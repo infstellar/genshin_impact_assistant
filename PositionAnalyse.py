@@ -1,4 +1,4 @@
-from unit import *
+from unit_old import *
 
 hwnd=getWindowsInfo("trinityWindow","星战前夜：晨曦 - luboil")#星战前夜：晨曦
 print("load over")
