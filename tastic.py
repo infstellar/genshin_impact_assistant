@@ -28,13 +28,16 @@ class Tastic():
                 
                 if tas[0:2] == 'e?':
                     is_ready = self.character.is_E_ready()
-                    ta = tas.split(':')
+                    ta = tas[2:]
+                    ta = ta.split(':')
                     if is_ready:
                         ta[0].replace(',','.')
-                        self.execute_tastic(ta[0])
+                        self.execute_tastic([ta[0]])
                     else:
                         ta[1].replace(',','.')
-                        self.execute_tastic(ta[1])
+                        self.execute_tastic([ta[1]])
+                
+                
                 
                 
                     
