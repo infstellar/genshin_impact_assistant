@@ -20,8 +20,9 @@ class Character():
             return t
     
     def used_E(self):
-        self.Ecd_timer.reset()
-        self.Elast_timer.reset()
+        if self.is_E_ready():
+            self.Ecd_timer.reset()
+            self.Elast_timer.reset()
         
     def is_E_ready(self):
         if self.get_Ecd_time()<=0:
