@@ -6,11 +6,9 @@ def stop_func_example():#True:continue;False:stop
 
 
 class Tastic():
-    def __init__(self,tastic_group:str,character:Character,stop_func=stop_func_example):
-        self.tastic_group=tastic_group
-        self.character = character
-        self.stop_func=stop_func
-        
+    def __init__(self):
+        pass
+      
     def _tastic_group_former(self):
         tastic = self.tastic_group.split(';')
         return tastic
@@ -20,7 +18,10 @@ class Tastic():
         s = s.split(':')
         return s
     
-    def run(self):
+    def run(self,tastic_group:str,character:Character,stop_func=stop_func_example):
+        self.tastic_group=tastic_group
+        self.character = character
+        self.stop_func=stop_func
         a=self._tastic_group_former()
         self.execute_tastic(a)
     
