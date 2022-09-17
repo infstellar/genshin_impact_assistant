@@ -3,19 +3,27 @@ def default_trigger_func():
     return True
 
 class Character():
-    def __init__(self,name,position,priority,Ecd_time,Elast_time,Ecd_float_time,tastic_group,trigger:str):
+    def __init__(self,name,position,n,priority,E_short_cd_time,E_long_cd_time,Elast_time,Ecd_float_time,tastic_group,trigger:str):
         self.name=name
         self.position=position
-        self.Ecd_time=Ecd_time
+        
+        self.E_short_cd_time=E_short_cd_time
+        self.E_long_cd_time=E_long_cd_time
         self.Elast_time=Elast_time
         self.Ecd_float_time=Ecd_float_time
         self.tastic_group=tastic_group
         self.priority=priority
+        self.n=n
         
+        if E_long_cd_time!=0:
+            self.Ecd_time=E_long_cd_time
+        else:
+            self.Ecd_time=E_short_cd_time
         self.triggers=trigger
         self.trigger=default_trigger_func
-        self.Ecd_timer=Timer(diff_start_time=Ecd_time)
+        self.Ecd_timer=Timer(diff_start_time=self.Ecd_time)
         self.Elast_timer=Timer(diff_start_time=Elast_time)
+        
         self._trigger_analyse()
         
     def _trigger_e_ready(self):
@@ -42,9 +50,17 @@ class Character():
     
     def used_E(self):
         if self.is_E_ready():
+            self.Ecd_time=self.E_short_cd_time
             self.Ecd_timer.reset()
             self.Elast_timer.reset()
-        
+            
+    
+    def used_longE(self):
+        if self.is_E_ready():
+            self.Ecd_time=self.E_long_cd_time
+            self.Ecd_timer.reset()
+            self.Elast_timer.reset()
+    
     def is_E_ready(self):
         if self.get_Ecd_time()<=0:
             return True

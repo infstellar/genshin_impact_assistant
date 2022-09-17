@@ -1,4 +1,15 @@
-import sys, os, json, time, pickle
+import ctypes, sys
+def is_admin():
+    try:
+        return ctypes.windll.shell32.IsUserAnAdmin()
+    except:
+        return False
+if not is_admin():
+    print('try to get administrator')
+    ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, __file__, None, 1)
+    print('administrator have been obtained')
+
+import os, json, time, pickle, math, random, pytweening
 
 class Logger(object):
     def __init__(self, fileN='Terminal.log'):
