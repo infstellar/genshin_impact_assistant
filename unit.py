@@ -39,8 +39,16 @@ class Logger(object):
 
 sys.stdout = Logger()#'G:/2.0/test.txt'
 
+def isint(x):
+    try:
+        a = int(x)
+    except ValueError:
+        return False
+    else:
+        return True
+
 def loadjson(json_name='config.json'):
-    f = open(json_name, 'r')
+    f = open('config/'+json_name, 'r')
     content = f.read()
     a = json.loads(content)
     f.close()

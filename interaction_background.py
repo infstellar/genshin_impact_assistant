@@ -78,7 +78,7 @@ class Interaction_BGD():
         return np.frombuffer(buffer, dtype=np.uint8).reshape(height, width, 4)
 
     def match_img(self,img_name:str,is_show_res:bool = False):
-        image = self.capture(self.handle)        
+        image = self.capture()        
         # 转为灰度图
         gray = cv2.cvtColor(image, cv2.COLOR_BGRA2GRAY)
         # 读取图片，并保留Alpha通道

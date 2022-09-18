@@ -6,8 +6,8 @@ from interaction_background import Interaction_BGD
 def sort_flag_1(x:character.Character):
     return x.priority
 
-def stop_func_example():#True:continue;False:stop
-    return True
+def stop_func_example():#True:stop;False:continue
+    return False
 
 class Combat_Loop(threading.Thread):
     def __init__(self,chara_list:list[character.Character],stop_func=stop_func_example):
@@ -29,10 +29,10 @@ class Combat_Loop(threading.Thread):
     
     def _switch_character(self,x:int):
         t = self.switch_timer.getDiffTime()
-        if t>=1.1:
-            pass
-        else:
-            self.itt.delay(1.1-t)
+        # if t>=1.1:
+        #     pass
+        # else:
+        #     self.itt.delay(1.1-t)
         while self.tastic_exc.get_character_busy():
             time.sleep(0.1)    
         self.itt.keyPress(str(x))
@@ -57,5 +57,5 @@ class Combat_Loop(threading.Thread):
                 self.tastic_exc.run(chara.tastic_group,chara,stop_func=self.stop_func)
                 idle=False
                 return idle
-            time.sleep(0.5)
+            #time.sleep()
         return idle

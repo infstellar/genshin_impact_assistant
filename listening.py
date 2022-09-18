@@ -1,4 +1,3 @@
-from win32gui import FindWindow
 import PyHook3,time
 import alpha_loop
 combat_flag=False
@@ -44,10 +43,15 @@ hm = PyHook3.HookManager()  # 创建一个HOOK管理对象
 hm.KeyDown = OnKeyboardEvent # 绑定键盘处理函数--就是我们创建的函数
 hm.HookKeyboard()   # 初始化
 data = []
-if __name__ == '__main__':
 
-    # 循环监听
+def listening():
     import pythoncom
     pythoncom.PumpMessages()
     while(1):
         time.sleep(0.1)
+
+
+if __name__ == '__main__':
+
+    # 循环监听
+    listening()
