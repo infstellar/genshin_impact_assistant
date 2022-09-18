@@ -4,7 +4,7 @@
         "position":"",
         "priority":2,
         "n":1,
-        "Elast_time":8,
+        "Elast_time":10,
         "E_short_cd_time":18,
         "E_long_cd_time":0,
         "Ecd_float_time":0,
@@ -26,12 +26,12 @@
     },
 
     "third":{
-        "name":"bnt",
+        "name":"bennett",
         "position":"",
         "priority":3,
         "n":3,
         "E_short_cd_time":3,
-        "E_long_cd_time":6,
+        "E_long_cd_time":10,
         "Elast_time":0,
         "Ecd_float_time":0,
         "tastic_group":"e?e~:none;q?q:none",
@@ -39,7 +39,7 @@
     },
 
     "forth":{
-        "name":"yj",
+        "name":"yunjin",
         "position":"",
         "priority":4,
         "n":4,

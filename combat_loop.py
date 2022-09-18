@@ -24,7 +24,7 @@ class Combat_Loop(threading.Thread):
         self.stop_func=stop_func
         
         self._switch_character(1)
-        self.itt.delay(1)
+        #self.itt.delay(1)
         ...
     
     def _switch_character(self,x:int):

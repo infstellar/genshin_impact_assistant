@@ -1,4 +1,7 @@
+import os, cv2
 from timer import Timer
+from interaction_background import Interaction_BGD
+import posi_manager
 def default_trigger_func():
     return True
 
@@ -14,6 +17,7 @@ class Character():
         self.tastic_group=tastic_group
         self.priority=priority
         self.n=n
+        self.itt=Interaction_BGD()
         
         if E_long_cd_time!=0:
             self.Ecd_time=E_long_cd_time
@@ -31,14 +35,29 @@ class Character():
             return True
         
     def _trigger_q_ready(self):
-        if self.is_Q_ready():
+        name = self.name
+        filename='imgs/'+name+'_listq.png'
+        if os.path.exists(filename):
+            img = cv2.imread(filename)
+            mr = self.itt.similar_img(name+'_listq.png',posi_manager.posi_charalist_q[self.n-1])
+            print('Qmr= ',mr)
+            if mr>=0.9:
+                return True
+            else:
+                return False
+        else:
             return True
-    
+        
+    def _trigger_idle(self):
+        return True   
+        
     def _trigger_analyse(self):
         if self.triggers == 'e_ready':
             self.trigger = self._trigger_e_ready
         elif self.triggers == 'q_ready':
             self.trigger = self._trigger_q_ready
+        elif self.triggers == 'idle':
+            self.trigger = self._trigger_idle
     
     def get_Ecd_time(self):
         t = self.Ecd_timer.getDiffTime()
@@ -68,7 +87,20 @@ class Character():
             return False
         
     def is_Q_ready(self):
-        return True
+        name = self.name
+        filename='imgs/'+name+'_q.png'
+        if os.path.exists(filename):
+            img = cv2.imread(filename)
+            mr = self.itt.similar_img(name+'_q.png',posi_manager.posi_chara_q)
+            print('Qmr= ',mr)
+            if mr>=0.9:
+                return True
+            else:
+                return False
+        else:
+            return True
+    
+    
     
     def get_Ecd_last_time(self):
         t = self.Elast_timer.getDiffTime()
@@ -84,3 +116,5 @@ class Character():
             return True
         else:
             return False
+        
+        

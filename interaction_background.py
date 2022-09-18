@@ -76,13 +76,16 @@ class Interaction_BGD():
         self.ReleaseDC(handle, dc)
         # 返回截图数据为numpy.ndarray
         return np.frombuffer(buffer, dtype=np.uint8).reshape(height, width, 4)
-
+    
     def match_img(self,img_name:str,is_show_res:bool = False):
-        image = self.capture()        
+        image = self.capture()  
+        #image = (image/(image[3]+10)).astype(int)
+        
         # 转为灰度图
         gray = cv2.cvtColor(image, cv2.COLOR_BGRA2GRAY)
         # 读取图片，并保留Alpha通道
         template = cv2.imread('imgs/'+img_name, cv2.IMREAD_UNCHANGED)
+        #template = template/template[3]
         # 取出Alpha通道
         alpha = template[:,:,3]
         template = cv2.cvtColor(template, cv2.COLOR_BGRA2GRAY)
@@ -90,6 +93,10 @@ class Interaction_BGD():
         result = cv2.matchTemplate(gray, template, cv2.TM_CCORR_NORMED, mask=alpha)
         # 获取结果中最大值和最小值以及他们的坐标
         min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
+        if is_show_res:
+            cv2.imshow('template', template)
+            cv2.imshow('gray', gray)
+            cv2.waitKey()
         top_left = max_loc
         h, w = template.shape[:2]
         bottom_right = top_left[0] + w, top_left[1] + h
@@ -100,6 +107,35 @@ class Interaction_BGD():
             cv2.waitKey()
         matching_rate = max_val
         return matching_rate, top_left, bottom_right
+    
+    def similar_img(self,img_name,img_posi,is_gray=False,is_show_res:bool = False):
+        img1 = cv2.imread('imgs/'+img_name, cv2.IMREAD_UNCHANGED)
+
+        cap = self.capture() 
+        img = cap[img_posi[0]:img_posi[2],img_posi[1]:img_posi[3]]
+        gray = img
+        # if is_gray:
+        #     gray = cv2.cvtColor(img, cv2.COLOR_BGRA2GRAY)
+        
+        # 读取图片，并保留Alpha通道
+        template = img1
+        #template = template/template[3]
+        # 取出Alpha通道
+        alpha = template[:,:,3]
+        if is_gray:
+            gray = cv2.cvtColor(img, cv2.COLOR_BGRA2GRAY)
+            template = cv2.cvtColor(template, cv2.COLOR_BGRA2GRAY)
+        # 模板匹配，将alpha作为mask，TM_CCORR_NORMED方法的计算结果范围为[0, 1]，越接近1越匹配
+        result = cv2.matchTemplate(gray, template, cv2.TM_CCORR_NORMED, mask=alpha)
+        # 获取结果中最大值和最小值以及他们的坐标
+        min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
+        if is_show_res:
+            cv2.imshow('template', template)
+            cv2.imshow('gray', gray)
+            cv2.waitKey()
+        # 在窗口截图中匹配位置画红色方框
+        matching_rate = max_val
+        return matching_rate
     
     def color_SD(self,x_col,target_col):#standard deviation
         ret=0

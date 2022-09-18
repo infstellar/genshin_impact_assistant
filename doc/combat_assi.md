@@ -56,8 +56,9 @@
 触发器条件成立时，允许切换至该角色。
 |触发器|说明|
 |----|----|
-|`e_ready`|当角色的元素战技准备就绪时，可以切换
-|`q_ready`|当角色的元素爆发准备就绪时，可以切换
+|`e_ready`|当角色的元素战技准备就绪时，可以切换|
+|`q_ready`|当角色的元素爆发准备就绪时，可以切换|
+|`idle`|始终触发|
 
 当多个角色的触发条件成立时，切换角色的顺序由优先级决定。
 
@@ -87,7 +88,7 @@
     设置方法：如果imgs文件夹内没有该角色的图片时：
     1. 在角色的q技能准备就绪时，切换至任意其他角色；
     2. 运行 character_snapshot.exe， 根据提示操作；
-    3. 在outputimgs文件夹内，找到图片`character_Q_n.png`，将`character`改为该角色的*名称
+    3. 在outputimgs文件夹内，找到图片`character_listq_n.png`，将`character`改为该角色的名称，删除`_n`。
     4. 将图片移动到genshin-impact-assistant/imgs文件夹内。
 
 2. 角色 Q技能图片
@@ -97,7 +98,7 @@
     设置方法：如果imgs文件夹内没有该角色的图片时：
     1. 在角色的q技能准备就绪时，切换至该角色；
     2. 运行 character_snapshot.exe， 根据提示操作；
-    3. 在outputimgs文件夹内，找到图片`character_q.png`，将`character`改为该角色的*名称
+    3. 在outputimgs文件夹内，找到图片`character_q.png`，将`character`改为该角色的名称
     4. 将图片移动到genshin-impact-assistant/imgs文件夹内。
 
 3. 角色 E技能图片
@@ -107,7 +108,7 @@
     设置方法：如果imgs文件夹内没有该角色的图片时：
     1. 在角色的e技能准备就绪时，切换至该角色；
     2. 运行 character_snapshot.exe， 根据提示操作；
-    3. 在outputimgs文件夹内，找到图片`character_e.png`，将`character`改为该角色的*名称
+    3. 在outputimgs文件夹内，找到图片`character_e.png`，将`character`改为该角色的名称
     4. 将图片移动到genshin-impact-assistant/imgs文件夹内。
 
 4. 其他注意事项

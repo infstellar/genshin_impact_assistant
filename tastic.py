@@ -1,7 +1,9 @@
 from socket import errorTab
+from timer import Timer
 from character import Character
 from unit import *
 import time, cv2
+import posi_manager
 
 #from interaction import *
 from interaction_background import Interaction_BGD
@@ -15,6 +17,7 @@ class Tastic():
         self.hp_charalist_red=[102,102,255,255]#BGR
         self.hp_charalist_posi=[[283,1698],[379,1698],[475,1698],[571,1698]]
         self.chara_num=4
+        self.enter_timer=Timer()
         self.itt=Interaction_BGD()
       
     def _tastic_group_former(self):
@@ -25,10 +28,10 @@ class Tastic():
         name = self.character.name
         filename='imgs/'+name+'_e.png'
         if os.path.exists(filename):
-            img = cv2.imread(filename)
-            mr,tl,br = self.itt.match_img(name+'_e.png')
+            #img = cv2.imread(filename)
+            mr = self.itt.similar_img(name+'_e.png',posi_manager.posi_chara_e,is_gray=True)
             print('mr= ',mr)
-            if mr<=0.9:
+            if mr<=0.94:
                 return 1
             else:
                 return 0
@@ -37,7 +40,8 @@ class Tastic():
         
     def _chara_waiting(self,mode=0):
         
-        if mode==0 and self._is_E_release() == 0:
+        if mode==0 and self._is_E_release() == 0 and self.enter_timer.getDiffTime() <= 1:
+            print('skip waiting')
             return 0
         while self.get_character_busy():
             self.itt.delay(0.1)
@@ -73,6 +77,7 @@ class Tastic():
         self.character = character
         self.stop_func=stop_func
         a=self._tastic_group_former()
+        self.enter_timer.reset()
         self.execute_tastic(a)
     
     def do_attack(self):
@@ -101,7 +106,7 @@ class Tastic():
         
     def do_use_q(self):
         self._chara_waiting()
-        self.itt.keyDown('q')
+        self.itt.keyPress('q')
         self.itt.delay(0.2)
     
     def do_long_attack(self):
@@ -188,6 +193,8 @@ class Tastic():
                     self.do_unaim()
                 elif isint(tas):
                     self.itt.delay(int(tas)/1000)
+                elif tas == '>':
+                    break
                     
                 if '?' in tas:
                     tas1=tas[0:tas.index('?')+1]    
