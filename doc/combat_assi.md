@@ -2,7 +2,7 @@
 
 ## 简介
 
-- 演示视频：https://www.bilibili.com/video/BV13G4y1B7FA
+- 演示视频：https://www.bilibili.com/video/BV12P411H7yp
 
 - 自动战斗辅助可以按照设定的角色、策略、优先级、触发条件等自动切换角色和执行攻击，使用元素战技和元素爆发。
 
