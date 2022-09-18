@@ -53,7 +53,7 @@
 
 ## 触发器 trigger
 
-触发器条件成立时，切换至该角色。
+触发器条件成立时，允许切换至该角色。
 |触发器|说明|
 |----|----|
 |`e_ready`|当角色的元素战技准备就绪时，可以切换
@@ -66,7 +66,7 @@
 优先级从小到大依次降低，0为最高优先级。
 优先级可以同级。
 
-## 元素战技相关设置
+## 其他设置
 
 |设置项|介绍|
 |----|----|
@@ -74,6 +74,7 @@
 |`E_short_cd_time`|短E持续时间，不能为0|
 |`E_long_cd_time`|长E持续时间，没有则为0|
 |`Ecd_float_time`|在E技能冷却还有x秒前即切换至该角色，可以为0|
+|`n`|角色在队伍中的位置（1~4），不可重复，不可为0|
 
 ## 角色元素战技、元素爆发图片设置
 
@@ -87,7 +88,7 @@
     1. 在角色的q技能准备就绪时，切换至任意其他角色；
     2. 运行 character_snapshot.exe， 根据提示操作；
     3. 在outputimgs文件夹内，找到图片`character_Q_n.png`，将`character`改为该角色的*名称
-    4. 将图片移动到imgs文件夹内。
+    4. 将图片移动到genshin-impact-assistant/imgs文件夹内。
 
 2. 角色 Q技能图片
 
@@ -97,7 +98,7 @@
     1. 在角色的q技能准备就绪时，切换至该角色；
     2. 运行 character_snapshot.exe， 根据提示操作；
     3. 在outputimgs文件夹内，找到图片`character_q.png`，将`character`改为该角色的*名称
-    4. 将图片移动到imgs文件夹内。
+    4. 将图片移动到genshin-impact-assistant/imgs文件夹内。
 
 3. 角色 E技能图片
 
@@ -107,13 +108,15 @@
     1. 在角色的e技能准备就绪时，切换至该角色；
     2. 运行 character_snapshot.exe， 根据提示操作；
     3. 在outputimgs文件夹内，找到图片`character_e.png`，将`character`改为该角色的*名称
-    4. 将图片移动到imgs文件夹内。
+    4. 将图片移动到genshin-impact-assistant/imgs文件夹内。
 
 4. 其他注意事项
     1. 角色名称可在`config/character_dist.json`中查找，每个角色的首项即为该角色名称，其余为角色别名，如：
+
         `["albedo","Albedo","阿贝多","アルベド"]`中，角色名称为`albedo`，其他为别名。
 
     2. character_snapshot.exe 运行后，在准备完成后按下回车，在控制台将会看到`clolr:xxx`。请确认该项的数字与
+
     [34,215,150](角色血量健康)或[102,102,255](角色血量受到挑战)接近。
     否则，请确认使用了1080p 窗口化 无色彩滤镜 运行。如果无法解决问题，可提交issue。
 
