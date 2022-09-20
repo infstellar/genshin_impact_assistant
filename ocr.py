@@ -1,30 +1,21 @@
-def get_extra_params():
-    # 项目根目录
-    root_path = get_root_path()
-    extra_data = [
-        ("src\\res", "src\\res"),
-        ("config", "config"),
-        ("venv\\Lib\\site-packages\\Shapely.libs", "Shapely.libs"),
-        ("venv\\Lib\\site-packages\\paddle", "paddle"),
-        ("venv\\Lib\\site-packages\\paddleocr", "paddleocr"),
-        ("venv\\Lib\\site-packages\\PIL", "PIL"),
-        ("venv\\Lib\\site-packages\\pywt", "pywt"),
-        ("venv\\Lib\\site-packages\\lmdb", "lmdb"),
-        ("venv\\Lib\\site-packages\\shapely", "shapely"),
-        ("venv\\Lib\\site-packages\\skimage", "skimage"),
-        ("venv\\Lib\\site-packages\\pyclipper", "pyclipper"),
-        ("venv\\Lib\\site-packages\\scipy", "scipy"),
-        ("venv\\Lib\\site-packages\\imgaug", "imgaug"),
-        ("venv\\Lib\\site-packages\\imageio", "imageio"),
-        ("venv\\Lib\\site-packages\\attrdict", "attrdict")]
-    params = []
-    for item in extra_data:
-        src_path = os.path.join(root_path, item[0])
-        params.extend(["--add-data", f"{src_path};{item[1]}"])
-    return params
+from paddleocr import PaddleOCR, draw_ocr
 
+# Paddleocr目前支持的多语言语种可以通过修改lang参数进行切换
+# 例如`ch`, `en`, `fr`, `german`, `korean`, `japan`
+ocr = PaddleOCR(use_angle_cls=True, lang="ch")  # need to run only once to download and load model into memory
+img_path = './imgs/11.jpg'
+result = ocr.ocr(img_path, cls=True)
+for line in result:
+    print(line)
 
-import paddleocr
+# 显示结果
+from PIL import Image
 
-
-print(paddleocr)
+image = Image.open(img_path).convert('RGB')
+boxes = [line[0] for line in result]
+txts = [line[1][0] for line in result]
+scores = [line[1][1] for line in result]
+im_show = draw_ocr(image, boxes, txts, scores, font_path='./fonts/simfang.ttf')
+im_show = Image.fromarray(im_show)
+im_show.save('result.jpg')
+input()

@@ -131,3 +131,4 @@ dmypy.json
 dist/
 test_py/
 outputimgs/
+tools/snapshot/
