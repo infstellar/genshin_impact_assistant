@@ -2,8 +2,8 @@
 
 此页面介绍config设置的各个项目。
 
-|---|---|
 |项目|内容|
+|----|----|
 |`version`|版本号|
 |`teamfile`|自动战斗使用的team.json文件，可在config目录下新建新的teamjson文件并设置。|
 |`domain_times`|刷秘境的次数|
