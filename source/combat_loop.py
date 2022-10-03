@@ -73,7 +73,7 @@ class Combat_Loop(threading.Thread):
         ...
     
     def checkupstop(self):
-        if self.stop_flag:
+        if self.stop_func():
             print('ConsoleMessage: 停止自动战斗')
             return True
             
