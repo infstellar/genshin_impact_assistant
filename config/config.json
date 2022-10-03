@@ -1,3 +1,8 @@
 {
-    "version":"v0.2.0"
+    "version":"v0.2.0",
+
+    "teamfile":"team.json",
+    "domain_times":2,
+    "device":"cpu",
+    "DEBUG":false
 }

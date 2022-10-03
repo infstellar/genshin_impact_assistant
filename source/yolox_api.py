@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 # Copyright (c) Megvii, Inc. and its affiliates.
+from unit import *
+print('ConsoleMessage: Creating yolox obj. It may takes a few second.')
+
 import sys,os
 path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, path)
@@ -116,7 +119,7 @@ def make_parser_2(
                 camid=0,
                 save_result=True,
                 exp_file=None,
-                device='gpu',
+                device=configjson["device"],
                 conf=0.3,
                 nms=0.5,
                 tsize=640,
@@ -222,7 +225,8 @@ class Predictor(object):
                 outputs, self.num_classes, self.confthre,
                 self.nmsthre, class_agnostic=True
             )
-            logger.info("Infer time: {:.4f}s".format(time.time() - t0))
+            if DEBUG_MODE:
+                logger.info("Infer time: {:.4f}s".format(time.time() - t0))
         return outputs, img_info
 
     def visual(self, output, img_info, cls_conf=0.35):
@@ -278,7 +282,8 @@ def image_demo(predictor:Predictor, vis_folder, path, current_time, save_result,
             )
             #os.makedirs(save_folder, exist_ok=True)
             save_file_name = os.path.join(save_folder, os.path.basename(image_name))
-            logger.info("Saving detection result in {}".format(save_file_name))
+            if DEBUG_MODE:
+                logger.info("Saving detection result in {}".format(save_file_name))
             cv2.imwrite(save_file_name, result_image)
         ch = cv2.waitKey(0)
         if ch == 27 or ch == ord("q") or ch == ord("Q"):
@@ -299,7 +304,8 @@ def imageflow_demo(predictor, vis_folder, current_time, args):
             save_path = os.path.join(save_folder, os.path.basename(args.path))
         else:
             save_path = os.path.join(save_folder, "camera.mp4")
-        logger.info(f"video save_path is {save_path}")
+        if DEBUG_MODE:
+            logger.info(f"video save_path is {save_path}")
         vid_writer = cv2.VideoWriter(
             save_path, cv2.VideoWriter_fourcc(*"mp4v"), fps, (int(width), int(height))
         )
@@ -334,8 +340,8 @@ def main(exp, args):
 
     if args.trt:
         args.device = "gpu"
-
-    logger.info("Args: {}".format(args))
+    if DEBUG_MODE:
+        logger.info("Args: {}".format(args))
 
     if args.conf is not None:
         exp.test_conf = args.conf
@@ -345,7 +351,8 @@ def main(exp, args):
         exp.test_size = (args.tsize, args.tsize)
 
     model = exp.get_model()
-    logger.info("Model Summary: {}".format(get_model_info(model, exp.test_size)))
+    if DEBUG_MODE:
+        logger.info("Model Summary: {}".format(get_model_info(model, exp.test_size)))
 
     if args.device == "gpu":
         model.cuda()
@@ -358,14 +365,17 @@ def main(exp, args):
             ckpt_file = os.path.join(file_name, "best_ckpt.pth")
         else:
             ckpt_file = args.ckpt
-        logger.info("loading checkpoint")
+        if DEBUG_MODE:
+            logger.info("loading checkpoint")
         ckpt = torch.load(ckpt_file, map_location="cpu")
         # load the model state dict
         model.load_state_dict(ckpt["model"])
-        logger.info("loaded checkpoint done.")
+        if DEBUG_MODE:
+            logger.info("loaded checkpoint done.")
 
     if args.fuse:
-        logger.info("\tFusing model...")
+        if DEBUG_MODE:
+            logger.info("\tFusing model...")
         model = fuse_model(model)
 
     if args.trt:
@@ -376,7 +386,8 @@ def main(exp, args):
         ), "TensorRT model is not found!\n Run python3 tools/trt.py first!"
         model.head.decode_in_inference = False
         decoder = model.head.decode_outputs
-        logger.info("Using TensorRT to inference")
+        if DEBUG_MODE:
+            logger.info("Using TensorRT to inference")
     else:
         trt_file = None
         decoder = None
@@ -402,6 +413,7 @@ class Yolox_Api():
         self.args = make_parser_2(save_result=save_result,
                                   ckpt=ckpt
                                   )
+        print("ConsoleMessage: yolox device: "+self.args.device)
         self.exp = get_exp(self.args.exp_file, self.args.name)
         if not self.args.experiment_name:
             self.args.experiment_name = self.exp.exp_name
@@ -419,8 +431,8 @@ class Yolox_Api():
 
         if self.args.trt:
             self.args.device = "gpu"
-
-        logger.info("Args: {}".format(self.args))
+        if DEBUG_MODE:
+            logger.info("Args: {}".format(self.args))
 
         if self.args.conf is not None:
             self.exp.test_conf = self.args.conf
@@ -430,7 +442,8 @@ class Yolox_Api():
             self.exp.test_size = (self.args.tsize, self.args.tsize)
 
         model = self.exp.get_model()
-        logger.info("Model Summary: {}".format(get_model_info(model, self.exp.test_size)))
+        if DEBUG_MODE:
+            logger.info("Model Summary: {}".format(get_model_info(model, self.exp.test_size)))
 
         if self.args.device == "gpu":
             model.cuda()
@@ -443,15 +456,18 @@ class Yolox_Api():
                 ckpt_file = os.path.join(file_name, "best_ckpt.pth")
             else:
                 ckpt_file = self.args.ckpt
-            logger.info("loading checkpoint")
+            if DEBUG_MODE:                
+                logger.info("loading checkpoint")
             ckpt = torch.load(ckpt_file, map_location="cpu")
             # load the model state dict
             # may should ###
             model.load_state_dict(ckpt["model"])
-            logger.info("loaded checkpoint done.")
+            if DEBUG_MODE:
+                logger.info("loaded checkpoint done.")
 
         if self.args.fuse:
-            logger.info("\tFusing model...")
+            if DEBUG_MODE:
+                logger.info("\tFusing model...")
             model = fuse_model(model)
 
         if self.args.trt:
@@ -462,7 +478,8 @@ class Yolox_Api():
             ), "TensorRT model is not found!\n Run python3 tools/trt.py first!"
             model.head.decode_in_inference = False
             decoder = model.head.decode_outputs
-            logger.info("Using TensorRT to inference")
+            if DEBUG_MODE:
+                logger.info("Using TensorRT to inference")
         else:
             trt_file = None
             decoder = None
@@ -471,12 +488,14 @@ class Yolox_Api():
             model, self.exp, COCO_CLASSES, trt_file, decoder,
             self.args.device, self.args.fp16, self.args.legacy,
         )
-        logger.info("predictor has been created")
+        if DEBUG_MODE:
+            logger.info("predictor has been created")
         
         
             
     def predicte(self,imgsrc,img_id=-1):
-        logger.info("predicte img")
+        if DEBUG_MODE:
+            logger.info("predicte img")
         self.current_time = time.localtime()
         if self.args.demo == "image":
             if True:
@@ -495,7 +514,7 @@ class Yolox_Api():
         return a[0]+(a[2]-a[0])/2, a[1]+(a[3]-a[1])/2
     
 yolo_tree = Yolox_Api()
-    
+print('ConsoleMessage: Created yolox obj.')
 if __name__ == "__main__":
     
     # yolox=yolox_api_custom()

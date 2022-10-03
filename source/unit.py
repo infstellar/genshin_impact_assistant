@@ -1,5 +1,5 @@
 import ctypes, sys
-
+DEBUG_MODE=False
 
 def is_admin():
     try:
@@ -13,8 +13,11 @@ if not is_admin():
 
 import os, json, time, pickle, math, random, pytweening
 path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+path1 = path+'\\source'
 if sys.path[0]!=path:
     sys.path.insert(0, path)
+if sys.path[1]!=path1:
+    sys.path.insert(1, path1)
 
 
 
@@ -32,13 +35,18 @@ class Logger(object):
 
     def write(self, message):
         '''print实际相当于sys.stdout.write'''
-        self.terminal.write(message)
+        if DEBUG_MODE:
+            self.terminal.write(message)
+        elif 'ConsoleMessage' in message:
+            self.terminal.write(message+'\n')
         nowTime=str(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())))
         if message!='\n':
             self.messageCache+=message
         else:
             self.log.write(nowTime+':    '+self.messageCache+'\n')
             self.messageCache=''
+            
+    
 
     def flush(self):
         pass
@@ -78,9 +86,9 @@ def savefileP(filename,item):
     with open('wordlist//'+filename+'.wl', 'w+b') as fp: # 把 t 对象存到文件中
         pickle.dump(item, fp)
         
-global config        
-config=loadjson("config.json")
-
+global configjson        
+configjson=loadjson("config.json")
+DEBUG_MODE=configjson["DEBUG"]
 def reflash_config():
-    global config
-    config=loadjson("config.json")
+    global configjson
+    configjson=loadjson("config.json")

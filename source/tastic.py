@@ -1,5 +1,3 @@
-from socket import errorTab
-from turtle import bgcolor
 import pyautogui
 from timer_module import Timer
 from character import Character

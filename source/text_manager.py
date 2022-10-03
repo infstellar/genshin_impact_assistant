@@ -21,7 +21,7 @@ conti_challenge={
     'ch':'继续挑战'
 }
 exit_challenge={
-    'ch':'退出挑战'
+    'ch':'退出秘境'
 }
 def text(x):
     return x[lang]

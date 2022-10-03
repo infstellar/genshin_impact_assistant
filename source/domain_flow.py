@@ -21,7 +21,9 @@ class Domain_Flow_Control(threading.Thread):
         self.combatloop.start()
         self.gdr.pause_thread()
         self.gdr.start()
-        self.last_domain_times=4-1
+        domain_times=configjson["domain_times"]
+        self.last_domain_times=domain_times-1
+        print(domain_times)
         print() 
     
     def stop_thread(self):
@@ -98,6 +100,8 @@ class Domain_Flow_Control(threading.Thread):
                 
                 if self.domaininitflag==False:
                     while(pdocr_api.ocr.getTextPosition(cap, textM.text(textM.clld)) == -1):
+                        if self.stop_flag:
+                            break
                         time.sleep(1)
                         cap =self.itt.capture()
                         cap=self.itt.png2jpg(cap, channel='ui')
@@ -109,13 +113,21 @@ class Domain_Flow_Control(threading.Thread):
                         time.sleep(1)
                         # self.itt.leftClick()
                         pyautogui.leftClick()
+                    if self.stop_flag:
+                        break
                     time.sleep(2)
                     movement.reset_const_val()
                     time.sleep(1)
+                    if self.stop_flag:
+                        break
                     #movement.view_to_90(deltanum=0.5,maxloop=10)
                     self.domaininitflag=True
                     self.itt.keyDown('w')
+                    if self.stop_flag:
+                        break
                     time.sleep(10)
+                    if self.stop_flag:
+                        break
                     
                     
                 
@@ -153,6 +165,8 @@ class Domain_Flow_Control(threading.Thread):
                 self.gdr.reset_flag()
                 self.gdr.continue_thread()
                 while(1):
+                    if self.stop_flag:
+                        break
                     time.sleep(1)
                     if self.gdr.get_statement()==False:
                         self.current_state=ST.STATE_END_COPY
@@ -160,7 +174,11 @@ class Domain_Flow_Control(threading.Thread):
             
             elif self.current_state==ST.STATE_END_COPY:
                 print('domain over. restart next domain in 5 sec.')
+                if self.stop_flag:
+                        break
                 time.sleep(5)
+                if self.stop_flag:
+                        break
                 cap=self.itt.capture()
                 cap=self.itt.png2jpg(cap, channel='ui')
                 if self.last_domain_times>=1:
@@ -175,7 +193,11 @@ class Domain_Flow_Control(threading.Thread):
                     time.sleep(0.5)
                     self.itt.leftClick()
                     self.autostartinit()
+                    if self.stop_flag:
+                        break
                     time.sleep(5)
+                    if self.stop_flag:
+                        break
                 else:
                     print('no more times. exit domain.')
                     posi=pdocr_api.ocr.getTextPosition(cap, textM.text(textM.exit_challenge))
@@ -190,6 +212,8 @@ class Domain_Flow_Control(threading.Thread):
 
 
 if __name__=='__main__':
+    
+    # domain_times=configjson["domain_times"]
     dfc=Domain_Flow_Control()
     dfc.start()
     while(1):

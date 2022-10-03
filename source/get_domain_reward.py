@@ -3,7 +3,7 @@ from interaction_background import Interaction_BGD
 import small_map, movement, cv2, time, threading, pdocr_api, text_manager as textM, posi_manager as PosiM
 # sys.path.append("..")
 
-import yoloxtools.yolox_api
+import source.yolox_api
 class Get_Reward(threading.Thread):
     def __init__(self):
         threading.Thread.__init__(self)
@@ -19,21 +19,21 @@ class Get_Reward(threading.Thread):
         cap = self.itt.png2jpg(cap)
         # cv2.imshow('123',cap)
         # cv2.waitKey(0)
-        addition_info,ret2 = yoloxtools.yolox_api.yolo_tree.predicte(cap)
+        addition_info,ret2 = source.yolox_api.yolo_tree.predicte(cap)
         print(addition_info)
         if addition_info!=None:
             if addition_info[0][1][0]>=0.5:
-                treex, treey=yoloxtools.yolox_api.yolo_tree.get_center(addition_info)
+                treex, treey=source.yolox_api.yolo_tree.get_center(addition_info)
                 return (treex,treey)
         return False
     
     def get_tree_size(self):
         cap = self.itt.capture(shape='xy')
         cap = self.itt.png2jpg(cap)
-        addition_info,ret2 = yoloxtools.yolox_api.yolo_tree.predicte(cap)
+        addition_info,ret2 = source.yolox_api.yolo_tree.predicte(cap)
         if addition_info!=None:
             if addition_info[0][1][0]>=0.5:
-                posi=yoloxtools.yolox_api.yolo_tree.get_maxap_pic_bbox(addition_info)
+                posi=source.yolox_api.yolo_tree.get_maxap_pic_bbox(addition_info)
                 return posi[2]-posi[0]
         return -1
             
