@@ -17,7 +17,7 @@
 ### 下载与安装
 
 1. 下载`tag`里最新版本的`genshin_assistant.zip`并解压，之后每次更新只需要重新下载`genshin_assistant.zip`即可。
-2. 下载`tag`里的`environment_all.7z`,并全部复制到解压后的`genshin_assistant`目录中
+2. 下载`tag`里的`environment_all.7z`,并全部复制到解压后的`genshin_assistant`目录中,选择全部替换。
 
     如果environment_all.7z下载过慢，也可以下载environment_no_torch.7z,并自行下载torch复制到目录中(或者加入q群下载
 3. 启动原神后，以管理员权限运行`genshin_assistant.exe`
@@ -37,7 +37,7 @@
 
 ## 性能需求
 
-- 程序需要至少3G内存与至少8G存储空间。
+- 程序需要至少1.5G内存与至少6G存储空间。
 
 ## 致谢
 
@@ -51,7 +51,7 @@
 
 ### 贡献/参与者
 
-- [数据集标注](https://space.bilibili.com/396023811)
+- 数据集标注，测试[nɡ.](https://space.bilibili.com/396023811)
 
 ## 声明
 
