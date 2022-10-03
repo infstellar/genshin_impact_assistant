@@ -14,6 +14,7 @@ def stop_func_example():#True:stop;False:continue
     return False
 
 
+
 class Tastic():
     def __init__(self):
         self.hp_charalist_green=[34,215,150,255]#BGR
@@ -23,6 +24,10 @@ class Tastic():
         self.enter_timer=Timer()
         self.itt=Interaction_BGD()
         # self.timer_performance=Timer()
+    
+    # def checkupstop(self):
+    #     if self.stop_flag:
+    #         return True
       
     def _tastic_group_former(self):
         tastic = self.tastic_group.split(';')
@@ -63,7 +68,7 @@ class Tastic():
         # else:
         #     return -1
         
-    def _chara_waiting(self,mode=0):
+    def chara_waiting(self,mode=0):
         
         if (mode==0) and (self.is_E_available() == True) and (self.enter_timer.getDiffTime() <= 1):
             print('skip waiting')
@@ -117,7 +122,7 @@ class Tastic():
         self.execute_tastic(a)
     
     def do_attack(self):
-        self._chara_waiting()
+        self.chara_waiting()
         #print('press a')
         self.itt.leftClick()
         self.itt.delay(0.1)
@@ -129,7 +134,7 @@ class Tastic():
         if self.character.Ecd_float_time>0:
             self.itt.delay(self.character.get_Ecd_time()+0.1)
         
-        self._chara_waiting()
+        self.chara_waiting()
         print('press e')
         self.itt.keyPress('e')
         
@@ -147,7 +152,7 @@ class Tastic():
         if self.character.Ecd_float_time>0:
             self.itt.delay(self.character.get_Ecd_time()+0.1)
                 
-        self._chara_waiting()
+        self.chara_waiting()
         pyautogui.click(button='middle')
         print('press long e')
         self.itt.keyPress('s')
@@ -162,12 +167,13 @@ class Tastic():
         self.character.used_longE()
         
     def do_use_q(self):
-        self._chara_waiting()
+        self.chara_waiting()
         self.itt.keyPress('q')
         self.itt.delay(0.2)
+        self.chara_waiting()
     
     def do_long_attack(self):
-        self._chara_waiting(mode=1)
+        self.chara_waiting(mode=1)
         self.itt.leftDown()
         self.itt.delay(2.5)
         self.itt.leftUp()
@@ -178,14 +184,14 @@ class Tastic():
     def do_jump_attack(self):
         self.itt.keyPress('spacebar')
         self.itt.delay(0.3)
-        self._chara_waiting(mode=1)
+        self.chara_waiting(mode=1)
         self.itt.leftClick()
     
     def do_sprint(self):
         self.itt.rightClick()
     
     def do_aim(self):
-        self._chara_waiting(mode=1)
+        self.chara_waiting(mode=1)
         self.itt.keyPress('r')
     
     def do_unaim(self):

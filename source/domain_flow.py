@@ -29,6 +29,11 @@ class Domain_Flow_Control(threading.Thread):
     def stop_thread(self):
         self.stop_flag=True
     
+    def checkupstop(self):
+        if self.stop_flag:
+            print('ConsoleMessage: 停止自动秘境')
+            return True
+    
     def get_stop_flag(self):
         return self.stop_flag
     
@@ -90,7 +95,7 @@ class Domain_Flow_Control(threading.Thread):
         # self.domaininitflag=True
         while(1):
             
-            if self.stop_flag:
+            if self.checkupstop():
                 break
             # if self.domaininitflag==False:
                 
@@ -100,7 +105,7 @@ class Domain_Flow_Control(threading.Thread):
                 
                 if self.domaininitflag==False:
                     while(pdocr_api.ocr.getTextPosition(cap, textM.text(textM.clld)) == -1):
-                        if self.stop_flag:
+                        if self.checkupstop():
                             break
                         time.sleep(1)
                         cap =self.itt.capture()
@@ -113,20 +118,20 @@ class Domain_Flow_Control(threading.Thread):
                         time.sleep(1)
                         # self.itt.leftClick()
                         pyautogui.leftClick()
-                    if self.stop_flag:
+                    if self.checkupstop():
                         break
                     time.sleep(2)
                     movement.reset_const_val()
                     time.sleep(1)
-                    if self.stop_flag:
+                    if self.checkupstop():
                         break
                     #movement.view_to_90(deltanum=0.5,maxloop=10)
                     self.domaininitflag=True
                     self.itt.keyDown('w')
-                    if self.stop_flag:
+                    if self.checkupstop():
                         break
                     time.sleep(10)
-                    if self.stop_flag:
+                    if self.checkupstop():
                         break
                     
                     
@@ -157,7 +162,7 @@ class Domain_Flow_Control(threading.Thread):
             elif self.current_state==ST.END_CHALLENGE:
                 self.combatloop.stop_loop()
                 time.sleep(5)
-                print('我在等岩造物消失，你在等什么 (bushi')
+                print('等待岩造物消失')
                 time.sleep(20)
                 self.current_state=ST.STATE_GETTING_REAWARD
                 
@@ -165,7 +170,7 @@ class Domain_Flow_Control(threading.Thread):
                 self.gdr.reset_flag()
                 self.gdr.continue_thread()
                 while(1):
-                    if self.stop_flag:
+                    if self.checkupstop():
                         break
                     time.sleep(1)
                     if self.gdr.get_statement()==False:
@@ -174,11 +179,11 @@ class Domain_Flow_Control(threading.Thread):
             
             elif self.current_state==ST.STATE_END_COPY:
                 print('domain over. restart next domain in 5 sec.')
-                if self.stop_flag:
-                        break
+                if self.checkupstop():
+                    break
                 time.sleep(5)
-                if self.stop_flag:
-                        break
+                if self.checkupstop():
+                    break
                 cap=self.itt.capture()
                 cap=self.itt.png2jpg(cap, channel='ui')
                 if self.last_domain_times>=1:
@@ -193,10 +198,10 @@ class Domain_Flow_Control(threading.Thread):
                     time.sleep(0.5)
                     self.itt.leftClick()
                     self.autostartinit()
-                    if self.stop_flag:
+                    if self.checkupstop():
                         break
                     time.sleep(5)
-                    if self.stop_flag:
+                    if self.checkupstop():
                         break
                 else:
                     print('no more times. exit domain.')

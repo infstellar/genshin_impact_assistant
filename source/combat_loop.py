@@ -1,4 +1,5 @@
 #from interaction import *
+from re import T
 import pyautogui
 import character,tastic,time,threading
 from unit import *
@@ -71,6 +72,11 @@ class Combat_Loop(threading.Thread):
         #self.itt.delay(1)
         ...
     
+    def checkupstop(self):
+        if self.stop_flag:
+            print('ConsoleMessage: 停止自动战斗')
+            return True
+            
     def _switch_character(self,x:int):
         pyautogui.click(button='middle')
         t = self.switch_timer.getDiffTime()
@@ -78,7 +84,8 @@ class Combat_Loop(threading.Thread):
         #     pass
         # else:
         #     self.itt.delay(1.1-t)
-        for i in range(50):
+        self.tastic_exc.chara_waiting()
+        for i in range(30):
             self.itt.keyPress(str(x))
             print('try switching to '+str(x))
             time.sleep(0.1)
@@ -126,7 +133,7 @@ class Combat_Loop(threading.Thread):
     def run(self):
         while(1):
             if self.start_loop_flag:
-                if self.stop_flag:
+                if self.checkupstop():
                     break
                 ret=self.loop()
                 print('\n','idle: ',ret,'\n')

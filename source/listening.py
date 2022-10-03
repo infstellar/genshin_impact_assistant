@@ -12,8 +12,10 @@ t2=None
 def switch_combat_loop():
     global t1, combat_flag
     if combat_flag:
+        print('ConsoleMessage: 正在停止自动战斗')
         t1.stop_thread()
     else:
+        print('ConsoleMessage: 启动自动战斗')
         t1=alpha_loop.Alpha_Loop()
         t1.start()
     combat_flag = not combat_flag
@@ -21,8 +23,10 @@ def switch_combat_loop():
 def switch_domain_loop():
     global t2, domain_flag
     if domain_flag:
+        print('ConsoleMessage: 正在停止自动秘境')
         t2.stop_thread()
     else:
+        print('ConsoleMessage: 启动自动秘境')
         t2=domain_flow.Domain_Flow_Control()
         t2.start()
     domain_flag = not domain_flag

@@ -1,1 +1,0 @@
-pyinstaller genshin_assistant.py
