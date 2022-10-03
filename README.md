@@ -45,7 +45,7 @@
 
 - [opencv](https://github.com/opencv/opencv)
 - [paddleocr](https://github.com/PaddlePaddle/PaddleOCR)
-- [yolox](https://github.com/GengGode/GenshinImpact_AutoTrack_DLL)
+- [yolox](https://github.com/Megvii-BaseDetection/YOLOX)
 - [GenshinImpact_AutoTrack](https://github.com/GengGode/GenshinImpact_AutoTrack_DLL)
 - [pyinstaller](https://github.com/pyinstaller/pyinstaller)
 
