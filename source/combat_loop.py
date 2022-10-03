@@ -12,6 +12,7 @@ def stop_func_example():#True:stop;False:continue
     return False
 
 def get_chara_list(teamname='team.json'):
+    teamname=configjson["teamfile"]
     team=loadjson(teamname)
     characters=loadjson("character.json")
     chara_list=[]

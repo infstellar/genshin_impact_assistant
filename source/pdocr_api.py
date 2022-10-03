@@ -1,4 +1,5 @@
-print('creating ocr object.')
+from unit import *
+print('ConsoleMessage: Creating ocr object.')
 from timer_module import Timer
 pdocr_timer_performance=Timer()
 pdocr_timer_performance.reset()
@@ -20,7 +21,9 @@ RETURN_POSITION=0
 class Paddleocr_API():
     
     def __init__(self,lang='ch',device='gpu'):
-        self.ocr = PaddleOCR(use_angle_cls=True, lang=lang, show_log=False)  # need to run only once to download and load model into memory
+        device=configjson["device"]
+        print("ConsoleMessage: ocr device: "+device)
+        self.ocr = PaddleOCR(use_angle_cls=True, lang=lang, show_log=False, device=device)  # need to run only once to download and load model into memory
         #self.
     def ImgAnalyse(self,imsrc):
         result = self.ocr.ocr(imsrc, cls=False)
@@ -136,4 +139,4 @@ class Paddleocr_API():
         return ret1, ret2
         
 ocr=Paddleocr_API()
-print('created pdocr. coust '+str(pdocr_timer_performance.getDiffTime())+' second.')
+print('ConsoleMessage: created pdocr. cost '+str(pdocr_timer_performance.getDiffTime())+' second.')

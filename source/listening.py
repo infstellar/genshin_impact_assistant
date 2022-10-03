@@ -1,8 +1,14 @@
+try:
+    from unit import *
+except:
+    from source.unit import *
 import PyHook3,time
-import alpha_loop
+import alpha_loop, domain_flow
 combat_flag=False
-global t1
+domain_flag=False
+global t1, t2
 t1=None
+t2=None
 def switch_combat_loop():
     global t1, combat_flag
     if combat_flag:
@@ -11,6 +17,15 @@ def switch_combat_loop():
         t1=alpha_loop.Alpha_Loop()
         t1.start()
     combat_flag = not combat_flag
+    
+def switch_domain_loop():
+    global t2, domain_flag
+    if domain_flag:
+        t2.stop_thread()
+    else:
+        t2=domain_flow.Domain_Flow_Control()
+        t2.start()
+    domain_flag = not domain_flag
 
 
 def OnKeyboardEvent(event):
@@ -28,11 +43,16 @@ def OnKeyboardEvent(event):
     # print('Alt', event.Alt)                          #是某同时按下Alt
     #print('Transition', event.Transition)            #判断转换状态
     # print('---')
-    
+    #print('Key:', event.Key) 
     if event.Key=='Oem_2' and event.MessageName=='key down':
         print('MessageName:',event.MessageName)
         print('Key:', event.Key)  
         switch_combat_loop()
+        
+    if event.Key=='Oem_6' and event.MessageName=='key down':
+        print('MessageName:',event.MessageName)
+        print('Key:', event.Key)  
+        switch_domain_loop()
     
 
   # 同上
