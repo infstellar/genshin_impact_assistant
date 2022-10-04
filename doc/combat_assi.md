@@ -104,7 +104,7 @@
 
 - 角色名称可在`config/character_dist.json`中查找，每个角色的首项即为该角色名称，其余为角色别名，如：
 
-        `["albedo","Albedo","阿贝多","アルベド"]`中，角色名称为`albedo`，其他为别名。
+`["albedo","Albedo","阿贝多","アルベド"]`中，角色名称为`albedo`，其他为别名。
 
 - 角色血量过低或有角色死亡时，程序可能暂停运行。
 - 不在合适的界面时，程序可能暂停运行。
@@ -115,7 +115,7 @@
 
 ## team.json文件示例
 
-你可以基于自己的需求在示例json中修改，或者新建新的json并将config.json中的teamfile修改为你自己的json.
+你可以基于自己的需求在`示例json`中修改，或者新建新的`json`并将`config.json`中的`teamfile`修改为你自己的`json`.
 
 文件示例：
 
