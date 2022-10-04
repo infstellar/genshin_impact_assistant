@@ -19,12 +19,13 @@
 1. 下载`tag`里最新版本的`genshin_assistant.zip`并解压，之后每次更新只需要重新下载`genshin_assistant.zip`即可。
 2. 下载`tag`里的`environment_all.7z`,并全部复制到解压后的`genshin_assistant`目录中,选择全部替换。
 
-    如果environment_all.7z下载过慢，也可以下载environment_no_torch.7z,并自行下载torch复制到目录中(或者加入q群下载
+    如果`environment_all.7z`下载过慢，也可以下载`environment_no_torch.7z`,并自行下载`torch`复制到目录中(或者加入q群下载
 3. 启动原神后，以管理员权限运行`genshin_assistant.exe`
 
 ### 原神窗口设置
 
 - 需要在原神启动后再运行程序
+
 - 原神需要以1080p窗口化运行，设置抗锯齿为SMAA，低特效。
 
 ### config设置
@@ -33,11 +34,11 @@
 
 ### 为什么文件这么多
 
-神奇的python需要打包所有运行环境到一起才能启动 T_T 实际上是个python虚拟机
+神奇的python需要打包所有运行环境到一起才能启动 实际上是个python虚拟机 T_T
 
 ## 性能需求
 
-- 程序需要至少1.5G内存与至少6G存储空间。
+- 程序需要至少`1.5G内存`与至少`6G存储空间`。
 
 ## 致谢
 

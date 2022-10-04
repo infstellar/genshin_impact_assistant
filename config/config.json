@@ -2,7 +2,8 @@
     "version":"v0.2.0",
 
     "teamfile":"team.json",
-    "domain_times":2,
-    "device":"cpu",
-    "DEBUG":false
+    "domain_times":6,
+    "isLiYue":false,
+    "device":"gpu",
+    "DEBUG":true
 }

@@ -3,7 +3,7 @@ import static_method,small_map
 itt=static_method.sta_itt
 AHEAD=0
 LEFT=1
-RIGNT=2
+RIGHT=2
 BACK=3
 global VIEW_X,VIEW_Y,VIEW_D
 VIEW_X=197.5
@@ -19,7 +19,7 @@ def move(direction,distance=1):
         itt.keyDown('a')
         itt.delay(0.1*distance)
         itt.keyUp('a')
-    if direction==RIGNT:
+    if direction==RIGHT:
         itt.keyDown('d')
         itt.delay(0.1*distance)
         itt.keyUp('d')

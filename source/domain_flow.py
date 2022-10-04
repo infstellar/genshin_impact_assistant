@@ -113,7 +113,7 @@ class Domain_Flow_Control(threading.Thread):
                     cap=self.itt.capture()
                     cap=self.itt.png2jpg(cap, channel='ui')
                     if pdocr_api.ocr.getTextPosition(cap, textM.text(textM.clld)) != -1:
-                        print("Warning: 正在检测默认位置，切勿移动鼠标!\n"*10)
+                        print("ConsoleMessage: Warning: 正在检测默认位置，切勿移动鼠标!\n"*3)
                         self.itt.move_to(PosiM.posi_domain['CLLD'][0],PosiM.posi_domain['CLLD'][1])
                         time.sleep(1)
                         # self.itt.leftClick()

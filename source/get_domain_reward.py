@@ -1,6 +1,6 @@
 from unit import *
 from interaction_background import Interaction_BGD
-import small_map, movement, cv2, time, threading, pdocr_api, text_manager as textM, posi_manager as PosiM
+import small_map, movement, cv2, time, threading, pdocr_api, text_manager as textM, posi_manager as PosiM, timer_module
 # sys.path.append("..")
 
 import source.yolox_api
@@ -12,7 +12,11 @@ class Get_Reward(threading.Thread):
         self.pause_thread_flag=False
         self.working_flag=False
         self.stopFlag=False
+        reflash_config()
         
+        self.isLiYue=configjson["isLiYue"]
+        self.move_timer=timer_module.Timer()
+        self.ahead_timer=timer_module.Timer()
         
     def get_tree_posi(self):
         cap = self.itt.capture(shape='xy')
@@ -47,7 +51,7 @@ class Get_Reward(threading.Thread):
             print(dx)
             
             if dx>=0:
-                movement.move(movement.RIGNT,movenum)
+                movement.move(movement.RIGHT,movenum)
                 self.itt.keyPress('w')
             else:
                 movement.move(movement.LEFT,movenum)
@@ -121,6 +125,7 @@ class Get_Reward(threading.Thread):
         return self.working_flag
     
     def run(self):
+        direc=True
         while(1):
             if self.stopFlag:
                 break
@@ -130,10 +135,23 @@ class Get_Reward(threading.Thread):
                 continue
             if self.lockOnFlag<=5:
                 is_tree=self.align_to_tree()
+                self.ahead_timer.reset()
                 if is_tree==False:
                     movement.view_to_90()
-                    movement.move(movement.BACK,distance=2)
+                    if self.isLiYue:
+                        if self.move_timer.getDiffTime()>=20:
+                            direc=not direc
+                            self.move_timer.reset()    
+                        if direc:
+                            movement.move(movement.LEFT,distance=4)
+                        else:
+                            movement.move(movement.RIGHT,distance=4)
+                    else:
+                        movement.move(movement.BACK,distance=2)
             else:
+                if self.ahead_timer.getDiffTime()>=5:
+                    self.itt.keyPress('spacebar')
+                    self.ahead_timer.reset()
                 movement.view_to_90()
                 self.itt.keyDown('w')
                 time.sleep(0.2)
