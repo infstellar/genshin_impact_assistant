@@ -14,7 +14,7 @@ class Get_Reward(threading.Thread):
         self.stopFlag=False
         reflash_config()
         
-        self.isLiYue=configjson["isLiYue"]
+        self.isLiYue=configjson["isLiYueDomain"]
         self.move_timer=timer_module.Timer()
         self.ahead_timer=timer_module.Timer()
         
@@ -123,6 +123,9 @@ class Get_Reward(threading.Thread):
     
     def get_statement(self):
         return self.working_flag
+    
+    def stop_thread(self):
+        self.stopFlag=True
     
     def run(self):
         direc=True
