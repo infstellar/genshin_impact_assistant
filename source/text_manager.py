@@ -1,6 +1,7 @@
 lang='ch'
 start_challenge={
-    'ch':'启动'
+    'ch':'启动',
+    'en':'start'
 }
 LeavingIn={
     'ch':'自动退出'

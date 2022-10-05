@@ -32,6 +32,8 @@ class Domain_Flow_Control(threading.Thread):
     def checkupstop(self):
         if self.stop_flag:
             print('ConsoleMessage: 停止自动秘境')
+            self.gdr.stop_thread()
+            self.combatloop.stop()
             return True
     
     def get_stop_flag(self):
@@ -104,6 +106,7 @@ class Domain_Flow_Control(threading.Thread):
             if self.current_state==ST.STATE_BEFORE_CHALLENGE:
                 
                 if self.domaininitflag==False:
+                    print('ConsoleMessage: 正在开始挑战秘境')
                     while(pdocr_api.ocr.getTextPosition(cap, textM.text(textM.clld)) == -1):
                         if self.checkupstop():
                             break
@@ -130,23 +133,25 @@ class Domain_Flow_Control(threading.Thread):
                     self.itt.keyDown('w')
                     if self.checkupstop():
                         break
-                    time.sleep(10)
+                    time.sleep(5)
                     if self.checkupstop():
                         break
                     
                     
                 
-                time.sleep(0)
+                movement.move(movement.AHEAD,3)
+                time.sleep(0.08)
                 
             
             elif self.current_state==ST.READY_CHALLENGE:
                 self.itt.keyUp('w')
-                self.itt.keyDown('s')
-                time.sleep(0.5)
-                self.itt.keyUp('s')
-                time.sleep(2)
+                # self.itt.keyDown('s')
+                # time.sleep(0.5)
+                # self.itt.keyUp('s')
+                # time.sleep(2)
                 
                 if self.combatloop.start_loop_flag==False:
+                    print('ConsoleMessage: 正在开始战斗')
                     self.combatloop.start_loop()
                 
                 self.itt.keyPress('f')
@@ -156,10 +161,12 @@ class Domain_Flow_Control(threading.Thread):
             elif self.current_state==ST.STATE_IN_CHALLENGE:
                 
                 if self.combatloop.start_loop_flag==False:
+                    print('ConsoleMessage: 正在开始战斗')
                     self.combatloop.start_loop()
                 time.sleep(3)
                     
             elif self.current_state==ST.END_CHALLENGE:
+                print('ConsoleMessage: 正在停止战斗')
                 self.combatloop.stop_loop()
                 time.sleep(5)
                 print('等待岩造物消失')
@@ -169,6 +176,7 @@ class Domain_Flow_Control(threading.Thread):
             elif self.current_state==ST.STATE_GETTING_REAWARD:
                 self.gdr.reset_flag()
                 self.gdr.continue_thread()
+                print('ConsoleMessage: 正在激活石化古树')
                 while(1):
                     if self.checkupstop():
                         break
@@ -178,6 +186,7 @@ class Domain_Flow_Control(threading.Thread):
                         break
             
             elif self.current_state==ST.STATE_END_COPY:
+                print('ConsoleMessage: 秘境结束。')
                 print('domain over. restart next domain in 5 sec.')
                 if self.checkupstop():
                     break
@@ -187,6 +196,7 @@ class Domain_Flow_Control(threading.Thread):
                 cap=self.itt.capture()
                 cap=self.itt.png2jpg(cap, channel='ui')
                 if self.last_domain_times>=1:
+                    print('ConsoleMessage: 开始下一次秘境')
                     print('start next domain.')
                     self.last_domain_times-=1
                     
@@ -204,6 +214,7 @@ class Domain_Flow_Control(threading.Thread):
                     if self.checkupstop():
                         break
                 else:
+                    print('ConsoleMessage: 次数结束。退出秘境')
                     print('no more times. exit domain.')
                     posi=pdocr_api.ocr.getTextPosition(cap, textM.text(textM.exit_challenge))
                     if posi!=-1:
@@ -212,6 +223,10 @@ class Domain_Flow_Control(threading.Thread):
                         self.itt.move_to(0,0)
                     time.sleep(0.5)
                     self.itt.leftClick()
+                    # exit all threads
+                    self.gdr.stop_thread()
+                    self.combatloop.stop()
+                    
                     break
                 
 
