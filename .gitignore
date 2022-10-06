@@ -132,3 +132,4 @@ dist/
 test_py/
 outputimgs/
 tools/snapshot/
+config/config.json
