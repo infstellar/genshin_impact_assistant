@@ -10,7 +10,8 @@
         "Ecd_float_time":0,
         "Epress_time":0,
         "tastic_group":"e?e:none;#@e?a:q;",
-        "trigger":"e_ready"
+        "trigger":"e_ready",
+        "autofill":false
     },
 
     "second":{
@@ -24,7 +25,8 @@
         "Ecd_float_time":3,
         "Epress_time":2,
         "tastic_group":"e?e~:none;q?q:none",
-        "trigger":"e_ready"
+        "trigger":"e_ready",
+        "autofill":false
     },
 
     "third":{
@@ -38,7 +40,8 @@
         "Ecd_float_time":0,
         "Epress_time":2.5,
         "tastic_group":"e?e~:none;q?q:none",
-        "trigger":"e_ready"
+        "trigger":"e_ready",
+        "autofill":false
     },
 
     "forth":{
@@ -52,7 +55,8 @@
         "Ecd_float_time":0,
         "Epress_time":3,
         "tastic_group":"e?e~:none;q?q:none",
-        "trigger":"e_ready"
+        "trigger":"e_ready",
+        "autofill":false
     }
 
 }
