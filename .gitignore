@@ -134,3 +134,4 @@ outputimgs/
 tools/snapshot/
 config/config.json
 source.7z
+source.7z.tmp

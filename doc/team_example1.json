@@ -11,7 +11,7 @@
         "Epress_time":0,
         "tastic_group":"e?e:none;#@e?a:q;",
         "trigger":"e_ready",
-        "Qlast_time":0,
+        "Qlast_time":10,
         "autofill":false
     },
 
