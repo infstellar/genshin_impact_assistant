@@ -26,6 +26,7 @@ https://www.bilibili.com/video/BV1RV4y157m6
     如果`environment_all.7z`下载过慢，也可以下载`environment_no_torch.7z`,并自行下载`torch`复制到目录中(或者加入q群下载
 3. 启动原神后，以管理员权限运行`genshin_assistant.exe`
 4. 实在搞不定可以加qq群(
+[图文教程](doc/install.md)
 
 ### 从源代码构建
 
