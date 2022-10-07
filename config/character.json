@@ -7,7 +7,7 @@
         "Ecd_float_time":0,
         "Epress_time":0,
         "tastic_group":"e?e:none;#@e?a:q;",
-        "Qlast_time":0,
+        "Qlast_time":10,
         "verify":true
     },
     "zhongli":{
@@ -54,6 +54,6 @@
         "tastic_group":"e?e.500:none;q?q:none;a,700,a,500,a~",
         "Qlast_time":0,
         "verify":true
-        
+    
     }
 }

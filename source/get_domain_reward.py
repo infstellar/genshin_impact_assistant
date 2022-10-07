@@ -166,9 +166,19 @@ class Get_Reward(threading.Thread):
                     self.itt.keyPress('f')
                     
                     time.sleep(2)
-                    cap=self.itt.capture()
-                    cap=self.itt.png2jpg(cap,channel='ui')
-                    posi=pdocr_api.ocr.getTextPosition(cap,textM.text(textM.use_20resin))
+                    
+                    for i in range(10):
+                        cap=self.itt.capture()
+                        cap=self.itt.png2jpg(cap,channel='ui')
+                        posi=pdocr_api.ocr.getTextPosition(cap,textM.text(textM.use_20resin))
+                        if posi!=-1:
+                            break
+                        else:
+                            self.itt.keyPress('f')
+                        time.sleep(3)
+                    if posi==-1:
+                        print("ConsoleMessage: 找不到领取树脂按钮，请检查")
+                        
                     self.itt.move_to(posi[0]+30,posi[1]+30)
                     time.sleep(0.5)
                     self.itt.leftClick()

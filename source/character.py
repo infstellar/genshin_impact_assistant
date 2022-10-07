@@ -44,24 +44,13 @@ class Character():
             return True
         
     def _trigger_q_ready(self):
-        cap = self.itt.capture(jpgmode=2)
+        cap = self.itt.capture()
+        cap = self.itt.png2jpg(cap, channel='ui',alpha_num=20)
         p=posi_manager.posi_charalist_q_point[self.n-1]
         if cap[p[0],p[1]].max()>0:
             return True
         else:
             return False
-        # name = self.name
-        # filename='imgs/'+name+'_listq.png'
-        # if os.path.exists(filename):
-        #     img = cv2.imread(filename)
-        #     mr = self.itt.similar_img(name+'_listq.png',self.itt.capture(),posi_manager.posi_charalist_q[self.n-1])
-        #     print('Qmr= ',mr)
-        #     if mr>=0.9:
-        #         return True
-        #     else:
-        #         return False
-        # else:
-        #     return True
         
     def _trigger_idle(self):
         return True   
@@ -88,6 +77,8 @@ class Character():
             self.Ecd_timer.reset()
             self.Elast_timer.reset()
             
+    def used_Q(self):
+        self.Qlast_timer.reset()
     
     def used_longE(self):
         if self.is_E_ready():
@@ -100,6 +91,8 @@ class Character():
             return True
         else:
             return False
+        
+    
         
     def is_chara_Q_ready(self):
         name = self.name
@@ -148,7 +141,7 @@ class Character():
             return False
         
 if __name__=='__main__':
-    chara=Character('3','none',3,0,1,2,2,1,'none','q_ready')
+    chara=Character('4','none',4,0,1,2,2,1,'none','q_ready')
     while(1):
         time.sleep(0.1)
         print(chara._trigger_q_ready(),end=' ')
