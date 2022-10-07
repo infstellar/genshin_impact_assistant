@@ -13,3 +13,7 @@
 ![image](install_pic_3.png)
 
 3. 以管理员运行genshin_assistant.exe
+
+4. 选择跳过(推荐)
+
+![image](install_pic_4.png)
