@@ -27,6 +27,13 @@ https://www.bilibili.com/video/BV1RV4y157m6
 3. 启动原神后，以管理员权限运行`genshin_assistant.exe`
 4. 实在搞不定可以加qq群(
 
+### 从源代码构建
+
+1. clone项目到本地
+2. 运行pip -r requirements.txt 安装依赖
+3. 缺什么包pip什么包
+4. 运行genshin_assistant.py
+
 ### 原神窗口设置
 
 - 需要在原神启动后再运行程序
