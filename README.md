@@ -41,6 +41,8 @@ https://www.bilibili.com/video/BV1RV4y157m6
 
 - 原神需要以1080p窗口化运行(全屏也可以)，设置抗锯齿为SMAA，中或以上特效。
 
+- 窗口焦点应全程在原神窗口上
+
 ### config设置
 
 参考[config设置](./doc/config.md)
