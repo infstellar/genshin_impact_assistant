@@ -11,13 +11,15 @@ class Character():
                  E_short_cd_time=None,E_long_cd_time=None,
                  Elast_time=None,Ecd_float_time=None,
                  tastic_group=None,trigger:str=None,
-                 Epress_time=None):
+                 Epress_time=None,Qlast_time=0):
         self.name=name
         self.position=position
         
         self.E_short_cd_time=E_short_cd_time
         self.E_long_cd_time=E_long_cd_time
         self.Elast_time=Elast_time
+        self.Qlast_time=Qlast_time
+        
         self.Ecd_float_time=Ecd_float_time
         self.tastic_group=tastic_group
         self.priority=priority
@@ -33,6 +35,7 @@ class Character():
         self.trigger=default_trigger_func
         self.Ecd_timer=Timer(diff_start_time=self.Ecd_time)
         self.Elast_timer=Timer(diff_start_time=Elast_time)
+        self.Qlast_timer=Timer(diff_start_time=Qlast_time)
         
         self._trigger_analyse()
         
@@ -121,9 +124,24 @@ class Character():
             return 0
         else:
             return t
+        
+    def get_Q_last_time(self):
+        t = self.Qlast_timer.getDiffTime()
+        t = self.Qlast_time - t
+        if t <=0:
+            return 0
+        else:
+            return t
     
     def is_E_pass(self):
         t = self.get_Ecd_last_time()
+        if t <= 0 :
+            return True
+        else:
+            return False
+        
+    def is_Q_pass(self):
+        t = self.get_Q_last_time()
         if t <= 0 :
             return True
         else:
