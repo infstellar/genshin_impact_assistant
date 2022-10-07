@@ -180,7 +180,11 @@ class Get_Reward(threading.Thread):
                         print("ConsoleMessage: 找不到领取树脂按钮，请检查")
                         
                     self.itt.move_to(posi[0]+30,posi[1]+30)
-                    time.sleep(0.5)
+                    time.sleep(1)
+                    self.itt.leftClick()
+                    time.sleep(0.2)
+                    self.itt.leftClick()
+                    time.sleep(0.2)
                     self.itt.leftClick()
                     time.sleep(2)
                     self.itt.move_to(1854,48)

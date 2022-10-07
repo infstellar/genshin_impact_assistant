@@ -166,12 +166,18 @@ class Tastic():
             self.do_use_longe(times=times+1)
         self.character.used_longE()
         
-    def do_use_q(self):
+    def do_use_q(self,times=0):
+        if times>=2:
+            return -1
+        
         self.chara_waiting()
         self.itt.keyPress('q')
         self.itt.delay(0.2)
-        self.character.used_Q()
         self.chara_waiting()
+        if self.is_Q_ready()==True and E_STRICT_MODE:
+            print('没q到')
+            self.do_use_q(times=times+1)
+        self.character.used_Q()
     
     def do_long_attack(self):
         self.chara_waiting(mode=1)
