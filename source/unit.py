@@ -21,40 +21,7 @@ if sys.path[1]!=path1:
 
 
 
-class Logger(object):
-    def __init__(self, fileN='Terminal.log'):
-        self.terminal = sys.stdout
-        
-        try:
-            self.log = open(fileN, 'a')
-        except FileNotFoundError:
-            open(fileN,'w')
-            self.log = open(fileN, 'a')
-        self.messageCache=''
-        self.log.write('\n\n\n')
-
-    def write(self, message):
-        '''print实际相当于sys.stdout.write'''
-        if DEBUG_MODE:
-            self.terminal.write(message)
-        elif 'ConsoleMessage' in message:
-            self.terminal.write(message+'\n')
-        nowTime=str(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())))
-        if message!='\n':
-            self.messageCache+=message
-        else:
-            self.log.write(nowTime+':    '+self.messageCache+'\n')
-            self.messageCache=''
-            
-    
-
-    def flush(self):
-        pass
-
-
-sys.stdout = Logger()#'G:/2.0/test.txt'
-
-
+# print('test')
 
 def isint(x):
     try:
@@ -92,3 +59,5 @@ DEBUG_MODE=configjson["DEBUG"]
 def reflash_config():
     global configjson
     configjson=loadjson("config.json")
+import logger_module
+sys.stdout = logger_module.Logger()#'G:/2.0/test.txt'
