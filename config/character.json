@@ -7,6 +7,7 @@
         "Ecd_float_time":0,
         "Epress_time":0,
         "tastic_group":"e?e:none;#@e?a:q;",
+        "Qlast_time":0,
         "verify":true
     },
     "zhongli":{
@@ -17,6 +18,7 @@
         "Ecd_float_time":1.5,
         "Epress_time":2,
         "tastic_group":"e?e~:none;q?q:none",
+        "Qlast_time":0,
         "verify":true
     },
     "bennett":{
@@ -27,6 +29,7 @@
         "Ecd_float_time":0,
         "Epress_time":2.5,
         "tastic_group":"e?e~:none;q?q:none",
+        "Qlast_time":0,
         "verify":true
     },
     "yunjin":{
@@ -37,6 +40,7 @@
         "Ecd_float_time":0,
         "Epress_time":3,
         "tastic_group":"e?e~:none;q?q:none",
+        "Qlast_time":0,
         "verify":true
     },
 
@@ -48,6 +52,7 @@
         "Ecd_float_time":0,
         "Epress_time":3,
         "tastic_group":"e?e.500:none;q?q:none;a,700,a,500,a~",
+        "Qlast_time":0,
         "verify":true
         
     }

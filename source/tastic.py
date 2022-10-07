@@ -179,12 +179,14 @@ class Tastic():
         self.itt.leftUp()
     
     def do_jump(self):
+        self.chara_waiting(mode=1)
         self.itt.keyPress('spacebar')
         
     def do_jump_attack(self):
+        self.chara_waiting(mode=1)
         self.itt.keyPress('spacebar')
         self.itt.delay(0.3)
-        self.chara_waiting(mode=1)
+        # self.chara_waiting(mode=1)
         self.itt.leftClick()
     
     def do_sprint(self):
@@ -236,6 +238,20 @@ class Tastic():
         else:
             tas[1].replace('.',',')
             self.execute_tastic([tas[1]])
+            
+    def estimate_lock_q_ready(self,tastic): # #@q?
+        is_ready = not self.character.is_Q_pass()
+        tas = tastic[4:]
+        tas = tas.split(':')
+        if is_ready:
+            tas[0].replace('.',',')
+            if self.stop_func():
+                print('lock stop')
+            while (not self.character.is_Q_pass()) and (not self.stop_func()):
+                self.execute_tastic([tas[0]])
+        else:
+            tas[1].replace('.',',')
+            self.execute_tastic([tas[1]])
     
     def execute_tastic(self,tastic_list):
         
@@ -275,6 +291,8 @@ class Tastic():
                         self.estimate_lock_e_ready(tas)
                     elif tas1 == 'q?':
                         self.estimate_q_ready(tas)
+                    elif tas1 == '#@q?':
+                        self.estimate_lock_q_ready(tas)
                     
                     
                         
