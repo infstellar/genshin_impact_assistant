@@ -89,8 +89,8 @@
 
 ## 自动配置team文件
 
-在character.json文件中有一些已经配置好的角色,此时在team.json文件中只需要将autofill设置为true,并配置name,priority,n,trigger即可。
-在character.json中的verify属性可以查看该角色操作是否被验证通过。
+在`character.json`文件中有一些已经配置好的角色,此时在`team.json`文件中只需要将`autofill`设置为`true`,并配置`name`,`priority`,`n`,`trigger`即可。
+在`character.json`中的`verify`属性可以查看该角色操作是否被验证通过。
 
 ## 角色元素战技、元素爆发图片设置
 
