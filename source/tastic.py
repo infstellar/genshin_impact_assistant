@@ -170,6 +170,7 @@ class Tastic():
         self.chara_waiting()
         self.itt.keyPress('q')
         self.itt.delay(0.2)
+        self.character.used_Q()
         self.chara_waiting()
     
     def do_long_attack(self):

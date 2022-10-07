@@ -26,9 +26,9 @@ def jpg_with_alpha(png,bgclolr='black',channel='bg',alpha_num=50):
 
 def jwa_2(imsrc):
     Alpha=imsrc[:,:,3:]
-    Alpha = 255.0 - Alpha;
+    Alpha = 255.0 - Alpha
 
-    Alpha = Alpha * 2;
+    Alpha = Alpha * 2
     _,Alpha=cv2.threshold(Alpha, 503, 0, cv2.THRESH_TOZERO_INV)
     _,Alpha=cv2.threshold(Alpha, 50, 0, cv2.THRESH_TOZERO)
     _,Alpha=cv2.threshold(Alpha, 50, 255, cv2.THRESH_BINARY)
