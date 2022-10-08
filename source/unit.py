@@ -1,6 +1,19 @@
-import ctypes, sys
-DEBUG_MODE=False
+import sys, os
+path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+path1 = path+'\\source'
+path2 = os.path.dirname(path)+'\\environment'
 
+if sys.path[0]!=path:
+    sys.path.insert(0, path)
+if sys.path[1]!=path1:
+    sys.path.insert(1, path1)
+if sys.path[2]!=path2:
+    sys.path.insert(2, path2)
+    
+    
+    
+DEBUG_MODE=False
+import ctypes
 def is_admin():
     try:
         return ctypes.windll.shell32.IsUserAnAdmin()
@@ -11,13 +24,8 @@ if not is_admin():
     ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, __file__, None, 1)
     print('administrator have been obtained')
 
-import os, json, time, pickle, math, random, pytweening
-path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-path1 = path+'\\source'
-if sys.path[0]!=path:
-    sys.path.insert(0, path)
-if sys.path[1]!=path1:
-    sys.path.insert(1, path1)
+import  json, time, pickle, math, random, pytweening
+
 
 
 

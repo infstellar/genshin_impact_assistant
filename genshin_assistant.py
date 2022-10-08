@@ -1,4 +1,4 @@
-# import source
+import source.unit
 import win32api, win32con, win32gui, pyautogui
 print('ConsoleMessage: 正在初始化，请稍后')
 print('ConsoleMessage: Initializing, please hold on')
