@@ -3,6 +3,7 @@ import time
 from timer_module import Timer
 from interaction_background import Interaction_BGD
 import posi_manager
+from unit import *
 def default_trigger_func():
     return True
 
@@ -100,7 +101,7 @@ class Character():
         if os.path.exists(filename):
             img = cv2.imread(filename)
             mr = self.itt.similar_img(name+'_q.png',self.itt.capture(),posi_manager.posi_chara_q)
-            print('Qmr= ',mr)
+            logger.debug('Qmr= ',mr)
             if mr>=0.9:
                 return True
             else:

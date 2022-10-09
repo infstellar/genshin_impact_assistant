@@ -9,25 +9,26 @@ domain_flag=False
 global t1, t2
 t1=None
 t2=None
+# @logger.catch
 def switch_combat_loop():
     global t1, combat_flag
     if combat_flag:
-        print('ConsoleMessage: 正在停止自动战斗')
+        logger.info('正在停止自动战斗')
         t1.stop_thread()
     else:
-        print('ConsoleMessage: 启动自动战斗')
+        logger.info('启动自动战斗')
         t1=alpha_loop.Alpha_Loop()
         t1.start()
     combat_flag = not combat_flag
-    
+# @logger.catch    
 def switch_domain_loop():
     global t2, domain_flag
     if domain_flag:
-        print('ConsoleMessage: 正在停止自动秘境')
+        logger.info('正在停止自动秘境')
         t2.stop_thread()
     else:
-        print('ConsoleMessage: 启动自动秘境')
-        t2=domain_flow.Domain_Flow_Control()
+        logger.info('启动自动秘境')
+        t2=domain_flow.Domain_Flow_Control() 
         t2.start()
     domain_flag = not domain_flag
 
@@ -48,16 +49,16 @@ def OnKeyboardEvent(event):
     #print('Transition', event.Transition)            #判断转换状态
     # print('---')
     #print('Key:', event.Key) 
+    
     if event.Key=='Oem_2' and event.MessageName=='key down':
-        print('MessageName:',event.MessageName)
-        print('Key:', event.Key)  
+        logger.debug('MessageName:',event.MessageName)
+        logger.debug('Key:', event.Key)  
         switch_combat_loop()
         
     if event.Key=='Oem_6' and event.MessageName=='key down':
-        print('MessageName:',event.MessageName)
-        print('Key:', event.Key)  
+        logger.debug('MessageName:',event.MessageName)
+        logger.debug('Key:', event.Key)  
         switch_domain_loop()
-    
 
   # 同上
     return True
@@ -68,6 +69,7 @@ hm.KeyDown = OnKeyboardEvent # 绑定键盘处理函数--就是我们创建的�
 hm.HookKeyboard()   # 初始化
 data = []
 
+@logger.catch
 def listening():
     import pythoncom
     pythoncom.PumpMessages()

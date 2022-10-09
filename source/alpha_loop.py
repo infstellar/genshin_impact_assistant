@@ -12,6 +12,7 @@ class Alpha_Loop(threading.Thread):
         self.combatloop=combat_loop.Combat_Loop(chara_list,super_stop_func=self.get_stop_flag)
         self.combatloop.stop_loop()
         self.combatloop.start()
+    @logger.catch  
     def run(self):                   #把要执行的代码写到run函数里面 线程在创建后会直接运行run函数 
         self.combatloop.start_loop()
         while(True):
@@ -36,7 +37,7 @@ class Alpha_Loop(threading.Thread):
                 ctypes.py_object(SystemExit)) 
             if res > 1: 
                 ctypes.pythonapi.PyThreadState_SetAsyncExc(thread_id, 0) 
-                print('Exception raise failure') 
+                logger.warning('Exception raise failure') 
 
 
 if __name__=='__main__':

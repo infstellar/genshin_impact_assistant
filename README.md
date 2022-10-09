@@ -10,7 +10,7 @@
 
 ## 演示视频
 
-https://www.bilibili.com/video/BV1RV4y157m6
+<https://www.bilibili.com/video/BV1RV4y157m6>(挂了)
 
 ## 目前功能及如何启动
 
@@ -24,6 +24,7 @@ https://www.bilibili.com/video/BV1RV4y157m6
 2. 手动选择队伍，配置队伍，进入秘境。
 3. 进入秘境后，按下`]`键开始刷刷刷~
 4. 如果要终止自动战斗，按下`]`键。
+
 - 注意阅读[domain_assi.md](./doc/domain_assi.md)中的注意事项
 
 ## 使用方法
@@ -35,7 +36,7 @@ https://www.bilibili.com/video/BV1RV4y157m6
 2. 下载`tag`里的`environment_all.7z`,并全部复制到解压后的`genshin_assistant`目录中,选择全部跳过。
 
     如果`environment_all.7z`下载过慢，也可以下载`environment_no_torch.7z`,并自行下载`torch`复制到目录中(或者加入q群下载
-    
+
 3. 根据实际情况配置config文件夹中的配置文件
 
 4. 启动原神后，以管理员权限运行`genshin_assistant.exe`
@@ -54,6 +55,7 @@ https://www.bilibili.com/video/BV1RV4y157m6
 4. 运行genshin_assistant.py
 
 ### 原神窗口设置
+
 - 需要在原神启动后再运行程序
 
 - 原神需要以1080p窗口化运行(全屏也可以)，设置抗锯齿为SMAA，中或以上特效。

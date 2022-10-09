@@ -76,7 +76,7 @@ class Combat_Loop(threading.Thread):
     
     def checkupstop(self):
         if self.stop_func():
-            print('ConsoleMessage: 停止自动战斗')
+            logger.info('停止自动战斗')
             return True
             
     def _switch_character(self,x:int):
@@ -89,7 +89,7 @@ class Combat_Loop(threading.Thread):
         self.tastic_exc.chara_waiting()
         for i in range(30):
             self.itt.keyPress(str(x))
-            print('try switching to '+str(x))
+            logger.debug('try switching to '+str(x))
             time.sleep(0.1)
             if self.tastic_exc.get_current_chara_num()==x:
                 break
@@ -108,7 +108,7 @@ class Combat_Loop(threading.Thread):
     def loop(self):
         idle=True
         for chara in self.chara_list:
-            print(chara.name)
+            logger.debug(chara.name)
             if self.stop_flag:
                 return 0
             if chara.trigger():
@@ -138,7 +138,7 @@ class Combat_Loop(threading.Thread):
                 if self.checkupstop():
                     break
                 ret=self.loop()
-                print('\n','idle: ',ret,'\n')
+                logger.debug('\n','idle: ',ret,'\n')
                 if ret:
                     time.sleep(0.2)
                 else:
