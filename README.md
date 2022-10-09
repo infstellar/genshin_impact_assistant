@@ -32,7 +32,7 @@ https://www.bilibili.com/video/BV1RV4y157m6
 
 1. 下载`tag`里最新版本的`genshin_assistant.zip`并解压，之后每次更新只需要重新下载`genshin_assistant.zip`即可。
 
-2. 下载`tag`里的`environment_all.7z`,并全部复制到解压后的`genshin_assistant`目录中,选择全部替换。
+2. 下载`tag`里的`environment_all.7z`,并全部复制到解压后的`genshin_assistant`目录中,选择全部跳过。
 
     如果`environment_all.7z`下载过慢，也可以下载`environment_no_torch.7z`,并自行下载`torch`复制到目录中(或者加入q群下载
     
@@ -40,8 +40,20 @@ https://www.bilibili.com/video/BV1RV4y157m6
 
 4. 启动原神后，以管理员权限运行`genshin_assistant.exe`
 
-### 原神窗口设置
+5. 实在搞不定可以加qq群(
+[图文教程](doc/install.md)
 
+### 从源代码构建
+
+1. clone项目到本地
+
+2. 运行pip -r requirements.txt 安装依赖
+
+3. 缺什么包pip什么包
+
+4. 运行genshin_assistant.py
+
+### 原神窗口设置
 - 需要在原神启动后再运行程序
 
 - 原神需要以1080p窗口化运行(全屏也可以)，设置抗锯齿为SMAA，中或以上特效。
@@ -51,13 +63,6 @@ https://www.bilibili.com/video/BV1RV4y157m6
 ### config设置
 
 参考[config设置](./doc/config.md)
-
-### 原神窗口设置
-- 需要在原神启动后再运行程序
-
-- 原神需要以1080p窗口化运行(全屏也可以)，设置抗锯齿为SMAA，中或以上特效。
-
-- 窗口焦点应全程在原神窗口上
 
 ### 为什么文件这么多
 
