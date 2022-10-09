@@ -32,12 +32,12 @@ def Line2Angle(p):
 
 def jwa_3(imsrc):
     Alpha=imsrc[:,:,3:]
-    Alpha = 255.0 - Alpha;
+    Alpha = 255.0 - Alpha
 
     Alpha[360:,286:]=0
     Alpha[:,303:]=0
     
-    Alpha = Alpha * 2;
+    Alpha = Alpha * 2
     _,Alpha=cv2.threshold(Alpha, 503, 0, cv2.THRESH_TOZERO_INV)
     _,Alpha=cv2.threshold(Alpha, 50, 0, cv2.THRESH_TOZERO)
     _,Alpha=cv2.threshold(Alpha, 50, 255, cv2.THRESH_BINARY)
@@ -87,10 +87,10 @@ def jwa_3(imsrc):
 
 	#}
     if len(boundRect)==0:
-        print('warning: can not find map')
+        logger.warning('找不到小地图')
         return None,None
     p = ((boundRect[maxId][0] + boundRect[maxId][1] / 2), (boundRect[maxId][2] + boundRect[maxId][3] / 2))
-    print((p),Line2Angle(p))
+    logger.debug((p),Line2Angle(p))
     #Alpha =cv2.circle(Alpha, p, 3, (255, 0, 0))  
     #Alpha =cv2.line(Alpha, p, (120, 170), (0, 255, 0))
     #cv2.imshow("Img", Alpha)

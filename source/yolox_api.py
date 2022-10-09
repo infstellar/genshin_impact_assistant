@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 # Copyright (c) Megvii, Inc. and its affiliates.
 from unit import *
-print('ConsoleMessage: Creating yolox obj. It may takes a few second.')
+logger.info('Creating yolox obj. It may takes a few second.')
 
 import sys,os
 path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -413,7 +413,7 @@ class Yolox_Api():
         self.args = make_parser_2(save_result=save_result,
                                   ckpt=ckpt
                                   )
-        print("ConsoleMessage: yolox device: "+self.args.device)
+        logger.info("yolox device: "+self.args.device)
         self.exp = get_exp(self.args.exp_file, self.args.name)
         if not self.args.experiment_name:
             self.args.experiment_name = self.exp.exp_name
@@ -514,7 +514,7 @@ class Yolox_Api():
         return a[0]+(a[2]-a[0])/2, a[1]+(a[3]-a[1])/2
     
 yolo_tree = Yolox_Api()
-print('ConsoleMessage: Created yolox obj.')
+logger.info('Created yolox obj.')
 if __name__ == "__main__":
     
     # yolox=yolox_api_custom()
@@ -528,4 +528,4 @@ if __name__ == "__main__":
     # main(exp, args)
     # ya = Yolox_Api()
     a=yolo_tree.predicte(cv2.imread("D:\Program Data\\vscode\yolox_test4\\assets\\84.jpg"))
-    print()
+    # print()

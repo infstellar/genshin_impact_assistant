@@ -23,15 +23,14 @@ class Domain_Flow_Control(threading.Thread):
         self.gdr.start()
         domain_times=configjson["domain_times"]
         self.last_domain_times=domain_times-1
-        print(domain_times)
-        print() 
+        logger.info('秘境次数：'+domain_times)
     
     def stop_thread(self):
         self.stop_flag=True
     
     def checkupstop(self):
         if self.stop_flag:
-            print('ConsoleMessage: 停止自动秘境')
+            logger.info('停止自动秘境')
             self.gdr.stop_thread()
             self.combatloop.stop()
             return True
@@ -89,7 +88,7 @@ class Domain_Flow_Control(threading.Thread):
         else:
             return False
         
-    
+    @logger.catch 
     def run(self):
         cap=self.itt.capture()
         cap=self.itt.png2jpg(cap,channel='ui')
@@ -106,7 +105,7 @@ class Domain_Flow_Control(threading.Thread):
             if self.current_state==ST.STATE_BEFORE_CHALLENGE:
                 
                 if self.domaininitflag==False:
-                    print('ConsoleMessage: 正在开始挑战秘境')
+                    logger.info('正在开始挑战秘境')
                     while(pdocr_api.ocr.getTextPosition(cap, textM.text(textM.clld)) == -1):
                         if self.checkupstop():
                             break
@@ -116,7 +115,7 @@ class Domain_Flow_Control(threading.Thread):
                     cap=self.itt.capture()
                     cap=self.itt.png2jpg(cap, channel='ui')
                     if pdocr_api.ocr.getTextPosition(cap, textM.text(textM.clld)) != -1:
-                        print("ConsoleMessage: Warning: 正在检测默认位置，切勿移动鼠标!\n"*3)
+                        logger.warning("正在检测默认位置，切勿移动鼠标!")
                         self.itt.move_to(PosiM.posi_domain['CLLD'][0],PosiM.posi_domain['CLLD'][1])
                         time.sleep(1)
                         # self.itt.leftClick()
@@ -151,7 +150,7 @@ class Domain_Flow_Control(threading.Thread):
                 # time.sleep(2)
                 
                 if self.combatloop.start_loop_flag==False:
-                    print('ConsoleMessage: 正在开始战斗')
+                    logger.info('正在开始战斗')
                     self.combatloop.start_loop()
                 
                 self.itt.keyPress('f')
@@ -161,22 +160,22 @@ class Domain_Flow_Control(threading.Thread):
             elif self.current_state==ST.STATE_IN_CHALLENGE:
                 
                 if self.combatloop.start_loop_flag==False:
-                    print('ConsoleMessage: 正在开始战斗')
+                    logger.info('正在开始战斗')
                     self.combatloop.start_loop()
                 time.sleep(3)
                     
             elif self.current_state==ST.END_CHALLENGE:
-                print('ConsoleMessage: 正在停止战斗')
+                logger.info('正在停止战斗')
                 self.combatloop.stop_loop()
                 time.sleep(5)
-                print('等待岩造物消失')
+                logger.info('等待岩造物消失')
                 time.sleep(20)
                 self.current_state=ST.STATE_GETTING_REAWARD
                 
             elif self.current_state==ST.STATE_GETTING_REAWARD:
                 self.gdr.reset_flag()
                 self.gdr.continue_thread()
-                print('ConsoleMessage: 正在激活石化古树')
+                logger.info('正在激活石化古树')
                 while(1):
                     if self.checkupstop():
                         break
@@ -186,8 +185,8 @@ class Domain_Flow_Control(threading.Thread):
                         break
             
             elif self.current_state==ST.STATE_END_COPY:
-                print('ConsoleMessage: 秘境结束。')
-                print('domain over. restart next domain in 5 sec.')
+                logger.info('秘境结束。')
+                logger.info('domain over. restart next domain in 5 sec.')
                 if self.checkupstop():
                     break
                 time.sleep(5)
@@ -196,8 +195,8 @@ class Domain_Flow_Control(threading.Thread):
                 cap=self.itt.capture()
                 cap=self.itt.png2jpg(cap, channel='ui')
                 if self.last_domain_times>=1:
-                    print('ConsoleMessage: 开始下一次秘境')
-                    print('start next domain.')
+                    logger.info('开始下一次秘境')
+                    logger.info('start next domain.')
                     self.last_domain_times-=1
                     
                     posi=pdocr_api.ocr.getTextPosition(cap, textM.text(textM.conti_challenge))
@@ -214,8 +213,8 @@ class Domain_Flow_Control(threading.Thread):
                     if self.checkupstop():
                         break
                 else:
-                    print('ConsoleMessage: 次数结束。退出秘境')
-                    print('no more times. exit domain.')
+                    logger.info('次数结束。退出秘境')
+                    logger.info('no more times. exit domain.')
                     posi=pdocr_api.ocr.getTextPosition(cap, textM.text(textM.exit_challenge))
                     if posi!=-1:
                         self.itt.move_to(posi[0],posi[1]+30)

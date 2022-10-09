@@ -185,11 +185,11 @@ class Interaction_BGD():
         if randtime:
             a=a*x*0.02
             if  x>0.2 and isprint:
-                print('delay: ',x,'rand: ',x+a)
+                logger.debug('delay: ',x,'rand: ',x+a)
             time.sleep(x+a)
         else:
             if  x>0.2 and isprint:
-                print('delay: ',x)
+                logger.debug('delay: ',x)
             time.sleep(x)
     
     def get_mouse_point(self):
@@ -231,7 +231,7 @@ class Interaction_BGD():
             self.PostMessageW(self.handle, self.WM_LBUTTONDOWN, wparam, lparam)
             self.delay(0.06,randtime=False, isprint=False)
             self.PostMessageW(self.handle, self.WM_LBUTTONUP, wparam, lparam)
-        print('left click')
+        logger.debug('left click')
     
     def leftDown(self, x=-1, y=-1):
         if x==-1:
@@ -241,7 +241,7 @@ class Interaction_BGD():
             lparam = y << 16 | x
             self.PostMessageW(self.handle, self.WM_LBUTTONDOWN, wparam, lparam)
             
-        print('left down')
+        logger.debug('left down')
     
     def leftUp(self, x=-1, y=-1):
         if x==-1:
@@ -250,14 +250,14 @@ class Interaction_BGD():
             wparam = 0
             lparam = y << 16 | x
             self.PostMessageW(self.handle, self.WM_LBUTTONUP, wparam, lparam)
-        print('left up')    
+        logger.debug('left up')    
          
     def leftDoubleClick(self, dt=0.05):
         if not self.CONSOLE_ONLY:
             self.leftClick()
             self.delay(0.06,randtime=False, isprint=False)
             self.leftClick()
-        print('leftDoubleClick')
+        logger.debug('leftDoubleClick')
         
     def rightClick(self, x=-1, y=-1):
         if x==-1:
@@ -269,7 +269,7 @@ class Interaction_BGD():
             self.delay(0.06,randtime=False, isprint=False)
             self.PostMessageW(self.handle, self.WM_RBUTTONUP, wparam, lparam)
             #pyautogui.rightClick()
-        print('rightClick')
+        logger.debug('rightClick')
         self.delay(0.05)
         
     def keyDown(self, key):
@@ -280,7 +280,7 @@ class Interaction_BGD():
             wparam = vk_code
             lparam = (scan_code << 16) | 1
             self.PostMessageW(self.handle, self.WM_KEYDOWN, wparam, lparam)
-        print("keyDown",key)
+        logger.debug("keyDown",key)
     
     def keyUp(self, key):
         if not self.CONSOLE_ONLY:
@@ -290,7 +290,7 @@ class Interaction_BGD():
             wparam = vk_code
             lparam = (scan_code << 16) | 0XC0000001
             self.PostMessageW(self.handle, self.WM_KEYUP, wparam, lparam)
-        print("keyUp",key)
+        logger.debug("keyUp",key)
     
     def keyPress(self, key):
         if not self.CONSOLE_ONLY:
@@ -304,7 +304,7 @@ class Interaction_BGD():
             time.sleep(0.05)
             self.PostMessageW(self.handle, self.WM_KEYUP, wparam, lparam2)
             # self.delay(self.DEFAULT_DELAY_TIME)
-        print("keyPress",key)
+        logger.debug("keyPress",key)
         
     def move_to(self, x: int, y: int, relative=False):
         """移动鼠标到坐标（x, y)

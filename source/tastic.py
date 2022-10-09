@@ -71,7 +71,7 @@ class Tastic():
     def chara_waiting(self,mode=0):
         
         if (mode==0) and (self.is_E_available() == True) and (self.enter_timer.getDiffTime() <= 1):
-            print('skip waiting')
+            logger.debug('skip waiting')
             return 0
         while self.get_character_busy():
             self.itt.delay(0.1)
@@ -109,7 +109,7 @@ class Tastic():
             # print(min( self.itt.color_SD(self.hp_charalist_green, cap[self.hp_charalist_posi[i][0],self.hp_charalist_posi[i][1]] )  ,
             #         self.itt.color_SD(self.hp_charalist_red  , cap[self.hp_charalist_posi[i][0],self.hp_charalist_posi[i][1]] ) ) )
             # print(t)
-            print('waiting  ',end=' ')
+            logger.debug('waiting  ',end=' ')
             return True
         
     
@@ -135,7 +135,7 @@ class Tastic():
             self.itt.delay(self.character.get_Ecd_time()+0.1)
         
         self.chara_waiting()
-        print('press e')
+        logger.debug('press e')
         self.itt.keyPress('e')
         
         #self.itt.delay(1)
@@ -154,7 +154,7 @@ class Tastic():
                 
         self.chara_waiting()
         pyautogui.click(button='middle')
-        print('press long e')
+        logger.debug('press long e')
         self.itt.keyPress('s')
         self.itt.keyDown('e')
         self.itt.delay(self.character.Epress_time)
@@ -175,7 +175,7 @@ class Tastic():
         self.itt.delay(0.2)
         self.chara_waiting()
         if self.is_Q_ready()==True and E_STRICT_MODE:
-            print('没q到')
+            logger.debug('没q到')
             self.do_use_q(times=times+1)
         self.character.used_Q()
     
@@ -239,7 +239,7 @@ class Tastic():
         if is_ready:
             tas[0].replace('.',',')
             if self.stop_func():
-                print('lock stop')
+                logger.debug('lock stop')
             while (not self.character.is_E_pass()) and (not self.stop_func()):
                 self.execute_tastic([tas[0]])
         else:
@@ -253,7 +253,7 @@ class Tastic():
         if is_ready:
             tas[0].replace('.',',')
             if self.stop_func():
-                print('lock stop')
+                logger.debug('lock stop')
             while (not self.character.is_Q_pass()) and (not self.stop_func()):
                 self.execute_tastic([tas[0]])
         else:

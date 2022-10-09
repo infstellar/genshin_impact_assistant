@@ -24,7 +24,7 @@ class Get_Reward(threading.Thread):
         # cv2.imshow('123',cap)
         # cv2.waitKey(0)
         addition_info,ret2 = source.yolox_api.yolo_tree.predicte(cap)
-        print(addition_info)
+        logger.debug(addition_info)
         if addition_info!=None:
             if addition_info[0][1][0]>=0.5:
                 treex, treey=source.yolox_api.yolo_tree.get_center(addition_info)
@@ -48,7 +48,7 @@ class Get_Reward(threading.Thread):
             tx, ty=self.itt.get_mouse_point()
             dx=int(tposi[0]-tx)
             movenum=2
-            print(dx)
+            logger.debug(dx)
             
             if dx>=0:
                 movement.move(movement.RIGHT,movenum)
@@ -78,7 +78,7 @@ class Get_Reward(threading.Thread):
                 movement.move(movement.LEFT,4)
                 self.itt.keyPress('w')
             if dx<=8:
-                print(dx)
+                logger.debug(dx)
                 return 0
             else:
                 return 1
@@ -177,7 +177,7 @@ class Get_Reward(threading.Thread):
                             self.itt.keyPress('f')
                         time.sleep(3)
                     if posi==-1:
-                        print("ConsoleMessage: 找不到领取树脂按钮，请检查")
+                        logger.error("找不到领取树脂按钮，请检查")
                         
                     self.itt.move_to(posi[0]+30,posi[1]+30)
                     time.sleep(1)
