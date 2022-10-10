@@ -108,7 +108,7 @@ class Combat_Loop(threading.Thread):
     def loop(self):
         idle=True
         for chara in self.chara_list:
-            logger.debug(chara.name)
+            logger.debug('check up in: '+chara.name)
             if self.stop_flag:
                 return 0
             if chara.trigger():
@@ -138,7 +138,7 @@ class Combat_Loop(threading.Thread):
                 if self.checkupstop():
                     break
                 ret=self.loop()
-                logger.debug('\n','idle: ',ret,'\n')
+                logger.debug('idle: '+str(ret))
                 if ret:
                     time.sleep(0.2)
                 else:
