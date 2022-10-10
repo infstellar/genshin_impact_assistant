@@ -2,8 +2,9 @@
     "version":"v0.2.1",
 
     "teamfile":"team.json",
+    "env_floder_path":"..\\environment",
     "domain_times":1,
     "isLiYueDomain":false,
     "device":"cpu",
-    "DEBUG":false 
+    "DEBUG":true 
 }

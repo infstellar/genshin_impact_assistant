@@ -3,8 +3,12 @@ logger.info('Creating ocr object.')
 from timer_module import Timer
 pdocr_timer_performance=Timer()
 pdocr_timer_performance.reset()
-from paddleocr import PaddleOCR
-from paddleocr import draw_ocr
+try:
+    from paddleocr import PaddleOCR
+    from paddleocr import draw_ocr
+except Exception as error:
+    logger.critical("导入paddleocr时错误; err code: 001")
+    logger.exception(error)
 
 APPROXIMATE_MATCHING=0
 ACCURATE_MATCHING=1
@@ -59,7 +63,7 @@ class Paddleocr_API():
         elif mode==TWICE_AND_MATCHING:
             for i in range(len(result)):
                 if  text[0] in result[i][1][0] and text[1] in result[i][1][0]:
-                    print('TWICE_AND_MATCHING found ',text,end='')
+                    logger.debug('TWICE_AND_MATCHING found '+text+ ' |function name: '+ inspect.getframeinfo(inspect.currentframe().f_back)[2])
                     return result[i]
         elif mode==TWICE_FRONTANDBACK_MATCHING:
             for i in range(len(result)):
@@ -73,13 +77,13 @@ class Paddleocr_API():
         elif mode==TWICE_FRONTANDBACK_SEQUENTIAL_MATCHING:
             for i in range(len(result)):
                 if (i!=len(result)-1) and (text[0] in result[i][1][0]) and (text[1] in result[i+1][1][0]):
-                    print('TWICE_FRONTANDBACK_SEQUENTIAL_MATCHING found ',text,end='')
+                    logger.debug('TWICE_FRONTANDBACK_SEQUENTIAL_MATCHING found '+text, '|function name: '+ inspect.getframeinfo(inspect.currentframe().f_back)[2])
                     return result[i]
         elif mode==REPEATLY_MATCHING:
             result=[]
             for i in range(len(result)):
                 if (i!=len(result)-1) and (text[0] in result[i][1][0]) and (text[1] in result[i+1][1][0]):
-                    print('TWICE_FRONTANDBACK_SEQUENTIAL_MATCHING found ',text,end='')
+                    logger.debug('TWICE_FRONTANDBACK_SEQUENTIAL_MATCHING found '+text+ '|function name: '+ inspect.getframeinfo(inspect.currentframe().f_back)[2])
                     result.append(result[i])
             if result!=[]:
                 return result
@@ -88,12 +92,12 @@ class Paddleocr_API():
     def getTextPosition(self,imsrc,text,mode=APPROXIMATE_MATCHING,returnMode=RETURN_POSITION,isprintlog=False,message='',defaultend='\n'):
         res=self.ImgAnalyse(imsrc)
         resposition=self.findText(res,text,mode=mode)
-        print('getTextPosition:  ',message,end=' | ')
+        logger.debug('getTextPosition:  '+message,end=' | ')
         if isprintlog:
-            print('res: ',end='')
+            logger.debug('res: '+ '|function name: '+ inspect.getframeinfo(inspect.currentframe().f_back)[2])
             for i in res:
-                print(i[1][0],end=', ')
-            print(end=defaultend)
+                logger.debug(i[1][0],end=', ')
+            logger.debug(end=defaultend)
         #cv2.imshow('pic',imsrc)
         #cv2.waitKey(0)
         if resposition!=None:
@@ -104,13 +108,13 @@ class Paddleocr_API():
                     result.append([resposition[0][0][0],resposition[0][0][1]])
                 return result
             if returnMode==RETURN_POSITION:
-                print('found the text:',text)
+                logger.debug('found the text:'+ text+ ' |function name: '+ inspect.getframeinfo(inspect.currentframe().f_back)[2])
                 return [resposition[0][0][0],resposition[0][0][1]]
             elif returnMode==RETURN_TEXT:
-                print('found the text:',text)
+                logger.debug('found the text:'+ text+ ' |function name: '+ inspect.getframeinfo(inspect.currentframe().f_back)[2])
                 return resposition[1][0]
         else:
-            print('can not find the text:',text)
+            logger.debug('can not find the text:'+ text+ ' |function name: '+ inspect.getframeinfo(inspect.currentframe().f_back)[2])
             return -1
         
     def is_img_num(self,imsrc):
@@ -129,7 +133,7 @@ class Paddleocr_API():
                 except:
                     resnum=None
         t = pdocr_timer_performance.getDiffTime()
-        print(isnum, resnum, t)
+        logger.debug(str(isnum)+' '+ str(resnum)+' '+ str(t)+ ' |function name: '+ inspect.getframeinfo(inspect.currentframe().f_back)[2])
         return isnum, resnum
     
     def is_img_num_plus(self,imsrc):

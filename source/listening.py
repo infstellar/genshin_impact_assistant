@@ -51,13 +51,13 @@ def OnKeyboardEvent(event):
     #print('Key:', event.Key) 
     
     if event.Key=='Oem_2' and event.MessageName=='key down':
-        logger.debug('MessageName:',event.MessageName)
+        logger.debug('MessageName: '+event.MessageName)
         logger.debug('Key:', event.Key)  
         switch_combat_loop()
         
     if event.Key=='Oem_6' and event.MessageName=='key down':
-        logger.debug('MessageName:',event.MessageName)
-        logger.debug('Key:', event.Key)  
+        logger.debug('MessageName: '+event.MessageName)
+        logger.debug('Key: '+ event.Key)  
         switch_domain_loop()
 
   # 同上

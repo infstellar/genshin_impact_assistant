@@ -90,7 +90,7 @@ def jwa_3(imsrc):
         logger.warning('找不到小地图')
         return None,None
     p = ((boundRect[maxId][0] + boundRect[maxId][1] / 2), (boundRect[maxId][2] + boundRect[maxId][3] / 2))
-    logger.debug((p),Line2Angle(p))
+    logger.debug((p)+' '+Line2Angle(p))
     #Alpha =cv2.circle(Alpha, p, 3, (255, 0, 0))  
     #Alpha =cv2.line(Alpha, p, (120, 170), (0, 255, 0))
     #cv2.imshow("Img", Alpha)

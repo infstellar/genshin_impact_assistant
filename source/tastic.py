@@ -109,7 +109,7 @@ class Tastic():
             # print(min( self.itt.color_SD(self.hp_charalist_green, cap[self.hp_charalist_posi[i][0],self.hp_charalist_posi[i][1]] )  ,
             #         self.itt.color_SD(self.hp_charalist_red  , cap[self.hp_charalist_posi[i][0],self.hp_charalist_posi[i][1]] ) ) )
             # print(t)
-            logger.debug('waiting  ',end=' ')
+            logger.debug('waiting  ')
             return True
         
     
@@ -135,7 +135,7 @@ class Tastic():
             self.itt.delay(self.character.get_Ecd_time()+0.1)
         
         self.chara_waiting()
-        logger.debug('press e')
+        logger.debug('do_use_e')
         self.itt.keyPress('e')
         
         #self.itt.delay(1)
@@ -154,7 +154,7 @@ class Tastic():
                 
         self.chara_waiting()
         pyautogui.click(button='middle')
-        logger.debug('press long e')
+        logger.debug('do_use_longe')
         self.itt.keyPress('s')
         self.itt.keyDown('e')
         self.itt.delay(self.character.Epress_time)

@@ -48,7 +48,7 @@ def reset_const_val():
     VIEW_X=p[0]
     VIEW_Y=p[1]
     VIEW_D=delta
-    logger.debug(VIEW_X,VIEW_Y,VIEW_D)
+    logger.debug(str(VIEW_X)+str(VIEW_Y)+str(VIEW_D))
 
 def view_to_90(deltanum=1.5,maxloop=50):
     global VIEW_X,VIEW_Y,VIEW_D

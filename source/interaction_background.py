@@ -45,6 +45,9 @@ class Interaction_BGD():
             self.handle=ctypes.windll.user32.FindWindowW(None, "原神")
         else:
             self.handle=hwnd
+            
+        if self.handle==0:
+            logger.error("未找到句柄，请确认原神窗口是否开启。")
     
     def capture(self,posi=None,shape='yx',jpgmode=None):
         """窗口客户区截图
@@ -180,16 +183,17 @@ class Interaction_BGD():
             ret+=t
         return math.sqrt(ret/min(len(x_col),len(target_col)))
     
-    def delay(self, x, randtime=True, isprint=True):
+    def delay(self, x, randtime=True, isprint=True, comment=''):
+        upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
         a=random.randint(-10,10)
         if randtime:
             a=a*x*0.02
             if  x>0.2 and isprint:
-                logger.debug('delay: ',x,'rand: ',x+a)
+                logger.debug('delay: '+ str(x)+' rand: '+ str(x+a)+ ' |function name: '+ upper_func_name+ ' |comment: '+ comment)
             time.sleep(x+a)
         else:
             if  x>0.2 and isprint:
-                logger.debug('delay: ',x)
+                logger.debug('delay: '+ str(x)+ ' |function name: '+ upper_func_name+ ' |comment: '+ comment)
             time.sleep(x)
     
     def get_mouse_point(self):
@@ -231,7 +235,7 @@ class Interaction_BGD():
             self.PostMessageW(self.handle, self.WM_LBUTTONDOWN, wparam, lparam)
             self.delay(0.06,randtime=False, isprint=False)
             self.PostMessageW(self.handle, self.WM_LBUTTONUP, wparam, lparam)
-        logger.debug('left click')
+        logger.debug('left click '+ ' |function name: '+ inspect.getframeinfo(inspect.currentframe().f_back)[2])
     
     def leftDown(self, x=-1, y=-1):
         if x==-1:
@@ -241,7 +245,7 @@ class Interaction_BGD():
             lparam = y << 16 | x
             self.PostMessageW(self.handle, self.WM_LBUTTONDOWN, wparam, lparam)
             
-        logger.debug('left down')
+        logger.debug('left down'+ ' |function name: '+ inspect.getframeinfo(inspect.currentframe().f_back)[2])
     
     def leftUp(self, x=-1, y=-1):
         if x==-1:
@@ -250,14 +254,14 @@ class Interaction_BGD():
             wparam = 0
             lparam = y << 16 | x
             self.PostMessageW(self.handle, self.WM_LBUTTONUP, wparam, lparam)
-        logger.debug('left up')    
+        logger.debug('left up '+ ' |function name: '+ inspect.getframeinfo(inspect.currentframe().f_back)[2])    
          
     def leftDoubleClick(self, dt=0.05):
         if not self.CONSOLE_ONLY:
             self.leftClick()
             self.delay(0.06,randtime=False, isprint=False)
             self.leftClick()
-        logger.debug('leftDoubleClick')
+        logger.debug('leftDoubleClick '+ ' |function name: '+ inspect.getframeinfo(inspect.currentframe().f_back)[2])
         
     def rightClick(self, x=-1, y=-1):
         if x==-1:
@@ -269,7 +273,7 @@ class Interaction_BGD():
             self.delay(0.06,randtime=False, isprint=False)
             self.PostMessageW(self.handle, self.WM_RBUTTONUP, wparam, lparam)
             #pyautogui.rightClick()
-        logger.debug('rightClick')
+        logger.debug('rightClick '+ ' |function name: '+ inspect.getframeinfo(inspect.currentframe().f_back)[2])
         self.delay(0.05)
         
     def keyDown(self, key):
@@ -280,7 +284,7 @@ class Interaction_BGD():
             wparam = vk_code
             lparam = (scan_code << 16) | 1
             self.PostMessageW(self.handle, self.WM_KEYDOWN, wparam, lparam)
-        logger.debug("keyDown",key)
+        logger.debug("keyDown "+ key+ ' |function name: '+ inspect.getframeinfo(inspect.currentframe().f_back)[2])
     
     def keyUp(self, key):
         if not self.CONSOLE_ONLY:
@@ -290,7 +294,7 @@ class Interaction_BGD():
             wparam = vk_code
             lparam = (scan_code << 16) | 0XC0000001
             self.PostMessageW(self.handle, self.WM_KEYUP, wparam, lparam)
-        logger.debug("keyUp",key)
+        logger.debug("keyUp "+ key+ ' |function name: '+ inspect.getframeinfo(inspect.currentframe().f_back)[2])
     
     def keyPress(self, key):
         if not self.CONSOLE_ONLY:
@@ -304,7 +308,7 @@ class Interaction_BGD():
             time.sleep(0.05)
             self.PostMessageW(self.handle, self.WM_KEYUP, wparam, lparam2)
             # self.delay(self.DEFAULT_DELAY_TIME)
-        logger.debug("keyPress",key)
+        logger.debug("keyPress "+ key+ ' |function name: '+ inspect.getframeinfo(inspect.currentframe().f_back)[2])
         
     def move_to(self, x: int, y: int, relative=False):
         """移动鼠标到坐标（x, y)
