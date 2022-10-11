@@ -47,7 +47,7 @@ def get_chara_list(teamname='team.json'):
         ctrigger=team_item["trigger"]
         
         if cEcd_float_time>0:
-            logger.info("角色 "+cname+" 的E float time大于0，请确定该角色不是多段e技能角色。")
+            logger.info("角色 "+cname+" 的Ecd_float_time大于0，请确定该角色不是多段e技能角色。")
 
         chara_list.append(
             character.Character(
