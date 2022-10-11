@@ -133,13 +133,14 @@ class Paddleocr_API():
                 except:
                     resnum=None
         t = pdocr_timer_performance.getDiffTime()
-        logger.debug(str(isnum)+' '+ str(resnum)+' '+ str(t)+ ' |function name: '+ inspect.getframeinfo(inspect.currentframe().f_back)[2])
-        return isnum, resnum
+        
+        return isnum, resnum, t
     
     def is_img_num_plus(self,imsrc):
-        ret1,ret2 = self.is_img_num(imsrc)
+        ret1,ret2, t = self.is_img_num(imsrc)
         if ret1==None:
-            ret1, ret2 = self.is_img_num(imsrc)
+            ret1, ret2, t = self.is_img_num(imsrc)
+        logger.debug(str(ret1)+' '+ str(ret2)+' '+ str(t)+ ' |function name: '+ inspect.getframeinfo(inspect.currentframe().f_back)[2])
         return ret1, ret2
         
 ocr=Paddleocr_API()
