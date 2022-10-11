@@ -126,13 +126,18 @@ class Tastic():
         #print('press a')
         self.itt.leftClick()
         self.itt.delay(0.1)
-        
+
+    def do_down_attack(self):
+        self.itt.leftClick()
+        self.itt.delay(0.1)
+
     def do_use_e(self,times=0):
         if times>=2:
             return -1
         
         if self.character.Ecd_float_time>0:
-            self.itt.delay(self.character.get_Ecd_time()+0.1)
+            if self._is_E_release()==True:
+                self.itt.delay(self.character.get_Ecd_time()+0.1)
         
         self.chara_waiting()
         logger.debug('do_use_e')
@@ -267,6 +272,8 @@ class Tastic():
             for tas in tastic:
                 if tas == 'a':
                     self.do_attack()
+                elif tas == 'da':
+                    self.do_down_attack()
                 elif tas == 'q':
                     self.do_use_q()
                 elif tas == 'e':
