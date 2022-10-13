@@ -47,7 +47,7 @@ class Get_Reward(threading.Thread):
         if tposi != False:
             tx, ty=self.itt.get_mouse_point()
             dx=int(tposi[0]-tx)
-            movenum=2
+            movenum=4
             logger.debug(dx)
             
             if dx>=0:
@@ -61,7 +61,7 @@ class Get_Reward(threading.Thread):
                 movenum=1
             return True
         else:
-            movenum=2
+            movenum=4
             return False                
     
     def find_tree(self):
