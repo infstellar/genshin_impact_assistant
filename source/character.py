@@ -7,25 +7,34 @@ from unit import *
 def default_trigger_func():
     return True
 
+def log_format(x,name):
+    variable_name_len=15
+    variable_name=name
+    variable_content=str(x)
+    var_name=variable_name+(variable_name_len-len(variable_name))*' '+'|'
+    logger.debug(var_name+variable_content)
+
+
 class Character():
+    @logger.catch
     def __init__(self,name=None,position=None,n=None,priority=None,
                  E_short_cd_time=None,E_long_cd_time=None,
                  Elast_time=None,Ecd_float_time=None,
                  tastic_group=None,trigger:str=None,
-                 Epress_time=None,Qlast_time=0):
+                 Epress_time=None,Qlast_time=0): 
+        
         self.name=name
         self.position=position
-        
         self.E_short_cd_time=E_short_cd_time
         self.E_long_cd_time=E_long_cd_time
         self.Elast_time=Elast_time
         self.Qlast_time=Qlast_time
-        
         self.Ecd_float_time=Ecd_float_time
         self.tastic_group=tastic_group
         self.priority=priority
         self.n=n
         self.Epress_time=Epress_time
+        
         self.itt=Interaction_BGD()
         
         if E_long_cd_time!=0:
@@ -37,8 +46,25 @@ class Character():
         self.Ecd_timer=Timer(diff_start_time=self.Ecd_time)
         self.Elast_timer=Timer(diff_start_time=Elast_time)
         self.Qlast_timer=Timer(diff_start_time=Qlast_time)
-        
+
+        self._init_log()
         self._trigger_analyse()
+    
+    def _init_log(self):
+        logger.debug('---- character info ----')
+        log_format(self.name,'name')
+        log_format(self.position,'position')
+        log_format(self.E_short_cd_time,'E_short_cd_time')
+        log_format(self.E_long_cd_time,'E_long_cd_time')
+        log_format(self.Elast_time,'Elast_time')
+        log_format(self.Qlast_time,'Qlast_time')
+        log_format(self.Ecd_float_time,'Ecd_float_time')
+        log_format(self.tastic_group,'tastic_group')
+        log_format(self.priority,'priority')
+        log_format(self.n,'n')
+        log_format(self.Epress_time,'Epress_time')
+        log_format(self.Ecd_time,'Ecd_time')
+        logger.debug('---- character info end ---')
         
     def _trigger_e_ready(self):
         if self.is_E_ready():
