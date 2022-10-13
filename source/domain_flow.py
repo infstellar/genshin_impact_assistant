@@ -7,6 +7,7 @@ import flow_state as ST
 import threading
 
 class Domain_Flow_Control(threading.Thread):
+    @logger.catch
     def __init__(self):
         threading.Thread.__init__(self)
         self.current_state=ST.STATE_BEFORE_CHALLENGE
@@ -23,7 +24,7 @@ class Domain_Flow_Control(threading.Thread):
         self.gdr.start()
         domain_times=configjson["domain_times"]
         self.last_domain_times=domain_times-1
-        logger.info('秘境次数：'+domain_times)
+        logger.info('秘境次数：' + str(domain_times))
     
     def stop_thread(self):
         self.stop_flag=True

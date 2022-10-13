@@ -12,9 +12,9 @@ class Pickup_Loop(threading.Thread):
         self.pick_flag=False
         
         
-    def trigger(self,cap):
-        if video_loop.video_cap.itt.similar_img('pickup.jpg',cap[self.posi[0]:self.posi[2],self.posi[1]:self.posi[3]])>=0.8:
-            return True
+    # def trigger(self,cap):
+    #     if video_loop.video_cap.itt.similar_img('pickup.jpg',cap[self.posi[0]:self.posi[2],self.posi[1]:self.posi[3]])>=0.8:
+    #         return True
         
     def operate(self):
         self.pick_flag=True

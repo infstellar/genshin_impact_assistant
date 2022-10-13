@@ -6,13 +6,13 @@ import static_method, posi_manager
 itt=static_method.sta_itt
 
 
-def get_direction_angle():
-    cap=itt.png2jpg(itt.capture(),bgcolor='white',channel='ui')
-    val=[]
-    for i in ['N.jpg','NE.jpg','E.jpg','SE.jpg','S.jpg','SW.jpg','W.jpg','NW.jpg']:
-        a=itt.similar_img(i,cap,posi_manager.posi_arrow)
-        val.append(a)
-    return [0,45,90,135,180,-135,-90,-45][val.index(max(val))]
+# def get_direction_angle():
+#     cap=itt.png2jpg(itt.capture(),bgcolor='white',channel='ui')
+#     val=[]
+#     for i in ['N.jpg','NE.jpg','E.jpg','SE.jpg','S.jpg','SW.jpg','W.jpg','NW.jpg']:
+#         a=itt.similar_img(i,cap,posi_manager.posi_arrow)
+#         val.append(a)
+#     return [0,45,90,135,180,-135,-90,-45][val.index(max(val))]
 
 
 

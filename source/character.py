@@ -121,19 +121,19 @@ class Character():
         
     
         
-    def is_chara_Q_ready(self):
-        name = self.name
-        filename='imgs/'+name+'_q.png'
-        if os.path.exists(filename):
-            img = cv2.imread(filename)
-            mr = self.itt.similar_img(name+'_q.png',self.itt.capture(),posi_manager.posi_chara_q)
-            logger.debug('Qmr= '+ str(mr))
-            if mr>=0.9:
-                return True
-            else:
-                return False
-        else:
-            return True
+    # def is_chara_Q_ready(self):
+    #     name = self.name
+    #     filename='imgs/'+name+'_q.png'
+    #     if os.path.exists(filename):
+    #         img = cv2.imread(filename)
+    #         mr = self.itt.similar_img(name+'_q.png',self.itt.capture(),posi_manager.posi_chara_q)
+    #         logger.debug('Qmr= '+ str(mr))
+    #         if mr>=0.9:
+    #             return True
+    #         else:
+    #             return False
+    #     else:
+    #         return True
     
     
     

@@ -2,7 +2,7 @@ try:
     from unit import *
 except:
     from source.unit import *
-import PyHook3,time,keyboard
+import PyHook3, time, keyboard
 import alpha_loop, domain_flow
 combat_flag=False
 domain_flag=False
@@ -11,7 +11,6 @@ t1=None
 t2=None
 # @logger.catch
 keymapjson=loadjson("keymap.json")
-
 
 def switch_combat_loop():
     global t1, combat_flag
@@ -34,44 +33,12 @@ def switch_domain_loop():
         t2=domain_flow.Domain_Flow_Control() 
         t2.start()
     domain_flag = not domain_flag
-keyboard.add_hotkey(keymapjson["autoBattle"], switch_combat_loop)
+    
+keyboard.add_hotkey(keymapjson["autoCombat"], switch_combat_loop)
 keyboard.add_hotkey(keymapjson["autoDomain"], switch_domain_loop)
 
-def OnKeyboardEvent(event):
-              #同上，共同属性不再赘述
-    #print('Message:',event.Message)
-    # print('Time:',event.Time)
-    # print('Window:',event.Window)
-    # print('WindowName:',event.WindowName)
-    # print('Ascii:', event.Ascii, chr(event.Ascii))   #按键的ASCII码
-                           #按键的名称
-    # print('KeyID:', event.KeyID)                     #按键的虚拟键值
-    #print('ScanCode:', event.ScanCode)               #按键扫描码
-    # print('Extended:', event.Extended)               #判断是否为增强键盘的扩展键
-    # print('Injected:', event.Injected)
-    # print('Alt', event.Alt)                          #是某同时按下Alt
-    #print('Transition', event.Transition)            #判断转换状态
-    # print('---')
-    #print('Key:', event.Key) 
-    
-    if event.Key=='Oem_2' and event.MessageName=='key down':
-        logger.debug('MessageName: '+event.MessageName)
-        logger.debug('Key:', event.Key)  
-        switch_combat_loop()
-        
-    if event.Key=='Oem_6' and event.MessageName=='key down':
-        logger.debug('MessageName: '+event.MessageName)
-        logger.debug('Key: '+ event.Key)  
-        switch_domain_loop()
 
-  # 同上
-    return True
-
-
-# hm = PyHook3.HookManager()  # 创建一个HOOK管理对象
-# hm.KeyDown = OnKeyboardEvent # 绑定键盘处理函数--就是我们创建的函数
-# hm.HookKeyboard()   # 初始化
-data = []
+# data = []
 
 @logger.catch
 def listening():
@@ -85,3 +52,39 @@ if __name__ == '__main__':
 
     # 循环监听
     listening()
+    
+    
+# def OnKeyboardEvent(event):
+#               #同上，共同属性不再赘述
+#     #print('Message:',event.Message)
+#     # print('Time:',event.Time)
+#     # print('Window:',event.Window)
+#     # print('WindowName:',event.WindowName)
+#     # print('Ascii:', event.Ascii, chr(event.Ascii))   #按键的ASCII码
+#                            #按键的名称
+#     # print('KeyID:', event.KeyID)                     #按键的虚拟键值
+#     #print('ScanCode:', event.ScanCode)               #按键扫描码
+#     # print('Extended:', event.Extended)               #判断是否为增强键盘的扩展键
+#     # print('Injected:', event.Injected)
+#     # print('Alt', event.Alt)                          #是某同时按下Alt
+#     #print('Transition', event.Transition)            #判断转换状态
+#     # print('---')
+#     #print('Key:', event.Key) 
+    
+#     if event.Key=='Oem_2' and event.MessageName=='key down':
+#         logger.debug('MessageName: '+event.MessageName)
+#         logger.debug('Key:', event.Key)  
+#         switch_combat_loop()
+        
+#     if event.Key=='Oem_6' and event.MessageName=='key down':
+#         logger.debug('MessageName: '+event.MessageName)
+#         logger.debug('Key: '+ event.Key)  
+#         switch_domain_loop()
+
+#   # 同上
+#     return True
+
+
+# hm = PyHook3.HookManager()  # 创建一个HOOK管理对象
+# hm.KeyDown = OnKeyboardEvent # 绑定键盘处理函数--就是我们创建的函数
+# hm.HookKeyboard()   # 初始化
