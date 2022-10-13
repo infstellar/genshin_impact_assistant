@@ -1,7 +1,7 @@
 #from interaction import *
 from re import T
 import pyautogui
-import character,tastic,time,threading
+import character,tastic,time,threading, img_manager as imgM, posi_manager as posiM
 from unit import *
 from timer_module import Timer
 from interaction_background import Interaction_BGD
@@ -77,10 +77,14 @@ class Combat_Loop(threading.Thread):
         #self.itt.delay(1)
         ...
     
-    def checkupstop(self):
+    def checkup_stop(self):
         if self.stop_func():
             logger.info('停止自动战斗')
             return True
+    
+    def checkup_trapped(self):
+        pass
+        # if self.itt.capture(posi=posiM)
             
     def _switch_character(self,x:int):
         pyautogui.click(button='middle')
@@ -138,7 +142,7 @@ class Combat_Loop(threading.Thread):
     def run(self):
         while(1):
             if self.start_loop_flag:
-                if self.checkupstop():
+                if self.checkup_stop():
                     break
                 ret=self.loop()
                 logger.debug('idle: '+str(ret))

@@ -3,6 +3,7 @@ from unit import *
 import combat_loop,character
 
 class Alpha_Loop(threading.Thread):
+    @logger.catch
     def __init__(self):
         threading.Thread.__init__(self)
         

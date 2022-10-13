@@ -73,7 +73,9 @@ class Tastic():
         if (mode==0) and (self.is_E_available() == True) and (self.enter_timer.getDiffTime() <= 1):
             logger.debug('skip waiting')
             return 0
-        while self.get_character_busy():
+        while self.get_character_busy() and (not self.stop_func()):
+            if self.stop_func():
+                logger.debug('chara_waiting stop')
             self.itt.delay(0.1)
     
     def get_current_chara_num(self):

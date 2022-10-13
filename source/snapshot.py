@@ -4,7 +4,7 @@ from interaction_background import Interaction_BGD
 import cv2,numpy as np, os, time
 itt=Interaction_BGD()
 i=0
-numi=-11500
+numi=-21500
 SA_name=''
 
 def jpg_with_alpha(png,bgclolr='black',channel='bg',alpha_num=50):

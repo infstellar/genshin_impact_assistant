@@ -4,7 +4,7 @@ import win32api, win32con, win32gui, pyautogui
 from ctypes.wintypes import RECT, HWND
 import numpy as np
 import cv2 
-import vkcode 
+import vkcode ,posi_manager, img_manager
 
 class Interaction_BGD():
     '''
@@ -130,34 +130,28 @@ class Interaction_BGD():
         matching_rate = max_val
         return matching_rate, top_left, bottom_right
     
-    def similar_img(self,img_name,cap,img_posi,is_gray=False,is_show_res:bool = False):
-        img1 = cv2.imread('imgs/'+img_name, cv2.IMREAD_UNCHANGED)
-
-        #cap = self.itt.capture() 
-        img = cap[img_posi[0]:img_posi[2],img_posi[1]:img_posi[3]]
-        gray = img
-        # if is_gray:
-        #     gray = cv2.cvtColor(img, cv2.COLOR_BGRA2GRAY)
-        
-        # 读取图片，并保留Alpha通道
-        template = img1
-        #template = template/template[3]
-        # 取出Alpha通道
+    def similar_img(self,img, target, is_gray=False,is_show_res:bool = False):
 
         if is_gray:
-            gray = cv2.cvtColor(img, cv2.COLOR_BGRA2GRAY)
-            template = cv2.cvtColor(template, cv2.COLOR_BGRA2GRAY)
+            img = cv2.cvtColor(img, cv2.COLOR_BGRA2GRAY)
+            target = cv2.cvtColor(target, cv2.COLOR_BGRA2GRAY)
         # 模板匹配，将alpha作为mask，TM_CCORR_NORMED方法的计算结果范围为[0, 1]，越接近1越匹配
-        result = cv2.matchTemplate(gray, template, cv2.TM_CCORR_NORMED)
+        result = cv2.matchTemplate(img, target, cv2.TM_CCORR_NORMED)
         # 获取结果中最大值和最小值以及他们的坐标
         min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
         if is_show_res:
-            cv2.imshow('template', template)
-            cv2.imshow('gray', gray)
+            cv2.imshow('template', target)
+            cv2.imshow('gray', img)
             cv2.waitKey()
         # 在窗口截图中匹配位置画红色方框
         matching_rate = max_val
         return matching_rate
+    
+    def is_img_exist(self,imgname ,jpgmode,is_gray=False):
+        cap = self.capture(posi=posi_manager.get_posi_from_str(imgname),jpgmode=jpgmode)
+        matching_rate = self.similar_img(img_manager.get_img_from_imgname(imgname), cap)
+        return matching_rate
+        
     
     def png2jpg(self,png,bgcolor='black',channel='bg',alpha_num=50):
         if bgcolor=='black':

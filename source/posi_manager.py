@@ -1,8 +1,14 @@
+import cv2
 ly=96
 dx=0
 dy=0
 d2x=5
 d2y=5
+
+posi_dict={
+    "posi_coming_out_by_space":[505,1379,568,1447]
+}
+
 posi_charalist_q=[[339-ly+dy,1591+dx,339-ly+55,1591+55],[339+dy,1591+dx,339+55,1591+55],
                   [339+ly+dy,1591+dx,339+ly+55,1591+55],[339+2*ly+dy,1591+dx,339+2*ly+55,1591+55]]
 posi_charalist_q_point=[ 
@@ -19,6 +25,7 @@ posi_chara_q=[915+d2x,1766+d2y,1015,1866]
 posi_chara_q_point=[981,1812]
 posi_chara_e=[965,1666,1015,1716]
 posi_chara_smaller_e=[974,1671,1013,1710]
+posi_coming_out_by_space=[505,1379,568,1447]
 # posi_chara_e_point=[]
 posi_arrow=[111-3,156-3,111+26+2,156+26+2]
 posi_domain={
@@ -30,3 +37,14 @@ posi_domain={
     'UseResin':[714, 537, 811, 1386], 
     'LeaveOrContinue':[908, 391, 1042, 1547]
 }
+
+def get_posi_from_str(str1:str):
+    return posi_dict[str1]
+
+if __name__=='__main__':
+    a = cv2.imread("imgs\\-21387.jpg")
+    p = posi_coming_out_by_space
+    b = a [p[0]:p[2],p[1]:p[3]]
+    cv2.imshow("123",b)
+    cv2.imwrite("assests\imgs\common\coming_out_by_space.jpg",b)
+    cv2.waitKey(0)
