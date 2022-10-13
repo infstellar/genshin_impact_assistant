@@ -2,7 +2,7 @@ try:
     from unit import *
 except:
     from source.unit import *
-import PyHook3,time
+import PyHook3,time,keyboard
 import alpha_loop, domain_flow
 combat_flag=False
 domain_flag=False
@@ -10,6 +10,9 @@ global t1, t2
 t1=None
 t2=None
 # @logger.catch
+keymapjson=loadjson("keymap.json")
+
+
 def switch_combat_loop():
     global t1, combat_flag
     if combat_flag:
@@ -31,7 +34,8 @@ def switch_domain_loop():
         t2=domain_flow.Domain_Flow_Control() 
         t2.start()
     domain_flag = not domain_flag
-
+keyboard.add_hotkey(keymapjson["autoBattle"], switch_combat_loop)
+keyboard.add_hotkey(keymapjson["autoDomain"], switch_domain_loop)
 
 def OnKeyboardEvent(event):
               #同上，共同属性不再赘述
@@ -64,15 +68,15 @@ def OnKeyboardEvent(event):
     return True
 
 
-hm = PyHook3.HookManager()  # 创建一个HOOK管理对象
-hm.KeyDown = OnKeyboardEvent # 绑定键盘处理函数--就是我们创建的函数
-hm.HookKeyboard()   # 初始化
+# hm = PyHook3.HookManager()  # 创建一个HOOK管理对象
+# hm.KeyDown = OnKeyboardEvent # 绑定键盘处理函数--就是我们创建的函数
+# hm.HookKeyboard()   # 初始化
 data = []
 
 @logger.catch
 def listening():
-    import pythoncom
-    pythoncom.PumpMessages()
+    # import pythoncom
+    # pythoncom.PumpMessages()
     while(1):
         time.sleep(0.1)
 
