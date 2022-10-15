@@ -137,3 +137,5 @@ source.7z
 source.7z.tmp
 tests/
 imgs/-21387.jpg
+assests/imgs/common/test.jpg
+dev_tools/origin_text.txt

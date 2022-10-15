@@ -1,5 +1,5 @@
 import pyautogui
-from sympy import capture
+from source import img_manager
 from unit import *
 
 import combat_loop, get_domain_reward, pdocr_api, text_manager as textM, interaction_background, posi_manager as PosiM, movement, config
@@ -93,7 +93,7 @@ class Domain_Flow_Control(threading.Thread):
     def run(self):
         cap=self.itt.capture()
         cap=self.itt.png2jpg(cap,channel='ui')
-        # self.current_state=1300
+        # self.current_state=ST.STATE_GETTING_REAWARD
         # self.domaininitflag=True
         while(1):
             
@@ -107,28 +107,31 @@ class Domain_Flow_Control(threading.Thread):
                 
                 if self.domaininitflag==False:
                     logger.info('正在开始挑战秘境')
-                    while(pdocr_api.ocr.getTextPosition(cap, textM.text(textM.clld)) == -1):
+                    movement.reset_view()
+                    
+                    while(1):
                         if self.checkupstop():
                             break
+                        if pdocr_api.ocr.getTextPosition(cap, textM.text(textM.clld)) != -1:
+                            break
+                        if self.itt.get_img_existence(imgname=img_manager.IN_DOMAIN):
+                            break
                         time.sleep(1)
-                        cap =self.itt.capture()
-                        cap=self.itt.png2jpg(cap, channel='ui')
-                    cap=self.itt.capture()
-                    cap=self.itt.png2jpg(cap, channel='ui')
+                        cap=self.itt.capture(jpgmode=2)
+                    
+                    cap=self.itt.capture(jpgmode=2)
                     if pdocr_api.ocr.getTextPosition(cap, textM.text(textM.clld)) != -1:
-                        logger.warning("正在检测默认位置，切勿移动鼠标!")
                         self.itt.move_to(PosiM.posi_domain['CLLD'][0],PosiM.posi_domain['CLLD'][1])
                         time.sleep(1)
-                        # self.itt.leftClick()
                         pyautogui.leftClick()
+                    time.sleep(5)
+                    movement.view_to_angle(-90)
                     if self.checkupstop():
                         break
-                    time.sleep(2)
-                    movement.reset_const_val()
-                    time.sleep(1)
+                    # time.sleep(2)
                     if self.checkupstop():
                         break
-                    #movement.view_to_90(deltanum=0.5,maxloop=10)
+
                     self.domaininitflag=True
                     self.itt.keyDown('w')
                     if self.checkupstop():
@@ -138,7 +141,7 @@ class Domain_Flow_Control(threading.Thread):
                         break
                     
                     
-                
+                movement.view_to_angle(-90)
                 movement.move(movement.AHEAD,3)
                 time.sleep(0.08)
                 
@@ -187,7 +190,7 @@ class Domain_Flow_Control(threading.Thread):
             
             elif self.current_state==ST.STATE_END_COPY:
                 logger.info('秘境结束。')
-                logger.info('domain over. restart next domain in 5 sec.')
+                # logger.info('domain over. restart next domain in 5 sec.')
                 if self.checkupstop():
                     break
                 time.sleep(5)
@@ -197,7 +200,7 @@ class Domain_Flow_Control(threading.Thread):
                 cap=self.itt.png2jpg(cap, channel='ui')
                 if self.last_domain_times>=1:
                     logger.info('开始下一次秘境')
-                    logger.info('start next domain.')
+                    # logger.info('start next domain.')
                     self.last_domain_times-=1
                     
                     posi=pdocr_api.ocr.getTextPosition(cap, textM.text(textM.conti_challenge))
@@ -215,7 +218,7 @@ class Domain_Flow_Control(threading.Thread):
                         break
                 else:
                     logger.info('次数结束。退出秘境')
-                    logger.info('no more times. exit domain.')
+                    # logger.info('no more times. exit domain.')
                     posi=pdocr_api.ocr.getTextPosition(cap, textM.text(textM.exit_challenge))
                     if posi!=-1:
                         self.itt.move_to(posi[0],posi[1]+30)

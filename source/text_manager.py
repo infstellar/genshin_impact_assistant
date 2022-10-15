@@ -24,5 +24,8 @@ conti_challenge={
 exit_challenge={
     'ch':'退出秘境'
 }
+domain_obtain={
+    'ch':'获得'
+}
 def text(x):
     return x[lang]

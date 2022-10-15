@@ -95,6 +95,7 @@ class Combat_Loop(threading.Thread):
         #     self.itt.delay(1.1-t)
         self.tastic_exc.chara_waiting()
         for i in range(30):
+            self.tastic_exc.unconventionality_situlation_detection()
             self.itt.keyPress(str(x))
             logger.debug('try switching to '+str(x))
             time.sleep(0.1)

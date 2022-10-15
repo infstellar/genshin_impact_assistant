@@ -1,6 +1,6 @@
 from unit import *
 from interaction_background import Interaction_BGD
-import small_map, movement, cv2, time, threading, pdocr_api, text_manager as textM, posi_manager as PosiM, timer_module
+import small_map, movement, cv2, time, threading, pdocr_api, text_manager as textM, posi_manager as PosiM, timer_module, img_manager
 # sys.path.append("..")
 
 import source.yolox_api
@@ -12,9 +12,11 @@ class Get_Reward(threading.Thread):
         self.pause_thread_flag=False
         self.working_flag=False
         self.stopFlag=False
+        self.movenum=2.5
         reflash_config()
         
         self.isLiYue=configjson["isLiYueDomain"]
+        self.resin_mode=configjson["resin"]
         self.move_timer=timer_module.Timer()
         self.ahead_timer=timer_module.Timer()
         
@@ -42,26 +44,26 @@ class Get_Reward(threading.Thread):
         return -1
             
     def align_to_tree(self):
-        movement.view_to_90()
+        movement.view_to_angle(-90)
         tposi=self.get_tree_posi()
         if tposi != False:
             tx, ty=self.itt.get_mouse_point()
             dx=int(tposi[0]-tx)
-            movenum=4
+            # movenum=2.5
             logger.debug(dx)
             
             if dx>=0:
-                movement.move(movement.RIGHT,movenum)
-                self.itt.keyPress('w')
+                movement.move(movement.RIGHT,self.movenum)
+                # self.itt.keyPress('w')
             else:
-                movement.move(movement.LEFT,movenum)
-                self.itt.keyPress('w')
+                movement.move(movement.LEFT,self.movenum)
+                # self.itt.keyPress('w')
             if abs(dx)<=20:
                 self.lockOnFlag+=1
-                movenum=1
+                self.movenum=1
             return True
         else:
-            movenum=4
+            self.movenum=4
             return False                
     
     def find_tree(self):
@@ -72,11 +74,11 @@ class Get_Reward(threading.Thread):
             dx=int(tposi[0]-tx)
             
             if dx>=0:
-                movement.move(movement.RIGNT,4)
-                self.itt.keyPress('w')
+                movement.move(movement.RIGHT,4)
+                #self.itt.keyPress('w')
             else:
                 movement.move(movement.LEFT,4)
-                self.itt.keyPress('w')
+                # self.itt.keyPress('w')
             if dx<=8:
                 logger.debug(dx)
                 return 0
@@ -114,6 +116,8 @@ class Get_Reward(threading.Thread):
     def continue_thread(self):
         self.pause_thread_flag=False
         self.lockOnFlag=0
+        movement.reset_view()
+        time.sleep(1)
     
     def pause_thread(self):
         self.pause_thread_flag=True
@@ -140,8 +144,9 @@ class Get_Reward(threading.Thread):
                 is_tree=self.align_to_tree()
                 self.ahead_timer.reset()
                 if is_tree==False:
-                    movement.view_to_90()
-                    if self.isLiYue:
+                    movement.view_to_angle(-90)
+                    
+                    if self.isLiYue: # barrier treatment
                         if self.move_timer.getDiffTime()>=20:
                             direc=not direc
                             self.move_timer.reset()    
@@ -149,49 +154,38 @@ class Get_Reward(threading.Thread):
                             movement.move(movement.LEFT,distance=4)
                         else:
                             movement.move(movement.RIGHT,distance=4)
-                    else:
+                    
+                    else: # maybe can't look at tree
+                        logger.debug('can not find tree. moving back.')
                         movement.move(movement.BACK,distance=2)
             else:
+                # do jump every five seconds
                 if self.ahead_timer.getDiffTime()>=5:
                     self.itt.keyPress('spacebar')
                     self.ahead_timer.reset()
-                movement.view_to_90()
+                
+                movement.view_to_angle(-90)
                 self.itt.keyDown('w')
                 time.sleep(0.2)
+                
                 cap=self.itt.capture(posi=PosiM.posi_domain["ClaimRewards"]) # posi=PosiM.posi_domain["ClaimRewards"]
                 cap=self.itt.png2jpg(cap,channel='ui')
                 if pdocr_api.ocr.getTextPosition(cap, textM.text(textM.claim_rewards)) != -1:
                     self.itt.keyUp('w')
                     
                     self.itt.keyPress('f')
-                    
                     time.sleep(2)
                     
-                    for i in range(10):
-                        cap=self.itt.capture()
-                        cap=self.itt.png2jpg(cap,channel='ui')
-                        posi=pdocr_api.ocr.getTextPosition(cap,textM.text(textM.use_20resin))
-                        if posi!=-1:
-                            break
-                        else:
-                            self.itt.keyPress('f')
-                        time.sleep(3)
-                    if posi==-1:
-                        logger.error("找不到领取树脂按钮，请检查")
+                    while(1):
+                        if self.resin_mode=='40':
+                            self.itt.appear_then_click(imgname=img_manager.USE_20X2RESIN_DOBLE_CHOICES)
+                        elif self.resin_mode=='20':
+                            self.itt.appear_then_click(imgname=img_manager.USE_20RESIN_DOBLE_CHOICES)
                         
-                    self.itt.move_to(posi[0]+30,posi[1]+30)
-                    time.sleep(1)
-                    self.itt.leftClick()
-                    time.sleep(0.2)
-                    self.itt.leftClick()
-                    time.sleep(0.2)
-                    self.itt.leftClick()
-                    time.sleep(2)
-                    self.itt.move_to(1854,48)
-                    for i in range(10):
-                        time.sleep(0.1)
-                        self.itt.leftClick()
-                    
+                        if pdocr_api.ocr.getTextPosition(self.itt.capture(jpgmode=3), textM.text(textM.domain_obtain)) != -1:
+                            break
+                        time.sleep(2)
+                        
                     self.working_flag=False
                     self.pause_thread()
                     time.sleep(2)

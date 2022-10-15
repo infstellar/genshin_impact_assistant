@@ -26,6 +26,12 @@ from yolox.exp import get_exp
 from yolox.utils import fuse_model, get_model_info, postprocess, vis
 
 IMAGE_EXT = [".jpg", ".jpeg", ".webp", ".bmp", ".png"]
+globaldevice=configjson["device_torch"]
+if globaldevice=='auto':
+    if torch.cuda.is_available():
+        globaldevice='gpu'
+    else:
+        globaldevice='cpu'
 
 class Sim_Args():
     def __init__(self,demo,experiment_name,name,path,camid,save_result,exp_file,device,conf,nms,tsize,fp16=False,legacy=False,
@@ -121,7 +127,7 @@ def make_parser_2(
                 camid=0,
                 save_result=True,
                 exp_file=None,
-                device=configjson["device"],
+                device=globaldevice,
                 conf=0.3,
                 nms=0.5,
                 tsize=640,
