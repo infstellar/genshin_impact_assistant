@@ -27,6 +27,10 @@
 
 - 注意阅读[domain_assi.md](./doc/domain_assi.md)中的注意事项
 
+## 更新日志 (和饼
+
+![更新记录](update_note.md)
+
 ## 使用方法
 
 ### 下载与安装
@@ -37,7 +41,7 @@
 
     如果`environment_all.7z`下载过慢，也可以下载`environment_no_torch.7z`,并自行下载`torch`复制到目录中(或者加入q群下载
 
-3. 将`genshin_assistant` 与 `environment` 文件夹置于同一目录下。
+3. 将`genshin_assistant` 与 `environment` 文件夹置于同一目录下。 如果有能力，也可以在config中修改`env_floder_path`
 
 4. 根据实际情况配置config文件夹中的配置文件
 
