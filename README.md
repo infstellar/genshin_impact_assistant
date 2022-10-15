@@ -33,15 +33,17 @@
 
 1. 下载`tag`里最新版本的`genshin_assistant.zip`并解压，之后每次更新只需要重新下载`genshin_assistant.zip`即可。
 
-2. 下载`tag`里的`environment_all.7z`,并全部复制到解压后的`genshin_assistant`目录中,选择全部跳过。
+2. 下载`tag`里的`environment_all.7z`
 
     如果`environment_all.7z`下载过慢，也可以下载`environment_no_torch.7z`,并自行下载`torch`复制到目录中(或者加入q群下载
 
-3. 根据实际情况配置config文件夹中的配置文件
+3. 将`genshin_assistant` 与 `environment` 文件夹置于同一目录下。
 
-4. 启动原神后，以管理员权限运行`genshin_assistant.exe`
+4. 根据实际情况配置config文件夹中的配置文件
 
-5. 实在搞不定可以加qq群(
+5. 启动原神后，以管理员权限运行`genshin_assistant.exe`
+
+6. 实在搞不定可以加qq群(
 [图文教程](doc/install.md)
 
 ### 从源代码构建
