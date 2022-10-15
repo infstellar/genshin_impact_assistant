@@ -13,7 +13,7 @@ class Interaction_BGD():
     thanks for https://zhuanlan.zhihu.com/p/361569101
     '''
     
-    def __init__(self,hwnd=None):
+    def __init__(self,hwndname="原神"):
         self.GetDC = ctypes.windll.user32.GetDC
         self.CreateCompatibleDC = ctypes.windll.gdi32.CreateCompatibleDC
         self.GetClientRect = ctypes.windll.user32.GetClientRect
@@ -41,10 +41,8 @@ class Interaction_BGD():
         self.DEFAULT_DELAY_TIME=0.05
         self.DEBUG_MODE=False
         self.CONSOLE_ONLY=False
-        if hwnd==None:
-            self.handle=ctypes.windll.user32.FindWindowW(None, "原神")
-        else:
-            self.handle=hwnd
+        
+        self.handle=ctypes.windll.user32.FindWindowW(None, hwndname)
             
         if self.handle==0:
             logger.error("未找到句柄，请确认原神窗口是否开启。")
@@ -97,6 +95,8 @@ class Interaction_BGD():
             ret=self.png2jpg(ret,bgcolor='black',channel='bg')
         elif jpgmode==2:
             ret=self.png2jpg(ret,bgcolor='black',channel='ui')
+        elif jpgmode==3:
+            ret=ret[:,:,:3]
         return ret
     
     def match_img(self,img_name:str,is_show_res:bool = False):
@@ -147,10 +147,29 @@ class Interaction_BGD():
         matching_rate = max_val
         return matching_rate
     
-    def is_img_exist(self,imgname ,jpgmode,is_gray=False):
+    def get_img_existence(self,imgname ,jpgmode = 2, is_gray=False, min_rate=0.9):
         cap = self.capture(posi=posi_manager.get_posi_from_str(imgname),jpgmode=jpgmode)
         matching_rate = self.similar_img(img_manager.get_img_from_imgname(imgname), cap)
-        return matching_rate
+        # print(matching_rate)
+        if matching_rate >= min_rate:
+            return True
+        else:
+            return False
+    
+    def appear_then_click(self, imgname, jpgmode=2, is_gray=False, min_rate=0.85):
+        upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
+        cap = self.capture(posi=posi_manager.get_posi_from_str(imgname),jpgmode=jpgmode)
+        matching_rate = self.similar_img(img_manager.get_img_from_imgname(imgname), cap, is_gray=is_gray)
+        if matching_rate >= min_rate:
+            p=posi_manager.get_posi_from_str(imgname)
+            center_p=[(p[1]+p[3])/2, (p[0]+p[2])/2]
+            self.move_to(center_p[0],center_p[1])
+            self.leftClick()
+            logger.debug('imgname: '+ imgname+ 'matching_rate: '+ str(matching_rate)+ ' |function name: '+ upper_func_name)
+            return 0
+        else:
+            logger.debug('imgname: '+ imgname+ 'matching_rate: '+ str(matching_rate)+ ' |function name: '+ upper_func_name)
+            return -1
         
     
     def png2jpg(self,png,bgcolor='black',channel='bg',alpha_num=50):
@@ -332,5 +351,8 @@ class Interaction_BGD():
     
 if __name__=='__main__':
     ib=Interaction_BGD()
-    ib.keyPress('1')
+    while(1):
+        time.sleep(1)
+        # print( ib.get_img_existence(img_manager.COMING_OUT_BY_SPACE, jpgmode=2))
+        ib.appear_then_click(imgname=img_manager.USE_20RESIN_DOBLE_CHOICES)
     

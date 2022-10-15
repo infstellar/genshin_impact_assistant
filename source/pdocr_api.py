@@ -10,6 +10,11 @@ except Exception as error:
     logger.critical("导入paddleocr时错误; err code: 001")
     logger.exception(error)
 
+globaldevice=configjson["device_paddle"]
+if globaldevice=='auto':
+    import paddle
+    paddle.fluid.install_check.run_check()
+    globaldevice='cpu'
 APPROXIMATE_MATCHING=0
 ACCURATE_MATCHING=1
 TWICE_AND_MATCHING=3
@@ -25,7 +30,7 @@ RETURN_POSITION=0
 class Paddleocr_API():
     
     def __init__(self,lang='ch',device='gpu'):
-        device=configjson["device"]
+        device=globaldevice
         logger.info("ocr device: "+device)
         self.ocr = PaddleOCR(use_angle_cls=True, lang=lang, show_log=False, device=device)  # need to run only once to download and load model into memory
         #self.

@@ -3,7 +3,7 @@ from timer_module import Timer
 from character import Character
 from unit import *
 import time, cv2
-import posi_manager, pdocr_api
+import posi_manager, pdocr_api, img_manager
 
 #from interaction import *
 from interaction_background import Interaction_BGD
@@ -67,17 +67,33 @@ class Tastic():
         #         return 0
         # else:
         #     return -1
+    
+    def unconventionality_situlation_detection(self, autoDispose = True): # unconventionality situlation detection
+        # situlation 1: coming_out_by_space
+        
+        situlation_code=-1
+        
+        while self.itt.get_img_existence(img_manager.COMING_OUT_BY_SPACE, jpgmode=2, min_rate=0.8):
+            situlation_code=1
+            self.itt.keyPress('spacebar')
+            logger.debug('Unconventionality Situlation: COMING_OUT_BY_SPACE')
+            time.sleep(0.1)
+
+        return situlation_code
         
     def chara_waiting(self,mode=0):
-        
+        self.unconventionality_situlation_detection()
         if (mode==0) and (self.is_E_available() == True) and (self.enter_timer.getDiffTime() <= 1):
             logger.debug('skip waiting')
             return 0
         while self.get_character_busy() and (not self.stop_func()):
             if self.stop_func():
                 logger.debug('chara_waiting stop')
+            logger.debug('waiting  ')
             self.itt.delay(0.1)
     
+    
+        
     def get_current_chara_num(self):
         cap=self.itt.capture(jpgmode=2)
         for i in range(4):
@@ -111,7 +127,7 @@ class Tastic():
             # print(min( self.itt.color_SD(self.hp_charalist_green, cap[self.hp_charalist_posi[i][0],self.hp_charalist_posi[i][1]] )  ,
             #         self.itt.color_SD(self.hp_charalist_red  , cap[self.hp_charalist_posi[i][0],self.hp_charalist_posi[i][1]] ) ) )
             # print(t)
-            logger.debug('waiting  ')
+            
             return True
         
     
@@ -248,6 +264,7 @@ class Tastic():
             if self.stop_func():
                 logger.debug('lock stop')
             while (not self.character.is_E_pass()) and (not self.stop_func()):
+                self.unconventionality_situlation_detection()
                 self.execute_tastic([tas[0]])
         else:
             tas[1].replace('.',',')
@@ -262,12 +279,15 @@ class Tastic():
             if self.stop_func():
                 logger.debug('lock stop')
             while (not self.character.is_Q_pass()) and (not self.stop_func()):
+                self.unconventionality_situlation_detection()
                 self.execute_tastic([tas[0]])
         else:
             tas[1].replace('.',',')
             self.execute_tastic([tas[1]])
     
     def execute_tastic(self,tastic_list):
+        
+        self.unconventionality_situlation_detection()
         
         for tastic in tastic_list:
             tastic = tastic.split(',')
@@ -315,8 +335,8 @@ class Tastic():
 if __name__=='__main__':
     tastic=Tastic()
     while(1):
-        print(tastic.get_current_chara_num(),end=' ')
-        time.sleep(0.1)
+        print(tastic.unconventionality_situlation_detection())
+        time.sleep(0.2)
     print()
                     
                 

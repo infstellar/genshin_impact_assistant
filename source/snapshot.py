@@ -3,9 +3,9 @@ import math
 from interaction_background import Interaction_BGD
 import cv2,numpy as np, os, time
 itt=Interaction_BGD()
-i=0
-numi=-21500
-SA_name=''
+i=8
+numi=5
+SA_name='test'
 
 def jpg_with_alpha(png,bgclolr='black',channel='bg',alpha_num=50):
     if bgclolr=='black':
@@ -49,12 +49,12 @@ def Line2Angle(p):
 
 def jwa_3(imsrc):
     Alpha=imsrc[:,:,3:]
-    Alpha = 255.0 - Alpha;
+    Alpha = 255.0 - Alpha
 
     Alpha[360:,286:]=0
     Alpha[:,303:]=0
     
-    Alpha = Alpha * 2;
+    Alpha = Alpha * 2
     _,Alpha=cv2.threshold(Alpha, 503, 0, cv2.THRESH_TOZERO_INV)
     _,Alpha=cv2.threshold(Alpha, 50, 0, cv2.THRESH_TOZERO)
     _,Alpha=cv2.threshold(Alpha, 50, 255, cv2.THRESH_BINARY)
@@ -125,14 +125,14 @@ if not os.path.exists(snap_path+"\\jpg"):
 if not os.path.exists(snap_path+"\\jpg_withalpha"):
     os.mkdir("tools\\snapshot\\jpg_withalpha")
 while(1):
-    # input('wait')
+    input('wait')
     i+=1
     numi+=1
-    cap=itt.capture()
+    cap=itt.capture(jpgmode=2)
     x=str(time.time())
     #cv2.imwrite("tools\\snapshot\\png\\"+SA_name+str(numi)+".png",cap)
-    #cv2.imwrite("tools\\snapshot\\jpg\\"+SA_name+str(numi)+".jpg",cap[:,:,:3])
-    cv2.imwrite("tools\\snapshot\\jpg_withalpha\\"+SA_name+str(numi)+".jpg",jpg_with_alpha(cap,channel='ui',bgclolr='black'))
+    cv2.imwrite("tools\\snapshot\\jpg\\"+SA_name+str(numi)+".jpg",cap[:,:,:3])
+    #cv2.imwrite("tools\\snapshot\\jpg_withalpha\\"+SA_name+str(numi)+".jpg",jpg_with_alpha(cap,channel='ui',bgclolr='black'))
     # cv2.imwrite("tools\\snapshot\\jpg_withalpha\\"+SA_name+str(numi)+".jpg",jwa_3(cap))
     # jwa_3(cap)
     time.sleep(0.1)

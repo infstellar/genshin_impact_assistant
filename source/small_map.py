@@ -1,11 +1,13 @@
 import cv2
+from scipy.fftpack import cs_diff
 from unit import *
 
 
-import static_method, posi_manager
+import static_method, posi_manager, math
 itt=static_method.sta_itt
-
-
+dx=25
+dy=25
+posi_map=[15+dx,57+dy,236-dx,278-dy]
 # def get_direction_angle():
 #     cap=itt.png2jpg(itt.capture(),bgcolor='white',channel='ui')
 #     val=[]
@@ -14,7 +16,9 @@ itt=static_method.sta_itt
 #         val.append(a)
 #     return [0,45,90,135,180,-135,-90,-45][val.index(max(val))]
 
-
+def qshow(img1):
+    cv2.imshow('123', img1)
+    cv2.waitKey(0)
 
 def Line2Angle(p):
     # rad2degScale = 180/math.pi
@@ -33,25 +37,21 @@ def Line2Angle(p):
 def jwa_3(imsrc):
     Alpha=imsrc[:,:,3:]
     Alpha = 255.0 - Alpha
-
-    Alpha[360:,286:]=0
-    Alpha[:,303:]=0
-    
+    # Alpha = Alpha[:360,:286:,:]
+    # Alpha[:,303:,:]=0
+    # qshow(Alpha)
     Alpha = Alpha * 2
     _,Alpha=cv2.threshold(Alpha, 503, 0, cv2.THRESH_TOZERO_INV)
     _,Alpha=cv2.threshold(Alpha, 50, 0, cv2.THRESH_TOZERO)
     _,Alpha=cv2.threshold(Alpha, 50, 255, cv2.THRESH_BINARY)
-    #cv2.imshow('1',Alpha)
-    #cv2.waitKey(0)
-    cv2.circle(Alpha, (int(Alpha.shape[0] / 2), int(Alpha.shape[1] / 2)), 
-                        int((min(int(Alpha.shape[0] / 2), int(Alpha.shape[1] / 2)) * 1.21))
-                        , (0, 0, 0), 
-                        int((min(int(Alpha.shape[0] / 2), int(Alpha.shape[1] / 2)) * 0.42)))
-    cv2.circle(Alpha, (int(Alpha.shape[0] / 2), int(Alpha.shape[1] / 2)), 
-                        int((min(int(Alpha.shape[0] / 2), int(Alpha.shape[1] / 2)) * 0.3)), 
-                        (0, 0, 0), -1)
-
-
+    # qshow(Alpha)
+    cv2.circle(Alpha, 
+               (int(Alpha.shape[0] / 2), int(Alpha.shape[1] / 2)), int((min(int(Alpha.shape[0] / 2), int(Alpha.shape[1] / 2)) * 1.15)),# 1.21
+                (0, 0, 0), int((min(int(Alpha.shape[0] / 2), int(Alpha.shape[1] / 2)) * 0.6)))# 0.42
+    # qshow(Alpha)
+    cv2.circle(Alpha, 
+               (int(Alpha.shape[0] / 2), int(Alpha.shape[1] / 2)), int((min(int(Alpha.shape[0] / 2), int(Alpha.shape[1] / 2)) * 0.6)), (0, 0, 0), -1)
+    # qshow(Alpha)
     dilate_element = cv2.getStructuringElement(cv2.MORPH_RECT, (4, 4))
     Alpha=cv2.dilate(Alpha, dilate_element)
     erode_element = cv2.getStructuringElement(cv2.MORPH_RECT, (4, 4))
@@ -64,36 +64,70 @@ def jwa_3(imsrc):
     Alpha=Alpha.astype('uint8')
     # return Alpha
     contours, hierarcy=cv2.findContours(Alpha, 0, 1)
+    # qshow(Alpha)
 
-	# std2.vector<cv2.Rect> boundRect(contours.size());  //定义外接矩形集合
-
-
-	# cv2.Point p;
-	# int maxBlack = 0;
     maxBlack=0
-	# int maxId = 0;
     maxId=0
     boundRect=[]
-	# for (int i = 0; i < contours.size(); i++)
     for i in range(len(contours)):
         boundRect.append([])
-	# {
         if (len(contours[i]) > maxBlack):
-	# 	{
             maxBlack = len(contours[i])
             maxId = i
-	# 	}
         boundRect[i] = cv2.boundingRect(cv2.Mat(contours[i]))
-
-	#}
+    
     if len(boundRect)==0:
         logger.warning('找不到小地图')
-        return None,None
-    p = ((boundRect[maxId][0] + boundRect[maxId][1] / 2), (boundRect[maxId][2] + boundRect[maxId][3] / 2))
-    logger.debug((p)+' '+Line2Angle(p))
+        return -1
+    x,y,w,h=boundRect[maxId]
+    
+    p = [x+w/2, y+h/2]
+    
+    origin_point=[int(Alpha.shape[0]/2)+1,int(Alpha.shape[1]/2)+1]
+    point=[p[0]-origin_point[0],-p[1]+origin_point[1]]
+    
+    if point[0] == 0:
+        point[0]+=0.1
+    if point[1] == 0:
+        point[1]+=0.1
+
+    degree = math.degrees(math.atan((point[1])/(point[0])))
+    
+    if point[0]>0 and point[1]>0:
+        quadrant=1
+        degree=degree
+    elif point[0]<0 and point[1]>0:
+        quadrant=2
+        degree+=180
+    elif point[0]<0 and point[1]<0:
+        quadrant=3
+        degree+=180
+    elif point[0]>0 and point[1]<0:
+        quadrant=4
+        degree+=360
+    
+    # degree = math.atan((point[1]/hypotenuse_length)/(point[0]/hypotenuse_length))*(180 / math.pi)
+    degree -= 90
+    
+    if (degree > 180):
+        degree -= 360
+    # cv2.imshow('123', cv2.drawMarker(Alpha,position=(int(p[0]),int(p[1])),color=(255, 0, 255),markerSize = 1, markerType=cv2.MARKER_CROSS, thickness=5))
+    # cv2.waitKey(100)
+    # print(degree)
+    return degree
+    
+    # logger.debug(str(p)+' '+str(Line2Angle(p)))
     #Alpha =cv2.circle(Alpha, p, 3, (255, 0, 0))  
     #Alpha =cv2.line(Alpha, p, (120, 170), (0, 255, 0))
     #cv2.imshow("Img", Alpha)
     #cv2.waitKey(0)
     # p = p - (img_object.cols / 2, img_object.rows / 2)
-    return p,Line2Angle(p)
+    # return p,Line2Angle(p)
+
+if __name__ == '__main__':
+    # qshow(itt.capture(posi=posi_map))
+    while(1):
+        jwa_3(itt.capture(posi=posi_map))
+        time.sleep(0.1)
+    # cv2.imshow('123', img1)
+    # cv2.waitKey(0)

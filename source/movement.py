@@ -1,3 +1,4 @@
+import pyautogui
 from unit import *
 import static_method,small_map
 itt=static_method.sta_itt
@@ -5,11 +6,8 @@ AHEAD=0
 LEFT=1
 RIGHT=2
 BACK=3
-global VIEW_X,VIEW_Y,VIEW_D
-VIEW_X=197.5
-VIEW_Y=120
-VIEW_D=285.75
-    
+CORRECT_DEGREE = configjson["corr_degree"]
+# >0:right; <0:left
 def move(direction,distance=1):
     if direction==AHEAD:
         itt.keyDown('w')
@@ -29,57 +27,36 @@ def move(direction,distance=1):
         itt.keyUp('s')
         
 def cview(angle=10): # left<0,right>0
-    itt.move_to(int(2*angle),0,relative=True)
-    # itt.keyPress('w')
+    angle=(2*angle)
+    if abs(angle)<1:
+        if angle<0:
+            angle=-1
+        else:
+            angle=1
+    itt.move_to(int(angle),0,relative=True)
+
+def reset_view():
+    pyautogui.click(button='middle')
     
-def view_to_angle(angle=0):
-    itt.keyUp('w')
-    while(small_map.get_direction_angle()!=angle):
-        #itt.keyDown('w')
-        current_angle=small_map.get_direction_angle()
-        cview((angle-current_angle))
+def view_to_angle(angle=0,deltanum=0.65,maxloop=100,corrected_num=CORRECT_DEGREE):
+    cap=itt.capture(posi=small_map.posi_map)
+    degree=small_map.jwa_3(cap)
+    i=0
+    while not abs(degree-(angle-corrected_num))<deltanum:
+        degree=small_map.jwa_3(itt.capture(posi=small_map.posi_map))
+        # print(degree)
+        cview((degree-(angle-corrected_num)))
         time.sleep(0.05)
+        if i>maxloop:
+            break
+        i+=1
+    logger.debug('last degree: '+str(degree))
     #itt.keyUp('w')
     
 def reset_const_val():
-    global VIEW_X,VIEW_Y,VIEW_D
-    cap=itt.capture()
-    p,delta=small_map.jwa_3(cap)
-    VIEW_X=p[0]
-    VIEW_Y=p[1]
-    VIEW_D=delta
-    logger.debug(str(VIEW_X)+str(VIEW_Y)+str(VIEW_D))
-
-def view_to_90(deltanum=1.5,maxloop=50):
-    global VIEW_X,VIEW_Y,VIEW_D
-    cap=itt.capture()
-    p,delta=small_map.jwa_3(cap)
-    while(p==None):
-        time.sleep(1)
-        cap=itt.capture()
-        p,delta=small_map.jwa_3(cap)
-    
-    
-    
-    # 198,119.5,283.5
-    i=0
-    while not (abs(p[0]-VIEW_X)<deltanum and abs(p[1]-VIEW_Y<deltanum)):
-        itt.keyUp('w')
-        cap=itt.capture()
-        p,delta=small_map.jwa_3(cap) 
-        while(p==None):
-            time.sleep(1)
-            cap=itt.capture()
-            p,delta=small_map.jwa_3(cap)
-        cview((VIEW_D-delta))
-        if VIEW_D==delta:
-            cview(random.randint(-3,3))
-        time.sleep(0.1)
-        i+=1
-        if i>=maxloop:
-            break
+    pass
 
 # view_to_angle(-90)
 if __name__=='__main__':
-    view_to_90()
+    view_to_angle(-90)
     

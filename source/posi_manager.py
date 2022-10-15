@@ -6,7 +6,10 @@ d2x=5
 d2y=5
 
 posi_dict={
-    "posi_coming_out_by_space":[505,1379,568,1447]
+    "coming_out_by_space":[505,1379,568,1447],
+    "IN_DOMAIN":[112, 25, 137, 52],
+    "USE_20RESIN_DOBLE_CHOICES" : [720, 976, 800, 1352],
+    "USE_20X2RESIN_DOBLE_CHOICES" : [720, 561, 796, 941]
 }
 
 posi_charalist_q=[[339-ly+dy,1591+dx,339-ly+55,1591+55],[339+dy,1591+dx,339+55,1591+55],
