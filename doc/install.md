@@ -4,16 +4,6 @@
 
 ![image](install_pic_1.png)
 
-2. 全选environment_all内的全部文件
+2. 将它们置于同级目录
 
-![image](install_pic_2.png)
-
-复制到genshin_assistant同级目录
-
-![image](install_pic_3.png)
-
-3. 以管理员运行genshin_assistant.exe
-
-4. 选择跳过(推荐)
-
-![image](install_pic_4.png)
+![image](install_guide_5.png)
