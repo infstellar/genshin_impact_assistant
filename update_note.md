@@ -6,9 +6,9 @@
 
 - 下落攻击修复
 
-- 指定environment路径 Readme: False
+- 指定environment路径 Readme: True
 
-- 自定义按键 Readme: False
+- 自定义按键 Readme: True
 
 - 小地图视角识别优化
 
@@ -18,17 +18,13 @@
 
 - 优化开始挑战
 
-- 自动识别gpu可用性 Readme: False
+- 自动识别gpu可用性 Readme: True
 
 ## Doing
 
-- 日志系统优化 ETC: 2022-10-16
+- 日志系统优化 ETC: 2022
 
 ## To Do
-
-### v0.2.3 ETC: 2022-10-16
-
-- Complete! Time: 2022-10-15 22-06
 
 ### v0.2.4 ETC: 2022-10-23 or later
 

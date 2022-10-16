@@ -4,8 +4,6 @@
 
 config.json文件位置：`genshin_assistant\config`
 
-
-
 ## config.json
 
 | 项目            | 内容                                                         |
@@ -14,24 +12,30 @@ config.json文件位置：`genshin_assistant\config`
 | `teamfile`      | 自动战斗使用的`team.json`文件，可在`config`目录下新建新的`teamjson`文件并设置。 |
 | `domain_times`  | 刷秘境的次数                                                 |
 | `isLiYueDomain` | 挑战部分石化古树被墙壁阻挡视野的秘境(大多位于璃月)时，设置为`true`，否则为`false` |
-| `device`        | yolox与paddleocr运算使用的设备，如果安装了cudnn则设为`'gpu'`，否则设为`'cpu'` |
+| `device_torch`        | yolox运算使用的设备，如果安装了cudnn则设为`'gpu'`，否则设为`'cpu'` 。 设置为`auto`时可以自动检测GPU可用性并自动切换。|
+| `device_paddle`        | paddleocr运算使用的设备，如果安装了cudnn则设为`'gpu'`，否则设为`'cpu'`。 设置为`auto`时，会自动检测GPU可用性，但不会自动切换GPU，需要根据是否可用的提示手动切换。 |
 | `debug`         | 是否启用debug模式                                            |
+| `env_file_path`| envirenment文件夹位置|
+| `resin`|领取奖励时选择的原萃树脂模式，`20`代表小树脂，`40`代表浓缩|
+| `corr_degree`| 秘境内视角校准时的辅助参数。若在秘境内视角偏左则增大该值，反之亦然。|
 
+## keymap.json
 
+可以自定义按键。详情如下：
+| 项目            | 内容                                                         |
+| --------------- | ------------------------------------------------------------ |
+| `autoCombat`   | 开关自动战斗的按键|
+| `autoDomain`| 开关自动秘境的按键|
 
 ## character.json
 
 包含了一些预设的角色策略组参数，`verify`属性可以查看该角色操作是否被验证通过。
-
-
 
 ## character_dist.json
 
 角色名称对照表，每个角色的首项即为该角色名称，其余为角色别名，如：
 
 `["albedo","Albedo","阿贝多","アルベド"]`中，角色名称为`albedo`，其他为别名。
-
-
 
 ## team.json
 
@@ -61,8 +65,6 @@ config.json文件位置：`genshin_assistant\config`
 如`autofill`参数为`false`，则需要在`team.json`中填写战斗相关参数。
 
 关于参数配置的填写说明见[combat_assi.md](./combat_assi.md)
-
-
 
 ## tastic.json
 
