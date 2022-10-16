@@ -1,6 +1,6 @@
 import string
 from unit import *
-import win32api, win32con, win32gui, pyautogui
+import win32api, win32con, win32gui, pyautogui, pydirectinput
 from ctypes.wintypes import RECT, HWND
 import numpy as np
 import cv2 
@@ -338,12 +338,23 @@ class Interaction_BGD():
         if relative:
             win32api.mouse_event(win32con.MOUSEEVENTF_MOVE, x, y)
         else:
+            
         #print(x,y)
         
         #lx,ly,w,h = win32gui.GetWindowRect(self.handle)
             
         #pyautogui.moveRel()
+            # p = win32api.GetCursorPos()
+            # mx=p[0]
+            # my=p[1]
+            # win32api.mouse_event(win32con.MOUSEEVENTF_MOVE, x, y)
             wx,wy,w,h = win32gui.GetWindowRect(self.handle)
+            # x+=wx
+            # y+=wy
+            # print(mx,my)
+            # print(int((x-mx)/1.5), int((y-my)/1.5))
+            # pydirectinput.moveTo(wx+x,wy+y)
+            # win32api.mouse_event(win32con.MOUSEEVENTF_MOVE, int((x-mx)/1.5), int((y-my)/1.5))
             win32api.SetCursorPos((wx+x,wy+y))
 
     def crop_image(self,imsrc,posilist):
@@ -351,8 +362,13 @@ class Interaction_BGD():
     
 if __name__=='__main__':
     ib=Interaction_BGD()
+    # print(win32api.GetCursorPos())
+    # win32api.mouse_event(win32con.MOUSEEVENTF_MOVE, 150, 150)
+    # print(win32api.GetCursorPos())
     while(1):
         time.sleep(1)
         # print( ib.get_img_existence(img_manager.COMING_OUT_BY_SPACE, jpgmode=2))
-        ib.appear_then_click(imgname=img_manager.USE_20RESIN_DOBLE_CHOICES)
+        # ib.appear_then_click(imgname=img_manager.USE_20RESIN_DOBLE_CHOICES)
+        ib.move_to(100,100)
+        
     

@@ -68,6 +68,43 @@ def auto_import_img(impath,name):
     return [y,x,y+h,x+w]
     p = [x+w/2, y+h/2]
 
+def get_rect(imsrc,origin_img,ret_mode=0):
+    # if origin_img==None:
+    #     origin_img = imsrc
+    ret, imsrc = cv2.threshold(imsrc, 1, 255,cv2.THRESH_BINARY)
+    contours, hierarcy=cv2.findContours(imsrc, 0, 1)
+    # qshow(Alpha)
+    draw_1=origin_img
+    maxBlack=0
+    maxId=0
+    boundRect=[]
+    center_points=[]
+    for i in range(len(contours)):
+        boundRect.append([])
+        
+        
+        if (len(contours[i]) > maxBlack):
+            maxBlack = len(contours[i])
+            maxId = i
+        boundRect[i] = cv2.boundingRect(cv2.Mat(contours[i]))
+        x,y,w,h=boundRect[i]
+        center_points.append([(x+w/2), (y+h/2)])
+        if ret_mode==1:
+            draw_1 = cv2.rectangle(draw_1, (x,y), (x+w,y+h), (0,255,0), 2)
+            
+        x,y,w,h=boundRect[maxId]
+        
+        
+
+    # qshow(draw_1)
+    # print('\"'+name+'\"',':',[y,x,y+h,x+w])
+    if ret_mode==0:
+        return [y,x,y+h,x+w]
+    elif ret_mode==1:
+        return draw_1
+    elif ret_mode==2:
+        return center_points
+
 if __name__=='__main__':
     # img = refrom_img(cv2.imread("assests\\imgs\\common\\coming_out_by_space.jpg"),posi_manager.get_posi_from_str('coming_out_by_space'))
     # cv2.imwrite("assests\\imgs\\common\\coming_out_by_space.jpg", img)
