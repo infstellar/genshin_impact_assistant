@@ -15,7 +15,7 @@ config.json文件位置：`genshin_assistant\config`
 | `device_torch`        | yolox运算使用的设备，如果安装了cudnn则设为`'gpu'`，否则设为`'cpu'` 。 设置为`auto`时可以自动检测GPU可用性并自动切换。|
 | `device_paddle`        | paddleocr运算使用的设备，如果安装了cudnn则设为`'gpu'`，否则设为`'cpu'`。 设置为`auto`时，会自动检测GPU可用性，但不会自动切换GPU，需要根据是否可用的提示手动切换。 |
 | `debug`         | 是否启用debug模式                                            |
-| `env_file_path`| envirenment文件夹位置|
+| `env_floder_path`| envirenment文件夹位置|
 | `resin`|领取奖励时选择的原萃树脂模式，`20`代表小树脂，`40`代表浓缩|
 | `corr_degree`| 秘境内视角校准时的辅助参数。若在秘境内视角偏左则增大该值，反之亦然。|
 
