@@ -3,8 +3,8 @@ import math
 from interaction_background import Interaction_BGD
 import cv2,numpy as np, os, time
 itt=Interaction_BGD()
-i=8
-numi=5
+i=0
+numi=8
 SA_name='test'
 
 def jpg_with_alpha(png,bgclolr='black',channel='bg',alpha_num=50):
