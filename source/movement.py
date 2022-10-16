@@ -7,6 +7,9 @@ LEFT=1
 RIGHT=2
 BACK=3
 CORRECT_DEGREE = configjson["corr_degree"]
+HORIZONTAL=1
+VERTICALLY=2
+VERTICALLY_AND_HORIZONTAL=3
 # >0:right; <0:left
 def move(direction,distance=1):
     if direction==AHEAD:
@@ -26,7 +29,7 @@ def move(direction,distance=1):
         itt.delay(0.1*distance)
         itt.keyUp('s')
         
-def cview(angle=10): # left<0,right>0
+def cview(angle=10, mode=HORIZONTAL): # left<0,right>0
     angle=(2*angle)
     if abs(angle)<1:
         if angle<0:
@@ -34,6 +37,10 @@ def cview(angle=10): # left<0,right>0
         else:
             angle=1
     itt.move_to(int(angle),0,relative=True)
+
+def move_view_p(x,y):
+    # x,y=point
+    itt.move_to(x,y)
 
 def reset_view():
     pyautogui.click(button='middle')

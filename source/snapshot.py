@@ -4,7 +4,7 @@ from interaction_background import Interaction_BGD
 import cv2,numpy as np, os, time
 itt=Interaction_BGD()
 i=0
-numi=8
+numi=20
 SA_name='test'
 
 def jpg_with_alpha(png,bgclolr='black',channel='bg',alpha_num=50):
@@ -128,11 +128,11 @@ while(1):
     input('wait')
     i+=1
     numi+=1
-    cap=itt.capture(jpgmode=2)
+    cap=itt.capture()
     x=str(time.time())
     #cv2.imwrite("tools\\snapshot\\png\\"+SA_name+str(numi)+".png",cap)
-    cv2.imwrite("tools\\snapshot\\jpg\\"+SA_name+str(numi)+".jpg",cap[:,:,:3])
-    #cv2.imwrite("tools\\snapshot\\jpg_withalpha\\"+SA_name+str(numi)+".jpg",jpg_with_alpha(cap,channel='ui',bgclolr='black'))
+    # cv2.imwrite("tools\\snapshot\\jpg\\"+SA_name+str(numi)+".jpg",cap[:,:,:3])
+    cv2.imwrite("tools\\snapshot\\jpg_withalpha\\"+SA_name+str(numi)+".jpg",jpg_with_alpha(cap,channel='ui',bgclolr='black',alpha_num=254))
     # cv2.imwrite("tools\\snapshot\\jpg_withalpha\\"+SA_name+str(numi)+".jpg",jwa_3(cap))
     # jwa_3(cap)
     time.sleep(0.1)
