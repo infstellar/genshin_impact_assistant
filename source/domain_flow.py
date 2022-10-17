@@ -18,7 +18,7 @@ class Domain_Flow_Control(threading.Thread):
         self.gdr=get_domain_reward.Get_Reward()
         self.domaininitflag=False
         self.automatic_start=False
-        self.combatloop.stop_loop()
+        self.combatloop.pause_threading()
         self.combatloop.start()
         self.gdr.pause_thread()
         self.gdr.start()
@@ -33,7 +33,7 @@ class Domain_Flow_Control(threading.Thread):
         if self.stop_flag:
             logger.info('停止自动秘境')
             self.gdr.stop_thread()
-            self.combatloop.stop()
+            self.combatloop.stop_threading()
             return True
     
     def get_stop_flag(self):
@@ -153,9 +153,9 @@ class Domain_Flow_Control(threading.Thread):
                 # self.itt.keyUp('s')
                 # time.sleep(2)
                 
-                if self.combatloop.start_loop_flag==False:
+                if self.combatloop.pause_threading_flag==True:
                     logger.info('正在开始战斗')
-                    self.combatloop.start_loop()
+                    self.combatloop.continue_threading()
                 
                 self.itt.keyPress('f')
                 time.sleep(0.1)
@@ -163,14 +163,14 @@ class Domain_Flow_Control(threading.Thread):
                 
             elif self.current_state==ST.STATE_IN_CHALLENGE:
                 
-                if self.combatloop.start_loop_flag==False:
+                if self.combatloop.pause_threading_flag==True:
                     logger.info('正在开始战斗')
-                    self.combatloop.start_loop()
+                    self.combatloop.continue_threading()
                 time.sleep(3)
                     
             elif self.current_state==ST.END_CHALLENGE:
                 logger.info('正在停止战斗')
-                self.combatloop.stop_loop()
+                self.combatloop.pause_threading()
                 time.sleep(5)
                 logger.info('等待岩造物消失')
                 time.sleep(20)
@@ -228,7 +228,7 @@ class Domain_Flow_Control(threading.Thread):
                     self.itt.leftClick()
                     # exit all threads
                     self.gdr.stop_thread()
-                    self.combatloop.stop()
+                    self.combatloop.stop_threading()
                     
                     break
                 

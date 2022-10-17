@@ -11,11 +11,11 @@ class Alpha_Loop(threading.Thread):
         self.stop_flag=False
         chara_list=combat_loop.get_chara_list()
         self.combatloop=combat_loop.Combat_Loop(chara_list,super_stop_func=self.get_stop_flag)
-        self.combatloop.stop_loop()
+        self.combatloop.pause_threading()
         self.combatloop.start()
     @logger.catch  
     def run(self):                   #把要执行的代码写到run函数里面 线程在创建后会直接运行run函数 
-        self.combatloop.start_loop()
+        self.combatloop.continue_threading()
         while(True):
             time.sleep(1)
                 
@@ -31,7 +31,7 @@ class Alpha_Loop(threading.Thread):
     def stop_thread(self,mode:int=0):
         if mode==0:
             self.stop_flag=True
-            self.combatloop.stop()
+            self.combatloop.stop_threading()
         elif mode==1: #emergency stop
             thread_id = self.get_id() 
             res = ctypes.pythonapi.PyThreadState_SetAsyncExc(thread_id, 

@@ -5,6 +5,7 @@ import character,tastic,time,threading, img_manager as imgM, posi_manager as pos
 from unit import *
 from timer_module import Timer
 from interaction_background import Interaction_BGD
+from base_threading import Base_Threading
 
 def sort_flag_1(x:character.Character):
     return x.priority
@@ -59,28 +60,39 @@ def get_chara_list(teamname='team.json'):
             )
     return chara_list
 
-class Combat_Loop(threading.Thread):
+class Combat_Loop(Base_Threading):
     def __init__(self,chara_list:list[character.Character],super_stop_func=stop_func_example):
-        threading.Thread.__init__(self)
+        Base_Threading.__init__(self)
         
-        self.start_loop_flag=False
         self.chara_list=chara_list
         self.chara_list.sort(key=sort_flag_1,reverse=False)
         self.tastic_exc=tastic.Tastic()
-        self.stop_flag=False
+        self.pause_threading_flag=False
         self.current_num=1
         self.switch_timer=Timer(diff_start_time=2)
         self.itt=Interaction_BGD()
         self.super_stop_func=super_stop_func
-        
-        
         #self.itt.delay(1)
         ...
     
-    def checkup_stop(self):
-        if self.stop_func():
+    def checkup_stop_func(self):
+        if self.super_stop_func() or self.pause_threading_flag or self.stop_threading_flag:
             logger.info('停止自动战斗')
             return True
+        
+    def checkup_stop_threading(self):
+        if self.stop_threading_flag:
+            logger.info('停止自动战斗')
+            return True
+    
+    def continue_threading(self):
+        self.current_num=self.tastic_exc.get_current_chara_num()
+        self.current_num=1
+        self.pause_threading_flag=False
+        
+        
+    def pause_threading(self):
+        self.pause_threading_flag=True
     
     def checkup_trapped(self):
         pass
@@ -106,18 +118,14 @@ class Combat_Loop(threading.Thread):
         self.switch_timer.reset()
         self.itt.delay(0.1)
             
-    def stop_func(self):
-        if self.super_stop_func() or self.stop_flag:
-            return True
-    
-    def stop(self):
-        self.stop_flag=True
+    def stop_threading(self):
+        self.stop_threading_flag=True
     
     def loop(self):
         idle=True
         for chara in self.chara_list:
             logger.debug('check up in: '+chara.name)
-            if self.stop_flag:
+            if self.checkup_stop_func():
                 return 0
             if chara.trigger():
                 if chara.n != self.current_num:
@@ -128,22 +136,12 @@ class Combat_Loop(threading.Thread):
             #time.sleep()
         return idle
     
-    def start_loop(self):
-        self.current_num=self.tastic_exc.get_current_chara_num()
-        self.current_num=1
-        self.stop_flag=False
-        self.start_loop_flag=True
-        
-        
-    def stop_loop(self):
-        
-        self.start_loop_flag=False
-        self.stop_flag=True
+
     
     def run(self):
         while(1):
-            if self.start_loop_flag:
-                if self.checkup_stop():
+            if self.pause_threading_flag==False:
+                if self.checkup_stop_func():
                     break
                 ret=self.loop()
                 logger.debug('idle: '+str(ret))
