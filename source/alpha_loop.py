@@ -3,18 +3,18 @@ from unit import *
 import combat_loop,character
 
 class Alpha_Loop(threading.Thread):
+    
     @logger.catch
     def __init__(self):
         threading.Thread.__init__(self)
-        
-        
         self.stop_flag=False
         chara_list=combat_loop.get_chara_list()
-        self.combatloop=combat_loop.Combat_Loop(chara_list,super_stop_func=self.get_stop_flag)
+        self.combatloop = combat_loop.Combat_Loop(chara_list)
         self.combatloop.pause_threading()
         self.combatloop.start()
-    @logger.catch  
-    def run(self):                   #把要执行的代码写到run函数里面 线程在创建后会直接运行run函数 
+    
+    @logger.catch 
+    def run(self):
         self.combatloop.continue_threading()
         while(True):
             time.sleep(1)

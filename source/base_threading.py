@@ -7,6 +7,7 @@ class Base_Threading(threading.Thread):
         super().__init__()
         self.pause_threading_flag=False
         self.stop_threading_flag=False
+        self.working_flag=True
         
     def pause_threading(self):
         self.pause_threading_flag=True
@@ -20,6 +21,9 @@ class Base_Threading(threading.Thread):
     def checkup_stop_threading(self):
         if self.stop_threading_flag:
             return True
+    
+    def get_working_statement(self):
+        return self.working_flag
     
     def checkup_stop_func(self):
         if self.pause_threading_flag or self.stop_threading_flag:

@@ -1,17 +1,18 @@
 from unit import *
 from interaction_background import Interaction_BGD
 import small_map, movement, cv2, time, threading, pdocr_api, text_manager as textM, posi_manager as PosiM, timer_module, img_manager
+from base_threading import Base_Threading
 # sys.path.append("..")
 
 import yolox_api
-class Get_Reward(threading.Thread):
+class Get_Reward(Base_Threading):
     def __init__(self):
-        threading.Thread.__init__(self)
+        super().__init__()
         self.itt = Interaction_BGD()
         self.lockOnFlag=0
-        self.pause_thread_flag=False
-        self.working_flag=False
-        self.stopFlag=False
+        self.pause_threading_flag=False
+        # self.working_flag=False
+        self.stop_threading_flag=False
         self.movenum=2.5
         reflash_config()
         
@@ -32,16 +33,6 @@ class Get_Reward(threading.Thread):
                 treex, treey=yolox_api.yolo_tree.get_center(addition_info)
                 return (treex,treey)
         return False
-    
-    def get_tree_size(self):
-        cap = self.itt.capture(shape='xy')
-        cap = self.itt.png2jpg(cap)
-        addition_info,ret2 = yolox_api.yolo_tree.predicte(cap)
-        if addition_info!=None:
-            if addition_info[0][1][0]>=0.5:
-                posi=yolox_api.yolo_tree.get_maxap_pic_bbox(addition_info)
-                return posi[2]-posi[0]
-        return -1
             
     def align_to_tree(self):
         movement.view_to_angle(-90)
@@ -49,15 +40,12 @@ class Get_Reward(threading.Thread):
         if tposi != False:
             tx, ty=self.itt.get_mouse_point()
             dx=int(tposi[0]-tx)
-            # movenum=2.5
             logger.debug(dx)
             
             if dx>=0:
                 movement.move(movement.RIGHT,self.movenum)
-                # self.itt.keyPress('w')
             else:
                 movement.move(movement.LEFT,self.movenum)
-                # self.itt.keyPress('w')
             if abs(dx)<=20:
                 self.lockOnFlag+=1
                 self.movenum=1
@@ -66,77 +54,28 @@ class Get_Reward(threading.Thread):
             self.movenum=4
             return False                
     
-    def find_tree(self):
-        movement.view_to_angle(90)
-        tposi=self.get_tree_posi()
-        if tposi != False:
-            tx, ty=self.itt.get_mouse_point()
-            dx=int(tposi[0]-tx)
-            
-            if dx>=0:
-                movement.move(movement.RIGHT,4)
-                #self.itt.keyPress('w')
-            else:
-                movement.move(movement.LEFT,4)
-                # self.itt.keyPress('w')
-            if dx<=8:
-                logger.debug(dx)
-                return 0
-            else:
-                return 1
-        else:
-            movement.cview(-30)
-            
-    def close_to_tree(self):
-        while(1):
-            a = self.find_tree()
-            if a==0:
-                self.itt.keyDown('w')
-                if self.get_tree_size()>=320:
-                    self.itt.keyUp('w')
-                    return 0
-            time.sleep(0.2)
-    
-    def approve_tree(self):
-        for i in range(40):
-            self.itt.keyDown('w')
-            tposi=self.get_tree_posi()
-            if tposi != False:
-                tx, ty=self.itt.get_mouse_point()
-                dx=int((tposi[0]-tx)/2)
-                movement.cview(dx)
-            self.itt.keyDown('w')
-            time.sleep(0.2)
-        self.itt.keyUp('w')
-            
-    def do_loop(self):
-        self.close_to_tree()
-        self.approve_tree()
-    
-    def continue_thread(self):
-        self.pause_thread_flag=False
+    def continue_threading(self):
+        self.working_flag=True
+        self.pause_threading_flag=False
         self.lockOnFlag=0
         movement.reset_view()
         time.sleep(1)
     
     def pause_thread(self):
-        self.pause_thread_flag=True
-        
-    def reset_flag(self):
-        self.working_flag=True
+        self.pause_threading_flag=True
     
-    def get_statement(self):
+    def get_working_statement(self):
         return self.working_flag
     
     def stop_thread(self):
-        self.stopFlag=True
+        self.stop_threading_flag=True
     
     def run(self):
         direc=True
         while(1):
-            if self.stopFlag:
+            if self.stop_threading_flag:
                 break
-            if self.pause_thread_flag:
+            if self.pause_threading_flag:
                 self.working_flag=False
                 time.sleep(1)
                 continue

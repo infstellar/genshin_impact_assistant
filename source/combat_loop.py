@@ -62,7 +62,7 @@ def get_chara_list(teamname='team.json'):
 
 class Combat_Loop(Base_Threading):
     def __init__(self,chara_list:list[character.Character],super_stop_func=stop_func_example):
-        Base_Threading.__init__(self)
+        super().__init__()
         
         self.chara_list=chara_list
         self.chara_list.sort(key=sort_flag_1,reverse=False)
@@ -72,8 +72,6 @@ class Combat_Loop(Base_Threading):
         self.switch_timer=Timer(diff_start_time=2)
         self.itt=Interaction_BGD()
         self.super_stop_func=super_stop_func
-        #self.itt.delay(1)
-        ...
     
     def checkup_stop_func(self):
         if self.super_stop_func() or self.pause_threading_flag or self.stop_threading_flag:
@@ -130,14 +128,12 @@ class Combat_Loop(Base_Threading):
             if chara.trigger():
                 if chara.n != self.current_num:
                     self._switch_character(chara.n)
-                self.tastic_exc.run(chara.tastic_group,chara,stop_func=self.stop_func)
+                self.tastic_exc.run(chara.tastic_group,chara)
                 idle=False
                 return idle
             #time.sleep()
         return idle
-    
 
-    
     def run(self):
         while(1):
             if self.pause_threading_flag==False:
