@@ -142,3 +142,4 @@ dev_tools/origin_text.txt
 source/test11.jpg
 test11 copy.jpg
 .gitignore
+config/config.json

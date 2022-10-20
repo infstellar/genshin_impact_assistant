@@ -7,7 +7,7 @@
     "isLiYueDomain":false,
     "device_torch":"auto",
     "device_paddle":"cpu",
-    "DEBUG":false,
+    "DEBUG":true,
     "resin":"40",
     "corr_degree":0.95
 }
