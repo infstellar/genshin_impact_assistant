@@ -11,7 +11,7 @@ class Domain_Flow_Control(Base_Threading):
     @logger.catch
     def __init__(self):
         threading.Thread.__init__(self)
-        self.current_state=ST.BEFORE_MOVETO_CHALLENGE
+        self.current_state=ST.INIT_MOVETO_CHALLENGE
         self.itt=interaction_background.Interaction_BGD()
         chara_list=combat_loop.get_chara_list()
         self.stop_threading_flag=False
@@ -19,8 +19,8 @@ class Domain_Flow_Control(Base_Threading):
         self.gdr=get_domain_reward.Get_Reward()
         self.gdr.setDaemon(True)
         self.combatloop.setDaemon(True)
-        self.domaininitflag=False
-        self.automatic_start=False
+        # self.domaininitflag=False
+        # self.automatic_start=False
         self.combatloop.pause_threading()
         self.combatloop.start()
         self.gdr.pause_thread()
@@ -37,16 +37,15 @@ class Domain_Flow_Control(Base_Threading):
     
     def checkup_stop_func(self):
         if self.stop_threading_flag:
-            
             return True
     
     def get_stop_flag(self):
         return self.stop_threading_flag
     
     def autostartinit(self):
-        self.current_state=ST.BEFORE_MOVETO_CHALLENGE
-        self.domaininitflag=False
-        self.automatic_start=True
+        self.current_state=ST.INIT_MOVETO_CHALLENGE
+        # self.domaininitflag=False
+        # self.automatic_start=True
     
     def _state_check(self): # Not in using
         cap=self.itt.capture()
@@ -70,15 +69,20 @@ class Domain_Flow_Control(Base_Threading):
             pass
         
     
-    def _Trigger_AFTER_MOVETO_CHALLENGE(self,cap):
-        
+    def _Trigger_AFTER_MOVETO_CHALLENGE(self,cap=None):
+        if cap==None:
+            cap = self.itt.capture()
+            cap = self.itt.png2jpg(cap, channel='ui')
         if pdocr_api.ocr.getTextPosition(self.itt.crop_image(cap,PosiM.posi_domain['Start']),
                                          textM.text(textM.start_challenge))!=-1:
             return True
         else:
             return False
     
-    def _Trigger_AFTER_CHALLENGE(self,cap):
+    def _Trigger_AFTER_CHALLENGE(self,cap=None):
+        if cap==None:
+            cap = self.itt.capture()
+            cap = self.itt.png2jpg(cap, channel='ui')
         if pdocr_api.ocr.getTextPosition(self.itt.crop_image(cap,PosiM.posi_domain['LeavingIn']), 
                                          textM.text(textM.LeavingIn))!=-1:
             return True
@@ -129,17 +133,15 @@ class Domain_Flow_Control(Base_Threading):
                     pyautogui.leftClick()
                 time.sleep(5)
                 movement.view_to_angle(-90)
-                
-                
-                
-                self.current_state==ST.BEFORE_MOVETO_CHALLENGE
+            
+                self.current_state=ST.BEFORE_MOVETO_CHALLENGE
             
             elif self.current_state==ST.BEFORE_MOVETO_CHALLENGE:
                 self.itt.keyDown('w')
                 if self.checkup_stop_func():
                     break
                 time.sleep(5)
-                self.current_state==ST.IN_MOVETO_CHALLENGE
+                self.current_state=ST.IN_MOVETO_CHALLENGE
             
             elif self.current_state==ST.IN_MOVETO_CHALLENGE:
                 
@@ -159,13 +161,13 @@ class Domain_Flow_Control(Base_Threading):
                 self.itt.keyPress('f')
                 time.sleep(0.1)
                 
-                self.current_state==ST.IN_CHALLENGE
+                self.current_state=ST.IN_CHALLENGE
                 
             elif self.current_state==ST.IN_CHALLENGE:
                 
                 time.sleep(3)
                 if self._Trigger_AFTER_CHALLENGE():
-                    self.current_state==ST.AFTER_CHALLENGE
+                    self.current_state=ST.AFTER_CHALLENGE
                     
             elif self.current_state==ST.AFTER_CHALLENGE:
                 logger.info('正在停止战斗')
@@ -176,13 +178,13 @@ class Domain_Flow_Control(Base_Threading):
                 self.current_state=ST.END_CHALLENGE
             
             elif self.current_state==ST.END_CHALLENGE:
-                self.current_state==ST.INIT_GETTING_REAWARD
+                self.current_state=ST.INIT_GETTING_REAWARD
             
             elif self.current_state==ST.INIT_GETTING_REAWARD:
                 # self.gdr.reset_flag()
                 self.gdr.continue_threading()
                 logger.info('正在激活石化古树')
-                self.current_state==ST.IN_GETTING_REAWARD
+                self.current_state=ST.IN_GETTING_REAWARD
                     
             elif self.current_state==ST.IN_GETTING_REAWARD:
                 time.sleep(3)
@@ -192,7 +194,7 @@ class Domain_Flow_Control(Base_Threading):
             elif self.current_state==ST.END_GETTING_REAWARD:
                 logger.info('秘境结束。')
                 # logger.info('domain over. restart next domain in 5 sec.')
-                self.current_state==ST.END_DOMAIN
+                self.current_state=ST.END_DOMAIN
             
             elif self.current_state==ST.END_DOMAIN:
                 time.sleep(5)

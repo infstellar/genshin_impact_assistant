@@ -1,11 +1,12 @@
 #from interaction import *
-from re import T
+
 import pyautogui
 import character,tastic,time,threading, img_manager as imgM, posi_manager as posiM
 from unit import *
 from timer_module import Timer
 from interaction_background import Interaction_BGD
 from base_threading import Base_Threading
+from switch_character_operator import Switch_Character_Operator
 
 def sort_flag_1(x:character.Character):
     return x.priority
@@ -71,6 +72,10 @@ class Combat_Loop(Base_Threading):
         self.current_num=1
         self.switch_timer=Timer(diff_start_time=2)
         self.itt=Interaction_BGD()
+        
+        self.sco = Switch_Character_Operator(self.chara_list)
+        self.sco.pause_threading()
+        
         self.super_stop_func=super_stop_func
     
     def checkup_stop_func(self):

@@ -28,7 +28,7 @@ def switch_domain_loop():
     global t2, domain_flag
     if domain_flag:
         logger.info('正在停止自动秘境')
-        t2.stop_thread()
+        t2.stop_threading()
     else:
         logger.info('启动自动秘境')
         t2=domain_flow.Domain_Flow_Control()

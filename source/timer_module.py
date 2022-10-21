@@ -17,7 +17,7 @@ class Timer:
         self.stop()
         return self.end_time-self.start_time
     
-    def getDiffTime(self):#new
+    def getDiffTime(self): # new
         self.stop()
         return self.end_time-self.start_time
     
