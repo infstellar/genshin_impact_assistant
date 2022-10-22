@@ -174,7 +174,7 @@ class Interaction_BGD():
     def get_img_existence(self, imgname, jpgmode=2, is_gray=False, min_rate=0.98):
         cap = self.capture(posi=posi_manager.get_posi_from_str(imgname), jpgmode=jpgmode)
 
-        matching_rate = self.similar_img_pixel(img_manager.get_img_from_imgname(imgname), cap)
+        matching_rate = self.similar_img_pixel(img_manager.get_img_from_name(imgname), cap)
 
         print(matching_rate)
         if matching_rate >= min_rate:
@@ -187,7 +187,7 @@ class Interaction_BGD():
         cap = self.capture(posi=posi_manager.get_posi_from_str(imgname), jpgmode=jpgmode)
         min_rate = img_manager.matching_rate_dict[imgname]
 
-        matching_rate = self.similar_img_pixel(img_manager.get_img_from_imgname(imgname), cap, is_gray=is_gray)
+        matching_rate = self.similar_img_pixel(img_manager.get_img_from_name(imgname), cap, is_gray=is_gray)
         # print(matching_rate)
         if matching_rate >= min_rate:
             p = posi_manager.get_posi_from_str(imgname)
