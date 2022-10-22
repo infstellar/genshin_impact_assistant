@@ -1,7 +1,7 @@
 from unit import *
 import posi_manager, img_manager
 from interaction_background import Interaction_BGD
-
+import time
 
 def get_current_chara_num(itt:Interaction_BGD):
         cap = itt.capture(jpgmode=2)

@@ -17,6 +17,13 @@ imgs_dict={
     "USE_20X2RESIN_DOBLE_CHOICES":imsrc_USE_20X2RESIN_DOBLE_CHOICES,
 }
 
+matching_rate_dict={
+    "coming_out_by_space":0.9,
+    "IN_DOMAIN":0.98,
+    "USE_20RESIN_DOBLE_CHOICES":0.88,
+    "USE_20X2RESIN_DOBLE_CHOICES":0.88,
+}
+
 def qshow(img1):
     cv2.imshow('123', img1)
     cv2.waitKey(0)

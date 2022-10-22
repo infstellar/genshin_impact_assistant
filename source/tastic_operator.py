@@ -5,6 +5,7 @@ from timer_module import Timer
 from interaction_background import Interaction_BGD
 from base_threading import Base_Threading
 from character import Character
+import inspect
 
 E_STRICT_MODE=True # may cause more performance overhead
 def stop_func_example():#True:stop;False:continue
@@ -203,7 +204,7 @@ class Tastic_Operator(Base_Threading):
     def do_use_q(self,times=0):
         if self.checkup_stop_func():
             return 0
-        if times>=2:
+        if times>2:
             return -1
         
         self.chara_waiting()

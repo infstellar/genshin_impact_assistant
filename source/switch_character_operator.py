@@ -5,6 +5,7 @@ from timer_module import Timer
 from interaction_background import Interaction_BGD
 from base_threading import Base_Threading
 
+
 def sort_flag_1(x:character.Character):
     return x.priority
 
