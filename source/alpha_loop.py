@@ -1,48 +1,48 @@
-import threading
 import time
 
-from unit import *
-import combat_loop, character
+import combat_loop
 from base_threading import Base_Threading
+from unit import *
 
-class Alpha_Loop(Base_Threading):
-    
+
+class AlphaLoop(Base_Threading):
+
     @logger.catch
     def __init__(self):
         super().__init__()
         self.setName('Alpha_Loop')
-        self.stop_flag=False
+        self.stop_flag = False
         chara_list = combat_loop.get_chara_list()
-        self.combatloop = combat_loop.Combat_Controller(chara_list)
-        self.combatloop.pause_threading()
-        self.combatloop.start()
-    
-    @logger.catch 
+        self.combat_loop = combat_loop.Combat_Controller(chara_list)
+        self.combat_loop.pause_threading()
+        self.combat_loop.start()
+
+    @logger.catch
     def run(self):
-        self.combatloop.continue_threading()
-        while(1):
+        self.combat_loop.continue_threading()
+        while 1:
             if self.stop_threading_flag:
                 return 0
-            
-            if self.pause_threading_flag: 
-                if self.working_flag == True:
+
+            if self.pause_threading_flag:
+                if self.working_flag:
                     self.working_flag = False
-                if self.combatloop.get_working_statement()==True:
-                    self.combatloop.pause_threading()
+                if self.combat_loop.get_working_statement():
+                    self.combat_loop.pause_threading()
                 time.sleep(1)
                 continue
-            
-            if self.working_flag == False:
-                if self.combatloop.get_working_statement()==False:
-                    self.combatloop.continue_threading()
+
+            if not self.working_flag:
+                if not self.combat_loop.get_working_statement():
+                    self.combat_loop.continue_threading()
                 self.working_flag = True
 
             time.sleep(2)
-                
+
     # def stop_thread(self,mode:int=0):
     #     if mode==0:
     #         self.stop_flag=True
-    #         self.combatloop.stop_threading()
+    #         self.combat_loop.stop_threading()
     #     elif mode==1: #emergency stop
     #         thread_id = self.get_id() 
     #         res = ctypes.pythonapi.PyThreadState_SetAsyncExc(thread_id, 
@@ -52,10 +52,10 @@ class Alpha_Loop(Base_Threading):
     #             logger.warning('Exception raise failure') 
 
 
-if __name__=='__main__':
-    #character_json=loadjson('character.json')
-    # team=loadjson('team.json')
-    al=Alpha_Loop()
+if __name__ == '__main__':
+    # character_json=load_json('character.json')
+    # team=load_json('team.json')
+    al = AlphaLoop()
     al.start()
-    while(1):
+    while 1:
         time.sleep(1)

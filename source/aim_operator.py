@@ -19,12 +19,12 @@ class AimOperator(Base_Threading):
         self.setName('Aim_Operator')
         self.itt = Interaction_BGD()
         self.loop_timer = Timer()
-        autoaimjson = load_json("auto_aim.json")
-        self.fps = 1 / autoaimjson["fps"]
-        self.max_number_of_enemy_loops = autoaimjson["max_number_of_enemy_loops"]
+        auto_aim_json = load_json("auto_aim.json")
+        self.fps = 1 / auto_aim_json["fps"]
+        self.max_number_of_enemy_loops = auto_aim_json["max_number_of_enemy_loops"]
         self.enemy_loops = 0
         self.enemy_flag = True
-        self.reset_time = autoaimjson["reset_time"]
+        self.reset_time = auto_aim_json["reset_time"]
         self.reset_timer = Timer()
 
     def run(self):
