@@ -160,7 +160,7 @@ class InteractionBGD():
         matching_rate = max_val
         return matching_rate
 
-    def similar_img_pixel(self, img, target):
+    def similar_img_pixel(self, img, target, is_gray = False):
         img1 = img.astype('int')
         target1 = target.astype('int')
         # cv2.imshow('1',img)
