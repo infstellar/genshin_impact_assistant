@@ -1,23 +1,26 @@
 # TODO: Update with exact module version
-numpy
+numpy~=1.23.4
 torch>=1.7
-opencv_python
-loguru
-tqdm
-torchvision
-thop
-ninja
-tabulate
+loguru~=0.6.0
+tqdm~=4.64.1
+torchvision~=0.13.1
+tabulate~=0.9.0
 
 # verified versions
 # pycocotools corresponds to https://github.com/ppwwyyxx/cocoapi
 pycocotools>=2.0.2
-onnx>=1.8.1
-onnxruntime>=1.8.0
-onnx-simplifier>=0.3.5
 
 # paddleocr
-paddleocr
-paddle
+paddleocr~=2.6.0.3
 
 
+
+opencv-python~=4.6.0.66
+Pillow~=9.2.0
+pypiwin32~=223
+pywin32~=304
+pytweening~=1.0.4
+matplotlib~=3.6.1
+keyboard~=0.13.5
+scipy~=1.9.3
+PyAutoGUI~=0.9.53
