@@ -1,8 +1,8 @@
 # from unit import *
 import math
-from interaction_background import Interaction_BGD
+from interaction_background import InteractionBGD
 import cv2,numpy as np, os, time
-itt=Interaction_BGD()
+itt=InteractionBGD()
 i=0
 numi=20
 SA_name='test'

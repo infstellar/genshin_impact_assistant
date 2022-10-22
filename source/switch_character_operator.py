@@ -4,7 +4,7 @@ import pyautogui
 import character,tastic,threading, img_manager as imgM, posi_manager as posiM, combat_lib, tastic_operator
 from unit import *
 from timer_module import Timer
-from interaction_background import Interaction_BGD
+from interaction_background import InteractionBGD
 from base_threading import BaseThreading
 
 
@@ -16,7 +16,7 @@ class Switch_Character_Operator(BaseThreading):
         super().__init__()
         self.setName('Switch_Character_Operator')
         self.chara_list = chara_list
-        self.itt = Interaction_BGD()
+        self.itt = InteractionBGD()
         
         self.tastic_operator=tastic_operator.TasticOperator()
         self.tastic_operator.pause_threading()

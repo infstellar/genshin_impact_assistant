@@ -6,8 +6,9 @@ import character
 import tastic
 from aim_operator import AimOperator
 from base_threading import BaseThreading
-from interaction_background import Interaction_BGD
+from interaction_background import InteractionBGD
 from switch_character_operator import Switch_Character_Operator
+import combat_lib
 from unit import *
 
 
@@ -73,9 +74,8 @@ class Combat_Controller(BaseThreading):
         self.setName('Combat_Controller')
 
         self.chara_list = chara_list
-        self.tastic_exc = tastic.Tastic()
         self.pause_threading_flag = False
-        self.itt = Interaction_BGD()
+        self.itt = InteractionBGD()
 
         self.sco = Switch_Character_Operator(self.chara_list)
         self.sco.pause_threading()
@@ -137,7 +137,7 @@ class Combat_Controller(BaseThreading):
             return True
 
     def continue_threading(self):
-        self.current_num = self.tastic_exc.get_current_chara_num()
+        self.current_num = combat_lib.get_current_chara_num()
         self.current_num = 1
         self.pause_threading_flag = False
         self.sco.continue_threading()
@@ -152,43 +152,8 @@ class Combat_Controller(BaseThreading):
         pass
         # if self.itt.capture(posi=posiM)
 
-    # def _switch_character(self,x:int):
-    #     pyautogui.click(button='middle')
-    #     t = self.switch_timer.getDiffTime()
-    #     # if t>=1.1:
-    #     #     pass
-    #     # else:
-    #     #     self.itt.delay(1.1-t)
-    #     self.tastic_exc.chara_waiting()
-    #     for i in range(30):
-    #         self.tastic_exc.unconventionality_situlation_detection()
-    #         self.itt.keyPress(str(x))
-    #         logger.debug('try switching to '+str(x))
-    #         time.sleep(0.1)
-    #         if self.tastic_exc.get_current_chara_num()==x:
-    #             break
-    #     # self.itt.delay(0.1)
-    #     self.current_num=x
-    #     self.switch_timer.reset()
-    #     self.itt.delay(0.1)
-
     def stop_threading(self):
         self.stop_threading_flag = True
-
-    # def loop(self):
-    #     idle=True
-    #     for chara in self.chara_list:
-    #         logger.debug('check up in: '+chara.name)
-    #         if self.checkup_stop_func():
-    #             return 0
-    #         if chara.trigger():
-    #             if chara.n != self.current_num:
-    #                 self._switch_character(chara.n)
-    #             self.tastic_exc.run(chara.tastic_group,chara)
-    #             idle=False
-    #             return idle
-    #         #time.sleep()
-    #     return idle
 
 
 if __name__ == '__main__':

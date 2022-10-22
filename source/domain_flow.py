@@ -4,7 +4,6 @@ import pyautogui
 
 import combat_loop
 import flow_state as ST
-import get_domain_reward
 import img_manager
 import interaction_background
 import movement
@@ -26,17 +25,13 @@ class DomainFlow(BaseThreading):
         self.current_state = ST.INIT_MOVETO_CHALLENGE
         # self.current_state = ST.END_ATTAIN_REAWARD
 
-        self.itt = interaction_background.Interaction_BGD()
+        self.itt = interaction_background.InteractionBGD()
         chara_list = combat_loop.get_chara_list()
         self.combat_loop = combat_loop.Combat_Controller(chara_list)
-        self.gdr = get_domain_reward.GetRewardFlow()
-        self.gdr.setDaemon(True)
         self.combat_loop.setDaemon(True)
 
         self.combat_loop.pause_threading()
         self.combat_loop.start()
-        self.gdr.pause_thread()
-        self.gdr.start()
 
         domain_times = config_json["domain_times"]
         self.lockOnFlag = 0
@@ -53,7 +48,6 @@ class DomainFlow(BaseThreading):
 
     def stop_threading(self):
         logger.info('停止自动秘境')
-        self.gdr.stop_thread()
         self.combat_loop.stop_threading()
         self.stop_threading_flag = True
 
@@ -272,16 +266,10 @@ class DomainFlow(BaseThreading):
                 self.current_state = ST.INIT_FINGING_TREE
 
             elif self.current_state == ST.INIT_FINGING_TREE:
-                # self.gdr.reset_flag()
-                # self.gdr.continue_threading()
                 logger.info('正在激活石化古树')
                 self.current_state = ST.IN_FINGING_TREE
 
             elif self.current_state == ST.IN_FINGING_TREE:
-                # time.sleep(3)
-                # if self.gdr.get_working_statement()==False:
-                #     self.current_state=ST.END_GETTING_REAWARD
-
                 self.Flow_IN_FINGING_TREE()
 
             elif self.current_state == ST.END_FINGING_TREE:
