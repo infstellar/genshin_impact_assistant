@@ -18,7 +18,7 @@ class Switch_Character_Operator(Base_Threading):
         self.chara_list = chara_list
         self.itt = Interaction_BGD()
         
-        self.tastic_operator=tastic_operator.Tastic_Operator()
+        self.tastic_operator=tastic_operator.TasticOperator()
         self.tastic_operator.pause_threading()
         self.tastic_operator.setDaemon(True)
         self.tastic_operator.start()
