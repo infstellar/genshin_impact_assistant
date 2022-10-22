@@ -1,10 +1,17 @@
 import string
-from unit import *
-import win32api, win32con, win32gui, pyautogui, pydirectinput
 from ctypes.wintypes import RECT, HWND
+
+import cv2
 import numpy as np
-import cv2 
-import vkcode ,posi_manager, img_manager
+import win32api
+import win32con
+import win32gui
+
+import img_manager
+import posi_manager
+import vkcode
+from unit import *
+
 
 class Interaction_BGD():
     '''

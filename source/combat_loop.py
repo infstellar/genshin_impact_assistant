@@ -1,12 +1,16 @@
 #from interaction import *
 
 import pyautogui
-import character,tastic,time,threading, img_manager as imgM, posi_manager as posiM
-from unit import *
-from timer_module import Timer
-from interaction_background import Interaction_BGD
+
+import character
+import tastic
+import time
 from base_threading import Base_Threading
+from interaction_background import Interaction_BGD
 from switch_character_operator import Switch_Character_Operator
+from timer_module import Timer
+from unit import *
+
 
 def sort_flag_1(x:character.Character):
     return x.priority
@@ -15,9 +19,9 @@ def stop_func_example():#True:stop;False:continue
     return False
 
 def get_chara_list(teamname='team.json'):
-    teamname=configjson["teamfile"]
-    team=loadjson(teamname)
-    characters=loadjson("character.json")
+    teamname=config_json["teamfile"]
+    team=load_json(teamname)
+    characters=load_json("character.json")
     chara_list=[]
     for team_name in team:
         team_item=team[team_name]
