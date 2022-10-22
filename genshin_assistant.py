@@ -1,8 +1,6 @@
 import ctypes
 import sys
 
-import source.unit
-
 
 def is_admin():
     try:
@@ -13,6 +11,8 @@ def is_admin():
 
 if not is_admin():
     ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, __file__, None, 1)
+
+import source.unit
 
 source.unit.logger.info('正在初始化，请稍后')
 # source.unit.logger.info('Initializing, please hold on')
