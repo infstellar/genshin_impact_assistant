@@ -18,15 +18,15 @@ def loadjson(json_name='config.json'):
     a = json.loads(content)
     f.close()
     return a
-global configjson        
-configjson=loadjson("config.json")
+global config_json
+config_json=loadjson("config.json")
 
 # 设置debug
 DEBUG_MODE=False
-DEBUG_MODE=configjson["DEBUG"]
+DEBUG_MODE=config_json["DEBUG"]
 
 # 设置env path
-env_folder_path = configjson["env_floder_path"]   
+env_folder_path = config_json["env_floder_path"]
 env_path = os.path.abspath(os.path.join(root_path, env_folder_path))
 if True:
     if sys.path[2]!=env_path:
@@ -93,7 +93,7 @@ def savefileP(filename,item):
         
 
 def reflash_config():
-    global configjson
+    global config_json
     configjson=loadjson("config.json")
     
 # if __name__=='__main__':

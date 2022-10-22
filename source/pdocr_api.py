@@ -10,7 +10,7 @@ except Exception as error:
     logger.critical("导入paddleocr时错误; err code: 001")
     logger.exception(error)
 
-globaldevice=configjson["device_paddle"]
+globaldevice=config_json["device_paddle"]
 if globaldevice=='auto':
     import paddle
     paddle.fluid.install_check.run_check()

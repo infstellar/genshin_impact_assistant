@@ -29,7 +29,8 @@ class Domain_Flow(Base_Threading):
         self.combatloop.start()
         self.gdr.pause_thread()
         self.gdr.start()
-        
+
+        domain_times=config_json["domain_times"]
         self.lockOnFlag=0
         self.movenum=2.5
         
@@ -38,7 +39,7 @@ class Domain_Flow(Base_Threading):
         self.resin_mode=configjson["resin"]
         self.move_timer=timer_module.Timer()
         self.ahead_timer=timer_module.Timer()
-        domain_times = configjson["domain_times"]
+        
         self.last_domain_times=domain_times-1
         logger.info('秘境次数：' + str(domain_times))
     
