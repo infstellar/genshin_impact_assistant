@@ -149,19 +149,35 @@ class Interaction_BGD():
         matching_rate = max_val
         return matching_rate
     
-    def get_img_existence(self,imgname ,jpgmode = 2, is_gray=False, min_rate=0.9):
+    def similar_img_pixel(self,img,target):
+        img1 = img.astype('int')
+        target1 = target.astype('int')
+        # cv2.imshow('1',img)
+        # cv2.imshow('2',target)
+        # cv2.waitKey(0)
+        s = np.sum(img1-target1)
+        s = abs(s)
+        matching_rate = 1 - s/( (img1.shape[0]*img1.shape[1]) *765)
+        return matching_rate
+    
+    def get_img_existence(self,imgname ,jpgmode = 2, is_gray=False, min_rate=0.98):
         cap = self.capture(posi=posi_manager.get_posi_from_str(imgname),jpgmode=jpgmode)
-        matching_rate = self.similar_img(img_manager.get_img_from_imgname(imgname), cap)
-        # print(matching_rate)
+        
+        matching_rate = self.similar_img_pixel(img_manager.get_img_from_imgname(imgname), cap)
+        
+        print(matching_rate)
         if matching_rate >= min_rate:
             return True
         else:
             return False
     
-    def appear_then_click(self, imgname, jpgmode=2, is_gray=False, min_rate=0.85):
+    def appear_then_click(self, imgname, jpgmode=2, is_gray=False, min_rate=0.98):
         upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
         cap = self.capture(posi=posi_manager.get_posi_from_str(imgname),jpgmode=jpgmode)
-        matching_rate = self.similar_img(img_manager.get_img_from_imgname(imgname), cap, is_gray=is_gray)
+        min_rate=img_manager.matching_rate_dict[imgname]
+        
+        matching_rate = self.similar_img_pixel(img_manager.get_img_from_imgname(imgname), cap, is_gray=is_gray)
+        # print(matching_rate)
         if matching_rate >= min_rate:
             p=posi_manager.get_posi_from_str(imgname)
             center_p=[(p[1]+p[3])/2, (p[0]+p[2])/2]
@@ -364,13 +380,18 @@ class Interaction_BGD():
     
 if __name__=='__main__':
     ib=Interaction_BGD()
+    rootpath="D:\Program Data\\vscode\GIA\genshin_impact_assistant\dist\imgs"
+    # ib.similar_img_pixel(cv2.imread(rootpath+"\\yunjin_q.png"),cv2.imread(rootpath+"\\zhongli_q.png"))
+    
+    
     # print(win32api.GetCursorPos())
     # win32api.mouse_event(win32con.MOUSEEVENTF_MOVE, 150, 150)
     # print(win32api.GetCursorPos())
     while(1):
         time.sleep(1)
-        # print( ib.get_img_existence(img_manager.COMING_OUT_BY_SPACE, jpgmode=2))
+        print( ib.get_img_existence(img_manager.USE_20X2RESIN_DOBLE_CHOICES, jpgmode=2))
+        print(ib.get_img_existence(img_manager.USE_20RESIN_DOBLE_CHOICES))
         # ib.appear_then_click(imgname=img_manager.USE_20RESIN_DOBLE_CHOICES)
-        ib.move_to(100,100)
+        # ib.move_to(100,100)
         
     
