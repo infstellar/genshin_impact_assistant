@@ -77,14 +77,17 @@ class TasticOperator(BaseThreading):
         cap = self.itt.png2jpg(cap, channel='ui', alpha_num=100)
         ret = pdocr_api.ocr.is_img_num_plus(cap)
 
-        if ret[0]:
+        if ret[0] != False:
             return True
         else:
             cap = self.itt.capture(posi=posi_manager.posi_chara_e)
             cap = self.itt.png2jpg(cap, channel='ui', alpha_num=100)
             ret = pdocr_api.ocr.is_img_num_plus(cap)
 
-            return ret[0]
+            if ret[0] != False:
+                return True
+            else:
+                return False
 
     def unconventionality_situation_detection(self, autoDispose=True):  # unconventionality situation detection
         # situation 1: coming_out_by_space
