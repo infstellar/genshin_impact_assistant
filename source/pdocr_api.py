@@ -3,6 +3,7 @@ logger.info('Creating ocr object.')
 from timer_module import Timer
 pdocr_timer_performance=Timer()
 pdocr_timer_performance.reset()
+import inspect
 try:
     from paddleocr import PaddleOCR
     from paddleocr import draw_ocr

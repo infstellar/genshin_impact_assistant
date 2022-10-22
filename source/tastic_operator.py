@@ -5,6 +5,7 @@ from timer_module import Timer
 from interaction_background import Interaction_BGD
 from base_threading import Base_Threading
 from character import Character
+import inspect
 
 E_STRICT_MODE=True # may cause more performance overhead
 def stop_func_example():#True:stop;False:continue
