@@ -24,7 +24,7 @@ def switch_combat_loop():
         t1.stop_threading()
     else:
         logger.info('启动自动战斗')
-        t1 = alpha_loop.Alpha_Loop()
+        t1 = alpha_loop.AlphaLoop()
         t1.setDaemon(True)
         t1.start()
     combat_flag = not combat_flag
