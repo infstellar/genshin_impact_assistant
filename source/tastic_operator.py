@@ -35,7 +35,7 @@ class TasticOperator(BaseThreading):
 
     def run(self):
         while 1:
-            time.sleep(0.2)
+            time.sleep(0.1)
             if self.stop_threading_flag:
                 return 0
 
@@ -177,7 +177,6 @@ class TasticOperator(BaseThreading):
             self.itt.delay(self.character.get_Ecd_time() + 0.1)
 
         self.chara_waiting()
-        pyautogui.click(button='middle')
         logger.debug('do_use_longe')
         self.itt.keyPress('s')
         self.itt.keyDown('e')

@@ -2,7 +2,8 @@ import pyautogui
 from unit import *
 import small_map
 import static_lib
-itt=static_lib.sta_itt
+import interaction_background
+itt=interaction_background.InteractionBGD()
 AHEAD=0
 LEFT=1
 RIGHT=2

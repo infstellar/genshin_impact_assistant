@@ -29,6 +29,7 @@ class AimOperator(BaseThreading):
 
     def run(self):
         while (1):
+            
             if self.stop_threading_flag:
                 return 0
 
