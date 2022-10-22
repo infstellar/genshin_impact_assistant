@@ -7,7 +7,7 @@ import pdocr_api
 import posi_manager
 from base_threading import BaseThreading
 from character import Character
-from interaction_background import Interaction_BGD
+from interaction_background import InteractionBGD
 from timer_module import Timer
 from unit import *
 
@@ -27,7 +27,7 @@ class TasticOperator(BaseThreading):
         self.hp_chara_list_position = [[283, 1698], [379, 1698], [475, 1698], [571, 1698]]
         self.chara_num = 4
         self.enter_timer = Timer()
-        self.itt = Interaction_BGD()
+        self.itt = InteractionBGD()
 
         self.forme_red_tastic = None
         self.tastic_group = None

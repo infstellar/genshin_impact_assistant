@@ -1,6 +1,6 @@
-from interaction_background import Interaction_BGD
+from interaction_background import InteractionBGD
 
-itt = Interaction_BGD()
+itt = InteractionBGD()
 from posi_manager import *
 
 while 1:

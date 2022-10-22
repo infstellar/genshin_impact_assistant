@@ -5,9 +5,10 @@ import threading
 
 from timer_module import Timer
 from unit import *
+from interaction_background import InteractionBGD
 
-
-class Screen_Capture():
+sta_itt=InteractionBGD
+class ScreenCapture():
     def __init__(self):
         logger.debug('static_lib_created')
         
@@ -70,7 +71,7 @@ class Screen_Capture():
         # print(self.last_cap.shape)
         return self.last_cap
 
-SCREENCAPTURE=Screen_Capture()
+SCREENCAPTURE=ScreenCapture()
 
 class testtest(threading.Thread):
     def __init__(self):

@@ -8,7 +8,7 @@ from unit import *
 class Video_Cap(threading.Thread):
     def __init__(self):
         threading.Thread.__init__()
-        self.itt = interaction_background.Interaction_BGD()
+        self.itt = interaction_background.InteractionBGD()
         self.latest_cap = None
         self.event = {}
         self.ret_event = {}

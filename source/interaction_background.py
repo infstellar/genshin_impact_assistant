@@ -18,7 +18,7 @@ import vkcode
 from unit import *
 
 
-class Interaction_BGD():
+class InteractionBGD():
     '''
     default size:1920x1080
     support size:1920x1080
@@ -232,8 +232,8 @@ class Interaction_BGD():
         if randtime:
             a = a * x * 0.02
             if x > 0.2 and isprint:
-                logger.debug('delay: ' + str(x) + ' rand: ' + str(
-                    x + a) + ' |function name: ' + upper_func_name + ' |comment: ' + comment)
+                logger.debug('delay: ' + str(x) + ' rand: ' + 
+                             str(x + a) + ' |function name: ' + upper_func_name + ' |comment: ' + comment)
             time.sleep(x + a)
         else:
             if x > 0.2 and isprint:
@@ -392,7 +392,7 @@ class Interaction_BGD():
 
 
 if __name__ == '__main__':
-    ib = Interaction_BGD()
+    ib = InteractionBGD()
     rootpath = "D:\Program Data\\vscode\GIA\genshin_impact_assistant\dist\imgs"
     # ib.similar_img_pixel(cv2.imread(rootpath+"\\yunjin_q.png"),cv2.imread(rootpath+"\\zhongli_q.png"))
 

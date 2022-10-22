@@ -5,7 +5,7 @@ import pyautogui
 
 import img_manager
 from base_threading import BaseThreading
-from interaction_background import Interaction_BGD
+from interaction_background import InteractionBGD
 from timer_module import Timer
 from unit import *
 
@@ -17,7 +17,7 @@ class AimOperator(BaseThreading):
     def __init__(self):
         super().__init__()
         self.setName('Aim_Operator')
-        self.itt = Interaction_BGD()
+        self.itt = InteractionBGD()
         self.loop_timer = Timer()
         auto_aim_json = load_json("auto_aim.json")
         self.fps = 1 / auto_aim_json["fps"]

@@ -2,11 +2,11 @@ import time
 
 import img_manager
 import posi_manager
-from interaction_background import Interaction_BGD
+from interaction_background import InteractionBGD
 from unit import *
 
 
-def get_current_chara_num(itt: Interaction_BGD):
+def get_current_chara_num(itt: InteractionBGD):
     cap = itt.capture(jpgmode=2)
     for i in range(4):
         p = posi_manager.chara_num_list_point[i]
@@ -16,7 +16,7 @@ def get_current_chara_num(itt: Interaction_BGD):
             return i + 1
 
 
-def unconventionality_situlation_detection(itt: Interaction_BGD,
+def unconventionality_situlation_detection(itt: InteractionBGD,
                                            autoDispose=True):  # unconventionality situlation detection
     # situlation 1: coming_out_by_space
 

@@ -1,7 +1,7 @@
 import time
 
 import posi_manager
-from interaction_background import Interaction_BGD
+from interaction_background import InteractionBGD
 from timer_module import Timer
 from unit import *
 
@@ -38,7 +38,7 @@ class Character:
         self.n = n
         self.Epress_time = Epress_time
 
-        self.itt = Interaction_BGD()
+        self.itt = InteractionBGD()
 
         if E_long_cd_time != 0:
             self.Ecd_time = E_long_cd_time

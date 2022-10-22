@@ -6,7 +6,7 @@ import time, cv2
 import posi_manager, pdocr_api, img_manager
 
 #from interaction import *
-from interaction_background import Interaction_BGD
+from interaction_background import InteractionBGD
 
 
 E_STRICT_MODE=True # may cause more performance overhead
@@ -22,7 +22,7 @@ class Tastic():
         self.hp_charalist_posi=[[283,1698],[379,1698],[475,1698],[571,1698]]
         self.chara_num=4
         self.enter_timer=Timer()
-        self.itt=Interaction_BGD()
+        self.itt=InteractionBGD()
         # self.timer_performance=Timer()
     
     # def checkupstop(self):

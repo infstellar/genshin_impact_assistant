@@ -7,7 +7,7 @@ import time
 import timer_module
 import yolox_api
 from base_threading import BaseThreading
-from interaction_background import Interaction_BGD
+from interaction_background import InteractionBGD
 from unit import *
 
 
@@ -17,7 +17,7 @@ class GetRewardFlow(BaseThreading):
         super().__init__()
         self.setName('Get_Reward_Flow')
 
-        self.itt = Interaction_BGD()
+        self.itt = InteractionBGD()
         self.lockOnFlag = 0
         self.pause_threading_flag = False
         # self.working_flag=False
