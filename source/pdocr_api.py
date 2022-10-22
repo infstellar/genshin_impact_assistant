@@ -64,7 +64,7 @@ class Paddleocr_API():
     #     im_show = Image.fromarray(im_show)
     #     im_show.save('result.jpg')
 
-    def findText(self, result, text, mode=APPROXIMATE_MATCHING):
+    def find_text(self, result, text, mode=APPROXIMATE_MATCHING):
         if mode == APPROXIMATE_MATCHING:
             for i in range(len(result)):
                 if text in result[i][1][0]:
@@ -106,59 +106,58 @@ class Paddleocr_API():
                 return result
         return None
 
-    def getTextPosition(self, imsrc, text, mode=APPROXIMATE_MATCHING, returnMode=RETURN_POSITION, isprintlog=False,
-                        message='', defaultend='\n'):
-        res = self.ImgAnalyse(imsrc)
-        resposition = self.findText(res, text, mode=mode)
+    def get_text_position(self, im_src, text, mode=APPROXIMATE_MATCHING, returnMode=RETURN_POSITION, isprintlog=False,
+                          message='', default_end='\n'):
+        res = self.ImgAnalyse(im_src)
+        res_position = self.find_text(res, text, mode=mode)
         logger.debug('getTextPosition:  ' + message, end=' | ')
         if isprintlog:
             logger.debug('res: ' + '|function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
             for i in res:
                 logger.debug(i[1][0], end=', ')
-            logger.debug(end=defaultend)
-        # cv2.imshow('pic',imsrc)
+            logger.debug(end=default_end)
+        # cv2.imshow('pic',im_src)
         # cv2.waitKey(0)
-        if resposition != None:
-            # print('resposition',resposition)
+        if res_position is not None:
+            # print('res_position',res_position)
             if mode == REPEATLY_MATCHING and returnMode == RETURN_POSITION:
                 result = []
-                for i in resposition:
-                    result.append([resposition[0][0][0], resposition[0][0][1]])
+                for i in res_position:
+                    result.append([res_position[0][0][0], res_position[0][0][1]])
                 return result
             if returnMode == RETURN_POSITION:
                 logger.debug('found the text:' + text + ' |function name: ' +
                              inspect.getframeinfo(inspect.currentframe().f_back)[2])
-                return [resposition[0][0][0], resposition[0][0][1]]
+                return [res_position[0][0][0], res_position[0][0][1]]
             elif returnMode == RETURN_TEXT:
                 logger.debug('found the text:' + text + ' |function name: ' +
                              inspect.getframeinfo(inspect.currentframe().f_back)[2])
-                return resposition[1][0]
+                return res_position[1][0]
         else:
             logger.debug('can not find the text:' + text + ' |function name: ' +
                          inspect.getframeinfo(inspect.currentframe().f_back)[2])
             return -1
 
-    def is_img_num(self, imsrc):
+    def is_img_num(self, im_src):
         pdocr_timer_performance.reset()
-        isnum = False
-        resnum = None
-        res = self.ImgAnalyse(imsrc)
+        is_num = False
+        res_num = None
+        res = self.ImgAnalyse(im_src)
+
         for result_item in res:
+            # noinspection PyBroadException
             try:
                 num = result_item[1][0]
             except:
                 num = ''
-            for i in num:
-                if i in ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.']:
-                    isnum = True
-            if isnum:
-                try:
-                    resnum = float(num)
-                except:
-                    resnum = None
+
+            if is_number(num):
+                res_num = float(num)
+            else:
+                res_num = None
         t = pdocr_timer_performance.getDiffTime()
 
-        return isnum, resnum, t
+        return is_num, res_num, t
 
     def is_img_num_plus(self, imsrc):
         ret1, ret2, t = self.is_img_num(imsrc)
