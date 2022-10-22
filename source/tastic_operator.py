@@ -40,7 +40,7 @@ class TasticOperator(Base_Threading):
                 return 0
 
             if self.pause_threading_flag:
-                if self.working_flag == True:
+                if self.working_flag:
                     self.working_flag = False
                 time.sleep(1)
                 continue
@@ -48,7 +48,7 @@ class TasticOperator(Base_Threading):
             # print('5')
 
             self.working_flag = True
-            if self.forme_red_tastic == None:
+            if self.forme_red_tastic is None:
                 self.working_flag = False
                 continue
             self.execute_tastic(self.forme_red_tastic)
@@ -65,47 +65,45 @@ class TasticOperator(Base_Threading):
         tastic = self.tastic_group.split(';')
         return tastic
 
-    def is_E_available(self):  # 被击飞时不可用
+    def is_e_available(self):  # 被击飞时不可用
         cap = self.itt.capture(posi=posi_manager.posi_chara_smaller_e, jpgmode=2)
         if cap.max() < 10:
             return False
         else:
             return True
 
-    def _is_E_release(self):
+    def _is_e_release(self):
         cap = self.itt.capture(posi=posi_manager.posi_chara_e)
         cap = self.itt.png2jpg(cap, channel='ui', alpha_num=100)
         ret = pdocr_api.ocr.is_img_num_plus(cap)
 
-        if ret[0] != False:
+        if ret[0]:
             return True
         else:
             cap = self.itt.capture(posi=posi_manager.posi_chara_e)
             cap = self.itt.png2jpg(cap, channel='ui', alpha_num=100)
             ret = pdocr_api.ocr.is_img_num_plus(cap)
-            if ret[0] != False:
-                return True
-            else:
-                return False
 
-    def unconventionality_situlation_detection(self, autoDispose=True):  # unconventionality situlation detection
-        # situlation 1: coming_out_by_space
+            return ret[0]
 
-        situlation_code = -1
+    def unconventionality_situation_detection(self, autoDispose=True):  # unconventionality situation detection
+        # situation 1: coming_out_by_space
+
+        situation_code = -1
 
         while self.itt.get_img_existence(img_manager.COMING_OUT_BY_SPACE, jpgmode=2, min_rate=0.8):
             if self.checkup_stop_func():
                 return 0
-            situlation_code = 1
+            situation_code = 1
             self.itt.keyPress('spacebar')
-            logger.debug('Unconventionality Situlation: COMING_OUT_BY_SPACE')
+            logger.debug('Unconventionality Situation: COMING_OUT_BY_SPACE')
             time.sleep(0.1)
 
-        return situlation_code
+        return situation_code
 
     def chara_waiting(self, mode=0):
-        self.unconventionality_situlation_detection()
-        if (mode == 0) and (self.is_E_available() == True) and (self.enter_timer.getDiffTime() <= 1):
+        self.unconventionality_situation_detection()
+        if (mode == 0) and self.is_e_available() and (self.enter_timer.getDiffTime() <= 1):
             logger.debug('skip waiting')
             return 0
         while self.get_character_busy() and (not self.checkup_stop_func()):
@@ -126,11 +124,6 @@ class TasticOperator(Base_Threading):
                 continue
             else:
                 return i + 1
-
-    def QEtactic_1(self, s, n):  # not using
-        s = s[n:]
-        s = s.split(':')
-        return s
 
     def get_character_busy(self):
         cap = self.itt.capture()
@@ -163,14 +156,14 @@ class TasticOperator(Base_Threading):
             return -1
 
         if self.character.Ecd_float_time > 0:
-            if self._is_E_release() == True:
+            if self._is_e_release():
                 self.itt.delay(self.character.get_Ecd_time() + 0.1)
 
         self.chara_waiting()
         logger.debug('do_use_e')
         self.itt.keyPress('e')
         self.itt.delay(0.2)
-        if self._is_E_release() == False and E_STRICT_MODE:
+        if (not self._is_e_release()) and E_STRICT_MODE:
             self.do_use_e(times=times + 1)
         self.character.used_E()
 
@@ -194,7 +187,7 @@ class TasticOperator(Base_Threading):
             return 0
         self.itt.keyPress('w')
         self.itt.delay(0.2)
-        if self._is_E_release() == False and E_STRICT_MODE:
+        if (not self._is_e_release()) and E_STRICT_MODE:
             self.do_use_longe(times=times + 1)
         self.character.used_longE()
 
@@ -208,7 +201,7 @@ class TasticOperator(Base_Threading):
         self.itt.keyPress('q')
         self.itt.delay(0.2)
         self.chara_waiting()
-        if self.is_Q_ready() == True and E_STRICT_MODE:
+        if (not self.is_q_ready()) and E_STRICT_MODE:
             logger.debug('没q到')
             self.do_use_q(times=times + 1)
         self.character.used_Q()
@@ -245,7 +238,7 @@ class TasticOperator(Base_Threading):
             return 0
         self.itt.keyPress('r')
 
-    def is_Q_ready(self):
+    def is_q_ready(self):
         cap = self.itt.capture(jpgmode=2)
         p = posi_manager.posi_chara_q_point
         if cap[p[0], p[1]].max() > 0:
@@ -263,7 +256,7 @@ class TasticOperator(Base_Threading):
             self.execute_tastic([tas[1].replace('.', ',')])
 
     def estimate_q_ready(self, tastic):
-        is_ready = self.is_Q_ready()
+        is_ready = self.is_q_ready()
         tas = tastic[tastic.index('?') + 1:]
         tas = tas.split(':')
         if is_ready:
@@ -280,7 +273,7 @@ class TasticOperator(Base_Threading):
             while (not self.character.is_E_pass()) and (not self.checkup_stop_func()):
                 if self.checkup_stop_func():
                     return 0
-                self.unconventionality_situlation_detection()
+                self.unconventionality_situation_detection()
                 self.execute_tastic([tas[0]])
         else:
             tas[1].replace('.', ',')
@@ -297,7 +290,7 @@ class TasticOperator(Base_Threading):
             while (not self.character.is_Q_pass()) and (not self.checkup_stop_func()):
                 if self.checkup_stop_func():
                     return 0
-                self.unconventionality_situlation_detection()
+                self.unconventionality_situation_detection()
                 self.execute_tastic([tas[0]])
         else:
             tas[1].replace('.', ',')
@@ -305,7 +298,7 @@ class TasticOperator(Base_Threading):
 
     def execute_tastic(self, tastic_list):
 
-        self.unconventionality_situlation_detection()
+        self.unconventionality_situation_detection()
 
         for tastic in tastic_list:
             if self.checkup_stop_func():
