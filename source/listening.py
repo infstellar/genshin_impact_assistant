@@ -16,7 +16,7 @@ def switch_combat_loop():
     global t1, combat_flag
     if combat_flag:
         logger.info('正在停止自动战斗')
-        t1.stop_thread()
+        t1.stop_threading()
     else:
         logger.info('启动自动战斗')
         t1=alpha_loop.Alpha_Loop()
@@ -31,7 +31,7 @@ def switch_domain_loop():
         t2.stop_threading()
     else:
         logger.info('启动自动秘境')
-        t2=domain_flow.Domain_Flow_Control()
+        t2=domain_flow.Domain_Flow()
         t2.setDaemon(True)
         t2.start()
     domain_flag = not domain_flag

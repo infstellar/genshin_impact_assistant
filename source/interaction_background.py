@@ -4,7 +4,7 @@ import win32api, win32con, win32gui, pyautogui, pydirectinput
 from ctypes.wintypes import RECT, HWND
 import numpy as np
 import cv2 
-import vkcode ,posi_manager, img_manager
+import vkcode ,posi_manager, img_manager, static_lib
 
 class Interaction_BGD():
     '''
@@ -63,29 +63,31 @@ class Interaction_BGD():
         1:return bg,black
         2:return ui,black
         '''
-        handle=self.handle
-        # 获取窗口客户区的大小
-        r = RECT()
-        self.GetClientRect(handle, ctypes.byref(r))
-        width, height = r.right, r.bottom
-        # 开始截图
-        dc = self.GetDC(handle)
-        cdc = self.CreateCompatibleDC(dc)
-        bitmap = self.CreateCompatibleBitmap(dc, width, height)
-        self.SelectObject(cdc, bitmap)
-        self.BitBlt(cdc, 0, 0, width, height, dc, 0, 0, self.SRCCOPY)
-        # 截图是BGRA排列，因此总元素个数需要乘以4
-        total_bytes = width*height*4
-        buffer = bytearray(total_bytes)
-        byte_array = ctypes.c_ubyte*total_bytes
-        self.GetBitmapBits(bitmap, total_bytes, byte_array.from_buffer(buffer))
-        self.DeleteObject(bitmap)
-        self.DeleteObject(cdc)
-        self.ReleaseDC(handle, dc)
-        # 返回截图数据为numpy.ndarray
+        # handle=self.handle
+        # # 获取窗口客户区的大小
+        # r = RECT()
+        # self.GetClientRect(handle, ctypes.byref(r))
+        # width, height = r.right, r.bottom
+        # # 开始截图
+        # dc = self.GetDC(handle)
+        # cdc = self.CreateCompatibleDC(dc)
+        # bitmap = self.CreateCompatibleBitmap(dc, width, height)
+        # self.SelectObject(cdc, bitmap)
+        # self.BitBlt(cdc, 0, 0, width, height, dc, 0, 0, self.SRCCOPY)
+        # # 截图是BGRA排列，因此总元素个数需要乘以4
+        # total_bytes = width*height*4
+        # buffer = bytearray(total_bytes)
+        # byte_array = ctypes.c_ubyte*total_bytes
+        # self.GetBitmapBits(bitmap, total_bytes, byte_array.from_buffer(buffer))
+        # self.DeleteObject(bitmap)
+        # self.DeleteObject(cdc)
+        # self.ReleaseDC(handle, dc)
+        # # 返回截图数据为numpy.ndarray
         
         
-        ret=np.frombuffer(buffer, dtype=np.uint8).reshape(height, width, 4)
+        # ret=np.frombuffer(buffer, dtype=np.uint8).reshape(height, width, 4)
+        
+        ret = static_lib.SCREENCAPTURE.get_capture()
         
         if posi!=None:
             ret=ret[posi[0]:posi[2],posi[1]:posi[3]]

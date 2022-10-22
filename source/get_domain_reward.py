@@ -5,9 +5,11 @@ from base_threading import Base_Threading
 # sys.path.append("..")
 
 import yolox_api
-class Get_Reward(Base_Threading):
+class Get_Reward_Flow(Base_Threading):
     def __init__(self):
         super().__init__()
+        self.setName('Get_Reward_Flow')
+        
         self.itt = Interaction_BGD()
         self.lockOnFlag=0
         self.pause_threading_flag=False
@@ -133,7 +135,7 @@ class Get_Reward(Base_Threading):
                 
         
 if __name__=='__main__':
-    gr=Get_Reward()
+    gr=Get_Reward_Flow()
     gr.start()
     while(1):
         time.sleep(1)

@@ -7,6 +7,7 @@ from timer_module import Timer
 from interaction_background import Interaction_BGD
 from base_threading import Base_Threading
 from switch_character_operator import Switch_Character_Operator
+from aim_operator import Aim_Operator
 
 def sort_flag_1(x:character.Character):
     return x.priority
@@ -61,25 +62,67 @@ def get_chara_list(teamname='team.json'):
             )
     return chara_list
 
-class Combat_Loop(Base_Threading):
-    def __init__(self,chara_list:list[character.Character],super_stop_func=stop_func_example):
+class Combat_Controller(Base_Threading):
+    def __init__(self,chara_list:list[character.Character] = get_chara_list()):
         super().__init__()
+        self.setName('Combat_Controller')
         
         self.chara_list=chara_list
-        self.chara_list.sort(key=sort_flag_1,reverse=False)
         self.tastic_exc=tastic.Tastic()
         self.pause_threading_flag=False
-        self.current_num=1
-        self.switch_timer=Timer(diff_start_time=2)
         self.itt=Interaction_BGD()
         
         self.sco = Switch_Character_Operator(self.chara_list)
         self.sco.pause_threading()
+        self.sco.setDaemon(True)
+        self.sco.start()
         
-        self.super_stop_func=super_stop_func
+        self.ao = Aim_Operator()
+        self.ao.pause_threading()
+        self.ao.setDaemon(True)
+        self.ao.start()
+        
+        # self.super_stop_func=super_stop_func
+    
+    def run(self):
+        while(1):
+            time.sleep(0.5)
+            if self.stop_threading_flag:
+                self.ao.stop_threading()
+                self.sco.stop_threading()
+                return 0
+            
+            if self.pause_threading_flag==False:
+                if self.checkup_stop_func():
+                    break
+                
+                if self.sco.get_working_statement() == False:
+                    self.sco.continue_threading()
+                    time.sleep(1)
+                else:
+                    time.sleep(0.2)
+                    
+                if self.ao.get_working_statement() == False:
+                    self.ao.continue_threading()
+                else:
+                    pass
+                    
+            else:
+                if self.sco.get_working_statement() == True:
+                    self.sco.pause_threading()
+                    time.sleep(1)
+                
+                if self.ao.get_working_statement() == True:
+                    self.ao.pause_threading()
+                    time.sleep(1)
+                else:
+                    pass
+            
+            # print('6')
+            # time.sleep(1)
     
     def checkup_stop_func(self):
-        if self.super_stop_func() or self.pause_threading_flag or self.stop_threading_flag:
+        if self.pause_threading_flag or self.stop_threading_flag:
             logger.info('停止自动战斗')
             return True
         
@@ -92,68 +135,61 @@ class Combat_Loop(Base_Threading):
         self.current_num=self.tastic_exc.get_current_chara_num()
         self.current_num=1
         self.pause_threading_flag=False
+        self.sco.continue_threading()
+        self.ao.continue_threading()
         
         
     def pause_threading(self):
         self.pause_threading_flag=True
+        self.sco.pause_threading()
+        self.ao.pause_threading()
     
     def checkup_trapped(self):
         pass
         # if self.itt.capture(posi=posiM)
             
-    def _switch_character(self,x:int):
-        pyautogui.click(button='middle')
-        t = self.switch_timer.getDiffTime()
-        # if t>=1.1:
-        #     pass
-        # else:
-        #     self.itt.delay(1.1-t)
-        self.tastic_exc.chara_waiting()
-        for i in range(30):
-            self.tastic_exc.unconventionality_situlation_detection()
-            self.itt.keyPress(str(x))
-            logger.debug('try switching to '+str(x))
-            time.sleep(0.1)
-            if self.tastic_exc.get_current_chara_num()==x:
-                break
-        # self.itt.delay(0.1)
-        self.current_num=x
-        self.switch_timer.reset()
-        self.itt.delay(0.1)
+    # def _switch_character(self,x:int):
+    #     pyautogui.click(button='middle')
+    #     t = self.switch_timer.getDiffTime()
+    #     # if t>=1.1:
+    #     #     pass
+    #     # else:
+    #     #     self.itt.delay(1.1-t)
+    #     self.tastic_exc.chara_waiting()
+    #     for i in range(30):
+    #         self.tastic_exc.unconventionality_situlation_detection()
+    #         self.itt.keyPress(str(x))
+    #         logger.debug('try switching to '+str(x))
+    #         time.sleep(0.1)
+    #         if self.tastic_exc.get_current_chara_num()==x:
+    #             break
+    #     # self.itt.delay(0.1)
+    #     self.current_num=x
+    #     self.switch_timer.reset()
+    #     self.itt.delay(0.1)
             
     def stop_threading(self):
         self.stop_threading_flag=True
     
-    def loop(self):
-        idle=True
-        for chara in self.chara_list:
-            logger.debug('check up in: '+chara.name)
-            if self.checkup_stop_func():
-                return 0
-            if chara.trigger():
-                if chara.n != self.current_num:
-                    self._switch_character(chara.n)
-                self.tastic_exc.run(chara.tastic_group,chara)
-                idle=False
-                return idle
-            #time.sleep()
-        return idle
+    # def loop(self):
+    #     idle=True
+    #     for chara in self.chara_list:
+    #         logger.debug('check up in: '+chara.name)
+    #         if self.checkup_stop_func():
+    #             return 0
+    #         if chara.trigger():
+    #             if chara.n != self.current_num:
+    #                 self._switch_character(chara.n)
+    #             self.tastic_exc.run(chara.tastic_group,chara)
+    #             idle=False
+    #             return idle
+    #         #time.sleep()
+    #     return idle
 
-    def run(self):
-        while(1):
-            if self.pause_threading_flag==False:
-                if self.checkup_stop_func():
-                    break
-                ret=self.loop()
-                logger.debug('idle: '+str(ret))
-                if ret:
-                    time.sleep(0.2)
-                else:
-                    pass
-                    # time.sleep(0.1)
-            else:
-                time.sleep(1)
+    
                 
 if __name__=='__main__':
-    a = get_chara_list()
-    print()
+    cl = Combat_Controller()
+    cl.start()
+    # a = get_chara_list()
+    # print()
