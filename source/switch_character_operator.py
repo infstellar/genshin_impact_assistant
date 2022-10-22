@@ -1,3 +1,5 @@
+import time
+
 import pyautogui
 import character,tastic,threading, img_manager as imgM, posi_manager as posiM, combat_lib, tastic_operator
 from unit import *

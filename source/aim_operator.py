@@ -1,3 +1,5 @@
+import time
+
 import pyautogui
 
 import cv2

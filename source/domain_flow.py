@@ -88,8 +88,8 @@ class Domain_Flow(Base_Threading):
         if cap==None:
             cap = self.itt.capture()
             cap = self.itt.png2jpg(cap, channel='ui')
-        if pdocr_api.ocr.getTextPosition(self.itt.crop_image(cap,PosiM.posi_domain['Start']),
-                                         textM.text(textM.start_challenge))!=-1:
+        if pdocr_api.ocr.get_text_position(self.itt.crop_image(cap, PosiM.posi_domain['Start']),
+                                           textM.text(textM.start_challenge))!=-1:
             return True
         else:
             return False
@@ -98,16 +98,16 @@ class Domain_Flow(Base_Threading):
         if cap==None:
             cap = self.itt.capture()
             cap = self.itt.png2jpg(cap, channel='ui')
-        if pdocr_api.ocr.getTextPosition(self.itt.crop_image(cap,PosiM.posi_domain['LeavingIn']), 
-                                         textM.text(textM.LeavingIn))!=-1:
+        if pdocr_api.ocr.get_text_position(self.itt.crop_image(cap, PosiM.posi_domain['LeavingIn']),
+                                           textM.text(textM.LeavingIn))!=-1:
             return True
         else:
             return False
         
     
     def _Trigger_GETTING_REAWARD(self,cap): # Not in using
-        if pdocr_api.ocr.getTextPosition(self.itt.crop_image(cap,PosiM.posi_domain['ClaimRewards']), 
-                                         textM.text(textM.claim_rewards))!=-1:
+        if pdocr_api.ocr.get_text_position(self.itt.crop_image(cap, PosiM.posi_domain['ClaimRewards']),
+                                           textM.text(textM.claim_rewards))!=-1:
             return True
         else:
             return False
@@ -121,7 +121,7 @@ class Domain_Flow(Base_Threading):
             if self.checkup_stop_func():
                 return 0
             
-            if pdocr_api.ocr.getTextPosition(cap, textM.text(textM.clld)) != -1:
+            if pdocr_api.ocr.get_text_position(cap, textM.text(textM.clld)) != -1:
                 break
             if self.itt.get_img_existence(imgname=img_manager.IN_DOMAIN):
                 break
@@ -132,7 +132,7 @@ class Domain_Flow(Base_Threading):
             return 0
         
         cap=self.itt.capture(jpgmode=2)
-        if pdocr_api.ocr.getTextPosition(cap, textM.text(textM.clld)) != -1:
+        if pdocr_api.ocr.get_text_position(cap, textM.text(textM.clld)) != -1:
             self.itt.move_to(PosiM.posi_domain['CLLD'][0],PosiM.posi_domain['CLLD'][1])
             time.sleep(1)
             pyautogui.leftClick()
@@ -179,7 +179,7 @@ class Domain_Flow(Base_Threading):
             cap=self.itt.capture(posi=PosiM.posi_domain["ClaimRewards"]) # posi=PosiM.posi_domain["ClaimRewards"]
             cap=self.itt.png2jpg(cap,channel='ui')
             
-            if pdocr_api.ocr.getTextPosition(cap, textM.text(textM.claim_rewards)) != -1:
+            if pdocr_api.ocr.get_text_position(cap, textM.text(textM.claim_rewards)) != -1:
                 self.current_state = ST.END_MOVETO_TREE
                 return 0
                 
@@ -195,7 +195,7 @@ class Domain_Flow(Base_Threading):
             elif self.resin_mode=='20':
                 self.itt.appear_then_click(imgname=img_manager.USE_20RESIN_DOBLE_CHOICES)
             
-            if pdocr_api.ocr.getTextPosition(self.itt.capture(jpgmode=3), textM.text(textM.domain_obtain)) != -1:
+            if pdocr_api.ocr.get_text_position(self.itt.capture(jpgmode=3), textM.text(textM.domain_obtain)) != -1:
                 break
             time.sleep(2)
             
@@ -317,7 +317,7 @@ class Domain_Flow(Base_Threading):
                     # logger.info('start next domain.')
                     self.last_domain_times-=1
                     
-                    posi=pdocr_api.ocr.getTextPosition(cap, textM.text(textM.conti_challenge))
+                    posi=pdocr_api.ocr.get_text_position(cap, textM.text(textM.conti_challenge))
                     if posi!=-1:
                         self.itt.move_to(posi[0],posi[1]+30)
                     else:
@@ -333,7 +333,7 @@ class Domain_Flow(Base_Threading):
                 else:
                     logger.info('次数结束。退出秘境')
                     # logger.info('no more times. exit domain.')
-                    posi=pdocr_api.ocr.getTextPosition(cap, textM.text(textM.exit_challenge))
+                    posi=pdocr_api.ocr.get_text_position(cap, textM.text(textM.exit_challenge))
                     if posi!=-1:
                         self.itt.move_to(posi[0],posi[1]+30)
                     else:

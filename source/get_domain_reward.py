@@ -111,7 +111,7 @@ class Get_Reward_Flow(Base_Threading):
                 
                 cap=self.itt.capture(posi=PosiM.posi_domain["ClaimRewards"]) # posi=PosiM.posi_domain["ClaimRewards"]
                 cap=self.itt.png2jpg(cap,channel='ui')
-                if pdocr_api.ocr.getTextPosition(cap, textM.text(textM.claim_rewards)) != -1:
+                if pdocr_api.ocr.get_text_position(cap, textM.text(textM.claim_rewards)) != -1:
                     self.itt.keyUp('w')
                     
                     self.itt.keyPress('f')
@@ -123,7 +123,7 @@ class Get_Reward_Flow(Base_Threading):
                         elif self.resin_mode=='20':
                             self.itt.appear_then_click(imgname=img_manager.USE_20RESIN_DOBLE_CHOICES)
                         
-                        if pdocr_api.ocr.getTextPosition(self.itt.capture(jpgmode=3), textM.text(textM.domain_obtain)) != -1:
+                        if pdocr_api.ocr.get_text_position(self.itt.capture(jpgmode=3), textM.text(textM.domain_obtain)) != -1:
                             break
                         time.sleep(2)
                         

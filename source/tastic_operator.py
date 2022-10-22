@@ -1,3 +1,5 @@
+import time
+
 import pyautogui
 import character,tastic,threading, img_manager, posi_manager, pdocr_api
 from unit import *

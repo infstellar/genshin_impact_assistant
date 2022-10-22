@@ -1,4 +1,6 @@
 import threading
+import time
+
 from unit import *
 import combat_loop, character
 from base_threading import Base_Threading
