@@ -10,7 +10,7 @@ from interaction_background import Interaction_BGD
 from switch_character_operator import Switch_Character_Operator
 from timer_module import Timer
 from unit import *
-from aim_operator import Aim_Operator
+from aim_operator import AimOperator
 
 
 def sort_flag_1(x:character.Character):
@@ -81,7 +81,7 @@ class Combat_Controller(Base_Threading):
         self.sco.setDaemon(True)
         self.sco.start()
         
-        self.ao = Aim_Operator()
+        self.ao = AimOperator()
         self.ao.pause_threading()
         self.ao.setDaemon(True)
         self.ao.start()
