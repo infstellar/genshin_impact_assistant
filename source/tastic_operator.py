@@ -203,7 +203,7 @@ class Tastic_Operator(Base_Threading):
     def do_use_q(self,times=0):
         if self.checkup_stop_func():
             return 0
-        if times>=2:
+        if times>2:
             return -1
         
         self.chara_waiting()
