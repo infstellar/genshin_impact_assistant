@@ -21,6 +21,7 @@ class AlphaLoop(BaseThreading):
     def run(self):
         self.combat_loop.continue_threading()
         while 1:
+            time.sleep(2)
             if self.stop_threading_flag:
                 return 0
 
@@ -37,7 +38,7 @@ class AlphaLoop(BaseThreading):
                     self.combat_loop.continue_threading()
                 self.working_flag = True
 
-            time.sleep(2)
+            
 
     # def stop_thread(self,mode:int=0):
     #     if mode==0:

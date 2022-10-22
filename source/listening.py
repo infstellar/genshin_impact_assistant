@@ -39,7 +39,7 @@ def switch_domain_loop():
     else:
         logger.info('启动自动秘境')
 
-        t2 = domain_flow.Domain_Flow_Control()
+        t2 = domain_flow.DomainFlow()
         t2.setDaemon(True)
         t2.start()
     domain_flag = not domain_flag
@@ -52,7 +52,7 @@ keyboard.add_hotkey(keymapjson["autoDomain"], switch_domain_loop)
 @logger.catch
 def listening():
     while (1):
-        time.sleep(0.1)
+        time.sleep(0.2)
 
 
 if __name__ == '__main__':

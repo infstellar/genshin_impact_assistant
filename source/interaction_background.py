@@ -176,7 +176,7 @@ class InteractionBGD():
 
         matching_rate = self.similar_img_pixel(img_manager.get_img_from_name(imgname), cap)
 
-        print(matching_rate)
+        # print(matching_rate)
         if matching_rate >= min_rate:
             return True
         else:

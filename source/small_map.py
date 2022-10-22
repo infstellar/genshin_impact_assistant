@@ -3,8 +3,8 @@ from unit import *
 
 
 import posi_manager, math
-import static_lib
-itt=static_lib.sta_itt
+import interaction_background
+itt=interaction_background.InteractionBGD()
 dx=25
 dy=25
 posi_map=[15+dx,57+dy,236-dx,278-dy]

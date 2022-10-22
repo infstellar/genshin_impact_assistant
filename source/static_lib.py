@@ -5,9 +5,7 @@ import threading
 
 from timer_module import Timer
 from unit import *
-from interaction_background import InteractionBGD
 
-sta_itt=InteractionBGD
 class ScreenCapture():
     def __init__(self):
         logger.debug('static_lib_created')
