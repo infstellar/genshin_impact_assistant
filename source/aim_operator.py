@@ -8,6 +8,7 @@ from base_threading import BaseThreading
 from interaction_background import InteractionBGD
 from timer_module import Timer
 from unit import *
+import movement
 
 red_num = 245
 BG_num = 100
@@ -25,6 +26,7 @@ class AimOperator(BaseThreading):
         self.enemy_loops = 0
         self.enemy_flag = True
         self.reset_time = auto_aim_json["reset_time"]
+        self.left_timer = Timer()
         self.reset_timer = Timer()
 
     def run(self):
@@ -47,14 +49,16 @@ class AimOperator(BaseThreading):
                 time.sleep(self.fps - t)
 
             ret = self.auto_aim()
-            if ret == 1:
+            if ret == -1:
                 self.enemy_flag = False
                 self.finding_enemy()
                 if self.reset_timer.getDiffTime() >= self.reset_time:
                     self.reset_timer.reset()
                     self.reset_enemy_loops()
+            elif ret <= 30:
+                self.keep_distance_with_enemy()
 
-    def get_enemy_feature(self):
+    def get_enemy_feature(self,ret_mode=1):
         if self.checkup_stop_func():
             return 0
         cap = self.itt.capture()
@@ -72,8 +76,15 @@ class AimOperator(BaseThreading):
         _, imsrc2 = cv2.threshold(imsrc[:, :, 2], 1, 255, cv2.THRESH_BINARY)
         # cv2.imshow('123',retimg)
         # cv2.waitKey(100)
-        ret_point = img_manager.get_rect(imsrc2, orsrc, ret_mode=2)
-        return ret_point
+        if ret_mode == 1:
+            ret_point = img_manager.get_rect(imsrc2, orsrc, ret_mode=2)
+            return ret_point
+        elif ret_mode == 2:
+            ret_rect = img_manager.get_rect(imsrc2, orsrc, ret_mode=0)
+            if ret_rect == None:
+                return None
+            return ret_rect[2]-ret_rect[0]
+            
 
     def auto_aim(self):
         # time.sleep(0.1)
@@ -82,7 +93,7 @@ class AimOperator(BaseThreading):
         ret_points = self.get_enemy_feature()
         points_length = []
         if len(ret_points) == 0:
-            return 1
+            return -1
         else:
             if not self.enemy_flag:
                 self.reset_enemy_loops()
@@ -95,11 +106,12 @@ class AimOperator(BaseThreading):
         closest_point = ret_points[points_length.index(min(points_length))]
         px, py = closest_point
         mx, my = self.itt.get_mouse_point()
-        px = (px - mx) / 4
-        py = (py - my) / 4 + 35
+        px = (px - mx) / 2.4
+        py = (py - my) / 2 + 35
         # print(px,py)
 
         self.itt.move_to(px, py, relative=True)
+        return(px)
         # print()
 
     def finding_enemy(self):
@@ -121,7 +133,27 @@ class AimOperator(BaseThreading):
     def reset_enemy_loops(self):
         self.enemy_loops = 0
 
+    def keep_distance_with_enemy(self): # 10px
+        target_px=6
+        if self.enemy_flag:
+            px = self.get_enemy_feature(ret_mode=2)
+            if px == None:
+                return 0
+            if px < target_px:
+                movement.move(movement.AHEAD,distance=target_px-px)
+            elif px > target_px + 1:
+                movement.move(movement.BACK,distance=px-target_px)
+        
+        if True:
+            if self.left_timer.getDiffTime()>=15:
+                self.itt.keyUp('a')
+                self.itt.keyDown('a')
+                self.left_timer.reset()
 
 if __name__ == '__main__':
     ao = AimOperator()
     ao.start()
+    # ao.get_enemy_feature(ret_mode=2)
+    while 1:
+        # ao.keep_distance_with_enemy()
+        time.sleep(0.1)

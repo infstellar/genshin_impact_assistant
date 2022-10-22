@@ -72,12 +72,21 @@ def auto_import_img(im_path, name):
         bound_rect[i] = cv2.boundingRect(cv2.Mat(contours[i]))
 
     x, y, w, h = bound_rect[max_id]
-
-    draw_1 = cv2.rectangle(origin_img, (x, y), (x + w, y + h), (0, 255, 0), 2)
-    qshow(draw_1)
-    print('\"' + name + '\"', ':', [y, x, y + h, x + w])
+    while 1:
+        d = origin_img.copy()
+        draw_1 = cv2.rectangle(d, (x, y), (x + w, y + h), (0, 255, 0), 2)
+        qshow(draw_1)
+        print('\"' + name + '\"', ':', [y, x, y + h, x + w])
+        a,b,c,d=map(int,input('x,y,w,h: ').split(','))
+        if a==0 and b==0 and c==0 and d==0:
+            break
+        else:
+            x+=a
+            y+=b
+            w+=c
+            h+=d
     return [y, x, y + h, x + w]
-    p = [x + w / 2, y + h / 2]
+    # p = [x + w / 2, y + h / 2]
 
 
 def get_rect(im_src, origin_img, ret_mode=0):
@@ -104,10 +113,12 @@ def get_rect(im_src, origin_img, ret_mode=0):
             draw_1 = cv2.rectangle(draw_1, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
         x, y, w, h = bound_rect[max_id]
-
+    
     # qshow(draw_1)
     # print('\"'+name+'\"',':',[y,x,y+h,x+w])
     if ret_mode == 0:
+        if len(contours)==0:
+            return None
         return [y, x, y + h, x + w]
     elif ret_mode == 1:
         return draw_1
@@ -119,6 +130,6 @@ if __name__ == '__main__':
     # img = refrom_img(cv2.imread("assests\\imgs\\common\\coming_out_by_space.jpg"),posi_manager.get_posi_from_str('coming_out_by_space'))
     # cv2.imwrite("assests\\imgs\\common\\coming_out_by_space.jpg", img)
     # get_img_from_imgname(COMING_OUT_BY_SPACE)
-    pname = USE_20RESIN_DOBLE_CHOICES
+    pname = USE_20X2RESIN_DOBLE_CHOICES
     p = auto_import_img("assests\\imgs\\common\\" + pname + ".jpg", pname)
     print(p)
