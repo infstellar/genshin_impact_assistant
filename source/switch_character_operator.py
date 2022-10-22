@@ -1,7 +1,7 @@
 import time
 
 import pyautogui
-import character,tastic,threading, img_manager as imgM, posi_manager as posiM, combat_lib, tastic_operator
+import character,threading, img_manager as imgM, posi_manager as posiM, combat_lib, tastic_operator
 from unit import *
 from timer_module import Timer
 from interaction_background import InteractionBGD
