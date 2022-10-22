@@ -13,7 +13,7 @@ red_num = 245
 BG_num = 100
 
 
-class Aim_Operator(Base_Threading):
+class AimOperator(Base_Threading):
     def __init__(self):
         super().__init__()
         self.setName('Aim_Operator')
@@ -122,5 +122,5 @@ class Aim_Operator(Base_Threading):
 
 
 if __name__ == '__main__':
-    ao = Aim_Operator()
+    ao = AimOperator()
     ao.start()
