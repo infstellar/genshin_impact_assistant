@@ -5,13 +5,13 @@ import character,tastic,threading, img_manager as imgM, posi_manager as posiM, c
 from unit import *
 from timer_module import Timer
 from interaction_background import Interaction_BGD
-from base_threading import Base_Threading
+from base_threading import BaseThreading
 
 
 def sort_flag_1(x:character.Character):
     return x.priority
 
-class Switch_Character_Operator(Base_Threading):
+class Switch_Character_Operator(BaseThreading):
     def __init__(self, chara_list:list[character.Character]):
         super().__init__()
         self.setName('Switch_Character_Operator')

@@ -5,7 +5,7 @@ import pyautogui
 import img_manager
 import pdocr_api
 import posi_manager
-from base_threading import Base_Threading
+from base_threading import BaseThreading
 from character import Character
 from interaction_background import Interaction_BGD
 from timer_module import Timer
@@ -18,7 +18,7 @@ def stop_func_example():  # True:stop;False:continue
     return False
 
 
-class TasticOperator(Base_Threading):
+class TasticOperator(BaseThreading):
     def __init__(self):
         super().__init__()
         self.setName('Tastic_Operator')

@@ -5,7 +5,7 @@ import pyautogui
 import character
 import tastic
 import time
-from base_threading import Base_Threading
+from base_threading import BaseThreading
 from interaction_background import Interaction_BGD
 from switch_character_operator import Switch_Character_Operator
 from timer_module import Timer
@@ -66,7 +66,7 @@ def get_chara_list(teamname='team.json'):
             )
     return chara_list
 
-class Combat_Controller(Base_Threading):
+class Combat_Controller(BaseThreading):
     def __init__(self,chara_list:list[character.Character] = get_chara_list()):
         super().__init__()
         self.setName('Combat_Controller')
