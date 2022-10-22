@@ -1,6 +1,6 @@
 import pyautogui
 
-from base_threading import Base_Threading
+from base_threading import BaseThreading
 from unit import *
 
 import combat_loop, get_domain_reward, pdocr_api, text_manager as textM, interaction_background, posi_manager as PosiM, movement
@@ -10,7 +10,7 @@ import img_manager
 import yolox_api
 import inspect
 
-class Domain_Flow(Base_Threading):
+class Domain_Flow(BaseThreading):
     @logger.catch
     def __init__(self):
         super().__init__()

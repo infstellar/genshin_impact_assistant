@@ -1,11 +1,11 @@
 from unit import *
 from interaction_background import Interaction_BGD
 import small_map, movement, cv2, time, threading, pdocr_api, text_manager as textM, posi_manager as PosiM, timer_module, img_manager
-from base_threading import Base_Threading
+from base_threading import BaseThreading
 # sys.path.append("..")
 
 import yolox_api
-class Get_Reward_Flow(Base_Threading):
+class Get_Reward_Flow(BaseThreading):
     def __init__(self):
         super().__init__()
         self.setName('Get_Reward_Flow')

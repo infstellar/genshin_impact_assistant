@@ -1,11 +1,11 @@
 import time
 
 import combat_loop
-from base_threading import Base_Threading
+from base_threading import BaseThreading
 from unit import *
 
 
-class AlphaLoop(Base_Threading):
+class AlphaLoop(BaseThreading):
 
     @logger.catch
     def __init__(self):

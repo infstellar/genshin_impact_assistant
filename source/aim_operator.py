@@ -1,10 +1,10 @@
 import time
 
+import cv2
 import pyautogui
 
-import cv2
 import img_manager
-from base_threading import Base_Threading
+from base_threading import BaseThreading
 from interaction_background import Interaction_BGD
 from timer_module import Timer
 from unit import *
@@ -13,7 +13,7 @@ red_num = 245
 BG_num = 100
 
 
-class AimOperator(Base_Threading):
+class AimOperator(BaseThreading):
     def __init__(self):
         super().__init__()
         self.setName('Aim_Operator')
@@ -33,12 +33,12 @@ class AimOperator(Base_Threading):
                 return 0
 
             if self.pause_threading_flag:
-                if self.working_flag == True:
+                if self.working_flag:
                     self.working_flag = False
                 time.sleep(1)
                 continue
 
-            if self.working_flag == False:
+            if not self.working_flag:
                 self.working_flag = True
 
             t = self.loop_timer.loop_time()
@@ -83,7 +83,7 @@ class AimOperator(Base_Threading):
         if len(ret_points) == 0:
             return 1
         else:
-            if self.enemy_flag == False:
+            if not self.enemy_flag:
                 self.reset_enemy_loops()
                 self.enemy_flag = True
 

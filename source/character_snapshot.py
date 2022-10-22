@@ -1,6 +1,5 @@
-from unit import *
 from interaction_background import Interaction_BGD
-import cv2
+
 itt=Interaction_BGD()
 from posi_manager import *
 
