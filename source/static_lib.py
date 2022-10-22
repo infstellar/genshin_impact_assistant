@@ -1,7 +1,11 @@
 from ctypes.wintypes import RECT
-import win32api, win32con, win32gui, pyautogui, pydirectinput, numpy as np, threading
-from unit import *
+
+import numpy as np
+import threading
+
 from timer_module import Timer
+from unit import *
+
 
 class Screen_Capture():
     def __init__(self):
