@@ -1,0 +1,5 @@
+{
+    "fps":20,
+    "max_number_of_enemy_loops":100,
+    "reset_time":30
+}

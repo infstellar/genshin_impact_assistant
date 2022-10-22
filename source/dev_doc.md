@@ -6,6 +6,6 @@
 |----|----|
 |`listing`|顶级键鼠事件监听线程|
 |`static`|静态全局功能线程，只存在一个|
-|`flow`|流程控制线程，下属线程为`controlor`|
-|`controlor`|功能管理线程，下属线程为`operator`|
+|`flow`|流程控制线程，下属线程为`controller`|
+|`controller`|功能管理线程，下属线程为`operator`|
 |`operator`|具体功能执行线程|

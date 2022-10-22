@@ -21,4 +21,7 @@ class Timer:
         self.stop()
         return self.end_time-self.start_time
     
-    
+    def loop_time(self):
+        t = self.getDiffTime()
+        self.reset()
+        return t
