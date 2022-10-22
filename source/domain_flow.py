@@ -25,7 +25,7 @@ class Domain_Flow_Control(Base_Threading):
         self.combatloop.start()
         self.gdr.pause_thread()
         self.gdr.start()
-        domain_times=configjson["domain_times"]
+        domain_times=config_json["domain_times"]
         self.last_domain_times=domain_times-1
         logger.info('秘境次数：' + str(domain_times))
     

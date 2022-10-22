@@ -16,8 +16,8 @@ class Get_Reward(Base_Threading):
         self.movenum=2.5
         reflash_config()
         
-        self.isLiYue=configjson["isLiYueDomain"]
-        self.resin_mode=configjson["resin"]
+        self.isLiYue=config_json["isLiYueDomain"]
+        self.resin_mode=config_json["resin"]
         self.move_timer=timer_module.Timer()
         self.ahead_timer=timer_module.Timer()
         

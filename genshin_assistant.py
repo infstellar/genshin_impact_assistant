@@ -1,5 +1,19 @@
+import ctypes
+import sys
+
 import source.unit
-import win32api, win32con, win32gui, pyautogui, requests, unittest, xml, inspect, keyboard
+
+
+def is_admin():
+    try:
+        return ctypes.windll.shell32.IsUserAnAdmin()
+    except:
+        return False
+
+
+if not is_admin():
+    ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, __file__, None, 1)
+
 source.unit.logger.info('正在初始化，请稍后')
 # source.unit.logger.info('Initializing, please hold on')
 
