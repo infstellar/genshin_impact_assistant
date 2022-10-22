@@ -149,7 +149,7 @@ class InteractionBGD():
             img = cv2.cvtColor(img, cv2.COLOR_BGRA2GRAY)
             target = cv2.cvtColor(target, cv2.COLOR_BGRA2GRAY)
         # 模板匹配，将alpha作为mask，TM_CCORR_NORMED方法的计算结果范围为[0, 1]，越接近1越匹配
-        result = cv2.matchTemplate(img, target, cv2.TM_CCORR_NORMED)
+        result = cv2.matchTemplate(img, target, cv2.TM_CCORR_NORMED)# TM_CCOEFF_NORMED
         # 获取结果中最大值和最小值以及他们的坐标
         min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
         if is_show_res:
@@ -171,23 +171,27 @@ class InteractionBGD():
         matching_rate = 1 - s / ((img1.shape[0] * img1.shape[1]) * 765)
         return matching_rate
 
-    def get_img_existence(self, imgname, jpgmode=2, is_gray=False, min_rate=0.98):
+    def get_img_existence(self, imgname, jpgmode=2, is_gray=False, min_rate=0.93):
         cap = self.capture(posi=posi_manager.get_posi_from_str(imgname), jpgmode=jpgmode)
 
-        matching_rate = self.similar_img_pixel(img_manager.get_img_from_name(imgname), cap)
+        matching_rate = self.similar_img(img_manager.get_img_from_name(imgname), cap)
 
-        # print(matching_rate)
+        print(matching_rate)
         if matching_rate >= min_rate:
             return True
         else:
             return False
 
-    def appear_then_click(self, imgname, jpgmode=2, is_gray=False, min_rate=0.98):
+    def appear_then_click(self, imgname, bgcolor='black', channel=None, alpha_num=None, jpgmode=2, is_gray=False, min_rate=0.93):
         upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
-        cap = self.capture(posi=posi_manager.get_posi_from_str(imgname), jpgmode=jpgmode)
-        min_rate = img_manager.matching_rate_dict[imgname]
+        if channel!=None:
+            cap = self.capture()
+            cap = self.png2jpg(cap, bgcolor=bgcolor, channel=channel, alpha_num=alpha_num)
+        else:
+            cap = self.capture(posi=posi_manager.get_posi_from_str(imgname), jpgmode=jpgmode)
+        # min_rate = img_manager.matching_rate_dict[imgname]
 
-        matching_rate = self.similar_img_pixel(img_manager.get_img_from_name(imgname), cap, is_gray=is_gray)
+        matching_rate = self.similar_img(img_manager.get_img_from_name(imgname), cap, is_gray=is_gray)
         # print(matching_rate)
         if matching_rate >= min_rate:
             p = posi_manager.get_posi_from_str(imgname)
@@ -196,12 +200,39 @@ class InteractionBGD():
             self.leftClick()
             logger.debug(
                 'imgname: ' + imgname + 'matching_rate: ' + str(matching_rate) + ' |function name: ' + upper_func_name)
-            return 0
+            return True
         else:
             logger.debug(
                 'imgname: ' + imgname + 'matching_rate: ' + str(matching_rate) + ' |function name: ' + upper_func_name)
-            return -1
+            return False
 
+    def appear_then_press(self, imgname, key_name, bgcolor='black', channel=None, alpha_num=None, jpgmode=2, is_gray=False, min_rate=0.93):
+        upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
+        if channel!=None:
+            cap = self.capture()
+            cap = self.png2jpg(cap, bgcolor=bgcolor, channel=channel, alpha_num=alpha_num)
+        else:
+            cap = self.capture(posi=posi_manager.get_posi_from_str(imgname), jpgmode=jpgmode)
+        # min_rate = img_manager.matching_rate_dict[imgname]
+
+        matching_rate = self.similar_img(img_manager.get_img_from_name(imgname), cap, is_gray=is_gray)
+        # print(matching_rate)
+        if matching_rate >= min_rate:
+            self.keyPress(key_name)
+            logger.debug(
+                'imgname: ' + imgname + 'matching_rate: ' + str(matching_rate) + 'key_name:'+ key_name + ' |function name: ' + upper_func_name)
+            return True
+        else:
+            logger.debug(
+                'imgname: ' + imgname + 'matching_rate: ' + str(matching_rate) + 'key_name:'+ key_name + ' |function name: ' + upper_func_name)
+            return False
+    
+    def extract_white_letters(image, threshold=128):
+        r, g, b = cv2.split(cv2.subtract((255, 255, 255, 0), image))
+        minimum = cv2.min(cv2.min(r, g), b)
+        maximum = cv2.max(cv2.max(r, g), b)
+        return cv2.multiply(cv2.add(maximum, cv2.subtract(maximum, minimum)), 255.0 / threshold)
+    
     def png2jpg(self, png, bgcolor='black', channel='bg', alpha_num=50):
         if bgcolor == 'black':
             bgcol = 0
@@ -401,7 +432,7 @@ if __name__ == '__main__':
     # print(win32api.GetCursorPos())
     while (1):
         time.sleep(1)
-        print(ib.get_img_existence(img_manager.USE_20X2RESIN_DOBLE_CHOICES, jpgmode=2))
-        print(ib.get_img_existence(img_manager.USE_20RESIN_DOBLE_CHOICES))
+        print(ib.get_img_existence(img_manager.IN_DOMAIN, jpgmode=2))
+        print(ib.get_img_existence(img_manager.USE_20X2RESIN_DOBLE_CHOICES))
         # ib.appear_then_click(imgname=img_manager.USE_20RESIN_DOBLE_CHOICES)
         # ib.move_to(100,100)
