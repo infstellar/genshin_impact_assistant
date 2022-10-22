@@ -233,7 +233,7 @@ class DomainFlow(BaseThreading):
                 if self.checkup_stop_func():
                     break
                 movement.view_to_angle(-90)
-                movement.move(movement.AHEAD, 5)
+                movement.move(movement.AHEAD, 4)
                 # time.sleep(0.08)
 
                 if self._Trigger_AFTER_MOVETO_CHALLENGE():
