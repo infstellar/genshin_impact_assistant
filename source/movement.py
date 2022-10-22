@@ -1,6 +1,6 @@
 import pyautogui
 from unit import *
-import static_method,small_map
+import small_map
 import static_lib
 itt=static_lib.sta_itt
 AHEAD=0

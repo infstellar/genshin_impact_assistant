@@ -2,7 +2,7 @@ import cv2
 from unit import *
 
 
-import static_method, posi_manager, math
+import posi_manager, math
 import static_lib
 itt=static_lib.sta_itt
 dx=25

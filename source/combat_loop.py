@@ -3,7 +3,6 @@
 import time
 
 import character
-import tastic
 from aim_operator import AimOperator
 from base_threading import BaseThreading
 from interaction_background import InteractionBGD

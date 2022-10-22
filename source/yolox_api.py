@@ -191,6 +191,7 @@ class Predictor(object):
         self.fp16 = fp16
         self.preproc = ValTransform(legacy=legacy)
         if trt_file is not None:
+            # torch2trt=None
             from torch2trt import TRTModule
 
             model_trt = TRTModule()
