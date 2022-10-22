@@ -3,7 +3,7 @@
 
     "teamfile":"team.json",
     "env_floder_path":"..\\environment",
-    "domain_times":1,
+    "domain_times":2,
     "isLiYueDomain":false,
     "device_torch":"auto",
     "device_paddle":"cpu",

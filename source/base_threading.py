@@ -1,4 +1,4 @@
-import threading
+import threading, time
 
 
 
@@ -7,7 +7,7 @@ class Base_Threading(threading.Thread):
         super().__init__()
         self.pause_threading_flag=False
         self.stop_threading_flag=False
-        self.working_flag=True
+        self.working_flag=False
         
     def pause_threading(self):
         self.pause_threading_flag=True
@@ -29,5 +29,17 @@ class Base_Threading(threading.Thread):
         if self.pause_threading_flag or self.stop_threading_flag:
             return True
         
-    def run():
-        pass
+    def run(self):
+        while(1):
+            if self.stop_threading_flag:
+                return 0
+            
+            if self.pause_threading_flag: 
+                if self.working_flag == True:
+                    self.working_flag = False
+                time.sleep(1)
+                continue
+            
+            if self.working_flag == False:
+                    self.working_flag = True
+            
