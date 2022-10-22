@@ -26,7 +26,7 @@ from yolox.exp import get_exp
 from yolox.utils import fuse_model, get_model_info, postprocess, vis
 
 IMAGE_EXT = [".jpg", ".jpeg", ".webp", ".bmp", ".png"]
-globaldevice=configjson["device_torch"]
+globaldevice=config_json["device_torch"]
 if globaldevice=='auto':
     if torch.cuda.is_available():
         globaldevice='gpu'
