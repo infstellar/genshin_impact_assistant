@@ -144,7 +144,7 @@ class AimOperator(BaseThreading):
             elif px > target_px + 1:
                 movement.move(movement.BACK,distance=px-target_px)
         
-        if True:
+        if False:
             if self.left_timer.getDiffTime()>=15:
                 self.itt.keyUp('a')
                 self.itt.keyDown('a')

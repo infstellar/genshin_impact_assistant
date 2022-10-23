@@ -171,60 +171,67 @@ class InteractionBGD():
         matching_rate = 1 - s / ((img1.shape[0] * img1.shape[1]) * 765)
         return matching_rate
 
-    def get_img_existence(self, imgname, jpgmode=2, is_gray=False, min_rate=0.93):
-        cap = self.capture(posi=posi_manager.get_posi_from_str(imgname), jpgmode=jpgmode)
-
+    def get_img_existence(self, imgname, jpgmode = 2, is_gray = False, min_rate = 0.95, is_log = False):
+        upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
+        if imgname in img_manager.alpha_dict:
+            cap = self.capture()
+            cap = self.png2jpg(cap, bgcolor = 'black', channel = 'ui', alpha_num = img_manager.alpha_dict[imgname])
+        else:
+            cap = self.capture(posi=posi_manager.get_posi_from_str(imgname), jpgmode=jpgmode)
+        
         matching_rate = self.similar_img(img_manager.get_img_from_name(imgname), cap)
 
-        print(matching_rate)
+        if is_log:
+            logger.debug(
+                    'imgname: ' + imgname + 'matching_rate: ' + str(matching_rate) + ' |function name: ' + upper_func_name)
+        
         if matching_rate >= min_rate:
             return True
         else:
             return False
 
-    def appear_then_click(self, imgname, bgcolor='black', channel=None, alpha_num=None, jpgmode=2, is_gray=False, min_rate=0.93):
+    def appear_then_click(self, imgname, jpgmode=2, is_gray=False, min_rate=0.95):
         upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
-        if channel!=None:
+        if imgname in img_manager.alpha_dict:
             cap = self.capture()
-            cap = self.png2jpg(cap, bgcolor=bgcolor, channel=channel, alpha_num=alpha_num)
+            cap = self.png2jpg(cap, bgcolor = 'black', channel = 'ui', alpha_num = img_manager.alpha_dict[imgname])
         else:
             cap = self.capture(posi=posi_manager.get_posi_from_str(imgname), jpgmode=jpgmode)
         # min_rate = img_manager.matching_rate_dict[imgname]
 
         matching_rate = self.similar_img(img_manager.get_img_from_name(imgname), cap, is_gray=is_gray)
-        # print(matching_rate)
+        
+        logger.debug(
+                'imgname: ' + imgname + 'matching_rate: ' + str(matching_rate) + ' |function name: ' + upper_func_name)
+        
         if matching_rate >= min_rate:
             p = posi_manager.get_posi_from_str(imgname)
             center_p = [(p[1] + p[3]) / 2, (p[0] + p[2]) / 2]
             self.move_to(center_p[0], center_p[1])
             self.leftClick()
-            logger.debug(
-                'imgname: ' + imgname + 'matching_rate: ' + str(matching_rate) + ' |function name: ' + upper_func_name)
             return True
         else:
-            logger.debug(
-                'imgname: ' + imgname + 'matching_rate: ' + str(matching_rate) + ' |function name: ' + upper_func_name)
             return False
 
-    def appear_then_press(self, imgname, key_name, bgcolor='black', channel=None, alpha_num=None, jpgmode=2, is_gray=False, min_rate=0.93):
+    def appear_then_press(self, imgname, key_name, jpgmode=2, is_gray=False, min_rate=0.95):
         upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
-        if channel!=None:
+        if imgname in img_manager.alpha_dict:
             cap = self.capture()
-            cap = self.png2jpg(cap, bgcolor=bgcolor, channel=channel, alpha_num=alpha_num)
+            cap = self.png2jpg(cap, bgcolor = 'black', channel = 'ui', alpha_num = img_manager.alpha_dict[imgname])
         else:
             cap = self.capture(posi=posi_manager.get_posi_from_str(imgname), jpgmode=jpgmode)
         # min_rate = img_manager.matching_rate_dict[imgname]
 
         matching_rate = self.similar_img(img_manager.get_img_from_name(imgname), cap, is_gray=is_gray)
-        # print(matching_rate)
+
+        logger.debug(
+                'imgname: ' + imgname + 'matching_rate: ' + str(matching_rate) + 'key_name:'+ key_name + ' |function name: ' + upper_func_name)
+        
         if matching_rate >= min_rate:
             self.keyPress(key_name)
-            logger.debug(
-                'imgname: ' + imgname + 'matching_rate: ' + str(matching_rate) + 'key_name:'+ key_name + ' |function name: ' + upper_func_name)
             return True
         else:
-            logger.debug(
-                'imgname: ' + imgname + 'matching_rate: ' + str(matching_rate) + 'key_name:'+ key_name + ' |function name: ' + upper_func_name)
+            
             return False
     
     def extract_white_letters(image, threshold=128):
@@ -351,7 +358,7 @@ class InteractionBGD():
         logger.debug('rightClick ' + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
         self.delay(0.05)
 
-    def keyDown(self, key):
+    def keyDown(self, key, is_log = True):
         if not self.CONSOLE_ONLY:
             vk_code = self.get_virtual_keycode(key)
             scan_code = self.MapVirtualKeyW(vk_code, 0)
@@ -359,9 +366,10 @@ class InteractionBGD():
             wparam = vk_code
             lparam = (scan_code << 16) | 1
             self.PostMessageW(self.handle, self.WM_KEYDOWN, wparam, lparam)
-        logger.debug("keyDown " + key + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
+        if is_log:
+            logger.debug("keyDown " + key + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
 
-    def keyUp(self, key):
+    def keyUp(self, key, is_log = True):
         if not self.CONSOLE_ONLY:
             vk_code = self.get_virtual_keycode(key)
             scan_code = self.MapVirtualKeyW(vk_code, 0)
@@ -369,7 +377,8 @@ class InteractionBGD():
             wparam = vk_code
             lparam = (scan_code << 16) | 0XC0000001
             self.PostMessageW(self.handle, self.WM_KEYUP, wparam, lparam)
-        logger.debug("keyUp " + key + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
+        if is_log:
+            logger.debug("keyUp " + key + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
 
     def keyPress(self, key):
         if not self.CONSOLE_ONLY:
@@ -432,7 +441,7 @@ if __name__ == '__main__':
     # print(win32api.GetCursorPos())
     while (1):
         time.sleep(1)
-        print(ib.get_img_existence(img_manager.IN_DOMAIN, jpgmode=2))
-        print(ib.get_img_existence(img_manager.USE_20X2RESIN_DOBLE_CHOICES))
+        print(ib.get_img_existence(img_manager.F_BUTTON, jpgmode=2))
+        # print(ib.get_img_existence(img_manager.USE_20X2RESIN_DOBLE_CHOICES))
         # ib.appear_then_click(imgname=img_manager.USE_20RESIN_DOBLE_CHOICES)
         # ib.move_to(100,100)

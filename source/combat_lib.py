@@ -17,7 +17,8 @@ def get_current_chara_num(itt: InteractionBGD):
 
 
 def unconventionality_situlation_detection(itt: InteractionBGD,
-                                           autoDispose=True):  # unconventionality situlation detection
+                                           autoDispose=True): 
+    # unconventionality situlation detection
     # situlation 1: coming_out_by_space
 
     situlation_code = -1

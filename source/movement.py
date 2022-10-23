@@ -15,21 +15,21 @@ VERTICALLY_AND_HORIZONTAL=3
 # >0:right; <0:left
 def move(direction,distance=1):
     if direction==AHEAD:
-        itt.keyDown('w')
+        itt.keyDown('w', is_log = False)
         itt.delay(0.1*distance)
-        itt.keyUp('w')
+        itt.keyUp('w', is_log = False)
     if direction==LEFT:
-        itt.keyDown('a')
+        itt.keyDown('a', is_log = False)
         itt.delay(0.1*distance)
-        itt.keyUp('a')
+        itt.keyUp('a', is_log = False)
     if direction==RIGHT:
-        itt.keyDown('d')
+        itt.keyDown('d', is_log = False)
         itt.delay(0.1*distance)
-        itt.keyUp('d')
+        itt.keyUp('d', is_log = False)
     if direction==BACK:
-        itt.keyDown('s')
+        itt.keyDown('s', is_log = False)
         itt.delay(0.1*distance)
-        itt.keyUp('s')
+        itt.keyUp('s', is_log = False)
         
 def cview(angle=10, mode=HORIZONTAL): # left<0,right>0
     angle=(2*angle)
@@ -59,7 +59,8 @@ def view_to_angle(angle=0,deltanum=0.65,maxloop=100,corrected_num=CORRECT_DEGREE
         if i>maxloop:
             break
         i+=1
-    logger.debug('last degree: '+str(degree))
+    if i>1:
+        logger.debug('last degree: '+str(degree))
     #itt.keyUp('w')
     
 def reset_const_val():
