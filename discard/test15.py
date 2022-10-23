@@ -1,6 +1,6 @@
 from unit import *
-from interaction_background import Interaction_BGD
-itt=Interaction_BGD()
+from interaction_background import InteractionBGD
+itt=InteractionBGD()
 import cv2, numpy as np, img_manager, movement
 
 # imsrc = cv2.imread("test21.jpg")

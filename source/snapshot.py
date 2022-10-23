@@ -1,10 +1,10 @@
 # from unit import *
 import math
-from interaction_background import Interaction_BGD
+from interaction_background import InteractionBGD
 import cv2,numpy as np, os, time
-itt=Interaction_BGD()
+itt=InteractionBGD()
 i=0
-numi=20
+
 SA_name='test'
 
 def jpg_with_alpha(png,bgclolr='black',channel='bg',alpha_num=50):
@@ -124,6 +124,9 @@ if not os.path.exists(snap_path+"\\jpg"):
     
 if not os.path.exists(snap_path+"\\jpg_withalpha"):
     os.mkdir("tools\\snapshot\\jpg_withalpha")
+    
+    
+numi=40
 while(1):
     input('wait')
     i+=1

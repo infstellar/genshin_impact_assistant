@@ -24,3 +24,4 @@ matplotlib~=3.6.1
 keyboard~=0.13.5
 scipy~=1.9.3
 PyAutoGUI~=0.9.53
+PyQt5~=5.15.7

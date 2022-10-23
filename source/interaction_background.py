@@ -1,30 +1,31 @@
+import inspect
 import math
+import random
 import string
-from ctypes.wintypes import RECT, HWND
+import time
+from ctypes.wintypes import HWND
 
 import cv2
 import numpy as np
-
 import win32api
 import win32con
 import win32gui
 
 import img_manager
 import posi_manager
+import static_lib
 import vkcode
 from unit import *
-import cv2 
-import static_lib
-import inspect
 
-class Interaction_BGD():
+
+class InteractionBGD():
     '''
     default size:1920x1080
     support size:1920x1080
     thanks for https://zhuanlan.zhihu.com/p/361569101
     '''
-    
-    def __init__(self,hwndname="原神"):
+
+    def __init__(self, hwndname="原神"):
         self.GetDC = ctypes.windll.user32.GetDC
         self.CreateCompatibleDC = ctypes.windll.gdi32.CreateCompatibleDC
         self.GetClientRect = ctypes.windll.user32.GetClientRect
@@ -35,7 +36,7 @@ class Interaction_BGD():
         self.GetBitmapBits = ctypes.windll.gdi32.GetBitmapBits
         self.DeleteObject = ctypes.windll.gdi32.DeleteObject
         self.ReleaseDC = ctypes.windll.user32.ReleaseDC
-        self.VK_CODE=vkcode.VK_CODE
+        self.VK_CODE = vkcode.VK_CODE
         self.PostMessageW = ctypes.windll.user32.PostMessageW
         self.MapVirtualKeyW = ctypes.windll.user32.MapVirtualKeyW
         self.VkKeyScanA = ctypes.windll.user32.VkKeyScanA
@@ -49,16 +50,16 @@ class Interaction_BGD():
         self.WM_KEYDOWN = 0x100
         self.WM_KEYUP = 0x101
         self.WHEEL_DELTA = 120
-        self.DEFAULT_DELAY_TIME=0.05
-        self.DEBUG_MODE=False
-        self.CONSOLE_ONLY=False
-        
-        self.handle=ctypes.windll.user32.FindWindowW(None, hwndname)
-            
-        if self.handle==0:
+        self.DEFAULT_DELAY_TIME = 0.05
+        self.DEBUG_MODE = False
+        self.CONSOLE_ONLY = False
+
+        self.handle = ctypes.windll.user32.FindWindowW(None, hwndname)
+
+        if self.handle == 0:
             logger.error("未找到句柄，请确认原神窗口是否开启。")
-    
-    def capture(self,posi=None,shape='yx',jpgmode=None):
+
+    def capture(self, posi=None, shape='yx', jpgmode=None):
         """窗口客户区截图
 
         Args:
@@ -67,7 +68,7 @@ class Interaction_BGD():
         Returns:
             numpy.ndarray: 截图数据
         """
-        
+
         '''
         jpgmode:
         0:return png;
@@ -94,35 +95,34 @@ class Interaction_BGD():
         # self.DeleteObject(cdc)
         # self.ReleaseDC(handle, dc)
         # # 返回截图数据为numpy.ndarray
-        
-        
+
         # ret=np.frombuffer(buffer, dtype=np.uint8).reshape(height, width, 4)
-        
+
         ret = static_lib.SCREENCAPTURE.get_capture()
-        
-        if posi!=None:
-            ret=ret[posi[0]:posi[2],posi[1]:posi[3]]
-        if jpgmode==0:
+
+        if posi != None:
+            ret = ret[posi[0]:posi[2], posi[1]:posi[3]]
+        if jpgmode == 0:
             pass
-        elif jpgmode==1:
-            ret=self.png2jpg(ret,bgcolor='black',channel='bg')
-        elif jpgmode==2:
-            ret=self.png2jpg(ret,bgcolor='black',channel='ui')
-        elif jpgmode==3:
-            ret=ret[:,:,:3]
+        elif jpgmode == 1:
+            ret = self.png2jpg(ret, bgcolor='black', channel='bg')
+        elif jpgmode == 2:
+            ret = self.png2jpg(ret, bgcolor='black', channel='ui')
+        elif jpgmode == 3:
+            ret = ret[:, :, :3]
         return ret
-    
-    def match_img(self,img_name:str,is_show_res:bool = False):
-        image = self.capture()  
-        #image = (image/(image[3]+10)).astype(int)
-        
+
+    def match_img(self, img_name: str, is_show_res: bool = False):
+        image = self.capture()
+        # image = (image/(image[3]+10)).astype(int)
+
         # 转为灰度图
         gray = cv2.cvtColor(image, cv2.COLOR_BGRA2GRAY)
         # 读取图片，并保留Alpha通道
-        template = cv2.imread('imgs/'+img_name, cv2.IMREAD_UNCHANGED)
-        #template = template/template[3]
+        template = cv2.imread('imgs/' + img_name, cv2.IMREAD_UNCHANGED)
+        # template = template/template[3]
         # 取出Alpha通道
-        alpha = template[:,:,3]
+        alpha = template[:, :, 3]
         template = cv2.cvtColor(template, cv2.COLOR_BGRA2GRAY)
         # 模板匹配，将alpha作为mask，TM_CCORR_NORMED方法的计算结果范围为[0, 1]，越接近1越匹配
         result = cv2.matchTemplate(gray, template, cv2.TM_CCORR_NORMED, mask=alpha)
@@ -137,19 +137,19 @@ class Interaction_BGD():
         bottom_right = top_left[0] + w, top_left[1] + h
         # 在窗口截图中匹配位置画红色方框
         if is_show_res:
-            cv2.rectangle(image, top_left, bottom_right, (0,0,255), 2)
+            cv2.rectangle(image, top_left, bottom_right, (0, 0, 255), 2)
             cv2.imshow('Match Template', image)
             cv2.waitKey()
         matching_rate = max_val
         return matching_rate, top_left, bottom_right
-    
-    def similar_img(self,img, target, is_gray=False,is_show_res:bool = False):
+
+    def similar_img(self, img, target, is_gray=False, is_show_res: bool = False):
 
         if is_gray:
             img = cv2.cvtColor(img, cv2.COLOR_BGRA2GRAY)
             target = cv2.cvtColor(target, cv2.COLOR_BGRA2GRAY)
         # 模板匹配，将alpha作为mask，TM_CCORR_NORMED方法的计算结果范围为[0, 1]，越接近1越匹配
-        result = cv2.matchTemplate(img, target, cv2.TM_CCORR_NORMED)
+        result = cv2.matchTemplate(img, target, cv2.TM_CCORR_NORMED)# TM_CCOEFF_NORMED
         # 获取结果中最大值和最小值以及他们的坐标
         min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
         if is_show_res:
@@ -159,95 +159,135 @@ class Interaction_BGD():
         # 在窗口截图中匹配位置画红色方框
         matching_rate = max_val
         return matching_rate
-    
-    def similar_img_pixel(self,img,target):
+
+    def similar_img_pixel(self, img, target, is_gray = False):
         img1 = img.astype('int')
         target1 = target.astype('int')
         # cv2.imshow('1',img)
         # cv2.imshow('2',target)
         # cv2.waitKey(0)
-        s = np.sum(img1-target1)
+        s = np.sum(img1 - target1)
         s = abs(s)
-        matching_rate = 1 - s/( (img1.shape[0]*img1.shape[1]) *765)
+        matching_rate = 1 - s / ((img1.shape[0] * img1.shape[1]) * 765)
         return matching_rate
-    
-    def get_img_existence(self,imgname ,jpgmode = 2, is_gray=False, min_rate=0.98):
-        cap = self.capture(posi=posi_manager.get_posi_from_str(imgname),jpgmode=jpgmode)
+
+    def get_img_existence(self, imgname, jpgmode = 2, is_gray = False, min_rate = 0.95, is_log = False):
+        upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
+        if imgname in img_manager.alpha_dict:
+            cap = self.capture()
+            cap = self.png2jpg(cap, bgcolor = 'black', channel = 'ui', alpha_num = img_manager.alpha_dict[imgname])
+        else:
+            cap = self.capture(posi=posi_manager.get_posi_from_str(imgname), jpgmode=jpgmode)
         
-        matching_rate = self.similar_img_pixel(img_manager.get_img_from_imgname(imgname), cap)
+        matching_rate = self.similar_img(img_manager.get_img_from_name(imgname), cap)
+
+        if is_log:
+            logger.debug(
+                    'imgname: ' + imgname + 'matching_rate: ' + str(matching_rate) + ' |function name: ' + upper_func_name)
         
-        print(matching_rate)
         if matching_rate >= min_rate:
             return True
         else:
             return False
-    
-    def appear_then_click(self, imgname, jpgmode=2, is_gray=False, min_rate=0.98):
+
+    def appear_then_click(self, imgname, jpgmode=2, is_gray=False, min_rate=0.95):
         upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
-        cap = self.capture(posi=posi_manager.get_posi_from_str(imgname),jpgmode=jpgmode)
-        min_rate=img_manager.matching_rate_dict[imgname]
+        if imgname in img_manager.alpha_dict:
+            cap = self.capture()
+            cap = self.png2jpg(cap, bgcolor = 'black', channel = 'ui', alpha_num = img_manager.alpha_dict[imgname])
+        else:
+            cap = self.capture(posi=posi_manager.get_posi_from_str(imgname), jpgmode=jpgmode)
+        # min_rate = img_manager.matching_rate_dict[imgname]
+
+        matching_rate = self.similar_img(img_manager.get_img_from_name(imgname), cap, is_gray=is_gray)
         
-        matching_rate = self.similar_img_pixel(img_manager.get_img_from_imgname(imgname), cap, is_gray=is_gray)
-        # print(matching_rate)
+        logger.debug(
+                'imgname: ' + imgname + 'matching_rate: ' + str(matching_rate) + ' |function name: ' + upper_func_name)
+        
         if matching_rate >= min_rate:
-            p=posi_manager.get_posi_from_str(imgname)
-            center_p=[(p[1]+p[3])/2, (p[0]+p[2])/2]
-            self.move_to(center_p[0],center_p[1])
+            p = posi_manager.get_posi_from_str(imgname)
+            center_p = [(p[1] + p[3]) / 2, (p[0] + p[2]) / 2]
+            self.move_to(center_p[0], center_p[1])
             self.leftClick()
-            logger.debug('imgname: '+ imgname+ 'matching_rate: '+ str(matching_rate)+ ' |function name: '+ upper_func_name)
-            return 0
+            return True
         else:
-            logger.debug('imgname: '+ imgname+ 'matching_rate: '+ str(matching_rate)+ ' |function name: '+ upper_func_name)
-            return -1
+            return False
+
+    def appear_then_press(self, imgname, key_name, jpgmode=2, is_gray=False, min_rate=0.95):
+        upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
+        if imgname in img_manager.alpha_dict:
+            cap = self.capture()
+            cap = self.png2jpg(cap, bgcolor = 'black', channel = 'ui', alpha_num = img_manager.alpha_dict[imgname])
+        else:
+            cap = self.capture(posi=posi_manager.get_posi_from_str(imgname), jpgmode=jpgmode)
+        # min_rate = img_manager.matching_rate_dict[imgname]
+
+        matching_rate = self.similar_img(img_manager.get_img_from_name(imgname), cap, is_gray=is_gray)
+
+        logger.debug(
+                'imgname: ' + imgname + 'matching_rate: ' + str(matching_rate) + 'key_name:'+ key_name + ' |function name: ' + upper_func_name)
         
-    
-    def png2jpg(self,png,bgcolor='black',channel='bg',alpha_num=50):
-        if bgcolor=='black':
-            bgcol=0
+        if matching_rate >= min_rate:
+            self.keyPress(key_name)
+            return True
         else:
-            bgcol=255
             
-        jpg = png[:,:,:3]
-        if channel=='bg':
-            over_item_list=png[:,:,3]>alpha_num
+            return False
+    
+    def extract_white_letters(image, threshold=128):
+        r, g, b = cv2.split(cv2.subtract((255, 255, 255, 0), image))
+        minimum = cv2.min(cv2.min(r, g), b)
+        maximum = cv2.max(cv2.max(r, g), b)
+        return cv2.multiply(cv2.add(maximum, cv2.subtract(maximum, minimum)), 255.0 / threshold)
+    
+    def png2jpg(self, png, bgcolor='black', channel='bg', alpha_num=50):
+        if bgcolor == 'black':
+            bgcol = 0
         else:
-            over_item_list=png[:,:,3]<alpha_num
-        jpg[:,:,0][over_item_list]=bgcol
-        jpg[:,:,1][over_item_list]=bgcol
-        jpg[:,:,2][over_item_list]=bgcol
+            bgcol = 255
+
+        jpg = png[:, :, :3]
+        if channel == 'bg':
+            over_item_list = png[:, :, 3] > alpha_num
+        else:
+            over_item_list = png[:, :, 3] < alpha_num
+        jpg[:, :, 0][over_item_list] = bgcol
+        jpg[:, :, 1][over_item_list] = bgcol
+        jpg[:, :, 2][over_item_list] = bgcol
         return jpg
-    
-    def color_SD(self,x_col,target_col):#standard deviation
-        ret=0
-        for i in range(min(len(x_col),len(target_col))):
-            t=abs(x_col[i]-target_col[i])
-            math.pow(t,2)
-            ret+=t
-        return math.sqrt(ret/min(len(x_col),len(target_col)))
-    
+
+    def color_SD(self, x_col, target_col):  # standard deviation
+        ret = 0
+        for i in range(min(len(x_col), len(target_col))):
+            t = abs(x_col[i] - target_col[i])
+            math.pow(t, 2)
+            ret += t
+        return math.sqrt(ret / min(len(x_col), len(target_col)))
+
     def delay(self, x, randtime=True, isprint=True, comment=''):
         upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
-        a=random.randint(-10,10)
+        a = random.randint(-10, 10)
         if randtime:
-            a=a*x*0.02
-            if  x>0.2 and isprint:
-                logger.debug('delay: '+ str(x)+' rand: '+ str(x+a)+ ' |function name: '+ upper_func_name+ ' |comment: '+ comment)
-            time.sleep(x+a)
+            a = a * x * 0.02
+            if x > 0.2 and isprint:
+                logger.debug('delay: ' + str(x) + ' rand: ' + 
+                             str(x + a) + ' |function name: ' + upper_func_name + ' |comment: ' + comment)
+            time.sleep(x + a)
         else:
-            if  x>0.2 and isprint:
-                logger.debug('delay: '+ str(x)+ ' |function name: '+ upper_func_name+ ' |comment: '+ comment)
+            if x > 0.2 and isprint:
+                logger.debug('delay: ' + str(x) + ' |function name: ' + upper_func_name + ' |comment: ' + comment)
             time.sleep(x)
-    
+
     def get_mouse_point(self):
         p = win32api.GetCursorPos()
-        #print(p[0],p[1])
+        # print(p[0],p[1])
         #  GetWindowRect 获得整个窗口的范围矩形，窗口的边框、标题栏、滚动条及菜单等都在这个矩形内 
-        x,y,w,h = win32gui.GetWindowRect(self.handle)
+        x, y, w, h = win32gui.GetWindowRect(self.handle)
         # 鼠标坐标减去指定窗口坐标为鼠标在窗口中的坐标值
         pos_x = p[0] - x
-        pos_y = p[1] - y 
-        return(pos_x,pos_y)
-    
+        pos_y = p[1] - y
+        return (pos_x, pos_y)
+
     def get_virtual_keycode(self, key: str):
         """根据按键名获取虚拟按键码
 
@@ -262,63 +302,63 @@ class Interaction_BGD():
             return self.VkKeyScanA(ord(key)) & 0xff
         else:
             return self.VK_CODE[key]
-        
+
     def leftClick(self, x=-1, y=-1):
-        if type(x) == list: # x为list类型时
-            y=x[1]
-            x=x[0]
-        if x==-1: # x为空时
-            x,y=self.get_mouse_point()
-        x=int(x)
-        y=int(y)
+        if type(x) == list:  # x为list类型时
+            y = x[1]
+            x = x[0]
+        if x == -1:  # x为空时
+            x, y = self.get_mouse_point()
+        x = int(x)
+        y = int(y)
         if not self.CONSOLE_ONLY:
             wparam = 0
             lparam = y << 16 | x
             self.PostMessageW(self.handle, self.WM_LBUTTONDOWN, wparam, lparam)
-            self.delay(0.06,randtime=False, isprint=False)
+            self.delay(0.06, randtime=False, isprint=False)
             self.PostMessageW(self.handle, self.WM_LBUTTONUP, wparam, lparam)
-        logger.debug('left click '+ ' |function name: '+ inspect.getframeinfo(inspect.currentframe().f_back)[2])
-    
+        logger.debug('left click ' + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
+
     def leftDown(self, x=-1, y=-1):
-        if x==-1:
-            x,y=self.get_mouse_point()
+        if x == -1:
+            x, y = self.get_mouse_point()
         if not self.CONSOLE_ONLY:
             wparam = 0
             lparam = y << 16 | x
             self.PostMessageW(self.handle, self.WM_LBUTTONDOWN, wparam, lparam)
-            
-        logger.debug('left down'+ ' |function name: '+ inspect.getframeinfo(inspect.currentframe().f_back)[2])
-    
+
+        logger.debug('left down' + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
+
     def leftUp(self, x=-1, y=-1):
-        if x==-1:
-            x,y=self.get_mouse_point()
+        if x == -1:
+            x, y = self.get_mouse_point()
         if not self.CONSOLE_ONLY:
             wparam = 0
             lparam = y << 16 | x
             self.PostMessageW(self.handle, self.WM_LBUTTONUP, wparam, lparam)
-        logger.debug('left up '+ ' |function name: '+ inspect.getframeinfo(inspect.currentframe().f_back)[2])    
-         
+        logger.debug('left up ' + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
+
     def leftDoubleClick(self, dt=0.05):
         if not self.CONSOLE_ONLY:
             self.leftClick()
-            self.delay(0.06,randtime=False, isprint=False)
+            self.delay(0.06, randtime=False, isprint=False)
             self.leftClick()
-        logger.debug('leftDoubleClick '+ ' |function name: '+ inspect.getframeinfo(inspect.currentframe().f_back)[2])
-        
+        logger.debug('leftDoubleClick ' + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
+
     def rightClick(self, x=-1, y=-1):
-        if x==-1:
-            x,y=self.get_mouse_point()
+        if x == -1:
+            x, y = self.get_mouse_point()
         if not self.CONSOLE_ONLY:
             wparam = 0
             lparam = y << 16 | x
             self.PostMessageW(self.handle, self.WM_RBUTTONDOWN, wparam, lparam)
-            self.delay(0.06,randtime=False, isprint=False)
+            self.delay(0.06, randtime=False, isprint=False)
             self.PostMessageW(self.handle, self.WM_RBUTTONUP, wparam, lparam)
-            #pyautogui.rightClick()
-        logger.debug('rightClick '+ ' |function name: '+ inspect.getframeinfo(inspect.currentframe().f_back)[2])
+            # pyautogui.rightClick()
+        logger.debug('rightClick ' + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
         self.delay(0.05)
-        
-    def keyDown(self, key):
+
+    def keyDown(self, key, is_log = True):
         if not self.CONSOLE_ONLY:
             vk_code = self.get_virtual_keycode(key)
             scan_code = self.MapVirtualKeyW(vk_code, 0)
@@ -326,9 +366,10 @@ class Interaction_BGD():
             wparam = vk_code
             lparam = (scan_code << 16) | 1
             self.PostMessageW(self.handle, self.WM_KEYDOWN, wparam, lparam)
-        logger.debug("keyDown "+ key+ ' |function name: '+ inspect.getframeinfo(inspect.currentframe().f_back)[2])
-    
-    def keyUp(self, key):
+        if is_log:
+            logger.debug("keyDown " + key + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
+
+    def keyUp(self, key, is_log = True):
         if not self.CONSOLE_ONLY:
             vk_code = self.get_virtual_keycode(key)
             scan_code = self.MapVirtualKeyW(vk_code, 0)
@@ -336,11 +377,11 @@ class Interaction_BGD():
             wparam = vk_code
             lparam = (scan_code << 16) | 0XC0000001
             self.PostMessageW(self.handle, self.WM_KEYUP, wparam, lparam)
-        logger.debug("keyUp "+ key+ ' |function name: '+ inspect.getframeinfo(inspect.currentframe().f_back)[2])
-    
+        if is_log:
+            logger.debug("keyUp " + key + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
+
     def keyPress(self, key):
         if not self.CONSOLE_ONLY:
-            
             vk_code = self.get_virtual_keycode(key)
             scan_code = self.MapVirtualKeyW(vk_code, 0)
             wparam = vk_code
@@ -350,8 +391,8 @@ class Interaction_BGD():
             time.sleep(0.05)
             self.PostMessageW(self.handle, self.WM_KEYUP, wparam, lparam2)
             # self.delay(self.DEFAULT_DELAY_TIME)
-        logger.debug("keyPress "+ key+ ' |function name: '+ inspect.getframeinfo(inspect.currentframe().f_back)[2])
-        
+        logger.debug("keyPress " + key + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
+
     def move_to(self, x: int, y: int, relative=False):
         """移动鼠标到坐标（x, y)
 
@@ -360,49 +401,47 @@ class Interaction_BGD():
             x (int): 横坐标
             y (int): 纵坐标
         """
-        x=int(x)
-        y=int(y)
+        x = int(x)
+        y = int(y)
         # https://docs.microsoft.com/en-us/windows/win32/inputdev/wm-mousemove
-        
+
         if relative:
             win32api.mouse_event(win32con.MOUSEEVENTF_MOVE, x, y)
         else:
-            
-        #print(x,y)
-        
-        #lx,ly,w,h = win32gui.GetWindowRect(self.handle)
-            
-        #pyautogui.moveRel()
+
+            # print(x,y)
+
+            # lx,ly,w,h = win32gui.GetWindowRect(self.handle)
+
+            # pyautogui.moveRel()
             # p = win32api.GetCursorPos()
             # mx=p[0]
             # my=p[1]
             # win32api.mouse_event(win32con.MOUSEEVENTF_MOVE, x, y)
-            wx,wy,w,h = win32gui.GetWindowRect(self.handle)
+            wx, wy, w, h = win32gui.GetWindowRect(self.handle)
             # x+=wx
             # y+=wy
             # print(mx,my)
             # print(int((x-mx)/1.5), int((y-my)/1.5))
             # pydirectinput.moveTo(wx+x,wy+y)
             # win32api.mouse_event(win32con.MOUSEEVENTF_MOVE, int((x-mx)/1.5), int((y-my)/1.5))
-            win32api.SetCursorPos((wx+x,wy+y))
+            win32api.SetCursorPos((wx + x, wy + y))
 
-    def crop_image(self,imsrc,posilist):
-        return imsrc[posilist[0]:posilist[2],posilist[1]:posilist[3]]
-    
-if __name__=='__main__':
-    ib=Interaction_BGD()
-    rootpath="D:\Program Data\\vscode\GIA\genshin_impact_assistant\dist\imgs"
+    def crop_image(self, imsrc, posilist):
+        return imsrc[posilist[0]:posilist[2], posilist[1]:posilist[3]]
+
+
+if __name__ == '__main__':
+    ib = InteractionBGD()
+    rootpath = "D:\Program Data\\vscode\GIA\genshin_impact_assistant\dist\imgs"
     # ib.similar_img_pixel(cv2.imread(rootpath+"\\yunjin_q.png"),cv2.imread(rootpath+"\\zhongli_q.png"))
-    
-    
+
     # print(win32api.GetCursorPos())
     # win32api.mouse_event(win32con.MOUSEEVENTF_MOVE, 150, 150)
     # print(win32api.GetCursorPos())
-    while(1):
+    while (1):
         time.sleep(1)
-        print( ib.get_img_existence(img_manager.USE_20X2RESIN_DOBLE_CHOICES, jpgmode=2))
-        print(ib.get_img_existence(img_manager.USE_20RESIN_DOBLE_CHOICES))
+        print(ib.get_img_existence(img_manager.F_BUTTON, jpgmode=2))
+        # print(ib.get_img_existence(img_manager.USE_20X2RESIN_DOBLE_CHOICES))
         # ib.appear_then_click(imgname=img_manager.USE_20RESIN_DOBLE_CHOICES)
         # ib.move_to(100,100)
-        
-    

@@ -1,9 +1,12 @@
 from ctypes.wintypes import RECT
-import win32api, win32con, win32gui, pyautogui, pydirectinput, numpy as np, threading
-from unit import *
-from timer_module import Timer
 
-class Screen_Capture():
+import numpy as np
+import threading
+
+from timer_module import Timer
+from unit import *
+
+class ScreenCapture():
     def __init__(self):
         logger.debug('static_lib_created')
         
@@ -66,7 +69,7 @@ class Screen_Capture():
         # print(self.last_cap.shape)
         return self.last_cap
 
-SCREENCAPTURE=Screen_Capture()
+SCREENCAPTURE=ScreenCapture()
 
 class testtest(threading.Thread):
     def __init__(self):
