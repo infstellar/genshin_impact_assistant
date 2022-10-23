@@ -36,9 +36,6 @@ if True:
     if sys.path[2] != env_path:
         sys.path.insert(2, env_path)
 
-# 校验目录
-
-
 # 配置logger
 logger.remove(handler_id=None)
 logger.add('runtime.log', level="TRACE", backtrace=True)
@@ -47,6 +44,7 @@ if DEBUG_MODE:
 else:
     logger.add(sys.stdout, level="INFO", backtrace=True)
 
+# 校验目录
 if not os.path.exists(root_path):
     logger.error("目录不存在：" + root_path + " 请检查")
 if not os.path.exists(source_path):

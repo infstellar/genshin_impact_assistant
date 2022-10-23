@@ -241,9 +241,10 @@ class TasticOperator(BaseThreading):
         self.itt.keyPress('r')
 
     def is_q_ready(self):
-        cap = self.itt.capture(jpgmode=2)
-        p = posi_manager.posi_chara_q_point
-        if cap[p[0], p[1]].max() > 0:
+        cap = self.itt.capture(posi = posi_manager.posi_chara_q)
+        cap = self.itt.png2jpg(cap, channel='ui',alpha_num=200)
+        # p = posi_manager.posi_chara_q_point
+        if cap.max() > 0:
             return True
         else:
             return False
@@ -355,4 +356,6 @@ if __name__ == '__main__':
     chara = combat_loop.get_chara_list()[1]
     to.set_parameter(chara.tastic_group, chara)
     # to.setDaemon(True)
-    to.start()
+    while 1:
+        print(to.is_q_ready())
+        time.sleep(0.1)
