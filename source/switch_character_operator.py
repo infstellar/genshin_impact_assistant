@@ -1,22 +1,24 @@
+import time
+
 import pyautogui
-import character,tastic,threading, img_manager as imgM, posi_manager as posiM, combat_lib, tastic_operator
+import character,threading, img_manager as imgM, posi_manager as posiM, combat_lib, tastic_operator
 from unit import *
 from timer_module import Timer
-from interaction_background import Interaction_BGD
-from base_threading import Base_Threading
+from interaction_background import InteractionBGD
+from base_threading import BaseThreading
 
 
 def sort_flag_1(x:character.Character):
     return x.priority
 
-class Switch_Character_Operator(Base_Threading):
+class Switch_Character_Operator(BaseThreading):
     def __init__(self, chara_list:list[character.Character]):
         super().__init__()
         self.setName('Switch_Character_Operator')
         self.chara_list = chara_list
-        self.itt = Interaction_BGD()
+        self.itt = InteractionBGD()
         
-        self.tastic_operator=tastic_operator.Tastic_Operator()
+        self.tastic_operator=tastic_operator.TasticOperator()
         self.tastic_operator.pause_threading()
         self.tastic_operator.setDaemon(True)
         self.tastic_operator.start()
@@ -26,6 +28,7 @@ class Switch_Character_Operator(Base_Threading):
     
     def run(self):
         while(1):
+            time.sleep(0.2)
             if self.stop_threading_flag:
                 self.tastic_operator.stop_threading()
                 return 0

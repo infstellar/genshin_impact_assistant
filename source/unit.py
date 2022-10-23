@@ -2,7 +2,7 @@ import json
 import os
 import sys
 import time
-import random
+
 from loguru import logger
 
 # 配置基本目录
@@ -36,9 +36,6 @@ if True:
     if sys.path[2] != env_path:
         sys.path.insert(2, env_path)
 
-# 校验目录
-
-
 # 配置logger
 logger.remove(handler_id=None)
 logger.add('runtime.log', level="TRACE", backtrace=True)
@@ -47,6 +44,7 @@ if DEBUG_MODE:
 else:
     logger.add(sys.stdout, level="INFO", backtrace=True)
 
+# 校验目录
 if not os.path.exists(root_path):
     logger.error("目录不存在：" + root_path + " 请检查")
 if not os.path.exists(source_path):
@@ -86,6 +84,27 @@ def savejson(x, json_name='config.json'):
     f2 = open(json_name, 'w')
     f2.write(b)
     f2.close()
+
+
+def is_number(s):
+    """
+    懒得写,抄的
+    https://www.runoob.com/python3/python3-check-is-number.html
+    """
+    try:
+        float(s)
+        return True
+    except ValueError:
+        pass
+
+    try:
+        import unicodedata
+        unicodedata.numeric(s)
+        return True
+    except (TypeError, ValueError):
+        pass
+
+    return False
 
 
 def loadfileP(filename):

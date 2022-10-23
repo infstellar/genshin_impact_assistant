@@ -106,7 +106,7 @@ class CSPDarknet(nn.Module):
         super().__init__()
         assert out_features, "please provide output features of Darknet"
         self.out_features = out_features
-        Conv = DWConv if depthwise else BaseConv
+        conv = DWConv if depthwise else BaseConv
 
         base_channels = int(wid_mul * 64)  # 64
         base_depth = max(round(dep_mul * 3), 1)  # 3
@@ -116,7 +116,7 @@ class CSPDarknet(nn.Module):
 
         # dark2
         self.dark2 = nn.Sequential(
-            Conv(base_channels, base_channels * 2, 3, 2, act=act),
+            conv(base_channels, base_channels * 2, 3, 2, act=act),
             CSPLayer(
                 base_channels * 2,
                 base_channels * 2,
@@ -128,7 +128,7 @@ class CSPDarknet(nn.Module):
 
         # dark3
         self.dark3 = nn.Sequential(
-            Conv(base_channels * 2, base_channels * 4, 3, 2, act=act),
+            conv(base_channels * 2, base_channels * 4, 3, 2, act=act),
             CSPLayer(
                 base_channels * 4,
                 base_channels * 4,
@@ -140,7 +140,7 @@ class CSPDarknet(nn.Module):
 
         # dark4
         self.dark4 = nn.Sequential(
-            Conv(base_channels * 4, base_channels * 8, 3, 2, act=act),
+            conv(base_channels * 4, base_channels * 8, 3, 2, act=act),
             CSPLayer(
                 base_channels * 8,
                 base_channels * 8,
@@ -152,7 +152,7 @@ class CSPDarknet(nn.Module):
 
         # dark5
         self.dark5 = nn.Sequential(
-            Conv(base_channels * 8, base_channels * 16, 3, 2, act=act),
+            conv(base_channels * 8, base_channels * 16, 3, 2, act=act),
             SPPBottleneck(base_channels * 16, base_channels * 16, activation=act),
             CSPLayer(
                 base_channels * 16,

@@ -5,4 +5,4 @@ import interaction_background
 
 
 
-sta_itt=interaction_background.Interaction_BGD()
+sta_itt=interaction_background.InteractionBGD()

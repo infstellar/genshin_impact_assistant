@@ -8,8 +8,9 @@ d2y=5
 posi_dict={
     "coming_out_by_space":[505,1379,568,1447],
     "IN_DOMAIN":[112, 25, 137, 52],
-    "USE_20RESIN_DOBLE_CHOICES" : [720, 976, 800, 1352],
-    "USE_20X2RESIN_DOBLE_CHOICES" : [720, 561, 796, 941]
+    "USE_20RESIN_DOBLE_CHOICES" : [724, 985, 791, 1348],
+    "USE_20X2RESIN_DOBLE_CHOICES" : [726, 567, 793, 934],
+    "F_BUTTON":[526, 1104, 550, 1128]
 }
 
 posi_charalist_q=[[339-ly+dy,1591+dx,339-ly+55,1591+55],[339+dy,1591+dx,339+55,1591+55],
@@ -24,7 +25,8 @@ hp_charalist_posi=[[283,1698],[379,1698],[475,1698],[571,1698]]
 chara_head_list_point=[[270,1789],[366,1792],[461,1793],[557,1797]]
 chara_num_list_point=[[269,1862],[366,1862],[460,1862],[557,1862]]
 posi_chara_list=[[218,1779,218+68,1779+61],[218+ly,1779,218+ly+68,1779+61],[218+2*ly,1779,218+2*ly+68,1779+61],[218+3*ly,1779,218+3*ly+68,1779+61]]
-posi_chara_q=[915+d2x,1766+d2y,1015,1866]
+# posi_chara_q=[915+d2x,1766+d2y,1015,1866]
+posi_chara_q=[943, 1788, 1002, 1845]
 posi_chara_q_point=[981,1812]
 posi_chara_e=[965,1666,1015,1716]
 posi_chara_smaller_e=[974,1671,1013,1710]

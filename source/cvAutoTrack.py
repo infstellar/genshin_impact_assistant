@@ -1,8 +1,6 @@
 from ctypes import *
 from time import sleep
 
-from numpy import double
-
 
 class AutoTracker:
     def __init__(self, dll_path: str):
@@ -33,43 +31,43 @@ class AutoTracker:
         # bool GetUID(int &uid);
         self.__lib.GetUID.argtypes = [POINTER(c_int)]
         self.__lib.GetUID.restype = c_bool
-        
+
         # bool GetRotation(double &a);
         self.__lib.GetRotation.argtypes = [POINTER(c_double)]
         self.__lib.GetRotation.restype = c_bool
 
-    def init(self) :
+    def init(self):
         return self.__lib.init()
 
-    def uninit(self) :
+    def uninit(self):
         return self.__lib.uninit()
 
-    def get_last_error(self) :
+    def get_last_error(self):
         return self.__lib.GetLastErr()
 
-    def set_handle(self, hwnd: int) :
+    def set_handle(self, hwnd: int):
         return self.__lib.SetHandle(hwnd)
 
-    def get_transform(self) :
+    def get_transform(self):
         x, y, a = c_float(0), c_float(0), c_float(0)
         ret = self.__lib.GetTransform(x, y, a)
         return ret, x.value, y.value, a.value
 
-    def get_position(self) :
+    def get_position(self):
         x, y = c_float(0), c_float(0)
         ret = self.__lib.GetPosition(x, y)
         return ret, x.value, y.value
 
-    def get_direction(self) :
+    def get_direction(self):
         a = c_double(0)
         ret = self.__lib.GetDirection(a)
         return ret, a.value
 
-    def get_uid(self) :
+    def get_uid(self):
         uid = c_int(0)
         ret = self.__lib.GetUID(uid)
         return ret, uid.value
-    
+
     def get_rotation(self):
         a = c_double(0)
         ret = self.__lib.GetRotation(a)
@@ -79,7 +77,6 @@ class AutoTracker:
 # 以下是对被封装的类的简单演示。
 # 使用命令行 `python ./main.py` 直接运行本文件即可。
 if __name__ == '__main__':
-
     # 等待五秒钟以便切换到原神窗口：
     sleep(5)
 
@@ -100,9 +97,9 @@ if __name__ == '__main__':
 
     print(tracker.get_direction())
     print('4) err', tracker.get_last_error(), '\n')
-    
+
     print(tracker.get_rotation())
     print('5) err', tracker.get_last_error(), '\n')
-    
+
     # 卸载相关内存：（这一步不是必须的，但还是建议手动调用）
     tracker.uninit()

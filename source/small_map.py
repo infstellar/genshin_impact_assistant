@@ -1,10 +1,10 @@
 import cv2
-from scipy.fftpack import cs_diff
 from unit import *
 
 
-import static_method, posi_manager, math
-itt=static_method.sta_itt
+import posi_manager, math
+import interaction_background
+itt=interaction_background.InteractionBGD()
 dx=25
 dy=25
 posi_map=[15+dx,57+dy,236-dx,278-dy]
