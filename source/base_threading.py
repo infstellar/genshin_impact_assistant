@@ -8,6 +8,7 @@ class BaseThreading(threading.Thread):
         self.pause_threading_flag = False
         self.stop_threading_flag = False
         self.working_flag = False
+        self.while_sleep = 0.2
 
     def pause_threading(self):
         self.pause_threading_flag = True

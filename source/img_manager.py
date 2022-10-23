@@ -7,17 +7,20 @@ COMING_OUT_BY_SPACE = "coming_out_by_space"
 IN_DOMAIN = "IN_DOMAIN"
 USE_20RESIN_DOBLE_CHOICES = "USE_20RESIN_DOBLE_CHOICES"
 USE_20X2RESIN_DOBLE_CHOICES = "USE_20X2RESIN_DOBLE_CHOICES"
+F_BUTTON = 'F_BUTTON'
 
 imsrc_coming_out_by_space = cv2.imread("assests\\imgs\\common\\coming_out_by_space.jpg")
 imsrc_IN_DOMAIN = cv2.imread("assests\\imgs\\common\\IN_DOMAIN.jpg")
 imsrc_USE_20RESIN_DOBLE_CHOICES = cv2.imread("assests\\imgs\\common\\USE_20RESIN_DOBLE_CHOICES.jpg")
 imsrc_USE_20X2RESIN_DOBLE_CHOICES = cv2.imread("assests\\imgs\\common\\USE_20X2RESIN_DOBLE_CHOICES.jpg")
+imsrc_F_BUTTON = cv2.imread("assests\\imgs\\common\\F_BUTTON.jpg")
 
 imgs_dict = {
     "coming_out_by_space": imsrc_coming_out_by_space,
     "IN_DOMAIN": imsrc_IN_DOMAIN,
     "USE_20RESIN_DOBLE_CHOICES": imsrc_USE_20RESIN_DOBLE_CHOICES,
     "USE_20X2RESIN_DOBLE_CHOICES": imsrc_USE_20X2RESIN_DOBLE_CHOICES,
+    "F_BUTTON":imsrc_F_BUTTON
 }
 
 matching_rate_dict = {
@@ -25,6 +28,10 @@ matching_rate_dict = {
     "IN_DOMAIN": 0.98,
     "USE_20RESIN_DOBLE_CHOICES": 0.88,
     "USE_20X2RESIN_DOBLE_CHOICES": 0.88,
+}
+
+alpha_dict = {
+    "F_BUTTON":254
 }
 
 
@@ -110,7 +117,7 @@ def get_rect(im_src, origin_img, ret_mode=0):
         x, y, w, h = bound_rect[i]
         center_points.append([(x + w / 2), (y + h / 2)])
         if ret_mode == 1:
-            draw_1 = cv2.rectangle(draw_1, (x, y), (x + w, y + h), (0, 255, 0), 2)
+            draw_1 = cv2.rectangle(draw_1, (x, y), (x + w, y + h), (0, 255, 0), 1)
 
         x, y, w, h = bound_rect[max_id]
     
@@ -130,6 +137,6 @@ if __name__ == '__main__':
     # img = refrom_img(cv2.imread("assests\\imgs\\common\\coming_out_by_space.jpg"),posi_manager.get_posi_from_str('coming_out_by_space'))
     # cv2.imwrite("assests\\imgs\\common\\coming_out_by_space.jpg", img)
     # get_img_from_imgname(COMING_OUT_BY_SPACE)
-    pname = USE_20X2RESIN_DOBLE_CHOICES
+    pname = F_BUTTON
     p = auto_import_img("assests\\imgs\\common\\" + pname + ".jpg", pname)
     print(p)

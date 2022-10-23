@@ -9,7 +9,8 @@ posi_dict={
     "coming_out_by_space":[505,1379,568,1447],
     "IN_DOMAIN":[112, 25, 137, 52],
     "USE_20RESIN_DOBLE_CHOICES" : [724, 985, 791, 1348],
-    "USE_20X2RESIN_DOBLE_CHOICES" : [726, 567, 793, 934]
+    "USE_20X2RESIN_DOBLE_CHOICES" : [726, 567, 793, 934],
+    "F_BUTTON":[526, 1104, 550, 1128]
 }
 
 posi_charalist_q=[[339-ly+dy,1591+dx,339-ly+55,1591+55],[339+dy,1591+dx,339+55,1591+55],

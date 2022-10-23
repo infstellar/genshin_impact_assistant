@@ -1,13 +1,11 @@
 {
-    "version":"v0.2.3",
+    "version":"v0.2.3-b7",
 
     "teamfile":"team.json",
     "env_floder_path":"..\\environment",
-    "domain_times":2,
-    "isLiYueDomain":false,
     "device_torch":"auto",
     "device_paddle":"cpu",
-    "DEBUG":true,
-    "resin":"40",
-    "corr_degree":0.95
+    "corr_degree":0.95,
+    "DEBUG":true
+    
 }

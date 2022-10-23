@@ -24,23 +24,25 @@
 
 - 多线程架构优化
 
-- bug：角色大招动画结束后有几率切换角色失败 比如钟离开完大后就开始平砍了 没有切换到对应角色 @海石
+- fix: 角色大招动画结束后有几率切换角色失败   @海石
 
 - 自动瞄准 Readme: False
 
 - 代码优化
 
+- fix: 优化秘境进入流畅度 Readme: False
+
+- 大部分操作换成appear_then_click/appear_then_press
+
+- 图像识别优化
+
+- 半自动走位
+
+- config细化 Readme: False
+
 ## Doing
 
 - 日志系统优化 ETC: 2022
-
-- fix: 还有进秘境后开始前 走过去的时候是一卡一卡的 这个可以优化吗 @海石
-
-- 所有操作换成appear_then_click/appear_then_press
-
-- 大规模图像识别优化(增加图像识别点，使用图像识别代替ocr)
-
-- 半自动走位
 
 ## To Do
 

@@ -126,7 +126,7 @@ if not os.path.exists(snap_path+"\\jpg_withalpha"):
     os.mkdir("tools\\snapshot\\jpg_withalpha")
     
     
-numi=25
+numi=30
 while(1):
     input('wait')
     i+=1
