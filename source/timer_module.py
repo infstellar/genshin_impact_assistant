@@ -25,3 +25,5 @@ class Timer:
         t = self.getDiffTime()
         self.reset()
         return t
+    
+'''class 流速/fps检测器 之后再写'''

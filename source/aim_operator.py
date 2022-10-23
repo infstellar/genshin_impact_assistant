@@ -23,6 +23,8 @@ class AimOperator(BaseThreading):
         auto_aim_json = load_json("auto_aim.json")
         self.fps = 1 / auto_aim_json["fps"]
         self.max_number_of_enemy_loops = auto_aim_json["max_number_of_enemy_loops"]
+        self.auto_distance=auto_aim_json["auto_distance"]
+        self.auto_move=auto_aim_json["auto_move"]
         self.enemy_loops = 0
         self.enemy_flag = True
         self.reset_time = auto_aim_json["reset_time"]
@@ -43,7 +45,7 @@ class AimOperator(BaseThreading):
 
             if not self.working_flag:
                 self.working_flag = True
-
+            
             t = self.loop_timer.loop_time()
             if t <= self.fps:
                 time.sleep(self.fps - t)
@@ -55,7 +57,7 @@ class AimOperator(BaseThreading):
                 if self.reset_timer.getDiffTime() >= self.reset_time:
                     self.reset_timer.reset()
                     self.reset_enemy_loops()
-            elif ret <= 30:
+            elif ret <= 30 and self.auto_distance:
                 self.keep_distance_with_enemy()
 
     def get_enemy_feature(self,ret_mode=1):
@@ -144,7 +146,7 @@ class AimOperator(BaseThreading):
             elif px > target_px + 1:
                 movement.move(movement.BACK,distance=px-target_px)
         
-        if False:
+        if self.auto_move:
             if self.left_timer.getDiffTime()>=15:
                 self.itt.keyUp('a')
                 self.itt.keyDown('a')

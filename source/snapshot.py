@@ -126,7 +126,7 @@ if not os.path.exists(snap_path+"\\jpg_withalpha"):
     os.mkdir("tools\\snapshot\\jpg_withalpha")
     
     
-numi=30
+numi=40
 while(1):
     input('wait')
     i+=1
@@ -135,7 +135,7 @@ while(1):
     x=str(time.time())
     #cv2.imwrite("tools\\snapshot\\png\\"+SA_name+str(numi)+".png",cap)
     # cv2.imwrite("tools\\snapshot\\jpg\\"+SA_name+str(numi)+".jpg",cap[:,:,:3])
-    cv2.imwrite("tools\\snapshot\\jpg\\"+SA_name+str(numi)+".jpg",jpg_with_alpha(cap,channel='ui',bgclolr='black',alpha_num=254))
+    cv2.imwrite("tools\\snapshot\\jpg\\"+SA_name+str(numi)+".jpg",jpg_with_alpha(cap,channel='ui',bgclolr='black',alpha_num=200))
     # cv2.imwrite("tools\\snapshot\\jpg_withalpha\\"+SA_name+str(numi)+".jpg",jwa_3(cap))
     # jwa_3(cap)
     time.sleep(0.1)

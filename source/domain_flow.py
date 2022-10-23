@@ -267,7 +267,8 @@ class DomainFlow(BaseThreading):
                 if t <= 1/10:
                     time.sleep(1/10-t)
                 else:
-                    logger.debug('low speed: ' + str(t))
+                    pass
+                    # logger.debug('low speed: ' + str(t))
 
             elif self.current_state == ST.INIT_CHALLENGE:
                 self.itt.keyUp('w')
