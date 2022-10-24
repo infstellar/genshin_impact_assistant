@@ -45,16 +45,19 @@ class JitOp:
         """
         return []
 
-    def define_macros(self) -> List:
+    @staticmethod
+    def define_macros() -> List:
         """Get list of macros to define for op"""
         return []
 
-    def cxx_args(self) -> List:
+    @staticmethod
+    def cxx_args() -> List:
         """Get optional list of compiler flags to forward"""
         args = ["-O2"] if sys.platform == "win32" else ["-O3", "-std=c++14", "-g", "-Wno-reorder"]
         return args
 
-    def nvcc_args(self) -> List:
+    @staticmethod
+    def nvcc_args() -> List:
         """Get optional list of compiler flags to forward to nvcc when building CUDA sources"""
         args = [
             "-O3", "--use_fast_math",

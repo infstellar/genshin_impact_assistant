@@ -104,7 +104,8 @@ class Tastic:
             else:
                 return i + 1
 
-    def QEtactic_1(self, s, n):  # not using
+    @staticmethod
+    def QEtactic_1(s, n):  # not using
         s = s[n:]
         s = s.split(':')
         return s

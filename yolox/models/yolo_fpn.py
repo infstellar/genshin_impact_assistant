@@ -35,7 +35,8 @@ class YOLOFPN(nn.Module):
         # upsample
         self.upsample = nn.Upsample(scale_factor=2, mode="nearest")
 
-    def _make_cbl(self, _in, _out, ks):
+    @staticmethod
+    def _make_cbl(_in, _out, ks):
         return BaseConv(_in, _out, ks, stride=1, act="lrelu")
 
     def _make_embedding(self, filters_list, in_filters):

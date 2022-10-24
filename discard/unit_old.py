@@ -151,7 +151,8 @@ class ImgAnalyse:
         res = self.ImgAnalyse(imsrc)
         return res, position
 
-    def SaveResult(self, imsrc, result):
+    @staticmethod
+    def SaveResult(imsrc, result):
         from PIL import Image
         # image = Image.open(img_path).convert('RGB')
         boxes = [line[0] for line in result]
@@ -161,7 +162,8 @@ class ImgAnalyse:
         im_show = Image.fromarray(im_show)
         im_show.save('result.jpg')
 
-    def findText(self, result, text, mode=APPROXIMATE_MATCHING):
+    @staticmethod
+    def findText(result, text, mode=APPROXIMATE_MATCHING):
         if mode == APPROXIMATE_MATCHING:
             for i in range(len(result)):
                 if text in result[i][1][0]:
@@ -231,7 +233,8 @@ class ImgAnalyse:
             print('can not find the text:', text)
             return -1
 
-    def imgComparison(self, hwnd: winInfo, rangePosition, objectImg, mode=0, minThreshold=0, name='', channel=-1):
+    @staticmethod
+    def imgComparison(hwnd: winInfo, rangePosition, objectImg, mode=0, minThreshold=0, name='', channel=-1):
         imsrc, position = GetScrWindowsImg(hwnd, rangePosition)
 
         img = cv2.cvtColor(imsrc, cv2.COLOR_RGB2BGR)
