@@ -148,8 +148,8 @@ class AimOperator(BaseThreading):
         
         if self.auto_move:
             if self.left_timer.getDiffTime()>=15:
-                self.itt.keyUp('a')
-                self.itt.keyDown('a')
+                self.itt.key_up('a')
+                self.itt.key_down('a')
                 self.left_timer.reset()
 
 if __name__ == '__main__':

@@ -173,10 +173,10 @@ class DomainFlow(BaseThreading):
             self.current_state = ST.END_FINGING_TREE
 
     def Flow_IN_MOVETO_TREE(self):
-        self.itt.keyDown('w')
+        self.itt.key_down('w')
         while 1:
             if self.ahead_timer.getDiffTime() >= 5:
-                self.itt.keyPress('spacebar')
+                self.itt.key_press('spacebar')
                 self.ahead_timer.reset()
 
             movement.view_to_angle(-90)
@@ -200,9 +200,9 @@ class DomainFlow(BaseThreading):
         self.current_state = ST.END_MOVETO_TREE
         
     def Flow_IN_ATTAIN_REAWARD(self):
-        self.itt.keyUp('w')
+        self.itt.key_up('w')
 
-        self.itt.keyPress('f')
+        self.itt.key_press('f')
         time.sleep(2)
 
         while 1:
@@ -247,7 +247,7 @@ class DomainFlow(BaseThreading):
                 time.sleep(5)
                 
                 if self.fast_mode:
-                    self.itt.keyDown('w')
+                    self.itt.key_down('w')
                 
                 self.while_sleep = 0
                 self.current_state = ST.IN_MOVETO_CHALLENGE
@@ -271,10 +271,10 @@ class DomainFlow(BaseThreading):
                     # logger.debug('low speed: ' + str(t))
 
             elif self.current_state == ST.INIT_CHALLENGE:
-                self.itt.keyUp('w')
+                self.itt.key_up('w')
                 logger.info('正在开始战斗')
                 self.combat_loop.continue_threading()
-                self.itt.keyPress('f')
+                self.itt.key_press('f')
                 time.sleep(0.1)
 
                 self.current_state = ST.IN_CHALLENGE
@@ -346,7 +346,7 @@ class DomainFlow(BaseThreading):
                     else:
                         self.itt.move_to(0, 0)
                     time.sleep(0.5)
-                    self.itt.leftClick()
+                    self.itt.left_click()
                     self.auto_start_init()
                     if self.checkup_stop_func():
                         break
@@ -362,7 +362,7 @@ class DomainFlow(BaseThreading):
                     else:
                         self.itt.move_to(0, 0)
                     time.sleep(0.5)
-                    self.itt.leftClick()
+                    self.itt.left_click()
                     # exit all threads
                     self.gdr.stop_thread()
                     self.combat_loop.stop_threading()
