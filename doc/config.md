@@ -45,20 +45,20 @@ config.json文件位置：`genshin_assistant\config`
 
 原始文件中的队伍配置为：宵宫，钟离，班尼特，云堇
 
-| 设置项            | 介绍                                                         |
-| ----------------- | ------------------------------------------------------------ |
-| `name`            | 根据`character_dist.json`填写角色名称                        |
-| `priority`        | 出战优先级，从小到大依次降低，0为最高优先级。优先级可以同级  |
-| `n`               | 角色在队伍中的位置（1~4），不可重复，不可为0                 |
-| `trigger`         | 触发器，触发器条件成立时，允许切换至该角色                   |
+| 设置项               | 介绍                                                                                                                 |
+|-------------------|--------------------------------------------------------------------------------------------------------------------|
+| `name`            | 根据`character_dist.json`填写角色名称                                                                                      |
+| `priority`        | 出战优先级，从小到大依次降低，0为最高优先级。优先级可以同级                                                                                     |
+| `n`               | 角色在队伍中的位置（1~4），不可重复，不可为0                                                                                           |
+| `trigger`         | 触发器，触发器条件成立时，允许切换至该角色                                                                                              |
 | `autofill`        | 自动填充，在`character.json`文件中有一些已经配置好的角色,此时在`team.json`文件中只需要将`autofill`设置为`true`,并配置`name`,`priority`,`n`,`trigger`即可 |
-| `Elast_time`      | E技能持续时间，没有则为0                                     |
-| `Qlast_time`      | Q技能持续时间，没有则为0                                     |
-| `E_short_cd_time` | 短Ecd时间，不能为0                                           |
-| `E_long_cd_time`  | 长Ecd时间，没有则为0                                         |
-| `Ecd_float_time`  | 在E技能冷却还有x秒前即切换至该角色，可以为0，建议设置的值比预计值偏小一点 |
-| `Ecd_press_time`  | 按E技能的时间                                                |
-| `tastic_group`    | 策略组，配置角色战斗策略，详细说明见[combat_assi.md](./combat_assi.md) |
+| `Elast_time`      | E技能持续时间，没有则为0                                                                                                      |
+| `Qlast_time`      | Q技能持续时间，没有则为0                                                                                                      |
+| `E_short_cd_time` | 短Ecd时间，不能为0                                                                                                        |
+| `E_long_cd_time`  | 长Ecd时间，没有则为0                                                                                                       |
+| `Ecd_float_time`  | 在E技能冷却还有x秒前即切换至该角色，可以为0，建议设置的值比预计值偏小一点                                                                             |
+| `Ecd_press_time`  | 按E技能的时间                                                                                                            |
+| `tastic_group`    | 策略组，配置角色战斗策略，详细说明见[combat_assi.md](./combat_assi.md)                                                               |
 
 如`autofill`参数为`true`，且`character.json`文件中有此角色的配置参数时，则无需在`team.jsom`中填写`Elast_time`、`Qlast_time`、`E_short_cd_time`、`E_long_cd_time`、`Ecd_float_time`、`Ecd_press_time`、`tastic_group`参数。
 
