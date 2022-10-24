@@ -20,8 +20,8 @@ class YOLOXHead(nn.Module):
         self,
         num_classes,
         width=1.0,
-        strides=[8, 16, 32],
-        in_channels=[256, 512, 1024],
+            strides=None,
+            in_channels=None,
         act="silu",
         depthwise=False,
     ):
@@ -32,6 +32,10 @@ class YOLOXHead(nn.Module):
         """
         super().__init__()
 
+        if strides is None:
+            strides = [8, 16, 32]
+        if in_channels is None:
+            in_channels = [256, 512, 1024]
         self.n_anchors = 1
         self.num_classes = num_classes
         self.decode_in_inference = True  # for deploy, set to False

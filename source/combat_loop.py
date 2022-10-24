@@ -68,8 +68,10 @@ def get_chara_list(team_name='team.json'):
 
 
 class Combat_Controller(BaseThreading):
-    def __init__(self, chara_list: list[character.Character] = get_chara_list()):
+    def __init__(self, chara_list=None):
         super().__init__()
+        if chara_list is None:
+            chara_list = get_chara_list()
         self.setName('Combat_Controller')
 
         self.chara_list = chara_list

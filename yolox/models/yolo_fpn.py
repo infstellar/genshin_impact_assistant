@@ -17,10 +17,12 @@ class YOLOFPN(nn.Module):
     def __init__(
         self,
         depth=53,
-        in_features=["dark3", "dark4", "dark5"],
+            in_features=None,
     ):
         super().__init__()
 
+        if in_features is None:
+            in_features = ["dark3", "dark4", "dark5"]
         self.backbone = Darknet(depth)
         self.in_features = in_features
 
