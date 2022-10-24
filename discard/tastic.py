@@ -75,7 +75,7 @@ class Tastic():
         
         while self.itt.get_img_existence(img_manager.COMING_OUT_BY_SPACE, jpgmode=2, min_rate=0.8):
             situlation_code=1
-            self.itt.keyPress('spacebar')
+            self.itt.key_press('spacebar')
             logger.debug('Unconventionality Situlation: COMING_OUT_BY_SPACE')
             time.sleep(0.1)
 
@@ -142,11 +142,11 @@ class Tastic():
     def do_attack(self):
         self.chara_waiting()
         #print('press a')
-        self.itt.leftClick()
+        self.itt.left_click()
         self.itt.delay(0.1)
 
     def do_down_attack(self):
-        self.itt.leftClick()
+        self.itt.left_click()
         self.itt.delay(0.1)
 
     def do_use_e(self,times=0):
@@ -159,7 +159,7 @@ class Tastic():
         
         self.chara_waiting()
         logger.debug('do_use_e')
-        self.itt.keyPress('e')
+        self.itt.key_press('e')
         
         #self.itt.delay(1)
         self.itt.delay(0.2)
@@ -178,12 +178,12 @@ class Tastic():
         self.chara_waiting()
         pyautogui.click(button='middle')
         logger.debug('do_use_longe')
-        self.itt.keyPress('s')
-        self.itt.keyDown('e')
+        self.itt.key_press('s')
+        self.itt.key_down('e')
         self.itt.delay(self.character.Epress_time)
-        self.itt.keyUp('e')
+        self.itt.key_up('e')
         
-        self.itt.keyPress('w')
+        self.itt.key_press('w')
         self.itt.delay(0.2)
         if self._is_E_release()==False and E_STRICT_MODE:
             self.do_use_longe(times=times+1)
@@ -194,7 +194,7 @@ class Tastic():
             return -1
         
         self.chara_waiting()
-        self.itt.keyPress('q')
+        self.itt.key_press('q')
         self.itt.delay(0.2)
         self.chara_waiting()
         if self.is_Q_ready()==True and E_STRICT_MODE:
@@ -204,30 +204,30 @@ class Tastic():
     
     def do_long_attack(self):
         self.chara_waiting(mode=1)
-        self.itt.leftDown()
+        self.itt.left_down()
         self.itt.delay(2.5)
-        self.itt.leftUp()
+        self.itt.left_up()
     
     def do_jump(self):
         self.chara_waiting(mode=1)
-        self.itt.keyPress('spacebar')
+        self.itt.key_press('spacebar')
         
     def do_jump_attack(self):
         self.chara_waiting(mode=1)
-        self.itt.keyPress('spacebar')
+        self.itt.key_press('spacebar')
         self.itt.delay(0.3)
         # self.chara_waiting(mode=1)
-        self.itt.leftClick()
+        self.itt.left_click()
     
     def do_sprint(self):
-        self.itt.rightClick()
+        self.itt.right_click()
     
     def do_aim(self):
         self.chara_waiting(mode=1)
-        self.itt.keyPress('r')
+        self.itt.key_press('r')
     
     def do_unaim(self):
-        self.itt.keyPress('r')
+        self.itt.key_press('r')
     
     def is_Q_ready(self):
         cap = self.itt.capture(jpgmode=2)

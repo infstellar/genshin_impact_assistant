@@ -109,19 +109,19 @@ class GetRewardFlow(BaseThreading):
             else:
                 # do jump every five seconds
                 if self.ahead_timer.getDiffTime() >= 5:
-                    self.itt.keyPress('spacebar')
+                    self.itt.key_press('spacebar')
                     self.ahead_timer.reset()
 
                 movement.view_to_angle(-90)
-                self.itt.keyDown('w')
+                self.itt.key_down('w')
                 time.sleep(0.2)
 
                 cap = self.itt.capture(posi=PosiM.posi_domain["ClaimRewards"])  # posi=PosiM.posi_domain["ClaimRewards"]
                 cap = self.itt.png2jpg(cap, channel='ui')
                 if pdocr_api.ocr.get_text_position(cap, textM.text(textM.claim_rewards)) != -1:
-                    self.itt.keyUp('w')
+                    self.itt.key_up('w')
 
-                    self.itt.keyPress('f')
+                    self.itt.key_press('f')
                     time.sleep(2)
 
                     while 1:
