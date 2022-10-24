@@ -1,7 +1,5 @@
 import time
 
-import pyautogui
-
 import img_manager
 import pdocr_api
 import posi_manager
@@ -84,7 +82,7 @@ class TasticOperator(BaseThreading):
             cap = self.itt.png2jpg(cap, channel='ui', alpha_num=100)
             ret = pdocr_api.ocr.is_img_num_plus(cap)
 
-            if ret[0] != False:
+            if ret[0]:
                 return True
             else:
                 return False
@@ -241,8 +239,8 @@ class TasticOperator(BaseThreading):
         self.itt.key_press('r')
 
     def is_q_ready(self):
-        cap = self.itt.capture(posi = posi_manager.posi_chara_q)
-        cap = self.itt.png2jpg(cap, channel='ui',alpha_num=200)
+        cap = self.itt.capture(posi=posi_manager.posi_chara_q)
+        cap = self.itt.png2jpg(cap, channel='ui', alpha_num=200)
         # p = posi_manager.posi_chara_q_point
         if cap.max() > 0:
             return True

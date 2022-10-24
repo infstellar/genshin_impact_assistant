@@ -1,14 +1,14 @@
-from unit import *
 from base_threading import BaseThreading
 
+
 class PickupOperator(BaseThreading):
-    
+
     def __init__(self):
         super().__init__()
-        
+
     def operate(self):
-        self.pick_flag=True
-        
+        self.pick_flag = True
+
     def run(self):
         while 1:
             if self.stop_threading_flag:

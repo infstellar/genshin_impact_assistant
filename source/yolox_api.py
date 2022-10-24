@@ -2,9 +2,11 @@
 # -*- coding:utf-8 -*-
 # Copyright (c) Megvii, Inc. and its affiliates.
 from unit import *
+
 logger.info('Creating yolox obj. It may takes a few second.')
 
-import sys,os
+import sys, os
+
 root_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, root_path)
 import argparse
@@ -14,6 +16,7 @@ import time
 # from loguru import logger
 
 import cv2
+
 try:
     import torch
 except Exception as error:
@@ -26,32 +29,35 @@ from yolox.exp import get_exp
 from yolox.utils import fuse_model, get_model_info, postprocess, vis
 
 IMAGE_EXT = [".jpg", ".jpeg", ".webp", ".bmp", ".png"]
-globaldevice=config_json["device_torch"]
-if globaldevice=='auto':
+globaldevice = config_json["device_torch"]
+if globaldevice == 'auto':
     if torch.cuda.is_available():
-        globaldevice='gpu'
+        globaldevice = 'gpu'
     else:
-        globaldevice='cpu'
+        globaldevice = 'cpu'
+
 
 class Sim_Args():
-    def __init__(self,demo,experiment_name,name,path,camid,save_result,exp_file,device,conf,nms,tsize,fp16=False,legacy=False,
-                 fuse=False,trt=False,ckpt=None):
-        self.demo=demo
-        self.experiment_name=experiment_name
-        self.name=name
-        self.path=path
-        self.camid=camid
-        self.save_result=save_result
-        self.exp_file=exp_file
-        self.device=device
-        self.conf=conf
-        self.nms=nms
-        self.tsize=tsize
-        self.fp16=fp16
-        self.legacy=legacy
-        self.fuse=fuse
-        self.trt=trt
-        self.ckpt=ckpt
+    def __init__(self, demo, experiment_name, name, path, camid, save_result, exp_file, device, conf, nms, tsize,
+                 fp16=False, legacy=False,
+                 fuse=False, trt=False, ckpt=None):
+        self.demo = demo
+        self.experiment_name = experiment_name
+        self.name = name
+        self.path = path
+        self.camid = camid
+        self.save_result = save_result
+        self.exp_file = exp_file
+        self.device = device
+        self.conf = conf
+        self.nms = nms
+        self.tsize = tsize
+        self.fp16 = fp16
+        self.legacy = legacy
+        self.fuse = fuse
+        self.trt = trt
+        self.ckpt = ckpt
+
 
 def make_parser():
     parser = argparse.ArgumentParser("YOLOX Demo!")
@@ -119,41 +125,42 @@ def make_parser():
     )
     return parser
 
+
 def make_parser_2(
-                demo="image",
-                experiment_name=None,
-                name='yolox-s',
-                path='D:\Program Data\IDEA\yolo3_test1\YOLOX\\assets/head2.jpg',
-                camid=0,
-                save_result=True,
-                exp_file=None,
-                device=globaldevice,
-                conf=0.3,
-                nms=0.5,
-                tsize=640,
-                fp16=True,
-                legacy=False,
-                trt=False,
-                ckpt="D:\Program Data\\vscode\yolox_test4\YOLOX_outputs/tree_exp/best_ckpt.pth"
-    
+        demo="image",
+        experiment_name=None,
+        name='yolox-s',
+        path='D:\Program Data\IDEA\yolo3_test1\YOLOX\\assets/head2.jpg',
+        camid=0,
+        save_result=True,
+        exp_file=None,
+        device=globaldevice,
+        conf=0.3,
+        nms=0.5,
+        tsize=640,
+        fp16=True,
+        legacy=False,
+        trt=False,
+        ckpt="D:\Program Data\\vscode\yolox_test4\YOLOX_outputs/tree_exp/best_ckpt.pth"
+
 ):
-    path1="D:\Program Data\IDEA\yolo3_test1\yoloxmodel\yolox_ss.pth"
-    path2="D:\Program Data\IDEA\yolo3_test1\YOLOX\YOLOX_outputs/yolox_voc_s/best_ckpt.pth"
-    args=Sim_Args(demo=demo,
-                  experiment_name=experiment_name,
-                  name=name,
-                  path=path,
-                  camid=camid,
-                  save_result=save_result,
-                  exp_file=exp_file,
-                  device=device,
-                  conf=conf,
-                  nms=nms,
-                  tsize=tsize,
-                  fp16=fp16,
-                  legacy=legacy,
-                  trt=trt,
-                  ckpt=ckpt)
+    path1 = "D:\Program Data\IDEA\yolo3_test1\yoloxmodel\yolox_ss.pth"
+    path2 = "D:\Program Data\IDEA\yolo3_test1\YOLOX\YOLOX_outputs/yolox_voc_s/best_ckpt.pth"
+    args = Sim_Args(demo=demo,
+                    experiment_name=experiment_name,
+                    name=name,
+                    path=path,
+                    camid=camid,
+                    save_result=save_result,
+                    exp_file=exp_file,
+                    device=device,
+                    conf=conf,
+                    nms=nms,
+                    tsize=tsize,
+                    fp16=fp16,
+                    legacy=legacy,
+                    trt=trt,
+                    ckpt=ckpt)
     return args
 
 
@@ -170,15 +177,15 @@ def get_image_list(path):
 
 class Predictor(object):
     def __init__(
-        self,
-        model,
-        exp,
-        cls_names=COCO_CLASSES,
-        trt_file=None,
-        decoder=None,
-        device="cpu",
-        fp16=True,
-        legacy=False,
+            self,
+            model,
+            exp,
+            cls_names=COCO_CLASSES,
+            trt_file=None,
+            decoder=None,
+            device="cpu",
+            fp16=True,
+            legacy=False,
     ):
         self.model = model
         self.cls_names = cls_names
@@ -234,7 +241,7 @@ class Predictor(object):
                 outputs, self.num_classes, self.confthre,
                 self.nmsthre, class_agnostic=True
             )
-            
+
             logger.debug("Infer time: {:.4f}s".format(time.time() - t0))
         return outputs, img_info
 
@@ -254,50 +261,51 @@ class Predictor(object):
         scores = output[:, 4] * output[:, 5]
 
         vis_res = vis(img, bboxes, scores, cls, cls_conf, self.cls_names)
-        return vis_res,[bboxes,scores,cls,cls_conf,self.cls_names]
+        return vis_res, [bboxes, scores, cls, cls_conf, self.cls_names]
 
 
-def image_demo(predictor:Predictor, vis_folder, path, current_time, save_result,img_id=-1):
+def image_demo(predictor: Predictor, vis_folder, path, current_time, save_result, img_id=-1):
     if os.path.isdir(path):
         files = get_image_list(path)
     else:
         files = [path]  # path is a list in this time
     files.sort()
-    addition_info=[]
-    
+    addition_info = []
+
     for image_name in files:
         if isinstance(image_name, str):
-            #img_info["file_name"] = os.path.basename(image_name)
+            # img_info["file_name"] = os.path.basename(image_name)
             img = cv2.imread(image_name)
         else:
             img = image_name
-            if img_id !=-1:
-                image_name = datetime.datetime.now().strftime('%Y_%m_%d_%H_%M_%S_%f')+str(img_id)+'.jpg'
-                #image_name = time.strftime("%Y_%m_%d_%H_%M_%S_%F", current_time)+'.jpg'+str(img_id)
+            if img_id != -1:
+                image_name = datetime.datetime.now().strftime('%Y_%m_%d_%H_%M_%S_%f') + str(img_id) + '.jpg'
+                # image_name = time.strftime("%Y_%m_%d_%H_%M_%S_%F", current_time)+'.jpg'+str(img_id)
             else:
-                image_name = datetime.datetime.now().strftime('%Y_%m_%d_%H_%M_%S_%f')+'.jpg'
-                #image_name = time.strftime("%Y_%m_%d_%H_%M_%S_%F", current_time)+'.jpg'
-        
-        #img = cv2.imread(image_name)
+                image_name = datetime.datetime.now().strftime('%Y_%m_%d_%H_%M_%S_%f') + '.jpg'
+                # image_name = time.strftime("%Y_%m_%d_%H_%M_%S_%F", current_time)+'.jpg'
+
+        # img = cv2.imread(image_name)
         outputs, img_info = predictor.inference(img)
-        if outputs[0]!=None:
-            result_image,adi = predictor.visual(outputs[0], img_info, predictor.confthre)
+        if outputs[0] != None:
+            result_image, adi = predictor.visual(outputs[0], img_info, predictor.confthre)
         else:
-            return None,None
+            return None, None
         addition_info.append(adi)
         if save_result:
             save_folder = os.path.join(
-                vis_folder#, "visimg"   # time.strftime("%Y_%m_%d_%H_%M_%S", current_time)
+                vis_folder  # , "visimg"   # time.strftime("%Y_%m_%d_%H_%M_%S", current_time)
             )
-            #os.makedirs(save_folder, exist_ok=True)
+            # os.makedirs(save_folder, exist_ok=True)
             save_file_name = os.path.join(save_folder, os.path.basename(image_name))
-            
+
             logger.debug("Saving detection result in {}".format(save_file_name))
             cv2.imwrite(save_file_name, result_image)
         ch = cv2.waitKey(0)
         if ch == 27 or ch == ord("q") or ch == ord("Q"):
             break
-        return addition_info,result_image
+        return addition_info, result_image
+
 
 def imageflow_demo(predictor, vis_folder, current_time, args):
     cap = cv2.VideoCapture(args.path if args.demo == "video" else args.camid)
@@ -313,7 +321,7 @@ def imageflow_demo(predictor, vis_folder, current_time, args):
             save_path = os.path.join(save_folder, os.path.basename(args.path))
         else:
             save_path = os.path.join(save_folder, "camera.mp4")
-        
+
             logger.debug(f"video save_path is {save_path}")
         vid_writer = cv2.VideoWriter(
             save_path, cv2.VideoWriter_fourcc(*"mp4v"), fps, (int(width), int(height))
@@ -349,7 +357,7 @@ def main(exp, args):
 
     if args.trt:
         args.device = "gpu"
-    
+
         logger.debug("Args: {}".format(args))
 
     if args.conf is not None:
@@ -360,7 +368,7 @@ def main(exp, args):
         exp.test_size = (args.tsize, args.tsize)
 
     model = exp.get_model()
-    
+
     logger.debug("Model Summary: {}".format(get_model_info(model, exp.test_size)))
 
     if args.device == "gpu":
@@ -374,16 +382,15 @@ def main(exp, args):
             ckpt_file = os.path.join(file_name, "best_ckpt.pth")
         else:
             ckpt_file = args.ckpt
-        
+
             logger.debug("loading checkpoint")
         ckpt = torch.load(ckpt_file, map_location="cpu")
         # load the model state dict
         model.load_state_dict(ckpt["model"])
-        
+
         logger.debug("loaded checkpoint done.")
 
     if args.fuse:
-        
         logger.debug("\tFusing model...")
         model = fuse_model(model)
 
@@ -395,7 +402,7 @@ def main(exp, args):
         ), "TensorRT model is not found!\n Run python3 tools/trt.py first!"
         model.head.decode_in_inference = False
         decoder = model.head.decode_outputs
-        
+
         logger.debug("Using TensorRT to inference")
     else:
         trt_file = None
@@ -412,17 +419,16 @@ def main(exp, args):
         imageflow_demo(predictor, vis_folder, current_time, args)
 
 
-
 class Yolox_Api():
-    def __init__(self,vis_folder = None,
-                 save_result = False,
-                 ckpt = "yoloxtools/model/tree_exp2/best_ckpt.pth"
+    def __init__(self, vis_folder=None,
+                 save_result=False,
+                 ckpt="yoloxtools/model/tree_exp2/best_ckpt.pth"
                  ):
-        
+
         self.args = make_parser_2(save_result=save_result,
                                   ckpt=ckpt
                                   )
-        logger.debug("yolox device: "+self.args.device)
+        logger.debug("yolox device: " + self.args.device)
         self.exp = get_exp(self.args.exp_file, self.args.name)
         if not self.args.experiment_name:
             self.args.experiment_name = self.exp.exp_name
@@ -433,10 +439,8 @@ class Yolox_Api():
         self.vis_folder = os.path.join(file_name, "vis_res")
         os.makedirs(self.vis_folder, exist_ok=True)
         if self.args.save_result:
-            if vis_folder!=None:
+            if vis_folder != None:
                 self.vis_folder = vis_folder
-            
-                
 
         if self.args.trt:
             self.args.device = "gpu"
@@ -464,18 +468,17 @@ class Yolox_Api():
             if self.args.ckpt is None:
                 ckpt_file = os.path.join(file_name, "best_ckpt.pth")
             else:
-                ckpt_file = self.args.ckpt               
-            
+                ckpt_file = self.args.ckpt
+
             logger.debug("loading checkpoint")
             ckpt = torch.load(ckpt_file, map_location="cpu")
             # load the model state dict
             # may should ###
             model.load_state_dict(ckpt["model"])
-            
+
             logger.debug("loaded checkpoint done.")
 
         if self.args.fuse:
-            
             logger.debug("\tFusing model...")
             model = fuse_model(model)
 
@@ -487,7 +490,7 @@ class Yolox_Api():
             ), "TensorRT model is not found!\n Run python3 tools/trt.py first!"
             model.head.decode_in_inference = False
             decoder = model.head.decode_outputs
-            
+
             logger.debug("Using TensorRT to inference")
         else:
             trt_file = None
@@ -497,35 +500,35 @@ class Yolox_Api():
             model, self.exp, COCO_CLASSES, trt_file, decoder,
             self.args.device, self.args.fp16, self.args.legacy,
         )
-        
+
         logger.debug("predictor has been created")
-        
-        
-            
-    def predicte(self,imgsrc,img_id=-1):
-        
+
+    def predicte(self, imgsrc, img_id=-1):
+
         logger.debug("predicte img")
         self.current_time = time.localtime()
         if self.args.demo == "image":
             if True:
-                return image_demo(self.predictor, self.vis_folder, imgsrc, self.current_time, self.args.save_result ,img_id=img_id)
+                return image_demo(self.predictor, self.vis_folder, imgsrc, self.current_time, self.args.save_result,
+                                  img_id=img_id)
             else:
-                return image_demo(self.predictor, self.vis_folder, self.args.path, self.current_time, self.args.save_result)  # just backup
+                return image_demo(self.predictor, self.vis_folder, self.args.path, self.current_time,
+                                  self.args.save_result)  # just backup
         elif self.args.demo == "video" or self.args.demo == "webcam":
             imageflow_demo(self.predictor, self.vis_folder, self.current_time, self.args)
         pass
-    
-    def get_maxap_pic_bbox(self,addinfo):
+
+    def get_maxap_pic_bbox(self, addinfo):
         return addinfo[0][0][0].numpy()
-    
-    def get_center(self,addinfo):
+
+    def get_center(self, addinfo):
         a = addinfo[0][0][0].numpy()
-        return a[0]+(a[2]-a[0])/2, a[1]+(a[3]-a[1])/2
-    
+        return a[0] + (a[2] - a[0]) / 2, a[1] + (a[3] - a[1]) / 2
+
+
 yolo_tree = Yolox_Api()
 logger.info('Created yolox obj.')
 if __name__ == "__main__":
-    
     # yolox=yolox_api_custom()
     # yolox.predicte(cv2.imread("D:\\Program Data\\IDEA\\yolo3_test1\\YOLOX\\assets\\head.jpg",1))
     # yolox.predicte(cv2.imread("D:\\Program Data\\IDEA\\yolo3_test1\\YOLOX\\assets\\head2.jpg",1))
@@ -536,5 +539,5 @@ if __name__ == "__main__":
 
     # main(exp, args)
     # ya = Yolox_Api()
-    a=yolo_tree.predicte(cv2.imread("D:\Program Data\\vscode\yolox_test4\\assets\\84.jpg"))
+    a = yolo_tree.predicte(cv2.imread("D:\Program Data\\vscode\yolox_test4\\assets\\84.jpg"))
     # print()
