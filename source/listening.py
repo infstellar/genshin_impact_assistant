@@ -2,8 +2,9 @@ try:
     from unit import *
 except:
     from source.unit import *
-import keyboard
 import time
+
+import keyboard
 
 import alpha_loop
 import domain_flow
