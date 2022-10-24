@@ -418,7 +418,8 @@ class YOLOXHead(nn.Module):
             num_fg / max(num_gts, 1),
         )
 
-    def get_l1_target(self, l1_target, gt, stride, x_shifts, y_shifts, eps=1e-8):
+    @staticmethod
+    def get_l1_target(l1_target, gt, stride, x_shifts, y_shifts, eps=1e-8):
         l1_target[:, 0] = gt[:, 0] / stride - x_shifts
         l1_target[:, 1] = gt[:, 1] / stride - y_shifts
         l1_target[:, 2] = torch.log(gt[:, 2] / stride + eps)
@@ -523,9 +524,9 @@ class YOLOXHead(nn.Module):
             num_fg,
         )
 
+    @staticmethod
     def get_in_boxes_info(
-        self,
-        gt_bboxes_per_image,
+            gt_bboxes_per_image,
         expanded_strides,
         x_shifts,
         y_shifts,
@@ -608,7 +609,8 @@ class YOLOXHead(nn.Module):
         )
         return is_in_boxes_anchor, is_in_boxes_and_center
 
-    def dynamic_k_matching(self, cost, pair_wise_ious, gt_classes, num_gt, fg_mask):
+    @staticmethod
+    def dynamic_k_matching(cost, pair_wise_ious, gt_classes, num_gt, fg_mask):
         # Dynamic K
         # ---------------------------------------------------------------
         matching_matrix = torch.zeros_like(cost, dtype=torch.uint8)

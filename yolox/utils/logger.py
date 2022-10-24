@@ -60,7 +60,8 @@ class StreamToLoguru:
     def flush(self):
         pass
 
-    def isatty(self):
+    @staticmethod
+    def isatty():
         # when using colab, jax is installed by default and issue like
         # https://github.com/Megvii-BaseDetection/YOLOX/issues/1437 might be raised
         # due to missing attribute like`isatty`.

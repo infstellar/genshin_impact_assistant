@@ -143,7 +143,8 @@ class InteractionBGD:
         matching_rate = max_val
         return matching_rate, top_left, bottom_right
 
-    def similar_img(self, img, target, is_gray=False, is_show_res: bool = False):
+    @staticmethod
+    def similar_img(img, target, is_gray=False, is_show_res: bool = False):
 
         if is_gray:
             img = cv2.cvtColor(img, cv2.COLOR_BGRA2GRAY)
@@ -160,7 +161,8 @@ class InteractionBGD:
         matching_rate = max_val
         return matching_rate
 
-    def similar_img_pixel(self, img, target, is_gray=False):
+    @staticmethod
+    def similar_img_pixel(img, target, is_gray=False):
         img1 = img.astype('int')
         target1 = target.astype('int')
         # cv2.imshow('1',img)
@@ -241,7 +243,8 @@ class InteractionBGD:
         maximum = cv2.max(cv2.max(r, g), b)
         return cv2.multiply(cv2.add(maximum, cv2.subtract(maximum, minimum)), 255.0 / threshold)
 
-    def png2jpg(self, png, bgcolor='black', channel='bg', alpha_num=50):
+    @staticmethod
+    def png2jpg(png, bgcolor='black', channel='bg', alpha_num=50):
         if bgcolor == 'black':
             bgcol = 0
         else:
@@ -257,7 +260,8 @@ class InteractionBGD:
         jpg[:, :, 2][over_item_list] = bgcol
         return jpg
 
-    def color_SD(self, x_col, target_col):  # standard deviation
+    @staticmethod
+    def color_SD(x_col, target_col):  # standard deviation
         ret = 0
         for i in range(min(len(x_col), len(target_col))):
             t = abs(x_col[i] - target_col[i])
@@ -265,7 +269,8 @@ class InteractionBGD:
             ret += t
         return math.sqrt(ret / min(len(x_col), len(target_col)))
 
-    def delay(self, x, randtime=True, isprint=True, comment=''):
+    @staticmethod
+    def delay(x, randtime=True, isprint=True, comment=''):
         upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
         a = random.randint(-10, 10)
         if randtime:
@@ -429,7 +434,8 @@ class InteractionBGD:
             # win32api.mouse_event(win32con.MOUSEEVENTF_MOVE, int((x-mx)/1.5), int((y-my)/1.5))
             win32api.SetCursorPos((wx + x, wy + y))
 
-    def crop_image(self, imsrc, posilist):
+    @staticmethod
+    def crop_image(imsrc, posilist):
         return imsrc[posilist[0]:posilist[2], posilist[1]:posilist[3]]
 
 

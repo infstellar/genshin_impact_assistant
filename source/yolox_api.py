@@ -520,10 +520,12 @@ class Yolox_Api:
             imageflow_demo(self.predictor, self.vis_folder, self.current_time, self.args)
         pass
 
-    def get_maxap_pic_bbox(self, addinfo):
+    @staticmethod
+    def get_maxap_pic_bbox(addinfo):
         return addinfo[0][0][0].numpy()
 
-    def get_center(self, addinfo):
+    @staticmethod
+    def get_center(addinfo):
         a = addinfo[0][0][0].numpy()
         return a[0] + (a[2] - a[0]) / 2, a[1] + (a[3] - a[1]) / 2
 

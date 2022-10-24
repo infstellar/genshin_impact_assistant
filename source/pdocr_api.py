@@ -64,7 +64,8 @@ class Paddleocr_API:
     #     im_show = Image.fromarray(im_show)
     #     im_show.save('result.jpg')
 
-    def find_text(self, result, text, mode=APPROXIMATE_MATCHING):
+    @staticmethod
+    def find_text(result, text, mode=APPROXIMATE_MATCHING):
         if mode == APPROXIMATE_MATCHING:
             for i in range(len(result)):
                 if text in result[i][1][0]:
