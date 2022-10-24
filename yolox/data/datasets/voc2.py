@@ -100,7 +100,7 @@ class VOCDetection(Dataset):
     def __init__(
             self,
             data_dir,
-            image_sets=[("2007", "trainval"), ("2012", "trainval")],
+            image_sets=None,
             img_size=(416, 416),
             preproc=None,
             target_transform=AnnotationTransform(),
@@ -108,6 +108,8 @@ class VOCDetection(Dataset):
             cache=False,
     ):
         super().__init__(img_size)
+        if image_sets is None:
+            image_sets = [("2007", "trainval"), ("2012", "trainval")]
         self.root = data_dir
         self.image_set = image_sets
         self.img_size = img_size

@@ -67,7 +67,9 @@ class winInfo:
         self.mainHnd = mainHnd
         self.winpos = [x, y]
 
-    def getRect(self, rangePosition=[0, 0, 0, 0]):
+    def getRect(self, rangePosition=None):
+        if rangePosition is None:
+            rangePosition = [0, 0, 0, 0]
         return [self.x, self.y, self.w + self.x, self.h + self.y]
 
 
@@ -110,7 +112,9 @@ def getWindowsInfo(classname, title):
     return winInfo(x, y, w, h, mainHnd)
 
 
-def GetScrWindowsImg(wininfo: winInfo, rangePosition=[0, 0, 0, 0]):
+def GetScrWindowsImg(wininfo: winInfo, rangePosition=None):
+    if rangePosition is None:
+        rangePosition = [0, 0, 0, 0]
     hwnd = wininfo.mainHnd
     app = QApplication(sys.argv)
     screen = QApplication.primaryScreen()
