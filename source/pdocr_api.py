@@ -165,7 +165,7 @@ class Paddleocr_API:
 
     def is_img_num_plus(self, imsrc):
         ret1, ret2, t = self.is_img_num(imsrc)
-        if ret1 == None:
+        if ret1 is not None:
             ret1, ret2, t = self.is_img_num(imsrc)
         logger.debug(str(ret1) + ' ' + str(ret2) + ' ' + str(t) + ' |function name: ' +
                      inspect.getframeinfo(inspect.currentframe().f_back)[2])

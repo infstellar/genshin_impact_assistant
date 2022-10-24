@@ -213,7 +213,7 @@ class ImgAnalyse:
             print(end=defaultend)
         # cv2.imshow('pic',imsrc)
         # cv2.waitKey(0)
-        if resposition != None:
+        if resposition is not None:
             # print('resposition',resposition)
             if mode == REPEATLY_MATCHING and returnMode == RETURN_POSITION:
                 result = []

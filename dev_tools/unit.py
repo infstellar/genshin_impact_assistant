@@ -23,7 +23,6 @@ def loadjson(json_name='config.json'):
     return a
 
 
-
 config_json = loadjson("config.json")
 
 # 设置debug
