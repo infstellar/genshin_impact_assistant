@@ -58,7 +58,7 @@ def get_virtual_keycode(key: str):
         return VK_CODE[key]
 
 
-class winInfo():
+class winInfo:
     def __init__(self, x, y, w, h, mainHnd):
         self.x = x
         self.y = y

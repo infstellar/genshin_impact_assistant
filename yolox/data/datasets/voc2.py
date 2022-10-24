@@ -198,7 +198,7 @@ class VOCDetection(Dataset):
         res[:, :4] *= r
         resized_info = (int(height * r), int(width * r))
 
-        return (res, img_info, resized_info)
+        return res, img_info, resized_info
 
     def load_anno(self, index):
         return self.annotations[index][0]
@@ -294,7 +294,7 @@ class VOCDetection(Dataset):
                 for im_ind, index in enumerate(self.ids):
                     index = index[1]
                     dets = all_boxes[cls_ind][im_ind]
-                    if dets == []:
+                    if not dets:
                         continue
                     for k in range(dets.shape[0]):
                         f.write(

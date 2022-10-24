@@ -7,7 +7,7 @@ from timer_module import Timer
 from unit import *
 
 
-class ScreenCapture():
+class ScreenCapture:
     def __init__(self):
         logger.debug('static_lib_created')
 
@@ -79,7 +79,7 @@ class testtest(threading.Thread):
         super().__init__()
 
     def run(self):
-        while (1):
+        while 1:
             SCREENCAPTURE.get_capture()
 
 

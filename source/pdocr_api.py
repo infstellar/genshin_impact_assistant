@@ -33,7 +33,7 @@ RETURN_TEXT = 1
 RETURN_POSITION = 0
 
 
-class Paddleocr_API():
+class Paddleocr_API:
 
     def __init__(self, lang='ch', device='gpu'):
         device = globaldevice
@@ -102,7 +102,7 @@ class Paddleocr_API():
                     logger.debug('TWICE_FRONTANDBACK_SEQUENTIAL_MATCHING found ' + text + '|function name: ' +
                                  inspect.getframeinfo(inspect.currentframe().f_back)[2])
                     result.append(result[i])
-            if result != []:
+            if result:
                 return result
         return None
 

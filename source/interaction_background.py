@@ -19,11 +19,11 @@ from unit import *
 
 
 class InteractionBGD:
-    '''
+    """
     default size:1920x1080
     support size:1920x1080
     thanks for https://zhuanlan.zhihu.com/p/361569101
-    '''
+    """
 
     def __init__(self, hwndname="原神"):
         self.GetDC = ctypes.windll.user32.GetDC
@@ -287,7 +287,7 @@ class InteractionBGD:
         # 鼠标坐标减去指定窗口坐标为鼠标在窗口中的坐标值
         pos_x = p[0] - x
         pos_y = p[1] - y
-        return (pos_x, pos_y)
+        return pos_x, pos_y
 
     def get_virtual_keycode(self, key: str):
         """根据按键名获取虚拟按键码

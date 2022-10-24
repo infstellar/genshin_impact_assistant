@@ -32,7 +32,7 @@ class AimOperator(BaseThreading):
         self.reset_timer = Timer()
 
     def run(self):
-        while (1):
+        while 1:
 
             if self.stop_threading_flag:
                 return 0
@@ -112,7 +112,7 @@ class AimOperator(BaseThreading):
         # print(px,py)
 
         self.itt.move_to(px, py, relative=True)
-        return (px)
+        return px
         # print()
 
     def finding_enemy(self):

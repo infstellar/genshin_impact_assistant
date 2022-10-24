@@ -81,7 +81,7 @@ RETURN_TEXT = 1
 RETURN_POSITION = 0
 
 
-class winInfo():
+class winInfo:
     def __init__(self, x, y, w, h, mainHnd):
         self.x = x
         self.y = y
@@ -134,7 +134,7 @@ def GetScrWindowsImg(wininfo: winInfo, rangePosition=[0, 0, 0, 0]):
     return imsrc, [bbox[0], bbox[1]]  # BGR
 
 
-class ImgAnalyse():
+class ImgAnalyse:
 
     def __init__(self, lang='ch'):
         self.ocr = PaddleOCR(use_angle_cls=True, lang=lang,
@@ -196,7 +196,7 @@ class ImgAnalyse():
                 if (i != len(result) - 1) and (text[0] in result[i][1][0]) and (text[1] in result[i + 1][1][0]):
                     print('TWICE_FRONTANDBACK_SEQUENTIAL_MATCHING found ', text, end='')
                     result.append(result[i])
-            if result != []:
+            if result:
                 return result
         return None
 

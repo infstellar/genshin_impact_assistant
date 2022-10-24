@@ -10,7 +10,7 @@ import domain_flow
 
 combat_flag = False
 domain_flag = False
-global t1, t2
+
 t1 = None
 t2 = None
 # @logger.catch
@@ -51,7 +51,7 @@ keyboard.add_hotkey(keymapjson["autoDomain"], switch_domain_loop)
 
 @logger.catch
 def listening():
-    while (1):
+    while 1:
         time.sleep(0.2)
 
 
