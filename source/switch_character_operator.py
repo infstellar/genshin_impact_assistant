@@ -31,27 +31,27 @@ class Switch_Character_Operator(BaseThreading):
         self.switch_timer = Timer(diff_start_time=2)
 
     def run(self):
-        while (1):
+        while 1:
             time.sleep(0.2)
             if self.stop_threading_flag:
                 self.tastic_operator.stop_threading()
                 return 0
 
             if self.pause_threading_flag:
-                if self.working_flag == True:
+                if self.working_flag:
                     self.working_flag = False
                 time.sleep(1)
 
                 continue
 
-            if self.working_flag == False:  # tastic operator no working
+            if not self.working_flag:  # tastic operator no working
                 self.working_flag = True
             if self.tastic_operator.get_working_statement():  # tastic operator working
                 time.sleep(0.2)
 
             else:
                 ret = self.switch_character()
-                if ret == False:  # able to change character
+                if not ret:  # able to change character
                     self.tastic_operator.continue_threading()
                     time.sleep(1)
 

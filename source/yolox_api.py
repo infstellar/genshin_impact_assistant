@@ -37,7 +37,7 @@ if globaldevice == 'auto':
         globaldevice = 'cpu'
 
 
-class Sim_Args():
+class Sim_Args:
     def __init__(self, demo, experiment_name, name, path, camid, save_result, exp_file, device, conf, nms, tsize,
                  fp16=False, legacy=False,
                  fuse=False, trt=False, ckpt=None):
@@ -419,7 +419,7 @@ def main(exp, args):
         imageflow_demo(predictor, vis_folder, current_time, args)
 
 
-class Yolox_Api():
+class Yolox_Api:
     def __init__(self, vis_folder=None,
                  save_result=False,
                  ckpt="yoloxtools/model/tree_exp2/best_ckpt.pth"
@@ -511,9 +511,11 @@ class Yolox_Api():
             if True:
                 return image_demo(self.predictor, self.vis_folder, imgsrc, self.current_time, self.args.save_result,
                                   img_id=img_id)
-            else:
-                return image_demo(self.predictor, self.vis_folder, self.args.path, self.current_time,
-                                  self.args.save_result)  # just backup
+
+            # else:
+            #    return image_demo(self.predictor, self.vis_folder, self.args.path, self.current_time,
+            #                      self.args.save_result)  # just backup
+
         elif self.args.demo == "video" or self.args.demo == "webcam":
             imageflow_demo(self.predictor, self.vis_folder, self.current_time, self.args)
         pass

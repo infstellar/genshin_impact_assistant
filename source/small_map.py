@@ -76,7 +76,7 @@ def jwa_3(imsrc):
     boundRect = []
     for i in range(len(contours)):
         boundRect.append([])
-        if (len(contours[i]) > maxBlack):
+        if len(contours[i]) > maxBlack:
             maxBlack = len(contours[i])
             maxId = i
         boundRect[i] = cv2.boundingRect(cv2.Mat(contours[i]))
@@ -101,20 +101,20 @@ def jwa_3(imsrc):
     if point[0] > 0 and point[1] > 0:
         quadrant = 1
         degree = degree
-    elif point[0] < 0 and point[1] > 0:
+    elif point[0] < 0 < point[1]:
         quadrant = 2
         degree += 180
     elif point[0] < 0 and point[1] < 0:
         quadrant = 3
         degree += 180
-    elif point[0] > 0 and point[1] < 0:
+    elif point[0] > 0 > point[1]:
         quadrant = 4
         degree += 360
 
     # degree = math.atan((point[1]/hypotenuse_length)/(point[0]/hypotenuse_length))*(180 / math.pi)
     degree -= 90
 
-    if (degree > 180):
+    if degree > 180:
         degree -= 360
     # cv2.imshow('123', cv2.drawMarker(Alpha,position=(int(p[0]),int(p[1])),color=(255, 0, 255),markerSize = 1, markerType=cv2.MARKER_CROSS, thickness=5))
     # cv2.waitKey(100)
@@ -132,7 +132,7 @@ def jwa_3(imsrc):
 
 if __name__ == '__main__':
     # qshow(itt.capture(posi=posi_map))
-    while (1):
+    while 1:
         jwa_3(itt.capture(posi=posi_map))
         time.sleep(0.1)
     # cv2.imshow('123', img1)

@@ -1,9 +1,10 @@
+import time
+
 import img_manager
 import movement
 import pdocr_api
 import posi_manager as PosiM
 import text_manager as textM
-import time
 import timer_module
 import yolox_api
 from base_threading import BaseThreading

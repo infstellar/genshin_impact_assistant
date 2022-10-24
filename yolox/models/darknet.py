@@ -57,7 +57,7 @@ class Darknet(nn.Module):
         )
 
     def make_group_layer(self, in_channels: int, num_blocks: int, stride: int = 1):
-        "starts with conv layer then has `num_blocks` `ResLayer`"
+        """starts with conv layer then has `num_blocks` `ResLayer`"""
         return [
             BaseConv(in_channels, in_channels * 2, ksize=3, stride=stride, act="lrelu"),
             *[(ResLayer(in_channels * 2)) for _ in range(num_blocks)],

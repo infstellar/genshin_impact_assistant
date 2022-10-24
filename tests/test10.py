@@ -36,7 +36,7 @@ def get_direction_angle():
 # cv2.imshow('123', itt.png2jpg(itt.capture(posi_manager.posi_arrow),bgcolor='white',channel='ui'))
 # cv2.waitKey(0)
 # cv2.imwrite('imgs\\NW.jpg',itt.png2jpg(itt.capture(posi_manager.posi_arrow),bgcolor='white',channel='ui'))
-while (1):
+while 1:
     print(get_direction_angle())
     time.sleep(1)
     # input()

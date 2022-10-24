@@ -17,7 +17,7 @@ def stop_func_example():  # True:stop;False:continue
     return False
 
 
-class Tastic():
+class Tastic:
     def __init__(self):
         self.hp_charalist_green = [34, 215, 150, 255]  # BGR
         self.hp_charalist_red = [102, 102, 255, 255]  # BGR
@@ -47,13 +47,13 @@ class Tastic():
         cap = self.itt.png2jpg(cap, channel='ui', alpha_num=100)
         ret = pdocr_api.ocr.is_img_num_plus(cap)
         # ret = pdocr_api.ocr.is_img_num(self.itt.capture(posi=posi_manager.posi_chara_e,jpgmode=2))
-        if ret[0] != False:
+        if ret[0]:
             return True
         else:
             cap = self.itt.capture(posi=posi_manager.posi_chara_e)
             cap = self.itt.png2jpg(cap, channel='ui', alpha_num=100)
             ret = pdocr_api.ocr.is_img_num_plus(cap)
-            if ret[0] != False:
+            if ret[0]:
                 return True
             else:
                 return False
@@ -152,7 +152,7 @@ class Tastic():
             return -1
 
         if self.character.Ecd_float_time > 0:
-            if self._is_E_release() == True:
+            if self._is_E_release():
                 self.itt.delay(self.character.get_Ecd_time() + 0.1)
 
         self.chara_waiting()
@@ -330,7 +330,7 @@ class Tastic():
 
 if __name__ == '__main__':
     tastic = Tastic()
-    while (1):
+    while 1:
         print(tastic.unconventionality_situlation_detection())
         time.sleep(0.2)
-    print()
+

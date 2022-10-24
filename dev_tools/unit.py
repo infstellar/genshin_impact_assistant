@@ -1,5 +1,3 @@
-import sys, os, json
-from loguru import logger
 import json
 import os
 import sys
@@ -25,11 +23,10 @@ def loadjson(json_name='config.json'):
     return a
 
 
-global config_json
+
 config_json = loadjson("config.json")
 
 # 设置debug
-DEBUG_MODE = False
 DEBUG_MODE = config_json["DEBUG"]
 
 # 设置env path

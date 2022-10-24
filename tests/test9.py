@@ -27,9 +27,9 @@ def get_extra_params():
     t = ''
     for i in params:
         if i == '--add-data':
-            t = t + ((i + ' '))
+            t = t + (i + ' ')
         else:
-            t = t + (('\"' + i + '\"' + ' '))
+            t = t + ('\"' + i + '\"' + ' ')
     return t
 
 

@@ -4,7 +4,7 @@ from interaction_background import InteractionBGD
 
 
 def f_recognition(itt: InteractionBGD, mode='button_only'):
-    if itt.get_img_existence(img_manager.F_BUTTON) == True:
+    if itt.get_img_existence(img_manager.F_BUTTON):
         return True
     else:
         return False

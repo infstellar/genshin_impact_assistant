@@ -99,7 +99,7 @@ def jwa_3(imsrc):
     for i in range(len(contours)):
         boundRect.append([])
         # {
-        if (len(contours[i]) > maxBlack):
+        if len(contours[i]) > maxBlack:
             # 	{
             maxBlack = len(contours[i])
             maxId = i
@@ -109,7 +109,7 @@ def jwa_3(imsrc):
     # }
 
     p = ((boundRect[maxId][0] + boundRect[maxId][1] / 2), (boundRect[maxId][2] + boundRect[maxId][3] / 2))
-    print((p), Line2Angle(p))
+    print(p, Line2Angle(p))
     # Alpha =cv2.circle(Alpha, p, 3, (255, 0, 0))
     # Alpha =cv2.line(Alpha, p, (120, 170), (0, 255, 0))
     # cv2.imshow("Img", Alpha)
@@ -131,7 +131,7 @@ if not os.path.exists(snap_path + "\\jpg_withalpha"):
     os.mkdir("tools\\snapshot\\jpg_withalpha")
 
 numi = 40
-while (1):
+while 1:
     input('wait')
     i += 1
     numi += 1
