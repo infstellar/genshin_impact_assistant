@@ -287,7 +287,7 @@ def image_demo(predictor: Predictor, vis_folder, path, current_time, save_result
 
         # img = cv2.imread(image_name)
         outputs, img_info = predictor.inference(img)
-        if outputs[0] != None:
+        if outputs[0] is not None:
             result_image, adi = predictor.visual(outputs[0], img_info, predictor.confthre)
         else:
             return None, None
@@ -439,7 +439,7 @@ class Yolox_Api:
         self.vis_folder = os.path.join(file_name, "vis_res")
         os.makedirs(self.vis_folder, exist_ok=True)
         if self.args.save_result:
-            if vis_folder != None:
+            if vis_folder is not None:
                 self.vis_folder = vis_folder
 
         if self.args.trt:
