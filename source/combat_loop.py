@@ -96,17 +96,17 @@ class Combat_Controller(BaseThreading):
                 self.sco.stop_threading()
                 return 0
 
-            if self.pause_threading_flag == False:
+            if not self.pause_threading_flag:
                 if self.checkup_stop_func():
                     break
 
-                if self.sco.get_working_statement() == False:
+                if not self.sco.get_working_statement():
                     self.sco.continue_threading()
                     time.sleep(1)
                 else:
                     time.sleep(0.2)
 
-                if self.ao.get_working_statement() == False:
+                if not self.ao.get_working_statement():
                     self.ao.continue_threading()
                 else:
                     pass
@@ -116,7 +116,7 @@ class Combat_Controller(BaseThreading):
                     self.sco.pause_threading()
                     time.sleep(1)
 
-                if self.ao.get_working_statement() == True:
+                if self.ao.get_working_statement():
                     self.ao.pause_threading()
                     time.sleep(1)
                 else:

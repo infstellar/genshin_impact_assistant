@@ -152,9 +152,9 @@ class Paddleocr_API():
                 num = ''
 
             for i in num:
-                if i in ['0','1','2','3','4','5','6','7','8','9','.']:
+                if i in ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.']:
                     is_num = True
-            
+
             if is_number(num):
                 res_num = float(num)
             else:

@@ -100,7 +100,7 @@ class InteractionBGD:
 
         ret = static_lib.SCREENCAPTURE.get_capture()
 
-        if posi != None:
+        if posi is not None:
             ret = ret[posi[0]:posi[2], posi[1]:posi[3]]
         if jpgmode == 0:
             pass

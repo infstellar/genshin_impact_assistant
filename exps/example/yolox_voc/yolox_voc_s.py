@@ -4,7 +4,6 @@ import os
 import torch
 import torch.distributed as dist
 
-from yolox.data import get_yolox_datadir
 from yolox.exp import Exp as MyExp
 
 
@@ -42,7 +41,8 @@ class Exp(MyExp):
 
         with wait_for_the_master(local_rank):
             dataset = VOCDetection(
-                data_dir='D:\Program Data\IDEA\yolo3_test1\YOLOX\datasets\VOCdevkit',  #os.path.join(get_yolox_datadir(), "VOCdevkit"),
+                data_dir='D:\Program Data\IDEA\yolo3_test1\YOLOX\datasets\VOCdevkit',
+                # os.path.join(get_yolox_datadir(), "VOCdevkit"),
                 image_sets=[('train')],  # ('2007', 'trainval'), ('2012', 'trainval')
                 img_size=self.input_size,
                 preproc=TrainTransform(
@@ -100,9 +100,9 @@ class Exp(MyExp):
         from yolox.data import VOCDetection, ValTransform
 
         valdataset = VOCDetection(
-            #data_dir=os.path.join(get_yolox_datadir(), "VOCdevkit"),
+            # data_dir=os.path.join(get_yolox_datadir(), "VOCdevkit"),
             data_dir="D:\Program Data\IDEA\yolo3_test1\YOLOX\datasets\VOCdevkit",
-            #image_sets=[('2007', 'test')],
+            # image_sets=[('2007', 'test')],
             image_sets=[('val')],
             img_size=self.test_size,
             preproc=ValTransform(legacy=legacy),

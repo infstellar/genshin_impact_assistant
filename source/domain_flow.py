@@ -1,9 +1,10 @@
 import time
-from unit import *
 
 import pyautogui
+
 import combat_loop
 import flow_state as ST
+import generic_lib
 import img_manager
 import interaction_background
 import movement
@@ -13,7 +14,7 @@ import text_manager as textM
 import timer_module
 import yolox_api
 from base_threading import BaseThreading
-import generic_lib
+from unit import *
 
 
 class DomainFlow(BaseThreading):
@@ -34,7 +35,7 @@ class DomainFlow(BaseThreading):
         self.combat_loop.start()
 
         domain_json = load_json("auto_domain.json")
-        
+
         domain_times = domain_json["domain_times"]
         self.lockOnFlag = 0
         self.move_num = 2.5
@@ -92,10 +93,10 @@ class DomainFlow(BaseThreading):
         if cap is None:
             cap = self.itt.capture()
             cap = self.itt.png2jpg(cap, channel='ui')
-            
+
         if generic_lib.f_recognition(self.itt):
-        # if pdocr_api.ocr.get_text_position(self.itt.crop_image(cap, PosiM.posi_domain['Start']),
-        #                                    textM.text(textM.start_challenge)) != -1:
+            # if pdocr_api.ocr.get_text_position(self.itt.crop_image(cap, PosiM.posi_domain['Start']),
+            #                                    textM.text(textM.start_challenge)) != -1:
             return True
         else:
             return False
@@ -112,8 +113,8 @@ class DomainFlow(BaseThreading):
 
     def _Trigger_GETTING_REAWARD(self, cap):  # Not in using
         if generic_lib.f_recognition(self.itt):
-        # if pdocr_api.ocr.get_text_position(self.itt.crop_image(cap, PosiM.posi_domain['ClaimRewards']),
-        #                                    textM.text(textM.claim_rewards)) != -1:
+            # if pdocr_api.ocr.get_text_position(self.itt.crop_image(cap, PosiM.posi_domain['ClaimRewards']),
+            #                                    textM.text(textM.claim_rewards)) != -1:
             return True
         else:
             return False
@@ -180,7 +181,7 @@ class DomainFlow(BaseThreading):
                 self.ahead_timer.reset()
 
             movement.view_to_angle(-90)
-            
+
             # time.sleep(0.2)
 
             # cap = self.itt.capture(posi=PosiM.posi_domain["ClaimRewards"])  # posi=PosiM.posi_domain["ClaimRewards"]
@@ -188,17 +189,17 @@ class DomainFlow(BaseThreading):
 
             if generic_lib.f_recognition(self.itt):
                 break
-            
-            t = self.fast_move_timer.loop_time() # max check up speed: 1/10 second
-            if t <= 1/10:
-                time.sleep(1/15-t)
-            
+
+            t = self.fast_move_timer.loop_time()  # max check up speed: 1/10 second
+            if t <= 1 / 10:
+                time.sleep(1 / 15 - t)
+
             # if pdocr_api.ocr.get_text_position(cap, textM.text(textM.claim_rewards)) != -1:
             #     self.current_state = ST.END_MOVETO_TREE
             #     return 0
-            
+
         self.current_state = ST.END_MOVETO_TREE
-        
+
     def Flow_IN_ATTAIN_REAWARD(self):
         self.itt.key_up('w')
 
@@ -211,11 +212,8 @@ class DomainFlow(BaseThreading):
             elif self.resin_mode == '20':
                 self.itt.appear_then_click(imgname=img_manager.USE_20RESIN_DOBLE_CHOICES)
 
-            
-            
             if pdocr_api.ocr.get_text_position(self.itt.capture(jpgmode=3), textM.text(textM.domain_obtain)) != -1:
                 break
-            
 
         time.sleep(2)
         self.current_state = ST.END_ATTAIN_REAWARD
@@ -241,14 +239,14 @@ class DomainFlow(BaseThreading):
                 self.Flow_INIT_MOVETO_CHALLENGE()
 
             elif self.current_state == ST.BEFORE_MOVETO_CHALLENGE:
-                
+
                 if self.checkup_stop_func():
                     break
                 time.sleep(5)
-                
+
                 if self.fast_mode:
                     self.itt.key_down('w')
-                
+
                 self.while_sleep = 0
                 self.current_state = ST.IN_MOVETO_CHALLENGE
 
@@ -262,10 +260,10 @@ class DomainFlow(BaseThreading):
                 if self._Trigger_AFTER_MOVETO_CHALLENGE():
                     self.while_sleep = 0.2
                     self.current_state = ST.INIT_CHALLENGE
-                
-                t = self.fast_move_timer.loop_time() # max check up speed: 1/10 second
-                if t <= 1/10:
-                    time.sleep(1/10-t)
+
+                t = self.fast_move_timer.loop_time()  # max check up speed: 1/10 second
+                if t <= 1 / 10:
+                    time.sleep(1 / 10 - t)
                 else:
                     pass
                     # logger.debug('low speed: ' + str(t))

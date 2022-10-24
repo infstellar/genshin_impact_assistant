@@ -10,19 +10,17 @@ import os
 import os.path
 import pickle
 import xml.etree.ElementTree as ET
-from loguru import logger
 
 import cv2
 import numpy as np
+from loguru import logger
 
 from yolox.evaluators.voc_eval import voc_eval
-
 from .datasets_wrapper import Dataset
 from .voc_classes import VOC_CLASSES
 
 
 class AnnotationTransform(object):
-
     """Transforms a VOC annotation into a Tensor of bbox coords and label index
     Initilized with a dictionary lookup of classnames to indexes
 
@@ -82,7 +80,6 @@ class AnnotationTransform(object):
 
 
 class VOCDetection(Dataset):
-
     """
     VOC Detection Dataset Object
 
@@ -101,14 +98,14 @@ class VOCDetection(Dataset):
     """
 
     def __init__(
-        self,
-        data_dir,
-        image_sets=[("2007", "trainval"), ("2012", "trainval")],
-        img_size=(416, 416),
-        preproc=None,
-        target_transform=AnnotationTransform(),
-        dataset_name="VOC0712",
-        cache=False,
+            self,
+            data_dir,
+            image_sets=[("2007", "trainval"), ("2012", "trainval")],
+            img_size=(416, 416),
+            preproc=None,
+            target_transform=AnnotationTransform(),
+            dataset_name="VOC0712",
+            cache=False,
     ):
         super().__init__(img_size)
         self.root = data_dir
@@ -122,10 +119,10 @@ class VOCDetection(Dataset):
         self._classes = VOC_CLASSES
         self.ids = list()
         for name in image_sets:
-            #self._year = year
+            # self._year = year
             rootpath = self.root
             for line in open(
-                os.path.join(rootpath, "ImageSets", "Main", name + ".txt")
+                    os.path.join(rootpath, "ImageSets", "Main", name + ".txt")
             ):
                 self.ids.append((rootpath, line.strip()))
 
@@ -279,7 +276,7 @@ class VOCDetection(Dataset):
         return np.mean(mAPs), mAPs[0]
 
     def _get_voc_results_file_template(self):
-        filename = "comp4_det_test" + "_{:s}.txt"#:s
+        filename = "comp4_det_test" + "_{:s}.txt"  #:s
         filedir = os.path.join(self.root, "results")
         if not os.path.exists(filedir):
             os.makedirs(filedir)
@@ -314,7 +311,7 @@ class VOCDetection(Dataset):
     def _do_python_eval(self, output_dir="output", iou=0.5):
         rootpath = self.root
         name = self.image_set[0][1]
-        annopath = os.path.join(rootpath, "Annotations", "{:s}.xml")#:s
+        annopath = os.path.join(rootpath, "Annotations", "{:s}.xml")  #:s
         print(annopath)
         imagesetfile = os.path.join(rootpath, "ImageSets", "Main", name + ".txt")
         cachedir = os.path.join(

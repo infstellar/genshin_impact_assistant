@@ -58,7 +58,6 @@ import pytweening
 
 print('import: PyQt5.QtWidgets')
 from PyQt5.QtWidgets import QApplication
-from PyQt5.QtGui import *
 
 print('import: win32gui,sys')
 import win32gui
