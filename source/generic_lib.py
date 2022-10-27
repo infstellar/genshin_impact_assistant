@@ -1,11 +1,14 @@
+import img_manager
+import time
 from interaction_background import InteractionBGD
-import img_manager, time
 
-def f_recognition(itt:InteractionBGD, mode='button_only'):
-    if itt.get_img_existence(img_manager.F_BUTTON) == True:
+
+def f_recognition(itt: InteractionBGD, mode='button_only'):
+    if itt.get_img_existence(img_manager.F_BUTTON):
         return True
     else:
         return False
+
 
 if __name__ == '__main__':
     itt = InteractionBGD()

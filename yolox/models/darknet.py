@@ -56,14 +56,16 @@ class Darknet(nn.Module):
             *self.make_spp_block([in_channels, in_channels * 2], in_channels * 2),
         )
 
-    def make_group_layer(self, in_channels: int, num_blocks: int, stride: int = 1):
-        "starts with conv layer then has `num_blocks` `ResLayer`"
+    @staticmethod
+    def make_group_layer(in_channels: int, num_blocks: int, stride: int = 1):
+        """starts with conv layer then has `num_blocks` `ResLayer`"""
         return [
             BaseConv(in_channels, in_channels * 2, ksize=3, stride=stride, act="lrelu"),
             *[(ResLayer(in_channels * 2)) for _ in range(num_blocks)],
         ]
 
-    def make_spp_block(self, filters_list, in_filters):
+    @staticmethod
+    def make_spp_block(filters_list, in_filters):
         m = nn.Sequential(
             *[
                 BaseConv(in_filters, filters_list[0], 1, stride=1, act="lrelu"),

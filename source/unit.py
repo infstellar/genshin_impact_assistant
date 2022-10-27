@@ -1,7 +1,6 @@
 import json
 import os
 import sys
-import time
 
 from loguru import logger
 

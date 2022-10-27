@@ -68,8 +68,10 @@ def get_chara_list(team_name='team.json'):
 
 
 class Combat_Controller(BaseThreading):
-    def __init__(self, chara_list: list[character.Character] = get_chara_list()):
+    def __init__(self, chara_list=None):
         super().__init__()
+        if chara_list is None:
+            chara_list = get_chara_list()
         self.setName('Combat_Controller')
 
         self.chara_list = chara_list
@@ -89,34 +91,34 @@ class Combat_Controller(BaseThreading):
         # self.super_stop_func=super_stop_func
 
     def run(self):
-        while (1):
+        while 1:
             time.sleep(0.5)
             if self.stop_threading_flag:
                 self.ao.stop_threading()
                 self.sco.stop_threading()
                 return 0
 
-            if self.pause_threading_flag == False:
+            if not self.pause_threading_flag:
                 if self.checkup_stop_func():
                     break
 
-                if self.sco.get_working_statement() == False:
+                if not self.sco.get_working_statement():
                     self.sco.continue_threading()
                     time.sleep(1)
                 else:
                     time.sleep(0.2)
 
-                if self.ao.get_working_statement() == False:
+                if not self.ao.get_working_statement():
                     self.ao.continue_threading()
                 else:
                     pass
 
             else:
-                if self.sco.get_working_statement() == True:
+                if self.sco.get_working_statement():
                     self.sco.pause_threading()
                     time.sleep(1)
 
-                if self.ao.get_working_statement() == True:
+                if self.ao.get_working_statement():
                     self.ao.pause_threading()
                     time.sleep(1)
                 else:

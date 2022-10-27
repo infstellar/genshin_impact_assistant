@@ -10,19 +10,17 @@ import os
 import os.path
 import pickle
 import xml.etree.ElementTree as ET
-from loguru import logger
 
 import cv2
 import numpy as np
+from loguru import logger
 
 from yolox.evaluators.voc_eval import voc_eval
-
 from .datasets_wrapper import Dataset
 from .voc_classes import VOC_CLASSES
 
 
 class AnnotationTransform(object):
-
     """Transforms a VOC annotation into a Tensor of bbox coords and label index
     Initilized with a dictionary lookup of classnames to indexes
 
@@ -68,8 +66,8 @@ class AnnotationTransform(object):
                 # scale height or width
                 # cur_pt = cur_pt / width if i % 2 == 0 else cur_pt / height
                 bndbox.append(cur_pt)
-            #print(name)
-            #name='tree'
+            # print(name)
+            # name='tree'
             label_idx = self.class_to_ind[name]
             bndbox.append(label_idx)
             res = np.vstack((res, bndbox))  # [xmin, ymin, xmax, ymax, label_ind]
@@ -83,7 +81,6 @@ class AnnotationTransform(object):
 
 
 class VOCDetection(Dataset):
-
     """
     VOC Detection Dataset Object
 
@@ -102,17 +99,19 @@ class VOCDetection(Dataset):
     """
 
     def __init__(
-        self,
-        data_dir,
-        #image_sets=[("2007", "trainval"), ("2012", "trainval")],
-        image_sets=[('train')],
-        img_size=(416, 416),
-        preproc=None,
-        target_transform=AnnotationTransform(),
-        dataset_name="VOC0712",
-        cache=False,
+            self,
+            data_dir,
+            # image_sets=[("2007", "trainval"), ("2012", "trainval")],
+            image_sets=None,
+            img_size=(416, 416),
+            preproc=None,
+            target_transform=AnnotationTransform(),
+            dataset_name="VOC0712",
+            cache=False,
     ):
         super().__init__(img_size)
+        if image_sets is None:
+            image_sets = ['train']
         self.root = data_dir
         self.image_set = image_sets
         self.img_size = img_size
@@ -123,13 +122,13 @@ class VOCDetection(Dataset):
         self._imgpath = os.path.join("%s", "JPEGImages", "%s.jpg")
         self._classes = VOC_CLASSES
         self.ids = list()
-        #for (year, name) in image_sets:
+        # for (year, name) in image_sets:
         for name in image_sets:
-            #self._year = year
-            #rootpath = os.path.join(self.root, "VOC" + year)
+            # self._year = year
+            # rootpath = os.path.join(self.root, "VOC" + year)
             rootpath = self.root
             for line in open(
-                os.path.join(rootpath, "ImageSets", "Main", name + ".txt")
+                    os.path.join(rootpath, "ImageSets", "Main", name + ".txt")
             ):
                 self.ids.append((rootpath, line.strip()))
 
@@ -205,7 +204,7 @@ class VOCDetection(Dataset):
         res[:, :4] *= r
         resized_info = (int(height * r), int(width * r))
 
-        return (res, img_info, resized_info)
+        return res, img_info, resized_info
 
     def load_anno(self, index):
         return self.annotations[index][0]
@@ -284,7 +283,7 @@ class VOCDetection(Dataset):
 
     def _get_voc_results_file_template(self):
         filename = "comp4_det_test" + "_{:s}.txt"
-        #filedir = os.path.join(self.root, "results", "VOC" + self._year, "Main")
+        # filedir = os.path.join(self.root, "results", "VOC" + self._year, "Main")
         filedir = os.path.join(self.root, "results")
         if not os.path.exists(filedir):
             os.makedirs(filedir)
@@ -302,7 +301,7 @@ class VOCDetection(Dataset):
                 for im_ind, index in enumerate(self.ids):
                     index = index[1]
                     dets = all_boxes[cls_ind][im_ind]
-                    if dets == []:
+                    if not dets:
                         continue
                     for k in range(dets.shape[0]):
                         f.write(
@@ -317,23 +316,23 @@ class VOCDetection(Dataset):
                         )
 
     def _do_python_eval(self, output_dir="output", iou=0.5):
-        #rootpath = os.path.join(self.root, "VOC" + self._year)
+        # rootpath = os.path.join(self.root, "VOC" + self._year)
         rootpath = os.path.join(self.root)
         name = self.image_set[0][1]
-        if name=='a':
+        if name == 'a':
             name = 'val'
-        #annopath = os.path.join(rootpath, "Annotations", "{:s}.xml")
+        # annopath = os.path.join(rootpath, "Annotations", "{:s}.xml")
         annopath = os.path.join(rootpath, "Annotations", "{}.xml")
         imagesetfile = os.path.join(rootpath, "ImageSets", "Main", name + ".txt")
         cachedir = os.path.join(
-            #self.root, "annotations_cache", "VOC" + self._year, name
+            # self.root, "annotations_cache", "VOC" + self._year, name
             self.root, "annotations_cache"
         )
         if not os.path.exists(cachedir):
             os.makedirs(cachedir)
         aps = []
         # The PASCAL VOC metric changed in 2010
-        use_07_metric = True #if int(self._year) < 2010 else False
+        use_07_metric = True  # if int(self._year) < 2010 else False
         print("Eval IoU : {:.2f}".format(iou))
         if output_dir is not None and not os.path.isdir(output_dir):
             os.mkdir(output_dir)

@@ -1,28 +1,27 @@
-import argparse
+import os
 import os
 import time
-from loguru import logger
 
 import cv2
-
 import torch
+from loguru import logger
 
 from yolox.data.data_augment import ValTransform
 from yolox.data.datasets import COCO_CLASSES
-from yolox.exp import get_exp
-from yolox.utils import fuse_model, get_model_info, postprocess, vis
+from yolox.utils import postprocess, vis
+
 
 class Predictor(object):
     def __init__(
-        self,
-        model,
-        exp,
-        cls_names=COCO_CLASSES,
-        trt_file=None,
-        decoder=None,
-        device="cpu",
-        fp16=False,
-        legacy=False,
+            self,
+            model,
+            exp,
+            cls_names=COCO_CLASSES,
+            trt_file=None,
+            decoder=None,
+            device="cpu",
+            fp16=False,
+            legacy=False,
     ):
         self.model = model
         self.cls_names = cls_names

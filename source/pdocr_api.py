@@ -33,7 +33,7 @@ RETURN_TEXT = 1
 RETURN_POSITION = 0
 
 
-class Paddleocr_API():
+class Paddleocr_API:
 
     def __init__(self, lang='ch', device='gpu'):
         device = globaldevice
@@ -64,7 +64,8 @@ class Paddleocr_API():
     #     im_show = Image.fromarray(im_show)
     #     im_show.save('result.jpg')
 
-    def find_text(self, result, text, mode=APPROXIMATE_MATCHING):
+    @staticmethod
+    def find_text(result, text, mode=APPROXIMATE_MATCHING):
         if mode == APPROXIMATE_MATCHING:
             for i in range(len(result)):
                 if text in result[i][1][0]:
@@ -102,7 +103,7 @@ class Paddleocr_API():
                     logger.debug('TWICE_FRONTANDBACK_SEQUENTIAL_MATCHING found ' + text + '|function name: ' +
                                  inspect.getframeinfo(inspect.currentframe().f_back)[2])
                     result.append(result[i])
-            if result != []:
+            if result:
                 return result
         return None
 
@@ -152,9 +153,9 @@ class Paddleocr_API():
                 num = ''
 
             for i in num:
-                if i in ['0','1','2','3','4','5','6','7','8','9','.']:
+                if i in ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.']:
                     is_num = True
-            
+
             if is_number(num):
                 res_num = float(num)
             else:
@@ -165,7 +166,7 @@ class Paddleocr_API():
 
     def is_img_num_plus(self, imsrc):
         ret1, ret2, t = self.is_img_num(imsrc)
-        if ret1 == None:
+        if ret1 is not None:
             ret1, ret2, t = self.is_img_num(imsrc)
         logger.debug(str(ret1) + ' ' + str(ret2) + ' ' + str(t) + ' |function name: ' +
                      inspect.getframeinfo(inspect.currentframe().f_back)[2])
