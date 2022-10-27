@@ -20,7 +20,7 @@ imgs_dict = {
     "IN_DOMAIN": imsrc_IN_DOMAIN,
     "USE_20RESIN_DOBLE_CHOICES": imsrc_USE_20RESIN_DOBLE_CHOICES,
     "USE_20X2RESIN_DOBLE_CHOICES": imsrc_USE_20X2RESIN_DOBLE_CHOICES,
-    "F_BUTTON":imsrc_F_BUTTON
+    "F_BUTTON": imsrc_F_BUTTON
 }
 
 matching_rate_dict = {
@@ -31,7 +31,7 @@ matching_rate_dict = {
 }
 
 alpha_dict = {
-    "F_BUTTON":254
+    "F_BUTTON": 254
 }
 
 
@@ -84,14 +84,14 @@ def auto_import_img(im_path, name):
         draw_1 = cv2.rectangle(d, (x, y), (x + w, y + h), (0, 255, 0), 2)
         qshow(draw_1)
         print('\"' + name + '\"', ':', [y, x, y + h, x + w])
-        a,b,c,d=map(int,input('x,y,w,h: ').split(','))
-        if a==0 and b==0 and c==0 and d==0:
+        a, b, c, d = map(int, input('x,y,w,h: ').split(','))
+        if a == 0 and b == 0 and c == 0 and d == 0:
             break
         else:
-            x+=a
-            y+=b
-            w+=c
-            h+=d
+            x += a
+            y += b
+            w += c
+            h += d
     return [y, x, y + h, x + w]
     # p = [x + w / 2, y + h / 2]
 
@@ -120,11 +120,11 @@ def get_rect(im_src, origin_img, ret_mode=0):
             draw_1 = cv2.rectangle(draw_1, (x, y), (x + w, y + h), (0, 255, 0), 1)
 
         x, y, w, h = bound_rect[max_id]
-    
+
     # qshow(draw_1)
     # print('\"'+name+'\"',':',[y,x,y+h,x+w])
     if ret_mode == 0:
-        if len(contours)==0:
+        if len(contours) == 0:
             return None
         return [y, x, y + h, x + w]
     elif ret_mode == 1:

@@ -1,15 +1,16 @@
+import threading
 from ctypes.wintypes import RECT
 
 import numpy as np
-import threading
 
 from timer_module import Timer
 from unit import *
 
-class ScreenCapture():
+
+class ScreenCapture:
     def __init__(self):
         logger.debug('static_lib_created')
-        
+
         self.GetDC = ctypes.windll.user32.GetDC
         self.CreateCompatibleDC = ctypes.windll.gdi32.CreateCompatibleDC
         self.GetClientRect = ctypes.windll.user32.GetClientRect
@@ -23,14 +24,14 @@ class ScreenCapture():
         self.PostMessageW = ctypes.windll.user32.PostMessageW
         self.MapVirtualKeyW = ctypes.windll.user32.MapVirtualKeyW
         self.VkKeyScanA = ctypes.windll.user32.VkKeyScanA
-        self.handle=ctypes.windll.user32.FindWindowW(None, '原神')
-        
-        self.fps = 1/30
+        self.handle = ctypes.windll.user32.FindWindowW(None, '原神')
+
+        self.fps = 1 / 30
         self.cap_timer = Timer()
         self.wrtting_flag = False
         self.last_cap = self.capture_handle()
         self.cap_timer.reset()
-    
+
     def capture_handle(self):
         # 获取窗口客户区的大小
         handle = self.handle
@@ -44,17 +45,17 @@ class ScreenCapture():
         self.SelectObject(cdc, bitmap)
         self.BitBlt(cdc, 0, 0, width, height, dc, 0, 0, self.SRCCOPY)
         # 截图是BGRA排列，因此总元素个数需要乘以4
-        total_bytes = width*height*4
+        total_bytes = width * height * 4
         buffer = bytearray(total_bytes)
-        byte_array = ctypes.c_ubyte*total_bytes
+        byte_array = ctypes.c_ubyte * total_bytes
         self.GetBitmapBits(bitmap, total_bytes, byte_array.from_buffer(buffer))
         self.DeleteObject(bitmap)
         self.DeleteObject(cdc)
         self.ReleaseDC(handle, dc)
         # 返回截图数据为numpy.ndarray
-        ret=np.frombuffer(buffer, dtype=np.uint8).reshape(height, width, 4)
+        ret = np.frombuffer(buffer, dtype=np.uint8).reshape(height, width, 4)
         return ret
-    
+
     def get_capture(self):
         if self.cap_timer.getDiffTime() >= self.fps:
             # print('recap', self.cap_timer.getDiffTime())
@@ -69,21 +70,23 @@ class ScreenCapture():
         # print(self.last_cap.shape)
         return self.last_cap
 
-SCREENCAPTURE=ScreenCapture()
+
+SCREENCAPTURE = ScreenCapture()
+
 
 class testtest(threading.Thread):
     def __init__(self):
         super().__init__()
-    
+
     def run(self):
-        while(1):
+        while 1:
             SCREENCAPTURE.get_capture()
 
-if __name__=='__main__':
-    tt=testtest()
-    tt1=testtest()
+
+if __name__ == '__main__':
+    tt = testtest()
+    tt1 = testtest()
     tt.start()
     tt1.start()
     for i in range(5):
         time.sleep(2)
-        

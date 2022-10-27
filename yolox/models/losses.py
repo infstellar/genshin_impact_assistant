@@ -30,7 +30,7 @@ class IOUloss(nn.Module):
         en = (tl < br).type(tl.type()).prod(dim=1)
         area_i = torch.prod(br - tl, 1) * en
         area_u = area_p + area_g - area_i
-        iou = (area_i) / (area_u + 1e-16)
+        iou = area_i / (area_u + 1e-16)
 
         if self.loss_type == "iou":
             loss = 1 - iou ** 2

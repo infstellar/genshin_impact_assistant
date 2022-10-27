@@ -1,7 +1,5 @@
 import time
 
-import pyautogui
-
 import img_manager
 import pdocr_api
 import posi_manager
@@ -77,14 +75,14 @@ class TasticOperator(BaseThreading):
         cap = self.itt.png2jpg(cap, channel='ui', alpha_num=100)
         ret = pdocr_api.ocr.is_img_num_plus(cap)
 
-        if ret[0] != False:
+        if ret[0]:
             return True
         else:
             cap = self.itt.capture(posi=posi_manager.posi_chara_e)
             cap = self.itt.png2jpg(cap, channel='ui', alpha_num=100)
             ret = pdocr_api.ocr.is_img_num_plus(cap)
 
-            if ret[0] != False:
+            if ret[0]:
                 return True
             else:
                 return False
@@ -98,7 +96,7 @@ class TasticOperator(BaseThreading):
             if self.checkup_stop_func():
                 return 0
             situation_code = 1
-            self.itt.keyPress('spacebar')
+            self.itt.key_press('spacebar')
             logger.debug('Unconventionality Situation: COMING_OUT_BY_SPACE')
             time.sleep(0.1)
 
@@ -145,11 +143,11 @@ class TasticOperator(BaseThreading):
 
     def do_attack(self):
         self.chara_waiting()
-        self.itt.leftClick()
+        self.itt.left_click()
         self.itt.delay(0.1)
 
     def do_down_attack(self):
-        self.itt.leftClick()
+        self.itt.left_click()
         self.itt.delay(0.1)
 
     def do_use_e(self, times=0):
@@ -164,7 +162,7 @@ class TasticOperator(BaseThreading):
 
         self.chara_waiting()
         logger.debug('do_use_e')
-        self.itt.keyPress('e')
+        self.itt.key_press('e')
         self.itt.delay(0.2)
         if (not self._is_e_release()) and E_STRICT_MODE:
             self.do_use_e(times=times + 1)
@@ -181,13 +179,13 @@ class TasticOperator(BaseThreading):
 
         self.chara_waiting()
         logger.debug('do_use_longe')
-        self.itt.keyPress('s')
-        self.itt.keyDown('e')
+        self.itt.key_press('s')
+        self.itt.key_down('e')
         self.itt.delay(self.character.Epress_time)
-        self.itt.keyUp('e')
+        self.itt.key_up('e')
         if self.checkup_stop_func():
             return 0
-        self.itt.keyPress('w')
+        self.itt.key_press('w')
         self.itt.delay(0.2)
         if (not self._is_e_release()) and E_STRICT_MODE:
             self.do_use_longe(times=times + 1)
@@ -200,7 +198,7 @@ class TasticOperator(BaseThreading):
             return -1
 
         self.chara_waiting()
-        self.itt.keyPress('q')
+        self.itt.key_press('q')
         self.itt.delay(0.2)
         self.chara_waiting()
         if (not self.is_q_ready()) and E_STRICT_MODE:
@@ -212,37 +210,37 @@ class TasticOperator(BaseThreading):
         if self.checkup_stop_func():
             return 0
         self.chara_waiting(mode=1)
-        self.itt.leftDown()
+        self.itt.left_down()
         self.itt.delay(2.5)
-        self.itt.leftUp()
+        self.itt.left_up()
 
     def do_jump(self):
         self.chara_waiting(mode=1)
-        self.itt.keyPress('spacebar')
+        self.itt.key_press('spacebar')
 
     def do_jump_attack(self):
         self.chara_waiting(mode=1)
-        self.itt.keyPress('spacebar')
+        self.itt.key_press('spacebar')
         self.itt.delay(0.3)
-        self.itt.leftClick()
+        self.itt.left_click()
 
     def do_sprint(self):
-        self.itt.rightClick()
+        self.itt.right_click()
 
     def do_aim(self):
         if self.checkup_stop_func():
             return 0
         self.chara_waiting(mode=1)
-        self.itt.keyPress('r')
+        self.itt.key_press('r')
 
     def do_unaim(self):
         if self.checkup_stop_func():
             return 0
-        self.itt.keyPress('r')
+        self.itt.key_press('r')
 
     def is_q_ready(self):
-        cap = self.itt.capture(posi = posi_manager.posi_chara_q)
-        cap = self.itt.png2jpg(cap, channel='ui',alpha_num=200)
+        cap = self.itt.capture(posi=posi_manager.posi_chara_q)
+        cap = self.itt.png2jpg(cap, channel='ui', alpha_num=200)
         # p = posi_manager.posi_chara_q_point
         if cap.max() > 0:
             return True

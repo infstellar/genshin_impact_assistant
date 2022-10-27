@@ -38,8 +38,6 @@ class AlphaLoop(BaseThreading):
                     self.combat_loop.continue_threading()
                 self.working_flag = True
 
-            
-
     # def stop_thread(self,mode:int=0):
     #     if mode==0:
     #         self.stop_flag=True
