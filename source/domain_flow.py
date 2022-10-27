@@ -145,7 +145,9 @@ class DomainFlow(BaseThreading):
 
         if self.checkup_stop_func():
             return 0
-        time.sleep(5)
+        time.sleep(2)
+        movement.reset_view()
+        time.sleep(3)
         movement.view_to_angle(-90)
 
         self.current_state = ST.BEFORE_MOVETO_CHALLENGE
@@ -298,6 +300,7 @@ class DomainFlow(BaseThreading):
 
             elif self.current_state == ST.INIT_FINGING_TREE:
                 logger.info('正在激活石化古树')
+                self.lockOnFlag = 0
                 self.current_state = ST.IN_FINGING_TREE
 
             elif self.current_state == ST.IN_FINGING_TREE:
