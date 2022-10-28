@@ -243,11 +243,11 @@ class TasticOperator(BaseThreading):
         cap = self.itt.png2jpg(cap, channel='ui', alpha_num = 200)
         # p = posi_manager.posi_chara_q_point
         if cap.max() > 10:
-            print(cap.max())
+            # print(cap.max())
             return True
         
         else:
-            print(cap.max())
+            # print(cap.max())
             return False
 
     def estimate_e_ready(self, tastic):
@@ -261,7 +261,7 @@ class TasticOperator(BaseThreading):
 
     def estimate_q_ready(self, tastic):
         is_ready = self.is_q_ready()
-        print(is_ready)
+        # print(is_ready)
         tas = tastic[tastic.index('?') + 1:]
         tas = tas.split(':')
         if is_ready:
