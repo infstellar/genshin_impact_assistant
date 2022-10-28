@@ -37,6 +37,8 @@ class DomainFlow(BaseThreading):
         domain_json = load_json("auto_domain.json")
 
         domain_times = domain_json["domain_times"]
+        if domain_times == 0:
+            domain_times = int(input("请输入秘境次数"))
         self.lockOnFlag = 0
         self.move_num = 2.5
 
@@ -365,7 +367,6 @@ class DomainFlow(BaseThreading):
                     time.sleep(0.5)
                     self.itt.left_click()
                     # exit all threads
-                    self.gdr.stop_thread()
                     self.combat_loop.stop_threading()
                     self.stop_threading()
                     time.sleep(10)

@@ -92,7 +92,7 @@ class Combat_Controller(BaseThreading):
 
     def run(self):
         while 1:
-            time.sleep(0.5)
+            time.sleep(0.2)
             if self.stop_threading_flag:
                 self.ao.stop_threading()
                 self.sco.stop_threading()
