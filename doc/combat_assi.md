@@ -82,20 +82,21 @@
 
 ## 其他设置
 
-|设置项|介绍|
-|----|----|
-|`Elast_time`|E技能持续时间，没有则为0|
-|`Qlast_time`|Q技能持续时间，没有则为0|
-|`E_short_cd_time`|短Ecd时间，不能为0|
-|`Epress_time`|长按E的时间，没有则为0|
-|`E_long_cd_time`|长Ecd时间，没有则为0|
-|`Ecd_float_time`|在E技能冷却还有x秒前即切换至该角色，可以为0|
-|`Ecd_press_time`|按E技能的时间|
-|`n`|角色在队伍中的位置（1~4），不可重复，不可为0|
+| 设置项               | 介绍                       |
+|-------------------|--------------------------|
+| `Elast_time`      | E技能持续时间，没有则为0            |
+| `Qlast_time`      | Q技能持续时间，没有则为0            |
+| `E_short_cd_time` | 短Ecd时间，不能为0              |
+| `Epress_time`     | 长按E的时间，没有则为0             |
+| `E_long_cd_time`  | 长Ecd时间，没有则为0             |
+| `Ecd_float_time`  | 在E技能冷却还有x秒前即切换至该角色，可以为0  |
+| `Ecd_press_time`  | 按E技能的时间                  |
+| `n`               | 角色在队伍中的位置（1~4），不可重复，不可为0 |
 
 ## 自动配置team文件
 
-在`character.json`文件中有一些已经配置好的角色,此时在`team.json`文件中只需要将`autofill`设置为`true`,并配置`name`,`priority`,`n`,`trigger`即可。
+在`character.json`文件中有一些已经配置好的角色,此时在`team.json`文件中只需要将`autofill`设置为`true`,并配置`name`
+,`priority`,`n`,`trigger`即可。
 在`character.json`中的`verify`属性可以查看该角色操作是否被验证通过。
 
 ## 角色元素战技、元素爆发图片设置

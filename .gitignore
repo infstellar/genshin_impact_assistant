@@ -127,8 +127,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
-
-dist/
 test_py/
 outputimgs/
 tools/snapshot/
@@ -142,4 +140,3 @@ dev_tools/origin_text.txt
 source/test11.jpg
 test11 copy.jpg
 .gitignore
-config/config.json

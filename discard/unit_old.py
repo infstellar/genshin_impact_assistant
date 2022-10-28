@@ -58,7 +58,6 @@ import pytweening
 
 print('import: PyQt5.QtWidgets')
 from PyQt5.QtWidgets import QApplication
-from PyQt5.QtGui import *
 
 print('import: win32gui,sys')
 import win32gui
@@ -82,7 +81,7 @@ RETURN_TEXT = 1
 RETURN_POSITION = 0
 
 
-class winInfo():
+class winInfo:
     def __init__(self, x, y, w, h, mainHnd):
         self.x = x
         self.y = y
@@ -91,7 +90,9 @@ class winInfo():
         self.mainHnd = mainHnd
         self.winpos = [x, y]
 
-    def getRect(self, rangePosition=[0, 0, 0, 0]):
+    def getRect(self, rangePosition=None):
+        if rangePosition is None:
+            rangePosition = [0, 0, 0, 0]
         return [self.x, self.y, self.w + self.x, self.h + self.y]
 
 
@@ -111,7 +112,9 @@ def getWindowsInfo(classname, title):
     return winInfo(x, y, w, h, mainHnd)
 
 
-def GetScrWindowsImg(wininfo: winInfo, rangePosition=[0, 0, 0, 0]):
+def GetScrWindowsImg(wininfo: winInfo, rangePosition=None):
+    if rangePosition is None:
+        rangePosition = [0, 0, 0, 0]
     hwnd = wininfo.mainHnd
     app = QApplication(sys.argv)
     screen = QApplication.primaryScreen()
@@ -135,7 +138,7 @@ def GetScrWindowsImg(wininfo: winInfo, rangePosition=[0, 0, 0, 0]):
     return imsrc, [bbox[0], bbox[1]]  # BGR
 
 
-class ImgAnalyse():
+class ImgAnalyse:
 
     def __init__(self, lang='ch'):
         self.ocr = PaddleOCR(use_angle_cls=True, lang=lang,
@@ -152,7 +155,8 @@ class ImgAnalyse():
         res = self.ImgAnalyse(imsrc)
         return res, position
 
-    def SaveResult(self, imsrc, result):
+    @staticmethod
+    def SaveResult(imsrc, result):
         from PIL import Image
         # image = Image.open(img_path).convert('RGB')
         boxes = [line[0] for line in result]
@@ -162,7 +166,8 @@ class ImgAnalyse():
         im_show = Image.fromarray(im_show)
         im_show.save('result.jpg')
 
-    def findText(self, result, text, mode=APPROXIMATE_MATCHING):
+    @staticmethod
+    def findText(result, text, mode=APPROXIMATE_MATCHING):
         if mode == APPROXIMATE_MATCHING:
             for i in range(len(result)):
                 if text in result[i][1][0]:
@@ -197,7 +202,7 @@ class ImgAnalyse():
                 if (i != len(result) - 1) and (text[0] in result[i][1][0]) and (text[1] in result[i + 1][1][0]):
                     print('TWICE_FRONTANDBACK_SEQUENTIAL_MATCHING found ', text, end='')
                     result.append(result[i])
-            if result != []:
+            if result:
                 return result
         return None
 
@@ -214,7 +219,7 @@ class ImgAnalyse():
             print(end=defaultend)
         # cv2.imshow('pic',imsrc)
         # cv2.waitKey(0)
-        if resposition != None:
+        if resposition is not None:
             # print('resposition',resposition)
             if mode == REPEATLY_MATCHING and returnMode == RETURN_POSITION:
                 result = []
@@ -232,7 +237,8 @@ class ImgAnalyse():
             print('can not find the text:', text)
             return -1
 
-    def imgComparison(self, hwnd: winInfo, rangePosition, objectImg, mode=0, minThreshold=0, name='', channel=-1):
+    @staticmethod
+    def imgComparison(hwnd: winInfo, rangePosition, objectImg, mode=0, minThreshold=0, name='', channel=-1):
         imsrc, position = GetScrWindowsImg(hwnd, rangePosition)
 
         img = cv2.cvtColor(imsrc, cv2.COLOR_RGB2BGR)

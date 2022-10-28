@@ -18,15 +18,15 @@ class Video_Cap(threading.Thread):
         pass
 
     def registered_events(self, event_func: function, ret_func: function, tag: str):
-        self.event[tag] = (event_func)
-        self.ret_event[tag] = (ret_func)
+        self.event[tag] = event_func
+        self.ret_event[tag] = ret_func
 
     def logout(self, tag):
         del self.event[tag]
         del self.ret_event[tag]
 
     def run(self):
-        while (1):
+        while 1:
             if self.stop_flag:
                 time.sleep(1)
                 continue
