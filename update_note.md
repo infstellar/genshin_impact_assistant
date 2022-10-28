@@ -22,23 +22,31 @@
 
 ## Done v0.2.4
 
-- 多线程架构优化
+- feature: 将`domain_times`设为0时可以手动输入`domain_times`
 
-- fix: 角色大招动画结束后有几率切换角色失败   @海石
+- feature: 自动战斗新增：自动瞄准 Readme: False
 
-- 自动瞄准 Readme: False
+- feature: 半自动走位(测试版)
 
-- 代码优化
+- fix: 角色大招动画结束后有几率切换角色失败
 
-- fix: 优化秘境进入流畅度 Readme: False
+- fix: 秘境中大招检测灵敏度下降
 
-- 大部分操作换成appear_then_click/appear_then_press
+- optimization: 变量、函数、代码命名优化，代码优化 @hongshinn
 
-- 图像识别优化
+- optimization: 多线程架构优化
 
-- 半自动走位
+- optimization: 代码优化
 
-- config细化 Readme: False
+- optimization: 优化秘境进入流畅度 Readme: False
+
+- optimization: 部分操作换成appear_then_click/appear_then_press
+
+- optimization: 图像识别优化
+
+- optimization: config细化 Readme: False
+
+- 修复了一些bug
 
 ## Doing
 
@@ -46,20 +54,20 @@
 
 ## To Do
 
-### v0.2.4 ETC: ~~2022-10-23~~ 2022-10-26
+### v0.2.4 ETC: ~~2022-10-23~~  ~~2022-10-26~~ 2022-10-28
+
+### v0.2.5 ETC: 2022-11-6
 
 - 自动战斗识别优化
 
 - 代码注释
 
-### v0.2.5 ETC: 2022-10-30
-
 - 自动寻路 v0.1
 
-### v0.2.6 ETC: 2022-11-6
+### v0.2.6
 
 - 自动寻路 v0.2
 
-### v0.3.0 ETC: Before 2023-1
+### v0.3.0
 
 - 自动安装，更新
