@@ -23,6 +23,7 @@ class AlphaLoop(BaseThreading):
         while 1:
             time.sleep(2)
             if self.stop_threading_flag:
+                self.combat_loop.stop_threading()
                 return 0
 
             if self.pause_threading_flag:
