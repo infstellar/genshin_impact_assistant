@@ -12,6 +12,7 @@ def extract_white_letters(image, threshold=128):
     maximum = cv2.max(cv2.max(r, g), b)
     return cv2.multiply(cv2.add(maximum, cv2.subtract(maximum, minimum)), 255.0 / threshold)
 
+
 def extract_letters(image, letter=(255, 255, 255), threshold=128):
     """Set letter color to black, set background color to white.
     Args:

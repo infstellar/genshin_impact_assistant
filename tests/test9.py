@@ -5,8 +5,8 @@ def get_extra_params():
     # 项目根目录
     root_path = "D:\Program Files\Anaconda\envs\GIA_py"
     extra_data = [
-        #("src\\res", "src\\res"),
-        #("config", "config"),
+        # ("src\\res", "src\\res"),
+        # ("config", "config"),
         ("Lib\\site-packages\\Shapely.libs", "Shapely.libs"),
         ("Lib\\site-packages\\paddle", "paddle"),
         ("Lib\\site-packages\\paddleocr", "paddleocr"),
@@ -24,16 +24,16 @@ def get_extra_params():
     for item in extra_data:
         src_path = os.path.join(root_path, item[0])
         params.extend(["--add-data", f"{src_path};{item[1]}"])
-    t=''
+    t = ''
     for i in params:
-        if i=='--add-data':
-            t=t+((i+' '))
+        if i == '--add-data':
+            t = t + (i + ' ')
         else:
-            t=t+(('\"'+i+'\"'+' '))
+            t = t + ('\"' + i + '\"' + ' ')
     return t
 
 
-#import paddleocr
+# import paddleocr
 
 
 print(get_extra_params())

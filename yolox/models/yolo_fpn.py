@@ -17,10 +17,12 @@ class YOLOFPN(nn.Module):
     def __init__(
         self,
         depth=53,
-        in_features=["dark3", "dark4", "dark5"],
+            in_features=None,
     ):
         super().__init__()
 
+        if in_features is None:
+            in_features = ["dark3", "dark4", "dark5"]
         self.backbone = Darknet(depth)
         self.in_features = in_features
 
@@ -35,7 +37,8 @@ class YOLOFPN(nn.Module):
         # upsample
         self.upsample = nn.Upsample(scale_factor=2, mode="nearest")
 
-    def _make_cbl(self, _in, _out, ks):
+    @staticmethod
+    def _make_cbl(_in, _out, ks):
         return BaseConv(_in, _out, ks, stride=1, act="lrelu")
 
     def _make_embedding(self, filters_list, in_filters):

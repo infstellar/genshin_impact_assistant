@@ -102,7 +102,7 @@ class Bottleneck(nn.Module):
 
 
 class ResLayer(nn.Module):
-    "Residual layer with `in_channels` inputs."
+    """Residual layer with `in_channels` inputs."""
 
     def __init__(self, in_channels: int):
         super().__init__()

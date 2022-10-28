@@ -4,7 +4,6 @@ import os
 import torch
 import torch.distributed as dist
 
-from yolox.data import get_yolox_datadir
 from yolox.exp import Exp as MyExp
 
 
@@ -42,8 +41,9 @@ class Exp(MyExp):
 
         with wait_for_the_master(local_rank):
             dataset = VOCDetection(
-                data_dir='D:\Program Data\IDEA\yolo3_test1\YOLOX\datasets\VOCdevkit',  #os.path.join(get_yolox_datadir(), "VOCdevkit"),
-                image_sets=[('train')],  # ('2007', 'trainval'), ('2012', 'trainval')
+                data_dir='D:\Program Data\IDEA\yolo3_test1\YOLOX\datasets\VOCdevkit',
+                # os.path.join(get_yolox_datadir(), "VOCdevkit"),
+                image_sets=['train'],  # ('2007', 'trainval'), ('2012', 'trainval')
                 img_size=self.input_size,
                 preproc=TrainTransform(
                     max_labels=100,
@@ -86,11 +86,10 @@ class Exp(MyExp):
             mosaic=not no_aug,
         )
 
-        dataloader_kwargs = {"num_workers": self.data_num_workers, "pin_memory": True}
-        dataloader_kwargs["batch_sampler"] = batch_sampler
+        dataloader_kwargs = {"num_workers": self.data_num_workers, "pin_memory": True, "batch_sampler": batch_sampler,
+                             "worker_init_fn": worker_init_reset_seed}
 
         # Make sure each process has different random seed, especially for 'fork' method
-        dataloader_kwargs["worker_init_fn"] = worker_init_reset_seed
 
         train_loader = DataLoader(self.dataset, **dataloader_kwargs)
 
@@ -100,10 +99,10 @@ class Exp(MyExp):
         from yolox.data import VOCDetection, ValTransform
 
         valdataset = VOCDetection(
-            #data_dir=os.path.join(get_yolox_datadir(), "VOCdevkit"),
+            # data_dir=os.path.join(get_yolox_datadir(), "VOCdevkit"),
             data_dir="D:\Program Data\IDEA\yolo3_test1\YOLOX\datasets\VOCdevkit",
-            #image_sets=[('2007', 'test')],
-            image_sets=[('val')],
+            # image_sets=[('2007', 'test')],
+            image_sets=['val'],
             img_size=self.test_size,
             preproc=ValTransform(legacy=legacy),
         )
@@ -116,12 +115,8 @@ class Exp(MyExp):
         else:
             sampler = torch.utils.data.SequentialSampler(valdataset)
 
-        dataloader_kwargs = {
-            "num_workers": self.data_num_workers,
-            "pin_memory": True,
-            "sampler": sampler,
-        }
-        dataloader_kwargs["batch_size"] = batch_size
+        dataloader_kwargs = {"num_workers": self.data_num_workers, "pin_memory": True, "sampler": sampler,
+                             "batch_size": batch_size}
         val_loader = torch.utils.data.DataLoader(valdataset, **dataloader_kwargs)
 
         return val_loader

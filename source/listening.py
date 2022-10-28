@@ -2,19 +2,20 @@ try:
     from unit import *
 except:
     from source.unit import *
-import keyboard
 import time
+
+import keyboard
 
 import alpha_loop
 import domain_flow
 
 combat_flag = False
 domain_flag = False
-global t1, t2
+
 t1 = None
 t2 = None
 # @logger.catch
-keymapjson = load_json("keymap.json")
+keymap_json = load_json("keymap.json")
 
 
 def switch_combat_loop():
@@ -45,13 +46,13 @@ def switch_domain_loop():
     domain_flag = not domain_flag
 
 
-keyboard.add_hotkey(keymapjson["autoCombat"], switch_combat_loop)
-keyboard.add_hotkey(keymapjson["autoDomain"], switch_domain_loop)
+keyboard.add_hotkey(keymap_json["autoCombat"], switch_combat_loop)
+keyboard.add_hotkey(keymap_json["autoDomain"], switch_domain_loop)
 
 
 @logger.catch
 def listening():
-    while (1):
+    while 1:
         time.sleep(0.2)
 
 

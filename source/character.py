@@ -82,7 +82,8 @@ class Character:
         else:
             return False
 
-    def _trigger_idle(self):
+    @staticmethod
+    def _trigger_idle():
         return True
 
     def _trigger_analyse(self):
