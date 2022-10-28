@@ -1,5 +1,5 @@
 import source.unit
-
+import win32api, win32con, win32gui, pyautogui, requests, unittest, xml, inspect, keyboard # 用于pyinstaller，不要删除！
 source.unit.logger.info('正在初始化，请稍后')
 # source.unit.logger.info('Initializing, please hold on')
 
