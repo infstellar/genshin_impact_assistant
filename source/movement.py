@@ -3,6 +3,7 @@ import pyautogui
 import interaction_background
 import small_map
 from unit import *
+from cvAutoTrack import cvAutoTracker
 
 itt = interaction_background.InteractionBGD()
 AHEAD = 0
@@ -54,7 +55,7 @@ def reset_view():
     pyautogui.click(button='middle')
 
 
-def view_to_angle(angle=0, deltanum=0.65, maxloop=100, corrected_num=CORRECT_DEGREE):
+def view_to_angle_domain(angle=0, deltanum=0.65, maxloop=100, corrected_num=CORRECT_DEGREE):
     cap = itt.capture(posi=small_map.posi_map)
     degree = small_map.jwa_3(cap)
     i = 0
@@ -68,7 +69,23 @@ def view_to_angle(angle=0, deltanum=0.65, maxloop=100, corrected_num=CORRECT_DEG
         i += 1
     if i > 1:
         logger.debug('last degree: ' + str(degree))
-    # itt.keyUp('w')
+        
+def view_to_angle_teyvat(angle=0, deltanum=1, maxloop=30, corrected_num=CORRECT_DEGREE):
+    i = 0
+    while 1:
+        b,degree = cvAutoTracker.get_rotation()
+        if not b:
+            time.sleep(0.1)
+            continue
+        cview((degree - (angle - corrected_num))/2)
+        time.sleep(0.05)
+        if i > maxloop:
+            break
+        if abs(degree - (angle - corrected_num)) < deltanum:
+            break
+        i += 1
+    if i > 1:
+        logger.debug('last degree: ' + str(degree))
 
 
 def reset_const_val():
@@ -77,4 +94,4 @@ def reset_const_val():
 
 # view_to_angle(-90)
 if __name__ == '__main__':
-    view_to_angle(-90)
+    view_to_angle_domain(-90)

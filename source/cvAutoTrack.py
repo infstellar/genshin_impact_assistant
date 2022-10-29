@@ -63,7 +63,8 @@ class AutoTracker:
     def get_position(self):
         x, y = c_double(0), c_double(0)
         ret = self.__lib.GetPosition(x, y)
-        return ret, x.value, y.value
+        retx,rety=self.translate_posi(x.value, y.value)
+        return ret, retx, rety
 
     def get_direction(self):
         a = c_double(0)
@@ -85,7 +86,7 @@ class AutoTracker:
         return ret
     
     def translate_posi(self, x, y):
-        return -(y-(-1237.8))/2 , -(x-793.9)/2
+        return  -(x-793.9)/2 , -(y-(-1237.8))/2
     
 cvAutoTracker = AutoTracker('source\\cvAutoTrack_6.3\\CVAUTOTRACK.dll')
 cvAutoTracker.init()
@@ -98,7 +99,7 @@ if __name__ == '__main__':
     # 等待五秒钟以便切换到原神窗口：
     # sleep(5)
 
-    print(cvAutoTracker.SetWorldCenter(793.9, -1237.8))
+    # print(cvAutoTracker.SetWorldCenter(793.9, -1237.8))
     
     # 加载同一目录下的DLL：
     # tracker = AutoTracker('source\\CVAUTOTRACK.dll')
@@ -122,9 +123,11 @@ if __name__ == '__main__':
     print('5) err', cvAutoTracker.get_last_error(), '\n')
 
     while 1:
+        # print(cvAutoTracker.get_rotation())
+        
         ret = cvAutoTracker.get_position()
-        posi = cvAutoTracker.translate_posi(ret[1],ret[2])
-        print(posi)
+        # posi = cvAutoTracker.translate_posi(ret[1],ret[2])
+        print(ret)
         time.sleep(0.2)
     
     # 卸载相关内存：（这一步不是必须的，但还是建议手动调用）
