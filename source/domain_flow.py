@@ -1,7 +1,4 @@
-import time
-
 import pyautogui
-
 import combat_loop
 import flow_state as ST
 import generic_lib
@@ -38,7 +35,9 @@ class DomainFlow(BaseThreading):
 
         domain_times = domain_json["domain_times"]
         if domain_times == 0:
-            domain_times = int(input("请输入秘境次数"))
+            x = input("请输入秘境次数")
+            # x.replace(']','')
+            domain_times = int(x)
         self.lockOnFlag = 0
         self.move_num = 2.5
 
@@ -151,7 +150,7 @@ class DomainFlow(BaseThreading):
         time.sleep(2)
         movement.reset_view()
         time.sleep(3)
-        movement.view_to_angle(-90)
+        movement.view_to_angle_domain(-90)
 
         self.current_state = ST.BEFORE_MOVETO_CHALLENGE
 
@@ -160,7 +159,7 @@ class DomainFlow(BaseThreading):
             is_tree = self.align_to_tree()
             self.ahead_timer.reset()
             if not is_tree:
-                movement.view_to_angle(-90)
+                movement.view_to_angle_domain(-90)
 
                 if self.isLiYue:  # barrier treatment
                     if self.move_timer.getDiffTime() >= 20:
@@ -184,7 +183,7 @@ class DomainFlow(BaseThreading):
                 self.itt.key_press('spacebar')
                 self.ahead_timer.reset()
 
-            movement.view_to_angle(-90)
+            movement.view_to_angle_domain(-90)
 
             # time.sleep(0.2)
 
@@ -252,7 +251,7 @@ class DomainFlow(BaseThreading):
                 self.current_state = ST.IN_MOVETO_CHALLENGE
 
             elif self.current_state == ST.IN_MOVETO_CHALLENGE:
-                movement.view_to_angle(-90)
+                movement.view_to_angle_domain(-90)
                 if self.fast_mode:
                     pass
                 else:
@@ -390,7 +389,7 @@ class DomainFlow(BaseThreading):
         return False
 
     def align_to_tree(self):
-        movement.view_to_angle(-90)
+        movement.view_to_angle_domain(-90)
         t_posi = self.get_tree_posi()
         if t_posi:
             tx, ty = self.itt.get_mouse_point()

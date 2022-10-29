@@ -90,6 +90,6 @@ def combat_statement_detection(itt: InteractionBGD):
     
     
     
-while 1:
-    print(combat_statement_detection(InteractionBGD()))
-    time.sleep(0.5)
+# while 1:
+#     print(combat_statement_detection(InteractionBGD()))
+#     time.sleep(0.5)
