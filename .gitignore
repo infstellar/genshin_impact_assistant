@@ -140,3 +140,11 @@ dev_tools/origin_text.txt
 source/test11.jpg
 test11 copy.jpg
 .gitignore
+source/cvAutoTrack_5/CVAUTOTRACK.dll
+source/cvAutoTrack_5/cvAutoTrack.h
+source/cvAutoTrack_5/CVAUTOTRACK.lib
+source/cvAutoTrack_5/cvAutoTrack.md5
+source/cvAutoTrack_5/cvAutoTrackCSharp.cs
+source/cvAutoTrack_5/version.tag
+source/cvAutoTrack_5.7z
+source/CVAUTOTRACK732.dll
