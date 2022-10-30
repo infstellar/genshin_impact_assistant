@@ -31,6 +31,7 @@ class BaseThreading(threading.Thread):
             return True
 
     def run(self):
+        '''if you're using this class, copy this'''
         while 1:
             if self.stop_threading_flag:
                 return 0
@@ -43,3 +44,4 @@ class BaseThreading(threading.Thread):
 
             if not self.working_flag:
                 self.working_flag = True
+        '''write your code below'''
