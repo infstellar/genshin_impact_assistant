@@ -8,19 +8,22 @@ IN_DOMAIN = "IN_DOMAIN"
 USE_20RESIN_DOBLE_CHOICES = "USE_20RESIN_DOBLE_CHOICES"
 USE_20X2RESIN_DOBLE_CHOICES = "USE_20X2RESIN_DOBLE_CHOICES"
 F_BUTTON = 'F_BUTTON'
+smallmap_AbyssMage = "smallmap_AbyssMage"
 
 imsrc_coming_out_by_space = cv2.imread("assests\\imgs\\common\\coming_out_by_space.jpg")
 imsrc_IN_DOMAIN = cv2.imread("assests\\imgs\\common\\IN_DOMAIN.jpg")
 imsrc_USE_20RESIN_DOBLE_CHOICES = cv2.imread("assests\\imgs\\common\\USE_20RESIN_DOBLE_CHOICES.jpg")
 imsrc_USE_20X2RESIN_DOBLE_CHOICES = cv2.imread("assests\\imgs\\common\\USE_20X2RESIN_DOBLE_CHOICES.jpg")
 imsrc_F_BUTTON = cv2.imread("assests\\imgs\\common\\F_BUTTON.jpg")
+imsrc_smallmap_AbyssMage=cv2.imread("assests\\imgs\\enemies\\small_map\\AbyssMage.jpg")
 
 imgs_dict = {
     "coming_out_by_space": imsrc_coming_out_by_space,
     "IN_DOMAIN": imsrc_IN_DOMAIN,
     "USE_20RESIN_DOBLE_CHOICES": imsrc_USE_20RESIN_DOBLE_CHOICES,
     "USE_20X2RESIN_DOBLE_CHOICES": imsrc_USE_20X2RESIN_DOBLE_CHOICES,
-    "F_BUTTON": imsrc_F_BUTTON
+    "F_BUTTON": imsrc_F_BUTTON,
+    "smallmap_AbyssMage":imsrc_smallmap_AbyssMage
 }
 
 matching_rate_dict = {
@@ -40,10 +43,11 @@ def qshow(img1):
     cv2.waitKey(0)
 
 
-def get_img_from_name(img_name: str):
-    im_src = imgs_dict[img_name]
-    posi = posi_manager.get_posi_from_str(img_name)
-    ret_img = im_src[posi[0]:posi[2], posi[1]:posi[3]]
+def get_img_from_name(img_name: str, reshape=True):
+    ret_img = imgs_dict[img_name]
+    if reshape:
+        posi = posi_manager.get_posi_from_str(img_name)
+        ret_img = ret_img[posi[0]:posi[2], posi[1]:posi[3]]
     # cv2.imshow('12',ret_img)
     # cv2.waitKey(0)
     return ret_img
