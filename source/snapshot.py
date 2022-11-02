@@ -166,12 +166,13 @@ while 1:
     # input('wait')
     i += 1
     numi += 1
-    # cap = itt.capture()
+    cap = itt.capture(jpgmode= 2)
+    qshow(cap)
     x = str(time.time())
     # cv2.imwrite("tools\\snapshot\\png\\"+SA_name+str(numi)+".png",cap)
     # cv2.imwrite("tools\\snapshot\\jpg\\"+SA_name+str(numi)+".jpg",cap[:,:,:3])
-    cap = itt.capture(posi=small_map.posi_map)
-    jwa_3(cap)
+    # cap = itt.capture(posi=small_map.posi_map)
+    # jwa_3(cap)
     # cv2.imwrite("tools\\snapshot\\jpg\\" + SA_name + str(numi) + ".jpg",
     #             jpg_with_alpha(cap, channel='ui', bgclolr='black', alpha_num=250))
     
