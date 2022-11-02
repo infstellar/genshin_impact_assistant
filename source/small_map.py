@@ -117,9 +117,9 @@ def jwa_3(imsrc):
 
     if degree > 180:
         degree -= 360
-    # cv2.imshow('123', cv2.drawMarker(Alpha,position=(int(p[0]),int(p[1])),color=(255, 0, 255),markerSize = 1, markerType=cv2.MARKER_CROSS, thickness=5))
-    # cv2.waitKey(100)
-    # print(degree)
+    cv2.imshow('123', cv2.drawMarker(Alpha,position=(int(p[0]),int(p[1])),color=(255, 0, 255),markerSize = 1, markerType=cv2.MARKER_CROSS, thickness=5))
+    cv2.waitKey(100)
+    print(degree)
     return degree
 
     # logger.debug(str(p)+' '+str(Line2Angle(p)))
@@ -180,7 +180,8 @@ def teyvat_smallmap_crusade_target_search(itt:interaction_background.Interaction
 if __name__ == '__main__':
     # qshow(itt.capture(posi=posi_map))
     while 1:
-        teyvat_smallmap_crusade_target_search(itt)
+        jwa_3(itt.capture(posi=posi_map))
+        # teyvat_smallmap_crusade_target_search(itt)
         time.sleep(0.1)
     # cv2.imshow('123', img1)
     # cv2.waitKey(0)

@@ -195,7 +195,7 @@ class DomainFlow(BaseThreading):
 
             t = self.fast_move_timer.loop_time()  # max check up speed: 1/10 second
             if t <= 1 / 10:
-                time.sleep(1 / 15 - t)
+                time.sleep(1 / 10 - t)
 
             # if pdocr_api.ocr.get_text_position(cap, textM.text(textM.claim_rewards)) != -1:
             #     self.current_state = ST.END_MOVETO_TREE
@@ -381,7 +381,7 @@ class DomainFlow(BaseThreading):
         # cv2.imshow('123',cap)
         # cv2.waitKey(0)
         addition_info, ret2 = yolox_api.yolo_tree.predicte(cap)
-        logger.debug(addition_info)
+        # logger.debug(addition_info)
         if addition_info is not None:
             if addition_info[0][1][0] >= 0.5:
                 tree_x, tree_y = yolox_api.yolo_tree.get_center(addition_info)
