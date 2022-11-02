@@ -201,7 +201,7 @@ class DomainFlow(BaseThreading):
             #     self.current_state = ST.END_MOVETO_TREE
             #     return 0
 
-        self.current_state = ST.END_MOVETO_TREE
+        self.current_state = ST.AFTER_MOVETO_TREE
 
     def Flow_IN_ATTAIN_REAWARD(self):
         
@@ -310,12 +310,21 @@ class DomainFlow(BaseThreading):
 
             elif self.current_state == ST.IN_MOVETO_TREE:
                 self.Flow_IN_MOVETO_TREE()
+                self.itt.key_up('w')
+                self.current_state = ST.AFTER_MOVETO_TREE
+
+            elif self.current_state == ST.AFTER_MOVETO_TREE:
+                time.sleep(0.2)
+                if generic_lib.f_recognition() == False:
+                    self.current_state = ST.END_MOVETO_TREE
+                else:
+                    self.itt.key_up('w')
+                    self.itt.key_press('f')
 
             elif self.current_state == ST.END_MOVETO_TREE:
                 self.current_state = ST.INIT_ATTAIN_REAWARD
 
             elif self.current_state == ST.INIT_ATTAIN_REAWARD:
-                self.itt.key_up('w')
                 self.current_state = ST.BEFORE_ATTAIN_REAWARD
 
             elif self.current_state == ST.BEFORE_ATTAIN_REAWARD:
