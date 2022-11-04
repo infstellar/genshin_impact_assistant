@@ -75,7 +75,9 @@ class Character:
 
     def _trigger_q_ready(self):
         cap = self.itt.capture()
-        cap = self.itt.png2jpg(cap, channel='ui', alpha_num=20)
+        # cap = self.itt.png2jpg(cap, channel='ui', alpha_num=20) BEFOREV3D1
+        cap = self.itt.png2jpg(cap, channel='bg', alpha_num = 175)
+        
         p = posi_manager.posi_charalist_q_point[self.n - 1]
         if cap[p[0], p[1]].max() > 0:
             return True
