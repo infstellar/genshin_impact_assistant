@@ -10,6 +10,7 @@ USE_20X2RESIN_DOBLE_CHOICES = "USE_20X2RESIN_DOBLE_CHOICES"
 F_BUTTON = 'F_BUTTON'
 bigmap_TeleportWaypoint = "bigmap_TeleportWaypoint"
 smallmap_AbyssMage = "smallmap_AbyssMage"
+bigmap_AbyssMage = "bigmap_AbyssMage"
 
 imsrc_coming_out_by_space = cv2.imread("assests\\imgs\\common\\coming_out_by_space.jpg")
 imsrc_IN_DOMAIN = cv2.imread("assests\\imgs\\common\\IN_DOMAIN.jpg")
@@ -27,6 +28,7 @@ imgs_dict = {
     "USE_20X2RESIN_DOBLE_CHOICES": imsrc_USE_20X2RESIN_DOBLE_CHOICES,
     "F_BUTTON": imsrc_F_BUTTON,
     "smallmap_AbyssMage":imsrc_smallmap_AbyssMage,
+    "bigmap_AbyssMage":imsrc_bigmap_AbyssMage,
     "bigmap_TeleportWaypoint":imsrc_bigmap_TeleportWaypoint
 }
 
