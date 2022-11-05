@@ -6,6 +6,14 @@ import numpy as np
 from timer_module import Timer
 from unit import *
 
+def get_handle():
+    handle = ctypes.windll.user32.FindWindowW(None, '原神')
+    if handle!=0:
+        return handle
+    handle = ctypes.windll.user32.FindWindowW(None, 'Genshin Impact')
+    if handle!=0:
+        return handle
+
 
 class ScreenCapture:
     def __init__(self):
@@ -24,7 +32,7 @@ class ScreenCapture:
         self.PostMessageW = ctypes.windll.user32.PostMessageW
         self.MapVirtualKeyW = ctypes.windll.user32.MapVirtualKeyW
         self.VkKeyScanA = ctypes.windll.user32.VkKeyScanA
-        self.handle = ctypes.windll.user32.FindWindowW(None, '原神')
+        self.handle = get_handle()
 
         self.fps = 1 / 30
         self.cap_timer = Timer()

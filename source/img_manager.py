@@ -8,6 +8,7 @@ IN_DOMAIN = "IN_DOMAIN"
 USE_20RESIN_DOBLE_CHOICES = "USE_20RESIN_DOBLE_CHOICES"
 USE_20X2RESIN_DOBLE_CHOICES = "USE_20X2RESIN_DOBLE_CHOICES"
 F_BUTTON = 'F_BUTTON'
+bigmap_TeleportWaypoint = "bigmap_TeleportWaypoint"
 smallmap_AbyssMage = "smallmap_AbyssMage"
 
 imsrc_coming_out_by_space = cv2.imread("assests\\imgs\\common\\coming_out_by_space.jpg")
@@ -15,7 +16,9 @@ imsrc_IN_DOMAIN = cv2.imread("assests\\imgs\\common\\IN_DOMAIN.jpg")
 imsrc_USE_20RESIN_DOBLE_CHOICES = cv2.imread("assests\\imgs\\common\\USE_20RESIN_DOBLE_CHOICES.jpg")
 imsrc_USE_20X2RESIN_DOBLE_CHOICES = cv2.imread("assests\\imgs\\common\\USE_20X2RESIN_DOBLE_CHOICES.jpg")
 imsrc_F_BUTTON = cv2.imread("assests\\imgs\\common\\F_BUTTON.jpg")
-imsrc_smallmap_AbyssMage=cv2.imread("assests\\imgs\\enemies\\small_map\\AbyssMage.jpg")
+imsrc_smallmap_AbyssMage=cv2.imread("assests\\imgs\\map\\small_map\\enemies\\AbyssMage.jpg")
+imsrc_bigmap_AbyssMage=cv2.imread("assests\\imgs\\map\\big_map\\enemies\\AbyssMage.jpg")
+imsrc_bigmap_TeleportWaypoint=cv2.imread("assests\\imgs\\map\\big_map\\points\\TeleportWaypoint.jpg")
 
 imgs_dict = {
     "coming_out_by_space": imsrc_coming_out_by_space,
@@ -23,7 +26,8 @@ imgs_dict = {
     "USE_20RESIN_DOBLE_CHOICES": imsrc_USE_20RESIN_DOBLE_CHOICES,
     "USE_20X2RESIN_DOBLE_CHOICES": imsrc_USE_20X2RESIN_DOBLE_CHOICES,
     "F_BUTTON": imsrc_F_BUTTON,
-    "smallmap_AbyssMage":imsrc_smallmap_AbyssMage
+    "smallmap_AbyssMage":imsrc_smallmap_AbyssMage,
+    "bigmap_TeleportWaypoint":imsrc_bigmap_TeleportWaypoint
 }
 
 matching_rate_dict = {
