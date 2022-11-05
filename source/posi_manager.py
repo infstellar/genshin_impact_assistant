@@ -51,7 +51,10 @@ posi_domain = {
 
 
 def get_posi_from_str(str1: str):
-    return posi_dict[str1]
+    try:
+        return posi_dict[str1]
+    except:
+        return [0,0,1080,1920]
 
 
 if __name__ == '__main__':

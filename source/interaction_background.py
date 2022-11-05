@@ -11,6 +11,8 @@ import win32api
 import win32con
 import win32gui
 
+import pyautogui
+import pydirectinput
 import img_manager
 import posi_manager
 import static_lib
@@ -111,7 +113,7 @@ class InteractionBGD:
         if posi is not None:
             ret = ret[posi[0]:posi[2], posi[1]:posi[3]]
         if jpgmode == 0:
-            ret = ret[:, :, 0:3]
+            ret = ret[:, :, :3]
         elif jpgmode == 1:
             ret = self.png2jpg(ret, bgcolor='black', channel='bg')
         elif jpgmode == 2:
@@ -152,13 +154,13 @@ class InteractionBGD:
         matching_rate = max_val
         return matching_rate, top_left, bottom_right
 
-    def match_multiple_img(self, img, temple, is_gray=False, is_show_res: bool = False, ret_mode=IMG_POINT, threshold=0.98):
+    def match_multiple_img(self, img, template, is_gray=False, is_show_res: bool = False, ret_mode=IMG_POINT, threshold=0.98):
         if is_gray:
             img = cv2.cvtColor(img, cv2.COLOR_BGRA2GRAY)
-            temple = cv2.cvtColor(temple, cv2.COLOR_BGRA2GRAY)
+            template = cv2.cvtColor(template, cv2.COLOR_BGRA2GRAY)
         res_posi=[]
-        result = cv2.matchTemplate(img, temple, cv2.TM_CCORR_NORMED)  # TM_CCOEFF_NORMED
-        h,w = temple.shape[:2]#获取模板高和宽
+        result = cv2.matchTemplate(img, template, cv2.TM_CCORR_NORMED)  # TM_CCOEFF_NORMED
+        h,w = template.shape[:2]#获取模板高和宽
         loc = np.where(result >= threshold) #匹配结果小于阈值的位置
         for pt in zip(*loc[::-1]): #遍历位置，zip把两个列表依次参数打包
             right_bottom = (pt[0] + w, pt[1] + h) #右下角位置
@@ -174,7 +176,7 @@ class InteractionBGD:
                 right_bottom = (pt[0] + w,pt[1] + h) #右下角位置
                 cv2.rectangle((show_img), pt, right_bottom, (0,0,255), 2) #绘制匹配到的矩阵
             cv2.imshow("img",show_img)
-            cv2.imshow("template",temple)
+            cv2.imshow("template",template)
             cv2.waitKey(0)  #获取按键的ASCLL码
             cv2.destroyAllWindows()  #释放所有的窗口
 
@@ -216,7 +218,7 @@ class InteractionBGD:
         matching_rate = 1 - s / ((img1.shape[0] * img1.shape[1]) * 765)
         return matching_rate
 
-    def get_img_position(self, imgname, jpgmode=0, is_gray=False, min_rate=0.95, is_log=False):
+    def get_img_position(self, imgname, jpgmode=0, is_gray=False, min_rate=0.95, is_log=False, reshape=True):
         upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
         if imgname in img_manager.alpha_dict:
             cap = self.capture()
@@ -224,7 +226,7 @@ class InteractionBGD:
         else:
             cap = self.capture(posi=posi_manager.get_posi_from_str(imgname), jpgmode=jpgmode)
 
-        matching_rate, max_loc = self.similar_img(img_manager.get_img_from_name(imgname), cap, ret_mode=IMG_POSI)
+        matching_rate, max_loc = self.similar_img(img_manager.get_img_from_name(imgname, reshape=reshape), cap, ret_mode=IMG_POSI)
 
         if is_log:
             logger.debug(
@@ -307,7 +309,7 @@ class InteractionBGD:
         return cv2.multiply(cv2.add(maximum, cv2.subtract(maximum, minimum)), 255.0 / threshold)
 
     # @staticmethod
-    def png2jpg(png, bgcolor='black', channel='bg', alpha_num=50):
+    def png2jpg(self, png, bgcolor='black', channel='bg', alpha_num=50):
         if bgcolor == 'black':
             bgcol = 0
         else:
@@ -324,7 +326,7 @@ class InteractionBGD:
         return jpg
 
     # @staticmethod
-    def color_SD(x_col, target_col):  # standard deviation
+    def color_SD(self, x_col, target_col):  # standard deviation
         ret = 0
         for i in range(min(len(x_col), len(target_col))):
             t = abs(x_col[i] - target_col[i])
@@ -333,7 +335,7 @@ class InteractionBGD:
         return math.sqrt(ret / min(len(x_col), len(target_col)))
 
     # @staticmethod
-    def delay(x, randtime=True, isprint=True, comment=''):
+    def delay(self, x, randtime=True, isprint=True, comment=''):
         upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
         a = random.randint(-10, 10)
         if randtime:
@@ -389,11 +391,22 @@ class InteractionBGD:
         logger.debug('left click ' + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
 
     def left_down(self, x=-1, y=-1):
-        if x == -1:
+        if type(x) == list:  # x为list类型时
+            y = x[1]
+            x = x[0]
+        if x == -1:  # x为空时
             x, y = self.get_mouse_point()
+        x = int(x)
+        y = int(y)
         if not self.CONSOLE_ONLY:
+            # win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN, 0, 0)
+            # pyautogui.mouseDown()
             wparam = 0
             lparam = y << 16 | x
+            self.PostMessageW(self.handle, self.WM_LBUTTONDOWN, wparam, lparam)
+            time.sleep(0.01)
+            self.PostMessageW(self.handle, self.WM_LBUTTONDOWN, wparam, lparam)
+            time.sleep(0.01)
             self.PostMessageW(self.handle, self.WM_LBUTTONDOWN, wparam, lparam)
 
         logger.debug('left down' + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
@@ -402,9 +415,16 @@ class InteractionBGD:
         if x == -1:
             x, y = self.get_mouse_point()
         if not self.CONSOLE_ONLY:
+            # win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP, 0, 0)
+            # pyautogui.mouseUp()
             wparam = 0
             lparam = y << 16 | x
             self.PostMessageW(self.handle, self.WM_LBUTTONUP, wparam, lparam)
+            time.sleep(0.01)
+            self.PostMessageW(self.handle, self.WM_LBUTTONUP, wparam, lparam)
+            time.sleep(0.01)
+            self.PostMessageW(self.handle, self.WM_LBUTTONUP, wparam, lparam)
+            
         logger.debug('left up ' + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
 
     def left_double_click(self, dt=0.05):
@@ -476,7 +496,8 @@ class InteractionBGD:
         # https://docs.microsoft.com/en-us/windows/win32/inputdev/wm-mousemove
 
         if relative:
-            win32api.mouse_event(win32con.MOUSEEVENTF_MOVE, x, y)
+            # win32api.mouse_event(win32con.MOUSEEVENTF_MOVE, x, y)
+            pydirectinput.moveRel(x,y)
         else:
 
             # print(x,y)
@@ -489,13 +510,20 @@ class InteractionBGD:
             # my=p[1]
             # win32api.mouse_event(win32con.MOUSEEVENTF_MOVE, x, y)
             wx, wy, w, h = win32gui.GetWindowRect(self.handle)
-            # x+=wx
-            # y+=wy
+            x+=wx
+            y+=wy
             # print(mx,my)
             # print(int((x-mx)/1.5), int((y-my)/1.5))
             # pydirectinput.moveTo(wx+x,wy+y)
             # win32api.mouse_event(win32con.MOUSEEVENTF_MOVE, int((x-mx)/1.5), int((y-my)/1.5))
-            win32api.SetCursorPos((wx + x, wy + y))
+            # win32api.SetCursorPos((wx + x, wy + y))
+            
+            wparam = 0
+            lparam = y << 16 | x
+            self.PostMessageW(self.handle, self.WM_MOUSEMOVE, wparam, lparam)
+            self.PostMessageW(self.handle, self.WM_MOUSEMOVE, wparam, lparam)
+            self.PostMessageW(self.handle, self.WM_MOUSEMOVE, wparam, lparam)
+            
 
     # @staticmethod
     def crop_image(imsrc, posilist):
@@ -510,9 +538,17 @@ if __name__ == '__main__':
     # print(win32api.GetCursorPos())
     # win32api.mouse_event(win32con.MOUSEEVENTF_MOVE, 150, 150)
     # print(win32api.GetCursorPos())
-    a = ib.match_multiple_img(ib.capture(jpgmode=3), img_manager.get_img_from_name(img_manager.bigmap_TeleportWaypoint, reshape=False))
-    print(a)
+    # a = ib.match_multiple_img(ib.capture(jpgmode=3), img_manager.get_img_from_name(img_manager.bigmap_TeleportWaypoint, reshape=False))
+    # print(a)
+    # ib.left_down()
+    # time.sleep(1)
+    # ib.move_to(200,200,relative=True)
     
+    for i in range(20):
+        pydirectinput.mouseDown(0,0)
+        pydirectinput.moveRel(10,10)
+    # win32api.SetCursorPos((300, 300))
+    # pydirectinput.
     print()
     while 1:
         time.sleep(1)
