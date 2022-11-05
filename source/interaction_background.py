@@ -19,6 +19,9 @@ from unit import *
 
 IMG_RATE=0
 IMG_POSI=1
+IMG_POINT=2
+IMG_RECT=3
+
 
 class InteractionBGD:
     """
@@ -58,6 +61,9 @@ class InteractionBGD:
 
         self.handle = ctypes.windll.user32.FindWindowW(None, hwndname)
 
+        if self.handle == 0:
+            self.handle = static_lib.get_handle()
+            
         if self.handle == 0:
             logger.error("未找到句柄，请确认原神窗口是否开启。")
 
@@ -101,11 +107,11 @@ class InteractionBGD:
         # ret=np.frombuffer(buffer, dtype=np.uint8).reshape(height, width, 4)
 
         ret = static_lib.SCREENCAPTURE.get_capture()
-
+        # img_manager.qshow(ret)
         if posi is not None:
             ret = ret[posi[0]:posi[2], posi[1]:posi[3]]
         if jpgmode == 0:
-            pass
+            ret = ret[:, :, 0:3]
         elif jpgmode == 1:
             ret = self.png2jpg(ret, bgcolor='black', channel='bg')
         elif jpgmode == 2:
@@ -146,6 +152,35 @@ class InteractionBGD:
         matching_rate = max_val
         return matching_rate, top_left, bottom_right
 
+    def match_multiple_img(self, img, temple, is_gray=False, is_show_res: bool = False, ret_mode=IMG_POINT, threshold=0.98):
+        if is_gray:
+            img = cv2.cvtColor(img, cv2.COLOR_BGRA2GRAY)
+            temple = cv2.cvtColor(temple, cv2.COLOR_BGRA2GRAY)
+        res_posi=[]
+        result = cv2.matchTemplate(img, temple, cv2.TM_CCORR_NORMED)  # TM_CCOEFF_NORMED
+        h,w = temple.shape[:2]#获取模板高和宽
+        loc = np.where(result >= threshold) #匹配结果小于阈值的位置
+        for pt in zip(*loc[::-1]): #遍历位置，zip把两个列表依次参数打包
+            right_bottom = (pt[0] + w, pt[1] + h) #右下角位置
+            if ret_mode == IMG_RECT:
+                res_posi.append([pt[0], pt[1], pt[0] + w,pt[1] + h])
+            else:
+                res_posi.append([pt[0]+w/2, pt[1]+h/2])
+            # cv2.rectangle((show_img), pt, right_bottom, (0,0,255), 2) #绘制匹配到的矩阵
+        if is_show_res:
+            show_img=img.copy()
+            # print(*loc[::-1])
+            for pt in zip(*loc[::-1]): #遍历位置，zip把两个列表依次参数打包
+                right_bottom = (pt[0] + w,pt[1] + h) #右下角位置
+                cv2.rectangle((show_img), pt, right_bottom, (0,0,255), 2) #绘制匹配到的矩阵
+            cv2.imshow("img",show_img)
+            cv2.imshow("template",temple)
+            cv2.waitKey(0)  #获取按键的ASCLL码
+            cv2.destroyAllWindows()  #释放所有的窗口
+
+        return res_posi
+        
+            
     
     def similar_img(self, img, target, is_gray=False, is_show_res: bool = False, ret_mode = IMG_RATE):
 
@@ -153,12 +188,13 @@ class InteractionBGD:
             img = cv2.cvtColor(img, cv2.COLOR_BGRA2GRAY)
             target = cv2.cvtColor(target, cv2.COLOR_BGRA2GRAY)
         # 模板匹配，将alpha作为mask，TM_CCORR_NORMED方法的计算结果范围为[0, 1]，越接近1越匹配
+        # img_manager.qshow(img)
         result = cv2.matchTemplate(img, target, cv2.TM_CCORR_NORMED)  # TM_CCOEFF_NORMED
         # 获取结果中最大值和最小值以及他们的坐标
         min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
         if is_show_res:
-            cv2.imshow('template', target)
-            cv2.imshow('gray', img)
+            
+           
             cv2.waitKey()
         # 在窗口截图中匹配位置画红色方框
         matching_rate = max_val
@@ -167,6 +203,7 @@ class InteractionBGD:
         elif ret_mode == IMG_POSI:
             return matching_rate, max_loc
 
+    
     
     def similar_img_pixel(self, img, target, is_gray=False):
         img1 = img.astype('int')
@@ -269,7 +306,7 @@ class InteractionBGD:
         maximum = cv2.max(cv2.max(r, g), b)
         return cv2.multiply(cv2.add(maximum, cv2.subtract(maximum, minimum)), 255.0 / threshold)
 
-    @staticmethod
+    # @staticmethod
     def png2jpg(png, bgcolor='black', channel='bg', alpha_num=50):
         if bgcolor == 'black':
             bgcol = 0
@@ -286,7 +323,7 @@ class InteractionBGD:
         jpg[:, :, 2][over_item_list] = bgcol
         return jpg
 
-    @staticmethod
+    # @staticmethod
     def color_SD(x_col, target_col):  # standard deviation
         ret = 0
         for i in range(min(len(x_col), len(target_col))):
@@ -295,7 +332,7 @@ class InteractionBGD:
             ret += t
         return math.sqrt(ret / min(len(x_col), len(target_col)))
 
-    @staticmethod
+    # @staticmethod
     def delay(x, randtime=True, isprint=True, comment=''):
         upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
         a = random.randint(-10, 10)
@@ -460,7 +497,7 @@ class InteractionBGD:
             # win32api.mouse_event(win32con.MOUSEEVENTF_MOVE, int((x-mx)/1.5), int((y-my)/1.5))
             win32api.SetCursorPos((wx + x, wy + y))
 
-    @staticmethod
+    # @staticmethod
     def crop_image(imsrc, posilist):
         return imsrc[posilist[0]:posilist[2], posilist[1]:posilist[3]]
 
@@ -473,9 +510,15 @@ if __name__ == '__main__':
     # print(win32api.GetCursorPos())
     # win32api.mouse_event(win32con.MOUSEEVENTF_MOVE, 150, 150)
     # print(win32api.GetCursorPos())
+    a = ib.match_multiple_img(ib.capture(jpgmode=3), img_manager.get_img_from_name(img_manager.bigmap_TeleportWaypoint, reshape=False))
+    print(a)
+    
+    print()
     while 1:
         time.sleep(1)
         print(ib.get_img_position(img_manager.F_BUTTON, jpgmode=0))
+        
+        
         # print(ib.get_img_existence(img_manager.USE_20X2RESIN_DOBLE_CHOICES))
         # ib.appear_then_click(imgname=img_manager.USE_20RESIN_DOBLE_CHOICES)
         # ib.move_to(100,100)
