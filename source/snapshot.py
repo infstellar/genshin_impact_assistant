@@ -167,7 +167,7 @@ while 1:
     i += 1
     numi += 1
     cap = itt.capture()
-    cap = itt.png2jpg(cap, channel = 'bg', alpha_num = 110)# 22 no Q
+    cap = itt.png2jpg(cap, channel = 'ui', alpha_num = 50)# 22 no Q
     # qshow(cap)
     
     cv2.imshow('123', cap)

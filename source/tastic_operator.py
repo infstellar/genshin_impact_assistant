@@ -239,8 +239,8 @@ class TasticOperator(BaseThreading):
         self.itt.key_press('r')
 
     def is_q_ready(self):
-        cap = self.itt.capture(posi=posi_manager.posi_chara_q)
-        # cap = self.itt.png2jpg(cap, channel='ui', alpha_num = 200) BEFOREV3D1
+        # cap = self.itt.capture(posi=posi_manager.posi_chara_q)
+        cap = self.itt.png2jpg(cap, channel='ui', alpha_num = 200) # BEFOREV3D1
         cap = self.itt.png2jpg(cap, channel='bg', alpha_num = 160)
         img_manager.qshow(cap)
         # p = posi_manager.posi_chara_q_point
