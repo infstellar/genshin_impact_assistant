@@ -117,8 +117,8 @@ class InteractionBGD:
         elif jpgmode == 1:
             ret = self.png2jpg(ret, bgcolor='black', channel='bg')
         elif jpgmode == 2:
-            # ret = self.png2jpg(ret, bgcolor='black', channel='ui') before v3.1
-            ret = self.png2jpg(ret, bgcolor='black', channel='bg', alpha_num = 175)
+            ret = self.png2jpg(ret, bgcolor='black', channel='ui') # before v3.1
+            # ret = self.png2jpg(ret, bgcolor='black', channel='bg', alpha_num = 175)
         elif jpgmode == 3:
             ret = ret[:, :, :3]
         return ret
@@ -218,7 +218,7 @@ class InteractionBGD:
         matching_rate = 1 - s / ((img1.shape[0] * img1.shape[1]) * 765)
         return matching_rate
 
-    def get_img_position(self, imgname, jpgmode=0, is_gray=False, min_rate=0.95, is_log=False, reshape=True):
+    def get_img_position(self, imgname, jpgmode=2, is_gray=False, min_rate=0.95, is_log=False, reshape=True):
         upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
         if imgname in img_manager.alpha_dict:
             cap = self.capture()
@@ -238,7 +238,7 @@ class InteractionBGD:
             return False
         
         
-    def get_img_existence(self, imgname, jpgmode=0, posi=None, is_gray=False, min_rate=0.95, is_log=False):
+    def get_img_existence(self, imgname, jpgmode=2, posi=None, is_gray=False, min_rate=0.95, is_log=False):
         upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
         if imgname in img_manager.alpha_dict:
             cap = self.capture(posi=posi)
@@ -257,7 +257,7 @@ class InteractionBGD:
         else:
             return False
 
-    def appear_then_click(self, imgname, jpgmode=0, is_gray=False, min_rate=0.95):
+    def appear_then_click(self, imgname, jpgmode=2, is_gray=False, min_rate=0.95):
         upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
         if imgname in img_manager.alpha_dict:
             cap = self.capture()
@@ -280,7 +280,7 @@ class InteractionBGD:
         else:
             return False
 
-    def appear_then_press(self, imgname, key_name, jpgmode=0, is_gray=False, min_rate=0.95):
+    def appear_then_press(self, imgname, key_name, jpgmode=2, is_gray=False, min_rate=0.95):
         upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
         if imgname in img_manager.alpha_dict:
             cap = self.capture()
