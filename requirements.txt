@@ -27,3 +27,6 @@ scipy
 
 PyAutoGUI
 PyQt5
+
+# pywebio
+pywebio
