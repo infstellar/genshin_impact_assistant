@@ -11,7 +11,7 @@ def put_setting(name=''):
     file_name = name
     output.put_markdown('## {}'.format(name), scope='now')
     j = json.load(open(name, 'r', encoding='utf8'))
-    put_json(j, 'now')
+    put_json(j, 'now', level=3)
     output.put_button('save', scope='now', onclick=save)
 
 
@@ -40,7 +40,7 @@ async def get_json(j: dict, add_name=''):
     return rt_json
 
 
-def put_json(j: dict, scope_name, add_name=''):
+def put_json(j: dict, scope_name, add_name='', level=1):
     for k in j:
         v = j[k]
         if type(v) == str or v is None:
@@ -52,8 +52,8 @@ def put_json(j: dict, scope_name, add_name=''):
 
         elif type(v) == dict:
             output.put_scope('{}-{}'.format(add_name, k), scope=scope_name)
-            output.put_markdown(k, scope='{}-{}'.format(add_name, k))
-            put_json(v, '{}-{}'.format(add_name, k), add_name='{}-{}'.format(add_name, k))
+            output.put_markdown('#' * level + ' ' + k, scope='{}-{}'.format(add_name, k))
+            put_json(v, '{}-{}'.format(add_name, k), add_name='{}-{}'.format(add_name, k), level=level + 1)
         elif type(v) == list:
             pin.put_input('{}-{}'.format(add_name, k), label=k, value=str(v)[1:-1], scope=scope_name)
         elif type(v) == int:
