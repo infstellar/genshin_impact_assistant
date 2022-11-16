@@ -9,7 +9,7 @@ file_name = ''
 def put_setting(name=''):
     global file_name
     file_name = name
-    output.put_markdown('Setting-{}'.format(name), scope='now')
+    output.put_markdown('## {}'.format(name), scope='now')
     j = json.load(open(name, 'r', encoding='utf8'))
     put_json(j, 'now')
     output.put_button('save', scope='now', onclick=save)
@@ -20,7 +20,7 @@ async def save():
     j = json.load(open(file_name, 'r', encoding='utf8'))
 
     json.dump(await get_json(j), open(file_name, 'w', encoding='utf8'))
-    output.put_text('saved', scope='now')
+    output.put_text('saved!', scope='now')
 
 
 async def get_json(j: dict, add_name=''):
@@ -28,22 +28,15 @@ async def get_json(j: dict, add_name=''):
     for k in j:
 
         v = j[k]
-        if type(v) == str or v is None:
-
-            rt_json[k] = await pin.pin['{}-{}'.format(add_name, k)]
-        elif type(v) == bool:
-            rt_json[k] = await pin.pin['{}-{}'.format(add_name, k)]
-            # print(k, v)
-        elif type(v) == dict:
+        if type(v) == dict:
             rt_json[k] = get_json(v, add_name='{}-{}'.format(add_name, k))
 
         elif type(v) == list:
 
             rt_json[k] = await pin.pin['{}-{}'.format(add_name, k)].split(', ')
-        elif type(v) == int:
+        else:
             rt_json[k] = await pin.pin['{}-{}'.format(add_name, k)]
-        elif type(v) == float:
-            rt_json[k] = await pin.pin['{}-{}'.format(add_name, k)]
+
     return rt_json
 
 
@@ -77,7 +70,11 @@ for root, dirs, files in os.walk('config'):
 
 
 async def main():
-    pin.put_select('file', config_files, value='--please select--')
+    output.put_markdown('# Setting')
+    output.put_markdown('## config:')
+    pin.put_select('file', config_files)
+    with output.use_scope('now', clear=True):
+        put_setting(await pin.pin['file'])
     while True:
         changed = await pin.pin_wait_change('file')
         with output.use_scope('now', clear=True):
