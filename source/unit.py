@@ -17,11 +17,7 @@ if sys.path[1] != source_path:
 # 加载json
 def load_json(json_name='config.json'):
     # try:
-    f = open(os.path.join('config', json_name), 'r')
-    content = f.read()
-    a = json.loads(content)
-    f.close()
-    return a
+    return json.load(open(os.path.join('config', json_name), 'r'))
 
 
 config_json = load_json("config.json")
