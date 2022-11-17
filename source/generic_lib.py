@@ -11,7 +11,7 @@ NEGATIVE_XY=3
 
 
 def f_recognition(itt: InteractionBGD, mode='button_only'):
-    if itt.get_img_existence(img_manager.F_BUTTON, posi=posi_manager.posi_F_button_list):
+    if itt.get_img_existence(img_manager.F_BUTTON):
         return True
     else:
         return False
@@ -47,10 +47,10 @@ def points_angle(p1, p2, coordinate = NORMAL):
 
 if __name__ == '__main__':
     itt = InteractionBGD()
-    print(points_angle([0,0],[10,10]))
-    print(points_angle([10,10],[0,0]))
-    print(points_angle([0,0],[20,10]))
-    print(points_angle([0,0],[10,10]))
-    # while 1:
-    #     time.sleep(0.2)
-    #     print(f_recognition(itt))
+    # print(points_angle([0,0],[10,10]))
+    # print(points_angle([10,10],[0,0]))
+    # print(points_angle([0,0],[20,10]))
+    # print(points_angle([0,0],[10,10]))
+    while 1:
+        time.sleep(0.2)
+        print(f_recognition(itt))

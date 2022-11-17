@@ -25,7 +25,7 @@ def unconventionality_situlation_detection(itt: InteractionBGD,
 
     situlation_code = -1
 
-    while itt.get_img_existence(img_manager.COMING_OUT_BY_SPACE, jpgmode=2, min_rate=0.8):
+    while itt.get_img_existence(img_manager.COMING_OUT_BY_SPACE):
         situlation_code = 1
         itt.key_press('spacebar')
         logger.debug('Unconventionality Situlation: COMING_OUT_BY_SPACE')

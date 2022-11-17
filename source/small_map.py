@@ -133,7 +133,7 @@ def jwa_3(imsrc):
 def teyvat_smallmap_crusade_target_search(itt:interaction_background.InteractionBGD):
     imsrc = itt.capture(posi = posi_teyvat_map)
     imsrc = itt.png2jpg(imsrc, channel='ui')
-    img_target = img_manager.get_img_from_name(img_manager.smallmap_AbyssMage, reshape=False)
+    img_target = img_manager.smallmap_AbyssMage.image
     r, pp=itt.similar_img(imsrc, img_target, ret_mode=interaction_background.IMG_POSI)
     p=[0,0]
     p[0]=pp[0]+img_target.shape[1] / 2

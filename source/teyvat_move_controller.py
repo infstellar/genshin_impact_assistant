@@ -35,6 +35,7 @@ class TeyvatMoveController(BaseThreading):
         self.puo.setDaemon(True)
         self.puo.pause_threading()
         self.puo.start()
+        self.itt = InteractionBGD()
         
         self.statement = IN_MOVE
     
@@ -49,6 +50,9 @@ class TeyvatMoveController(BaseThreading):
     def stop_threading(self):
         self.puo.stop_threading()
         self.stop_threading_flag = True
+        
+    def check_flying(self):
+        self.itt.
     
         
     def run(self):
