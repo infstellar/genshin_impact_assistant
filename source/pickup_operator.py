@@ -38,7 +38,7 @@ class PickupOperator(BaseThreading):
         ret = generic_lib.f_recognition(self.itt)
         if ret:
             time.sleep(0.05)
-            ret = self.itt.get_img_position(img_manager.F_BUTTON, jpgmode=2)
+            ret = self.itt.get_img_position(img_manager.F_BUTTON)
             if ret == False:
                 return 0
             cap = self.itt.capture()

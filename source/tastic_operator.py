@@ -92,7 +92,7 @@ class TasticOperator(BaseThreading):
 
         situation_code = -1
 
-        while self.itt.get_img_existence(img_manager.COMING_OUT_BY_SPACE, jpgmode=2, min_rate=0.8):
+        while self.itt.get_img_existence(img_manager.COMING_OUT_BY_SPACE):
             if self.checkup_stop_func():
                 return 0
             situation_code = 1
