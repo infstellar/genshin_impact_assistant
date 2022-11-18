@@ -134,7 +134,7 @@ def get_rect(im_src, origin_img, ret_mode=0):
     ret, im_src = cv2.threshold(im_src, 1, 255, cv2.THRESH_BINARY)
     contours, hierarcy = cv2.findContours(im_src, 0, 1)
     # qshow(Alpha)
-    draw_1 = origin_img
+    draw_1 = origin_img.copy()
     max_black = 0
     max_id = 0
     bound_rect = []
@@ -149,7 +149,7 @@ def get_rect(im_src, origin_img, ret_mode=0):
         x, y, w, h = bound_rect[i]
         center_points.append([(x + w / 2), (y + h / 2)])
         if ret_mode == 1:
-            draw_1 = cv2.rectangle(draw_1, (x, y), (x + w, y + h), (0, 255, 0), 1)
+            draw_1 = cv2.rectangle(draw_1, (x, y), (x + w, y + h), (0, 255, 0), 10)
 
         x, y, w, h = bound_rect[max_id]
 

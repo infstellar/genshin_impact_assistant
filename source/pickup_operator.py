@@ -54,7 +54,11 @@ class PickupOperator(BaseThreading):
                     logger.info('pickup: '+str(res[0][1][0]))
                     return True
             
-        return False                
+        return False  
+    
+    def find_collector(self):
+        pass
+                  
 if __name__=='__main__':
     po=PickupOperator()
     po.start()
