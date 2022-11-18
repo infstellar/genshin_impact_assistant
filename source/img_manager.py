@@ -48,7 +48,12 @@ smallmap_AbyssMage=ImgIcon(name="smallmap_AbyssMage", path="assests\\imgs\\map\\
                                        is_bbg=False)                                    
 bigmap_AbyssMage=ImgIcon(name="bigmap_AbyssMage", path="assests\\imgs\\map\\big_map\\points\\TeleportWaypoint.jpg",
                                        is_bbg=False)
-
+motion_swimming=ImgIcon(name="motion_swimming", path="assests\\imgs\\common\\motion_swimming.jpg", 
+                        is_bbg=True, bbg_posi=[968, 1808, 1016, 1872], cap_posi='bbg')
+motion_climbing=ImgIcon(name="motion_climbing", path="assests\\imgs\\common\\motion_climbing.jpg", 
+                        is_bbg=True, bbg_posi=[960, 1706, 1022, 1866], cap_posi='bbg')
+motion_flying=ImgIcon(name="motion_flying", path="assests\\imgs\\common\\motion_flying.jpg", 
+                        is_bbg=True, bbg_posi=[960, 1706, 1022, 1866], cap_posi='bbg')
 matching_rate_dict = {
     "coming_out_by_space": 0.9,
     "IN_DOMAIN": 0.98,
@@ -164,6 +169,6 @@ if __name__ == '__main__':
     # img = refrom_img(cv2.imread("assests\\imgs\\common\\coming_out_by_space.jpg"),posi_manager.get_posi_from_str('coming_out_by_space'))
     # cv2.imwrite("assests\\imgs\\common\\coming_out_by_space.jpg", img)
     # get_img_from_imgname(COMING_OUT_BY_SPACE)
-    pname = F_BUTTON
-    p = auto_import_img("assests\\imgs\\common\\" + pname + ".jpg", pname)
+    # pname = F_BUTTON
+    p = auto_import_img("assests\\imgs\\common\\" + "motion_flying" + ".jpg", "swimming")
     print(p)
