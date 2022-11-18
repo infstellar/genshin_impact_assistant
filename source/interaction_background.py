@@ -177,7 +177,7 @@ class InteractionBGD:
         """单个图片匹配
 
         Args:
-            img (numpy): 截图Mat
+            img (numpy): Mat
             template (numpy): 要匹配的样板图片
             is_gray (bool, optional): 是否启用灰度匹配. Defaults to False.
             is_show_res (bool, optional): 结果显示. Defaults to False.
@@ -232,12 +232,9 @@ class InteractionBGD:
         """获得图片在屏幕上的坐标
 
         Args:
-            imgname (str): 图片名字
-            jpgmode (int, optional): jpgmode.参见capture函数. Defaults to 2.
+            imgicon (img_manager.ImgIcon): imgicon对象
             is_gray (bool, optional): 是否启用灰度匹配. Defaults to False.
-            threshold (float, optional): 最小匹配度. Defaults to 0.95.
             is_log (bool, optional): 是否打印日志. Defaults to False.
-            reshape (bool, optional): 是否切割图片。用于黑白背景的图片. Defaults to True.
 
         Returns:
             list[]/bool: 返回坐标或False
@@ -261,19 +258,16 @@ class InteractionBGD:
             return False
         
         
-    def get_img_existence(self, imgicon:img_manager.ImgIcon, posi=None, is_gray=False, is_log=False):
-        """_summary_
+    def get_img_existence(self, imgicon:img_manager.ImgIcon, is_gray=False, is_log=False):
+        """检测图片是否存在
 
         Args:
-            imgname (_type_): _description_
-            jpgmode (int, optional): _description_. Defaults to 2.
-            posi (_type_, optional): _description_. Defaults to None.
-            is_gray (bool, optional): _description_. Defaults to False.
-            min_rate (float, optional): _description_. Defaults to 0.95.
-            is_log (bool, optional): _description_. Defaults to False.
+            imgicon (img_manager.ImgIcon): imgicon对象
+            is_gray (bool, optional): 是否启用灰度匹配. Defaults to False.
+            is_log (bool, optional): 是否打印日志. Defaults to False.
 
         Returns:
-            _type_: _description_
+            bool: bool
         """
         upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
         
@@ -291,6 +285,15 @@ class InteractionBGD:
             return False
 
     def appear_then_click(self, imgicon:img_manager.ImgIcon, is_gray=False):
+        """_summary_
+
+        Args:
+            imgicon (img_manager.ImgIcon): imgicon对象
+            is_gray (bool, optional): 是否启用灰度匹配. Defaults to False.
+
+        Returns:
+            bool: bool
+        """
         upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
         
         cap = self.capture(posi = imgicon.cap_posi, jpgmode=imgicon.jpgmode)
@@ -579,7 +582,7 @@ if __name__ == '__main__':
     print()
     while 1:
         time.sleep(1)
-        print(ib.get_img_existence(img_manager.F_BUTTON))
+        print(ib.get_img_existence(img_manager.motion_flying), ib.get_img_existence(img_manager.motion_climbing), ib.get_img_existence(img_manager.motion_swimming))
         
         
         # print(ib.get_img_existence(img_manager.USE_20X2RESIN_DOBLE_CHOICES))
