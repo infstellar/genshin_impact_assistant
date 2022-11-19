@@ -16,7 +16,6 @@ if sys.path[1] != source_path:
 
 # 加载json
 def load_json(json_name='config.json'):
-    # try:
     return json.load(open(os.path.join('config', json_name), 'r', encoding='utf-8'))
 
 
@@ -66,41 +65,18 @@ if not is_admin():
     logger.error("请用管理员权限运行")
 
 
-def isint(x):
+def is_int(x):
     try:
-        a = int(x)
+        int(x)
     except ValueError:
         return False
     else:
         return True
 
 
-def savejson(x, json_name='config.json'):
-    b = json.dumps(x, sort_keys=True, indent=4, ensure_ascii=False)
-    f = open(os.path.join('config', json_name), 'w', encoding='utf-8')
-    f.write(b)
-    f.close()
-
-
-def is_number(s):
-    """
-    懒得写,抄的
-    https://www.runoob.com/python3/python3-check-is-number.html
-    """
-    try:
-        float(s)
-        return True
-    except ValueError:
-        pass
-
-    try:
-        import unicodedata
-        unicodedata.numeric(s)
-        return True
-    except (TypeError, ValueError):
-        pass
-
-    return False
+def save_json(x, json_name='config.json'):
+    json.dump(x, open(os.path.join('config', json_name), 'w', encoding='utf-8'), sort_keys=True, indent=4,
+              ensure_ascii=False)
 
 
 def loadfileP(filename):
@@ -118,7 +94,8 @@ def reflash_config():
     global config_json
     config_json = load_json("config.json")
 
-if __name__=='__main__':
+
+if __name__ == '__main__':
     a = load_json("../assests/itemall.json")
-    savejson(a, "../assests/itemall.json")
+    save_json(a, "../assests/itemall.json")
     print()
