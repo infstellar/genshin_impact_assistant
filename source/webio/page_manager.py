@@ -35,7 +35,7 @@ class PageManager:
             self.page_dict[idx].load()
 
             self.last_page = self.page_dict[idx]
-            print(type(self.last_page))
+
 
     def reg_page(self, idx: str, page: Page):
         self.page_dict[idx] = page

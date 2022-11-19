@@ -39,8 +39,8 @@ class VOCEvaluator:
         self.num_images = len(dataloader.dataset)
 
     def evaluate(
-        self, model, distributed=False, half=False, trt_file=None,
-        decoder=None, test_size=None, return_outputs=False,
+            self, model, distributed=False, half=False, trt_file=None,
+            decoder=None, test_size=None, return_outputs=False,
     ):
         """
         VOC average precision (AP) Evaluation. Iterate inference on the test dataset
@@ -154,9 +154,9 @@ class VOCEvaluator:
             [
                 "Average {} time: {:.2f} ms".format(k, v)
                 for k, v in zip(
-                    ["forward", "NMS", "inference"],
-                    [a_infer_time, a_nms_time, (a_infer_time + a_nms_time)],
-                )
+                ["forward", "NMS", "inference"],
+                [a_infer_time, a_nms_time, (a_infer_time + a_nms_time)],
+            )
             ]
         )
         info = time_info + "\n"

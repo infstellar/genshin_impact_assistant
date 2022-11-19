@@ -6,12 +6,13 @@ import numpy as np
 from timer_module import Timer
 from unit import *
 
+
 def get_handle():
     handle = ctypes.windll.user32.FindWindowW(None, '原神')
-    if handle!=0:
+    if handle != 0:
         return handle
     handle = ctypes.windll.user32.FindWindowW(None, 'Genshin Impact')
-    if handle!=0:
+    if handle != 0:
         return handle
 
 
@@ -81,6 +82,7 @@ class ScreenCapture:
 
 SCREENCAPTURE = ScreenCapture()
 W_KEYDOWN = False
+
 
 class testtest(threading.Thread):
     def __init__(self):
