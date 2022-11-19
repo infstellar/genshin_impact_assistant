@@ -54,6 +54,10 @@ motion_climbing=ImgIcon(name="motion_climbing", path="assests\\imgs\\common\\mot
                         is_bbg=True, bbg_posi=[960, 1706, 1022, 1866], cap_posi='bbg')
 motion_flying=ImgIcon(name="motion_flying", path="assests\\imgs\\common\\motion_flying.jpg", 
                         is_bbg=True, bbg_posi=[960, 1706, 1022, 1866], cap_posi='bbg')
+ui_main_win=ImgIcon(name="ui_main_win", path="assests\\imgs\\common\\ui\\emergency_food.jpg",
+                    is_bbg=True, bbg_posi=[34, 39, 78, 73], cap_posi='bbg')
+ui_bigmap_win=ImgIcon(name="ui_bigmap_win", path="assests\\imgs\\common\\ui\\bigmap.jpg",
+                    is_bbg=True, bbg_posi=[36, 1591, 59, 1614], cap_posi='bbg')
 matching_rate_dict = {
     "coming_out_by_space": 0.9,
     "IN_DOMAIN": 0.98,
@@ -170,5 +174,5 @@ if __name__ == '__main__':
     # cv2.imwrite("assests\\imgs\\common\\coming_out_by_space.jpg", img)
     # get_img_from_imgname(COMING_OUT_BY_SPACE)
     # pname = F_BUTTON
-    p = auto_import_img("assests\\imgs\\common\\" + "motion_flying" + ".jpg", "swimming")
+    p = auto_import_img("assests\\imgs\\common\\ui\\" + "bigmap" + ".jpg", "swimming")
     print(p)

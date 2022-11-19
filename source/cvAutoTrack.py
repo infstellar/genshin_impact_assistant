@@ -64,7 +64,7 @@ class AutoTracker:
         x, y = c_double(0), c_double(0)
         ret = self.__lib.GetPosition(x, y)
         # retx,rety=self.translate_posi(x.value, y.value)
-        return ret, x, y
+        return ret, x.value, y.value
 
     def get_direction(self):
         a = c_double(0)

@@ -85,7 +85,7 @@ class InteractionBGD:
         """
         
         ret = static_lib.SCREENCAPTURE.get_capture()
-        if ret.shape==(0,0,3):
+        if (ret.shape==(0,0,3)) or (ret.shape==(0,0,4)):
             logger.error("截图失败")
         # img_manager.qshow(ret)
         if posi is not None:
@@ -288,7 +288,7 @@ class InteractionBGD:
         else:
             return False
 
-    def appear_then_click(self, imgicon:img_manager.ImgIcon, is_gray=False):
+    def appear_then_click(self, inputvar, is_gray=False):
         """_summary_
 
         Args:
@@ -298,24 +298,28 @@ class InteractionBGD:
         Returns:
             bool: bool
         """
-        upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
-        
-        cap = self.capture(posi = imgicon.cap_posi, jpgmode=imgicon.jpgmode)
-        # min_rate = img_manager.matching_rate_dict[imgname]
+        if isinstance(inputvar, img_manager.ImgIcon):
+            imgicon = inputvar
+            upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
+            
+            cap = self.capture(posi = imgicon.cap_posi, jpgmode=imgicon.jpgmode)
+            # min_rate = img_manager.matching_rate_dict[imgname]
 
-        matching_rate = self.similar_img(imgicon.image, cap, is_gray=is_gray)
+            matching_rate = self.similar_img(imgicon.image, cap, is_gray=is_gray)
 
-        logger.debug(
-            'imgname: ' + imgicon.name + 'matching_rate: ' + str(matching_rate) + ' |function name: ' + upper_func_name)
+            logger.debug(
+                'imgname: ' + imgicon.name + 'matching_rate: ' + str(matching_rate) + ' |function name: ' + upper_func_name)
 
-        if matching_rate >= imgicon.threshold:
-            p = imgicon.cap_posi
-            center_p = [(p[1] + p[3]) / 2, (p[0] + p[2]) / 2]
-            self.move_to(center_p[0], center_p[1])
-            self.left_click()
-            return True
-        else:
-            return False
+            if matching_rate >= imgicon.threshold:
+                p = imgicon.cap_posi
+                center_p = [(p[1] + p[3]) / 2, (p[0] + p[2]) / 2]
+                self.move_to(center_p[0], center_p[1])
+                self.left_click()
+                return True
+            else:
+                return False
+        elif isinstance(inputvar, str):
+            pass
 
     def appear_then_press(self, imgicon:img_manager.ImgIcon, key_name, is_gray=False):
         upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
