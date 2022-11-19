@@ -15,7 +15,7 @@ def sort_flag_1(x: character.Character):
     return x.priority
 
 
-class Switch_Character_Operator(BaseThreading):
+class SwitchCharacterOperator(BaseThreading):
     def __init__(self, chara_list: list[character.Character]):
         super().__init__()
         self.setName('Switch_Character_Operator')

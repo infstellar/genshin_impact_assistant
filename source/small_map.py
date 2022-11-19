@@ -25,7 +25,7 @@ def qshow(img1):
     cv2.waitKey(0)
 
 
-def Line2Angle(p):
+def line2angle(p):
     # rad2degScale = 180/math.pi
     # res = math.atan2(-p[1], p[0])*rad2degScale
     # # const double rad2degScale = 180 / CV_PI;
