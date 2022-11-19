@@ -1,7 +1,6 @@
 import json
 import os
 import sys
-import time # 8药删了，qq了
 
 from loguru import logger
 
@@ -16,12 +15,7 @@ if sys.path[1] != source_path:
 
 # 加载json
 def load_json(json_name='config.json'):
-    # try:
-    f = open(os.path.join('config', json_name), 'r', encoding='utf-8')
-    content = f.read()
-    a = json.loads(content)
-    f.close()
-    return a
+    return json.load(open(os.path.join('config', json_name), 'r', encoding='utf-8'))
 
 
 config_json = load_json("config.json")
@@ -79,11 +73,9 @@ def isint(x):
         return True
 
 
-def savejson(x, json_name='config.json'):
-    b = json.dumps(x, sort_keys=True, indent=4, ensure_ascii=False)
-    f = open(os.path.join('config', json_name), 'w', encoding='utf-8')
-    f.write(b)
-    f.close()
+def save_json(x, json_name='config.json'):
+    json.dump(x, open(os.path.join('config', json_name), 'w', encoding='utf-8'), sort_keys=True, indent=4,
+              ensure_ascii=False)
 
 
 def is_number(s):
@@ -122,7 +114,8 @@ def reflash_config():
     global config_json
     config_json = load_json("config.json")
 
-if __name__=='__main__':
+
+if __name__ == '__main__':
     a = load_json("../assests/itemall.json")
-    savejson(a, "../assests/itemall.json") 
+    save_json(a, "../assests/itemall.json")
     print()
