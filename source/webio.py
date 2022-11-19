@@ -3,6 +3,8 @@ import os
 
 from pywebio import *
 
+from source import util
+
 file_name = ''
 
 
@@ -20,7 +22,8 @@ async def save():
     j = json.load(open(file_name, 'r', encoding='utf8'))
 
     json.dump(await get_json(j), open(file_name, 'w', encoding='utf8'))
-    output.put_text('saved!', scope='now')
+    # output.put_text('saved!', scope='now')
+    output.toast('saved!')
 
 
 async def get_json(j: dict, add_name=''):
@@ -32,8 +35,7 @@ async def get_json(j: dict, add_name=''):
             rt_json[k] = get_json(v, add_name='{}-{}'.format(add_name, k))
 
         elif type(v) == list:
-
-            rt_json[k] = await pin.pin['{}-{}'.format(add_name, k)].split(', ')
+            rt_json[k] = util.list_text2list(await pin.pin['{}-{}'.format(add_name, k)])
         else:
             rt_json[k] = await pin.pin['{}-{}'.format(add_name, k)]
 
@@ -55,7 +57,8 @@ def put_json(j: dict, scope_name, add_name='', level=1):
             output.put_markdown('#' * level + ' ' + k, scope='{}-{}'.format(add_name, k))
             put_json(v, '{}-{}'.format(add_name, k), add_name='{}-{}'.format(add_name, k), level=level + 1)
         elif type(v) == list:
-            pin.put_input('{}-{}'.format(add_name, k), label=k, value=str(v)[1:-1], scope=scope_name)
+            pin.put_textarea('{}-{}'.format(add_name, k), label=k, value=util.list2format_list_text(v),
+                             scope=scope_name)
         elif type(v) == int:
             pin.put_input('{}-{}'.format(add_name, k), label=k, value=v, scope=scope_name, type='number')
         elif type(v) == float:
