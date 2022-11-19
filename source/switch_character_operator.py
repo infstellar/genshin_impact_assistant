@@ -77,7 +77,7 @@ class SwitchCharacterOperator(BaseThreading):
         t = self.switch_timer.getDiffTime()
         self.tastic_operator.chara_waiting()
         logger.debug('try switching to ' + str(x))
-        for i in range(120): # 12 sec
+        for i in range(120):  # 12 sec
             if self.checkup_stop_func():
                 return 0
             combat_lib.unconventionality_situlation_detection(self.itt)

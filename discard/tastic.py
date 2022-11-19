@@ -334,4 +334,3 @@ if __name__ == '__main__':
     while 1:
         print(tastic.unconventionality_situlation_detection())
         time.sleep(0.2)
-

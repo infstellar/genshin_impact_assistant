@@ -22,7 +22,7 @@ config.json文件位置：`genshin_assistant\config`
 ## keymap.json
 
 可以自定义按键。详情如下：
-| 项目            | 内容                                                         |
+| 项目 | 内容 |
 | --------------- | ------------------------------------------------------------ |
 | `autoCombat`   | 开关自动战斗的按键|
 | `autoDomain`| 开关自动秘境的按键|
@@ -60,7 +60,8 @@ config.json文件位置：`genshin_assistant\config`
 | `Ecd_press_time`  | 按E技能的时间                                                                                                            |
 | `tastic_group`    | 策略组，配置角色战斗策略，详细说明见[combat_assi.md](./combat_assi.md)                                                               |
 
-如`autofill`参数为`true`，且`character.json`文件中有此角色的配置参数时，则无需在`team.jsom`中填写`Elast_time`、`Qlast_time`、`E_short_cd_time`、`E_long_cd_time`、`Ecd_float_time`、`Ecd_press_time`、`tastic_group`参数。
+如`autofill`参数为`true`，且`character.json`文件中有此角色的配置参数时，则无需在`team.jsom`中填写`Elast_time`、`Qlast_time`
+、`E_short_cd_time`、`E_long_cd_time`、`Ecd_float_time`、`Ecd_press_time`、`tastic_group`参数。
 
 如`autofill`参数为`false`，则需要在`team.json`中填写战斗相关参数。
 

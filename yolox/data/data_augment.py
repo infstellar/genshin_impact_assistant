@@ -44,11 +44,11 @@ def get_aug_params(value, center=0):
 
 
 def get_affine_matrix(
-    target_size,
-    degrees=10,
-    translate=0.1,
-    scales=0.1,
-    shear=10,
+        target_size,
+        degrees=10,
+        translate=0.1,
+        scales=0.1,
+        shear=10,
 ):
     twidth, theight = target_size
 
@@ -112,13 +112,13 @@ def apply_affine_to_bboxes(targets, target_size, M, scale):
 
 
 def random_affine(
-    img,
-    targets=(),
-    target_size=(640, 640),
-    degrees=10,
-    translate=0.1,
-    scales=0.1,
-    shear=10,
+        img,
+        targets=(),
+        target_size=(640, 640),
+        degrees=10,
+        translate=0.1,
+        scales=0.1,
+        shear=10,
 ):
     M, scale = get_affine_matrix(target_size, degrees, translate, scales, shear)
 
@@ -204,8 +204,8 @@ class TrainTransform:
         targets_t = np.hstack((labels_t, boxes_t))
         padded_labels = np.zeros((self.max_labels, 5))
         padded_labels[range(len(targets_t))[: self.max_labels]] = targets_t[
-            : self.max_labels
-        ]
+                                                                  : self.max_labels
+                                                                  ]
         padded_labels = np.ascontiguousarray(padded_labels, dtype=np.float32)
         return image_t, padded_labels
 

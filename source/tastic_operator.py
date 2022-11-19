@@ -240,14 +240,14 @@ class TasticOperator(BaseThreading):
 
     def is_q_ready(self):
         # cap = self.itt.capture(posi=posi_manager.posi_chara_q)
-        cap = self.itt.png2jpg(cap, channel='ui', alpha_num = 200) # BEFOREV3D1
-        cap = self.itt.png2jpg(cap, channel='bg', alpha_num = 160)
+        cap = self.itt.png2jpg(cap, channel='ui', alpha_num=200)  # BEFOREV3D1
+        cap = self.itt.png2jpg(cap, channel='bg', alpha_num=160)
         img_manager.qshow(cap)
         # p = posi_manager.posi_chara_q_point
         if cap.max() > 10:
             # print(cap.max())
             return True
-        
+
         else:
             # print(cap.max())
             return False
