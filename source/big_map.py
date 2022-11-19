@@ -71,13 +71,20 @@ def bigmap_posi2teyvat_posi(current_teyvat_posi, bigmap_posi_list):
     bigmap_posi_list = bigmap_posi_list + current_teyvat_posi
     return bigmap_posi_list
 
-def get_nearest_TW_posi_in_bigmap(current_posi=[[683,-1519]], target_posi=[0,0]):
+def get_nearest_TW_posi_in_bigmap(current_posi, target_posi):
     twpoints = np.array(get_TW_points(itt.capture(jpgmode = 0)))
     twpoints_teyvat = twpoints.copy()
     twpoints_teyvat = bigmap_posi2teyvat_posi(current_posi, twpoints_teyvat)
     p = calculate_nearest_posi(twpoints_teyvat, target_posi)
     a = np.where(twpoints_teyvat==p[0])[0][-1]
     return twpoints[a]
+
+def get_nearest_TW_posi_in_teyvat(current_posi, target_posi):
+    twpoints = np.array(get_TW_points(itt.capture(jpgmode = 0)))
+    twpoints_teyvat = twpoints.copy()
+    twpoints_teyvat = bigmap_posi2teyvat_posi(current_posi, twpoints_teyvat)
+    p = calculate_nearest_posi(twpoints_teyvat, target_posi)
+    return p
     
 
 if __name__ == '__main__':
