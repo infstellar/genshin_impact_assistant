@@ -131,7 +131,7 @@ class DomainFlow(BaseThreading):
 
             if pdocr_api.ocr.get_text_position(cap, textM.text(textM.clld)) != -1:
                 break
-            if self.itt.get_img_existence(imgname=img_manager.IN_DOMAIN):
+            if self.itt.get_img_existence(img_manager.IN_DOMAIN):
                 break
             time.sleep(1)
             # cap=self.itt.capture(jpgmode=2)
@@ -208,9 +208,9 @@ class DomainFlow(BaseThreading):
 
         while 1:
             if self.resin_mode == '40':
-                self.itt.appear_then_click(imgname=img_manager.USE_20X2RESIN_DOBLE_CHOICES)
+                self.itt.appear_then_click(img_manager.USE_20X2RESIN_DOBLE_CHOICES)
             elif self.resin_mode == '20':
-                self.itt.appear_then_click(imgname=img_manager.USE_20RESIN_DOBLE_CHOICES)
+                self.itt.appear_then_click(img_manager.USE_20RESIN_DOBLE_CHOICES)
 
             if pdocr_api.ocr.get_text_position(self.itt.capture(jpgmode=3), textM.text(textM.domain_obtain)) != -1:
                 break
