@@ -17,13 +17,13 @@ from .network_blocks import BaseConv, DWConv
 
 class YOLOXHead(nn.Module):
     def __init__(
-        self,
-        num_classes,
-        width=1.0,
+            self,
+            num_classes,
+            width=1.0,
             strides=None,
             in_channels=None,
-        act="silu",
-        depthwise=False,
+            act="silu",
+            depthwise=False,
     ):
         """
         Args:
@@ -152,7 +152,7 @@ class YOLOXHead(nn.Module):
         expanded_strides = []
 
         for k, (cls_conv, reg_conv, stride_this_level, x) in enumerate(
-            zip(self.cls_convs, self.reg_convs, self.strides, xin)
+                zip(self.cls_convs, self.reg_convs, self.strides, xin)
         ):
             x = self.stems[k](x)
             cls_x = x
@@ -255,15 +255,15 @@ class YOLOXHead(nn.Module):
         return outputs
 
     def get_losses(
-        self,
-        imgs,
-        x_shifts,
-        y_shifts,
-        expanded_strides,
-        labels,
-        outputs,
-        origin_preds,
-        dtype,
+            self,
+            imgs,
+            x_shifts,
+            y_shifts,
+            expanded_strides,
+            labels,
+            outputs,
+            origin_preds,
+            dtype,
     ):
         bbox_preds = outputs[:, :, :4]  # [batch, n_anchors_all, 4]
         obj_preds = outputs[:, :, 4].unsqueeze(-1)  # [batch, n_anchors_all, 1]
@@ -393,20 +393,20 @@ class YOLOXHead(nn.Module):
 
         num_fg = max(num_fg, 1)
         loss_iou = (
-            self.iou_loss(bbox_preds.view(-1, 4)[fg_masks], reg_targets)
-        ).sum() / num_fg
+                       self.iou_loss(bbox_preds.view(-1, 4)[fg_masks], reg_targets)
+                   ).sum() / num_fg
         loss_obj = (
-            self.bcewithlog_loss(obj_preds.view(-1, 1), obj_targets)
-        ).sum() / num_fg
+                       self.bcewithlog_loss(obj_preds.view(-1, 1), obj_targets)
+                   ).sum() / num_fg
         loss_cls = (
-            self.bcewithlog_loss(
-                cls_preds.view(-1, self.num_classes)[fg_masks], cls_targets
-            )
-        ).sum() / num_fg
+                       self.bcewithlog_loss(
+                           cls_preds.view(-1, self.num_classes)[fg_masks], cls_targets
+                       )
+                   ).sum() / num_fg
         if self.use_l1:
             loss_l1 = (
-                self.l1_loss(origin_preds.view(-1, 4)[fg_masks], l1_targets)
-            ).sum() / num_fg
+                          self.l1_loss(origin_preds.view(-1, 4)[fg_masks], l1_targets)
+                      ).sum() / num_fg
         else:
             loss_l1 = 0.0
 
@@ -432,22 +432,22 @@ class YOLOXHead(nn.Module):
 
     @torch.no_grad()
     def get_assignments(
-        self,
-        batch_idx,
-        num_gt,
-        total_num_anchors,
-        gt_bboxes_per_image,
-        gt_classes,
-        bboxes_preds_per_image,
-        expanded_strides,
-        x_shifts,
-        y_shifts,
-        cls_preds,
-        bbox_preds,
-        obj_preds,
-        labels,
-        imgs,
-        mode="gpu",
+            self,
+            batch_idx,
+            num_gt,
+            total_num_anchors,
+            gt_bboxes_per_image,
+            gt_classes,
+            bboxes_preds_per_image,
+            expanded_strides,
+            x_shifts,
+            y_shifts,
+            cls_preds,
+            bbox_preds,
+            obj_preds,
+            labels,
+            imgs,
+            mode="gpu",
     ):
 
         if mode == "cpu":
@@ -492,8 +492,8 @@ class YOLOXHead(nn.Module):
 
         with torch.cuda.amp.autocast(enabled=False):
             cls_preds_ = (
-                cls_preds_.float().unsqueeze(0).repeat(num_gt, 1, 1).sigmoid_()
-                * obj_preds_.float().unsqueeze(0).repeat(num_gt, 1, 1).sigmoid_()
+                    cls_preds_.float().unsqueeze(0).repeat(num_gt, 1, 1).sigmoid_()
+                    * obj_preds_.float().unsqueeze(0).repeat(num_gt, 1, 1).sigmoid_()
             )
             pair_wise_cls_loss = F.binary_cross_entropy(
                 cls_preds_.sqrt_(), gt_cls_per_image, reduction="none"
@@ -501,9 +501,9 @@ class YOLOXHead(nn.Module):
         del cls_preds_
 
         cost = (
-            pair_wise_cls_loss
-            + 3.0 * pair_wise_ious_loss
-            + 100000.0 * (~is_in_boxes_and_center)
+                pair_wise_cls_loss
+                + 3.0 * pair_wise_ious_loss
+                + 100000.0 * (~is_in_boxes_and_center)
         )
 
         (
@@ -531,11 +531,11 @@ class YOLOXHead(nn.Module):
     @staticmethod
     def get_in_boxes_info(
             gt_bboxes_per_image,
-        expanded_strides,
-        x_shifts,
-        y_shifts,
-        total_num_anchors,
-        num_gt,
+            expanded_strides,
+            x_shifts,
+            y_shifts,
+            total_num_anchors,
+            num_gt,
     ):
         expanded_strides_per_image = expanded_strides[0]
         x_shifts_per_image = x_shifts[0] * expanded_strides_per_image
@@ -609,7 +609,7 @@ class YOLOXHead(nn.Module):
         is_in_boxes_anchor = is_in_boxes_all | is_in_centers_all
 
         is_in_boxes_and_center = (
-            is_in_boxes[:, is_in_boxes_anchor] & is_in_centers[:, is_in_boxes_anchor]
+                is_in_boxes[:, is_in_boxes_anchor] & is_in_centers[:, is_in_boxes_anchor]
         )
         return is_in_boxes_anchor, is_in_boxes_and_center
 

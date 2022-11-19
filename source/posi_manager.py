@@ -35,7 +35,7 @@ posi_chara_q_point = [981, 1812]
 posi_chara_e = [965, 1666, 1015, 1716]
 posi_chara_smaller_e = [974, 1671, 1013, 1710]
 posi_coming_out_by_space = [505, 1379, 568, 1447]
-posi_F_button_list = [350,1079,751,1162]
+posi_F_button_list = [350, 1079, 751, 1162]
 posi_F_button_text = [505, 1152, 572, 1503]
 # posi_chara_e_point=[]
 posi_arrow = [111 - 3, 156 - 3, 111 + 26 + 2, 156 + 26 + 2]
@@ -48,7 +48,7 @@ posi_domain = {
     'UseResin': [714, 537, 811, 1386],
     'LeaveOrContinue': [908, 391, 1042, 1547]
 }
-tp_button=[1698,1002]
+tp_button = [1698, 1002]
 
 # def get_posi_from_str(str1: str):
 #     try:

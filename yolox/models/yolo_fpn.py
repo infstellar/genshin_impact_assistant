@@ -15,8 +15,8 @@ class YOLOFPN(nn.Module):
     """
 
     def __init__(
-        self,
-        depth=53,
+            self,
+            depth=53,
             in_features=None,
     ):
         super().__init__()

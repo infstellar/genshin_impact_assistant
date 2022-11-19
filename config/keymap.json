@@ -1,6 +1,6 @@
 {
-    "autoCombat":"/",
-    "autoDomain":"]",
-    "autoPickup":"'",
-    "startstop":"["
+  "autoCombat": "/",
+  "autoDomain": "]",
+  "autoPickup": "'",
+  "startstop": "["
 }

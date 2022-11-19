@@ -123,6 +123,7 @@ class WandbLogger(object):
     https://docs.wandb.ai/guides/track
     https://docs.wandb.ai/guides/integrations/other/yolox
     """
+
     def __init__(self,
                  project=None,
                  name=None,
@@ -168,7 +169,7 @@ class WandbLogger(object):
             raise ModuleNotFoundError(
                 "wandb is not installed."
                 "Please install wandb using pip install wandb"
-                )
+            )
 
         self.project = project
         self.name = name
@@ -322,12 +323,12 @@ class WandbLogger(object):
             result_table.add_data(
                 idx,
                 self.wandb.Image(val[1], boxes={
-                        "prediction": {
-                            "box_data": boxes,
-                            "class_labels": self.id_to_class
-                        }
+                    "prediction": {
+                        "box_data": boxes,
+                        "class_labels": self.id_to_class
                     }
-                ),
+                }
+                                 ),
                 *average_class_score
             )
 
