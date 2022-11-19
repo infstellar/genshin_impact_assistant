@@ -42,11 +42,11 @@ USE_20X2RESIN_DOBLE_CHOICES=ImgIcon(name="USE_20X2RESIN_DOBLE_CHOICES", path="as
 F_BUTTON=ImgIcon(name="F_BUTTON", path="assests\\imgs\\common\\F_BUTTON.jpg",
                                        is_bbg=True, bbg_posi=[526, 1104, 550, 1128], cap_posi=[350,1079,751,1162], 
                                        threshold=0.92)
-bigmap_TeleportWaypoint=ImgIcon(name="bigmap_TeleportWaypoint", path="assests\\imgs\\map\\small_map\\enemies\\AbyssMage.jpg",
+bigmap_TeleportWaypoint=ImgIcon(name="bigmap_TeleportWaypoint", path="assests\\imgs\\map\\big_map\\points\\TeleportWaypoint.jpg",
                                        is_bbg=False)
-smallmap_AbyssMage=ImgIcon(name="smallmap_AbyssMage", path="assests\\imgs\\map\\big_map\\enemies\\AbyssMage.jpg",
+smallmap_AbyssMage=ImgIcon(name="smallmap_AbyssMage", path="assests\\imgs\\map\\small_map\\enemies\\AbyssMage.jpg",
                                        is_bbg=False)                                    
-bigmap_AbyssMage=ImgIcon(name="bigmap_AbyssMage", path="assests\\imgs\\map\\big_map\\points\\TeleportWaypoint.jpg",
+bigmap_AbyssMage=ImgIcon(name="bigmap_AbyssMage", path="assests\\imgs\\map\\big_map\\enemies\\AbyssMage.jpg",
                                        is_bbg=False)
 motion_swimming=ImgIcon(name="motion_swimming", path="assests\\imgs\\common\\motion_swimming.jpg", 
                         is_bbg=True, bbg_posi=[968, 1808, 1016, 1872], cap_posi='bbg')
