@@ -414,11 +414,16 @@ class InteractionBGD:
             x = x[0]
         if x == -1:  # x为空时
             x, y = self.get_mouse_point()
-        x = int(x)
-        y = int(y)
+        else:
+            x = int(x)
+            y = int(y)
+            self.move_to(x,y)
+            self.delay(0.8)
+        
         if not self.CONSOLE_ONLY:
+            
             wparam = 0
-            lparam = y << 16 | x
+            lparam = 0 << 16 | 0
             self.PostMessageW(self.handle, self.WM_LBUTTONDOWN, wparam, lparam)
             self.delay(0.06, randtime=False, isprint=False)
             self.PostMessageW(self.handle, self.WM_LBUTTONUP, wparam, lparam)

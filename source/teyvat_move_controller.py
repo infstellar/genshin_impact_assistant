@@ -122,6 +122,17 @@ class TeyvatMoveController(BaseThreading):
             else:
                 self.switch_statement()
                 if not self.combat_loop.pause_threading_flag:
-                    self.combat_loop.pause_threading()
-                if self.puo.pause_threading_flag:
-                    self.puo.continue_threading()
+                    self.combat_loop.pause_threading()       
+                # if self.puo.pause_threading_flag:
+                #     self.puo.continue_threading()
+                    
+            
+                 
+
+                
+                
+            
+        
+    
+
+
