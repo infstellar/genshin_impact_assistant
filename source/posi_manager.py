@@ -48,7 +48,7 @@ posi_domain = {
     'UseResin': [714, 537, 811, 1386],
     'LeaveOrContinue': [908, 391, 1042, 1547]
 }
-
+tp_button=[1698,1002]
 
 # def get_posi_from_str(str1: str):
 #     try:
