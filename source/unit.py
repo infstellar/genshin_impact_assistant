@@ -64,9 +64,9 @@ if not is_admin():
     logger.error("请用管理员权限运行")
 
 
-def isint(x):
+def is_int(x):
     try:
-        a = int(x)
+        int(x)
     except ValueError:
         return False
     else:
