@@ -4,7 +4,6 @@ import os
 import time, math
 from img_manager import qshow
 
-
 from interaction_background import InteractionBGD
 import small_map
 
@@ -62,8 +61,8 @@ def jwa_3(imsrc):
     # Alpha = Alpha[:360,:286:,:]
     # Alpha[:,303:,:]=0
     # qshow(Alpha)
-    Alpha=255-Alpha
-    Alpha=Alpha.astype('uint8')
+    Alpha = 255 - Alpha
+    Alpha = Alpha.astype('uint8')
     # Alpha = Alpha * 2
     # _, Alpha = cv2.threshold(Alpha, 200, 0, cv2.THRESH_TOZERO_INV)
     _, Alpha = cv2.threshold(Alpha, 245, 0, cv2.THRESH_TOZERO)
@@ -137,7 +136,8 @@ def jwa_3(imsrc):
 
     if degree > 180:
         degree -= 360
-    cv2.imshow('123', cv2.drawMarker(Alpha,position=(int(p[0]),int(p[1])),color=(255, 0, 255),markerSize = 1, markerType=cv2.MARKER_CROSS, thickness=5))
+    cv2.imshow('123', cv2.drawMarker(Alpha, position=(int(p[0]), int(p[1])), color=(255, 0, 255), markerSize=1,
+                                     markerType=cv2.MARKER_CROSS, thickness=5))
     cv2.waitKey(100)
     print(degree)
     return degree
@@ -149,6 +149,7 @@ def jwa_3(imsrc):
     # cv2.waitKey(0)
     # p = p - (img_object.cols / 2, img_object.rows / 2)
     # return p,Line2Angle(p)
+
 
 # a = Line2Angle(p);
 snap_path = "tools\\snapshot"
@@ -168,22 +169,22 @@ while 1:
     numi += 1
     cap = itt.capture(jpgmode=0)
     # cap = itt.png2jpg(cap, channel = 'ui', alpha_num = 50)# 22 no Q
-    cv2.imwrite("tools\\snapshot\\jpg\\"+str(numi)+".jpg",cap)
+    cv2.imwrite("tools\\snapshot\\jpg\\" + str(numi) + ".jpg", cap)
     # qshow(cap)
-    
+
     # cv2.imshow('123', cap)
     # cv2.waitKey(1000)
-    
+
     x = str(time.time())
     # cv2.imwrite("tools\\snapshot\\png\\"+SA_name+str(numi)+".png",cap)
-    
+
     # cv2.imwrite("tools\\snapshot\\jpg\\"+str(numi)+".jpg",cap[:,:,:3])
-    
+
     # cap = itt.capture(posi=small_map.posi_map)
     # jwa_3(cap)
     # cv2.imwrite("tools\\snapshot\\jpg\\" + SA_name + str(numi) + ".jpg",
     #             jpg_with_alpha(cap, channel='ui', bgclolr='black', alpha_num=250))
-    
+
     # cv2.imwrite("tools\\snapshot\\jpg_withalpha\\"+SA_name+str(numi)+".jpg",jwa_3(cap))
     # jwa_3(cap)
     time.sleep(0.1)

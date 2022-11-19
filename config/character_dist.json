@@ -1,290 +1,304 @@
 {
-"name":[["albedo","Albedo","阿贝多","アルベド"],
-
-
-["alhaitham","Alhaitham","艾尔海森","アルハイゼン"],
-
-
-["aloy","Aloy","埃洛伊","アーロイ"],
-
-
-["amber",
-"Amber"
-,"安柏"
-,"アンバー"],
-
-
-["arataki_itto",
-"Arataki Itto"
-,"荒泷一斗"
-,"荒瀧一斗"
-],
-
-["barbara",
-"Barbara"
-,"芭芭拉"
-,"バーバラ"],
-
-
-["beidou",
-"Beidou"
-,"北斗"
-,"北斗"],
-
-
-["bennett",
-"Bennett"
-,"班尼特"
-,"ベネット"
- ],
-
-["chongyun",
-"Chongyun"
-,"重云"
-,"重雲"],
-
-["collei",
-"Collei"
-,"柯莱"
-,"コレイ" ],
-
-
-["diluc",
-"Diluc"
-,"迪卢克"
-,"ディルック"],
-
-
-["diona",
-"Diona"
-,"迪奥娜"
-,"ディオナ"],
-
-
-["dori",
-"Dori"
-,"多莉"
-,"ドリー"],
-
-
-["eula",
-"Eula"
-,"优菈"
-,"エウルア" ],
-
-
-["fischl",
-"Fischl"
-,"菲谢尔"
-,"フィッシュル" ],
-
-
-["ganyu",
-"Ganyu"
-,"甘雨"
-,"甘雨"],
-
-
-["gorou",
-"Gorou"
-,"五郎"
-,"ゴロー"],
-
-
-["hu_tao",
-"Hu Tao"
-,"胡桃"
-,"胡桃" ],
-
-
-["jean",
-"Jean"
-,"琴"
-,"ジン" ],
-
-
-["kaedehara_kazuha",
-"Kaedehara Kazuha"
-,"枫原万叶" ],
-
-
-["kaeya",
-"Kaiya"
-,"凯亚" ],
-
-
-["kamisato_ayaka",
-"Kamisato Ayaka"
-,"神里绫华" ],
-
-
-["kamisato_ayato",
-"Kamisato Ayato"
-,"神里绫人" ],
-
-
-["keqing",
-"Keqing"
-,"刻晴"],
-
-
-["klee",
-"Klee"
-,"可莉"],
-
-["kujou_sara",
-"Kujou Sara"
-,"九条裟罗" ],
-
-
-["kuki_shinobu",
-"Kuki Shinobu"
-,"久岐忍" ],
-
-
-["lisa",
-"Lisa"
-,"丽莎" ],
-
-
-["mona",
-"Mona"
-,"莫娜"],
-
-
-["ningguang",
-"Ningguang"
-,"凝光" ],
-
-
-["noelle",
-"Noelle"
-,"诺艾尔"],
-
-
-["paimon",
-"Paimon"
-,"派蒙" ],
-
-
-["qiqi",
-"Qiqi"
-,"七七" ],
-
-
-["raiden_shogun",
-"Raiden Shogun"
-,"雷电将军" ],
-
-
-["rezor",
-"Rezor"
-,"雷泽" ],
-
-
-["rosaria",
-"Rosaria"
-,"罗莎莉亚" ],
-
-
-["sangonomiya_kokomi",
-"Sangonomiya Kokomi"
-,"珊瑚宫心海" ],
-
-
-["sayu",
-"Sayu"
-,"早柚" ],
-
-
-["shenhe",
-"Shenhe"
-,"申鹤" ],
-
-
-["shikanoin_heizou",
-"Shikanoin Heizou"
-,"鹿野院平藏" ],
-
-
-["sucrose",
-"Sucrose"
-,"砂糖" ],
-
-
-["tartaglia",
-"Tartaglia"
-,"达达利亚" ],
-
-
-["thoma",
-"Thoma"
-,"托马" ],
-
-
-["tighnari",
-"Tighnari"
-,"提纳里" ],
-
-
-["traveler",
-"Traveler"
-,"旅行者"
-,"旅人"
- ],
-
-["venti",
-"Venti"
-,"温迪" ],
-
-
-["xiangling",
-"Xiangling"
-,"香菱" ],
-
-
-["xiao",
-"Xiao"
-,"魈" ],
-
-
-["xingqiu",
-"Xingqiu"
-,"行秋" ],
-
-
-["xinyan",
-"Xinyan"
-,"辛焱" ],
-
-
-["yae_miko",
-"Yae Miko"
-,"八重神子" ],
-
-
-["yanfei",
-"Yanfei"
-,"烟绯" ],
-
-
-["yelan",
-"Yelan"
-,"夜兰" ],
-
-
-["yoimiya",
-"Yoimiya"
-,"宵宫" ],
-
-
-["yun_jin",
-"Yun Jin"
-,"云堇" ],
-
-
-["zhongli",
-"Zhongli"
-,"钟离" ]]
-
+  "name": [
+    [
+      "albedo",
+      "Albedo",
+      "阿贝多",
+      "アルベド"
+    ],
+    [
+      "alhaitham",
+      "Alhaitham",
+      "艾尔海森",
+      "アルハイゼン"
+    ],
+    [
+      "aloy",
+      "Aloy",
+      "埃洛伊",
+      "アーロイ"
+    ],
+    [
+      "amber",
+      "Amber",
+      "安柏",
+      "アンバー"
+    ],
+    [
+      "arataki_itto",
+      "Arataki Itto",
+      "荒泷一斗",
+      "荒瀧一斗"
+    ],
+    [
+      "barbara",
+      "Barbara",
+      "芭芭拉",
+      "バーバラ"
+    ],
+    [
+      "beidou",
+      "Beidou",
+      "北斗",
+      "北斗"
+    ],
+    [
+      "bennett",
+      "Bennett",
+      "班尼特",
+      "ベネット"
+    ],
+    [
+      "chongyun",
+      "Chongyun",
+      "重云",
+      "重雲"
+    ],
+    [
+      "collei",
+      "Collei",
+      "柯莱",
+      "コレイ"
+    ],
+    [
+      "diluc",
+      "Diluc",
+      "迪卢克",
+      "ディルック"
+    ],
+    [
+      "diona",
+      "Diona",
+      "迪奥娜",
+      "ディオナ"
+    ],
+    [
+      "dori",
+      "Dori",
+      "多莉",
+      "ドリー"
+    ],
+    [
+      "eula",
+      "Eula",
+      "优菈",
+      "エウルア"
+    ],
+    [
+      "fischl",
+      "Fischl",
+      "菲谢尔",
+      "フィッシュル"
+    ],
+    [
+      "ganyu",
+      "Ganyu",
+      "甘雨",
+      "甘雨"
+    ],
+    [
+      "gorou",
+      "Gorou",
+      "五郎",
+      "ゴロー"
+    ],
+    [
+      "hu_tao",
+      "Hu Tao",
+      "胡桃",
+      "胡桃"
+    ],
+    [
+      "jean",
+      "Jean",
+      "琴",
+      "ジン"
+    ],
+    [
+      "kaedehara_kazuha",
+      "Kaedehara Kazuha",
+      "枫原万叶"
+    ],
+    [
+      "kaeya",
+      "Kaiya",
+      "凯亚"
+    ],
+    [
+      "kamisato_ayaka",
+      "Kamisato Ayaka",
+      "神里绫华"
+    ],
+    [
+      "kamisato_ayato",
+      "Kamisato Ayato",
+      "神里绫人"
+    ],
+    [
+      "keqing",
+      "Keqing",
+      "刻晴"
+    ],
+    [
+      "klee",
+      "Klee",
+      "可莉"
+    ],
+    [
+      "kujou_sara",
+      "Kujou Sara",
+      "九条裟罗"
+    ],
+    [
+      "kuki_shinobu",
+      "Kuki Shinobu",
+      "久岐忍"
+    ],
+    [
+      "lisa",
+      "Lisa",
+      "丽莎"
+    ],
+    [
+      "mona",
+      "Mona",
+      "莫娜"
+    ],
+    [
+      "ningguang",
+      "Ningguang",
+      "凝光"
+    ],
+    [
+      "noelle",
+      "Noelle",
+      "诺艾尔"
+    ],
+    [
+      "paimon",
+      "Paimon",
+      "派蒙"
+    ],
+    [
+      "qiqi",
+      "Qiqi",
+      "七七"
+    ],
+    [
+      "raiden_shogun",
+      "Raiden Shogun",
+      "雷电将军"
+    ],
+    [
+      "rezor",
+      "Rezor",
+      "雷泽"
+    ],
+    [
+      "rosaria",
+      "Rosaria",
+      "罗莎莉亚"
+    ],
+    [
+      "sangonomiya_kokomi",
+      "Sangonomiya Kokomi",
+      "珊瑚宫心海"
+    ],
+    [
+      "sayu",
+      "Sayu",
+      "早柚"
+    ],
+    [
+      "shenhe",
+      "Shenhe",
+      "申鹤"
+    ],
+    [
+      "shikanoin_heizou",
+      "Shikanoin Heizou",
+      "鹿野院平藏"
+    ],
+    [
+      "sucrose",
+      "Sucrose",
+      "砂糖"
+    ],
+    [
+      "tartaglia",
+      "Tartaglia",
+      "达达利亚"
+    ],
+    [
+      "thoma",
+      "Thoma",
+      "托马"
+    ],
+    [
+      "tighnari",
+      "Tighnari",
+      "提纳里"
+    ],
+    [
+      "traveler",
+      "Traveler",
+      "旅行者",
+      "旅人"
+    ],
+    [
+      "venti",
+      "Venti",
+      "温迪"
+    ],
+    [
+      "xiangling",
+      "Xiangling",
+      "香菱"
+    ],
+    [
+      "xiao",
+      "Xiao",
+      "魈"
+    ],
+    [
+      "xingqiu",
+      "Xingqiu",
+      "行秋"
+    ],
+    [
+      "xinyan",
+      "Xinyan",
+      "辛焱"
+    ],
+    [
+      "yae_miko",
+      "Yae Miko",
+      "八重神子"
+    ],
+    [
+      "yanfei",
+      "Yanfei",
+      "烟绯"
+    ],
+    [
+      "yelan",
+      "Yelan",
+      "夜兰"
+    ],
+    [
+      "yoimiya",
+      "Yoimiya",
+      "宵宫"
+    ],
+    [
+      "yun_jin",
+      "Yun Jin",
+      "云堇"
+    ],
+    [
+      "zhongli",
+      "Zhongli",
+      "钟离"
+    ]
+  ]
 }

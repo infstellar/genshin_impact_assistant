@@ -30,7 +30,7 @@ class AimOperator(BaseThreading):
         self.reset_time = auto_aim_json["reset_time"]
         self.left_timer = Timer()
         self.reset_timer = Timer()
-        self.kdwe_timer=Timer()
+        self.kdwe_timer = Timer()
 
     def run(self):
         while 1:
@@ -137,7 +137,7 @@ class AimOperator(BaseThreading):
 
     def keep_distance_with_enemy(self):  # 10px
         target_px = 6
-        if self.kdwe_timer.getDiffTime()<1:
+        if self.kdwe_timer.getDiffTime() < 1:
             return 0
         else:
             self.kdwe_timer.reset()

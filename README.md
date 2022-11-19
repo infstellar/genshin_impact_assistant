@@ -1,4 +1,4 @@
-# genshin_impact_assistant 原神助手  
+# genshin_impact_assistant 原神助手
 
 多功能原神自动辅助操作，包括自动战斗，自动刷秘境。不用每天原神半小时清体力了(*´▽｀)ノノ
 
@@ -39,7 +39,7 @@
 
 2. 下载`tag`里的`environment_all.7z`
 
-    如果`environment_all.7z`下载过慢，也可以下载`environment_no_torch.7z`,并自行下载`torch`复制到目录中(或者加入q群下载
+   如果`environment_all.7z`下载过慢，也可以下载`environment_no_torch.7z`,并自行下载`torch`复制到目录中(或者加入q群下载
 
 3. 将`genshin_assistant` 与 `environment` 文件夹置于同一目录下。 如果有能力，也可以在config中修改`env_floder_path`
 
@@ -48,7 +48,7 @@
 5. 启动原神后，以管理员权限运行`genshin_assistant.exe`
 
 6. 实在搞不定可以加qq群(
-[图文教程](doc/install.md)
+   [图文教程](doc/install.md)
 
 ### 从源代码构建
 

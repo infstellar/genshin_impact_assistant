@@ -10,7 +10,8 @@ itt = interaction_background.InteractionBGD()
 dx = 25
 dy = 25
 posi_map = [15 + dx, 57 + dy, 236 - dx, 278 - dy]
-posi_teyvat_map=[15,57,236,278]
+posi_teyvat_map = [15, 57, 236, 278]
+
 
 # def get_direction_angle():
 #     cap=itt.png2jpg(itt.capture(),bgcolor='white',channel='ui')
@@ -25,7 +26,7 @@ def qshow(img1):
     cv2.waitKey(0)
 
 
-def Line2Angle(p):
+def line2angle(p):
     # rad2degScale = 180/math.pi
     # res = math.atan2(-p[1], p[0])*rad2degScale
     # # const double rad2degScale = 180 / CV_PI;
@@ -117,7 +118,8 @@ def jwa_3(imsrc):
 
     if degree > 180:
         degree -= 360
-    cv2.imshow('123', cv2.drawMarker(Alpha,position=(int(p[0]),int(p[1])),color=(255, 0, 255),markerSize = 1, markerType=cv2.MARKER_CROSS, thickness=5))
+    cv2.imshow('123', cv2.drawMarker(Alpha, position=(int(p[0]), int(p[1])), color=(255, 0, 255), markerSize=1,
+                                     markerType=cv2.MARKER_CROSS, thickness=5))
     cv2.waitKey(100)
     print(degree)
     return degree
@@ -130,14 +132,15 @@ def jwa_3(imsrc):
     # p = p - (img_object.cols / 2, img_object.rows / 2)
     # return p,Line2Angle(p)
 
-def teyvat_smallmap_crusade_target_search(itt:interaction_background.InteractionBGD):
-    imsrc = itt.capture(posi = posi_teyvat_map)
+
+def teyvat_smallmap_crusade_target_search(itt: interaction_background.InteractionBGD):
+    imsrc = itt.capture(posi=posi_teyvat_map)
     imsrc = itt.png2jpg(imsrc, channel='ui')
     img_target = img_manager.smallmap_AbyssMage.image
-    r, pp=itt.similar_img(imsrc, img_target, ret_mode=interaction_background.IMG_POSI)
-    p=[0,0]
-    p[0]=pp[0]+img_target.shape[1] / 2
-    p[1]=pp[1]+img_target.shape[0] / 2
+    r, pp = itt.similar_img(imsrc, img_target, ret_mode=interaction_background.IMG_POSI)
+    p = [0, 0]
+    p[0] = pp[0] + img_target.shape[1] / 2
+    p[1] = pp[1] + img_target.shape[0] / 2
     # p = [x + w / 2, y + h / 2]
 
     origin_point = [int(imsrc.shape[1] / 2) + 1, int(imsrc.shape[0] / 2) + 1]
@@ -169,8 +172,9 @@ def teyvat_smallmap_crusade_target_search(itt:interaction_background.Interaction
     if degree > 180:
         degree -= 360
     # qshow(imsrc)
-    show_img=imsrc.copy()
-    cv2.drawMarker(show_img,position=(int(p[0]),int(p[1])),color=(255, 0, 255),markerSize = 3, markerType=cv2.MARKER_CROSS, thickness=5)
+    show_img = imsrc.copy()
+    cv2.drawMarker(show_img, position=(int(p[0]), int(p[1])), color=(255, 0, 255), markerSize=3,
+                   markerType=cv2.MARKER_CROSS, thickness=5)
     cv2.imshow('123', show_img)
     cv2.waitKey(100)
     print(degree)
