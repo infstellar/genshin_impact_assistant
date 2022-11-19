@@ -2,7 +2,7 @@ import interaction_background
 import threading
 import timer_module
 
-from unit import *
+from util import *
 
 
 class Video_Cap(threading.Thread):

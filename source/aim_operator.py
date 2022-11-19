@@ -8,7 +8,7 @@ import movement
 from base_threading import BaseThreading
 from interaction_background import InteractionBGD
 from timer_module import Timer
-from unit import *
+from util import *
 
 red_num = 245
 BG_num = 100

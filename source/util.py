@@ -1,7 +1,7 @@
 import json
 import os
 import sys
-
+import time
 from loguru import logger
 
 # 配置基本目录
@@ -74,7 +74,7 @@ def is_int(x):
 
 
 def save_json(x, json_name='config.json'):
-    json.dump(x, open(os.path.join('config', json_name), 'w', encoding='utf-8'), sort_keys=True, indent=4,
+    json.dump(x, open(os.path.join('config', json_name), 'w', encoding='utf-8'), sort_keys=True, indent=2,
               ensure_ascii=False)
 
 

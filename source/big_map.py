@@ -5,7 +5,7 @@ import cv2
 
 import interaction_background, img_manager, generic_lib
 import numpy as np
-from unit import *
+from util import *
 
 itt = interaction_background.InteractionBGD()
 

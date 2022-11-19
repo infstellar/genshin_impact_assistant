@@ -8,7 +8,7 @@ import tastic_operator
 from base_threading import BaseThreading
 from interaction_background import InteractionBGD
 from timer_module import Timer
-from unit import *
+from util import *
 
 
 def sort_flag_1(x: character.Character):

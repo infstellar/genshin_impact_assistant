@@ -11,7 +11,7 @@ import text_manager as textM
 import timer_module
 import yolox_api
 from base_threading import BaseThreading
-from unit import *
+from util import *
 
 
 class DomainFlow(BaseThreading):
