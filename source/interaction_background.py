@@ -85,6 +85,8 @@ class InteractionBGD:
         """
         
         ret = static_lib.SCREENCAPTURE.get_capture()
+        if ret.shape==(0,0,3):
+            logger.error("截图失败")
         # img_manager.qshow(ret)
         if posi is not None:
             ret = ret[posi[0]:posi[2], posi[1]:posi[3]]
@@ -228,7 +230,7 @@ class InteractionBGD:
     #     matching_rate = 1 - s / ((img1.shape[0] * img1.shape[1]) * 765)
     #     return matching_rate
 
-    def get_img_position(self, imgicon:img_manager.ImgIcon, is_gray=False, threshold=0.95, is_log=False):
+    def get_img_position(self, imgicon:img_manager.ImgIcon, is_gray=False, is_log=False):
         """获得图片在屏幕上的坐标
 
         Args:
@@ -252,7 +254,7 @@ class InteractionBGD:
             logger.debug(
                 'imgname: ' + imgicon.name + 'max_loc: ' + str(max_loc) + ' |function name: ' + upper_func_name)
 
-        if matching_rate >= threshold:
+        if matching_rate >= imgicon.threshold:
             return max_loc
         else:
             return False
@@ -274,7 +276,8 @@ class InteractionBGD:
         cap = self.capture(posi = imgicon.cap_posi, jpgmode=imgicon.jpgmode)
 
         matching_rate = self.similar_img(cap, imgicon.image)
-
+        # if matching_rate== 0:
+        #     img_manager.qshow(cap)
         if is_log:
             logger.debug(
                 'imgname: ' + imgicon.name + 'matching_rate: ' + str(matching_rate) + ' |function name: ' + upper_func_name)
@@ -478,6 +481,9 @@ class InteractionBGD:
         self.delay(0.05)
 
     def key_down(self, key, is_log=True):
+        if key == 'w':
+            static_lib.W_KEYDOWN=True
+            
         if not self.CONSOLE_ONLY:
             vk_code = self.get_virtual_keycode(key)
             scan_code = self.MapVirtualKeyW(vk_code, 0)
@@ -490,6 +496,9 @@ class InteractionBGD:
                 "keyDown " + key + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
 
     def key_up(self, key, is_log=True):
+        if key == 'w':
+            static_lib.W_KEYDOWN=False
+            
         if not self.CONSOLE_ONLY:
             vk_code = self.get_virtual_keycode(key)
             scan_code = self.MapVirtualKeyW(vk_code, 0)
@@ -526,8 +535,8 @@ class InteractionBGD:
         # https://docs.microsoft.com/en-us/windows/win32/inputdev/wm-mousemove
 
         if relative:
-            # win32api.mouse_event(win32con.MOUSEEVENTF_MOVE, x, y)
-            pydirectinput.moveRel(x,y)
+            win32api.mouse_event(win32con.MOUSEEVENTF_MOVE, x, y)
+            # pydirectinput.moveRel(x,y)
         else:
 
             # print(x,y)
@@ -556,7 +565,7 @@ class InteractionBGD:
             
 
     # @staticmethod
-    def crop_image(imsrc, posilist):
+    def crop_image(self, imsrc, posilist):
         return imsrc[posilist[0]:posilist[2], posilist[1]:posilist[3]]
 
 
@@ -572,7 +581,7 @@ if __name__ == '__main__':
     # print(a)
     # ib.left_down()
     # time.sleep(1)
-    # ib.move_to(200,200,relative=True)
+    ib.move_to(200,200,relative=True)
     
     # for i in range(20):
     #     pydirectinput.mouseDown(0,0)
