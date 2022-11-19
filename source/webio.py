@@ -1,14 +1,9 @@
 import asyncio
-import json
-import os
-
 from pywebio import *
 
 from source import listening
 from source import util
-
-auto_combat = True
-auto_domain = True
+from unit import *
 
 
 class WebUI:
