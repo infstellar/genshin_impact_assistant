@@ -161,17 +161,18 @@ if not os.path.exists(snap_path + "\\jpg"):
 if not os.path.exists(snap_path + "\\jpg_withalpha"):
     os.mkdir("tools\\snapshot\\jpg_withalpha")
 
-numi = 80
+numi = 120
 while 1:
     # input('wait')
     i += 1
     numi += 1
     cap = itt.capture()
-    cap = itt.png2jpg(cap, channel = 'ui', alpha_num = 50)# 22 no Q
+    cap = itt.png2jpg(cap, channel = 'ui', alpha_num = 1)# 22 no Q
+    cv2.imwrite("tools\\snapshot\\jpg\\"+str(numi)+".jpg",cap)
     # qshow(cap)
     
     cv2.imshow('123', cap)
-    cv2.waitKey(100)
+    cv2.waitKey(1000)
     
     x = str(time.time())
     # cv2.imwrite("tools\\snapshot\\png\\"+SA_name+str(numi)+".png",cap)

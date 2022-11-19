@@ -80,7 +80,7 @@ class ScreenCapture:
 
 
 SCREENCAPTURE = ScreenCapture()
-
+W_KEYDOWN = False
 
 class testtest(threading.Thread):
     def __init__(self):

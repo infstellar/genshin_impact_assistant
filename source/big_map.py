@@ -21,7 +21,7 @@ def move_map(x,y):
 
 def move_navigation_to_center(object_name=img_manager.bigmap_AbyssMage):
     # template = img_manager.get_img_from_name(object_name, reshape=False)
-    posi = itt.get_img_position(object_name, reshape=False)
+    posi = itt.get_img_position(object_name)
     dx = posi[0] - 1920/2
     dy = posi[1] - 1080/2
     times=2.5
@@ -56,9 +56,9 @@ def calculate_nearest_posi(posi_list, target_posi):
             
     return minposi, mind
 
-def get_closest_TeleportWaypoint(object_name):
+def get_closest_TeleportWaypoint(object_img:img_manager.ImgIcon):
     return calculate_nearest_posi(
-        itt.match_multiple_img(itt.capture(jpgmode = 0), img_manager.get_img_from_name(object_name, reshape=False)),
+        itt.match_multiple_img(itt.capture(jpgmode = 0), object_img.image),
         get_navigation_posi())
 
 if __name__ == '__main__':

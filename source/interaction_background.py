@@ -73,42 +73,20 @@ class InteractionBGD:
         """窗口客户区截图
 
         Args:
-            handle (HWND): 要截图的窗口句柄
+            posi ( [y1,x1,y2,x2] ): 截图区域的坐标, y2>y1,x2>x1. 全屏截图时为None。
+            shape (str): 为'yx'或'xy'.决定返回数组是[1080,1920]或[1920,1080]。
+            jpgmode(int): 
+                0:return jpg (3 channels, delete the alpha channel)
+                1:return genshin background channel, background color is black
+                2:return genshin ui channel, background color is black
 
         Returns:
-            numpy.ndarray: 截图数据
+            numpy.ndarray: 图片数组
         """
-
-        '''
-        jpgmode:
-        0:return png;
-        1:return bg,black
-        2:return ui,black
-        '''
-        # handle=self.handle
-        # # 获取窗口客户区的大小
-        # r = RECT()
-        # self.GetClientRect(handle, ctypes.byref(r))
-        # width, height = r.right, r.bottom
-        # # 开始截图
-        # dc = self.GetDC(handle)
-        # cdc = self.CreateCompatibleDC(dc)
-        # bitmap = self.CreateCompatibleBitmap(dc, width, height)
-        # self.SelectObject(cdc, bitmap)
-        # self.BitBlt(cdc, 0, 0, width, height, dc, 0, 0, self.SRCCOPY)
-        # # 截图是BGRA排列，因此总元素个数需要乘以4
-        # total_bytes = width*height*4
-        # buffer = bytearray(total_bytes)
-        # byte_array = ctypes.c_ubyte*total_bytes
-        # self.GetBitmapBits(bitmap, total_bytes, byte_array.from_buffer(buffer))
-        # self.DeleteObject(bitmap)
-        # self.DeleteObject(cdc)
-        # self.ReleaseDC(handle, dc)
-        # # 返回截图数据为numpy.ndarray
-
-        # ret=np.frombuffer(buffer, dtype=np.uint8).reshape(height, width, 4)
-
+        
         ret = static_lib.SCREENCAPTURE.get_capture()
+        if ret.shape==(0,0,3):
+            logger.error("截图失败")
         # img_manager.qshow(ret)
         if posi is not None:
             ret = ret[posi[0]:posi[2], posi[1]:posi[3]]
@@ -155,6 +133,19 @@ class InteractionBGD:
         return matching_rate, top_left, bottom_right
 
     def match_multiple_img(self, img, template, is_gray=False, is_show_res: bool = False, ret_mode=IMG_POINT, threshold=0.98):
+        """多图片识别
+
+        Args:
+            img (numpy): 截图Mat
+            template (numpy): 要匹配的样板图片
+            is_gray (bool, optional): 是否启用灰度匹配. Defaults to False.
+            is_show_res (bool, optional): 结果显示. Defaults to False.
+            ret_mode (int, optional): 返回值模式,目前只有IMG_POINT. Defaults to IMG_POINT. 
+            threshold (float, optional): 最小匹配度. Defaults to 0.98.
+
+        Returns:
+            list[list[], ...]: 匹配成功的坐标列表
+        """
         if is_gray:
             img = cv2.cvtColor(img, cv2.COLOR_BGRA2GRAY)
             template = cv2.cvtColor(template, cv2.COLOR_BGRA2GRAY)
@@ -185,7 +176,18 @@ class InteractionBGD:
             
     
     def similar_img(self, img, target, is_gray=False, is_show_res: bool = False, ret_mode = IMG_RATE):
+        """单个图片匹配
 
+        Args:
+            img (numpy): Mat
+            template (numpy): 要匹配的样板图片
+            is_gray (bool, optional): 是否启用灰度匹配. Defaults to False.
+            is_show_res (bool, optional): 结果显示. Defaults to False.
+            ret_mode (int, optional): 返回值模式. Defaults to IMG_RATE.
+
+        Returns:
+            float/(float, list[]): 匹配度或者匹配度和它的坐标
+        """
         if is_gray:
             img = cv2.cvtColor(img, cv2.COLOR_BGRA2GRAY)
             target = cv2.cvtColor(target, cv2.COLOR_BGRA2GRAY)
@@ -207,72 +209,106 @@ class InteractionBGD:
 
     
     
-    def similar_img_pixel(self, img, target, is_gray=False):
-        img1 = img.astype('int')
-        target1 = target.astype('int')
-        # cv2.imshow('1',img)
-        # cv2.imshow('2',target)
-        # cv2.waitKey(0)
-        s = np.sum(img1 - target1)
-        s = abs(s)
-        matching_rate = 1 - s / ((img1.shape[0] * img1.shape[1]) * 765)
-        return matching_rate
+    # def similar_img_pixel(self, img, target, is_gray=False):
+    #     """ABANDON
 
-    def get_img_position(self, imgname, jpgmode=2, is_gray=False, min_rate=0.95, is_log=False, reshape=True):
+    #     Args:
+    #         img (_type_): _description_
+    #         target (_type_): _description_
+    #         is_gray (bool, optional): _description_. Defaults to False.
+
+    #     Returns:
+    #         _type_: _description_
+    #     """
+    #     img1 = img.astype('int')
+    #     target1 = target.astype('int')
+    #     # cv2.imshow('1',img)
+    #     # cv2.imshow('2',target)
+    #     # cv2.waitKey(0)
+    #     s = np.sum(img1 - target1)
+    #     s = abs(s)
+    #     matching_rate = 1 - s / ((img1.shape[0] * img1.shape[1]) * 765)
+    #     return matching_rate
+
+    def get_img_position(self, imgicon:img_manager.ImgIcon, is_gray=False, is_log=False):
+        """获得图片在屏幕上的坐标
+
+        Args:
+            imgicon (img_manager.ImgIcon): imgicon对象
+            is_gray (bool, optional): 是否启用灰度匹配. Defaults to False.
+            is_log (bool, optional): 是否打印日志. Defaults to False.
+
+        Returns:
+            list[]/bool: 返回坐标或False
+        """
         upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
-        if imgname in img_manager.alpha_dict:
-            cap = self.capture()
-            cap = self.png2jpg(cap, bgcolor='black', channel='ui', alpha_num=img_manager.alpha_dict[imgname])
-        else:
-            cap = self.capture(posi=posi_manager.get_posi_from_str(imgname), jpgmode=jpgmode)
+        # if imgname in img_manager.alpha_dict:
+        #     cap = self.capture()
+        #     cap = self.png2jpg(cap, bgcolor='black', channel='ui', alpha_num=img_manager.alpha_dict[imgname])
+        # else:
+        cap = self.capture(posi = imgicon.cap_posi, jpgmode=imgicon.jpgmode)
 
-        matching_rate, max_loc = self.similar_img(img_manager.get_img_from_name(imgname, reshape=reshape), cap, ret_mode=IMG_POSI)
+        matching_rate, max_loc = self.similar_img(cap, imgicon.image, ret_mode=IMG_POSI)
 
         if is_log:
             logger.debug(
-                'imgname: ' + imgname + 'max_loc: ' + str(max_loc) + ' |function name: ' + upper_func_name)
+                'imgname: ' + imgicon.name + 'max_loc: ' + str(max_loc) + ' |function name: ' + upper_func_name)
 
-        if matching_rate >= min_rate:
+        if matching_rate >= imgicon.threshold:
             return max_loc
         else:
             return False
         
         
-    def get_img_existence(self, imgname, jpgmode=2, posi=None, is_gray=False, min_rate=0.95, is_log=False):
+    def get_img_existence(self, imgicon:img_manager.ImgIcon, is_gray=False, is_log=False):
+        """检测图片是否存在
+
+        Args:
+            imgicon (img_manager.ImgIcon): imgicon对象
+            is_gray (bool, optional): 是否启用灰度匹配. Defaults to False.
+            is_log (bool, optional): 是否打印日志. Defaults to False.
+
+        Returns:
+            bool: bool
+        """
         upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
-        if imgname in img_manager.alpha_dict:
-            cap = self.capture(posi=posi)
-            cap = self.png2jpg(cap, bgcolor='black', channel='ui', alpha_num=img_manager.alpha_dict[imgname])
-        else:
-            cap = self.capture(posi=posi_manager.get_posi_from_str(imgname), jpgmode=jpgmode)
+        
+        cap = self.capture(posi = imgicon.cap_posi, jpgmode=imgicon.jpgmode)
 
-        matching_rate = self.similar_img(img_manager.get_img_from_name(imgname), cap)
-
+        matching_rate = self.similar_img(cap, imgicon.image)
+        # if matching_rate== 0:
+        #     img_manager.qshow(cap)
         if is_log:
             logger.debug(
-                'imgname: ' + imgname + 'matching_rate: ' + str(matching_rate) + ' |function name: ' + upper_func_name)
+                'imgname: ' + imgicon.name + 'matching_rate: ' + str(matching_rate) + ' |function name: ' + upper_func_name)
 
-        if matching_rate >= min_rate:
+        if matching_rate >= imgicon.threshold:
             return True
         else:
             return False
 
-    def appear_then_click(self, imgname, jpgmode=2, is_gray=False, min_rate=0.95):
+    def appear_then_click(self, imgicon:img_manager.ImgIcon, is_gray=False):
+        """_summary_
+
+        Args:
+            imgicon (img_manager.ImgIcon): imgicon对象
+            is_gray (bool, optional): 是否启用灰度匹配. Defaults to False.
+
+        Returns:
+            bool: bool
+        """
         upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
-        if imgname in img_manager.alpha_dict:
-            cap = self.capture()
-            cap = self.png2jpg(cap, bgcolor='black', channel='ui', alpha_num=img_manager.alpha_dict[imgname])
-        else:
-            cap = self.capture(posi=posi_manager.get_posi_from_str(imgname), jpgmode=jpgmode)
+        
+        cap = self.capture(posi = imgicon.cap_posi, jpgmode=imgicon.jpgmode)
         # min_rate = img_manager.matching_rate_dict[imgname]
 
-        matching_rate = self.similar_img(img_manager.get_img_from_name(imgname), cap, is_gray=is_gray)
+        matching_rate = self.similar_img(imgicon.image, cap, is_gray=is_gray)
 
         logger.debug(
-            'imgname: ' + imgname + 'matching_rate: ' + str(matching_rate) + ' |function name: ' + upper_func_name)
+            'imgname: ' + imgicon.name + 'matching_rate: ' + str(matching_rate) + ' |function name: ' + upper_func_name)
 
-        if matching_rate >= min_rate:
-            p = posi_manager.get_posi_from_str(imgname)
+        if matching_rate >= imgicon.threshold:
+            p = imgicon.cap_posi
             center_p = [(p[1] + p[3]) / 2, (p[0] + p[2]) / 2]
             self.move_to(center_p[0], center_p[1])
             self.left_click()
@@ -280,22 +316,19 @@ class InteractionBGD:
         else:
             return False
 
-    def appear_then_press(self, imgname, key_name, jpgmode=2, is_gray=False, min_rate=0.95):
+    def appear_then_press(self, imgicon:img_manager.ImgIcon, key_name, is_gray=False):
         upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
-        if imgname in img_manager.alpha_dict:
-            cap = self.capture()
-            cap = self.png2jpg(cap, bgcolor='black', channel='ui', alpha_num=img_manager.alpha_dict[imgname])
-        else:
-            cap = self.capture(posi=posi_manager.get_posi_from_str(imgname), jpgmode=jpgmode)
+        
+        cap = self.capture(posi = imgicon.cap_posi, jpgmode=imgicon.jpgmode)
         # min_rate = img_manager.matching_rate_dict[imgname]
 
-        matching_rate = self.similar_img(img_manager.get_img_from_name(imgname), cap, is_gray=is_gray)
+        matching_rate = self.similar_img(imgicon.image, cap, is_gray=is_gray)
 
         logger.debug(
-            'imgname: ' + imgname + 'matching_rate: ' + str(
+            'imgname: ' + imgicon.name + 'matching_rate: ' + str(
                 matching_rate) + 'key_name:' + key_name + ' |function name: ' + upper_func_name)
 
-        if matching_rate >= min_rate:
+        if matching_rate >= imgicon.threshold:
             self.key_press(key_name)
             return True
         else:
@@ -448,6 +481,9 @@ class InteractionBGD:
         self.delay(0.05)
 
     def key_down(self, key, is_log=True):
+        if key == 'w':
+            static_lib.W_KEYDOWN=True
+            
         if not self.CONSOLE_ONLY:
             vk_code = self.get_virtual_keycode(key)
             scan_code = self.MapVirtualKeyW(vk_code, 0)
@@ -460,6 +496,9 @@ class InteractionBGD:
                 "keyDown " + key + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
 
     def key_up(self, key, is_log=True):
+        if key == 'w':
+            static_lib.W_KEYDOWN=False
+            
         if not self.CONSOLE_ONLY:
             vk_code = self.get_virtual_keycode(key)
             scan_code = self.MapVirtualKeyW(vk_code, 0)
@@ -496,8 +535,8 @@ class InteractionBGD:
         # https://docs.microsoft.com/en-us/windows/win32/inputdev/wm-mousemove
 
         if relative:
-            # win32api.mouse_event(win32con.MOUSEEVENTF_MOVE, x, y)
-            pydirectinput.moveRel(x,y)
+            win32api.mouse_event(win32con.MOUSEEVENTF_MOVE, x, y)
+            # pydirectinput.moveRel(x,y)
         else:
 
             # print(x,y)
@@ -526,7 +565,7 @@ class InteractionBGD:
             
 
     # @staticmethod
-    def crop_image(imsrc, posilist):
+    def crop_image(self, imsrc, posilist):
         return imsrc[posilist[0]:posilist[2], posilist[1]:posilist[3]]
 
 
@@ -542,17 +581,17 @@ if __name__ == '__main__':
     # print(a)
     # ib.left_down()
     # time.sleep(1)
-    # ib.move_to(200,200,relative=True)
+    ib.move_to(200,200,relative=True)
     
-    for i in range(20):
-        pydirectinput.mouseDown(0,0)
-        pydirectinput.moveRel(10,10)
+    # for i in range(20):
+    #     pydirectinput.mouseDown(0,0)
+    #     pydirectinput.moveRel(10,10)
     # win32api.SetCursorPos((300, 300))
     # pydirectinput.
     print()
     while 1:
         time.sleep(1)
-        print(ib.get_img_position(img_manager.F_BUTTON, jpgmode=0))
+        print(ib.get_img_existence(img_manager.motion_flying), ib.get_img_existence(img_manager.motion_climbing), ib.get_img_existence(img_manager.motion_swimming))
         
         
         # print(ib.get_img_existence(img_manager.USE_20X2RESIN_DOBLE_CHOICES))
