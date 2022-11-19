@@ -204,7 +204,6 @@ class DomainFlow(BaseThreading):
         self.current_state = ST.AFTER_MOVETO_TREE
 
     def Flow_IN_ATTAIN_REAWARD(self):
-        
 
         while 1:
             if self.resin_mode == '40':
@@ -332,7 +331,7 @@ class DomainFlow(BaseThreading):
                 time.sleep(0.2)
                 if generic_lib.f_recognition() == False:
                     self.current_state = ST.IN_ATTAIN_REAWARD
-            
+
             elif self.current_state == ST.IN_ATTAIN_REAWARD:
                 self.Flow_IN_ATTAIN_REAWARD()
 

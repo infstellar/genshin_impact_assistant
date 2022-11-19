@@ -15,13 +15,13 @@ class YOLOPAFPN(nn.Module):
     """
 
     def __init__(
-        self,
-        depth=1.0,
-        width=1.0,
-        in_features=("dark3", "dark4", "dark5"),
+            self,
+            depth=1.0,
+            width=1.0,
+            in_features=("dark3", "dark4", "dark5"),
             in_channels=None,
-        depthwise=False,
-        act="silu",
+            depthwise=False,
+            act="silu",
     ):
         super().__init__()
         if in_channels is None:

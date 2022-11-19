@@ -34,7 +34,7 @@ def get_exp(exp_file=None, exp_name=None):
         exp_name (str): name of experiment. "yolo-s",
     """
     assert (
-        exp_file is not None or exp_name is not None
+            exp_file is not None or exp_name is not None
     ), "plz provide exp file or exp name."
     if exp_file is not None:
         return get_exp_by_file(exp_file)

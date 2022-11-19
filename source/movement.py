@@ -69,15 +69,16 @@ def view_to_angle_domain(angle=0, deltanum=0.65, maxloop=100, corrected_num=CORR
         i += 1
     if i > 1:
         logger.debug('last degree: ' + str(degree))
-        
+
+
 def view_to_angle_teyvat(angle=0, deltanum=1, maxloop=30, corrected_num=CORRECT_DEGREE):
     i = 0
     while 1:
-        b,degree = cvAutoTracker.get_rotation()
+        b, degree = cvAutoTracker.get_rotation()
         if not b:
             time.sleep(0.1)
             continue
-        cview((degree - (angle - corrected_num))/2)
+        cview((degree - (angle - corrected_num)) / 2)
         time.sleep(0.05)
         if i > maxloop:
             break

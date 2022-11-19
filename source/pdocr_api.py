@@ -139,7 +139,7 @@ class Paddleocr_API:
             logger.debug('can not find the text:' + text + ' |function name: ' +
                          inspect.getframeinfo(inspect.currentframe().f_back)[2])
             return -1
-    
+
     def is_img_num(self, im_src):
         pdocr_timer_performance.reset()
         is_num = False
