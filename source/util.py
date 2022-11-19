@@ -41,3 +41,10 @@ def list2format_list_text(lst: list) -> str:
         rt_str = str(lst)
     print(rt_str)
     return rt_str
+
+
+def is_json_equal(j1: str, j2: str) -> bool:
+    try:
+        return json.dumps(json.loads(j1), sort_keys=True) == json.dumps(json.loads(j2), sort_keys=True)
+    except:
+        return False
