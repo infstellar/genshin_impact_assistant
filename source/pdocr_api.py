@@ -1,3 +1,4 @@
+from source.unil import is_number
 from unit import *
 
 logger.info('Creating ocr object.')
