@@ -3,7 +3,7 @@ import time
 import posi_manager
 from interaction_background import InteractionBGD
 from timer_module import Timer
-from unit import *
+from util import *
 
 
 def default_trigger_func():

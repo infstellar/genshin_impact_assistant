@@ -4,7 +4,7 @@ from ctypes.wintypes import RECT
 import numpy as np
 
 from timer_module import Timer
-from unit import *
+from util import *
 
 
 def get_handle():

@@ -4,7 +4,7 @@ import time
 import cv2
 
 import interaction_background, img_manager
-from unit import *
+from util import *
 
 itt = interaction_background.InteractionBGD()
 dx = 25

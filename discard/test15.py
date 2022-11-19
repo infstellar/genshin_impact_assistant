@@ -1,5 +1,5 @@
 from interaction_background import InteractionBGD
-from unit import *
+from util import *
 
 itt = InteractionBGD()
 import cv2, img_manager

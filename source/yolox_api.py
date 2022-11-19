@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 # Copyright (c) Megvii, Inc. and its affiliates.
-from unit import *
+from util import *
 
 logger.info('Creating yolox obj. It may takes a few second.')
 

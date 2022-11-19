@@ -2,7 +2,7 @@ import pyautogui
 
 import interaction_background
 import small_map
-from unit import *
+from util import *
 from cvAutoTrack import cvAutoTracker
 
 itt = interaction_background.InteractionBGD()

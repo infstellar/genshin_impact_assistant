@@ -1,5 +1,5 @@
 from source.interaction_background import InteractionBGD
-from unit import *
+from util import *
 
 itt = InteractionBGD(hwndname='GrasscutterTools  - by jie65535  - v1.6.8')
 
