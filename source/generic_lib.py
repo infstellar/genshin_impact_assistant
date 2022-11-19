@@ -27,16 +27,20 @@ def points_angle(p1, p2, coordinate = NORMAL):
     tx=p2[0]
     ty=p2[1]
     if coordinate == NEGATIVE_Y:
-        pass
+        y=-y
+        ty=-ty
     # x=-x
     # tx=-tx
     k = (ty-y)/(tx-x)
     degree = math.degrees(math.atan(k))
     if degree<0:
         degree+=180
-    if coordinate == NORMAL:
-        if ty<y:
-            degree+=180
+    # if coordinate == NORMAL:
+    if ty<y:
+        degree+=180
+    # elif coordinate == NEGATIVE_Y:
+    #     if y<ty:
+    #         degree+=180
     
     
     degree-=90
@@ -47,10 +51,10 @@ def points_angle(p1, p2, coordinate = NORMAL):
 
 if __name__ == '__main__':
     itt = InteractionBGD()
-    # print(points_angle([0,0],[10,10]))
-    # print(points_angle([10,10],[0,0]))
-    # print(points_angle([0,0],[20,10]))
-    # print(points_angle([0,0],[10,10]))
+    print(points_angle([0,0],[10,10],NEGATIVE_Y))
+    print(points_angle([10,10],[0,0],NEGATIVE_Y))
+    print(points_angle([0,0],[20,10],NEGATIVE_Y))
+    print(points_angle([0,10],[10,10],NEGATIVE_Y))
     while 1:
         time.sleep(0.2)
-        print(f_recognition(itt))
+        # print(f_recognition(itt))

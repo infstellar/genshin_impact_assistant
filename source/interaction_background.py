@@ -151,6 +151,7 @@ class InteractionBGD:
             template = cv2.cvtColor(template, cv2.COLOR_BGRA2GRAY)
         res_posi=[]
         result = cv2.matchTemplate(img, template, cv2.TM_CCORR_NORMED)  # TM_CCOEFF_NORMED
+        # img_manager.qshow(template)
         h,w = template.shape[:2]#获取模板高和宽
         loc = np.where(result >= threshold) #匹配结果小于阈值的位置
         for pt in zip(*loc[::-1]): #遍历位置，zip把两个列表依次参数打包
@@ -555,13 +556,13 @@ class InteractionBGD:
             # print(int((x-mx)/1.5), int((y-my)/1.5))
             # pydirectinput.moveTo(wx+x,wy+y)
             # win32api.mouse_event(win32con.MOUSEEVENTF_MOVE, int((x-mx)/1.5), int((y-my)/1.5))
-            # win32api.SetCursorPos((wx + x, wy + y))
+            win32api.SetCursorPos(( x, y))
             
-            wparam = 0
-            lparam = y << 16 | x
-            self.PostMessageW(self.handle, self.WM_MOUSEMOVE, wparam, lparam)
-            self.PostMessageW(self.handle, self.WM_MOUSEMOVE, wparam, lparam)
-            self.PostMessageW(self.handle, self.WM_MOUSEMOVE, wparam, lparam)
+            # wparam = 0
+            # lparam = y << 16 | x
+            # self.PostMessageW(self.handle, self.WM_MOUSEMOVE, wparam, lparam)
+            # self.PostMessageW(self.handle, self.WM_MOUSEMOVE, wparam, lparam)
+            # self.PostMessageW(self.handle, self.WM_MOUSEMOVE, wparam, lparam)
             
 
     # @staticmethod
@@ -581,7 +582,7 @@ if __name__ == '__main__':
     # print(a)
     # ib.left_down()
     # time.sleep(1)
-    ib.move_to(200,200,relative=True)
+    ib.move_to(200,200)
     
     # for i in range(20):
     #     pydirectinput.mouseDown(0,0)
