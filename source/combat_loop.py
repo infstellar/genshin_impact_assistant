@@ -6,7 +6,7 @@ import character
 from aim_operator import AimOperator
 from base_threading import BaseThreading
 from interaction_background import InteractionBGD
-from switch_character_operator import Switch_Character_Operator
+from switch_character_operator import SwitchCharacterOperator
 import combat_lib
 from unit import *
 
@@ -78,7 +78,7 @@ class Combat_Controller(BaseThreading):
         self.pause_threading_flag = False
         self.itt = InteractionBGD()
 
-        self.sco = Switch_Character_Operator(self.chara_list)
+        self.sco = SwitchCharacterOperator(self.chara_list)
         self.sco.pause_threading()
         self.sco.setDaemon(True)
         self.sco.start()

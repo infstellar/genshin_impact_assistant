@@ -39,12 +39,12 @@ class InfiniteSampler(Sampler):
     """
 
     def __init__(
-        self,
-        size: int,
-        shuffle: bool = True,
-        seed: Optional[int] = 0,
-        rank=0,
-        world_size=1,
+            self,
+            size: int,
+            shuffle: bool = True,
+            seed: Optional[int] = 0,
+            rank=0,
+            world_size=1,
     ):
         """
         Args:

@@ -30,7 +30,7 @@ class BaseConv(nn.Module):
     """A Conv2d -> Batchnorm -> silu/leaky relu block"""
 
     def __init__(
-        self, in_channels, out_channels, ksize, stride, groups=1, bias=False, act="silu"
+            self, in_channels, out_channels, ksize, stride, groups=1, bias=False, act="silu"
     ):
         super().__init__()
         # same padding
@@ -79,13 +79,13 @@ class DWConv(nn.Module):
 class Bottleneck(nn.Module):
     # Standard bottleneck
     def __init__(
-        self,
-        in_channels,
-        out_channels,
-        shortcut=True,
-        expansion=0.5,
-        depthwise=False,
-        act="silu",
+            self,
+            in_channels,
+            out_channels,
+            shortcut=True,
+            expansion=0.5,
+            depthwise=False,
+            act="silu",
     ):
         super().__init__()
         hidden_channels = int(out_channels * expansion)
@@ -123,7 +123,7 @@ class SPPBottleneck(nn.Module):
     """Spatial pyramid pooling layer used in YOLOv3-SPP"""
 
     def __init__(
-        self, in_channels, out_channels, kernel_sizes=(5, 9, 13), activation="silu"
+            self, in_channels, out_channels, kernel_sizes=(5, 9, 13), activation="silu"
     ):
         super().__init__()
         hidden_channels = in_channels // 2
@@ -148,14 +148,14 @@ class CSPLayer(nn.Module):
     """C3 in yolov5, CSP Bottleneck with 3 convolutions"""
 
     def __init__(
-        self,
-        in_channels,
-        out_channels,
-        n=1,
-        shortcut=True,
-        expansion=0.5,
-        depthwise=False,
-        act="silu",
+            self,
+            in_channels,
+            out_channels,
+            n=1,
+            shortcut=True,
+            expansion=0.5,
+            depthwise=False,
+            act="silu",
     ):
         """
         Args:
