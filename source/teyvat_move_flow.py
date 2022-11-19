@@ -4,6 +4,7 @@ import pyautogui
 import flow_state as ST
 from cvAutoTrack import cvAutoTracker
 from interaction_background import InteractionBGD
+import teyvat_move_controller
 import generic_lib
 import img_manager
 import interaction_background
@@ -35,6 +36,10 @@ class TeyvatMoveFlow(BaseThreading):
     def __init__(self):
         super().__init__()
         self.itt = InteractionBGD()
+        self.tmc = teyvat_move_controller.TeyvatMoveController()
+        self.tmc.setDaemon(True)
+        self.tmc.pause_threading()
+        self.tmc.start()
         self.current_state = ST.INIT_TEYVAT_TELEPORT
         self.target_posi = [0,0]
         
@@ -125,7 +130,15 @@ class TeyvatMoveFlow(BaseThreading):
                     self.current_state = ST.AFTER_TEYVAT_TELEPORT
                     
             if self.current_state == ST.AFTER_TEYVAT_TELEPORT:
-                print()
+                self.switchto_mainwin()
+                self.current_state = ST.END_TEYVAT_TELEPORT
+            if self.current_state == ST.END_TEYVAT_TELEPORT:
+                self.current_state = ST.INIT_TEYVAT_MOVE
+            if self.current_state == ST.INIT_TEYVAT_MOVE:
+                self.tmc.continue_threading()
+                self.current_state = ST.IN_TEYVAT_MOVE
+                
+            if self.current_state == ST.IN_TEYVAT_MOVE:
                 pass
                 
 
