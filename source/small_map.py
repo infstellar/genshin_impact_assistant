@@ -40,38 +40,38 @@ def line2angle(p):
 
 
 def jwa_3(imsrc):
-    Alpha = imsrc[:, :, 3:]
-    Alpha = 255.0 - Alpha
-    # Alpha = Alpha[:360,:286:,:]
-    # Alpha[:,303:,:]=0
-    # qshow(Alpha)
-    Alpha = Alpha * 2
-    _, Alpha = cv2.threshold(Alpha, 503, 0, cv2.THRESH_TOZERO_INV)
-    _, Alpha = cv2.threshold(Alpha, 50, 0, cv2.THRESH_TOZERO)
-    _, Alpha = cv2.threshold(Alpha, 50, 255, cv2.THRESH_BINARY)
-    # qshow(Alpha)
-    cv2.circle(Alpha,
-               (int(Alpha.shape[0] / 2), int(Alpha.shape[1] / 2)),
-               int((min(int(Alpha.shape[0] / 2), int(Alpha.shape[1] / 2)) * 1.15)),  # 1.21
-               (0, 0, 0), int((min(int(Alpha.shape[0] / 2), int(Alpha.shape[1] / 2)) * 0.6)))  # 0.42
-    # qshow(Alpha)
-    cv2.circle(Alpha,
-               (int(Alpha.shape[0] / 2), int(Alpha.shape[1] / 2)),
-               int((min(int(Alpha.shape[0] / 2), int(Alpha.shape[1] / 2)) * 0.6)), (0, 0, 0), -1)
-    # qshow(Alpha)
+    alpha = imsrc[:, :, 3:]
+    alpha = 255.0 - alpha
+    # alpha = alpha[:360,:286:,:]
+    # alpha[:,303:,:]=0
+    # qshow(alpha)
+    alpha = alpha * 2
+    _, alpha = cv2.threshold(alpha, 503, 0, cv2.THRESH_TOZERO_INV)
+    _, alpha = cv2.threshold(alpha, 50, 0, cv2.THRESH_TOZERO)
+    _, alpha = cv2.threshold(alpha, 50, 255, cv2.THRESH_BINARY)
+    # qshow(alpha)
+    cv2.circle(alpha,
+               (int(alpha.shape[0] / 2), int(alpha.shape[1] / 2)),
+               int((min(int(alpha.shape[0] / 2), int(alpha.shape[1] / 2)) * 1.15)),  # 1.21
+               (0, 0, 0), int((min(int(alpha.shape[0] / 2), int(alpha.shape[1] / 2)) * 0.6)))  # 0.42
+    # qshow(alpha)
+    cv2.circle(alpha,
+               (int(alpha.shape[0] / 2), int(alpha.shape[1] / 2)),
+               int((min(int(alpha.shape[0] / 2), int(alpha.shape[1] / 2)) * 0.6)), (0, 0, 0), -1)
+    # qshow(alpha)
     dilate_element = cv2.getStructuringElement(cv2.MORPH_RECT, (4, 4))
-    Alpha = cv2.dilate(Alpha, dilate_element)
+    alpha = cv2.dilate(alpha, dilate_element)
     erode_element = cv2.getStructuringElement(cv2.MORPH_RECT, (4, 4))
-    Alpha = cv2.erode(Alpha, erode_element)
+    alpha = cv2.erode(alpha, erode_element)
 
     erode_element = cv2.getStructuringElement(cv2.MORPH_RECT, (4, 4))
-    Alpha = cv2.erode(Alpha, erode_element)
+    alpha = cv2.erode(alpha, erode_element)
     dilate_element = cv2.getStructuringElement(cv2.MORPH_RECT, (4, 4))
-    Alpha = cv2.dilate(Alpha, dilate_element)
-    Alpha = Alpha.astype('uint8')
-    # return Alpha
-    contours, hierarcy = cv2.findContours(Alpha, 0, 1)
-    # qshow(Alpha)
+    alpha = cv2.dilate(alpha, dilate_element)
+    alpha = alpha.astype('uint8')
+    # return alpha
+    contours, hierarcy = cv2.findContours(alpha, 0, 1)
+    # qshow(alpha)
 
     maxBlack = 0
     maxId = 0
@@ -90,7 +90,7 @@ def jwa_3(imsrc):
 
     p = [x + w / 2, y + h / 2]
 
-    origin_point = [int(Alpha.shape[0] / 2) + 1, int(Alpha.shape[1] / 2) + 1]
+    origin_point = [int(alpha.shape[0] / 2) + 1, int(alpha.shape[1] / 2) + 1]
     point = [p[0] - origin_point[0], -p[1] + origin_point[1]]
 
     if point[0] == 0:
@@ -118,16 +118,16 @@ def jwa_3(imsrc):
 
     if degree > 180:
         degree -= 360
-    cv2.imshow('123', cv2.drawMarker(Alpha, position=(int(p[0]), int(p[1])), color=(255, 0, 255), markerSize=1,
+    cv2.imshow('123', cv2.drawMarker(alpha, position=(int(p[0]), int(p[1])), color=(255, 0, 255), markerSize=1,
                                      markerType=cv2.MARKER_CROSS, thickness=5))
     cv2.waitKey(100)
     print(degree)
     return degree
 
     # logger.debug(str(p)+' '+str(Line2Angle(p)))
-    # Alpha =cv2.circle(Alpha, p, 3, (255, 0, 0))
-    # Alpha =cv2.line(Alpha, p, (120, 170), (0, 255, 0))
-    # cv2.imshow("Img", Alpha)
+    # alpha =cv2.circle(alpha, p, 3, (255, 0, 0))
+    # alpha =cv2.line(alpha, p, (120, 170), (0, 255, 0))
+    # cv2.imshow("Img", alpha)
     # cv2.waitKey(0)
     # p = p - (img_object.cols / 2, img_object.rows / 2)
     # return p,Line2Angle(p)

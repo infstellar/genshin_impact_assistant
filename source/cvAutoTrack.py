@@ -82,11 +82,12 @@ class AutoTracker:
         ret = self.__lib.GetRotation(a)
         return ret, a.value
 
-    def SetWorldCenter(self, x, y):
+    def set_world_center(self, x, y):
         ret = self.__lib.SetWorldCenter(c_double(x), c_double(y))
         return ret
 
-    def translate_posi(self, x, y):
+    @staticmethod
+    def translate_posi(x, y):
         return -(x - 793.9) / 2, -(y - (-1237.8)) / 2
 
 

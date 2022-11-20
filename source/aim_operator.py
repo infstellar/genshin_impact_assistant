@@ -55,7 +55,7 @@ class AimOperator(BaseThreading):
             if ret == -1:
                 self.enemy_flag = False
                 self.finding_enemy()
-                if self.reset_timer.getDiffTime() >= self.reset_time:
+                if self.reset_timer.get_diff_time() >= self.reset_time:
                     self.reset_timer.reset()
                     self.reset_enemy_loops()
             elif ret <= 30 and self.auto_distance:
@@ -137,7 +137,7 @@ class AimOperator(BaseThreading):
 
     def keep_distance_with_enemy(self):  # 10px
         target_px = 6
-        if self.kdwe_timer.getDiffTime() < 1:
+        if self.kdwe_timer.get_diff_time() < 1:
             return 0
         else:
             self.kdwe_timer.reset()
@@ -151,7 +151,7 @@ class AimOperator(BaseThreading):
                 movement.move(movement.BACK, distance=px - target_px)
 
         if self.auto_move:
-            if self.left_timer.getDiffTime() >= 15:
+            if self.left_timer.get_diff_time() >= 15:
                 self.itt.key_up('a')
                 self.itt.key_down('a')
                 self.left_timer.reset()
