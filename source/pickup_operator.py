@@ -43,10 +43,10 @@ class PickupOperator(BaseThreading):
             ret = self.pickup_recognize()
 
             ret = self.auto_pickup()
-            if self.flicker_timer.getDiffTime() >= 5:
+            if self.flicker_timer.get_diff_time() >= 5:
                 self.collector_flag = False
                 self.finding_collector()
-                if self.reset_timer.getDiffTime() >= self.reset_time:
+                if self.reset_timer.get_diff_time() >= self.reset_time:
                     self.reset_timer.reset()
                     self.reset_collector_loops()
 
@@ -109,7 +109,7 @@ class PickupOperator(BaseThreading):
         ret_points = self.find_collector()
         points_length = []
         if len(ret_points) == 0:
-            if self.flicker_timer.getDiffTime() < 2:
+            if self.flicker_timer.get_diff_time() < 2:
                 # print('23')
                 if static_lib.W_KEYDOWN:
                     self.itt.key_up('w')

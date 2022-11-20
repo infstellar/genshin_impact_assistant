@@ -13,16 +13,16 @@ class Timer:
     def stop(self):
         self.end_time = time.time()
 
-    def getDeltaTime(self):
+    def get_delta_time(self):
         self.stop()
         return self.end_time - self.start_time
 
-    def getDiffTime(self):  # new
+    def get_diff_time(self):  # new
         self.stop()
         return self.end_time - self.start_time
 
     def loop_time(self):
-        t = self.getDiffTime()
+        t = self.get_diff_time()
         self.reset()
         return t
 
