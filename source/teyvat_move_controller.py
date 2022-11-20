@@ -4,9 +4,9 @@ import img_manager
 import generic_lib
 from interaction_background import InteractionBGD
 import posi_manager
-from pickup_operator import PickupOperator
-import combat_lib
-import combat_loop
+import cvAutoTrack
+import small_map
+import movement
 
 '''
 提瓦特大陆移动辅助控制，包括：
@@ -22,42 +22,13 @@ stamina_check low-> press x left click
 statement: in water; in climb; in move; in fly
 '''
 
-IN_MOVE = 0
-IN_FLY = 1
-IN_WATER = 2
-IN_CLIMB = 3
+
 
 
 class TeyvatMoveController(BaseThreading):
     def __init__(self):
         super().__init__()
-        self.puo = PickupOperator()
-        self.puo.setDaemon(True)
-        self.puo.pause_threading()
-        self.puo.start()
-
-        chara_list = combat_loop.get_chara_list()
-        self.combat_loop = combat_loop.Combat_Controller(chara_list)
-        self.combat_loop.setDaemon(True)
-        self.combat_loop.pause_threading()
-        self.combat_loop.start()
-
         self.itt = InteractionBGD()
-
-        self.statement = IN_MOVE
-        self.is_combat = False
-
-    def pause_threading(self):
-        self.puo.pause_threading()
-        self.pause_threading_flag = True
-
-    def continue_threading(self):
-        self.puo.continue_threading()
-        self.pause_threading_flag = False
-
-    def stop_threading(self):
-        self.puo.stop_threading()
-        self.stop_threading_flag = True
 
     def check_flying(self):
         if self.itt.get_img_existence(img_manager.motion_flying):
@@ -77,25 +48,19 @@ class TeyvatMoveController(BaseThreading):
         else:
             return False
 
-    def switch_statement(self):
-        if self.check_climbing():
-            self.statement = IN_CLIMB
-        elif self.statement == IN_CLIMB:
-            self.statement = IN_MOVE
-
-        if self.check_flying():
-            self.statement = IN_FLY
-        elif self.statement == IN_FLY:
-            self.statement = IN_MOVE
-
-        if self.check_swimming():
-            self.statement = IN_WATER
-        elif self.statement == IN_WATER:
-            self.statement = IN_MOVE
+    def change_view(pl):
+        x=pl[0]
+        y=pl[1]
+        tx, ty = cvAutoTrack.cvAutoTracker.get_position()[1:]
+        td = cvAutoTrack.cvAutoTracker.get_rotation()[1]
+        degree = generic_lib.points_angle([tx,ty], pl)
+        movement.cview(td-degree)
+        
 
     def run(self):
+        '''if you're using this class, copy this'''
         while 1:
-            time.sleep(0.2)
+            time.sleep(self.while_sleep)
             if self.stop_threading_flag:
                 return 0
 
@@ -107,24 +72,9 @@ class TeyvatMoveController(BaseThreading):
 
             if not self.working_flag:
                 self.working_flag = True
+            '''write your code below'''
+        
 
-            if combat_lib.combat_statement_detection(self.itt):
-                self.is_combat = True
-            else:
-                self.is_combat = False
-
-            if self.is_combat:
-                if self.combat_loop.pause_threading_flag:
-                    self.combat_loop.continue_threading()
-                if not self.puo.pause_threading_flag:
-                    self.puo.pause_threading()
-
-            else:
-                self.switch_statement()
-                if not self.combat_loop.pause_threading_flag:
-                    self.combat_loop.pause_threading()       
-                # if self.puo.pause_threading_flag:
-                #     self.puo.continue_threading()
                     
             
                  

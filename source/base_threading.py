@@ -11,10 +11,12 @@ class BaseThreading(threading.Thread):
         self.while_sleep = 0.2
 
     def pause_threading(self):
-        self.pause_threading_flag = True
+        if self.pause_threading_flag != True:
+            self.pause_threading_flag = True
 
     def continue_threading(self):
-        self.pause_threading_flag = False
+        if self.pause_threading_flag != False:
+            self.pause_threading_flag = False
 
     def stop_threading(self):
         self.stop_threading_flag = True
@@ -33,6 +35,7 @@ class BaseThreading(threading.Thread):
     def run(self):
         '''if you're using this class, copy this'''
         while 1:
+            time.sleep(self.while_sleep)
             if self.stop_threading_flag:
                 return 0
 
