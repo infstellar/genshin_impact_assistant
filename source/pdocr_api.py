@@ -1,5 +1,5 @@
 from source.unil import is_number
-from unit import *
+from util import *
 
 logger.info('Creating ocr object.')
 from timer_module import Timer

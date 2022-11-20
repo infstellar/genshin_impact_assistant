@@ -9,7 +9,7 @@ import timer_module
 import yolox_api
 from base_threading import BaseThreading
 from interaction_background import InteractionBGD
-from unit import *
+from util import *
 
 
 # sys.path.append("..")

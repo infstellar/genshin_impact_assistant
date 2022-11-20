@@ -5,7 +5,7 @@ import cv2
 import img_manager
 import posi_manager
 from interaction_background import InteractionBGD
-from unit import *
+from util import *
 
 
 def get_current_chara_num(itt: InteractionBGD):

@@ -2,7 +2,7 @@ import string
 
 import pyautogui
 import win32gui
-from unit import *
+from util import *
 from vkcode import VK_CODE
 
 print('import: cv2')

@@ -2,7 +2,7 @@ import time
 
 import combat_loop
 from base_threading import BaseThreading
-from unit import *
+from util import *
 
 
 class AlphaLoop(BaseThreading):
