@@ -162,7 +162,7 @@ class DomainFlow(BaseThreading):
                 movement.view_to_angle_domain(-90)
 
                 if self.isLiYue:  # barrier treatment
-                    if self.move_timer.getDiffTime() >= 20:
+                    if self.move_timer.get_diff_time() >= 20:
                         direc = not direc
                         self.move_timer.reset()
                     if direc:
@@ -179,7 +179,7 @@ class DomainFlow(BaseThreading):
     def Flow_IN_MOVETO_TREE(self):
         self.itt.key_down('w')
         while 1:
-            if self.ahead_timer.getDiffTime() >= 5:
+            if self.ahead_timer.get_diff_time() >= 5:
                 self.itt.key_press('spacebar')
                 self.ahead_timer.reset()
 

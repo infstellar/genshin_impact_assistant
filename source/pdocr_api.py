@@ -160,7 +160,7 @@ class PaddleocrAPI:
                 res_num = float(num)
             else:
                 res_num = None
-        t = pdocr_timer_performance.getDiffTime()
+        t = pdocr_timer_performance.get_diff_time()
 
         return is_num, res_num, t
 
@@ -174,4 +174,4 @@ class PaddleocrAPI:
 
 
 ocr = PaddleocrAPI()
-logger.info('created pdocr. cost ' + str(pdocr_timer_performance.getDiffTime()) + ' second.')
+logger.info('created pdocr. cost ' + str(pdocr_timer_performance.get_diff_time()) + ' second.')

@@ -97,7 +97,7 @@ class Character:
             self.trigger = self._trigger_idle
 
     def get_Ecd_time(self):
-        t = self.Ecd_timer.getDiffTime()
+        t = self.Ecd_timer.get_diff_time()
         t = self.Ecd_time - t
         if t <= 0:
             return 0
@@ -140,7 +140,7 @@ class Character:
     #         return True
 
     def get_Ecd_last_time(self):
-        t = self.Elast_timer.getDiffTime()
+        t = self.Elast_timer.get_diff_time()
         t = self.Elast_time - t
         if t <= 0:
             return 0
@@ -148,7 +148,7 @@ class Character:
             return t
 
     def get_Q_last_time(self):
-        t = self.Qlast_timer.getDiffTime()
+        t = self.Qlast_timer.get_diff_time()
         t = self.Qlast_time - t
         if t <= 0:
             return 0

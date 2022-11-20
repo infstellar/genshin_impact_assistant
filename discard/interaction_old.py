@@ -1,4 +1,5 @@
 import string
+import sys
 
 import pyautogui
 import win32gui
@@ -112,9 +113,9 @@ def get_windows_info(classname, title):
     return WinInfo(x, y, w, h, mainHnd)
 
 
-def get_scr_windows_img(wininfo: WinInfo, rangePosition=None):
-    if rangePosition is None:
-        rangePosition = [0, 0, 0, 0]
+def get_scr_windows_img(wininfo: WinInfo, range_position=None):
+    if range_position is None:
+        range_position = [0, 0, 0, 0]
     hwnd = wininfo.mainHnd
     app = QApplication(sys.argv)
     screen = QApplication.primaryScreen()
@@ -124,13 +125,13 @@ def get_scr_windows_img(wininfo: WinInfo, rangePosition=None):
     arr = np.fromstring(s, dtype=np.uint8).reshape((size.height(), size.width(), img.depth() // 8))
     new_image = Image.fromarray(arr)
     bbox = wininfo.get_rect()
-    bbox[2] = bbox[0] + rangePosition[2]
-    bbox[3] = bbox[1] + rangePosition[3]
-    bbox[0] += rangePosition[0]
-    bbox[1] += rangePosition[1]
+    bbox[2] = bbox[0] + range_position[2]
+    bbox[3] = bbox[1] + range_position[3]
+    bbox[0] += range_position[0]
+    bbox[1] += range_position[1]
 
     imsrc = np.array(new_image)
-    imsrc = imsrc[rangePosition[1]:rangePosition[3], rangePosition[0]:rangePosition[2], :3]
+    imsrc = imsrc[range_position[1]:range_position[3], range_position[0]:range_position[2], :3]
     # plt.imshow(imsrc)
     # plt.show()
     # plt.savefig('img.jpg')#
