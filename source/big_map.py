@@ -49,7 +49,7 @@ def calculate_nearest_posi(posi_list, target_posi):
     mind = 9999
     minposi = None
     for plist in posi_list:
-        d = generic_lib.points_distance(plist, target_posi)
+        d = generic_lib.euclidean_distance(plist, target_posi)
         if d <= mind:
             minposi = plist
             mind = d

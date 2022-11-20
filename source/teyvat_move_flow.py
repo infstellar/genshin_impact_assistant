@@ -164,8 +164,8 @@ class TeyvatMoveFlow(BaseThreading):
                 curr_posi = cvAutoTrack.cvAutoTracker.get_position()[1:]
                 self.switchto_bigmapwin()
                 tw_posi = big_map.nearest_teyvat_tw_posi(curr_posi, self.target_posi)[0]
-                p1 = generic_lib.points_distance(self.target_posi, tw_posi)
-                p2 = generic_lib.points_distance(self.target_posi, curr_posi)
+                p1 = generic_lib.euclidean_distance(self.target_posi, tw_posi)
+                p2 = generic_lib.euclidean_distance(self.target_posi, curr_posi)
                 if p1 < p2:
                     self.switchto_mainwin()
                     self.itt.delay(1)
