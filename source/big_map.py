@@ -1,11 +1,8 @@
-import math
-import time
-
-import cv2
-
-import interaction_background, img_manager, generic_lib
 import numpy as np
-from util import *
+
+import generic_lib
+import img_manager
+import interaction_background
 
 itt = interaction_background.InteractionBGD()
 

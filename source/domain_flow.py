@@ -314,7 +314,7 @@ class DomainFlow(BaseThreading):
 
             elif self.current_state == ST.AFTER_MOVETO_TREE:
                 time.sleep(0.2)
-                if generic_lib.f_recognition() == False:
+                if not generic_lib.f_recognition():
                     self.current_state = ST.END_MOVETO_TREE
                 else:
                     self.itt.key_up('w')
@@ -329,7 +329,7 @@ class DomainFlow(BaseThreading):
             elif self.current_state == ST.BEFORE_ATTAIN_REAWARD:
                 self.itt.key_press('f')
                 time.sleep(0.2)
-                if generic_lib.f_recognition() == False:
+                if not generic_lib.f_recognition():
                     self.current_state = ST.IN_ATTAIN_REAWARD
 
             elif self.current_state == ST.IN_ATTAIN_REAWARD:
