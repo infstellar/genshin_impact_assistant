@@ -2,19 +2,16 @@ import asyncio
 import json
 import os
 import threading
+import time
 
 from pywebio import *
 
 from source import listening, util, webio
+from source.util import is_json_equal
 from source.webio.page_manager import Page
 
 
-def to_main_page():
-    webio.manager.load_page('Main')
 
-
-def to_setting_page():
-    webio.manager.load_page('Setting')
 
 
 class MainPage(Page):
@@ -38,14 +35,10 @@ class MainPage(Page):
             await asyncio.sleep(0.1)
 
     def _load(self):
-        # 主scope
-        output.put_scope('Main')
+
         # 标题
-        output.put_markdown('# Main', scope='Main')
-        output.put_row([
-            output.put_button(label='Main', onclick=to_main_page),
-            output.put_button(label='setting', onclick=to_setting_page)
-        ], scope='Main')
+        output.put_markdown('# Main', scope=self.main_scope)
+        output.put_buttons(['Main', 'Setting'], onclick=webio.manager.load_page, scope=self.main_scope)
         output.put_row([  # 横列
             output.put_column([  # 左竖列
                 output.put_markdown('## Options'),  # 左竖列标题
@@ -63,7 +56,7 @@ class MainPage(Page):
             ]), None,
             output.put_scope('Log')
 
-        ], scope='Main')
+        ], scope=self.main_scope)
         # Button
         output.put_button(label=str(listening.FEAT_PICKUP), onclick=self.on_click_pickup, scope='Button_PickUp')
         # Log
@@ -76,7 +69,6 @@ class MainPage(Page):
 
         output.clear('Button_PickUp')
         listening.FEAT_PICKUP = not listening.FEAT_PICKUP
-        print(listening.FEAT_PICKUP)
         output.put_button(label=str(listening.FEAT_PICKUP), onclick=self.on_click_pickup, scope='Button_PickUp')
 
     def logout(self, text: str, color='black'):
@@ -84,12 +76,13 @@ class MainPage(Page):
             output.put_text(text, scope='LogArea').style(f'color: {color}')
 
     def _on_unload(self):
-        output.remove('Main')
+        pass
 
 
 class SettingPage(Page):
     def __init__(self):
         super().__init__()
+        self.exit_popup = None
         self.last_file = None
         self.file_name = ''
 
@@ -101,14 +94,14 @@ class SettingPage(Page):
         self.can_remove_last_scope = False
 
     def _load(self):
-        output.put_scope('Setting')
-        output.put_markdown('# Setting', scope='Setting')
-        output.put_row([
-            output.put_button(label='Main', onclick=to_main_page),
-            output.put_button(label='Setting', onclick=to_setting_page)
-        ], scope='Setting')
-        output.put_markdown('## config:', scope='Setting')
-        pin.put_select('file', self.config_files, scope='Setting')
+        self.last_file = None
+
+        output.put_markdown('# Setting', scope=self.main_scope)  #
+
+        output.put_buttons(['Main','Setting'], onclick=webio.manager.load_page,scope=self.main_scope)
+
+        output.put_markdown('## config:', scope=self.main_scope)
+        pin.put_select('file', self.config_files, scope=self.main_scope)
 
     def _on_load(self):
         self._load()
@@ -129,7 +122,7 @@ class SettingPage(Page):
                     output.remove('now')
                 else:
                     self.can_remove_last_scope = True
-                output.put_scope('now', scope='Setting')
+                output.put_scope('now', scope=self.main_scope)
 
                 self.put_setting(pin.pin['file'])
             await asyncio.sleep(0.1)
@@ -165,9 +158,31 @@ class SettingPage(Page):
         return rt_json
 
     def _on_unload(self):
+        j = json.load(open(self.file_name, 'r', encoding='utf8'))
+        self.exit_popup = True
+        if not is_json_equal(json.dumps(self.get_json(j)), json.dumps(j)):
+            self.exit_popup = False
+            output.popup('Do you need to save changes?', [
+                output.put_buttons(['No', 'Yes'], onclick=self.popup_button)
+            ])
+        while not self.exit_popup:
 
-        # is_json_equal(self.get_json())
-        output.remove('Setting')
+            time.sleep(0.1)
+
+    def popup_button(self, val):
+        if val == 'No':
+            self.close_popup()
+        elif val == 'Yes':
+            self.save_and_exit_popup()
+
+    def save_and_exit_popup(self):
+        self.save()
+        output.close_popup()
+        self.exit_popup = True
+
+    def close_popup(self):
+        output.close_popup()
+        self.exit_popup = True
 
     def put_json(self, j: dict, scope_name, add_name='', level=1):
         for k in j:

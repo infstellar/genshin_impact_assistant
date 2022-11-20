@@ -1,13 +1,11 @@
 import json
 import os
 import sys
-<<<<<<<< HEAD:source/unit.py
-import time # 8药删了，qq了
-
-========
-import time
->>>>>>>> dev:source/util.py
+import time  # 8药删了，qq了
 from loguru import logger
+
+time.time()  # 防自动删除
+
 
 def list_text2list(text: str) -> list:
     if text is not None:  # 判断是否为空
@@ -152,3 +150,24 @@ if __name__ == '__main__':
     a = load_json("../assests/itemall.json")
     save_json(a, "../assests/itemall.json")
     print()
+
+
+def is_number(s):
+    """
+    懒得写,抄的
+    https://www.runoob.com/python3/python3-check-is-number.html
+    """
+    try:
+        float(s)
+        return True
+    except ValueError:
+        pass
+
+    try:
+        import unicodedata
+        unicodedata.numeric(s)
+        return True
+    except (TypeError, ValueError):
+        pass
+
+    return False
