@@ -40,9 +40,9 @@ def combat_statement_detection(itt: InteractionBGD):
     green_num = 92
     float_num = 13
 
-    imsrc = itt.capture()
-    orsrc = imsrc.copy()
-    imsrc = itt.png2jpg(imsrc, channel='ui', alpha_num=150)
+    im_src = itt.capture()
+    orsrc = im_src.copy()
+    im_src = itt.png2jpg(im_src, channel='ui', alpha_num=150)
     # img_manager.qshow(imsrc)
 
     '''可以用圆形遮挡优化'''
@@ -51,36 +51,36 @@ def combat_statement_detection(itt: InteractionBGD):
     # imsrc[0:50, :, :] = 0
     # imsrc[:, 1800:1920, :] = 0
     # img_manager.qshow(imsrc)
-    imsrc[:, :, 2][imsrc[:, :, 2] < red_num] = 0
-    imsrc[:, :, 2][imsrc[:, :, 0] > blue_num + float_num] = 0
-    imsrc[:, :, 2][imsrc[:, :, 0] < blue_num - float_num] = 0
-    imsrc[:, :, 2][imsrc[:, :, 1] > green_num + float_num] = 0
-    imsrc[:, :, 2][imsrc[:, :, 1] < green_num - float_num] = 0
+    im_src[:, :, 2][im_src[:, :, 2] < red_num] = 0
+    im_src[:, :, 2][im_src[:, :, 0] > blue_num + float_num] = 0
+    im_src[:, :, 2][im_src[:, :, 0] < blue_num - float_num] = 0
+    im_src[:, :, 2][im_src[:, :, 1] > green_num + float_num] = 0
+    im_src[:, :, 2][im_src[:, :, 1] < green_num - float_num] = 0
     # img_manager.qshow(imsrc[:, :, 2])
     # _, imsrc2 = cv2.threshold(imsrc[:, :, 2], 1, 255, cv2.THRESH_BINARY)
     # img_manager.qshow(imsrc2)
     # ret_point = img_manager.get_rect(imsrc2, orsrc, ret_mode=2)
-    flag_is_arrow_exist = imsrc[:, :, 2].max() > 0
+    flag_is_arrow_exist = im_src[:, :, 2].max() > 0
     if flag_is_arrow_exist:
         return True
     # print('flag_is_arrow_exist', flag_is_arrow_exist)
 
     red_num = 245
-    BG_num = 100
+    bg_num = 100
 
-    imsrc = orsrc.copy()
-    imsrc = itt.png2jpg(imsrc, channel='ui', alpha_num=254)
+    im_src = orsrc.copy()
+    im_src = itt.png2jpg(im_src, channel='ui', alpha_num=254)
 
-    imsrc[950:1080, :, :] = 0
-    imsrc[0:150, :, :] = 0
-    imsrc[:, 1600:1920, :] = 0
+    im_src[950:1080, :, :] = 0
+    im_src[0:150, :, :] = 0
+    im_src[:, 1600:1920, :] = 0
 
-    imsrc[:, :, 2][imsrc[:, :, 2] < red_num] = 0
-    imsrc[:, :, 2][imsrc[:, :, 0] > BG_num] = 0
-    imsrc[:, :, 2][imsrc[:, :, 1] > BG_num] = 0
+    im_src[:, :, 2][im_src[:, :, 2] < red_num] = 0
+    im_src[:, :, 2][im_src[:, :, 0] > bg_num] = 0
+    im_src[:, :, 2][im_src[:, :, 1] > bg_num] = 0
     # _, imsrc2 = cv2.threshold(imsrc[:, :, 2], 1, 255, cv2.THRESH_BINARY)
     # img_manager.qshow(imsrc[:, :, 2])
-    flag_is_lifebar_exist = imsrc[:, :, 2].max() > 0
+    flag_is_lifebar_exist = im_src[:, :, 2].max() > 0
     # print('flag_is_lifebar_exist ',flag_is_lifebar_exist)
     if flag_is_lifebar_exist:
         return True
