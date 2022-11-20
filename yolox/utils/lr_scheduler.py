@@ -109,11 +109,12 @@ def warm_cos_lr(lr, total_iters, warmup_total_iters, warmup_lr_start, iters):
     else:
         lr *= 0.5 * (
                 1.0
-                + math.cos(
-            math.pi
-            * (iters - warmup_total_iters)
-            / (total_iters - warmup_total_iters)
-        )
+                + math.cos
+                    (
+                        math.pi
+                        * (iters - warmup_total_iters)
+                        / (total_iters - warmup_total_iters)
+                    )
         )
     return lr
 
@@ -139,11 +140,12 @@ def yolox_warm_cos_lr(
     else:
         lr = min_lr + 0.5 * (lr - min_lr) * (
                 1.0
-                + math.cos(
-            math.pi
-            * (iters - warmup_total_iters)
-            / (total_iters - warmup_total_iters - no_aug_iter)
-        )
+                + math.cos
+                    (
+                        math.pi
+                        * (iters - warmup_total_iters)
+                        / (total_iters - warmup_total_iters - no_aug_iter)
+                    )
         )
     return lr
 

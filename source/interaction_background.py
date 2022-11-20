@@ -417,11 +417,10 @@ class InteractionBGD:
         else:
             x = int(x)
             y = int(y)
-            self.move_to(x,y)
+            self.move_to(x, y)
             self.delay(0.8)
-        
+
         if not self.CONSOLE_ONLY:
-            
             wparam = 0
             lparam = 0 << 16 | 0
             self.PostMessageW(self.handle, self.WM_LBUTTONDOWN, wparam, lparam)

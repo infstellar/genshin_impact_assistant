@@ -10,7 +10,7 @@ USE_20X2RESIN_DOBLE_CHOICES = "USE_20X2RESIN_DOBLE_CHOICES"
 F_BUTTON = 'F_BUTTON'
 
 
-class ImgIcon():
+class ImgIcon:
     def __init__(self, name, path, is_bbg=True, matching_rate=None, alpha=None, bbg_posi=None, cap_posi=[1080, 1920],
                  jpgmode=2, threshold=0.95):
         self.name = name
