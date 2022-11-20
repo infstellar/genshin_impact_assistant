@@ -68,7 +68,7 @@ class PickupOperator(BaseThreading):
             cap = self.itt.crop_image(cap, [y1 + ret[1] - 20, x1 + ret[0] + 53, y1 + ret[1] + 54, x1 + ret[0] + 361])
             cap = self.itt.png2jpg(cap, channel='ui', alpha_num=180)
             # img_manager.qshow(cap)
-            res = ocr.ImgAnalyse(cap)
+            res = ocr.img_analyse(cap)
             if len(res) != 0:
                 if res[0][1][0] not in self.pickup_blacklist:
                     self.itt.key_press('f')
