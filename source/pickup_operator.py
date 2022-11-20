@@ -1,6 +1,6 @@
 from re import S
 from base_threading import BaseThreading
-from unit import *
+from util import *
 import img_manager
 import generic_lib
 from interaction_background import InteractionBGD

@@ -17,7 +17,7 @@ import img_manager
 import posi_manager
 import static_lib
 import vkcode
-from unit import *
+from util import *
 
 IMG_RATE = 0
 IMG_POSI = 1

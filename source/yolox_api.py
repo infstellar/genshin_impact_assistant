@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 # Copyright (c) Megvii, Inc. and its affiliates.
-from unit import *
+from util import *
 
 logger.info('Creating yolox obj. It may takes a few second.')
 
@@ -199,14 +199,15 @@ class Predictor(object):
         self.preproc = ValTransform(legacy=legacy)
         if trt_file is not None:
             # torch2trt=None
-            from torch2trt import TRTModule
+            # from torch2trt import TRTModule
 
-            model_trt = TRTModule()
-            model_trt.load_state_dict(torch.load(trt_file))
+            # model_trt = TRTModule()
+            # model_trt.load_state_dict(torch.load(trt_file))
 
-            x = torch.ones(1, 3, exp.test_size[0], exp.test_size[1]).cuda()
-            self.model(x)
-            self.model = model_trt
+            # x = torch.ones(1, 3, exp.test_size[0], exp.test_size[1]).cuda()
+            # self.model(x)
+            # self.model = model_trt
+            pass
 
     def inference(self, img):
         img_info = {"id": 0}

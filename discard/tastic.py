@@ -8,7 +8,7 @@ from character import Character
 # from interaction import *
 from interaction_background import InteractionBGD
 from timer_module import Timer
-from unit import *
+from util import *
 
 E_STRICT_MODE = True  # may cause more performance overhead
 
