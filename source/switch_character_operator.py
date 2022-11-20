@@ -74,7 +74,7 @@ class SwitchCharacterOperator(BaseThreading):
 
     def _switch_character(self, x: int):
         pyautogui.click(button='middle')
-        t = self.switch_timer.getDiffTime()
+        t = self.switch_timer.get_diff_time()
         self.tastic_operator.chara_waiting()
         logger.debug('try switching to ' + str(x))
         for i in range(120):  # 12 sec

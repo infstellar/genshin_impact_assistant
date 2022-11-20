@@ -360,7 +360,7 @@ class InteractionBGD:
         return jpg
 
     # @staticmethod
-    def color_SD(self, x_col, target_col):  # standard deviation
+    def color_sd(self, x_col, target_col):  # standard deviation
         ret = 0
         for i in range(min(len(x_col), len(target_col))):
             t = abs(x_col[i] - target_col[i])
@@ -417,11 +417,10 @@ class InteractionBGD:
         else:
             x = int(x)
             y = int(y)
-            self.move_to(x,y)
+            self.move_to(x, y)
             self.delay(0.8)
-        
+
         if not self.CONSOLE_ONLY:
-            
             wparam = 0
             lparam = 0 << 16 | 0
             self.PostMessageW(self.handle, self.WM_LBUTTONDOWN, wparam, lparam)
