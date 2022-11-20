@@ -360,7 +360,7 @@ class InteractionBGD:
         return jpg
 
     # @staticmethod
-    def color_SD(self, x_col, target_col):  # standard deviation
+    def color_sd(self, x_col, target_col):  # standard deviation
         ret = 0
         for i in range(min(len(x_col), len(target_col))):
             t = abs(x_col[i] - target_col[i])

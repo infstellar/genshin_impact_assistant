@@ -96,7 +96,7 @@ class TeyvatMoveFlow(BaseThreading):
                 curr_posi = cvAutoTracker.get_position()[1:]
                 self.switchto_bigmapwin()
                 self.itt.delay(1)
-                tw_posi = big_map.get_nearest_TW_posi_in_bigmap(curr_posi, self.target_posi)
+                tw_posi = big_map.nearest_big_map_tw_posi(curr_posi, self.target_posi)
                 self.itt.move_to(tw_posi[0], tw_posi[1])
                 self.itt.delay(0.2)
                 self.itt.left_click()
@@ -121,7 +121,7 @@ class TeyvatMoveFlow(BaseThreading):
                 time.sleep(2)
                 curr_posi = cvAutoTracker.get_position()[1:]
                 self.switchto_bigmapwin()
-                tw_posi = big_map.get_nearest_TW_posi_in_teyvat(curr_posi, self.target_posi)[0]
+                tw_posi = big_map.nearest_teyvat_tw_posi(curr_posi, self.target_posi)[0]
                 p1 = generic_lib.points_distance(self.target_posi, tw_posi)
                 p2 = generic_lib.points_distance(self.target_posi, curr_posi)
                 if p1 < p2:

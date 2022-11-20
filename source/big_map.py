@@ -62,11 +62,11 @@ def calculate_nearest_posi(posi_list, target_posi):
     return minposi, mind
 
 
-def get_TW_points(bigmatMat):
+def get_tw_points(bigmatMat):
     return itt.match_multiple_img(bigmatMat, img_manager.bigmap_TeleportWaypoint.image)
 
 
-def get_closest_TeleportWaypoint(object_img: img_manager.ImgIcon):
+def get_closest_teleport_waypoint(object_img: img_manager.ImgIcon):
     return calculate_nearest_posi(
         itt.match_multiple_img(itt.capture(jpgmode=0), object_img.image),
         get_navigation_posi())
@@ -79,8 +79,8 @@ def bigmap_posi2teyvat_posi(current_teyvat_posi, bigmap_posi_list):
     return bigmap_posi_list
 
 
-def get_nearest_TW_posi_in_bigmap(current_posi, target_posi):
-    twpoints = np.array(get_TW_points(itt.capture(jpgmode=0)))
+def nearest_big_map_tw_posi(current_posi, target_posi):
+    twpoints = np.array(get_tw_points(itt.capture(jpgmode=0)))
     twpoints_teyvat = twpoints.copy()
     twpoints_teyvat = bigmap_posi2teyvat_posi(current_posi, twpoints_teyvat)
     p = calculate_nearest_posi(twpoints_teyvat, target_posi)
@@ -88,8 +88,8 @@ def get_nearest_TW_posi_in_bigmap(current_posi, target_posi):
     return twpoints[a]
 
 
-def get_nearest_TW_posi_in_teyvat(current_posi, target_posi):
-    twpoints = np.array(get_TW_points(itt.capture(jpgmode=0)))
+def nearest_teyvat_tw_posi(current_posi, target_posi):
+    twpoints = np.array(get_tw_points(itt.capture(jpgmode=0)))
     twpoints_teyvat = twpoints.copy()
     twpoints_teyvat = bigmap_posi2teyvat_posi(current_posi, twpoints_teyvat)
     p = calculate_nearest_posi(twpoints_teyvat, target_posi)
@@ -98,7 +98,7 @@ def get_nearest_TW_posi_in_teyvat(current_posi, target_posi):
 
 if __name__ == '__main__':
     # print(get_closest_TeleportWaypoint(img_manager.bigmap_AbyssMage))
-    a = get_nearest_TW_posi_in_bigmap()
+    a = nearest_big_map_tw_posi()
     itt.move_to(a[0], a[1])
     print()
     # for i in range(10):
