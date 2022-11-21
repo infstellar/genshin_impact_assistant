@@ -110,7 +110,7 @@ class AutoTrackerLoop(threading.Thread):
             self.rotation = cvAutoTracker.get_rotation()
             self.position = cvAutoTracker.get_position()
             if not self.position[0]:
-                print("坐标获取失败")
+                # print("坐标获取失败")
                 self.position = (False,0,0)
                 continue
             if ct>=30:
@@ -152,18 +152,18 @@ if __name__ == '__main__':
     # print('1) err', tracker.get_last_error(), '\n')
 
     # 获取当前人物所在位置以及角度（箭头朝向）并打印错误：
-    print(cvAutoTracker.get_position())
-    print('2) err', cvAutoTracker.get_position(), '\n')
+    print(cvAutoTrackerLoop.get_position())
+    print('2) err', cvAutoTrackerLoop.get_position(), '\n')
 
     # 获取UID并打印错误：
-    print(cvAutoTracker.get_uid())
-    print('3) err', cvAutoTracker.get_last_error(), '\n')
+    print(cvAutoTrackerLoop.get_uid())
+    print('3) err', cvAutoTrackerLoop.get_last_error(), '\n')
 
-    print(cvAutoTracker.get_direction())
-    print('4) err', cvAutoTracker.get_last_error(), '\n')
+    print(cvAutoTrackerLoop.get_direction())
+    print('4) err', cvAutoTrackerLoop.get_last_error(), '\n')
 
-    print(cvAutoTracker.get_rotation())
-    print('5) err', cvAutoTracker.get_last_error(), '\n')
+    print(cvAutoTrackerLoop.get_rotation())
+    print('5) err', cvAutoTrackerLoop.get_last_error(), '\n')
 
     while 1:
         # print(cvAutoTracker.get_rotation())
