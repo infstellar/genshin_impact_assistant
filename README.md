@@ -60,6 +60,8 @@
 
 4. 运行genshin_assistant.py
 
+注意：需要额外解压source/cvAutoTrack_7.2.3/CVAUTOTRACK.7z文件！
+
 ### 原神窗口设置
 
 - 需要在原神启动后再运行程序
