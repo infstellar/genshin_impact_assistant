@@ -8,6 +8,7 @@ import cvAutoTrack
 import small_map
 import movement
 import numpy as np
+import static_lib
 '''
 提瓦特大陆移动辅助控制，包括：
 自动F控制 pickup_operator
@@ -34,7 +35,11 @@ class TeyvatMoveController(BaseThreading):
         for i in self.priority_waypoints:
             self.priority_waypoints_array.append(i["position"])
         self.priority_waypoints_array = np.array(self.priority_waypoints_array)
-        
+        self.target_positon = [0,0]
+        self.while_sleep=0.5
+    
+    def set_target_position(self, posi):
+        self.target_positon = posi    
 
     def check_flying(self):
         if self.itt.get_img_existence(img_manager.motion_flying):
@@ -55,22 +60,27 @@ class TeyvatMoveController(BaseThreading):
             return False
 
     def change_view_to_posi(self, pl):
-        x=pl[0]
-        y=pl[1]
         td=0
         degree=100
         while abs(td-degree)>10:
-            tx, ty = cvAutoTrack.cvAutoTracker.get_position()[1:]
-            td = cvAutoTrack.cvAutoTracker.get_rotation()[1]
-            degree = generic_lib.points_angle([tx,ty], pl)
-            movement.cview(td-degree)
+            time.sleep(0.05)
+            tx, ty = self.current_posi
+            td = cvAutoTrack.cvAutoTrackerLoop.get_rotation()[1]
+            degree = generic_lib.points_angle([tx,ty], pl, coordinate=generic_lib.NEGATIVE_Y)
+            cvn=td-degree
+            if cvn>=50:
+                cvn=50
+            if cvn<=-50:
+                cvn=-50
+            movement.cview(cvn)
     
     def caculate_next_priority_point(self, currentp, targetp):
+        float_distance = 50
         # 计算当前点到所有优先点的曼哈顿距离
         md = generic_lib.manhattan_distance_plist(currentp, self.priority_waypoints_array)
         nearly_pp_arg = np.argsort(md)
         # 计算当前点到所有优先点的欧拉距离
-        nearly_pp = self.priority_waypoints_array[nearly_pp_arg[:9]]
+        nearly_pp = self.priority_waypoints_array[nearly_pp_arg[:50]]
         ed = generic_lib.euclidean_distance_plist(currentp, nearly_pp)
         # 将点按欧拉距离升序排序
         nearly_pp_arg = np.argsort(ed)
@@ -78,11 +88,12 @@ class TeyvatMoveController(BaseThreading):
         # 删除距离目标比现在更远的点
         fd = generic_lib.euclidean_distance_plist(targetp, nearly_pp)
         c2t_distance = generic_lib.euclidean_distance(currentp, targetp)
-        nearly_pp = np.delete(nearly_pp, (np.where(fd>=c2t_distance)[0]), axis=0)
+        nearly_pp = np.delete(nearly_pp, (np.where(fd+float_distance >= (c2t_distance) )[0]), axis=0)
         # 获得最近点
         if len(nearly_pp) == 0:
             return targetp
         closest_pp = nearly_pp[0]
+        print(currentp, closest_pp)
         return closest_pp
     
     
@@ -102,14 +113,27 @@ class TeyvatMoveController(BaseThreading):
             if not self.working_flag:
                 self.working_flag = True
             '''write your code below'''
-        
+            self.current_posi = cvAutoTrack.cvAutoTrackerLoop.get_position()
+            if not self.current_posi[0]==False:
+                self.current_posi=self.current_posi[1:]
+            else:
+                print("position ERROR")
+                continue
+            p1 = tmc.caculate_next_priority_point(self.current_posi, [2526.9990234375, -5173.814453125])
+            self.change_view_to_posi(p1)
+            if not static_lib.W_KEYDOWN:
+                self.itt.key_down('w')
+            
+            
 
 if __name__ == '__main__':
     tmc=TeyvatMoveController()
     p1=[3,3]
-    for i in range(10):
-        p1 = tmc.caculate_next_priority_point(p1, [0,0])
-        print(p1)
+    tmc.set_target_position([2525.922711425781, -5221.934147521973])
+    tmc.start()
+    while 1:
+        time.sleep(1)
+        
     pass
                     
             
