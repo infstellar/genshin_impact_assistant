@@ -1,11 +1,21 @@
 import numpy as np
-
+from util import *
 import generic_lib
-import img_manager
+import img_manager, cv2
 import interaction_background
 
 itt = interaction_background.InteractionBGD()
 
+global priority_waypoints, priority_waypoints_list, priority_waypoints_array, idnum
+priority_waypoints, priority_waypoints_list, priority_waypoints_array, idnum = None, None, None, None
+priority_waypoints = load_json("priority_waypoints.json", default_path='assests')
+def load_pw():
+    global priority_waypoints, priority_waypoints_list, priority_waypoints_array, idnum
+    priority_waypoints_list = []
+    for i in priority_waypoints:
+        priority_waypoints_list.append(i["position"])
+    priority_waypoints_array = np.array(priority_waypoints_list)
+    idnum = priority_waypoints[-1]["id"]
 
 def move_map(x, y):
     x = x / 6
@@ -75,6 +85,13 @@ def bigmap_posi2teyvat_posi(current_teyvat_posi, bigmap_posi_list):
     bigmap_posi_list = bigmap_posi_list + current_teyvat_posi
     return bigmap_posi_list
 
+def teyvat_posi2bigmap_posi(current_teyvat_posi, bigmap_posi_list):
+    bigmap_posi_list = bigmap_posi_list - current_teyvat_posi
+    bigmap_posi_list = bigmap_posi_list / 3.5
+    bigmap_posi_list = bigmap_posi_list + [1920 / 2, 1080 / 2]
+    return bigmap_posi_list
+
+
 
 def nearest_big_map_tw_posi(current_posi, target_posi):
     twpoints = np.array(get_tw_points(itt.capture(jpgmode=0)))
@@ -95,8 +112,9 @@ def nearest_teyvat_tw_posi(current_posi, target_posi):
 
 if __name__ == '__main__':
     # print(get_closest_TeleportWaypoint(img_manager.bigmap_AbyssMage))
-    a = nearest_big_map_tw_posi()
-    itt.move_to(a[0], a[1])
+    load_pw()
+    # p = teyvat_posi2bigmap_posi([2625.204978515623, -5274.091235473633], np.array(priority_waypoints_list))
+    # show_bigmap_posi_in_window([2625.204978515623, -5274.091235473633], p)
     print()
     # for i in range(10):
     #     move_navigation_to_center()
