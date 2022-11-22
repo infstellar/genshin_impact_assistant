@@ -51,11 +51,7 @@ class TeyvatMoveFlow(BaseThreading):
         self.tmc.pause_threading()
         self.tmc.start()
         
-        chara_list = combat_loop.get_chara_list()
-        self.cct = combat_loop.Combat_Controller(chara_list)
-        self.cct.setDaemon(True)
-        self.cct.pause_threading()
-        self.cct.start()
+        
         
         self.jump_timer = timer_module.Timer()
         
@@ -211,18 +207,13 @@ class TeyvatMoveFlow(BaseThreading):
                             pass
                         else:
                             self.tmc.pause_threading()
-                            self.cct.continue_threading()
                     else:
-                        self.cct.pause_threading()
-                        self.cct.sco.tastic_operator.pause_threading()
                         self.tmc.continue_threading()
                         if self.jump_timer.get_diff_time()>=10:
                             self.jump_timer.reset()
                             self.itt.key_press('spacebar')
                         
                 if (self.motion_state == IN_FLY) or (self.motion_state == IN_CLIMB) or (self.motion_state == IN_WATER):
-                    self.cct.pause_threading()
-                    self.cct.sco.tastic_operator.pause_threading()
                     self.tmc.continue_threading()
                     '''可能会加体力条检测'''
                     

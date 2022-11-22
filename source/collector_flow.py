@@ -63,6 +63,12 @@ class CollectorFlow(BaseThreading):
         self.puo.pause_threading()
         self.puo.start()
         
+        chara_list = combat_loop.get_chara_list()
+        self.cct = combat_loop.Combat_Controller(chara_list)
+        self.cct.setDaemon(True)
+        self.cct.pause_threading()
+        self.cct.start()
+        
         self.pickup_timer = timer_module.Timer()
         self.itt = InteractionBGD()
         
@@ -80,6 +86,25 @@ class CollectorFlow(BaseThreading):
     def set_collector_name(self, text):
         self.collector_name = text
 
+    def stop_combat(self):
+        self.cct.pause_threading()
+        
+    def start_combat(self):
+        self.cct.continue_threading()
+        self.stop_pickup()
+        self.stop_walk()
+    def stop_pickup(self):
+        self.puo.pause_threading()
+    def start_pickup(self):
+        self.puo.continue_threading()
+        self.stop_combat()
+        self.stop_walk()
+    def stop_walk(self):
+        self.tmf.pause_threading()
+    def start_walk(self):
+        self.tmf.continue_threading()
+        self.stop_combat()
+        self.stop_pickup()
     def run(self):
         '''if you're using this class, copy this'''
         while 1:
