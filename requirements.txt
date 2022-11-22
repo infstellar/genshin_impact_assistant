@@ -30,3 +30,5 @@ PyQt5
 
 # pywebio
 pywebio
+
+py7zr
