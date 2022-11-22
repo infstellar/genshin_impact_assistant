@@ -13,13 +13,13 @@ import torch
 __all__ = [
     "AverageMeter",
     "MeterBuffer",
-    "get_total_and_free_memory_in_Mb",
+    "get_total_and_free_memory_in_mb",
     "occupy_mem",
     "gpu_mem_usage",
 ]
 
 
-def get_total_and_free_memory_in_Mb(cuda_device):
+def get_total_and_free_memory_in_mb(cuda_device):
     devices_info_str = os.popen(
         "nvidia-smi --query-gpu=memory.total,memory.used --format=csv,nounits,noheader"
     )
@@ -35,7 +35,7 @@ def occupy_mem(cuda_device, mem_ratio=0.9):
     """
     pre-allocate gpu memory for training to avoid memory Fragmentation.
     """
-    total, used = get_total_and_free_memory_in_Mb(cuda_device)
+    total, used = get_total_and_free_memory_in_mb(cuda_device)
     max_mem = int(total * mem_ratio)
     block_mem = max_mem - used
     x = torch.cuda.FloatTensor(256, 1024, block_mem)

@@ -104,7 +104,7 @@ class TasticOperator(BaseThreading):
 
     def chara_waiting(self, mode=0):
         self.unconventionality_situation_detection()
-        if (mode == 0) and self.is_e_available() and (self.enter_timer.getDiffTime() <= 1):
+        if (mode == 0) and self.is_e_available() and (self.enter_timer.get_diff_time() <= 1):
             logger.debug('skip waiting')
             return 0
         while self.get_character_busy() and (not self.checkup_stop_func()):

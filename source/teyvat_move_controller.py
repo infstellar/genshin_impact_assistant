@@ -4,10 +4,11 @@ import img_manager
 import generic_lib
 from interaction_background import InteractionBGD
 import posi_manager
-from pickup_operator import PickupOperator
-import combat_lib
-import combat_loop
-
+import cvAutoTrack
+import small_map
+import movement
+import numpy as np
+import static_lib
 '''
 提瓦特大陆移动辅助控制，包括：
 自动F控制 pickup_operator
@@ -22,42 +23,23 @@ stamina_check low-> press x left click
 statement: in water; in climb; in move; in fly
 '''
 
-IN_MOVE = 0
-IN_FLY = 1
-IN_WATER = 2
-IN_CLIMB = 3
+
 
 
 class TeyvatMoveController(BaseThreading):
     def __init__(self):
         super().__init__()
-        self.puo = PickupOperator()
-        self.puo.setDaemon(True)
-        self.puo.pause_threading()
-        self.puo.start()
-
-        chara_list = combat_loop.get_chara_list()
-        self.combat_loop = combat_loop.Combat_Controller(chara_list)
-        self.combat_loop.setDaemon(True)
-        self.combat_loop.pause_threading()
-        self.combat_loop.start()
-
         self.itt = InteractionBGD()
-
-        self.statement = IN_MOVE
-        self.is_combat = False
-
-    def pause_threading(self):
-        self.puo.pause_threading()
-        self.pause_threading_flag = True
-
-    def continue_threading(self):
-        self.puo.continue_threading()
-        self.pause_threading_flag = False
-
-    def stop_threading(self):
-        self.puo.stop_threading()
-        self.stop_threading_flag = True
+        self.priority_waypoints = load_json("priority_waypoints.json", default_path='assests')
+        self.priority_waypoints_array = []
+        for i in self.priority_waypoints:
+            self.priority_waypoints_array.append(i["position"])
+        self.priority_waypoints_array = np.array(self.priority_waypoints_array)
+        self.target_positon = [0,0]
+        self.while_sleep=0.5
+    
+    def set_target_position(self, posi):
+        self.target_positon = posi    
 
     def check_flying(self):
         if self.itt.get_img_existence(img_manager.motion_flying):
@@ -71,31 +53,59 @@ class TeyvatMoveController(BaseThreading):
         else:
             return False
 
+    def pause_threading(self):
+        if self.pause_threading_flag != True:
+            self.pause_threading_flag = True
+            self.itt.key_up('w')
+    
     def check_swimming(self):
         if self.itt.get_img_existence(img_manager.motion_swimming):
             return True
         else:
             return False
 
-    def switch_statement(self):
-        if self.check_climbing():
-            self.statement = IN_CLIMB
-        elif self.statement == IN_CLIMB:
-            self.statement = IN_MOVE
-
-        if self.check_flying():
-            self.statement = IN_FLY
-        elif self.statement == IN_FLY:
-            self.statement = IN_MOVE
-
-        if self.check_swimming():
-            self.statement = IN_WATER
-        elif self.statement == IN_WATER:
-            self.statement = IN_MOVE
-
+    def change_view_to_posi(self, pl):
+        td=0
+        degree=100
+        while abs(td-degree)>10:
+            time.sleep(0.05)
+            tx, ty = self.current_posi
+            td = cvAutoTrack.cvAutoTrackerLoop.get_rotation()[1]
+            degree = generic_lib.points_angle([tx,ty], pl, coordinate=generic_lib.NEGATIVE_Y)
+            cvn=td-degree
+            if cvn>=50:
+                cvn=50
+            if cvn<=-50:
+                cvn=-50
+            movement.cview(cvn)
+    
+    def caculate_next_priority_point(self, currentp, targetp):
+        float_distance = 30
+        # 计算当前点到所有优先点的曼哈顿距离
+        md = generic_lib.manhattan_distance_plist(currentp, self.priority_waypoints_array)
+        nearly_pp_arg = np.argsort(md)
+        # 计算当前点到所有优先点的欧拉距离
+        nearly_pp = self.priority_waypoints_array[nearly_pp_arg[:50]]
+        ed = generic_lib.euclidean_distance_plist(currentp, nearly_pp)
+        # 将点按欧拉距离升序排序
+        nearly_pp_arg = np.argsort(ed)
+        nearly_pp = nearly_pp[nearly_pp_arg]
+        # 删除距离目标比现在更远的点
+        fd = generic_lib.euclidean_distance_plist(targetp, nearly_pp)
+        c2t_distance = generic_lib.euclidean_distance(currentp, targetp)
+        nearly_pp = np.delete(nearly_pp, (np.where(fd+float_distance >= (c2t_distance) )[0]), axis=0)
+        # 获得最近点
+        if len(nearly_pp) == 0:
+            return targetp
+        closest_pp = nearly_pp[0]
+        print(currentp, closest_pp)
+        return closest_pp
+    
+    
     def run(self):
+        '''if you're using this class, copy this'''
         while 1:
-            time.sleep(0.2)
+            time.sleep(self.while_sleep)
             if self.stop_threading_flag:
                 return 0
 
@@ -107,24 +117,35 @@ class TeyvatMoveController(BaseThreading):
 
             if not self.working_flag:
                 self.working_flag = True
-
-            if combat_lib.combat_statement_detection(self.itt):
-                self.is_combat = True
+            '''write your code below'''
+            self.current_posi = cvAutoTrack.cvAutoTrackerLoop.get_position()
+            if not self.current_posi[0]==False:
+                self.current_posi=self.current_posi[1:]
             else:
-                self.is_combat = False
+                print("position ERROR")
+                continue
+            p1 = self.caculate_next_priority_point(self.current_posi, self.target_positon)
+            print(p1)
+            self.change_view_to_posi(p1)
+            if not static_lib.W_KEYDOWN:
+                self.itt.key_down('w')
+                
+            if generic_lib.euclidean_distance(self.target_positon, cvAutoTrack.cvAutoTrackerLoop.get_position()[1:])<=10:
+                self.pause_threading()
+                logger.info("已到达目的地附近，本次导航结束。")
+                self.itt.key_up('w')
+            
+            
 
-            if self.is_combat:
-                if self.combat_loop.pause_threading_flag:
-                    self.combat_loop.continue_threading()
-                if not self.puo.pause_threading_flag:
-                    self.puo.pause_threading()
-
-            else:
-                self.switch_statement()
-                if not self.combat_loop.pause_threading_flag:
-                    self.combat_loop.pause_threading()       
-                # if self.puo.pause_threading_flag:
-                #     self.puo.continue_threading()
+if __name__ == '__main__':
+    tmc=TeyvatMoveController()
+    p1=[3,3]
+    tmc.set_target_position([1175.70934912 -4894.67981738])
+    tmc.start()
+    while 1:
+        time.sleep(1)
+        
+    pass
                     
             
                  

@@ -13,18 +13,25 @@ class Timer:
     def stop(self):
         self.end_time = time.time()
 
-    def getDeltaTime(self):
+    def get_delta_time(self):
         self.stop()
         return self.end_time - self.start_time
 
-    def getDiffTime(self):  # new
+    def get_diff_time(self):  # new
         self.stop()
         return self.end_time - self.start_time
 
     def loop_time(self):
-        t = self.getDiffTime()
+        t = self.get_diff_time()
         self.reset()
         return t
 
 
-'''class 流速/fps检测器 之后再写'''
+class CyclicVelocityDetector(Timer):
+    def __init__(self):
+        super().__init__()
+        
+    def getandset_cyclic_velocity(self):
+        dt = self.get_diff_time()
+        self.reset()
+        return int(1/dt)

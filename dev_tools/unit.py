@@ -92,7 +92,7 @@ def savefileP(filename, item):
 
 def reflash_config():
     global config_json
-    configjson = load_json("config.json")
+    config_json = load_json("config.json")
 
 # if __name__=='__main__':
 

@@ -3,6 +3,7 @@ import time
 from interaction_background import InteractionBGD
 import posi_manager
 import math
+import numpy as np
 
 NORMAL = 0
 NEGATIVE_Y = 1
@@ -17,9 +18,17 @@ def f_recognition(itt: InteractionBGD, mode='button_only'):
         return False
 
 
-def points_distance(p1, p2):
+def euclidean_distance(p1, p2):
     return math.sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2)
 
+def euclidean_distance_plist(p1, p2):
+    return np.sqrt((p1[0] - p2[:,0]) ** 2 + (p1[1] - p2[:,1]) ** 2)
+
+def manhattan_distance(p1, p2):
+    return abs(p1[0]-p2[0]) + abs(p1[1]-p2[1])
+
+def manhattan_distance_plist(p1, p2):
+    return abs(p1[0]-p2[:,0]) + abs(p1[1]-p2[:,1])
 
 def points_angle(p1, p2, coordinate=NORMAL):
     # p1: current point
@@ -53,10 +62,14 @@ def points_angle(p1, p2, coordinate=NORMAL):
 
 if __name__ == '__main__':
     itt = InteractionBGD()
-    print(points_angle([0, 0], [10, 10], NEGATIVE_Y))
-    print(points_angle([10, 10], [0, 0], NEGATIVE_Y))
-    print(points_angle([0, 0], [20, 10], NEGATIVE_Y))
-    print(points_angle([0, 10], [10, 10], NEGATIVE_Y))
-    while 1:
-        time.sleep(0.2)
-        # print(f_recognition(itt))
+    p1 = [0,0]
+    p2 = np.array([[1,1],[2,2]])
+    euclidean_distance_plist(p1,p2)
+    
+    # print(points_angle([0, 0], [10, 10], NEGATIVE_Y))
+    # print(points_angle([10, 10], [0, 0], NEGATIVE_Y))
+    # print(points_angle([0, 0], [20, 10], NEGATIVE_Y))
+    # print(points_angle([0, 10], [10, 10], NEGATIVE_Y))
+    # while 1:
+    #     time.sleep(0.2)
+    #     print(f_recognition(itt))
