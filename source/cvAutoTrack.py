@@ -117,9 +117,10 @@ class AutoTrackerLoop(threading.Thread):
             if ct>=30:
                 self.last_position = self.position
                 self.in_excessive_error = False
+                logger.debug("位置已重置")
                 ct=0
             if generic_lib.euclidean_distance(self.position[1:],self.last_position[1:])>=50:
-                print("误差过大")
+                # print("误差过大")
                 self.in_excessive_error = True
                 ct+=1
             else:

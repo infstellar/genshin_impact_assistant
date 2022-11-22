@@ -21,7 +21,11 @@ import combat_lib
 import teyvat_move_flow
 import numpy as np
 
-def load_feature_position(text="清心"):
+COLLECTION = 0
+ENEMY = 1
+MINERAL = 2
+
+def load_feature_position(text="清心", blacklist_id=[]):
     ita = load_json("itemall.json", "assests")
     ret_dict=[]
     i=0
@@ -30,19 +34,23 @@ def load_feature_position(text="清心"):
         if feature == None:
             continue
         for item in feature["features"]:
+            if item["id"] in blacklist_id:
+                continue
             if item["properties"]["popTitle"] == text:
                 ret_dict.append({
                     "id":item["id"],
                     "position":item["geometry"]["coordinates"]
                 })
-    print()
+    # print()
     return ret_dict  
 
 class CollectorFlow(BaseThreading):
     def __init__(self):
         super().__init__()
-        self.collector_name = "蒲公英籽"
-        self.collector_posi_dict = load_feature_position(self.collector_name)
+        self.collector_name = "甜甜花 - 蒙德"
+        self.collector_type = COLLECTION
+        self.collector_blacklist_id = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,24,23,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48]
+        self.collector_posi_dict = load_feature_position(self.collector_name, blacklist_id=self.collector_blacklist_id)
         self.current_state = ST.INIT_MOVETO_COLLECTOR
         
         self.tmf = teyvat_move_flow.TeyvatMoveFlow()
@@ -54,6 +62,9 @@ class CollectorFlow(BaseThreading):
         self.puo.setDaemon(True)
         self.puo.pause_threading()
         self.puo.start()
+        
+        self.pickup_timer = timer_module.Timer()
+        self.itt = InteractionBGD()
         
     def pause_threading(self):
         if self.pause_threading_flag != True:
@@ -68,7 +79,6 @@ class CollectorFlow(BaseThreading):
         
     def set_collector_name(self, text):
         self.collector_name = text
-        self.collector_posi_dict = load_feature_position(self.collector_name)
 
     def run(self):
         '''if you're using this class, copy this'''
@@ -88,44 +98,79 @@ class CollectorFlow(BaseThreading):
             '''write your code below'''
             
             if self.current_state == ST.INIT_MOVETO_COLLECTOR:
-                self.collector_posi_dict = load_feature_position(self.collector_name)
+                self.collector_posi_dict = load_feature_position(self.collector_name, blacklist_id=self.collector_blacklist_id)
+                logger.info("switch Flow to: BEFORE_MOVETO_COLLECTOR")
                 self.current_state = ST.BEFORE_MOVETO_COLLECTOR
                 self.collector_id = 0
                 
             if self.current_state == ST.BEFORE_MOVETO_COLLECTOR:
                 self.collector_posi = list(np.array(list(map(float, self.collector_posi_dict[self.collector_id]["position"])))*1.5)
+                logger.info("正在前往：" + self.collector_name)
+                logger.info("物品id：" + str(self.collector_posi_dict[self.collector_id]["id"]))
+                logger.info("目标坐标：" + str(self.collector_posi))
                 self.tmf.set_target_posi(self.collector_posi)
                 self.tmf.continue_threading()
+                logger.info("switch Flow to: IN_MOVETO_COLLECTOR")
                 self.current_state = ST.IN_MOVETO_COLLECTOR
                 
             if self.current_state == ST.IN_MOVETO_COLLECTOR:
                 if self.tmf.pause_threading_flag:
+                    logger.info("switch Flow to: AFTER_MOVETO_COLLECTOR")
                     self.current_state = ST.AFTER_MOVETO_COLLECTOR
             
             if self.current_state == ST.AFTER_MOVETO_COLLECTOR:
                 self.tmf.pause_threading()
                 self.current_state = ST.END_MOVETO_COLLECTOR
+                logger.info("switch Flow to: INIT_PICKUP_COLLECTOR")
                 self.current_state = ST.INIT_PICKUP_COLLECTOR
                 
             if self.current_state == ST.INIT_PICKUP_COLLECTOR:
+                if self.collector_type == COLLECTION:
+                    self.puo.continue_threading()
+                    self.tmf.pause_threading()
+                elif self.collector_type == ENEMY:
+                    self.tmf.cct.continue_threading()
+                elif self.collector_type == MINERAL:
+                    pass
+                logger.info("switch Flow to: BEFORE_PICKUP_COLLECTOR")
                 self.current_state = ST.BEFORE_PICKUP_COLLECTOR
             
             if self.current_state == ST.BEFORE_PICKUP_COLLECTOR:
-                self.puo.continue_threading()
-                self.current_state = ST.IN_PICKUP_COLLECTOR
+                
+                if combat_lib.combat_statement_detection(self.itt) == False:
+                    self.tmf.cct.pause_threading()
+                    self.tmf.pause_threading()
+                    self.puo.continue_threading()
+                    logger.info("switch Flow to: IN_PICKUP_COLLECTOR")
+                    self.current_state = ST.IN_PICKUP_COLLECTOR
+                    self.while_sleep = 0.2
+                else:
+                    self.puo.pause_threading()
+                    self.tmf.cct.continue_threading()
+                    self.while_sleep = 0.5
                 
             if self.current_state == ST.IN_PICKUP_COLLECTOR:
+                self.tmf.pause_threading()
                 if self.puo.pause_threading_flag:
+                    logger.info("switch Flow to: AFTER_PICKUP_COLLECTOR")
                     self.current_state = ST.AFTER_PICKUP_COLLECTOR
+                if self.puo.pickup_timer.get_diff_time() >= 60:
+                    logger.info("自动拾取超时")
+                    logger.info("switch Flow to: AFTER_PICKUP_COLLECTOR")
+                    self.current_state = ST.AFTER_PICKUP_COLLECTOR
+                
                     
             if self.current_state == ST.AFTER_PICKUP_COLLECTOR:
                 self.puo.pause_threading()
                 if len(self.collector_posi_dict)-1 == self.collector_id:
                     print("exit")
+                    logger.info("switch Flow to: END_COLLECTOR")
                     self.current_state = ST.END_COLLECTOR
                 else:
                     self.collector_id += 1
+                    logger.info("switch Flow to: BEFORE_MOVETO_COLLECTOR")
                     self.current_state = ST.BEFORE_MOVETO_COLLECTOR
+                    self.tmf.reset_setting()
             
             if self.current_state == ST.END_COLLECTOR:
                 self.pause_threading()
