@@ -53,6 +53,11 @@ class TeyvatMoveController(BaseThreading):
         else:
             return False
 
+    def pause_threading(self):
+        if self.pause_threading_flag != True:
+            self.pause_threading_flag = True
+            self.itt.key_up('w')
+    
     def check_swimming(self):
         if self.itt.get_img_existence(img_manager.motion_swimming):
             return True

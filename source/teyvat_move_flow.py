@@ -51,7 +51,6 @@ class TeyvatMoveFlow(BaseThreading):
         self.tmc.pause_threading()
         self.tmc.start()
         
-
         chara_list = combat_loop.get_chara_list()
         self.cct = combat_loop.Combat_Controller(chara_list)
         self.cct.setDaemon(True)
@@ -63,18 +62,27 @@ class TeyvatMoveFlow(BaseThreading):
         self.current_state = ST.INIT_TEYVAT_TELEPORT
         self.target_posi = [0, 0]
         
+        self.reaction_to_enemy = 'RUN'
         self.motion_state = IN_MOVE
-        self.is_combat = False
+        # self.is_combat = False
 
     
     def pause_threading(self):
         self.pause_threading_flag = True
+        self.tmc.pause_threading()
+        self.cct.pause_threading()
 
     def continue_threading(self):
         self.pause_threading_flag = False
 
     def stop_threading(self):
         self.stop_threading_flag = True
+        self.tmc.stop_threading()
+        self.cct.stop_threading()
+    
+    def reset_setting(self):
+        self.current_state = ST.INIT_TEYVAT_TELEPORT
+        self.motion_state = IN_MOVE
     
     def align_position(self, tx, ty):
         b, x, y = cvAutoTrack.cvAutoTrackerLoop.get_position()
@@ -194,18 +202,27 @@ class TeyvatMoveFlow(BaseThreading):
                 if self.motion_state == IN_MOVE:
                     if combat_lib.combat_statement_detection(self.itt):
                         '''进入战斗模式'''
-                        self.tmc.pause_threading()
-                        self.cct.continue_threading()
-                        self.cct.pause_threading()
+                        if self.reaction_to_enemy == 'RUN':
+                            '''越级执行护盾命令 还没想好怎么写的优雅一点'''
+                            # shield_chara_num = 2
+                            # self.cct.sco._switch_character(shield_chara_num)
+                            # self.cct.sco.tastic_operator.set_parameter(self.cct.sco.chara_list[shield_chara_num-1].tastic_group, self.cct.sco.chara_list[shield_chara_num-1])
+                            # self.cct.sco.tastic_operator.continue_threading()
+                            pass
+                        else:
+                            self.tmc.pause_threading()
+                            self.cct.continue_threading()
                     else:
                         self.cct.pause_threading()
+                        self.cct.sco.tastic_operator.pause_threading()
                         self.tmc.continue_threading()
-                        if self.jump_timer.get_diff_time()>=15:
+                        if self.jump_timer.get_diff_time()>=10:
                             self.jump_timer.reset()
                             self.itt.key_press('spacebar')
                         
                 if (self.motion_state == IN_FLY) or (self.motion_state == IN_CLIMB) or (self.motion_state == IN_WATER):
                     self.cct.pause_threading()
+                    self.cct.sco.tastic_operator.pause_threading()
                     self.tmc.continue_threading()
                     '''可能会加体力条检测'''
                     

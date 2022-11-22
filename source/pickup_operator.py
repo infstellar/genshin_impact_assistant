@@ -24,7 +24,13 @@ class PickupOperator(BaseThreading):
         self.collecor_loops = 0
         self.collector_flag = True
         self.max_number_of_collector_loops = 200
+        self.pickup_timer = timer_module.Timer()
 
+    def continue_threading(self):
+        if self.pause_threading_flag != False:
+            self.pause_threading_flag = False
+            self.pickup_timer.reset()
+    
     def run(self):
         while 1:
             # time.sleep(0.1)
@@ -131,6 +137,14 @@ class PickupOperator(BaseThreading):
         mx, my = self.itt.get_mouse_point()
         px = (px - mx) / 2.4 + 35
         py = (py - my) / 2 + 40
+        if px >= 50:
+            px = 50
+        if px <= -50:
+            px = -50
+        if py >= 50:
+            py = 50
+        if py <= -50:
+            py = -50
         print(px, py)
 
         self.itt.move_to(px, py, relative=True)

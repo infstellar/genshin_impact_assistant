@@ -11,7 +11,7 @@
     "verify": true
   },
   "zhongli": {
-    "position": "",
+    "position": "shield",
     "E_short_cd_time": 4,
     "E_long_cd_time": 12,
     "Elast_time": 18,
