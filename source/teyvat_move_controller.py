@@ -119,7 +119,7 @@ class TeyvatMoveController(BaseThreading):
             else:
                 print("position ERROR")
                 continue
-            p1 = tmc.caculate_next_priority_point(self.current_posi, self.target_positon)
+            p1 = self.caculate_next_priority_point(self.current_posi, self.target_positon)
             print(p1)
             self.change_view_to_posi(p1)
             if not static_lib.W_KEYDOWN:
@@ -135,7 +135,7 @@ class TeyvatMoveController(BaseThreading):
 if __name__ == '__main__':
     tmc=TeyvatMoveController()
     p1=[3,3]
-    tmc.set_target_position([3031.1087519531247, -5615.011875366211])
+    tmc.set_target_position([1175.70934912 -4894.67981738])
     tmc.start()
     while 1:
         time.sleep(1)
