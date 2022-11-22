@@ -66,7 +66,6 @@ class TeyvatMoveFlow(BaseThreading):
     def pause_threading(self):
         self.pause_threading_flag = True
         self.tmc.pause_threading()
-        self.cct.pause_threading()
 
     def continue_threading(self):
         self.pause_threading_flag = False
@@ -74,7 +73,6 @@ class TeyvatMoveFlow(BaseThreading):
     def stop_threading(self):
         self.stop_threading_flag = True
         self.tmc.stop_threading()
-        self.cct.stop_threading()
     
     def reset_setting(self):
         self.current_state = ST.INIT_TEYVAT_TELEPORT
