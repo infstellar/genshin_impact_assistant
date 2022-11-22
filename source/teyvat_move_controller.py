@@ -75,7 +75,7 @@ class TeyvatMoveController(BaseThreading):
             movement.cview(cvn)
     
     def caculate_next_priority_point(self, currentp, targetp):
-        float_distance = 50
+        float_distance = 30
         # 计算当前点到所有优先点的曼哈顿距离
         md = generic_lib.manhattan_distance_plist(currentp, self.priority_waypoints_array)
         nearly_pp_arg = np.argsort(md)
@@ -119,17 +119,23 @@ class TeyvatMoveController(BaseThreading):
             else:
                 print("position ERROR")
                 continue
-            p1 = tmc.caculate_next_priority_point(self.current_posi, [2526.9990234375, -5173.814453125])
+            p1 = tmc.caculate_next_priority_point(self.current_posi, self.target_positon)
+            print(p1)
             self.change_view_to_posi(p1)
             if not static_lib.W_KEYDOWN:
                 self.itt.key_down('w')
+                
+            if generic_lib.euclidean_distance(self.target_positon, cvAutoTrack.cvAutoTrackerLoop.get_position()[1:])<=10:
+                self.pause_threading()
+                logger.info("已到达目的地附近，本次导航结束。")
+                self.itt.key_up('w')
             
             
 
 if __name__ == '__main__':
     tmc=TeyvatMoveController()
     p1=[3,3]
-    tmc.set_target_position([2525.922711425781, -5221.934147521973])
+    tmc.set_target_position([3031.1087519531247, -5615.011875366211])
     tmc.start()
     while 1:
         time.sleep(1)

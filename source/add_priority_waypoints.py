@@ -80,6 +80,12 @@ def edit_mode():
                     del(priority_waypoints[priority_waypoints.index(i)])
     save_json(priority_waypoints, json_name="priority_waypoints.json", default_path='assests')
 
+def show_current_posi():
+    while 1:
+        time.sleep(0.2)
+        print(cvAutoTrack.cvAutoTrackerLoop.get_position()[1:])
+
 time.sleep(1)
-add_mode()
+# add_mode()
 # edit_mode()
+show_current_posi()
