@@ -160,21 +160,21 @@ if __name__ == '__main__':
     print('2) err', cvAutoTrackerLoop.get_position(), '\n')
 
     # 获取UID并打印错误：
-    print(cvAutoTrackerLoop.get_uid())
-    print('3) err', cvAutoTrackerLoop.get_last_error(), '\n')
+    # print(cvAutoTrackerLoop.get_uid())
+    # print('3) err', cvAutoTrackerLoop.get_last_error(), '\n')
 
-    print(cvAutoTrackerLoop.get_direction())
-    print('4) err', cvAutoTrackerLoop.get_last_error(), '\n')
+    # print(cvAutoTrackerLoop.get_direction())
+    # print('4) err', cvAutoTrackerLoop.get_last_error(), '\n')
 
     print(cvAutoTrackerLoop.get_rotation())
-    print('5) err', cvAutoTrackerLoop.get_last_error(), '\n')
+    # print('5) err', cvAutoTrackerLoop.get_last_error(), '\n')
 
     while 1:
         # print(cvAutoTracker.get_rotation())
 
         # ret = cvAutoTracker.get_position()
         # posi = cvAutoTracker.translate_posi(ret[1],ret[2])
-        # print(cvAutoTrackerLoop.get_position())
+        print(cvAutoTrackerLoop.get_position())
         time.sleep(0.2)
 
     # 卸载相关内存：（这一步不是必须的，但还是建议手动调用）

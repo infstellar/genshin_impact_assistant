@@ -19,6 +19,7 @@ import text_manager
 import timer_module
 import combat_lib
 import teyvat_move_flow
+import numpy as np
 
 def load_feature_position(text="清心"):
     ita = load_json("itemall.json", "assests")
@@ -40,7 +41,7 @@ def load_feature_position(text="清心"):
 class CollectorFlow(BaseThreading):
     def __init__(self):
         super().__init__()
-        self.collector_name = "甜甜花 - 蒙德"
+        self.collector_name = "蒲公英籽"
         self.collector_posi_dict = load_feature_position(self.collector_name)
         self.current_state = ST.INIT_MOVETO_COLLECTOR
         
@@ -92,7 +93,7 @@ class CollectorFlow(BaseThreading):
                 self.collector_id = 0
                 
             if self.current_state == ST.BEFORE_MOVETO_COLLECTOR:
-                self.collector_posi = list(map(float, self.collector_posi_dict[self.collector_id]["position"]))
+                self.collector_posi = list(np.array(list(map(float, self.collector_posi_dict[self.collector_id]["position"])))*1.5)
                 self.tmf.set_target_posi(self.collector_posi)
                 self.tmf.continue_threading()
                 self.current_state = ST.IN_MOVETO_COLLECTOR
