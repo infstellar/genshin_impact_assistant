@@ -39,22 +39,7 @@ def get_target_relative_angle(x, y, tx, ty):
         degree -= 360
     return degree
 
-def load_feature_position(text="清心"):
-    ita = load_json("itemall.json", "assests")
-    ret_dict=[]
-    i=0
-    for feature in ita:
-        i+=1
-        if feature == None:
-            continue
-        for item in feature["features"]:
-            if item["properties"]["popTitle"] == text:
-                ret_dict.append({
-                    "id":item["id"],
-                    "position":item["geometry"]["coordinates"]
-                })
-    print()
-    return ret_dict       
+     
 
 class TeyvatMoveFlow(BaseThreading):
     def __init__(self):
@@ -66,10 +51,6 @@ class TeyvatMoveFlow(BaseThreading):
         self.tmc.pause_threading()
         self.tmc.start()
         
-        self.puo = pickup_operator.PickupOperator()
-        self.puo.setDaemon(True)
-        self.puo.pause_threading()
-        self.puo.start()
 
         chara_list = combat_loop.get_chara_list()
         self.cct = combat_loop.Combat_Controller(chara_list)
@@ -96,7 +77,7 @@ class TeyvatMoveFlow(BaseThreading):
         self.stop_threading_flag = True
     
     def align_position(self, tx, ty):
-        b, x, y = cvAutoTrack.cvAutoTracker.get_position()
+        b, x, y = cvAutoTrack.cvAutoTrackerLoop.get_position()
         if b:
             angle = get_target_relative_angle(x, y, tx, ty)
             movement.view_to_angle_teyvat(angle)
@@ -123,6 +104,10 @@ class TeyvatMoveFlow(BaseThreading):
         else:
             self.motion_state = IN_MOVE
     
+    def set_target_posi(self, pl):
+        self.target_posi = pl
+        print()
+    
     def run(self):
         while 1:
             time.sleep(self.while_sleep)
@@ -144,6 +129,7 @@ class TeyvatMoveFlow(BaseThreading):
                 '''切换到大世界界面'''
                 '''设置缩放'''
                 self.switchto_mainwin()
+                self.tmc.set_target_position(self.target_posi)
                 self.current_state = ST.BEFORE_TEYVAT_TELEPORT
 
             if self.current_state == ST.BEFORE_TEYVAT_TELEPORT:
@@ -153,7 +139,7 @@ class TeyvatMoveFlow(BaseThreading):
 
             if self.current_state == ST.IN_TEYVAT_TELEPORT:
 
-                curr_posi = cvAutoTrack.cvAutoTracker.get_position()[1:]
+                curr_posi = cvAutoTrack.cvAutoTrackerLoop.get_position()[1:]
                 self.switchto_bigmapwin()
                 self.itt.delay(1)
                 tw_posi = big_map.nearest_big_map_tw_posi(curr_posi, self.target_posi)
@@ -173,13 +159,15 @@ class TeyvatMoveFlow(BaseThreading):
                 self.itt.delay(1)
                 self.itt.left_click()
                 while not self.itt.get_img_existence(img_manager.ui_main_win):
-                    time.sleep(0.1)
+                    time.sleep(1)
+                while cvAutoTrack.cvAutoTrackerLoop.in_excessive_error:
+                    time.sleep(1)
                 self.current_state = ST.AFTER_TEYVAT_TELEPORT
 
             if self.current_state == ST.AFTER_TEYVAT_TELEPORT:
                 self.switchto_mainwin()
                 time.sleep(2)
-                curr_posi = cvAutoTrack.cvAutoTracker.get_position()[1:]
+                curr_posi = cvAutoTrack.cvAutoTrackerLoop.get_position()[1:]
                 self.switchto_bigmapwin()
                 tw_posi = big_map.nearest_teyvat_tw_posi(curr_posi, self.target_posi)[0]
                 p1 = generic_lib.euclidean_distance(self.target_posi, tw_posi)
@@ -208,12 +196,9 @@ class TeyvatMoveFlow(BaseThreading):
                         '''进入战斗模式'''
                         self.tmc.pause_threading()
                         self.cct.continue_threading()
-                        self.puo.pause_threading()
-                    elif self.cct.pause_threading_flag == False:
                         self.cct.pause_threading()
-                else:
+                    else:
                         self.cct.pause_threading()
-                        self.puo.pause_threading()
                         self.tmc.continue_threading()
                         if self.jump_timer.get_diff_time()>=15:
                             self.jump_timer.reset()
@@ -221,13 +206,22 @@ class TeyvatMoveFlow(BaseThreading):
                         
                 if (self.motion_state == IN_FLY) or (self.motion_state == IN_CLIMB) or (self.motion_state == IN_WATER):
                     self.cct.pause_threading()
-                    self.puo.pause_threading()
                     self.tmc.continue_threading()
                     '''可能会加体力条检测'''
+                    
+                if generic_lib.euclidean_distance(cvAutoTrack.cvAutoTrackerLoop.get_position()[1:], self.target_posi)<=10:
+                    self.current_state = ST.END_TEYVAT_MOVE
+                    
+            if self.current_state == ST.END_TEYVAT_MOVE:
+                self.pause_threading()
+                print("结束自动行走")
+                time.sleep(1)
+                    
                     
 
 if __name__ == '__main__':
     tmf = TeyvatMoveFlow()
+    tmf.set_target_posi([1175.70934912, -4894.67981738])
     tmf.start()
     while 1:
         time.sleep(0.2)
