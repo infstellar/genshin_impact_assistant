@@ -91,8 +91,6 @@ def teyvat_posi2bigmap_posi(current_teyvat_posi, bigmap_posi_list):
     bigmap_posi_list = bigmap_posi_list + [1920 / 2, 1080 / 2]
     return bigmap_posi_list
 
-
-
 def nearest_big_map_tw_posi(current_posi, target_posi):
     twpoints = np.array(get_tw_points(itt.capture(jpgmode=0)))
     twpoints_teyvat = twpoints.copy()
