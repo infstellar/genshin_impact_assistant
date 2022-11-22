@@ -27,4 +27,11 @@ class Timer:
         return t
 
 
-'''class 流速/fps检测器 之后再写'''
+class CyclicVelocityDetector(Timer):
+    def __init__(self):
+        super().__init__()
+        
+    def getandset_cyclic_velocity(self):
+        dt = self.get_diff_time()
+        self.reset()
+        return int(1/dt)

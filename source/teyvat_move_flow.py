@@ -39,6 +39,22 @@ def get_target_relative_angle(x, y, tx, ty):
         degree -= 360
     return degree
 
+def load_feature_position(text="清心"):
+    ita = load_json("itemall.json", "assests")
+    ret_dict=[]
+    i=0
+    for feature in ita:
+        i+=1
+        if feature == None:
+            continue
+        for item in feature["features"]:
+            if item["properties"]["popTitle"] == text:
+                ret_dict.append({
+                    "id":item["id"],
+                    "position":item["geometry"]["coordinates"]
+                })
+    print()
+    return ret_dict       
 
 class TeyvatMoveFlow(BaseThreading):
     def __init__(self):
@@ -60,6 +76,8 @@ class TeyvatMoveFlow(BaseThreading):
         self.cct.setDaemon(True)
         self.cct.pause_threading()
         self.cct.start()
+        
+        self.jump_timer = timer_module.Timer()
         
         self.current_state = ST.INIT_TEYVAT_TELEPORT
         self.target_posi = [0, 0]
@@ -184,6 +202,7 @@ class TeyvatMoveFlow(BaseThreading):
                 
             if self.current_state == ST.IN_TEYVAT_MOVE:
                 self.switch_motion_state()
+                
                 if self.motion_state == IN_MOVE:
                     if combat_lib.combat_statement_detection(self.itt):
                         '''进入战斗模式'''
@@ -196,6 +215,9 @@ class TeyvatMoveFlow(BaseThreading):
                         self.cct.pause_threading()
                         self.puo.pause_threading()
                         self.tmc.continue_threading()
+                        if self.jump_timer.get_diff_time()>=15:
+                            self.jump_timer.reset()
+                            self.itt.key_press('spacebar')
                         
                 if (self.motion_state == IN_FLY) or (self.motion_state == IN_CLIMB) or (self.motion_state == IN_WATER):
                     self.cct.pause_threading()
