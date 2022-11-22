@@ -66,8 +66,8 @@ if sys.path[1] != source_path:
 
 
 # 加载json
-def load_json(json_name='config.json'):
-    return json.load(open(os.path.join('config', json_name), 'r', encoding='utf-8'))
+def load_json(json_name='config.json', default_path='config'):
+    return json.load(open(os.path.join(default_path, json_name), 'r', encoding='utf-8'))
 
 
 config_json = load_json("config.json")
@@ -125,8 +125,8 @@ def is_int(x):
         return True
 
 
-def save_json(x, json_name='config.json'):
-    json.dump(x, open(os.path.join('config', json_name), 'w', encoding='utf-8'), sort_keys=True, indent=2,
+def save_json(x, json_name='config.json', default_path='config'):
+    json.dump(x, open(os.path.join(default_path, json_name), 'w', encoding='utf-8'), sort_keys=True, indent=2,
               ensure_ascii=False)
 
 

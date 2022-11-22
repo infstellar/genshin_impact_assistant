@@ -54,7 +54,6 @@ def move_view_p(x, y):
 def reset_view():
     pyautogui.click(button='middle')
 
-
 def view_to_angle_domain(angle=0, deltanum=0.65, maxloop=100, corrected_num=CORRECT_DEGREE):
     cap = itt.capture(posi=small_map.posi_map)
     degree = small_map.jwa_3(cap)

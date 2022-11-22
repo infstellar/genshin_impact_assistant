@@ -284,14 +284,14 @@ class InteractionBGD:
             return False
 
     def appear_then_click(self, inputvar, is_gray=False):
-        """_summary_
+        """appear then click
 
         Args:
             imgicon (img_manager.ImgIcon): imgicon对象
             is_gray (bool, optional): 是否启用灰度匹配. Defaults to False.
 
         Returns:
-            bool: bool
+            bool: bool,点击操作是否成功
         """
         if isinstance(inputvar, img_manager.ImgIcon):
             imgicon = inputvar
@@ -318,6 +318,16 @@ class InteractionBGD:
             pass
 
     def appear_then_press(self, imgicon: img_manager.ImgIcon, key_name, is_gray=False):
+        """appear then press
+
+        Args:
+            imgicon (img_manager.ImgIcon): imgicon对象
+            key_name (str): key_name
+            is_gray (bool, optional): 是否启用灰度匹配. Defaults to False.
+
+        Returns:
+            bool: 操作是否成功
+        """
         upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
 
         cap = self.capture(posi=imgicon.cap_posi, jpgmode=imgicon.jpgmode)
@@ -337,6 +347,15 @@ class InteractionBGD:
             return False
 
     def extract_white_letters(image, threshold=128):
+        """_summary_
+
+        Args:
+            image (_type_): _description_
+            threshold (int, optional): _description_. Defaults to 128.
+
+        Returns:
+            _type_: _description_
+        """
         r, g, b = cv2.split(cv2.subtract((255, 255, 255, 0), image))
         minimum = cv2.min(cv2.min(r, g), b)
         maximum = cv2.max(cv2.max(r, g), b)
@@ -344,6 +363,17 @@ class InteractionBGD:
 
     # @staticmethod
     def png2jpg(self, png, bgcolor='black', channel='bg', alpha_num=50):
+        """将截图的4通道png转换为3通道jpg
+
+        Args:
+            png (Mat/ndarray): 4通道图片
+            bgcolor (str, optional): 背景的颜色. Defaults to 'black'.
+            channel (str, optional): 提取背景或UI. Defaults to 'bg'.
+            alpha_num (int, optional): 透明通道的大小. Defaults to 50.
+
+        Returns:
+            Mat/ndarray: 3通道图片
+        """
         if bgcolor == 'black':
             bgcol = 0
         else:
@@ -360,7 +390,16 @@ class InteractionBGD:
         return jpg
 
     # @staticmethod
-    def color_SD(self, x_col, target_col):  # standard deviation
+    def color_sd(self, x_col, target_col):  # standard deviation
+        """Not in use
+
+        Args:
+            x_col (_type_): _description_
+            target_col (_type_): _description_
+
+        Returns:
+            _type_: _description_
+        """
         ret = 0
         for i in range(min(len(x_col), len(target_col))):
             t = abs(x_col[i] - target_col[i])
@@ -370,6 +409,14 @@ class InteractionBGD:
 
     # @staticmethod
     def delay(self, x, randtime=True, isprint=True, comment=''):
+        """延迟一段时间，单位为秒
+
+        Args:
+            x (int): 延迟时间
+            randtime (bool, optional): 是否启用加入随机秒. Defaults to True.
+            isprint (bool, optional): 是否打印日志. Defaults to True.
+            comment (str, optional): 日志注释. Defaults to ''.
+        """
         upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
         a = random.randint(-10, 10)
         if randtime:
@@ -384,6 +431,11 @@ class InteractionBGD:
             time.sleep(x)
 
     def get_mouse_point(self):
+        """获得当前鼠标在窗口内的位置
+
+        Returns:
+            (x,y): 坐标
+        """
         p = win32api.GetCursorPos()
         # print(p[0],p[1])
         #  GetWindowRect 获得整个窗口的范围矩形，窗口的边框、标题栏、滚动条及菜单等都在这个矩形内 
@@ -409,6 +461,12 @@ class InteractionBGD:
             return self.VK_CODE[key]
 
     def left_click(self, x=-1, y=-1):
+        """左键点击
+
+        Args:
+            x (int, optional): x. Defaults to -1.
+            y (int, optional): y. Defaults to -1.
+        """
         if type(x) == list:  # x为list类型时
             y = x[1]
             x = x[0]
@@ -417,11 +475,10 @@ class InteractionBGD:
         else:
             x = int(x)
             y = int(y)
-            self.move_to(x,y)
+            self.move_to(x, y)
             self.delay(0.8)
-        
+
         if not self.CONSOLE_ONLY:
-            
             wparam = 0
             lparam = 0 << 16 | 0
             self.PostMessageW(self.handle, self.WM_LBUTTONDOWN, wparam, lparam)
@@ -430,6 +487,12 @@ class InteractionBGD:
         logger.debug('left click ' + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
 
     def left_down(self, x=-1, y=-1):
+        """左键按下
+
+        Args:
+            x (int, optional): _description_. Defaults to -1.
+            y (int, optional): _description_. Defaults to -1.
+        """
         if type(x) == list:  # x为list类型时
             y = x[1]
             x = x[0]
@@ -451,6 +514,12 @@ class InteractionBGD:
         logger.debug('left down' + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
 
     def left_up(self, x=-1, y=-1):
+        """左键抬起
+
+        Args:
+            x (int, optional): _description_. Defaults to -1.
+            y (int, optional): _description_. Defaults to -1.
+        """
         if x == -1:
             x, y = self.get_mouse_point()
         if not self.CONSOLE_ONLY:
@@ -467,6 +536,11 @@ class InteractionBGD:
         logger.debug('left up ' + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
 
     def left_double_click(self, dt=0.05):
+        """左键双击
+
+        Args:
+            dt (float, optional): 间隔时间. Defaults to 0.05.
+        """
         if not self.CONSOLE_ONLY:
             self.left_click()
             self.delay(0.06, randtime=False, isprint=False)
@@ -474,6 +548,12 @@ class InteractionBGD:
         logger.debug('leftDoubleClick ' + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
 
     def right_click(self, x=-1, y=-1):
+        """右键单击
+
+        Args:
+            x (int, optional): _description_. Defaults to -1.
+            y (int, optional): _description_. Defaults to -1.
+        """
         if x == -1:
             x, y = self.get_mouse_point()
         if not self.CONSOLE_ONLY:
@@ -487,6 +567,12 @@ class InteractionBGD:
         self.delay(0.05)
 
     def key_down(self, key, is_log=True):
+        """按下按键
+
+        Args:
+            key (str): 按键代号。查阅vkCode.py
+            is_log (bool, optional): 是否打印日志. Defaults to True.
+        """
         if key == 'w':
             static_lib.W_KEYDOWN = True
 
@@ -502,6 +588,12 @@ class InteractionBGD:
                 "keyDown " + key + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
 
     def key_up(self, key, is_log=True):
+        """松开按键
+
+        Args:
+            key (str): 按键代号。查阅vkCode.py
+            is_log (bool, optional): 是否打印日志. Defaults to True.
+        """
         if key == 'w':
             static_lib.W_KEYDOWN = False
 
@@ -516,6 +608,11 @@ class InteractionBGD:
             logger.debug("keyUp " + key + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
 
     def key_press(self, key):
+        """点击按键
+
+        Args:
+            key (str): 按键代号。查阅vkCode.py
+        """
         if not self.CONSOLE_ONLY:
             vk_code = self.get_virtual_keycode(key)
             scan_code = self.MapVirtualKeyW(vk_code, 0)
@@ -532,9 +629,9 @@ class InteractionBGD:
         """移动鼠标到坐标（x, y)
 
         Args:
-            handle (HWND): 窗口句柄
             x (int): 横坐标
             y (int): 纵坐标
+            relative (bool): 是否为相对移动。
         """
         x = int(x)
         y = int(y)

@@ -24,7 +24,13 @@ class PickupOperator(BaseThreading):
         self.collecor_loops = 0
         self.collector_flag = True
         self.max_number_of_collector_loops = 200
+        self.pickup_timer = timer_module.Timer()
 
+    def continue_threading(self):
+        if self.pause_threading_flag != False:
+            self.pause_threading_flag = False
+            self.pickup_timer.reset()
+    
     def run(self):
         while 1:
             # time.sleep(0.1)
@@ -43,10 +49,10 @@ class PickupOperator(BaseThreading):
             ret = self.pickup_recognize()
 
             ret = self.auto_pickup()
-            if self.flicker_timer.getDiffTime() >= 5:
+            if self.flicker_timer.get_diff_time() >= 5:
                 self.collector_flag = False
                 self.finding_collector()
-                if self.reset_timer.getDiffTime() >= self.reset_time:
+                if self.reset_timer.get_diff_time() >= self.reset_time:
                     self.reset_timer.reset()
                     self.reset_collector_loops()
 
@@ -68,7 +74,7 @@ class PickupOperator(BaseThreading):
             cap = self.itt.crop_image(cap, [y1 + ret[1] - 20, x1 + ret[0] + 53, y1 + ret[1] + 54, x1 + ret[0] + 361])
             cap = self.itt.png2jpg(cap, channel='ui', alpha_num=180)
             # img_manager.qshow(cap)
-            res = ocr.ImgAnalyse(cap)
+            res = ocr.img_analyse(cap)
             if len(res) != 0:
                 if res[0][1][0] not in self.pickup_blacklist:
                     self.itt.key_press('f')
@@ -109,7 +115,7 @@ class PickupOperator(BaseThreading):
         ret_points = self.find_collector()
         points_length = []
         if len(ret_points) == 0:
-            if self.flicker_timer.getDiffTime() < 2:
+            if self.flicker_timer.get_diff_time() < 2:
                 # print('23')
                 if static_lib.W_KEYDOWN:
                     self.itt.key_up('w')
@@ -131,6 +137,14 @@ class PickupOperator(BaseThreading):
         mx, my = self.itt.get_mouse_point()
         px = (px - mx) / 2.4 + 35
         py = (py - my) / 2 + 40
+        if px >= 50:
+            px = 50
+        if px <= -50:
+            px = -50
+        if py >= 50:
+            py = 50
+        if py <= -50:
+            py = -50
         print(px, py)
 
         self.itt.move_to(px, py, relative=True)
