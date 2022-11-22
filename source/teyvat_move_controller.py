@@ -98,7 +98,8 @@ class TeyvatMoveController(BaseThreading):
         if len(nearly_pp) == 0:
             return targetp
         closest_pp = nearly_pp[0]
-        print(currentp, closest_pp)
+        '''加一个信息输出'''
+        # print(currentp, closest_pp)
         return closest_pp
     
     
@@ -122,10 +123,10 @@ class TeyvatMoveController(BaseThreading):
             if not self.current_posi[0]==False:
                 self.current_posi=self.current_posi[1:]
             else:
-                print("position ERROR")
+                logger.debug("position ERROR")
                 continue
             p1 = self.caculate_next_priority_point(self.current_posi, self.target_positon)
-            print(p1)
+            # print(p1)
             self.change_view_to_posi(p1)
             if not static_lib.W_KEYDOWN:
                 self.itt.key_down('w')

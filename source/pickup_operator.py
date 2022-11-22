@@ -105,7 +105,7 @@ class PickupOperator(BaseThreading):
         return adad
 
     def reset_collector_loops(self):
-        print('reset')
+        # print('reset')
         self.collecor_loops = 0
 
     def auto_pickup(self):
@@ -145,7 +145,7 @@ class PickupOperator(BaseThreading):
             py = 50
         if py <= -50:
             py = -50
-        print(px, py)
+        # print(px, py)
 
         self.itt.move_to(px, py, relative=True)
         return px
