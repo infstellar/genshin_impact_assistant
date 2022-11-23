@@ -147,6 +147,10 @@ class TeyvatMoveFlow(BaseThreading):
                 self.switchto_bigmapwin()
                 self.itt.delay(1)
                 tw_posi = big_map.nearest_big_map_tw_posi(curr_posi, self.target_posi)
+                if list(tw_posi) == [-1]:
+                    logger.info("获取传送锚点失败，正在重试")
+                    self.current_state = ST.IN_TEYVAT_TELEPORT
+                    continue
                 self.itt.move_to(tw_posi[0], tw_posi[1])
                 self.itt.delay(0.2)
                 self.itt.left_click()

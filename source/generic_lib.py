@@ -60,6 +60,7 @@ def points_angle(p1, p2, coordinate=NORMAL):
     return degree
 
 
+
 if __name__ == '__main__':
     itt = InteractionBGD()
     p1 = [0,0]
