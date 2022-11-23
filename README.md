@@ -64,10 +64,13 @@ To没用过github的小伙伴:描述文档中的蓝色文字是链接,可以打�
 - <strong>使用管理员权限打开命令提示符和你的代码编写器(IDE)!!!</strong>
 
 1. 输入以下命令以完成源码和依赖的下载.
+
    ```shell
    git clone https://github.com/infstellar/genshin_impact_assistant.git&cd genshin_impact_assistant&python setup.py install
    ```
+
 2. 输入以下命令运行程序.
+
    ```shell
    python genshin_assistant.py
    ```
@@ -111,10 +114,17 @@ To没用过github的小伙伴:描述文档中的蓝色文字是链接,可以打�
 
 ### 开源库
 
+#### 特别感谢
+
+- [原神-基于图像算法的坐标定位 GenshinImpact AutoTrack DLL](https://github.com/GengGode/GenshinImpact_AutoTrack_DLL)
+
+- [空荧酒馆原神地图 kongying-tavern/yuan-shen-map](https://github.com/kongying-tavern/yuan-shen-map)
+
+#### 其他开源库
+
 - [opencv](https://github.com/opencv/opencv)
 - [paddleocr](https://github.com/PaddlePaddle/PaddleOCR)
 - [yolox](https://github.com/Megvii-BaseDetection/YOLOX)
-- [GenshinImpact_AutoTrack](https://github.com/GengGode/GenshinImpact_AutoTrack_DLL)
 - [pyinstaller](https://github.com/pyinstaller/pyinstaller)
 
 ### 贡献/参与者
