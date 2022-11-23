@@ -112,6 +112,7 @@ class PickupOperator(BaseThreading):
     def reset_collector_loops(self):
         # print('reset')
         self.collecor_loops = 0
+        self.flicker_timer.reset()
 
     def auto_pickup(self):
         # time.sleep(0.1)

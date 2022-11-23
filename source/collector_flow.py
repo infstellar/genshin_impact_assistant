@@ -49,7 +49,8 @@ class CollectorFlow(BaseThreading):
         super().__init__()
         self.collector_name = "甜甜花 - 蒙德"
         self.collector_type = COLLECTION
-        self.collector_blacklist_id = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,24,23,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51]
+        self.collector_blacklist_id = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,24,23,25,26,27,28,29,30,
+                                       31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52]
         self.collector_posi_dict = load_feature_position(self.collector_name, blacklist_id=self.collector_blacklist_id)
         self.current_state = ST.INIT_MOVETO_COLLECTOR
         
@@ -167,11 +168,12 @@ class CollectorFlow(BaseThreading):
                 elif self.collector_type == MINERAL:
                     pass
                 logger.info("switch Flow to: BEFORE_PICKUP_COLLECTOR")
+                time.sleep(1) # wait for CSDL detection
                 self.current_state = ST.BEFORE_PICKUP_COLLECTOR
             
             if self.current_state == ST.BEFORE_PICKUP_COLLECTOR:
                 
-                if combat_lib.CSDL.get_combat_state(self.itt) == False:
+                if combat_lib.CSDL.get_combat_state() == False:
                     self.start_pickup()
                     logger.info("switch Flow to: IN_PICKUP_COLLECTOR")
                     self.current_state = ST.IN_PICKUP_COLLECTOR
