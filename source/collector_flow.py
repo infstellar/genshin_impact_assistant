@@ -171,7 +171,7 @@ class CollectorFlow(BaseThreading):
             
             if self.current_state == ST.BEFORE_PICKUP_COLLECTOR:
                 
-                if combat_lib.combat_statement_detection(self.itt) == False:
+                if combat_lib.CSDL.get_combat_state(self.itt) == False:
                     self.start_pickup()
                     logger.info("switch Flow to: IN_PICKUP_COLLECTOR")
                     self.current_state = ST.IN_PICKUP_COLLECTOR
