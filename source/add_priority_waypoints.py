@@ -1,5 +1,10 @@
 from util import *
-import cvAutoTrack, generic_lib, numpy as np, big_map, cv2
+import cvAutoTrack
+import generic_lib
+import numpy as np
+import big_map
+import cv2
+
 global priority_waypoints, priority_waypoints_list, priority_waypoints_array, idnum
 priority_waypoints, priority_waypoints_list, priority_waypoints_array, idnum = None, None, None, None
 priority_waypoints = load_json("priority_waypoints.json", default_path='assests')
@@ -25,9 +30,9 @@ def show_bigmap_posi_in_window(current_teyvat_posi, bigmap_posi_list):
         origin_show_img = cv2.drawMarker(origin_show_img, position=(int(i[0]), int(i[1])), color=(0, 0, 255), markerSize=5, markerType=cv2.MARKER_CROSS, thickness=1)
         origin_bpl = big_map.bigmap_posi2teyvat_posi(current_teyvat_posi, np.array(i))
         for ii in priority_waypoints:
-            if ii["position"] == list(origin_bpl):
+            if list(map(int,ii["position"])) == list(map(int,list(origin_bpl))):
                 cid = ii["id"]
-        origin_show_img = cv2.putText(origin_show_img, str(cid), (int(i[0]), int(i[1])+5), cv2.FONT_HERSHEY_SIMPLEX, 0.3, (255, 255, 255), 1)
+        origin_show_img = cv2.putText(origin_show_img, str(cid), (int(i[0]), int(i[1])+5), cv2.FONT_HERSHEY_SIMPLEX, 0.2, (255, 255, 255), 1)
     cv2.imshow('win',origin_show_img)
     cv2.waitKey(0)
 
@@ -64,9 +69,9 @@ def add_mode():
         
 def edit_mode():
     global priority_waypoints, priority_waypoints_list, priority_waypoints_array, idnum
-    input("mainwin")
+    input("请切换至大世界界面后，等待数秒，按下回车")
     cp=list(cvAutoTrack.cvAutoTrackerLoop.get_position()[1:])
-    input("mapwin")
+    input("请切换至地图界面后按下回车")
     while 1:
         load_pw()
         p = big_map.teyvat_posi2bigmap_posi(cp, np.array(priority_waypoints_list))
@@ -87,5 +92,5 @@ def show_current_posi():
 
 time.sleep(1)
 # add_mode()
-# edit_mode()
-show_current_posi()
+edit_mode()
+# show_current_posi()

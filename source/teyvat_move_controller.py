@@ -64,20 +64,7 @@ class TeyvatMoveController(BaseThreading):
         else:
             return False
 
-    def change_view_to_posi(self, pl):
-        td=0
-        degree=100
-        while abs(td-degree)>10:
-            time.sleep(0.05)
-            tx, ty = self.current_posi
-            td = cvAutoTrack.cvAutoTrackerLoop.get_rotation()[1]
-            degree = generic_lib.points_angle([tx,ty], pl, coordinate=generic_lib.NEGATIVE_Y)
-            cvn=td-degree
-            if cvn>=50:
-                cvn=50
-            if cvn<=-50:
-                cvn=-50
-            movement.cview(cvn)
+    
     
     def caculate_next_priority_point(self, currentp, targetp):
         float_distance = 30
@@ -98,7 +85,8 @@ class TeyvatMoveController(BaseThreading):
         if len(nearly_pp) == 0:
             return targetp
         closest_pp = nearly_pp[0]
-        print(currentp, closest_pp)
+        '''加一个信息输出'''
+        # print(currentp, closest_pp)
         return closest_pp
     
     
@@ -122,11 +110,11 @@ class TeyvatMoveController(BaseThreading):
             if not self.current_posi[0]==False:
                 self.current_posi=self.current_posi[1:]
             else:
-                print("position ERROR")
+                logger.debug("position ERROR")
                 continue
             p1 = self.caculate_next_priority_point(self.current_posi, self.target_positon)
-            print(p1)
-            self.change_view_to_posi(p1)
+            # print(p1)
+            movement.change_view_to_posi(p1)
             if not static_lib.W_KEYDOWN:
                 self.itt.key_down('w')
                 

@@ -3,7 +3,8 @@ import pyautogui
 import interaction_background
 import small_map
 from util import *
-from cvAutoTrack import cvAutoTracker
+import cvAutoTrack
+import generic_lib
 
 itt = interaction_background.InteractionBGD()
 AHEAD = 0
@@ -73,7 +74,7 @@ def view_to_angle_domain(angle=0, deltanum=0.65, maxloop=100, corrected_num=CORR
 def view_to_angle_teyvat(angle=0, deltanum=1, maxloop=30, corrected_num=CORRECT_DEGREE):
     i = 0
     while 1:
-        b, degree = cvAutoTracker.get_rotation()
+        b, degree = cvAutoTrack.cvAutoTrackerLoop.get_rotation()
         if not b:
             time.sleep(0.1)
             continue
@@ -87,6 +88,20 @@ def view_to_angle_teyvat(angle=0, deltanum=1, maxloop=30, corrected_num=CORRECT_
     if i > 1:
         logger.debug('last degree: ' + str(degree))
 
+def change_view_to_posi(pl):
+    td=0
+    degree=100
+    while abs(td-degree)>10:
+        time.sleep(0.05)
+        tx, ty = cvAutoTrack.cvAutoTrackerLoop.get_position()[1:]
+        td = cvAutoTrack.cvAutoTrackerLoop.get_rotation()[1]
+        degree = generic_lib.points_angle([tx,ty], pl, coordinate=generic_lib.NEGATIVE_Y)
+        cvn=td-degree
+        if cvn>=50:
+            cvn=50
+        if cvn<=-50:
+            cvn=-50
+        cview(cvn)
 
 def reset_const_val():
     pass

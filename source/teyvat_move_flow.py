@@ -51,11 +51,7 @@ class TeyvatMoveFlow(BaseThreading):
         self.tmc.pause_threading()
         self.tmc.start()
         
-        chara_list = combat_loop.get_chara_list()
-        self.cct = combat_loop.Combat_Controller(chara_list)
-        self.cct.setDaemon(True)
-        self.cct.pause_threading()
-        self.cct.start()
+        
         
         self.jump_timer = timer_module.Timer()
         
@@ -68,9 +64,10 @@ class TeyvatMoveFlow(BaseThreading):
 
     
     def pause_threading(self):
-        self.pause_threading_flag = True
-        self.tmc.pause_threading()
-        self.cct.pause_threading()
+        if self.pause_threading_flag != True:
+            self.pause_threading_flag = True
+            self.tmc.pause_threading()
+            self.itt.key_up('w')
 
     def continue_threading(self):
         self.pause_threading_flag = False
@@ -78,7 +75,6 @@ class TeyvatMoveFlow(BaseThreading):
     def stop_threading(self):
         self.stop_threading_flag = True
         self.tmc.stop_threading()
-        self.cct.stop_threading()
     
     def reset_setting(self):
         self.current_state = ST.INIT_TEYVAT_TELEPORT
@@ -112,7 +108,7 @@ class TeyvatMoveFlow(BaseThreading):
         else:
             self.motion_state = IN_MOVE
     
-    def set_target_posi(self, pl):
+    def set_target_position(self, pl):
         self.target_posi = pl
         print()
     
@@ -134,8 +130,10 @@ class TeyvatMoveFlow(BaseThreading):
             '''write your code below'''
 
             if self.current_state == ST.INIT_TEYVAT_TELEPORT:
-                '''切换到大世界界面'''
                 '''设置缩放'''
+                self.switchto_bigmapwin()
+                big_map.reset_map_size()
+                '''切换到大世界界面'''
                 self.switchto_mainwin()
                 self.tmc.set_target_position(self.target_posi)
                 self.current_state = ST.BEFORE_TEYVAT_TELEPORT
@@ -151,6 +149,11 @@ class TeyvatMoveFlow(BaseThreading):
                 self.switchto_bigmapwin()
                 self.itt.delay(1)
                 tw_posi = big_map.nearest_big_map_tw_posi(curr_posi, self.target_posi)
+                if list(tw_posi) == [-1]:
+                    logger.info("获取传送锚点失败，正在重试")
+                    big_map.reset_map_size()
+                    self.current_state = ST.IN_TEYVAT_TELEPORT
+                    continue
                 self.itt.move_to(tw_posi[0], tw_posi[1])
                 self.itt.delay(0.2)
                 self.itt.left_click()
@@ -211,18 +214,13 @@ class TeyvatMoveFlow(BaseThreading):
                             pass
                         else:
                             self.tmc.pause_threading()
-                            self.cct.continue_threading()
                     else:
-                        self.cct.pause_threading()
-                        self.cct.sco.tastic_operator.pause_threading()
                         self.tmc.continue_threading()
                         if self.jump_timer.get_diff_time()>=10:
                             self.jump_timer.reset()
                             self.itt.key_press('spacebar')
                         
                 if (self.motion_state == IN_FLY) or (self.motion_state == IN_CLIMB) or (self.motion_state == IN_WATER):
-                    self.cct.pause_threading()
-                    self.cct.sco.tastic_operator.pause_threading()
                     self.tmc.continue_threading()
                     '''可能会加体力条检测'''
                     
@@ -238,7 +236,7 @@ class TeyvatMoveFlow(BaseThreading):
 
 if __name__ == '__main__':
     tmf = TeyvatMoveFlow()
-    tmf.set_target_posi([1175.70934912, -4894.67981738])
+    tmf.set_target_position([1175.70934912, -4894.67981738])
     tmf.start()
     while 1:
         time.sleep(0.2)

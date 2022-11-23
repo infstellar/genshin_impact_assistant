@@ -1,3 +1,4 @@
+from util import *
 import inspect
 import math
 import random
@@ -17,7 +18,7 @@ import img_manager
 import posi_manager
 import static_lib
 import vkcode
-from util import *
+
 
 IMG_RATE = 0
 IMG_POSI = 1
@@ -61,6 +62,7 @@ class InteractionBGD:
         self.DEBUG_MODE = False
         self.CONSOLE_ONLY = False
 
+        self.isChromelessWindow = config_json["ChromelessWindow"]
         self.handle = ctypes.windll.user32.FindWindowW(None, hwndname)
 
         if self.handle == 0:
@@ -653,7 +655,11 @@ class InteractionBGD:
             # win32api.mouse_event(win32con.MOUSEEVENTF_MOVE, x, y)
             wx, wy, w, h = win32gui.GetWindowRect(self.handle)
             x += wx
-            y += wy
+            if self.isChromelessWindow:
+                y += wy
+            else:
+                y = y + wy + 26
+                
             # print(mx,my)
             # print(int((x-mx)/1.5), int((y-my)/1.5))
             # pydirectinput.moveTo(wx+x,wy+y)
@@ -670,6 +676,13 @@ class InteractionBGD:
     def crop_image(self, imsrc, posilist):
         return imsrc[posilist[0]:posilist[2], posilist[1]:posilist[3]]
 
+    def move_and_click(self, type='left', position=[0,0]):
+        self.move_to(position[0], position[1])
+        time.sleep(0.2)
+        if type == 'left':
+            self.left_click()
+        else:
+            self.right_click()
 
 if __name__ == '__main__':
     ib = InteractionBGD()
