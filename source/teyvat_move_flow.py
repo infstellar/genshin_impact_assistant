@@ -130,8 +130,10 @@ class TeyvatMoveFlow(BaseThreading):
             '''write your code below'''
 
             if self.current_state == ST.INIT_TEYVAT_TELEPORT:
-                '''切换到大世界界面'''
                 '''设置缩放'''
+                self.switchto_bigmapwin()
+                big_map.reset_map_size()
+                '''切换到大世界界面'''
                 self.switchto_mainwin()
                 self.tmc.set_target_position(self.target_posi)
                 self.current_state = ST.BEFORE_TEYVAT_TELEPORT
@@ -149,6 +151,7 @@ class TeyvatMoveFlow(BaseThreading):
                 tw_posi = big_map.nearest_big_map_tw_posi(curr_posi, self.target_posi)
                 if list(tw_posi) == [-1]:
                     logger.info("获取传送锚点失败，正在重试")
+                    big_map.reset_map_size()
                     self.current_state = ST.IN_TEYVAT_TELEPORT
                     continue
                 self.itt.move_to(tw_posi[0], tw_posi[1])
