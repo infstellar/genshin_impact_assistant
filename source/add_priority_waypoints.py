@@ -1,5 +1,10 @@
 from util import *
-import cvAutoTrack, generic_lib, numpy as np, big_map, cv2
+import cvAutoTrack
+import generic_lib
+import numpy as np
+import big_map
+import cv2
+
 global priority_waypoints, priority_waypoints_list, priority_waypoints_array, idnum
 priority_waypoints, priority_waypoints_list, priority_waypoints_array, idnum = None, None, None, None
 priority_waypoints = load_json("priority_waypoints.json", default_path='assests')
