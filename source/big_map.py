@@ -121,7 +121,8 @@ def nearest_teyvat_tw_posi(current_posi, target_posi):
 
 if __name__ == '__main__':
     # print(get_closest_TeleportWaypoint(img_manager.bigmap_AbyssMage))
-    load_pw()
+    # load_pw()
+    reset_map_size()
     # p = teyvat_posi2bigmap_posi([2625.204978515623, -5274.091235473633], np.array(priority_waypoints_list))
     # show_bigmap_posi_in_window([2625.204978515623, -5274.091235473633], p)
     print()
