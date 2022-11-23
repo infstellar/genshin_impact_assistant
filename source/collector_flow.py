@@ -144,7 +144,8 @@ class CollectorFlow(BaseThreading):
                 logger.info("正在前往：" + self.collector_name)
                 logger.info("物品id：" + str(self.collector_posi_dict[self.collector_id]["id"]))
                 logger.info("目标坐标：" + str(self.collector_posi))
-                self.tmf.set_target_posi(self.collector_posi)
+                self.tmf.set_target_position(self.collector_posi)
+                self.puo.set_target_position(self.collector_posi)
                 self.start_walk()
                 logger.info("switch Flow to: IN_MOVETO_COLLECTOR")
                 self.current_state = ST.IN_MOVETO_COLLECTOR

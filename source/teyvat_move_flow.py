@@ -108,7 +108,7 @@ class TeyvatMoveFlow(BaseThreading):
         else:
             self.motion_state = IN_MOVE
     
-    def set_target_posi(self, pl):
+    def set_target_position(self, pl):
         self.target_posi = pl
         print()
     
@@ -236,7 +236,7 @@ class TeyvatMoveFlow(BaseThreading):
 
 if __name__ == '__main__':
     tmf = TeyvatMoveFlow()
-    tmf.set_target_posi([1175.70934912, -4894.67981738])
+    tmf.set_target_position([1175.70934912, -4894.67981738])
     tmf.start()
     while 1:
         time.sleep(0.2)
