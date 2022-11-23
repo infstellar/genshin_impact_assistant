@@ -62,6 +62,7 @@ class InteractionBGD:
         self.DEBUG_MODE = False
         self.CONSOLE_ONLY = False
 
+        self.isChromelessWindow = config_json["ChromelessWindow"]
         self.handle = ctypes.windll.user32.FindWindowW(None, hwndname)
 
         if self.handle == 0:
@@ -654,7 +655,11 @@ class InteractionBGD:
             # win32api.mouse_event(win32con.MOUSEEVENTF_MOVE, x, y)
             wx, wy, w, h = win32gui.GetWindowRect(self.handle)
             x += wx
-            y += wy
+            if self.isChromelessWindow:
+                y += wy
+            else:
+                y = y + wy + 26
+                
             # print(mx,my)
             # print(int((x-mx)/1.5), int((y-my)/1.5))
             # pydirectinput.moveTo(wx+x,wy+y)
