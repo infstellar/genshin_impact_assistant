@@ -72,6 +72,7 @@ def view_to_angle_domain(angle=0, deltanum=0.65, maxloop=100, corrected_num=CORR
 
 
 def view_to_angle_teyvat(angle=0, deltanum=1, maxloop=30, corrected_num=CORRECT_DEGREE):
+    '''加一个场景检测'''
     i = 0
     while 1:
         b, degree = cvAutoTrack.cvAutoTrackerLoop.get_rotation()
@@ -91,7 +92,9 @@ def view_to_angle_teyvat(angle=0, deltanum=1, maxloop=30, corrected_num=CORRECT_
 def change_view_to_posi(pl):
     td=0
     degree=100
+    i = 0
     while abs(td-degree)>10:
+        '''加一个场景检测'''
         time.sleep(0.05)
         tx, ty = cvAutoTrack.cvAutoTrackerLoop.get_position()[1:]
         td = cvAutoTrack.cvAutoTrackerLoop.get_rotation()[1]
@@ -102,6 +105,9 @@ def change_view_to_posi(pl):
         if cvn<=-50:
             cvn=-50
         cview(cvn)
+        i+=1
+        if i>=80:
+            break
 
 def reset_const_val():
     pass

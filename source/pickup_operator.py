@@ -126,6 +126,8 @@ class PickupOperator(BaseThreading):
         if generic_lib.euclidean_distance(cp,self.target_posi)>=20:
             logger.debug("too far from the target")
             while generic_lib.euclidean_distance(cvAutoTrack.cvAutoTrackerLoop.get_position()[1:], self.target_posi) >= 8:
+                if self.checkup_stop_func():
+                    return 0
                 movement.change_view_to_posi(self.target_posi)
                 movement.move(movement.AHEAD, 4)
                 self.itt.key_down('spacebar')
