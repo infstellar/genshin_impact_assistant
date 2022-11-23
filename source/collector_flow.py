@@ -49,7 +49,8 @@ class CollectorFlow(BaseThreading):
         super().__init__()
         self.collector_name = "甜甜花 - 蒙德"
         self.collector_type = COLLECTION
-        self.collector_blacklist_id = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,24,23,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48]
+        self.collector_blacklist_id = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,24,23,25,26,27,28,29,30,
+                                       31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57]
         self.collector_posi_dict = load_feature_position(self.collector_name, blacklist_id=self.collector_blacklist_id)
         self.current_state = ST.INIT_MOVETO_COLLECTOR
         
@@ -63,23 +64,58 @@ class CollectorFlow(BaseThreading):
         self.puo.pause_threading()
         self.puo.start()
         
+        chara_list = combat_loop.get_chara_list()
+        self.cct = combat_loop.Combat_Controller(chara_list)
+        self.cct.setDaemon(True)
+        self.cct.pause_threading()
+        self.cct.start()
+        
         self.pickup_timer = timer_module.Timer()
         self.itt = InteractionBGD()
         
     def pause_threading(self):
         if self.pause_threading_flag != True:
             self.pause_threading_flag = True
+            self.tmf.pause_threading()
+            self.puo.pause_threading()
+            self.cct.pause_threading()
 
     def continue_threading(self):
         if self.pause_threading_flag != False:
             self.pause_threading_flag = False
+            self.tmf.continue_threading()
+            self.puo.continue_threading()
+            self.cct.continue_threading()
 
     def stop_threading(self):
         self.stop_threading_flag = True
+        self.tmf.stop_threading()
+        self.puo.stop_threading()
+        self.cct.stop_threading()
+        
         
     def set_collector_name(self, text):
         self.collector_name = text
 
+    def stop_combat(self):
+        self.cct.pause_threading()
+    def start_combat(self):
+        self.cct.continue_threading()
+        self.stop_pickup()
+        self.stop_walk()
+    def stop_pickup(self):
+        self.puo.pause_threading()
+    def start_pickup(self):
+        self.puo.continue_threading()
+        self.stop_combat()
+        self.stop_walk()
+    def stop_walk(self):
+        self.tmf.pause_threading()
+    def start_walk(self):
+        self.tmf.continue_threading()
+        self.stop_combat()
+        self.stop_pickup()
+        
     def run(self):
         '''if you're using this class, copy this'''
         while 1:
@@ -108,8 +144,9 @@ class CollectorFlow(BaseThreading):
                 logger.info("正在前往：" + self.collector_name)
                 logger.info("物品id：" + str(self.collector_posi_dict[self.collector_id]["id"]))
                 logger.info("目标坐标：" + str(self.collector_posi))
-                self.tmf.set_target_posi(self.collector_posi)
-                self.tmf.continue_threading()
+                self.tmf.set_target_position(self.collector_posi)
+                self.puo.set_target_position(self.collector_posi)
+                self.start_walk()
                 logger.info("switch Flow to: IN_MOVETO_COLLECTOR")
                 self.current_state = ST.IN_MOVETO_COLLECTOR
                 
@@ -119,49 +156,45 @@ class CollectorFlow(BaseThreading):
                     self.current_state = ST.AFTER_MOVETO_COLLECTOR
             
             if self.current_state == ST.AFTER_MOVETO_COLLECTOR:
-                self.tmf.pause_threading()
+                self.stop_walk()
                 self.current_state = ST.END_MOVETO_COLLECTOR
                 logger.info("switch Flow to: INIT_PICKUP_COLLECTOR")
                 self.current_state = ST.INIT_PICKUP_COLLECTOR
                 
             if self.current_state == ST.INIT_PICKUP_COLLECTOR:
                 if self.collector_type == COLLECTION:
-                    self.puo.continue_threading()
-                    self.tmf.pause_threading()
+                    self.start_pickup()
                 elif self.collector_type == ENEMY:
-                    self.tmf.cct.continue_threading()
+                    self.start_combat()
                 elif self.collector_type == MINERAL:
                     pass
                 logger.info("switch Flow to: BEFORE_PICKUP_COLLECTOR")
+                time.sleep(1) # wait for CSDL detection
                 self.current_state = ST.BEFORE_PICKUP_COLLECTOR
             
             if self.current_state == ST.BEFORE_PICKUP_COLLECTOR:
                 
-                if combat_lib.combat_statement_detection(self.itt) == False:
-                    self.tmf.cct.pause_threading()
-                    self.tmf.pause_threading()
-                    self.puo.continue_threading()
+                if combat_lib.CSDL.get_combat_state() == False:
+                    self.start_pickup()
                     logger.info("switch Flow to: IN_PICKUP_COLLECTOR")
                     self.current_state = ST.IN_PICKUP_COLLECTOR
                     self.while_sleep = 0.2
                 else:
-                    self.puo.pause_threading()
-                    self.tmf.cct.continue_threading()
+                    self.start_combat()
                     self.while_sleep = 0.5
                 
             if self.current_state == ST.IN_PICKUP_COLLECTOR:
-                self.tmf.pause_threading()
                 if self.puo.pause_threading_flag:
                     logger.info("switch Flow to: AFTER_PICKUP_COLLECTOR")
                     self.current_state = ST.AFTER_PICKUP_COLLECTOR
-                if self.puo.pickup_timer.get_diff_time() >= 60:
-                    logger.info("自动拾取超时")
+                if self.puo.pickup_timer.get_diff_time() >= 45:
+                    logger.info("自动拾取超时: 45s")
                     logger.info("switch Flow to: AFTER_PICKUP_COLLECTOR")
                     self.current_state = ST.AFTER_PICKUP_COLLECTOR
                 
                     
             if self.current_state == ST.AFTER_PICKUP_COLLECTOR:
-                self.puo.pause_threading()
+                self.stop_pickup()
                 if len(self.collector_posi_dict)-1 == self.collector_id:
                     print("exit")
                     logger.info("switch Flow to: END_COLLECTOR")

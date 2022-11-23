@@ -138,16 +138,18 @@ class Combat_Controller(BaseThreading):
             return True
 
     def continue_threading(self):
-        self.current_num = combat_lib.get_current_chara_num(self.itt)
-        self.current_num = 1
-        self.pause_threading_flag = False
-        self.sco.continue_threading()
-        self.ao.continue_threading()
+        if self.pause_threading_flag != False:
+            self.current_num = combat_lib.get_current_chara_num(self.itt)
+            self.current_num = 1
+            self.pause_threading_flag = False
+            self.sco.continue_threading()
+            self.ao.continue_threading()
 
     def pause_threading(self):
-        self.pause_threading_flag = True
-        self.sco.pause_threading()
-        self.ao.pause_threading()
+        if self.pause_threading_flag != True:
+            self.pause_threading_flag = True
+            self.sco.pause_threading()
+            self.ao.pause_threading()
 
     def checkup_trapped(self):
         pass

@@ -1,4 +1,3 @@
-from re import S
 from base_threading import BaseThreading
 from util import *
 import img_manager
@@ -9,6 +8,8 @@ import posi_manager
 import timer_module
 import static_lib
 import pyautogui
+import cvAutoTrack
+import movement
 
 
 class PickupOperator(BaseThreading):
@@ -25,11 +26,20 @@ class PickupOperator(BaseThreading):
         self.collector_flag = True
         self.max_number_of_collector_loops = 200
         self.pickup_timer = timer_module.Timer()
+        self.target_posi = []
 
     def continue_threading(self):
         if self.pause_threading_flag != False:
             self.pause_threading_flag = False
             self.pickup_timer.reset()
+    
+    def pause_threading(self):
+        if self.pause_threading_flag != True:
+            self.pause_threading_flag = True
+            self.itt.key_up('w')
+    
+    def set_target_position(self, p):
+        self.target_posi = p
     
     def run(self):
         while 1:
@@ -49,6 +59,8 @@ class PickupOperator(BaseThreading):
             ret = self.pickup_recognize()
 
             ret = self.auto_pickup()
+            if self.target_posi != []:
+                self.cview_toward_target()
             if self.flicker_timer.get_diff_time() >= 5:
                 self.collector_flag = False
                 self.finding_collector()
@@ -105,8 +117,18 @@ class PickupOperator(BaseThreading):
         return adad
 
     def reset_collector_loops(self):
-        print('reset')
+        # print('reset')
         self.collecor_loops = 0
+        self.flicker_timer.reset()
+
+    def cview_toward_target(self):
+        cp = cvAutoTrack.cvAutoTrackerLoop.get_position()[1:]
+        if generic_lib.euclidean_distance(cp,self.target_posi)>=20:
+            logger.debug("too far from the target")
+            while generic_lib.euclidean_distance(cvAutoTrack.cvAutoTrackerLoop.get_position()[1:], self.target_posi) >= 8:
+                movement.change_view_to_posi(self.target_posi)
+                movement.move(movement.AHEAD, 4)
+                self.itt.key_down('spacebar')
 
     def auto_pickup(self):
         # time.sleep(0.1)
@@ -145,7 +167,7 @@ class PickupOperator(BaseThreading):
             py = 50
         if py <= -50:
             py = -50
-        print(px, py)
+        # print(px, py)
 
         self.itt.move_to(px, py, relative=True)
         return px
@@ -168,6 +190,7 @@ class PickupOperator(BaseThreading):
 
 if __name__ == '__main__':
     po = PickupOperator()
+    po.set_target_position([4813.5, -4180.5])
     po.start()
     while 1:
         time.sleep(0.1)
