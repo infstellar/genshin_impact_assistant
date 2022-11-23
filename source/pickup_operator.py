@@ -31,6 +31,11 @@ class PickupOperator(BaseThreading):
             self.pause_threading_flag = False
             self.pickup_timer.reset()
     
+    def pause_threading(self):
+        if self.pause_threading_flag != True:
+            self.pause_threading_flag = True
+            self.itt.key_up('w')
+    
     def run(self):
         while 1:
             # time.sleep(0.1)
