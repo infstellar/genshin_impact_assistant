@@ -18,6 +18,7 @@ import interaction_background
 import text_manager
 import timer_module
 import combat_lib
+import scene_manager
 
 IN_MOVE = 0
 IN_FLY = 1
@@ -60,6 +61,11 @@ class TeyvatMoveFlow(BaseThreading):
         
         self.reaction_to_enemy = 'RUN'
         self.motion_state = IN_MOVE
+        
+        '''设置缩放'''
+        scene_manager.switchto_bigmapwin()
+        big_map.reset_map_size()
+        
         # self.is_combat = False
 
     
@@ -88,15 +94,7 @@ class TeyvatMoveFlow(BaseThreading):
             print(x, y, angle)
         return 0
 
-    def switchto_mainwin(self):
-        while not self.itt.get_img_existence(img_manager.ui_main_win):
-            self.itt.key_press('m')
-            time.sleep(1)
-
-    def switchto_bigmapwin(self):
-        while not self.itt.get_img_existence(img_manager.ui_bigmap_win):
-            self.itt.key_press('m')
-            time.sleep(1)
+    
 
     def switch_motion_state(self):
         if self.itt.get_img_existence(img_manager.motion_climbing):
@@ -130,23 +128,21 @@ class TeyvatMoveFlow(BaseThreading):
             '''write your code below'''
 
             if self.current_state == ST.INIT_TEYVAT_TELEPORT:
-                '''设置缩放'''
-                self.switchto_bigmapwin()
-                big_map.reset_map_size()
+                
                 '''切换到大世界界面'''
-                self.switchto_mainwin()
+                scene_manager.switchto_mainwin()
                 self.tmc.set_target_position(self.target_posi)
                 self.current_state = ST.BEFORE_TEYVAT_TELEPORT
 
             if self.current_state == ST.BEFORE_TEYVAT_TELEPORT:
                 '''切换到大世界界面'''
-                self.switchto_mainwin()
+                scene_manager.switchto_mainwin()
                 self.current_state = ST.IN_TEYVAT_TELEPORT
 
             if self.current_state == ST.IN_TEYVAT_TELEPORT:
 
                 curr_posi = cvAutoTrack.cvAutoTrackerLoop.get_position()[1:]
-                self.switchto_bigmapwin()
+                scene_manager.switchto_bigmapwin()
                 self.itt.delay(1)
                 tw_posi = big_map.nearest_big_map_tw_posi(curr_posi, self.target_posi)
                 if list(tw_posi) == [-1]:
@@ -176,22 +172,22 @@ class TeyvatMoveFlow(BaseThreading):
                 self.current_state = ST.AFTER_TEYVAT_TELEPORT
 
             if self.current_state == ST.AFTER_TEYVAT_TELEPORT:
-                self.switchto_mainwin()
+                scene_manager.switchto_mainwin()
                 time.sleep(2)
                 curr_posi = cvAutoTrack.cvAutoTrackerLoop.get_position()[1:]
-                self.switchto_bigmapwin()
+                scene_manager.switchto_bigmapwin()
                 tw_posi = big_map.nearest_teyvat_tw_posi(curr_posi, self.target_posi)[0]
                 p1 = generic_lib.euclidean_distance(self.target_posi, tw_posi)
                 p2 = generic_lib.euclidean_distance(self.target_posi, curr_posi)
                 if p1 < p2:
-                    self.switchto_mainwin()
+                    scene_manager.switchto_mainwin()
                     self.itt.delay(1)
                     self.current_state = ST.BEFORE_TEYVAT_TELEPORT
                 else:
                     self.current_state = ST.AFTER_TEYVAT_TELEPORT
 
             if self.current_state == ST.AFTER_TEYVAT_TELEPORT:
-                self.switchto_mainwin()
+                scene_manager.switchto_mainwin()
                 self.current_state = ST.END_TEYVAT_TELEPORT
             if self.current_state == ST.END_TEYVAT_TELEPORT:
                 self.current_state = ST.INIT_TEYVAT_MOVE
