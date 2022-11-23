@@ -123,8 +123,12 @@ class PickupOperator(BaseThreading):
 
     def cview_toward_target(self):
         cp = cvAutoTrack.cvAutoTrackerLoop.get_position()[1:]
-        if generic_lib.euclidean_distance(cp,self.target_posi)>=8:
-            movement.change_view_to_posi(self.target_posi)
+        if generic_lib.euclidean_distance(cp,self.target_posi)>=20:
+            logger.debug("too far from the target")
+            while generic_lib.euclidean_distance(cvAutoTrack.cvAutoTrackerLoop.get_position()[1:], self.target_posi) >= 8:
+                movement.change_view_to_posi(self.target_posi)
+                movement.move(movement.AHEAD, 4)
+                self.itt.key_down('spacebar')
 
     def auto_pickup(self):
         # time.sleep(0.1)
@@ -186,6 +190,7 @@ class PickupOperator(BaseThreading):
 
 if __name__ == '__main__':
     po = PickupOperator()
+    po.set_target_position([4813.5, -4180.5])
     po.start()
     while 1:
         time.sleep(0.1)
