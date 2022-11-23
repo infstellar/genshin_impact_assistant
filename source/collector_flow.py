@@ -39,10 +39,12 @@ def load_feature_position(text="清心", blacklist_id=[]):
             if item["properties"]["popTitle"] == text:
                 ret_dict.append({
                     "id":item["id"],
-                    "position":item["geometry"]["coordinates"]
+                    "position":list(np.array( list(map(float,item["geometry"]["coordinates"])) )*1.5)
                 })
     # print()
     return ret_dict  
+
+
 
 class CollectorFlow(BaseThreading):
     def __init__(self):
@@ -66,6 +68,7 @@ class CollectorFlow(BaseThreading):
         
         self.collector_posi_dict = load_feature_position(self.collector_name, blacklist_id=self.collector_blacklist_id)
         self.current_state = ST.INIT_MOVETO_COLLECTOR
+        self.current_position = cvAutoTrack.cvAutoTrackerLoop.get_position()[1:]
         
         self.tmf = teyvat_move_flow.TeyvatMoveFlow()
         self.tmf.setDaemon(True)
@@ -128,7 +131,10 @@ class CollectorFlow(BaseThreading):
         self.tmf.continue_threading()
         self.stop_combat()
         self.stop_pickup()
-        
+    
+    def sort_by_eu(self, x):
+        return generic_lib.euclidean_distance(x["position"], self.current_position)
+    
     def run(self):
         '''if you're using this class, copy this'''
         while 1:
@@ -147,17 +153,20 @@ class CollectorFlow(BaseThreading):
             '''write your code below'''
             
             if self.current_state == ST.INIT_MOVETO_COLLECTOR:
+                
                 self.collector_posi_dict = load_feature_position(self.collector_name, blacklist_id=self.shielded_id)
+                self.current_position = cvAutoTrack.cvAutoTrackerLoop.get_position()[1:]
+                self.collector_posi_dict.sort(key=self.sort_by_eu)
                 logger.info("switch Flow to: BEFORE_MOVETO_COLLECTOR")
                 self.current_state = ST.BEFORE_MOVETO_COLLECTOR
-                self.collector_id = 0
+                self.collector_i = 0
                 
             if self.current_state == ST.BEFORE_MOVETO_COLLECTOR:
-                self.collector_posi = list(np.array(list(map(float, self.collector_posi_dict[self.collector_id]["position"])))*1.5)
+                self.collector_posi = self.collector_posi_dict[self.collector_i]["position"]
                 logger.info("正在前往：" + self.collector_name)
-                logger.info("物品id：" + str(self.collector_posi_dict[self.collector_id]["id"]))
-                logger.info("目标坐标：" + str(self.collector_posi))
-                self.collected_id[self.collector_name].append(self.collector_posi_dict[self.collector_id]["id"])
+                logger.info("物品id：" + str(self.collector_posi_dict[self.collector_i]["id"]))
+                logger.info("目标坐标：" + str(self.collector_posi)+"当前坐标：" + str(cvAutoTrack.cvAutoTrackerLoop.get_position()[1:]))
+                self.collected_id[self.collector_name].append(self.collector_posi_dict[self.collector_i]["id"])
                 save_json(self.collected_id, "collected.json", default_path="config\\auto_collector", sort_keys=False)
                 
                 self.tmf.set_target_position(self.collector_posi)
@@ -211,12 +220,12 @@ class CollectorFlow(BaseThreading):
                     
             if self.current_state == ST.AFTER_PICKUP_COLLECTOR:
                 self.stop_pickup()
-                if len(self.collector_posi_dict)-1 == self.collector_id:
+                if len(self.collector_posi_dict)-1 == self.collector_i:
                     print("exit")
                     logger.info("switch Flow to: END_COLLECTOR")
                     self.current_state = ST.END_COLLECTOR
                 else:
-                    self.collector_id += 1
+                    self.collector_i += 1
                     logger.info("switch Flow to: BEFORE_MOVETO_COLLECTOR")
                     self.current_state = ST.BEFORE_MOVETO_COLLECTOR
                     self.tmf.reset_setting()
