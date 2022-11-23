@@ -8,37 +8,33 @@ from pywebio import *
 
 from source import listening, util, webio
 from source.util import is_json_equal
+from source.webio import manager
 from source.webio.page_manager import Page
-
-
-
 
 
 class MainPage(Page):
     def __init__(self):
         super().__init__()
 
-    def _on_load(self):
-        self._load()
-        t = threading.Thread(target=self._load_async, daemon=False)
-        session.register_thread(t)
+    def _on_load(self):  # 加载事件
+        self._load()  # 加载主页
+        t = threading.Thread(target=self._event_thread, daemon=False)  # 创建事件线程
+        session.register_thread(t)  # 注册线程
+        t.start()  # 启动线程
 
-        t.start()
-
-    def _load_async(self):
-        asyncio.run(self._main_pin_change_thread())
-
-    async def _main_pin_change_thread(self):
-        while self.loaded:
-            if pin.pin['FlowMode'] != listening.current_flow:
-                listening.current_flow = pin.pin['FlowMode']
-            await asyncio.sleep(0.1)
+    def _event_thread(self):
+        while self.loaded:  # 当界面被加载时循环运行
+            if pin.pin['FlowMode'] != listening.current_flow:  # 比较变更是否被应用
+                listening.current_flow = pin.pin['FlowMode']  # 应用变更
+            time.sleep(0.1)
 
     def _load(self):
-
         # 标题
         output.put_markdown('# Main', scope=self.main_scope)
-        output.put_buttons(['Main', 'Setting'], onclick=webio.manager.load_page, scope=self.main_scope)
+
+        # 页面切换按钮
+        output.put_buttons(list(manager.page_dict), onclick=webio.manager.load_page, scope=self.main_scope)
+
         output.put_row([  # 横列
             output.put_column([  # 左竖列
                 output.put_markdown('## Options'),  # 左竖列标题
@@ -50,15 +46,17 @@ class MainPage(Page):
                         {'label': 'AutoCombat', 'value': listening.FLOW_COMBAT},
                         {'label': 'AutoDomain', 'value': listening.FLOW_DOMAIN}
                     ])]),
-
+                # PickUpMode
                 output.put_row([output.put_text('PickUp'), output.put_scope('Button_PickUp')])
 
             ]), None,
             output.put_scope('Log')
 
         ], scope=self.main_scope)
-        # Button
+
+        # PickUpButton
         output.put_button(label=str(listening.FEAT_PICKUP), onclick=self.on_click_pickup, scope='Button_PickUp')
+
         # Log
         output.put_markdown('## Log', scope='Log')
         output.put_scrollable(output.put_scope('LogArea'), height=300, keep_bottom=True, scope='Log')
@@ -66,7 +64,6 @@ class MainPage(Page):
         self.main_pin_change_thread.start()'''
 
     def on_click_pickup(self):
-
         output.clear('Button_PickUp')
         listening.FEAT_PICKUP = not listening.FEAT_PICKUP
         output.put_button(label=str(listening.FEAT_PICKUP), onclick=self.on_click_pickup, scope='Button_PickUp')
@@ -96,42 +93,43 @@ class SettingPage(Page):
     def _load(self):
         self.last_file = None
 
-        output.put_markdown('# Setting', scope=self.main_scope)  #
+        # 标题
+        output.put_markdown('# Setting', scope=self.main_scope)
 
-        output.put_buttons(['Main','Setting'], onclick=webio.manager.load_page,scope=self.main_scope)
+        # 页面切换按钮
+        output.put_buttons(list(manager.page_dict), onclick=webio.manager.load_page, scope=self.main_scope)
 
+        # 配置页
         output.put_markdown('## config:', scope=self.main_scope)
         pin.put_select('file', self.config_files, scope=self.main_scope)
 
     def _on_load(self):
-        self._load()
-        t = threading.Thread(target=self._load_async, daemon=False)
-        session.register_thread(t)
-        # session.get_current_session()
-
+        self._load()  # 加载页面
+        t = threading.Thread(target=self._event_thread, daemon=False)
+        session.register_thread(t)  # 注册线程
         t.start()
 
-    def _load_async(self):
-        asyncio.run(self._main_pin_change_thread())
-
-    async def _main_pin_change_thread(self):
+    def _event_thread(self):
         while self.loaded:
-            if pin.pin['file'] != self.last_file:
+            if pin.pin['file'] != self.last_file:  # 当下拉框被更改时
                 self.last_file = pin.pin['file']
-                if self.can_remove_last_scope:
+
+                if self.can_remove_last_scope:  # 判断是否可以移除
                     output.remove('now')
                 else:
                     self.can_remove_last_scope = True
-                output.put_scope('now', scope=self.main_scope)
 
-                self.put_setting(pin.pin['file'])
+                output.put_scope('now', scope=self.main_scope)  # 创建配置页scope
+
+                self.put_setting(pin.pin['file'])  # 配置配置页
+
             await asyncio.sleep(0.1)
 
     def put_setting(self, name=''):
         self.file_name = name
-        output.put_markdown('## {}'.format(name), scope='now')
+        output.put_markdown('## {}'.format(name), scope='now')  # 标题
         j = json.load(open(name, 'r', encoding='utf8'))
-        self.put_json(j, 'now', level=3)
+        self.put_json(j, 'now', level=3)  # 载入json
         output.put_button('save', scope='now', onclick=self.save)
 
     def save(self):
@@ -166,7 +164,6 @@ class SettingPage(Page):
                 output.put_buttons(['No', 'Yes'], onclick=self.popup_button)
             ])
         while not self.exit_popup:
-
             time.sleep(0.1)
 
     def popup_button(self, val):
