@@ -149,6 +149,7 @@ def get_rect(im_src, origin_img, ret_mode=0):
     max_id = 0
     bound_rect = []
     center_points = []
+    max_contour = []
     for i in range(len(contours)):
         bound_rect.append([])
 
@@ -162,6 +163,9 @@ def get_rect(im_src, origin_img, ret_mode=0):
             draw_1 = cv2.rectangle(draw_1, (x, y), (x + w, y + h), (0, 255, 0), 10)
 
         x, y, w, h = bound_rect[max_id]
+        
+        if ret_mode == 3:
+            max_contour = contours[max_id]
 
     # qshow(draw_1)
     # print('\"'+name+'\"',':',[y,x,y+h,x+w])
@@ -173,6 +177,8 @@ def get_rect(im_src, origin_img, ret_mode=0):
         return draw_1
     elif ret_mode == 2:
         return center_points
+    elif ret_mode == 3:
+        return max_contour
 
 
 if __name__ == '__main__':
