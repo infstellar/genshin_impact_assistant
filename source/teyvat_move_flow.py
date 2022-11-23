@@ -64,8 +64,10 @@ class TeyvatMoveFlow(BaseThreading):
 
     
     def pause_threading(self):
-        self.pause_threading_flag = True
-        self.tmc.pause_threading()
+        if self.pause_threading_flag != True:
+            self.pause_threading_flag = True
+            self.tmc.pause_threading()
+            self.itt.key_up('w')
 
     def continue_threading(self):
         self.pause_threading_flag = False

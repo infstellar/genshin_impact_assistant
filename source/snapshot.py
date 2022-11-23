@@ -136,10 +136,10 @@ def jwa_3(imsrc):
 
     if degree > 180:
         degree -= 360
-    cv2.imshow('123', cv2.drawMarker(Alpha, position=(int(p[0]), int(p[1])), color=(255, 0, 255), markerSize=1,
-                                     markerType=cv2.MARKER_CROSS, thickness=5))
-    cv2.waitKey(100)
-    print(degree)
+    # cv2.imshow('123', cv2.drawMarker(Alpha, position=(int(p[0]), int(p[1])), color=(255, 0, 255), markerSize=1,
+    #                                  markerType=cv2.MARKER_CROSS, thickness=5))
+    # cv2.waitKey(100)
+    # print(degree)
     return degree
 
     # logger.debug(str(p)+' '+str(Line2Angle(p)))

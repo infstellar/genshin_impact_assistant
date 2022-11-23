@@ -75,20 +75,29 @@ class CollectorFlow(BaseThreading):
     def pause_threading(self):
         if self.pause_threading_flag != True:
             self.pause_threading_flag = True
+            self.tmf.pause_threading()
+            self.puo.pause_threading()
+            self.cct.pause_threading()
 
     def continue_threading(self):
         if self.pause_threading_flag != False:
             self.pause_threading_flag = False
+            self.tmf.continue_threading()
+            self.puo.continue_threading()
+            self.cct.continue_threading()
 
     def stop_threading(self):
         self.stop_threading_flag = True
+        self.tmf.stop_threading()
+        self.puo.stop_threading()
+        self.cct.stop_threading()
+        
         
     def set_collector_name(self, text):
         self.collector_name = text
 
     def stop_combat(self):
         self.cct.pause_threading()
-        
     def start_combat(self):
         self.cct.continue_threading()
         self.stop_pickup()
