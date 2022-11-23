@@ -127,6 +127,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
 test_py/
 outputimgs/
 tools/snapshot/
