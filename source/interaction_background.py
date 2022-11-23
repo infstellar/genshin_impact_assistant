@@ -1,3 +1,4 @@
+from util import *
 import inspect
 import math
 import random
@@ -17,7 +18,7 @@ import img_manager
 import posi_manager
 import static_lib
 import vkcode
-from util import *
+
 
 IMG_RATE = 0
 IMG_POSI = 1
