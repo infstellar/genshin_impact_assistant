@@ -6,6 +6,7 @@ import img_manager
 import posi_manager
 from interaction_background import InteractionBGD
 from util import *
+from base_threading import BaseThreading
 
 
 def get_current_chara_num(itt: InteractionBGD):
@@ -104,7 +105,50 @@ def combat_statement_detection(itt: InteractionBGD):
 
     return False
 
+class CombatStatementDetectionLoop(BaseThreading):
+    def __init__(self):
+        super().__init__()
+        self.itt = InteractionBGD()
+        self.current_state = False
+        self.state_counter = 0
+        self.while_sleep = 0.1
+    
+    def get_combat_state(self):
+        return self.current_state
+    
+    def run(self):
+        '''if you're using this class, copy this'''
+        while 1:
+            time.sleep(self.while_sleep)
+            if self.stop_threading_flag:
+                return 0
+
+            if self.pause_threading_flag:
+                if self.working_flag:
+                    self.working_flag = False
+                time.sleep(1)
+                continue
+
+            if not self.working_flag:
+                self.working_flag = True
+            '''write your code below'''
+            
+            state = combat_statement_detection(self.itt)
+            if state != self.current_state:
+                self.state_counter += 1
+                self.while_sleep = 0.05
+            else:
+                self.state_counter = 0
+                self.while_sleep = 0.2
+            if self.state_counter >= 10:
+                print('change state')
+                self.state_counter = 0
+                self.current_state = state
+
+CSDL = CombatStatementDetectionLoop()
+CSDL.start()
+
 if __name__ == '__main__':
     while 1:
-        print(combat_statement_detection(InteractionBGD()))
+        print(CSDL.get_combat_state())
         time.sleep(0.2)
