@@ -25,9 +25,9 @@ def show_bigmap_posi_in_window(current_teyvat_posi, bigmap_posi_list):
         origin_show_img = cv2.drawMarker(origin_show_img, position=(int(i[0]), int(i[1])), color=(0, 0, 255), markerSize=5, markerType=cv2.MARKER_CROSS, thickness=1)
         origin_bpl = big_map.bigmap_posi2teyvat_posi(current_teyvat_posi, np.array(i))
         for ii in priority_waypoints:
-            if ii["position"] == list(origin_bpl):
+            if list(map(int,ii["position"])) == list(map(int,list(origin_bpl))):
                 cid = ii["id"]
-        origin_show_img = cv2.putText(origin_show_img, str(cid), (int(i[0]), int(i[1])+5), cv2.FONT_HERSHEY_SIMPLEX, 0.3, (255, 255, 255), 1)
+        origin_show_img = cv2.putText(origin_show_img, str(cid), (int(i[0]), int(i[1])+5), cv2.FONT_HERSHEY_SIMPLEX, 0.2, (255, 255, 255), 1)
     cv2.imshow('win',origin_show_img)
     cv2.waitKey(0)
 
@@ -50,7 +50,7 @@ def add_mode():
         nearly_pp = nearly_pp[nearly_pp_arg]
         
         closest_pp = nearly_pp[0]
-        if ed[0]>25:
+        if ed[0]>20:
             priority_waypoints.append(
                 {
                 "id" : idnum+1,
@@ -64,7 +64,7 @@ def add_mode():
         
 def edit_mode():
     global priority_waypoints, priority_waypoints_list, priority_waypoints_array, idnum
-    input("请切换至大世界界面后按下回车")
+    input("请切换至大世界界面后，等待数秒，按下回车")
     cp=list(cvAutoTrack.cvAutoTrackerLoop.get_position()[1:])
     input("请切换至地图界面后按下回车")
     while 1:
@@ -86,6 +86,6 @@ def show_current_posi():
         print(cvAutoTrack.cvAutoTrackerLoop.get_position()[1:])
 
 time.sleep(1)
-add_mode()
-# edit_mode()
+# add_mode()
+edit_mode()
 # show_current_posi()
