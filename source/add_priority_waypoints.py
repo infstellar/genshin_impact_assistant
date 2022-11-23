@@ -50,7 +50,7 @@ def add_mode():
         nearly_pp = nearly_pp[nearly_pp_arg]
         
         closest_pp = nearly_pp[0]
-        if ed[0]>20:
+        if ed[0]>25:
             priority_waypoints.append(
                 {
                 "id" : idnum+1,
