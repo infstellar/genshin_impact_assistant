@@ -89,7 +89,8 @@ if DEBUG_MODE:
     logger.add(sys.stdout, level="TRACE", backtrace=True)
 else:
     logger.add(sys.stdout, level="INFO", backtrace=True)
-
+import webio.log_handler
+logger.add(webio.log_handler.webio_handler, level="TRACE", backtrace=True)
 # 校验目录
 if not os.path.exists(root_path):
     logger.error("目录不存在：" + root_path + " 请检查")
