@@ -64,9 +64,9 @@ def add_mode():
         
 def edit_mode():
     global priority_waypoints, priority_waypoints_list, priority_waypoints_array, idnum
-    input("mainwin")
+    input("请切换至大世界界面后按下回车")
     cp=list(cvAutoTrack.cvAutoTrackerLoop.get_position()[1:])
-    input("mapwin")
+    input("请切换至地图界面后按下回车")
     while 1:
         load_pw()
         p = big_map.teyvat_posi2bigmap_posi(cp, np.array(priority_waypoints_list))
@@ -86,6 +86,6 @@ def show_current_posi():
         print(cvAutoTrack.cvAutoTrackerLoop.get_position()[1:])
 
 time.sleep(1)
-# add_mode()
+add_mode()
 # edit_mode()
-show_current_posi()
+# show_current_posi()
