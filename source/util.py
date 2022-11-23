@@ -72,9 +72,8 @@ def is_int(x):
     else:
         return True
 
-
-def save_json(x, json_name='config.json', default_path='config'):
-    json.dump(x, open(os.path.join(default_path, json_name), 'w', encoding='utf-8'), sort_keys=True, indent=2,
+def save_json(x, json_name='config.json', default_path='config', sort_keys=True):
+    json.dump(x, open(os.path.join(default_path, json_name), 'w', encoding='utf-8'), sort_keys=sort_keys, indent=2,
               ensure_ascii=False)
 
 
