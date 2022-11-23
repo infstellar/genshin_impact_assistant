@@ -7,6 +7,7 @@ import posi_manager
 from interaction_background import InteractionBGD
 from util import *
 from base_threading import BaseThreading
+import numpy as np
 
 
 def get_current_chara_num(itt: InteractionBGD):
@@ -78,8 +79,8 @@ def combat_statement_detection(itt: InteractionBGD):
             cv2.imshow('123', rotated)
             cv2.waitKey(50)
         
-    flag_is_arrow_exist = im_src[:, :, 2].max() > 0
-    if flag_is_arrow_exist:
+    red_arrow_num = len(np.where(im_src[:, :, 2]>=254)[-1])
+    if red_arrow_num > 180:
         return True
     # print('flag_is_arrow_exist', flag_is_arrow_exist)
 
