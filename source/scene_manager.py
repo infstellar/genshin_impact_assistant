@@ -15,3 +15,16 @@ def switchto_bigmapwin():
         itt.key_press('m')
         time.sleep(1)
     time.sleep(1.2)
+    
+def switchto_esc_menu():
+    while not itt.get_img_existence(img_manager.ui_esc_menu):
+        itt.key_press('esc')
+        time.sleep(1)
+    time.sleep(0.5)
+
+def switchto_time_menu():
+    switchto_esc_menu()
+    while not itt.get_img_existence(img_manager.ui_time_menu_core):
+        itt.appear_then_click(img_manager.ui_switch_to_time_menu)
+        time.sleep(1)
+    time.sleep(0.5)

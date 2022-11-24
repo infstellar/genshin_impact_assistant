@@ -11,7 +11,7 @@ F_BUTTON = 'F_BUTTON'
 
 
 class ImgIcon:
-    def __init__(self, name, path, is_bbg=True, matching_rate=None, alpha=None, bbg_posi=None, cap_posi=[1080, 1920],
+    def __init__(self, name, path, is_bbg=True, matching_rate=None, alpha=None, bbg_posi=None, cap_posi=[0, 0, 1080, 1920],
                  jpgmode=2, threshold=0.95):
         self.name = name
         self.path = path
@@ -21,11 +21,12 @@ class ImgIcon:
         self.bbg_posi = bbg_posi
         self.jpgmode = jpgmode
         self.threshold = threshold
+        
         if cap_posi == 'bbg':
             self.cap_posi = self.bbg_posi
         else:
             self.cap_posi = cap_posi
-
+        self.cap_center_position_xy = [(self.cap_posi[1]+self.cap_posi[3])/2, (self.cap_posi[0]+self.cap_posi[2])/2]
         self.image = cv2.imread(self.path)
 
         if self.is_bbg:
