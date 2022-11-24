@@ -3,19 +3,10 @@ import math
 import flow_state as ST
 import cvAutoTrack
 from interaction_background import InteractionBGD
-import teyvat_move_controller
 import generic_lib
-import img_manager
 import pickup_operator
-import movement
-import posi_manager
-import big_map
 import combat_loop
-import pdocr_api
 from base_threading import BaseThreading
-import pyautogui
-import interaction_background
-import text_manager
 import timer_module
 import combat_lib
 import teyvat_move_flow
@@ -49,7 +40,7 @@ def load_feature_position(text="清心", blacklist_id=[]):
 class CollectorFlow(BaseThreading):
     def __init__(self):
         super().__init__()
-        self.collector_name = "甜甜花 - 蒙德"
+        self.collector_name = "薄荷 - 蒙德"
         self.collector_type = COLLECTION
         self.collector_blacklist_id = load_json("collection_blacklist.json", default_path="config\\auto_collector")
         self.collected_id = load_json("collected.json", default_path="config\\auto_collector")
@@ -155,6 +146,7 @@ class CollectorFlow(BaseThreading):
             if self.current_state == ST.INIT_MOVETO_COLLECTOR:
                 
                 self.collector_posi_dict = load_feature_position(self.collector_name, blacklist_id=self.shielded_id)
+                cvAutoTrack.wait_until_no_excessive_error()
                 self.current_position = cvAutoTrack.cvAutoTrackerLoop.get_position()[1:]
                 self.collector_posi_dict.sort(key=self.sort_by_eu)
                 logger.info("switch Flow to: BEFORE_MOVETO_COLLECTOR")
@@ -167,7 +159,7 @@ class CollectorFlow(BaseThreading):
                 logger.info("物品id：" + str(self.collector_posi_dict[self.collector_i]["id"]))
                 while cvAutoTrack.cvAutoTrackerLoop.in_excessive_error:
                     time.sleep(1)
-                logger.info("目标坐标：" + str(self.collector_posi)+"当前坐标：" + str(cvAutoTrack.cvAutoTrackerLoop.get_position()[1:]))
+                logger.info("目标坐标：" + str(self.collector_posi)+"当前坐标：" + self.current_position)
                 self.collected_id[self.collector_name].append(self.collector_posi_dict[self.collector_i]["id"])
                 save_json(self.collected_id, "collected.json", default_path="config\\auto_collector", sort_keys=False)
                 
@@ -194,7 +186,7 @@ class CollectorFlow(BaseThreading):
                     # self.start_pickup()
                     pass
                 elif self.collector_type == ENEMY:
-                    self.start_combat()
+                    pass
                 elif self.collector_type == MINERAL:
                     pass
                 logger.info("switch Flow to: BEFORE_PICKUP_COLLECTOR")
@@ -202,16 +194,15 @@ class CollectorFlow(BaseThreading):
                 self.current_state = ST.BEFORE_PICKUP_COLLECTOR
             
             if self.current_state == ST.BEFORE_PICKUP_COLLECTOR:
-                if self.collector_type == COLLECTION:
-                    if combat_lib.CSDL.get_combat_state() == False:
-                        self.start_pickup()
-                        logger.info("switch Flow to: IN_PICKUP_COLLECTOR")
-                        self.current_state = ST.IN_PICKUP_COLLECTOR
-                        self.while_sleep = 0.2
-                    else:
-                        self.start_combat()
-                        self.while_sleep = 0.5
-                
+                if combat_lib.CSDL.get_combat_state() == False:
+                    self.start_pickup()
+                    logger.info("switch Flow to: IN_PICKUP_COLLECTOR")
+                    self.current_state = ST.IN_PICKUP_COLLECTOR
+                    self.while_sleep = 0.2
+                else:
+                    self.start_combat()
+                    self.while_sleep = 0.5
+                    
             if self.current_state == ST.IN_PICKUP_COLLECTOR:
                 if self.puo.pause_threading_flag:
                     logger.info("switch Flow to: AFTER_PICKUP_COLLECTOR")
