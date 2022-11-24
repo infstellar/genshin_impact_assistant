@@ -103,7 +103,7 @@ def teyvat_posi2bigmap_posi(current_teyvat_posi, bigmap_posi_list):
 def nearest_big_map_tw_posi(current_posi, target_posi):
     twpoints = np.array(get_tw_points(itt.capture(jpgmode=0)))
     if len(twpoints) == 0:
-        return -1
+        return []
     twpoints_teyvat = twpoints.copy()
     twpoints_teyvat = np.delete(twpoints_teyvat, np.where(abs(twpoints_teyvat[:,0]-1920/2)>(1920/2-80))[0], axis=0)
     twpoints_teyvat = np.delete(twpoints_teyvat, np.where(abs(twpoints_teyvat[:,1]-1080/2)>(1080/2-55))[0], axis=0)
