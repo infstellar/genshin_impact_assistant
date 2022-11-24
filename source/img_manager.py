@@ -64,6 +64,13 @@ ui_main_win = ImgIcon(name="ui_main_win", path="assests\\imgs\\common\\ui\\emerg
                       is_bbg=True, bbg_posi=[34, 39, 78, 73], cap_posi='bbg')
 ui_bigmap_win = ImgIcon(name="ui_bigmap_win", path="assests\\imgs\\common\\ui\\bigmap.jpg",
                         is_bbg=True, bbg_posi=[36, 1591, 59, 1614], cap_posi='bbg')
+ui_esc_menu = ImgIcon(name="ui_esc_menu", path="assests\\imgs\\common\\ui\\esc_menu.jpg",
+                        is_bbg=True, bbg_posi=[1001, 18, 1058, 72], cap_posi='bbg')
+ui_switch_to_time_menu = ImgIcon(name="ui_switch_to_time_menu", path="assests\\imgs\\common\\ui\\switch_to_time_menu.jpg",
+                        is_bbg=True, bbg_posi=[689, 20, 741, 77], cap_posi='bbg')
+ui_time_menu_core = ImgIcon(name="ui_time_menu_core", path="assests\\imgs\\common\\ui\\time_menu_core.jpg",
+                        is_bbg=True, bbg_posi=[483, 1421, 521, 1459], cap_posi='bbg')
+
 matching_rate_dict = {
     "coming_out_by_space": 0.9,
     "IN_DOMAIN": 0.98,
@@ -186,5 +193,5 @@ if __name__ == '__main__':
     # cv2.imwrite("assests\\imgs\\common\\coming_out_by_space.jpg", img)
     # get_img_from_imgname(COMING_OUT_BY_SPACE)
     # pname = F_BUTTON
-    p = auto_import_img("assests\\imgs\\common\\ui\\" + "bigmap" + ".jpg", "swimming")
+    p = auto_import_img("assests\\imgs\\common\\ui\\" + "time_menu_core" + ".jpg", "swimming")
     print(p)

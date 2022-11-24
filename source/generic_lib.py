@@ -59,7 +59,8 @@ def points_angle(p1, p2, coordinate=NORMAL):
         degree -= 360
     return degree
 
-
+def set_genshin_time(x):
+    pass
 
 if __name__ == '__main__':
     itt = InteractionBGD()
