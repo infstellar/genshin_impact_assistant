@@ -97,6 +97,8 @@ cvAutoTracker = AutoTracker('source\\cvAutoTrack_7.2.3\\CVAUTOTRACK.dll')
 cvAutoTracker.init()
 logger.info('1) err' + str(cvAutoTracker.get_last_error()))
 
+
+
 class AutoTrackerLoop(threading.Thread):
     def __init__(self):
         super().__init__()
@@ -143,6 +145,9 @@ class AutoTrackerLoop(threading.Thread):
 cvAutoTrackerLoop = AutoTrackerLoop()
 cvAutoTrackerLoop.start()
 time.sleep(1)
+def wait_until_no_excessive_error():
+    while cvAutoTrackerLoop.in_excessive_error:
+        time.sleep(1)
 # logger.info(cvAutoTracker.verison())
 
 # 以下是对被封装的类的简单演示。

@@ -33,6 +33,7 @@ class PickupOperator(BaseThreading):
         if self.pause_threading_flag != False:
             self.pause_threading_flag = False
             self.pickup_timer.reset()
+            movement.change_view_to_posi(self.target_posi)
     
     def pause_threading(self):
         if self.pause_threading_flag != True:

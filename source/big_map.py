@@ -4,6 +4,7 @@ import generic_lib
 import img_manager, cv2
 import interaction_background
 import posi_manager
+import scene_manager
 
 itt = interaction_background.InteractionBGD()
 
@@ -71,7 +72,13 @@ def calculate_nearest_posi(posi_list, target_posi):
 
 
 def get_tw_points(bigmatMat):
-    return itt.match_multiple_img(bigmatMat, img_manager.bigmap_TeleportWaypoint.image)
+    ret = itt.match_multiple_img(bigmatMat, img_manager.bigmap_TeleportWaypoint.image)
+    if len(ret) == 0:
+        logger.warning("获取传送锚点坐标失败，正在重试")
+        time.sleep(5)
+        scene_manager.switchto_bigmapwin()
+        return get_tw_points(bigmatMat)
+    return ret
 
 
 def get_closest_teleport_waypoint(object_img: img_manager.ImgIcon):
