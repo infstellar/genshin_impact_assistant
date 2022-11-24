@@ -211,6 +211,8 @@ class TeyvatMoveFlow(BaseThreading):
                         if self.jump_timer.get_diff_time()>=10:
                             self.jump_timer.reset()
                             self.itt.key_press('spacebar')
+                            time.sleep(0.3)
+                            self.itt.key_press('spacebar') # fly
                         
                 if (self.motion_state == IN_FLY) or (self.motion_state == IN_CLIMB) or (self.motion_state == IN_WATER):
                     self.tmc.continue_threading()
