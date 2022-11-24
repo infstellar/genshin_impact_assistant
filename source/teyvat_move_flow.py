@@ -136,11 +136,10 @@ class TeyvatMoveFlow(BaseThreading):
                 self.current_state = ST.IN_TEYVAT_TELEPORT
 
             if self.current_state == ST.IN_TEYVAT_TELEPORT:
-
                 curr_posi = cvAutoTrack.cvAutoTrackerLoop.get_position()[1:]
                 scene_manager.switchto_bigmapwin()
-                self.itt.delay(1)
-                tw_posi = big_map.nearest_big_map_tw_posi(curr_posi, self.target_posi)
+                # Obtain the coordinates of the transmission anchor closest to the target coordinates
+                tw_posi = big_map.nearest_big_map_tw_posi(curr_posi, self.target_posi) # 获得距离目标坐标最近的传送锚点坐标 
                 if len(tw_posi)==0:
                     logger.info("获取传送锚点失败，正在重试")
                     big_map.reset_map_size()
