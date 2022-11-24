@@ -85,6 +85,8 @@ keyboard.add_hotkey(keymap_json["startstop"], startstop)
 def listening():
     while 1:
         time.sleep(0.2)
+        webio.log_handler.webio_poster('213')
+
 
 
 if __name__ == '__main__':

@@ -7,4 +7,7 @@ class WebioHandler(logging.NullHandler):
     def handle(self, record: logging.LogRecord) -> None:
         manager.get_page('Main').logout(logging.Formatter.formatMessage(record))
 
-webio_handler = WebioHandler
+def webio_poster(x):
+    manager.get_page('Main').logout(x)
+
+# webio_handler = WebioHandler()
