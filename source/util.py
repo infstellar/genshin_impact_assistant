@@ -82,6 +82,19 @@ if True:
     if sys.path[2] != env_path:
         sys.path.insert(2, env_path)
 
+# import asyncio
+# import threading
+# from source.webio import webio
+# from pywebio import platform
+# def server_thread():
+#     # https://zhuanlan.zhihu.com/p/101586682
+#     loop = asyncio.new_event_loop()
+#     asyncio.set_event_loop(loop)
+#     ###
+
+# platform.tornado.start_server(webio.main, auto_open_webbrowser=True, debug=DEBUG_MODE)
+# threading.Thread(target=server_thread, daemon=False).start()
+
 # 配置logger
 logger.remove(handler_id=None)
 logger.add('runtime.log', level="TRACE", backtrace=True)
@@ -90,7 +103,7 @@ if DEBUG_MODE:
 else:
     logger.add(sys.stdout, level="INFO", backtrace=True)
 import webio.log_handler
-logger.add(webio.log_handler.webio_handler, level="TRACE", backtrace=True)
+# logger.add(webio.log_handler.webio_handler)
 # 校验目录
 if not os.path.exists(root_path):
     logger.error("目录不存在：" + root_path + " 请检查")
@@ -171,3 +184,9 @@ def is_number(s):
         pass
 
     return False
+
+
+
+
+
+print()
