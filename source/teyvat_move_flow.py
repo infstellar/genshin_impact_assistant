@@ -6,16 +6,11 @@ from interaction_background import InteractionBGD
 import teyvat_move_controller
 import generic_lib
 import img_manager
-import pickup_operator
 import movement
 import posi_manager
 import big_map
-import combat_loop
 import pdocr_api
 from base_threading import BaseThreading
-import pyautogui
-import interaction_background
-import text_manager
 import timer_module
 import combat_lib
 import scene_manager

@@ -35,3 +35,18 @@ class CyclicVelocityDetector(Timer):
         dt = self.get_diff_time()
         self.reset()
         return int(1/dt)
+
+class TimeoutTimer(Timer):
+    def __init__(self, timeout_limit):
+        super().__init__()
+        self.timeout_limit=timeout_limit
+        self.reset()
+    
+    def set_timeout_limit(self, t):
+        self.timeout_limit = t
+        
+    def istimeout(self):
+        if self.get_diff_time() >= self.timeout_limit:
+            return True
+        else:
+            return False

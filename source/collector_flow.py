@@ -40,8 +40,8 @@ def load_feature_position(text="清心", blacklist_id=[]):
 class CollectorFlow(BaseThreading):
     def __init__(self):
         super().__init__()
-        self.collector_name = "薄荷 - 蒙德"
-        self.collector_type = COLLECTION
+        self.collector_name = "史莱姆 - 蒙德"
+        self.collector_type = ENEMY
         self.collector_blacklist_id = load_json("collection_blacklist.json", default_path="config\\auto_collector")
         self.collected_id = load_json("collected.json", default_path="config\\auto_collector")
         self.shielded_id = []
@@ -77,7 +77,10 @@ class CollectorFlow(BaseThreading):
         self.cct.pause_threading()
         self.cct.start()
         
-        self.pickup_timer = timer_module.Timer()
+        self.IN_PICKUP_COLLECTOR_timeout = timer_module.TimeoutTimer()
+        self.IN_PICKUP_COLLECTOR_timeout.set_timeout_limit(45)
+        self.IN_MOVETO_COLLECTOR_timeout = timer_module.TimeoutTimer()
+        self.IN_MOVETO_COLLECTOR_timeout.set_timeout_limit(300)
         self.itt = InteractionBGD()
         
     def pause_threading(self):
@@ -159,7 +162,7 @@ class CollectorFlow(BaseThreading):
                 logger.info("物品id：" + str(self.collector_posi_dict[self.collector_i]["id"]))
                 while cvAutoTrack.cvAutoTrackerLoop.in_excessive_error:
                     time.sleep(1)
-                logger.info("目标坐标：" + str(self.collector_posi)+"当前坐标：" + self.current_position)
+                logger.info("目标坐标：" + str(self.collector_posi)+"当前坐标：" + str(self.current_position))
                 self.collected_id[self.collector_name].append(self.collector_posi_dict[self.collector_i]["id"])
                 save_json(self.collected_id, "collected.json", default_path="config\\auto_collector", sort_keys=False)
                 
@@ -168,12 +171,18 @@ class CollectorFlow(BaseThreading):
                 self.puo.set_target_name(self.collector_name)
                 self.start_walk()
                 logger.info("switch Flow to: IN_MOVETO_COLLECTOR")
+                self.IN_MOVETO_COLLECTOR_timeout.reset()
                 self.current_state = ST.IN_MOVETO_COLLECTOR
                 
             if self.current_state == ST.IN_MOVETO_COLLECTOR:
                 if self.tmf.pause_threading_flag:
                     logger.info("switch Flow to: AFTER_MOVETO_COLLECTOR")
                     self.current_state = ST.AFTER_MOVETO_COLLECTOR
+                if self.IN_MOVETO_COLLECTOR_timeout.istimeout():
+                    logger.info(f"IN_MOVETO_COLLECTOR timeout: {self.IN_MOVETO_COLLECTOR_timeout.timeout_limit}")
+                    logger.info(f"collect in{self.collector_name} {self.collected_id} {self.collector_posi} failed.")
+                    self.current_state = ST.AFTER_PICKUP_COLLECTOR
+                    self.tmf.pause_threading()
             
             if self.current_state == ST.AFTER_MOVETO_COLLECTOR:
                 self.stop_walk()
@@ -183,10 +192,9 @@ class CollectorFlow(BaseThreading):
                 
             if self.current_state == ST.INIT_PICKUP_COLLECTOR:
                 if self.collector_type == COLLECTION:
-                    # self.start_pickup()
                     pass
                 elif self.collector_type == ENEMY:
-                    pass
+                    self.IN_PICKUP_COLLECTOR_timeout.set_timeout_limit(90)
                 elif self.collector_type == MINERAL:
                     pass
                 logger.info("switch Flow to: BEFORE_PICKUP_COLLECTOR")
@@ -197,6 +205,7 @@ class CollectorFlow(BaseThreading):
                 if combat_lib.CSDL.get_combat_state() == False:
                     self.start_pickup()
                     logger.info("switch Flow to: IN_PICKUP_COLLECTOR")
+                    self.IN_PICKUP_COLLECTOR_timeout.reset()
                     self.current_state = ST.IN_PICKUP_COLLECTOR
                     self.while_sleep = 0.2
                 else:
@@ -207,11 +216,12 @@ class CollectorFlow(BaseThreading):
                 if self.puo.pause_threading_flag:
                     logger.info("switch Flow to: AFTER_PICKUP_COLLECTOR")
                     self.current_state = ST.AFTER_PICKUP_COLLECTOR
-                if self.puo.pickup_timer.get_diff_time() >= 45:
-                    logger.info("自动拾取超时: 45s")
+                if self.IN_PICKUP_COLLECTOR_timeout.istimeout():
+                    logger.info(f"IN_PICKUP_COLLECTOR timeout: {self.IN_PICKUP_COLLECTOR_timeout.timeout_limit}")
+                    logger.info(f"collect in{self.collector_name} {self.collected_id} {self.collector_posi} failed.")
                     logger.info("switch Flow to: AFTER_PICKUP_COLLECTOR")
                     self.current_state = ST.AFTER_PICKUP_COLLECTOR
-                
+                    self.stop_pickup()
                     
             if self.current_state == ST.AFTER_PICKUP_COLLECTOR:
                 self.stop_pickup()

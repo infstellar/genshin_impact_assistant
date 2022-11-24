@@ -9,6 +9,7 @@ import small_map
 import movement
 import numpy as np
 import static_lib
+import timer_module
 '''
 提瓦特大陆移动辅助控制，包括：
 自动F控制 pickup_operator
@@ -64,7 +65,10 @@ class TeyvatMoveController(BaseThreading):
         else:
             return False
 
-    
+    def continue_threading(self):
+        if self.pause_threading_flag != False:
+            self.pause_threading_flag = False
+
     
     def caculate_next_priority_point(self, currentp, targetp):
         float_distance = 30
@@ -106,6 +110,7 @@ class TeyvatMoveController(BaseThreading):
             if not self.working_flag:
                 self.working_flag = True
             '''write your code below'''
+            
             self.current_posi = cvAutoTrack.cvAutoTrackerLoop.get_position()
             if not self.current_posi[0]==False:
                 self.current_posi=self.current_posi[1:]

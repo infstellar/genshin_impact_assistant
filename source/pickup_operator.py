@@ -28,12 +28,13 @@ class PickupOperator(BaseThreading):
         self.pickup_timer = timer_module.Timer()
         self.target_posi = []
         self.target_name = 'unknow'
-
+        self.pickup_succ = False
     def continue_threading(self):
         if self.pause_threading_flag != False:
             self.pause_threading_flag = False
             self.pickup_timer.reset()
             movement.change_view_to_posi(self.target_posi)
+            self.pickup_succ = False
     
     def pause_threading(self):
         if self.pause_threading_flag != True:
@@ -60,7 +61,7 @@ class PickupOperator(BaseThreading):
 
             if not self.working_flag:
                 self.working_flag = True
-
+            
             ret = self.pickup_recognize()
 
             ret = self.auto_pickup()
@@ -100,6 +101,7 @@ class PickupOperator(BaseThreading):
                     logger.info('pickup: ' + str(res[0][1][0]))
                     if str(res[0][1][0]) in self.target_name:
                         logger.info("已找到：" + self.target_name)
+                        self.pickup_succ = True
                         self.pause_threading()
                     if flag1:
                         self.itt.key_down('w')
@@ -130,6 +132,7 @@ class PickupOperator(BaseThreading):
         self.flicker_timer.reset()
 
     def cview_toward_target(self):
+        movement.reset_view()
         cp = cvAutoTrack.cvAutoTrackerLoop.get_position()[1:]
         if generic_lib.euclidean_distance(cp,self.target_posi)>=20:
             logger.debug("too far from the target")
