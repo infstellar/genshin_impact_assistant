@@ -7,7 +7,6 @@ from pdocr_api import ocr
 import posi_manager
 import timer_module
 import static_lib
-import pyautogui
 import cvAutoTrack
 import movement
 
@@ -65,7 +64,7 @@ class PickupOperator(BaseThreading):
             ret = self.pickup_recognize()
 
             ret = self.auto_pickup()
-            if self.target_posi != []:
+            if self.target_posi:
                 self.cview_toward_target()
             if self.flicker_timer.get_diff_time() >= 5:
                 self.collector_flag = False
@@ -73,6 +72,7 @@ class PickupOperator(BaseThreading):
                 if self.reset_timer.get_diff_time() >= self.reset_time:
                     self.reset_timer.reset()
                     self.reset_collector_loops()
+            '''当成功找到物品且找不到下一个可能物品后自动停止。'''
 
     def pickup_recognize(self):
         flag1 = False
@@ -102,7 +102,8 @@ class PickupOperator(BaseThreading):
                     if str(res[0][1][0]) in self.target_name:
                         logger.info("已找到：" + self.target_name)
                         self.pickup_succ = True
-                        self.pause_threading()
+                        
+                        # self.pause_threading()
                     if flag1:
                         self.itt.key_down('w')
                     return True
@@ -188,7 +189,10 @@ class PickupOperator(BaseThreading):
 
     def finding_collector(self):
         if self.collecor_loops < self.max_number_of_collector_loops:
-            pyautogui.middleClick()
+            movement.reset_view()
+            for i in range(5):
+                movement.cview(-30, mode = movement.VERTICALLY)
+                time.sleep(0.1)
         while self.collecor_loops < self.max_number_of_collector_loops:
             if self.checkup_stop_func():
                 return 0
@@ -199,11 +203,14 @@ class PickupOperator(BaseThreading):
                 return 0
 
             self.collecor_loops += 1
+        time.sleep(1)
 
 
 if __name__ == '__main__':
+    
+    
     po = PickupOperator()
-    po.set_target_position([4813.5, -4180.5])
+    # po.set_target_position([4813.5, -4180.5])
     po.start()
     while 1:
         time.sleep(0.1)
