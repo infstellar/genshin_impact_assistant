@@ -125,7 +125,7 @@ def bigmap_posi2teyvat_posi(current_teyvat_posi:list, bigmap_posi_list:list) -> 
         list: 提瓦特坐标
     """
     bigmap_posi_list = bigmap_posi_list - [1920 / 2, 1080 / 2]
-    bigmap_posi_list = bigmap_posi_list * 3.5  # 地图到提瓦特世界缩放比例
+    bigmap_posi_list = bigmap_posi_list * 3.7  # 地图到提瓦特世界缩放比例
     bigmap_posi_list = bigmap_posi_list + current_teyvat_posi
     return bigmap_posi_list
 

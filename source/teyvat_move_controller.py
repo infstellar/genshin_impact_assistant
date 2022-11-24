@@ -71,7 +71,7 @@ class TeyvatMoveController(BaseThreading):
 
     
     def caculate_next_priority_point(self, currentp, targetp):
-        float_distance = 30
+        float_distance = 35
         # 计算当前点到所有优先点的曼哈顿距离
         md = generic_lib.manhattan_distance_plist(currentp, self.priority_waypoints_array)
         nearly_pp_arg = np.argsort(md)

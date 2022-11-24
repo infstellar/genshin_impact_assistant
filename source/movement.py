@@ -44,7 +44,10 @@ def cview(angle=10, mode=HORIZONTAL):  # left<0,right>0
             angle = -1
         else:
             angle = 1
-    itt.move_to(int(angle), 0, relative=True)
+    if mode == HORIZONTAL:
+        itt.move_to(int(angle), 0, relative=True)
+    else:
+        itt.move_to(0, int(angle), relative=True)
 
 
 def move_view_p(x, y):
@@ -116,4 +119,4 @@ def reset_const_val():
 
 # view_to_angle(-90)
 if __name__ == '__main__':
-    view_to_angle_domain(-90)
+    cview(-90, VERTICALLY)
