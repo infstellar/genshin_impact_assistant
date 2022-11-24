@@ -65,6 +65,7 @@ class TeyvatMoveFlow(BaseThreading):
         '''设置缩放'''
         scene_manager.switchto_bigmapwin()
         big_map.reset_map_size()
+        scene_manager.switchto_mainwin()
         
         # self.is_combat = False
 
@@ -145,7 +146,7 @@ class TeyvatMoveFlow(BaseThreading):
                 scene_manager.switchto_bigmapwin()
                 self.itt.delay(1)
                 tw_posi = big_map.nearest_big_map_tw_posi(curr_posi, self.target_posi)
-                if list(tw_posi) == [-1]:
+                if len(tw_posi)==0:
                     logger.info("获取传送锚点失败，正在重试")
                     big_map.reset_map_size()
                     self.current_state = ST.IN_TEYVAT_TELEPORT

@@ -165,12 +165,15 @@ class CollectorFlow(BaseThreading):
                 self.collector_posi = self.collector_posi_dict[self.collector_i]["position"]
                 logger.info("正在前往：" + self.collector_name)
                 logger.info("物品id：" + str(self.collector_posi_dict[self.collector_i]["id"]))
+                while cvAutoTrack.cvAutoTrackerLoop.in_excessive_error:
+                    time.sleep(1)
                 logger.info("目标坐标：" + str(self.collector_posi)+"当前坐标：" + str(cvAutoTrack.cvAutoTrackerLoop.get_position()[1:]))
                 self.collected_id[self.collector_name].append(self.collector_posi_dict[self.collector_i]["id"])
                 save_json(self.collected_id, "collected.json", default_path="config\\auto_collector", sort_keys=False)
                 
                 self.tmf.set_target_position(self.collector_posi)
                 self.puo.set_target_position(self.collector_posi)
+                self.puo.set_target_name(self.collector_name)
                 self.start_walk()
                 logger.info("switch Flow to: IN_MOVETO_COLLECTOR")
                 self.current_state = ST.IN_MOVETO_COLLECTOR

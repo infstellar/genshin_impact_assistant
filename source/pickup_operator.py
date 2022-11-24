@@ -27,6 +27,7 @@ class PickupOperator(BaseThreading):
         self.max_number_of_collector_loops = 200
         self.pickup_timer = timer_module.Timer()
         self.target_posi = []
+        self.target_name = 'unknow'
 
     def continue_threading(self):
         if self.pause_threading_flag != False:
@@ -40,6 +41,9 @@ class PickupOperator(BaseThreading):
     
     def set_target_position(self, p):
         self.target_posi = p
+    
+    def set_target_name(self,x):
+        self.target_name = x
     
     def run(self):
         while 1:
@@ -93,6 +97,9 @@ class PickupOperator(BaseThreading):
                     # self.itt.delay(0)
                     self.pickup_item_list.append(res[0][1][0])
                     logger.info('pickup: ' + str(res[0][1][0]))
+                    if str(res[0][1][0]) in self.target_name:
+                        logger.info("已找到：" + self.target_name)
+                        self.pause_threading()
                     if flag1:
                         self.itt.key_down('w')
                     return True
