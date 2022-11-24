@@ -72,8 +72,16 @@ def calculate_nearest_posi(posi_list, target_posi):
 
 
 def get_tw_points(bigmatMat):
+    """获得传送锚点的坐标
+
+    Args:
+        bigmatMat (Mat): 截图
+
+    Returns:
+        list: 坐标列表
+    """
     ret = itt.match_multiple_img(bigmatMat, img_manager.bigmap_TeleportWaypoint.image)
-    if len(ret) == 0:
+    if len(ret) == 0: # 自动重试
         logger.warning("获取传送锚点坐标失败，正在重试")
         time.sleep(5)
         bigmatMat = itt.capture(jpgmode=0)
@@ -83,11 +91,21 @@ def get_tw_points(bigmatMat):
 
 
 def get_closest_teleport_waypoint(object_img: img_manager.ImgIcon):
+    """abandon
+
+    Args:
+        object_img (img_manager.ImgIcon): _description_
+
+    Returns:
+        _type_: _description_
+    """
     return calculate_nearest_posi(
         itt.match_multiple_img(itt.capture(jpgmode=0), object_img.image),
         get_navigation_posi())
     
 def reset_map_size():
+    """重置地图大小为标准值
+    """
     for i in range(8):        
         itt.move_and_click(position=posi_manager.posi_suoxiaoditu)
         time.sleep(0.2)
@@ -96,34 +114,70 @@ def reset_map_size():
         itt.move_and_click(position=posi_manager.posi_fangdaditu)
         time.sleep(0.2)
 
-def bigmap_posi2teyvat_posi(current_teyvat_posi, bigmap_posi_list):
+def bigmap_posi2teyvat_posi(current_teyvat_posi:list, bigmap_posi_list:list) -> list:
+    """将大地图上的坐标转换为提瓦特世界坐标。注意：中心必须为当前位置。
+
+    Args:
+        current_teyvat_posi (list): 当前位置在提瓦特世界的坐标
+        bigmap_posi_list (list): 需要转换的大地图坐标
+
+    Returns:
+        list: 提瓦特坐标
+    """
     bigmap_posi_list = bigmap_posi_list - [1920 / 2, 1080 / 2]
     bigmap_posi_list = bigmap_posi_list * 3.5  # 地图到提瓦特世界缩放比例
     bigmap_posi_list = bigmap_posi_list + current_teyvat_posi
     return bigmap_posi_list
 
-def teyvat_posi2bigmap_posi(current_teyvat_posi, bigmap_posi_list):
-    bigmap_posi_list = bigmap_posi_list - current_teyvat_posi
-    bigmap_posi_list = bigmap_posi_list / 3.5
-    bigmap_posi_list = bigmap_posi_list + [1920 / 2, 1080 / 2]
-    return bigmap_posi_list
+def teyvat_posi2bigmap_posi(current_teyvat_posi, teyvat_posi_list):
+    """提瓦特世界坐标转换为大地图坐标。注意：中心必须为当前位置。
+
+    Args:
+        current_teyvat_posi (list): 当前位置在提瓦特世界的坐标
+        teyvat_posi_list (list): 需要转换的提瓦特世界坐标
+
+    Returns:
+        list: 大地图坐标
+    """
+    teyvat_posi_list = teyvat_posi_list - current_teyvat_posi
+    teyvat_posi_list = teyvat_posi_list / 3.5
+    teyvat_posi_list = teyvat_posi_list + [1920 / 2, 1080 / 2]
+    return teyvat_posi_list
 
 def nearest_big_map_tw_posi(current_posi, target_posi):
-    twpoints = np.array(get_tw_points(itt.capture(jpgmode=0)))
+    """获得距离目标坐标最近的大地图传送锚点坐标
+
+    Args:
+        current_posi (_type_): 当前提瓦特世界坐标
+        target_posi (_type_): 目标坐标
+
+    Returns:
+        _type_: 最近的传送锚点坐标
+    """
+    twpoints = np.array(get_tw_points(itt.capture(jpgmode=0))) # 获得所有传送锚点坐标
     if len(twpoints) == 0:
         return []
-    twpoints_teyvat = twpoints.copy()
-    twpoints_teyvat = np.delete(twpoints_teyvat, np.where(abs(twpoints_teyvat[:,0]-1920/2)>(1920/2-80))[0], axis=0)
-    twpoints_teyvat = np.delete(twpoints_teyvat, np.where(abs(twpoints_teyvat[:,1]-1080/2)>(1080/2-55))[0], axis=0)
-    twpoints_teyvat = bigmap_posi2teyvat_posi(current_posi, twpoints_teyvat)
-    p = calculate_nearest_posi(twpoints_teyvat, target_posi)
-    a = np.where(twpoints_teyvat == p[0])[0][-1]
+    twpoints_teyvat = twpoints.copy() # 拷贝
+    twpoints_teyvat = np.delete(twpoints_teyvat, np.where(abs(twpoints_teyvat[:,0]-1920/2)>(1920/2-80))[0], axis=0) # 删除x方向上超过限定值的坐标，避免误触
+    twpoints_teyvat = np.delete(twpoints_teyvat, np.where(abs(twpoints_teyvat[:,1]-1080/2)>(1080/2-55))[0], axis=0) # 删除y方向上超过限定值的坐标，避免误触
+    twpoints_teyvat = bigmap_posi2teyvat_posi(current_posi, twpoints_teyvat) # 将大地图坐标转换为提瓦特坐标
+    p = calculate_nearest_posi(twpoints_teyvat, target_posi) # 计算最近的目标坐标（提瓦特）
+    a = np.where(twpoints_teyvat == p[0])[0][-1] # 获得该坐标index
     return twpoints[a]
 
 def nearest_teyvat_tw_posi(current_posi, target_posi):
-    twpoints = np.array(get_tw_points(itt.capture(jpgmode=0)))
-    twpoints_teyvat = twpoints.copy()
-    twpoints_teyvat = bigmap_posi2teyvat_posi(current_posi, twpoints_teyvat)
+    """获得距离目标坐标最近的传送锚点坐标
+
+    Args:
+        current_posi (_type_): _description_
+        target_posi (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
+    twpoints = np.array(get_tw_points(itt.capture(jpgmode=0))) # 获得传送锚点坐标
+    twpoints_teyvat = twpoints.copy() # copy
+    twpoints_teyvat = bigmap_posi2teyvat_posi(current_posi, twpoints_teyvat) # 转换为提瓦特坐标
     p = calculate_nearest_posi(twpoints_teyvat, target_posi)
     return p
 
