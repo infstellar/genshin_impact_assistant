@@ -4,7 +4,6 @@ import img_manager
 import generic_lib
 from interaction_background import InteractionBGD
 from pdocr_api import ocr
-import posi_manager
 import timer_module
 import static_lib
 import cvAutoTrack
@@ -28,6 +27,7 @@ class PickupOperator(BaseThreading):
         self.target_posi = []
         self.target_name = 'unknow'
         self.pickup_succ = False
+        self.max_distance_from_target = 20
     def continue_threading(self):
         if self.pause_threading_flag != False:
             self.pause_threading_flag = False
@@ -38,8 +38,9 @@ class PickupOperator(BaseThreading):
     def pause_threading(self):
         if self.pause_threading_flag != True:
             self.pause_threading_flag = True
+            time.sleep(0.5)
             self.itt.key_up('w')
-    
+            
     def set_target_position(self, p):
         self.target_posi = p
     
@@ -137,9 +138,9 @@ class PickupOperator(BaseThreading):
         self.flicker_timer.reset()
 
     def cview_toward_target(self):
-        movement.reset_view()
         cp = cvAutoTrack.cvAutoTrackerLoop.get_position()[1:]
-        if generic_lib.euclidean_distance(cp,self.target_posi)>=20:
+        if generic_lib.euclidean_distance(cp,self.target_posi)>= self.max_distance_from_target:
+            movement.reset_view()
             logger.debug("too far from the target")
             while generic_lib.euclidean_distance(cvAutoTrack.cvAutoTrackerLoop.get_position()[1:], self.target_posi) >= 8:
                 if self.checkup_stop_func():
@@ -195,8 +196,8 @@ class PickupOperator(BaseThreading):
         if self.collecor_loops < self.max_number_of_collector_loops:
             movement.reset_view()
             for i in range(5):
-                movement.cview(-30, mode = movement.VERTICALLY)
-                time.sleep(0.1)
+                movement.cview(30, mode = movement.VERTICALLY)
+                time.sleep(0.2)
         while self.collecor_loops < self.max_number_of_collector_loops:
             if self.checkup_stop_func():
                 return 0
