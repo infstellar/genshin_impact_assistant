@@ -129,6 +129,7 @@ class CollectorFlow(BaseThreading):
         self.stop_pickup()
         self.stop_combat()
         self.stop_walk()
+        time.sleep(2)
     
     def sort_by_eu(self, x):
         return generic_lib.euclidean_distance(x["position"], self.current_position)
@@ -186,7 +187,7 @@ class CollectorFlow(BaseThreading):
                 
             if self.current_state == ST.IN_MOVETO_COLLECTOR:
                 if self.tmf.pause_threading_flag:
-                    logger.info("switch Flow to: AFTER_MOVETO_COLLECTOR")
+                    logger.info(_("switch Flow to: AFTER_MOVETO_COLLECTOR"))
                     self.current_state = ST.AFTER_MOVETO_COLLECTOR
                 if self.IN_MOVETO_COLLECTOR_timeout.istimeout():
                     logger.info(f"IN_MOVETO_COLLECTOR timeout: {self.IN_MOVETO_COLLECTOR_timeout.timeout_limit}")
@@ -205,16 +206,17 @@ class CollectorFlow(BaseThreading):
                     self.IN_PICKUP_COLLECTOR_timeout.set_timeout_limit(45)
                 elif self.collector_type == ENEMY:
                     self.IN_PICKUP_COLLECTOR_timeout.set_timeout_limit(80)
+                    self.puo.max_distance_from_target = 60
                 elif self.collector_type == MINERAL:
                     pass
-                logger.info("switch Flow to: BEFORE_PICKUP_COLLECTOR")
+                logger.info(_("switch Flow to: BEFORE_PICKUP_COLLECTOR"))
                 time.sleep(1) # wait for CSDL detection
                 self.current_state = ST.BEFORE_PICKUP_COLLECTOR
             
             if self.current_state == ST.BEFORE_PICKUP_COLLECTOR:
                 if combat_lib.CSDL.get_combat_state() == False:
                     self.start_pickup()
-                    logger.info("switch Flow to: IN_PICKUP_COLLECTOR")
+                    logger.info(_("switch Flow to: IN_PICKUP_COLLECTOR"))
                     self.IN_PICKUP_COLLECTOR_timeout.reset()
                     self.current_state = ST.IN_PICKUP_COLLECTOR
                     self.while_sleep = 0.2
@@ -224,7 +226,7 @@ class CollectorFlow(BaseThreading):
                     
             if self.current_state == ST.IN_PICKUP_COLLECTOR:
                 if self.puo.pause_threading_flag:
-                    logger.info("switch Flow to: AFTER_PICKUP_COLLECTOR")
+                    logger.info(_("switch Flow to: AFTER_PICKUP_COLLECTOR"))
                     self.current_state = ST.AFTER_PICKUP_COLLECTOR
                 if self.IN_PICKUP_COLLECTOR_timeout.istimeout():
                     logger.info(f"IN_PICKUP_COLLECTOR timeout: {self.IN_PICKUP_COLLECTOR_timeout.timeout_limit}")

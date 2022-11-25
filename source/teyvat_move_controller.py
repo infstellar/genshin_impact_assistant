@@ -120,7 +120,7 @@ class TeyvatMoveController(BaseThreading):
             p1 = self.caculate_next_priority_point(self.current_posi, self.target_positon)
             # print(p1)
             movement.change_view_to_posi(p1)
-            if not static_lib.W_KEYDOWN:
+            if (not static_lib.W_KEYDOWN) and (not self.pause_threading_flag):
                 self.itt.key_down('w')
                 
             if generic_lib.euclidean_distance(self.target_positon, cvAutoTrack.cvAutoTrackerLoop.get_position()[1:])<=10:
