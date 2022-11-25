@@ -58,6 +58,8 @@ class CollectorFlow(BaseThreading):
             self.collected_id[self.collector_name] = []
             save_json(self.collected_id, "collected.json", default_path="config\\auto_collector", sort_keys=False)
         
+        self.collection_failure = load_json("collection_failure.json", default_path="config\\auto_collector")
+        
         self.collector_posi_dict = load_feature_position(self.collector_name, blacklist_id=self.collector_blacklist_id)
         self.current_state = ST.INIT_MOVETO_COLLECTOR
         self.current_position = cvAutoTrack.cvAutoTrackerLoop.get_position()[1:]
@@ -134,6 +136,13 @@ class CollectorFlow(BaseThreading):
     def sort_by_eu(self, x):
         return generic_lib.euclidean_distance(x["position"], self.current_position)
     
+    def add_failure(self, x):
+        a = self.collection_failure.setdefault(self.collector_name, value=[])
+        a.append({"id": self.collection_id,
+                  "error_code": x})
+        self.collection_failure[self.collector_name] = a
+        save_json(self.collection_failure, "collection_failure.json", default_path="config\\auto_collector", sort_keys=False)
+    
     def run(self):
         '''if you're using this class, copy this'''
         while 1:
@@ -192,6 +201,7 @@ class CollectorFlow(BaseThreading):
                 if self.IN_MOVETO_COLLECTOR_timeout.istimeout():
                     logger.info(f"IN_MOVETO_COLLECTOR timeout: {self.IN_MOVETO_COLLECTOR_timeout.timeout_limit}")
                     logger.info(f"collect in{self.collector_name} {self.collection_id} {self.collection_posi} failed.")
+                    self.add_failure("IN_MOVETO_COLLECTOR_TIMEOUT")
                     self.current_state = ST.AFTER_PICKUP_COLLECTOR
                     self.tmf.pause_threading()
             
@@ -232,6 +242,7 @@ class CollectorFlow(BaseThreading):
                     logger.info(f"IN_PICKUP_COLLECTOR timeout: {self.IN_PICKUP_COLLECTOR_timeout.timeout_limit}")
                     logger.info(f"collect in{self.collector_name} {self.collection_id} {self.collection_posi} failed.")
                     logger.info("switch Flow to: AFTER_PICKUP_COLLECTOR")
+                    self.add_failure("IN_PICKUP_COLLECTOR_TIMEOUT")
                     self.current_state = ST.AFTER_PICKUP_COLLECTOR
                     self.stop_pickup()
                 if combat_lib.CSDL.get_combat_state():
