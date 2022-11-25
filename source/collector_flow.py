@@ -61,6 +61,7 @@ class CollectorFlow(BaseThreading):
         self.collector_posi_dict = load_feature_position(self.collector_name, blacklist_id=self.collector_blacklist_id)
         self.current_state = ST.INIT_MOVETO_COLLECTOR
         self.current_position = cvAutoTrack.cvAutoTrackerLoop.get_position()[1:]
+        self.last_collection_posi = []
         
         self.tmf = teyvat_move_flow.TeyvatMoveFlow()
         self.tmf.setDaemon(True)
@@ -156,19 +157,22 @@ class CollectorFlow(BaseThreading):
                 self.collector_i = 0
                 
             if self.current_state == ST.BEFORE_MOVETO_COLLECTOR:
-                self.collector_posi = self.collector_posi_dict[self.collector_i]["position"]
-                '''当两个collector坐标小于30时，认为是同一个。'''
-                logger.info("正在前往：" + self.collector_name)
+                self.collection_posi = self.collector_posi_dict[self.collector_i]["position"]
                 self.collection_id = self.collector_posi_dict[self.collector_i]["id"]
+                '''当两个collector坐标小于30时，认为是同一个。'''
+                if generic_lib.euclidean_distance(self.collection_posi, self.last_collection_posi) <= 30:
+                    logger.info(f"collection id: {self.collection_id} ; collection position: {self.collection_posi} ; last collection position: {self.last_collection_posi}")
+                    logger.info(f"distance lower than 30, skip this collection.")
+                    self.current_state = ST.AFTER_PICKUP_COLLECTOR
+                logger.info("正在前往：" + self.collector_name)
                 logger.info(f"物品id：{self.collection_id}")
                 while cvAutoTrack.cvAutoTrackerLoop.in_excessive_error:
                     time.sleep(1)
-                logger.info("目标坐标：" + str(self.collector_posi)+"当前坐标：" + str(self.current_position))
-                self.collected_id[self.collector_name].append(self.collector_posi_dict[self.collector_i]["id"])
-                save_json(self.collected_id, "collected.json", default_path="config\\auto_collector", sort_keys=False)
+                logger.info("目标坐标：" + str(self.collection_posi)+"当前坐标：" + str(self.current_position))
                 
-                self.tmf.set_target_position(self.collector_posi)
-                self.puo.set_target_position(self.collector_posi)
+                
+                self.tmf.set_target_position(self.collection_posi)
+                self.puo.set_target_position(self.collection_posi)
                 self.puo.set_target_name(self.collector_name)
                 self.start_walk()
                 logger.info("switch Flow to: IN_MOVETO_COLLECTOR")
@@ -181,7 +185,7 @@ class CollectorFlow(BaseThreading):
                     self.current_state = ST.AFTER_MOVETO_COLLECTOR
                 if self.IN_MOVETO_COLLECTOR_timeout.istimeout():
                     logger.info(f"IN_MOVETO_COLLECTOR timeout: {self.IN_MOVETO_COLLECTOR_timeout.timeout_limit}")
-                    logger.info(f"collect in{self.collector_name} {self.collection_id} {self.collector_posi} failed.")
+                    logger.info(f"collect in{self.collector_name} {self.collection_id} {self.collection_posi} failed.")
                     self.current_state = ST.AFTER_PICKUP_COLLECTOR
                     self.tmf.pause_threading()
             
@@ -219,7 +223,7 @@ class CollectorFlow(BaseThreading):
                     self.current_state = ST.AFTER_PICKUP_COLLECTOR
                 if self.IN_PICKUP_COLLECTOR_timeout.istimeout():
                     logger.info(f"IN_PICKUP_COLLECTOR timeout: {self.IN_PICKUP_COLLECTOR_timeout.timeout_limit}")
-                    logger.info(f"collect in{self.collector_name} {self.collection_id} {self.collector_posi} failed.")
+                    logger.info(f"collect in{self.collector_name} {self.collection_id} {self.collection_posi} failed.")
                     logger.info("switch Flow to: AFTER_PICKUP_COLLECTOR")
                     self.current_state = ST.AFTER_PICKUP_COLLECTOR
                     self.stop_pickup()
@@ -229,12 +233,15 @@ class CollectorFlow(BaseThreading):
                     
             if self.current_state == ST.AFTER_PICKUP_COLLECTOR:
                 self.stop_pickup()
+                self.collected_id[self.collector_name].append(self.collector_posi_dict[self.collector_i]["id"])
+                save_json(self.collected_id, "collected.json", default_path="config\\auto_collector", sort_keys=False)
                 if len(self.collector_posi_dict)-1 == self.collector_i:
                     print("exit")
                     logger.info("switch Flow to: END_COLLECTOR")
                     self.current_state = ST.END_COLLECTOR
                 else:
                     self.collector_i += 1
+                    self.last_collection_posi = self.collection_posi
                     logger.info("switch Flow to: BEFORE_MOVETO_COLLECTOR")
                     self.current_state = ST.BEFORE_MOVETO_COLLECTOR
                     self.tmf.reset_setting()
