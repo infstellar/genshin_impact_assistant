@@ -61,7 +61,7 @@ class CollectorFlow(BaseThreading):
         self.collector_posi_dict = load_feature_position(self.collector_name, blacklist_id=self.collector_blacklist_id)
         self.current_state = ST.INIT_MOVETO_COLLECTOR
         self.current_position = cvAutoTrack.cvAutoTrackerLoop.get_position()[1:]
-        self.last_collection_posi = []
+        self.last_collection_posi = [9999,9999]
         
         self.tmf = teyvat_move_flow.TeyvatMoveFlow()
         self.tmf.setDaemon(True)
@@ -125,6 +125,10 @@ class CollectorFlow(BaseThreading):
         self.tmf.continue_threading()
         self.stop_combat()
         self.stop_pickup()
+    def stop_all(self):
+        self.stop_pickup()
+        self.stop_combat()
+        self.stop_walk()
     
     def sort_by_eu(self, x):
         return generic_lib.euclidean_distance(x["position"], self.current_position)
@@ -159,11 +163,12 @@ class CollectorFlow(BaseThreading):
             if self.current_state == ST.BEFORE_MOVETO_COLLECTOR:
                 self.collection_posi = self.collector_posi_dict[self.collector_i]["position"]
                 self.collection_id = self.collector_posi_dict[self.collector_i]["id"]
-                '''当两个collector坐标小于30时，认为是同一个。'''
+                '''当两个collection坐标小于30时，认为是同一个。'''
                 if generic_lib.euclidean_distance(self.collection_posi, self.last_collection_posi) <= 30:
                     logger.info(f"collection id: {self.collection_id} ; collection position: {self.collection_posi} ; last collection position: {self.last_collection_posi}")
                     logger.info(f"distance lower than 30, skip this collection.")
                     self.current_state = ST.AFTER_PICKUP_COLLECTOR
+                    continue
                 logger.info("正在前往：" + self.collector_name)
                 logger.info(f"物品id：{self.collection_id}")
                 while cvAutoTrack.cvAutoTrackerLoop.in_excessive_error:
@@ -232,7 +237,7 @@ class CollectorFlow(BaseThreading):
                     self.current_state = ST.BEFORE_PICKUP_COLLECTOR
                     
             if self.current_state == ST.AFTER_PICKUP_COLLECTOR:
-                self.stop_pickup()
+                self.stop_all()
                 self.collected_id[self.collector_name].append(self.collector_posi_dict[self.collector_i]["id"])
                 save_json(self.collected_id, "collected.json", default_path="config\\auto_collector", sort_keys=False)
                 if len(self.collector_posi_dict)-1 == self.collector_i:
