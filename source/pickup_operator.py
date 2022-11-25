@@ -34,6 +34,7 @@ class PickupOperator(BaseThreading):
             self.pickup_timer.reset()
             movement.change_view_to_posi(self.target_posi)
             self.pickup_succ = False
+            self.pickup_item_list = []
     
     def pause_threading(self):
         if self.pause_threading_flag != True:

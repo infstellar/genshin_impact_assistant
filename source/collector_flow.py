@@ -11,6 +11,7 @@ import timer_module
 import combat_lib
 import teyvat_move_flow
 import numpy as np
+import datetime
 
 COLLECTION = 0
 ENEMY = 1
@@ -27,7 +28,7 @@ def load_feature_position(text="清心", blacklist_id=[]):
         for item in feature["features"]:
             if item["id"] in blacklist_id:
                 continue
-            if item["properties"]["popTitle"] == text:
+            if text in item["properties"]["popTitle"] :
                 ret_dict.append({
                     "id":item["id"],
                     "position":list(np.array( list(map(float,item["geometry"]["coordinates"])) )*1.5)
@@ -40,7 +41,8 @@ def load_feature_position(text="清心", blacklist_id=[]):
 class CollectorFlow(BaseThreading):
     def __init__(self):
         super().__init__()
-        self.collector_name = "史莱姆 - 蒙德"
+        
+        self.collector_name = "甜甜花"
         self.collector_type = ENEMY
         self.collector_blacklist_id = load_json("collection_blacklist.json", default_path="config\\auto_collector")
         self.collected_id = load_json("collected.json", default_path="config\\auto_collector")
@@ -58,12 +60,13 @@ class CollectorFlow(BaseThreading):
             self.collected_id[self.collector_name] = []
             save_json(self.collected_id, "collected.json", default_path="config\\auto_collector", sort_keys=False)
         
-        self.collection_failure = load_json("collection_failure.json", default_path="config\\auto_collector")
+        self.collection_log = load_json("collection_log.json", default_path="config\\auto_collector")
         
         self.collector_posi_dict = load_feature_position(self.collector_name, blacklist_id=self.collector_blacklist_id)
         self.current_state = ST.INIT_MOVETO_COLLECTOR
         self.current_position = cvAutoTrack.cvAutoTrackerLoop.get_position()[1:]
         self.last_collection_posi = [9999,9999]
+        self.picked_list = []
         
         self.tmf = teyvat_move_flow.TeyvatMoveFlow()
         self.tmf.setDaemon(True)
@@ -136,12 +139,18 @@ class CollectorFlow(BaseThreading):
     def sort_by_eu(self, x):
         return generic_lib.euclidean_distance(x["position"], self.current_position)
     
-    def add_failure(self, x):
-        a = self.collection_failure.setdefault(self.collector_name, value=[])
-        a.append({"id": self.collection_id,
-                  "error_code": x})
-        self.collection_failure[self.collector_name] = a
-        save_json(self.collection_failure, "collection_failure.json", default_path="config\\auto_collector", sort_keys=False)
+    def add_log(self, x):
+        a = self.collection_log.setdefault(self.collector_name, [])
+        self.picked_list = self.puo.pickup_item_list.copy()
+        if not self.picked_list:
+            self.picked_list.append('None')
+        a.append({"time":str(datetime.datetime.now()),
+                  "id": self.collection_id,
+                  "error_code": x,
+                  "picked item: ": self.picked_list})
+        self.collection_log[self.collector_name] = a
+        save_json(self.collection_log, "collection_log.json", default_path="config\\auto_collector", sort_keys=False)
+        self.picked_list = []
     
     def run(self):
         '''if you're using this class, copy this'''
@@ -201,7 +210,7 @@ class CollectorFlow(BaseThreading):
                 if self.IN_MOVETO_COLLECTOR_timeout.istimeout():
                     logger.info(f"IN_MOVETO_COLLECTOR timeout: {self.IN_MOVETO_COLLECTOR_timeout.timeout_limit}")
                     logger.info(f"collect in{self.collector_name} {self.collection_id} {self.collection_posi} failed.")
-                    self.add_failure("IN_MOVETO_COLLECTOR_TIMEOUT")
+                    self.add_log("IN_MOVETO_COLLECTOR_TIMEOUT")
                     self.current_state = ST.AFTER_PICKUP_COLLECTOR
                     self.tmf.pause_threading()
             
@@ -216,7 +225,7 @@ class CollectorFlow(BaseThreading):
                     self.IN_PICKUP_COLLECTOR_timeout.set_timeout_limit(45)
                 elif self.collector_type == ENEMY:
                     self.IN_PICKUP_COLLECTOR_timeout.set_timeout_limit(80)
-                    self.puo.max_distance_from_target = 60
+                    self.puo.max_distance_from_target = 50
                 elif self.collector_type == MINERAL:
                     pass
                 logger.info(_("switch Flow to: BEFORE_PICKUP_COLLECTOR"))
@@ -237,12 +246,13 @@ class CollectorFlow(BaseThreading):
             if self.current_state == ST.IN_PICKUP_COLLECTOR:
                 if self.puo.pause_threading_flag:
                     logger.info(_("switch Flow to: AFTER_PICKUP_COLLECTOR"))
+                    self.add_log("None")
                     self.current_state = ST.AFTER_PICKUP_COLLECTOR
                 if self.IN_PICKUP_COLLECTOR_timeout.istimeout():
                     logger.info(f"IN_PICKUP_COLLECTOR timeout: {self.IN_PICKUP_COLLECTOR_timeout.timeout_limit}")
                     logger.info(f"collect in{self.collector_name} {self.collection_id} {self.collection_posi} failed.")
                     logger.info("switch Flow to: AFTER_PICKUP_COLLECTOR")
-                    self.add_failure("IN_PICKUP_COLLECTOR_TIMEOUT")
+                    self.add_log("IN_PICKUP_COLLECTOR_TIMEOUT")
                     self.current_state = ST.AFTER_PICKUP_COLLECTOR
                     self.stop_pickup()
                 if combat_lib.CSDL.get_combat_state():
