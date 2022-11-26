@@ -11,10 +11,11 @@ def default_trigger_func():
 
 
 def log_format(x, name):
+    # 格式化输出日志。
     variable_name_len = 15
     variable_name = name
     variable_content = str(x)
-    var_name = variable_name + (variable_name_len - len(variable_name)) * ' ' + '|'
+    var_name = variable_name + (variable_name_len - len(variable_name)) * ' ' + '|' # 垃圾实现，以后改 XCYD
     logger.debug(var_name + variable_content)
 
 
@@ -67,7 +68,7 @@ class Character:
         log_format(self.n, 'n')
         log_format(self.Epress_time, 'Epress_time')
         log_format(self.Ecd_time, 'Ecd_time')
-        logger.debug('---- character info end ---')
+        logger.debug('---- character info end ----')
 
     def _trigger_e_ready(self):
         if self.is_E_ready():
@@ -89,6 +90,9 @@ class Character:
         return True
 
     def _trigger_analyse(self):
+        """
+        将str分析为函数，并加入trigger。
+        """
         if self.triggers == 'e_ready':
             self.trigger = self._trigger_e_ready
         elif self.triggers == 'q_ready':
@@ -97,6 +101,11 @@ class Character:
             self.trigger = self._trigger_idle
 
     def get_Ecd_time(self):
+        """获得该角色E技能cd剩余时间。
+
+        Returns:
+            int: cd time
+        """
         t = self.Ecd_timer.get_diff_time()
         t = self.Ecd_time - t
         if t <= 0:
@@ -104,22 +113,36 @@ class Character:
         else:
             return t
 
-    def used_E(self):
+    def used_E(self)->None:
+        """
+        设置该角色已经使用E技能。
+        """
         if self.is_E_ready():
             self.Ecd_time = self.E_short_cd_time
             self.Ecd_timer.reset()
             self.Elast_timer.reset()
 
-    def used_Q(self):
+    def used_Q(self)->None:
+        """
+        设置该角色已经使用Q技能。
+        """
         self.Qlast_timer.reset()
 
-    def used_longE(self):
+    def used_longE(self)->None:
+        """
+        设置该角色已经使用长E技能。
+        """
         if self.is_E_ready():
             self.Ecd_time = self.E_long_cd_time
             self.Ecd_timer.reset()
             self.Elast_timer.reset()
 
-    def is_E_ready(self):
+    def is_E_ready(self)->bool:
+        """获得E技能是否冷却完毕。
+
+        Returns:
+            bool: 
+        """
         if self.get_Ecd_time() <= self.Ecd_float_time:
             return True
         else:
