@@ -11,7 +11,7 @@ itt = interaction_background.InteractionBGD()
 global priority_waypoints, priority_waypoints_list, priority_waypoints_array, idnum
 priority_waypoints, priority_waypoints_list, priority_waypoints_array, idnum = None, None, None, None
 priority_waypoints = load_json("priority_waypoints.json", default_path='assests')
-def load_pw():
+def load_pw(): # 加载json中的所有优先点
     global priority_waypoints, priority_waypoints_list, priority_waypoints_array, idnum
     priority_waypoints_list = []
     for i in priority_waypoints:
@@ -19,7 +19,13 @@ def load_pw():
     priority_waypoints_array = np.array(priority_waypoints_list)
     idnum = priority_waypoints[-1]["id"]
 
-def move_map(x, y):
+def move_map(x:int, y:int)->None:
+    """移动大地图
+
+    Args:
+        x (int): x方向上移动大小
+        y (int): y方向上移动大小
+    """
     x = x / 6
     y = y / 6
     for i in range(6):
@@ -31,7 +37,12 @@ def move_map(x, y):
     itt.move_to(-x * 6, -y * 6, relative=True)
 
 
-def move_navigation_to_center(object_name=img_manager.bigmap_AbyssMage):
+def move_navigation_to_center(object_name:img_manager.ImgIcon=img_manager.bigmap_AbyssMage)->None:
+    """移动导航点到中心，暂不使用。
+
+    Args:
+        object_name (ImgIcon, optional): _description_. Defaults to img_manager.bigmap_AbyssMage.
+    """
     # template = img_manager.get_img_from_name(object_name, reshape=False)
     posi = itt.get_img_position(object_name)
     dx = posi[0] - 1920 / 2
@@ -52,15 +63,32 @@ def move_navigation_to_center(object_name=img_manager.bigmap_AbyssMage):
     # itt.move_to(1920/2,1080/2)
 
 
-def get_navigation_posi(object_name=img_manager.bigmap_AbyssMage):
+def get_navigation_posi(object_name:img_manager.ImgIcon=img_manager.bigmap_AbyssMage)->list:
+    """获得导航点的坐标，暂不使用。
+
+    Args:
+        object_name (img_manager.ImgIcon, optional): _description_. Defaults to img_manager.bigmap_AbyssMage.
+
+    Returns:
+        _type_: _description_
+    """
     res_posi = itt.get_img_position(object_name)
     return res_posi
 
 
-def calculate_nearest_posi(posi_list, target_posi):
+def calculate_nearest_posi(posi_list:list, target_posi:list):
+    """计算最近坐标。
+
+    Args:
+        posi_list (list): _description_
+        target_posi (list): _description_
+
+    Returns:
+        _type_: _description_
+    """
     mind = 9999
     minposi = None
-    for plist in posi_list:
+    for plist in posi_list: # 垃圾实现，以后改 XCYD
         d = generic_lib.euclidean_distance(plist, target_posi)
         if d <= mind:
             minposi = plist
