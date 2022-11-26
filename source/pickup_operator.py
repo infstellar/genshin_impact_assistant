@@ -4,10 +4,8 @@ import img_manager
 import generic_lib
 from interaction_background import InteractionBGD
 from pdocr_api import ocr
-import posi_manager
 import timer_module
 import static_lib
-import pyautogui
 import cvAutoTrack
 import movement
 
@@ -27,19 +25,28 @@ class PickupOperator(BaseThreading):
         self.max_number_of_collector_loops = 200
         self.pickup_timer = timer_module.Timer()
         self.target_posi = []
-
+        self.target_name = 'unknow'
+        self.pickup_succ = False
+        self.max_distance_from_target = 20
     def continue_threading(self):
         if self.pause_threading_flag != False:
             self.pause_threading_flag = False
             self.pickup_timer.reset()
+            movement.change_view_to_posi(self.target_posi)
+            self.pickup_succ = False
+            self.pickup_item_list = []
     
     def pause_threading(self):
         if self.pause_threading_flag != True:
             self.pause_threading_flag = True
+            time.sleep(0.5)
             self.itt.key_up('w')
-    
+            
     def set_target_position(self, p):
         self.target_posi = p
+    
+    def set_target_name(self,x):
+        self.target_name = x
     
     def run(self):
         while 1:
@@ -55,11 +62,11 @@ class PickupOperator(BaseThreading):
 
             if not self.working_flag:
                 self.working_flag = True
-
+            
             ret = self.pickup_recognize()
 
             ret = self.auto_pickup()
-            if self.target_posi != []:
+            if self.target_posi:
                 self.cview_toward_target()
             if self.flicker_timer.get_diff_time() >= 5:
                 self.collector_flag = False
@@ -67,6 +74,11 @@ class PickupOperator(BaseThreading):
                 if self.reset_timer.get_diff_time() >= self.reset_time:
                     self.reset_timer.reset()
                     self.reset_collector_loops()
+            '''当成功找到物品且找不到下一个可能物品后自动停止。'''
+            if self.pickup_succ :
+                if self.collecor_loops > self.max_number_of_collector_loops:
+                    self.pause_threading()
+                    logger.info("已找到物品且无法找到下一个物品，停止拾取")
 
     def pickup_recognize(self):
         flag1 = False
@@ -93,6 +105,11 @@ class PickupOperator(BaseThreading):
                     # self.itt.delay(0)
                     self.pickup_item_list.append(res[0][1][0])
                     logger.info('pickup: ' + str(res[0][1][0]))
+                    if str(res[0][1][0]) in self.target_name:
+                        logger.info("已找到：" + self.target_name)
+                        self.pickup_succ = True
+                        
+                        # self.pause_threading()
                     if flag1:
                         self.itt.key_down('w')
                     return True
@@ -123,7 +140,8 @@ class PickupOperator(BaseThreading):
 
     def cview_toward_target(self):
         cp = cvAutoTrack.cvAutoTrackerLoop.get_position()[1:]
-        if generic_lib.euclidean_distance(cp,self.target_posi)>=20:
+        if generic_lib.euclidean_distance(cp,self.target_posi)>= self.max_distance_from_target:
+            movement.reset_view()
             logger.debug("too far from the target")
             while generic_lib.euclidean_distance(cvAutoTrack.cvAutoTrackerLoop.get_position()[1:], self.target_posi) >= 8:
                 if self.checkup_stop_func():
@@ -177,7 +195,10 @@ class PickupOperator(BaseThreading):
 
     def finding_collector(self):
         if self.collecor_loops < self.max_number_of_collector_loops:
-            pyautogui.middleClick()
+            movement.reset_view()
+            for i in range(5):
+                movement.cview(30, mode = movement.VERTICALLY)
+                time.sleep(0.2)
         while self.collecor_loops < self.max_number_of_collector_loops:
             if self.checkup_stop_func():
                 return 0
@@ -188,11 +209,14 @@ class PickupOperator(BaseThreading):
                 return 0
 
             self.collecor_loops += 1
+        time.sleep(1)
 
 
 if __name__ == '__main__':
+    
+    
     po = PickupOperator()
-    po.set_target_position([4813.5, -4180.5])
+    # po.set_target_position([4813.5, -4180.5])
     po.start()
     while 1:
         time.sleep(0.1)

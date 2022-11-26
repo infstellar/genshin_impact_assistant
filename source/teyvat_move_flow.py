@@ -6,16 +6,11 @@ from interaction_background import InteractionBGD
 import teyvat_move_controller
 import generic_lib
 import img_manager
-import pickup_operator
 import movement
 import posi_manager
 import big_map
-import combat_loop
 import pdocr_api
 from base_threading import BaseThreading
-import pyautogui
-import interaction_background
-import text_manager
 import timer_module
 import combat_lib
 import scene_manager
@@ -65,6 +60,7 @@ class TeyvatMoveFlow(BaseThreading):
         '''设置缩放'''
         scene_manager.switchto_bigmapwin()
         big_map.reset_map_size()
+        scene_manager.switchto_mainwin()
         
         # self.is_combat = False
 
@@ -140,12 +136,11 @@ class TeyvatMoveFlow(BaseThreading):
                 self.current_state = ST.IN_TEYVAT_TELEPORT
 
             if self.current_state == ST.IN_TEYVAT_TELEPORT:
-
                 curr_posi = cvAutoTrack.cvAutoTrackerLoop.get_position()[1:]
                 scene_manager.switchto_bigmapwin()
-                self.itt.delay(1)
-                tw_posi = big_map.nearest_big_map_tw_posi(curr_posi, self.target_posi)
-                if list(tw_posi) == [-1]:
+                # Obtain the coordinates of the transmission anchor closest to the target coordinates
+                tw_posi = big_map.nearest_big_map_tw_posi(curr_posi, self.target_posi) # 获得距离目标坐标最近的传送锚点坐标 
+                if len(tw_posi)==0:
                     logger.info("获取传送锚点失败，正在重试")
                     big_map.reset_map_size()
                     self.current_state = ST.IN_TEYVAT_TELEPORT
@@ -215,6 +210,8 @@ class TeyvatMoveFlow(BaseThreading):
                         if self.jump_timer.get_diff_time()>=10:
                             self.jump_timer.reset()
                             self.itt.key_press('spacebar')
+                            time.sleep(0.3)
+                            self.itt.key_press('spacebar') # fly
                         
                 if (self.motion_state == IN_FLY) or (self.motion_state == IN_CLIMB) or (self.motion_state == IN_WATER):
                     self.tmc.continue_threading()

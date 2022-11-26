@@ -1,7 +1,7 @@
 {
-  "fps": 1,
-  "max_number_of_enemy_loops": 1,
-  "auto_distance": true,
-  "auto_move": false,
-  "reset_time": 1000
+  "fps": 20,
+  "max_number_of_enemy_loops": 50,
+  "auto_distance": false,
+  "auto_move": true,
+  "reset_time": 40
 }

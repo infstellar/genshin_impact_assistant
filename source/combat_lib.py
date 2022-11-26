@@ -137,8 +137,8 @@ class CombatStatementDetectionLoop(BaseThreading):
             state = combat_statement_detection(self.itt)
             if state != self.current_state:
                 self.state_counter += 1
-                if self.current_state == True: # 切换到无敌人慢一点
-                    self.while_sleep = 0.5
+                if self.current_state == True: # 切换到无敌人慢一点, 8s
+                    self.while_sleep = 0.8
                 elif self.current_state == False: # 快速切换到遇敌
                     self.while_sleep = 0.02
             else:

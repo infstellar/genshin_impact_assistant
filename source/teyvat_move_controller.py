@@ -9,6 +9,7 @@ import small_map
 import movement
 import numpy as np
 import static_lib
+import timer_module
 '''
 提瓦特大陆移动辅助控制，包括：
 自动F控制 pickup_operator
@@ -64,10 +65,13 @@ class TeyvatMoveController(BaseThreading):
         else:
             return False
 
-    
+    def continue_threading(self):
+        if self.pause_threading_flag != False:
+            self.pause_threading_flag = False
+
     
     def caculate_next_priority_point(self, currentp, targetp):
-        float_distance = 30
+        float_distance = 35
         # 计算当前点到所有优先点的曼哈顿距离
         md = generic_lib.manhattan_distance_plist(currentp, self.priority_waypoints_array)
         nearly_pp_arg = np.argsort(md)
@@ -106,6 +110,7 @@ class TeyvatMoveController(BaseThreading):
             if not self.working_flag:
                 self.working_flag = True
             '''write your code below'''
+            
             self.current_posi = cvAutoTrack.cvAutoTrackerLoop.get_position()
             if not self.current_posi[0]==False:
                 self.current_posi=self.current_posi[1:]
@@ -115,7 +120,7 @@ class TeyvatMoveController(BaseThreading):
             p1 = self.caculate_next_priority_point(self.current_posi, self.target_positon)
             # print(p1)
             movement.change_view_to_posi(p1)
-            if not static_lib.W_KEYDOWN:
+            if (not static_lib.W_KEYDOWN) and (not self.pause_threading_flag):
                 self.itt.key_down('w')
                 
             if generic_lib.euclidean_distance(self.target_positon, cvAutoTrack.cvAutoTrackerLoop.get_position()[1:])<=10:

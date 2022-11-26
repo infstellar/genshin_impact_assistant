@@ -4,14 +4,15 @@ from interaction_background import InteractionBGD
 import posi_manager
 import math
 import numpy as np
+import scene_manager
 
 NORMAL = 0
 NEGATIVE_Y = 1
 NEGATIVE_X = 2
 NEGATIVE_XY = 3
+itt = InteractionBGD()
 
-
-def f_recognition(itt: InteractionBGD, mode='button_only'):
+def f_recognition(mode='button_only'):
     if itt.get_img_existence(img_manager.F_BUTTON):
         return True
     else:
@@ -59,13 +60,28 @@ def points_angle(p1, p2, coordinate=NORMAL):
         degree -= 360
     return degree
 
-
+def set_genshin_time(x=18): # 调整时间至夜晚
+    scene_manager.switchto_time_menu()
+    itt.move_to(img_manager.ui_time_menu_core.cap_center_position_xy[0],img_manager.ui_time_menu_core.cap_center_position_xy[1])
+    itt.left_down()
+    time.sleep(0.5)
+    itt.move_to(-10,0,relative=True)
+    time.sleep(0.2)
+    itt.move_to(0,-30,relative=True)
+    time.sleep(0.2)
+    for i in range(5):
+        itt.move_to(20,0,relative=True)
+        time.sleep(0.2)
+    itt.move_to(0,30,relative=True)
+    time.sleep(0.2)
+    itt.left_up()
+    itt.move_and_click(position = [1454,1021])
 
 if __name__ == '__main__':
-    itt = InteractionBGD()
-    p1 = [0,0]
-    p2 = np.array([[1,1],[2,2]])
-    euclidean_distance_plist(p1,p2)
+    set_genshin_time()
+    # p1 = [0,0]
+    # p2 = np.array([[1,1],[2,2]])
+    # euclidean_distance_plist(p1,p2)
     
     # print(points_angle([0, 0], [10, 10], NEGATIVE_Y))
     # print(points_angle([10, 10], [0, 0], NEGATIVE_Y))

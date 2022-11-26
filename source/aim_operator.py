@@ -32,6 +32,13 @@ class AimOperator(BaseThreading):
         self.reset_timer = Timer()
         self.kdwe_timer = Timer()
 
+    def pause_threading(self):
+        if self.pause_threading_flag != True:
+            self.pause_threading_flag = True
+            time.sleep(0.5)
+            self.itt.key_up('a')
+            self.itt.key_up('d')
+    
     def run(self):
         while 1:
 
@@ -152,6 +159,9 @@ class AimOperator(BaseThreading):
 
         if self.auto_move:
             if self.left_timer.get_diff_time() >= 15:
+                if self.checkup_stop_func():
+                    self.itt.key_up('a')
+                    return 0
                 self.itt.key_up('a')
                 self.itt.key_down('a')
                 self.left_timer.reset()

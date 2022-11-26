@@ -3,6 +3,7 @@ import os
 import sys
 import time  # 8药删了，qq了
 from loguru import logger
+import gettext
 
 time.time()  # 防自动删除
 
@@ -63,8 +64,11 @@ if sys.path[0] != root_path:
     sys.path.insert(0, root_path)
 if sys.path[1] != source_path:
     sys.path.insert(1, source_path)
-
-
+# load translation module
+l10n = gettext.translation("zh_CN", localedir="language/locale", languages=["zh_CN"])
+l10n.install()
+_ = l10n.gettext
+time.time()
 # 加载json
 def load_json(json_name='config.json', default_path='config'):
     return json.load(open(os.path.join(default_path, json_name), 'r', encoding='utf-8'))
@@ -125,7 +129,11 @@ def is_int(x):
         return True
 
 def save_json(x, json_name='config.json', default_path='config', sort_keys=True):
-    json.dump(x, open(os.path.join(default_path, json_name), 'w', encoding='utf-8'), sort_keys=sort_keys, indent=2,
+    if sort_keys:
+        json.dump(x, open(os.path.join(default_path, json_name), 'w', encoding='utf-8'), sort_keys=True, indent=2,
+              ensure_ascii=False)
+    else:
+        json.dump(x, open(os.path.join(default_path, json_name), 'w', encoding='utf-8'),
               ensure_ascii=False)
 
 
