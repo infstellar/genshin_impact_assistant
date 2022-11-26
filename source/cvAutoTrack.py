@@ -3,6 +3,7 @@ from util import *
 import threading
 import timer_module
 import generic_lib
+import scene_manager
 class AutoTracker:
     def __init__(self, dll_path: str):
         self.__lib = CDLL(dll_path)
@@ -96,9 +97,13 @@ cvAutoTracker = AutoTracker('source\\cvAutoTrack_7.2.3\\CVAUTOTRACK.dll')
 cvAutoTracker.init()
 logger.info('1) err' + str(cvAutoTracker.get_last_error()))
 
+
+
 class AutoTrackerLoop(threading.Thread):
     def __init__(self):
         super().__init__()
+        scene_manager.switchto_mainwin()
+        time.sleep(2)
         self.position = cvAutoTracker.get_position()
         self.last_position = self.position
         self.rotation = cvAutoTracker.get_rotation()
@@ -113,6 +118,7 @@ class AutoTrackerLoop(threading.Thread):
             if not self.position[0]:
                 # print("坐标获取失败")
                 self.position = (False,0,0)
+                self.in_excessive_error = True
                 continue
             if ct>=30:
                 self.last_position = self.position
@@ -139,6 +145,9 @@ class AutoTrackerLoop(threading.Thread):
 cvAutoTrackerLoop = AutoTrackerLoop()
 cvAutoTrackerLoop.start()
 time.sleep(1)
+def wait_until_no_excessive_error():
+    while cvAutoTrackerLoop.in_excessive_error:
+        time.sleep(1)
 # logger.info(cvAutoTracker.verison())
 
 # 以下是对被封装的类的简单演示。

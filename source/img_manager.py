@@ -11,7 +11,7 @@ F_BUTTON = 'F_BUTTON'
 
 
 class ImgIcon:
-    def __init__(self, name, path, is_bbg=True, matching_rate=None, alpha=None, bbg_posi=None, cap_posi=[1080, 1920],
+    def __init__(self, name, path, is_bbg=True, matching_rate=None, alpha=None, bbg_posi=None, cap_posi=[0, 0, 1080, 1920],
                  jpgmode=2, threshold=0.95):
         self.name = name
         self.path = path
@@ -21,11 +21,12 @@ class ImgIcon:
         self.bbg_posi = bbg_posi
         self.jpgmode = jpgmode
         self.threshold = threshold
+        
         if cap_posi == 'bbg':
             self.cap_posi = self.bbg_posi
         else:
             self.cap_posi = cap_posi
-
+        self.cap_center_position_xy = [(self.cap_posi[1]+self.cap_posi[3])/2, (self.cap_posi[0]+self.cap_posi[2])/2]
         self.image = cv2.imread(self.path)
 
         if self.is_bbg:
@@ -64,6 +65,13 @@ ui_main_win = ImgIcon(name="ui_main_win", path="assests\\imgs\\common\\ui\\emerg
                       is_bbg=True, bbg_posi=[34, 39, 78, 73], cap_posi='bbg')
 ui_bigmap_win = ImgIcon(name="ui_bigmap_win", path="assests\\imgs\\common\\ui\\bigmap.jpg",
                         is_bbg=True, bbg_posi=[36, 1591, 59, 1614], cap_posi='bbg')
+ui_esc_menu = ImgIcon(name="ui_esc_menu", path="assests\\imgs\\common\\ui\\esc_menu.jpg",
+                        is_bbg=True, bbg_posi=[1001, 18, 1058, 72], cap_posi='bbg')
+ui_switch_to_time_menu = ImgIcon(name="ui_switch_to_time_menu", path="assests\\imgs\\common\\ui\\switch_to_time_menu.jpg",
+                        is_bbg=True, bbg_posi=[689, 20, 741, 77], cap_posi='bbg')
+ui_time_menu_core = ImgIcon(name="ui_time_menu_core", path="assests\\imgs\\common\\ui\\time_menu_core.jpg",
+                        is_bbg=True, bbg_posi=[483, 1421, 521, 1459], cap_posi='bbg')
+
 matching_rate_dict = {
     "coming_out_by_space": 0.9,
     "IN_DOMAIN": 0.98,
@@ -186,5 +194,5 @@ if __name__ == '__main__':
     # cv2.imwrite("assests\\imgs\\common\\coming_out_by_space.jpg", img)
     # get_img_from_imgname(COMING_OUT_BY_SPACE)
     # pname = F_BUTTON
-    p = auto_import_img("assests\\imgs\\common\\ui\\" + "bigmap" + ".jpg", "swimming")
+    p = auto_import_img("assests\\imgs\\common\\ui\\" + "time_menu_core" + ".jpg", "swimming")
     print(p)
