@@ -17,6 +17,8 @@ import static_lib
 import vkcode
 from unit import *
 
+IMG_RATE=0
+IMG_POSI=1
 
 class InteractionBGD:
     """
@@ -143,8 +145,8 @@ class InteractionBGD:
         matching_rate = max_val
         return matching_rate, top_left, bottom_right
 
-    @staticmethod
-    def similar_img(img, target, is_gray=False, is_show_res: bool = False):
+    
+    def similar_img(self, img, target, is_gray=False, is_show_res: bool = False, ret_mode = IMG_RATE):
 
         if is_gray:
             img = cv2.cvtColor(img, cv2.COLOR_BGRA2GRAY)
@@ -159,10 +161,13 @@ class InteractionBGD:
             cv2.waitKey()
         # 在窗口截图中匹配位置画红色方框
         matching_rate = max_val
-        return matching_rate
+        if ret_mode == IMG_RATE:
+            return matching_rate
+        elif ret_mode == IMG_POSI:
+            return matching_rate, max_loc
 
-    @staticmethod
-    def similar_img_pixel(img, target, is_gray=False):
+    
+    def similar_img_pixel(self, img, target, is_gray=False):
         img1 = img.astype('int')
         target1 = target.astype('int')
         # cv2.imshow('1',img)
@@ -173,10 +178,30 @@ class InteractionBGD:
         matching_rate = 1 - s / ((img1.shape[0] * img1.shape[1]) * 765)
         return matching_rate
 
-    def get_img_existence(self, imgname, jpgmode=2, is_gray=False, min_rate=0.95, is_log=False):
+    def get_img_position(self, imgname, jpgmode=2, is_gray=False, min_rate=0.95, is_log=False):
         upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
         if imgname in img_manager.alpha_dict:
             cap = self.capture()
+            cap = self.png2jpg(cap, bgcolor='black', channel='ui', alpha_num=img_manager.alpha_dict[imgname])
+        else:
+            cap = self.capture(posi=posi_manager.get_posi_from_str(imgname), jpgmode=jpgmode)
+
+        matching_rate, max_loc = self.similar_img(img_manager.get_img_from_name(imgname), cap, ret_mode=IMG_POSI)
+
+        if is_log:
+            logger.debug(
+                'imgname: ' + imgname + 'max_loc: ' + str(max_loc) + ' |function name: ' + upper_func_name)
+
+        if matching_rate >= min_rate:
+            return max_loc
+        else:
+            return False
+        
+        
+    def get_img_existence(self, imgname, jpgmode=2, posi=None, is_gray=False, min_rate=0.95, is_log=False):
+        upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
+        if imgname in img_manager.alpha_dict:
+            cap = self.capture(posi=posi)
             cap = self.png2jpg(cap, bgcolor='black', channel='ui', alpha_num=img_manager.alpha_dict[imgname])
         else:
             cap = self.capture(posi=posi_manager.get_posi_from_str(imgname), jpgmode=jpgmode)
@@ -449,7 +474,7 @@ if __name__ == '__main__':
     # print(win32api.GetCursorPos())
     while 1:
         time.sleep(1)
-        print(ib.get_img_existence(img_manager.F_BUTTON, jpgmode=2))
+        print(ib.get_img_position(img_manager.F_BUTTON, jpgmode=2))
         # print(ib.get_img_existence(img_manager.USE_20X2RESIN_DOBLE_CHOICES))
         # ib.appear_then_click(imgname=img_manager.USE_20RESIN_DOBLE_CHOICES)
         # ib.move_to(100,100)

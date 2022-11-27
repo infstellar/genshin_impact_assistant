@@ -114,7 +114,7 @@ def loadfileP(filename):
 
 
 def savefileP(filename, item):
-    with open('wordlist//' + filename + '.wl', 'w+b') as fp:  # 把 t 对象存到文件中
+    with open('wordlist//' + filename + '.wl', 'w+b') as fp:
         pickle.dump(item, fp)
 
 
