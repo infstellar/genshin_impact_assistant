@@ -1,7 +1,4 @@
-import time
-
 import pyautogui
-
 import combat_loop
 import flow_state as ST
 import generic_lib
@@ -14,7 +11,7 @@ import text_manager as textM
 import timer_module
 import yolox_api
 from base_threading import BaseThreading
-from unit import *
+from util import *
 
 
 class DomainFlow(BaseThreading):
@@ -38,7 +35,9 @@ class DomainFlow(BaseThreading):
 
         domain_times = domain_json["domain_times"]
         if domain_times == 0:
-            domain_times = int(input("请输入秘境次数"))
+            x = input("请输入秘境次数")
+            # x.replace(']','')
+            domain_times = int(x)
         self.lockOnFlag = 0
         self.move_num = 2.5
 
@@ -132,7 +131,7 @@ class DomainFlow(BaseThreading):
 
             if pdocr_api.ocr.get_text_position(cap, textM.text(textM.clld)) != -1:
                 break
-            if self.itt.get_img_existence(imgname=img_manager.IN_DOMAIN):
+            if self.itt.get_img_existence(img_manager.IN_DOMAIN):
                 break
             time.sleep(1)
             # cap=self.itt.capture(jpgmode=2)
@@ -151,7 +150,7 @@ class DomainFlow(BaseThreading):
         time.sleep(2)
         movement.reset_view()
         time.sleep(3)
-        movement.view_to_angle(-90)
+        movement.view_to_angle_domain(-90)
 
         self.current_state = ST.BEFORE_MOVETO_CHALLENGE
 
@@ -160,10 +159,10 @@ class DomainFlow(BaseThreading):
             is_tree = self.align_to_tree()
             self.ahead_timer.reset()
             if not is_tree:
-                movement.view_to_angle(-90)
+                movement.view_to_angle_domain(-90)
 
                 if self.isLiYue:  # barrier treatment
-                    if self.move_timer.getDiffTime() >= 20:
+                    if self.move_timer.get_diff_time() >= 20:
                         direc = not direc
                         self.move_timer.reset()
                     if direc:
@@ -180,11 +179,11 @@ class DomainFlow(BaseThreading):
     def Flow_IN_MOVETO_TREE(self):
         self.itt.key_down('w')
         while 1:
-            if self.ahead_timer.getDiffTime() >= 5:
+            if self.ahead_timer.get_diff_time() >= 5:
                 self.itt.key_press('spacebar')
                 self.ahead_timer.reset()
 
-            movement.view_to_angle(-90)
+            movement.view_to_angle_domain(-90)
 
             # time.sleep(0.2)
 
@@ -196,25 +195,21 @@ class DomainFlow(BaseThreading):
 
             t = self.fast_move_timer.loop_time()  # max check up speed: 1/10 second
             if t <= 1 / 10:
-                time.sleep(1 / 15 - t)
+                time.sleep(1 / 10 - t)
 
             # if pdocr_api.ocr.get_text_position(cap, textM.text(textM.claim_rewards)) != -1:
             #     self.current_state = ST.END_MOVETO_TREE
             #     return 0
 
-        self.current_state = ST.END_MOVETO_TREE
+        self.current_state = ST.AFTER_MOVETO_TREE
 
     def Flow_IN_ATTAIN_REAWARD(self):
-        self.itt.key_up('w')
-
-        self.itt.key_press('f')
-        time.sleep(2)
 
         while 1:
             if self.resin_mode == '40':
-                self.itt.appear_then_click(imgname=img_manager.USE_20X2RESIN_DOBLE_CHOICES)
+                self.itt.appear_then_click(img_manager.USE_20X2RESIN_DOBLE_CHOICES)
             elif self.resin_mode == '20':
-                self.itt.appear_then_click(imgname=img_manager.USE_20RESIN_DOBLE_CHOICES)
+                self.itt.appear_then_click(img_manager.USE_20RESIN_DOBLE_CHOICES)
 
             if pdocr_api.ocr.get_text_position(self.itt.capture(jpgmode=3), textM.text(textM.domain_obtain)) != -1:
                 break
@@ -255,7 +250,7 @@ class DomainFlow(BaseThreading):
                 self.current_state = ST.IN_MOVETO_CHALLENGE
 
             elif self.current_state == ST.IN_MOVETO_CHALLENGE:
-                movement.view_to_angle(-90)
+                movement.view_to_angle_domain(-90)
                 if self.fast_mode:
                     pass
                 else:
@@ -314,12 +309,28 @@ class DomainFlow(BaseThreading):
 
             elif self.current_state == ST.IN_MOVETO_TREE:
                 self.Flow_IN_MOVETO_TREE()
+                self.itt.key_up('w')
+                self.current_state = ST.AFTER_MOVETO_TREE
+
+            elif self.current_state == ST.AFTER_MOVETO_TREE:
+                time.sleep(0.2)
+                if not generic_lib.f_recognition():
+                    self.current_state = ST.END_MOVETO_TREE
+                else:
+                    self.itt.key_up('w')
+                    self.itt.key_press('f')
 
             elif self.current_state == ST.END_MOVETO_TREE:
                 self.current_state = ST.INIT_ATTAIN_REAWARD
 
             elif self.current_state == ST.INIT_ATTAIN_REAWARD:
-                self.current_state = ST.IN_ATTAIN_REAWARD
+                self.current_state = ST.BEFORE_ATTAIN_REAWARD
+
+            elif self.current_state == ST.BEFORE_ATTAIN_REAWARD:
+                self.itt.key_press('f')
+                time.sleep(0.2)
+                if not generic_lib.f_recognition():
+                    self.current_state = ST.IN_ATTAIN_REAWARD
 
             elif self.current_state == ST.IN_ATTAIN_REAWARD:
                 self.Flow_IN_ATTAIN_REAWARD()
@@ -378,7 +389,7 @@ class DomainFlow(BaseThreading):
         # cv2.imshow('123',cap)
         # cv2.waitKey(0)
         addition_info, ret2 = yolox_api.yolo_tree.predicte(cap)
-        logger.debug(addition_info)
+        # logger.debug(addition_info)
         if addition_info is not None:
             if addition_info[0][1][0] >= 0.5:
                 tree_x, tree_y = yolox_api.yolo_tree.get_center(addition_info)
@@ -386,7 +397,7 @@ class DomainFlow(BaseThreading):
         return False
 
     def align_to_tree(self):
-        movement.view_to_angle(-90)
+        movement.view_to_angle_domain(-90)
         t_posi = self.get_tree_posi()
         if t_posi:
             tx, ty = self.itt.get_mouse_point()

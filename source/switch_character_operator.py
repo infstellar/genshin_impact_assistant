@@ -8,14 +8,14 @@ import tastic_operator
 from base_threading import BaseThreading
 from interaction_background import InteractionBGD
 from timer_module import Timer
-from unit import *
+from util import *
 
 
 def sort_flag_1(x: character.Character):
     return x.priority
 
 
-class Switch_Character_Operator(BaseThreading):
+class SwitchCharacterOperator(BaseThreading):
     def __init__(self, chara_list: list[character.Character]):
         super().__init__()
         self.setName('Switch_Character_Operator')
@@ -74,10 +74,10 @@ class Switch_Character_Operator(BaseThreading):
 
     def _switch_character(self, x: int):
         pyautogui.click(button='middle')
-        t = self.switch_timer.getDiffTime()
+        t = self.switch_timer.get_diff_time()
         self.tastic_operator.chara_waiting()
         logger.debug('try switching to ' + str(x))
-        for i in range(120): # 12 sec
+        for i in range(120):  # 12 sec
             if self.checkup_stop_func():
                 return 0
             combat_lib.unconventionality_situlation_detection(self.itt)

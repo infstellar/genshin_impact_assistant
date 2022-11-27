@@ -28,8 +28,8 @@ from yolox.utils import (
 )
 
 
-def per_class_AR_table(coco_eval, class_names=COCO_CLASSES, headers=["class", "AR"], colums=6):
-    per_class_AR = {}
+def per_class_ar_table(coco_eval, class_names=COCO_CLASSES, headers=["class", "AR"], colums=6):
+    per_class_ar = {}
     recalls = coco_eval.eval["recall"]
     # dimension of recalls: [TxKxAxM]
     # recall has dims (iou, cls, area range, max dets)
@@ -39,10 +39,10 @@ def per_class_AR_table(coco_eval, class_names=COCO_CLASSES, headers=["class", "A
         recall = recalls[:, idx, 0, -1]
         recall = recall[recall > -1]
         ar = np.mean(recall) if recall.size else float("nan")
-        per_class_AR[name] = float(ar * 100)
+        per_class_ar[name] = float(ar * 100)
 
-    num_cols = min(colums, len(per_class_AR) * len(headers))
-    result_pair = [x for pair in per_class_AR.items() for x in pair]
+    num_cols = min(colums, len(per_class_ar) * len(headers))
+    result_pair = [x for pair in per_class_ar.items() for x in pair]
     row_pair = itertools.zip_longest(*[result_pair[i::num_cols] for i in range(num_cols)])
     table_headers = headers * (num_cols // len(headers))
     table = tabulate(
@@ -51,10 +51,10 @@ def per_class_AR_table(coco_eval, class_names=COCO_CLASSES, headers=["class", "A
     return table
 
 
-def per_class_AP_table(coco_eval, class_names=COCO_CLASSES, headers=None, colums=6):
+def per_class_ap_table(coco_eval, class_names=COCO_CLASSES, headers=None, colums=6):
     if headers is None:
         headers = ["class", "AP"]
-    per_class_AP = {}
+    per_class_ap = {}
     precisions = coco_eval.eval["precision"]
     # dimension of precisions: [TxRxKxAxM]
     # precision has dims (iou, recall, cls, area range, max dets)
@@ -66,10 +66,10 @@ def per_class_AP_table(coco_eval, class_names=COCO_CLASSES, headers=None, colums
         precision = precisions[:, :, idx, 0, -1]
         precision = precision[precision > -1]
         ap = np.mean(precision) if precision.size else float("nan")
-        per_class_AP[name] = float(ap * 100)
+        per_class_ap[name] = float(ap * 100)
 
-    num_cols = min(colums, len(per_class_AP) * len(headers))
-    result_pair = [x for pair in per_class_AP.items() for x in pair]
+    num_cols = min(colums, len(per_class_ap) * len(headers))
+    result_pair = [x for pair in per_class_ap.items() for x in pair]
     row_pair = itertools.zip_longest(*[result_pair[i::num_cols] for i in range(num_cols)])
     table_headers = headers * (num_cols // len(headers))
     table = tabulate(
@@ -85,15 +85,15 @@ class COCOEvaluator:
     """
 
     def __init__(
-        self,
-        dataloader,
-        img_size: int,
-        confthre: float,
-        nmsthre: float,
-        num_classes: int,
-        testdev: bool = False,
-        per_class_AP: bool = False,
-        per_class_AR: bool = False,
+            self,
+            dataloader,
+            img_size: int,
+            confthre: float,
+            nmsthre: float,
+            num_classes: int,
+            testdev: bool = False,
+            per_class_AP: bool = False,
+            per_class_AR: bool = False,
     ):
         """
         Args:
@@ -116,8 +116,8 @@ class COCOEvaluator:
         self.per_class_AR = per_class_AR
 
     def evaluate(
-        self, model, distributed=False, half=False, trt_file=None,
-        decoder=None, test_size=None, return_outputs=False
+            self, model, distributed=False, half=False, trt_file=None,
+            decoder=None, test_size=None, return_outputs=False
     ):
         """
         COCO average precision (AP) Evaluation. Iterate inference on the test dataset
@@ -158,7 +158,7 @@ class COCOEvaluator:
             model = model_trt
 
         for cur_iter, (imgs, _, info_imgs, ids) in enumerate(
-            progress_bar(self.dataloader)
+                progress_bar(self.dataloader)
         ):
             with torch.no_grad():
                 imgs = imgs.type(tensor_type)
@@ -207,7 +207,7 @@ class COCOEvaluator:
         data_list = []
         image_wise_data = defaultdict(dict)
         for (output, img_h, img_w, img_id) in zip(
-            outputs, info_imgs[0], info_imgs[1], ids
+                outputs, info_imgs[0], info_imgs[1], ids
         ):
             if output is None:
                 continue
@@ -257,7 +257,7 @@ class COCOEvaluator:
 
         logger.info("Evaluate in main process...")
 
-        annType = ["segm", "bbox", "keypoints"]
+        ann_type = ["segm", "bbox", "keypoints"]
 
         inference_time = statistics[0].item()
         nms_time = statistics[1].item()
@@ -270,9 +270,9 @@ class COCOEvaluator:
             [
                 "Average {} time: {:.2f} ms".format(k, v)
                 for k, v in zip(
-                    ["forward", "NMS", "inference"],
-                    [a_infer_time, a_nms_time, (a_infer_time + a_nms_time)],
-                )
+                ["forward", "NMS", "inference"],
+                [a_infer_time, a_nms_time, (a_infer_time + a_nms_time)],
+            )
             ]
         )
 
@@ -280,37 +280,37 @@ class COCOEvaluator:
 
         # Evaluate the Dt (detection) json comparing with the ground truth
         if len(data_dict) > 0:
-            cocoGt = self.dataloader.dataset.coco
+            coco_gt = self.dataloader.dataset.coco
             # TODO: since pycocotools can't process dict in py36, write data to json file.
             if self.testdev:
                 json.dump(data_dict, open("./yolox_testdev_2017.json", "w"))
-                cocoDt = cocoGt.loadRes("./yolox_testdev_2017.json")
+                coco_dt = coco_gt.loadRes("./yolox_testdev_2017.json")
             else:
                 _, tmp = tempfile.mkstemp()
                 json.dump(data_dict, open(tmp, "w"))
-                cocoDt = cocoGt.loadRes(tmp)
+                coco_dt = coco_gt.loadRes(tmp)
             try:
-                from yolox.layers import COCOeval_opt as COCOeval
+                from yolox.layers import COCOEvalOpt as COCOeval
             except ImportError:
                 from pycocotools.cocoeval import COCOeval
 
                 logger.warning("Use standard COCOeval.")
 
-            cocoEval = COCOeval(cocoGt, cocoDt, annType[1])
-            cocoEval.evaluate()
-            cocoEval.accumulate()
+            coco_eval = COCOeval(coco_gt, coco_dt, ann_type[1])
+            coco_eval.evaluate()
+            coco_eval.accumulate()
             redirect_string = io.StringIO()
             with contextlib.redirect_stdout(redirect_string):
-                cocoEval.summarize()
+                coco_eval.summarize()
             info += redirect_string.getvalue()
-            cat_ids = list(cocoGt.cats.keys())
-            cat_names = [cocoGt.cats[catId]['name'] for catId in sorted(cat_ids)]
+            cat_ids = list(coco_gt.cats.keys())
+            cat_names = [coco_gt.cats[catId]['name'] for catId in sorted(cat_ids)]
             if self.per_class_AP:
-                AP_table = per_class_AP_table(cocoEval, class_names=cat_names)
-                info += "per class AP:\n" + AP_table + "\n"
+                ap_table = per_class_ap_table(coco_eval, class_names=cat_names)
+                info += "per class AP:\n" + ap_table + "\n"
             if self.per_class_AR:
-                AR_table = per_class_AR_table(cocoEval, class_names=cat_names)
-                info += "per class AR:\n" + AR_table + "\n"
-            return cocoEval.stats[0], cocoEval.stats[1], info
+                ar_table = per_class_ar_table(coco_eval, class_names=cat_names)
+                info += "per class AR:\n" + ar_table + "\n"
+            return coco_eval.stats[0], coco_eval.stats[1], info
         else:
             return 0, 0, info

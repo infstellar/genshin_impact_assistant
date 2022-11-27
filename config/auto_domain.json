@@ -1,6 +1,6 @@
 {
-    "domain_times":0,
-    "resin":"20",
-    "isLiYueDomain":false,
-    "fast_mode":true
+  "domain_times": 1,
+  "resin": "20",
+  "isLiYueDomain": false,
+  "fast_mode": true
 }

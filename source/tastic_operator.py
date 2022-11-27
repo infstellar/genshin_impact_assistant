@@ -7,7 +7,7 @@ from base_threading import BaseThreading
 from character import Character
 from interaction_background import InteractionBGD
 from timer_module import Timer
-from unit import *
+from util import *
 
 E_STRICT_MODE = True  # may cause more performance overhead
 
@@ -92,7 +92,7 @@ class TasticOperator(BaseThreading):
 
         situation_code = -1
 
-        while self.itt.get_img_existence(img_manager.COMING_OUT_BY_SPACE, jpgmode=2, min_rate=0.8):
+        while self.itt.get_img_existence(img_manager.COMING_OUT_BY_SPACE):
             if self.checkup_stop_func():
                 return 0
             situation_code = 1
@@ -104,7 +104,7 @@ class TasticOperator(BaseThreading):
 
     def chara_waiting(self, mode=0):
         self.unconventionality_situation_detection()
-        if (mode == 0) and self.is_e_available() and (self.enter_timer.getDiffTime() <= 1):
+        if (mode == 0) and self.is_e_available() and (self.enter_timer.get_diff_time() <= 1):
             logger.debug('skip waiting')
             return 0
         while self.get_character_busy() and (not self.checkup_stop_func()):
@@ -240,12 +240,14 @@ class TasticOperator(BaseThreading):
 
     def is_q_ready(self):
         cap = self.itt.capture(posi=posi_manager.posi_chara_q)
-        cap = self.itt.png2jpg(cap, channel='ui', alpha_num = 200)
+        cap = self.itt.png2jpg(cap, channel='ui', alpha_num=200)  # BEFOREV3D1
+        # cap = self.itt.png2jpg(cap, channel='bg', alpha_num=160)
+        # img_manager.qshow(cap)
         # p = posi_manager.posi_chara_q_point
         if cap.max() > 10:
             # print(cap.max())
             return True
-        
+
         else:
             # print(cap.max())
             return False
@@ -334,7 +336,7 @@ class TasticOperator(BaseThreading):
                     self.do_aim()
                 elif tas == 'rr':
                     self.do_unaim()
-                elif isint(tas):
+                elif is_int(tas):
                     self.itt.delay(int(tas) / 1000)
                 elif tas == '>':
                     break

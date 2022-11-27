@@ -1,11 +1,10 @@
 {
-    "version":"v0.2.4",
-
-    "teamfile":"team.json",
-    "env_floder_path":"..\\environment",
-    "device_torch":"auto",
-    "device_paddle":"cpu",
-    "corr_degree":0.95,
-    "DEBUG":false
-    
+  "version": "v0.2.4",
+  "teamfile": "team.json",
+  "env_floder_path": "..\\environment",
+  "device_torch": "auto",
+  "device_paddle": "cpu",
+  "corr_degree": 0.95,
+  "DEBUG": true,
+  "ChromelessWindow":false
 }
