@@ -123,7 +123,7 @@ class SettingPage(Page):
 
                 self.put_setting(pin.pin['file'])  # 配置配置页
 
-            await asyncio.sleep(0.1)
+            time.sleep(1)
 
     def put_setting(self, name=''):
         self.file_name = name
