@@ -54,21 +54,29 @@ class AimOperator(BaseThreading):
             if not self.working_flag:
                 self.working_flag = True
 
-            t = self.loop_timer.loop_time()
+            t = self.loop_timer.loop_time() # 设置最大检查时间
             if t <= self.fps:
                 time.sleep(self.fps - t)
 
-            ret = self.auto_aim()
+            ret = self.auto_aim() # 自动瞄准
             if ret == -1:
-                self.enemy_flag = False
-                self.finding_enemy()
-                if self.reset_timer.get_diff_time() >= self.reset_time:
+                self.enemy_flag = False # 没找到敌人
+                self.finding_enemy() # 寻找敌人
+                if self.reset_timer.get_diff_time() >= self.reset_time: # 重置检测次数
                     self.reset_timer.reset()
                     self.reset_enemy_loops()
             elif ret <= 30 and self.auto_distance:
-                self.keep_distance_with_enemy()
+                self.keep_distance_with_enemy() # 与敌人保持距离
 
     def get_enemy_feature(self, ret_mode=1):
+        """获得敌人位置
+
+        Args:
+            ret_mode (int, optional): _description_. Defaults to 1.
+
+        Returns:
+            _type_: _description_
+        """
         if self.checkup_stop_func():
             return 0
         cap = self.itt.capture()
@@ -86,10 +94,10 @@ class AimOperator(BaseThreading):
         _, imsrc2 = cv2.threshold(imsrc[:, :, 2], 1, 255, cv2.THRESH_BINARY)
         # cv2.imshow('123',retimg)
         # cv2.waitKey(100)
-        if ret_mode == 1:
+        if ret_mode == 1: # 返回点坐标
             ret_point = img_manager.get_rect(imsrc2, orsrc, ret_mode=2)
             return ret_point
-        elif ret_mode == 2:
+        elif ret_mode == 2: # 返回高度差
             ret_rect = img_manager.get_rect(imsrc2, orsrc, ret_mode=0)
             if ret_rect is None:
                 return None
@@ -99,24 +107,24 @@ class AimOperator(BaseThreading):
         # time.sleep(0.1)
         if self.checkup_stop_func():
             return 0
-        ret_points = self.get_enemy_feature()
+        ret_points = self.get_enemy_feature() # 获得敌方血条坐标
         points_length = []
         if len(ret_points) == 0:
             return -1
         else:
             if not self.enemy_flag:
-                self.reset_enemy_loops()
+                self.reset_enemy_loops() # 如果有敌人，重置搜索敌人次数
                 self.enemy_flag = True
 
         for point in ret_points:
             mx, my = self.itt.get_mouse_point()
             points_length.append((point[0] - mx) ** 2 + (point[1] - my) ** 2)
 
-        closest_point = ret_points[points_length.index(min(points_length))]
+        closest_point = ret_points[points_length.index(min(points_length))] # 获得距离鼠标坐标最近的一个坐标
         px, py = closest_point
         mx, my = self.itt.get_mouse_point()
         px = (px - mx) / 2.4
-        py = (py - my) / 2 + 35
+        py = (py - my) / 2 + 35 # 获得鼠标坐标偏移量
         # print(px,py)
 
         self.itt.move_to(px, py, relative=True)
@@ -125,8 +133,8 @@ class AimOperator(BaseThreading):
 
     def finding_enemy(self):
         if self.enemy_loops < self.max_number_of_enemy_loops:
-            pyautogui.middleClick()
-        while self.enemy_loops < self.max_number_of_enemy_loops:
+            pyautogui.middleClick() # 重置视角
+        while self.enemy_loops < self.max_number_of_enemy_loops: # 当搜索敌人次数小于最大限制次数时，开始搜索
             if self.checkup_stop_func():
                 return 0
             self.itt.move_to(50, 0, relative=True)
@@ -142,7 +150,7 @@ class AimOperator(BaseThreading):
     def reset_enemy_loops(self):
         self.enemy_loops = 0
 
-    def keep_distance_with_enemy(self):  # 10px
+    def keep_distance_with_enemy(self):  # 期望敌方血条像素高度为6px # 与敌人保持距离
         target_px = 6
         if self.kdwe_timer.get_diff_time() < 1:
             return 0
@@ -153,12 +161,12 @@ class AimOperator(BaseThreading):
             if px is None:
                 return 0
             if px < target_px:
-                movement.move(movement.AHEAD, distance=target_px - px)
+                movement.move(movement.AHEAD, distance=target_px - px) # 
             elif px > target_px + 1:
                 movement.move(movement.BACK, distance=px - target_px)
 
-        if self.auto_move:
-            if self.left_timer.get_diff_time() >= 15:
+        if self.auto_move: # 绕敌旋转
+            if self.left_timer.get_diff_time() >= 15: # 每15秒重新按一次a
                 if self.checkup_stop_func():
                     self.itt.key_up('a')
                     return 0

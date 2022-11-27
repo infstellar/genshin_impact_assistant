@@ -148,7 +148,7 @@ class TeyvatMoveFlow(BaseThreading):
                 self.itt.move_to(tw_posi[0], tw_posi[1])
                 self.itt.delay(0.2)
                 self.itt.left_click()
-                self.itt.delay(1)
+                self.itt.delay(0.6)
 
                 p1 = pdocr_api.ocr.get_text_position(self.itt.capture(jpgmode=0), "传送锚点")
                 if p1 != -1:
