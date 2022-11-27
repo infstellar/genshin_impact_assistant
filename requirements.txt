@@ -1,34 +1,31 @@
 # TODO: Update with exact module version
-numpy~=1.23.4
+numpy>=1.23.4
 torch>=1.7
-loguru~=0.6.0
-tqdm~=4.64.1
-torchvision~=0.13.1
-tabulate~=0.9.0
+loguru>=0.6.0
+tqdm>=4.64.1
+torchvision>=0.13.1
+tabulate>=0.9.0
 
 # verified versions
 # pycocotools corresponds to https://github.com/ppwwyyxx/cocoapi
-pycocotools>=2.0.2
+# pycocotools
 
 # paddleocr
-paddleocr
-paddlepaddle
+paddleocr>=2.6.0.3
+paddlepaddle>=2.3.2
 
 thop
 
-opencv-python~=4.6.0.66
-Pillow
-pypiwin32
+opencv-python>=4.6.0.66
+Pillow>=9.2.0
+pypiwin32>=223
 pywin32
-pytweening
-matplotlib
-keyboard
-scipy
-
-PyAutoGUI
-PyQt5
-
+pytweening>=1.0.4
+matplotlib>=3.6.1
+keyboard>=0.13.5
+scipy>=1.9.3
 py7zr
 
-# pywebio
+PyAutoGUI>=0.9.53
+PyQt5>=5.15.7
 pywebio
