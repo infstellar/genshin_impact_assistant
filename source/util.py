@@ -80,11 +80,11 @@ config_json = load_json("config.json")
 DEBUG_MODE = config_json["DEBUG"] if "DEBUG" in config_json else False
 
 # 设置env path
-env_folder_path = config_json["env_floder_path"]
-env_path = os.path.abspath(os.path.join(root_path, env_folder_path))
-if True:
-    if sys.path[2] != env_path:
-        sys.path.insert(2, env_path)
+# env_folder_path = config_json["env_floder_path"]
+# env_path = os.path.abspath(os.path.join(root_path, env_folder_path))
+# if True:
+#     if sys.path[2] != env_path:
+#         sys.path.insert(2, env_path)
 
 # 配置logger
 logger.remove(handler_id=None)
@@ -99,8 +99,8 @@ if not os.path.exists(root_path):
     logger.error("目录不存在：" + root_path + " 请检查")
 if not os.path.exists(source_path):
     logger.error("目录不存在：" + source_path + " 请检查")
-if not os.path.exists(env_path):
-    logger.error("目录不存在：" + env_path + " 请检查")
+# if not os.path.exists(env_path):
+#     logger.error("目录不存在：" + env_path + " 请检查")
 
 import ctypes, pickle
 
