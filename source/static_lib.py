@@ -4,7 +4,16 @@ from ctypes.wintypes import RECT
 import numpy as np
 
 from timer_module import Timer
-from unit import *
+from util import *
+
+
+def get_handle():
+    handle = ctypes.windll.user32.FindWindowW(None, '原神')
+    if handle != 0:
+        return handle
+    handle = ctypes.windll.user32.FindWindowW(None, 'Genshin Impact')
+    if handle != 0:
+        return handle
 
 
 class ScreenCapture:
@@ -24,7 +33,7 @@ class ScreenCapture:
         self.PostMessageW = ctypes.windll.user32.PostMessageW
         self.MapVirtualKeyW = ctypes.windll.user32.MapVirtualKeyW
         self.VkKeyScanA = ctypes.windll.user32.VkKeyScanA
-        self.handle = ctypes.windll.user32.FindWindowW(None, '原神')
+        self.handle = get_handle()
 
         self.fps = 1 / 30
         self.cap_timer = Timer()
@@ -57,7 +66,7 @@ class ScreenCapture:
         return ret
 
     def get_capture(self):
-        if self.cap_timer.getDiffTime() >= self.fps:
+        if self.cap_timer.get_diff_time() >= self.fps:
             # print('recap', self.cap_timer.getDiffTime())
             self.last_cap = self.capture_handle()
             self.cap_timer.reset()
@@ -72,9 +81,10 @@ class ScreenCapture:
 
 
 SCREENCAPTURE = ScreenCapture()
+W_KEYDOWN = False
 
 
-class testtest(threading.Thread):
+class TestTest(threading.Thread):
     def __init__(self):
         super().__init__()
 
@@ -84,8 +94,8 @@ class testtest(threading.Thread):
 
 
 if __name__ == '__main__':
-    tt = testtest()
-    tt1 = testtest()
+    tt = TestTest()
+    tt1 = TestTest()
     tt.start()
     tt1.start()
     for i in range(5):

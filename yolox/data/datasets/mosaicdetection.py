@@ -38,10 +38,10 @@ class MosaicDetection(Dataset):
     """Detection dataset wrapper that performs mixup for normal dataset."""
 
     def __init__(
-        self, dataset, img_size, mosaic=True, preproc=None,
-        degrees=10.0, translate=0.1, mosaic_scale=(0.5, 1.5),
-        mixup_scale=(0.5, 1.5), shear=2.0, enable_mixup=True,
-        mosaic_prob=1.0, mixup_prob=1.0, *args
+            self, dataset, img_size, mosaic=True, preproc=None,
+            degrees=10.0, translate=0.1, mosaic_scale=(0.5, 1.5),
+            mixup_scale=(0.5, 1.5), shear=2.0, enable_mixup=True,
+            mosaic_prob=1.0, mixup_prob=1.0, *args
     ):
         """
 
@@ -139,9 +139,9 @@ class MosaicDetection(Dataset):
             # CopyPaste: https://arxiv.org/abs/2012.07177
             # -----------------------------------------------------------------
             if (
-                self.enable_mixup
-                and not len(mosaic_labels) == 0
-                and random.random() < self.mixup_prob
+                    self.enable_mixup
+                    and not len(mosaic_labels) == 0
+                    and random.random() < self.mixup_prob
             ):
                 mosaic_img, mosaic_labels = self.mixup(mosaic_img, mosaic_labels, self.input_dim)
             mix_img, padded_labels = self.preproc(mosaic_img, mosaic_labels, self.input_dim)
@@ -161,7 +161,7 @@ class MosaicDetection(Dataset):
 
     def mixup(self, origin_img, origin_labels, input_dim):
         jit_factor = random.uniform(*self.mixup_scale)
-        FLIP = random.uniform(0, 1) > 0.5
+        flip = random.uniform(0, 1) > 0.5
         cp_labels = []
         while len(cp_labels) == 0:
             cp_index = random.randint(0, self.__len__() - 1)
@@ -181,7 +181,7 @@ class MosaicDetection(Dataset):
         )
 
         cp_img[
-            : int(img.shape[0] * cp_scale_ratio), : int(img.shape[1] * cp_scale_ratio)
+        : int(img.shape[0] * cp_scale_ratio), : int(img.shape[1] * cp_scale_ratio)
         ] = resized_img
 
         cp_img = cv2.resize(
@@ -190,7 +190,7 @@ class MosaicDetection(Dataset):
         )
         cp_scale_ratio *= jit_factor
 
-        if FLIP:
+        if flip:
             cp_img = cp_img[:, ::-1, :]
 
         origin_h, origin_w = cp_img.shape[:2]
@@ -206,15 +206,15 @@ class MosaicDetection(Dataset):
         if padded_img.shape[1] > target_w:
             x_offset = random.randint(0, padded_img.shape[1] - target_w - 1)
         padded_cropped_img = padded_img[
-            y_offset: y_offset + target_h, x_offset: x_offset + target_w
-        ]
+                             y_offset: y_offset + target_h, x_offset: x_offset + target_w
+                             ]
 
         cp_bboxes_origin_np = adjust_box_anns(
             cp_labels[:, :4].copy(), cp_scale_ratio, 0, 0, origin_w, origin_h
         )
-        if FLIP:
+        if flip:
             cp_bboxes_origin_np[:, 0::2] = (
-                origin_w - cp_bboxes_origin_np[:, 0::2][:, ::-1]
+                    origin_w - cp_bboxes_origin_np[:, 0::2][:, ::-1]
             )
         cp_bboxes_transformed_np = cp_bboxes_origin_np.copy()
         cp_bboxes_transformed_np[:, 0::2] = np.clip(

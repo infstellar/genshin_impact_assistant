@@ -14,11 +14,12 @@ from pycocotools.cocoeval import COCOeval
 from .jit_ops import FastCOCOEvalOp
 
 
-class COCOeval_opt(COCOeval):
+class COCOEvalOpt(COCOeval):
     """
     This is a slightly modified version of the original COCO API, where the functions evaluateImg()
     and accumulate() are implemented in C++ to speedup evaluation
     """
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.module = FastCOCOEvalOp().load()
@@ -53,19 +54,19 @@ class COCOeval_opt(COCOeval):
         self._prepare()
 
         # loop through images, area range, max detection number
-        catIds = p.catIds if p.useCats else [-1]
+        cat_ids = p.catIds if p.useCats else [-1]
 
         if p.iouType == "segm" or p.iouType == "bbox":
-            computeIoU = self.computeIoU
+            compute_io_u = self.computeIoU
         elif p.iouType == "keypoints":
-            computeIoU = self.computeOks
+            compute_io_u = self.computeOks
         self.ious = {
-            (imgId, catId): computeIoU(imgId, catId)
+            (imgId, catId): compute_io_u(imgId, catId)
             for imgId in p.imgIds
-            for catId in catIds
+            for catId in cat_ids
         }
 
-        maxDet = p.maxDets[-1]
+        max_det = p.maxDets[-1]
 
         # <<<< Beginning of code differences with original COCO API
         def convert_instances_to_cpp(instances, is_det=False):
@@ -95,7 +96,7 @@ class COCOeval_opt(COCOeval):
             ]
             for imgId in p.imgIds
         ]
-        ious = [[self.ious[imgId, catId] for catId in catIds] for imgId in p.imgIds]
+        ious = [[self.ious[imgId, catId] for catId in cat_ids] for imgId in p.imgIds]
 
         if not p.useCats:
             # For each image, flatten per-category lists into a single list
@@ -109,7 +110,7 @@ class COCOeval_opt(COCOeval):
         # Call C++ implementation of self.evaluateImgs()
         self._evalImgs_cpp = self.module.COCOevalEvaluateImages(
             p.areaRng,
-            maxDet,
+            max_det,
             p.iouThrs,
             ious,
             ground_truth_instances,

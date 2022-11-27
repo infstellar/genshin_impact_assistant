@@ -6,9 +6,9 @@ import character
 from aim_operator import AimOperator
 from base_threading import BaseThreading
 from interaction_background import InteractionBGD
-from switch_character_operator import Switch_Character_Operator
+from switch_character_operator import SwitchCharacterOperator
 import combat_lib
-from unit import *
+from util import *
 
 
 def sort_flag_1(x: character.Character):
@@ -78,7 +78,7 @@ class Combat_Controller(BaseThreading):
         self.pause_threading_flag = False
         self.itt = InteractionBGD()
 
-        self.sco = Switch_Character_Operator(self.chara_list)
+        self.sco = SwitchCharacterOperator(self.chara_list)
         self.sco.pause_threading()
         self.sco.setDaemon(True)
         self.sco.start()
@@ -138,16 +138,18 @@ class Combat_Controller(BaseThreading):
             return True
 
     def continue_threading(self):
-        self.current_num = combat_lib.get_current_chara_num(self.itt)
-        self.current_num = 1
-        self.pause_threading_flag = False
-        self.sco.continue_threading()
-        self.ao.continue_threading()
+        if self.pause_threading_flag != False:
+            self.current_num = combat_lib.get_current_chara_num(self.itt)
+            self.current_num = 1
+            self.pause_threading_flag = False
+            self.sco.continue_threading()
+            self.ao.continue_threading()
 
     def pause_threading(self):
-        self.pause_threading_flag = True
-        self.sco.pause_threading()
-        self.ao.pause_threading()
+        if self.pause_threading_flag != True:
+            self.pause_threading_flag = True
+            self.sco.pause_threading()
+            self.ao.pause_threading()
 
     def checkup_trapped(self):
         pass

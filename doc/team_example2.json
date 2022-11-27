@@ -1,34 +1,30 @@
 {
-    "frist":{
-        "name":"ningguang",
-        "priority":5,
-        "n":1,
-        "trigger":"idle",
-        "autofill":true
-    },
-
-    "second":{
-        "name":"zhongli",
-        "priority":1,
-        "n":2,
-        "trigger":"e_ready",
-        "autofill":true
-    },
-
-    "third":{
-        "name":"bennett",
-        "priority":3,
-        "n":3,
-        "trigger":"e_ready",
-        "autofill":true
-    },
-
-    "forth":{
-        "name":"yunjin",
-        "priority":4,
-        "n":4,
-        "trigger":"e_ready",
-        "autofill":true
-    }
-
+  "frist": {
+    "name": "ningguang",
+    "priority": 5,
+    "n": 1,
+    "trigger": "idle",
+    "autofill": true
+  },
+  "second": {
+    "name": "zhongli",
+    "priority": 1,
+    "n": 2,
+    "trigger": "e_ready",
+    "autofill": true
+  },
+  "third": {
+    "name": "bennett",
+    "priority": 3,
+    "n": 3,
+    "trigger": "e_ready",
+    "autofill": true
+  },
+  "forth": {
+    "name": "yunjin",
+    "priority": 4,
+    "n": 4,
+    "trigger": "e_ready",
+    "autofill": true
+  }
 }

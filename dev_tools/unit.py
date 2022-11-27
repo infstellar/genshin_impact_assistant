@@ -14,16 +14,11 @@ if sys.path[1] != source_path:
 
 
 # 加载json
-def loadjson(json_name='config.json'):
-    # try:
-    f = open('config/' + json_name, 'r')
-    content = f.read()
-    a = json.loads(content)
-    f.close()
-    return a
+def load_json(json_name='config.json'):
+    return json.load(open('config/' + json_name, 'r'))
 
 
-config_json = loadjson("config.json")
+config_json = load_json("config.json")
 
 # 设置debug
 DEBUG_MODE = config_json["DEBUG"]
@@ -80,11 +75,8 @@ def isint(x):
         return True
 
 
-def savejson(x, json_name='config.json'):
-    b = json.dumps(x, sort_keys=True, indent=4)
-    f2 = open(json_name, 'w')
-    f2.write(b)
-    f2.close()
+def save_json(x, json_name='config.json'):
+    json.dump(x, open(json_name, 'w'), sort_keys=True, indent=4)
 
 
 def loadfileP(filename):
@@ -100,7 +92,7 @@ def savefileP(filename, item):
 
 def reflash_config():
     global config_json
-    configjson = loadjson("config.json")
+    config_json = load_json("config.json")
 
 # if __name__=='__main__':
 

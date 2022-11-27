@@ -8,7 +8,7 @@ from character import Character
 # from interaction import *
 from interaction_background import InteractionBGD
 from timer_module import Timer
-from unit import *
+from util import *
 
 E_STRICT_MODE = True  # may cause more performance overhead
 
@@ -334,4 +334,3 @@ if __name__ == '__main__':
     while 1:
         print(tastic.unconventionality_situlation_detection())
         time.sleep(0.2)
-

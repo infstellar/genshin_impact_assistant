@@ -6,13 +6,13 @@ dy = 0
 d2x = 5
 d2y = 5
 
-posi_dict = {
-    "coming_out_by_space": [505, 1379, 568, 1447],
-    "IN_DOMAIN": [112, 25, 137, 52],
-    "USE_20RESIN_DOBLE_CHOICES": [724, 985, 791, 1348],
-    "USE_20X2RESIN_DOBLE_CHOICES": [726, 567, 793, 934],
-    "F_BUTTON": [526, 1104, 550, 1128]
-}
+# posi_dict = {
+#     "coming_out_by_space": [505, 1379, 568, 1447],
+#     "IN_DOMAIN": [112, 25, 137, 52],
+#     "USE_20RESIN_DOBLE_CHOICES": [724, 985, 791, 1348],
+#     "USE_20X2RESIN_DOBLE_CHOICES": [726, 567, 793, 934],
+#     "F_BUTTON": [526, 1104, 550, 1128]
+# }
 
 posi_charalist_q = [[339 - ly + dy, 1591 + dx, 339 - ly + 55, 1591 + 55], [339 + dy, 1591 + dx, 339 + 55, 1591 + 55],
                     [339 + ly + dy, 1591 + dx, 339 + ly + 55, 1591 + 55],
@@ -35,8 +35,10 @@ posi_chara_q_point = [981, 1812]
 posi_chara_e = [965, 1666, 1015, 1716]
 posi_chara_smaller_e = [974, 1671, 1013, 1710]
 posi_coming_out_by_space = [505, 1379, 568, 1447]
-posi_F_button_list = [350,1079,751,1162]
+posi_F_button_list = [350, 1079, 751, 1162]
 posi_F_button_text = [505, 1152, 572, 1503]
+posi_fangdaditu = [48, 429]
+posi_suoxiaoditu = [48, 653]
 # posi_chara_e_point=[]
 posi_arrow = [111 - 3, 156 - 3, 111 + 26 + 2, 156 + 26 + 2]
 posi_domain = {
@@ -48,10 +50,13 @@ posi_domain = {
     'UseResin': [714, 537, 811, 1386],
     'LeaveOrContinue': [908, 391, 1042, 1547]
 }
+tp_button = [1698, 1002]
 
-
-def get_posi_from_str(str1: str):
-    return posi_dict[str1]
+# def get_posi_from_str(str1: str):
+#     try:
+#         return posi_dict[str1]
+#     except:
+#         return [0,0,1080,1920]
 
 
 if __name__ == '__main__':

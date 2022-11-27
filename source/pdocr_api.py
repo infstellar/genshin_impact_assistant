@@ -1,4 +1,4 @@
-from unit import *
+from util import *
 
 logger.info('Creating ocr object.')
 from timer_module import Timer
@@ -33,7 +33,7 @@ RETURN_TEXT = 1
 RETURN_POSITION = 0
 
 
-class Paddleocr_API:
+class PaddleocrAPI:
 
     def __init__(self, lang='ch', device='gpu'):
         device = globaldevice
@@ -42,8 +42,8 @@ class Paddleocr_API:
                              device=device)  # need to run only once to download and load model into memory
         # self.
 
-    def ImgAnalyse(self, imsrc):
-        result = self.ocr.ocr(imsrc, cls=False)
+    def img_analyse(self, im_src):
+        result = self.ocr.ocr(im_src, cls=False)
         for line in result:
             pass
             # print(line)
@@ -109,7 +109,7 @@ class Paddleocr_API:
 
     def get_text_position(self, im_src, text, mode=APPROXIMATE_MATCHING, returnMode=RETURN_POSITION, isprintlog=False,
                           message='', default_end='\n'):
-        res = self.ImgAnalyse(im_src)
+        res = self.img_analyse(im_src)
         res_position = self.find_text(res, text, mode=mode)
         logger.debug('getTextPosition:  ' + message, end=' | ')
         if isprintlog:
@@ -138,12 +138,12 @@ class Paddleocr_API:
             logger.debug('can not find the text:' + text + ' |function name: ' +
                          inspect.getframeinfo(inspect.currentframe().f_back)[2])
             return -1
-    
+
     def is_img_num(self, im_src):
         pdocr_timer_performance.reset()
         is_num = False
         res_num = None
-        res = self.ImgAnalyse(im_src)
+        res = self.img_analyse(im_src)
 
         for result_item in res:
             # noinspection PyBroadException
@@ -160,18 +160,18 @@ class Paddleocr_API:
                 res_num = float(num)
             else:
                 res_num = None
-        t = pdocr_timer_performance.getDiffTime()
+        t = pdocr_timer_performance.get_diff_time()
 
         return is_num, res_num, t
 
-    def is_img_num_plus(self, imsrc):
-        ret1, ret2, t = self.is_img_num(imsrc)
+    def is_img_num_plus(self, im_src):
+        ret1, ret2, t = self.is_img_num(im_src)
         if ret1 is not None:
-            ret1, ret2, t = self.is_img_num(imsrc)
+            ret1, ret2, t = self.is_img_num(im_src)
         logger.debug(str(ret1) + ' ' + str(ret2) + ' ' + str(t) + ' |function name: ' +
                      inspect.getframeinfo(inspect.currentframe().f_back)[2])
         return ret1, ret2
 
 
-ocr = Paddleocr_API()
-logger.info('created pdocr. cost ' + str(pdocr_timer_performance.getDiffTime()) + ' second.')
+ocr = PaddleocrAPI()
+logger.info('created pdocr. cost ' + str(pdocr_timer_performance.get_diff_time()) + ' second.')
