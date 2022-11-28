@@ -65,13 +65,13 @@ if sys.path[0] != root_path:
 if sys.path[1] != source_path:
     sys.path.insert(1, source_path)
 # load translation module
-l10n = gettext.translation("zh_CN", localedir="language/locale", languages=["zh_CN"])
+l10n = gettext.translation("zh_CN", localedir=os.path.join(root_path, "language/locale"), languages=["zh_CN"])
 l10n.install()
 _ = l10n.gettext
 time.time()
 # 加载json
 def load_json(json_name='config.json', default_path='config'):
-    return json.load(open(os.path.join(default_path, json_name), 'r', encoding='utf-8'))
+    return json.load(open(os.path.join(root_path, default_path, json_name), 'r', encoding='utf-8'))
 
 
 config_json = load_json("config.json")
@@ -88,7 +88,7 @@ DEBUG_MODE = config_json["DEBUG"] if "DEBUG" in config_json else False
 
 # 配置logger
 logger.remove(handler_id=None)
-logger.add('runtime.log', level="TRACE", backtrace=True)
+logger.add(os.path.join(root_path, 'runtime.log'), level="TRACE", backtrace=True)
 if DEBUG_MODE:
     logger.add(sys.stdout, level="TRACE", backtrace=True)
 else:

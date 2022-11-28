@@ -87,7 +87,8 @@ class SettingPage(Page):
         self.config_files_name = []
         for root, dirs, files in os.walk('config'):
             for f in files:
-                self.config_files.append({"label": f, "value": os.path.join(root, f)})
+                if f[f.index('.')+1:] == "json":
+                    self.config_files.append({"label": f, "value": os.path.join(root, f)})
         self.can_remove_last_scope = False
 
     def _load(self):

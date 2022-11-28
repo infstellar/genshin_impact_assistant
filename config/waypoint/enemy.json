@@ -1,22 +1,22 @@
 {
   "slime": {
+    "operation_point": {
+      "4": []
+    },
     "waypoint": {
       "1": [],
       "2": [],
       "3": []
-    },
-    "operation_point": {
-      "4": []
     }
   },
   "test": {
+    "operation_point": {
+      "4": []
+    },
     "waypoint": {
       "1": [],
       "2": [],
       "3": []
-    },
-    "operation_point": {
-      "4": []
     }
   }
 }

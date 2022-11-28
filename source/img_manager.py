@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+from util import *
 
 import posi_manager
 
@@ -14,7 +15,7 @@ class ImgIcon:
     def __init__(self, name, path, is_bbg=True, matching_rate=None, alpha=None, bbg_posi=None, cap_posi=[0, 0, 1080, 1920],
                  jpgmode=2, threshold=0.95):
         self.name = name
-        self.path = path
+        self.path = os.path.join(root_path, path)
         self.is_bbg = is_bbg
         self.mr = matching_rate
         self.alpha = alpha

@@ -93,7 +93,7 @@ class AutoTracker:
         return -(x - 793.9) / 2, -(y - (-1237.8)) / 2
 
 
-cvAutoTracker = AutoTracker('source\\cvAutoTrack_7.2.3\\CVAUTOTRACK.dll')
+cvAutoTracker = AutoTracker(os.path.join(root_path, 'source\\cvAutoTrack_7.2.3\\CVAUTOTRACK.dll'))
 cvAutoTracker.init()
 logger.info('1) err' + str(cvAutoTracker.get_last_error()))
 
