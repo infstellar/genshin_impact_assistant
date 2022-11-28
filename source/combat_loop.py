@@ -1,14 +1,13 @@
 # from interaction import *
 
-import time
-
+from util import *
 import character
 from aim_operator import AimOperator
 from base_threading import BaseThreading
 from interaction_background import InteractionBGD
 from switch_character_operator import SwitchCharacterOperator
 import combat_lib
-from util import *
+
 
 
 def sort_flag_1(x: character.Character):

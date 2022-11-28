@@ -1,30 +1,30 @@
 {
-  "frist": {
-    "name": "yoimiya",
-    "priority": 2,
-    "n": 1,
-    "trigger": "e_ready",
-    "autofill": true
-  },
-  "second": {
-    "name": "zhongli",
-    "priority": 1,
-    "n": 2,
-    "trigger": "e_ready",
-    "autofill": true
-  },
-  "third": {
-    "name": "bennett",
-    "priority": 3,
-    "n": 3,
-    "trigger": "e_ready",
-    "autofill": true
-  },
   "forth": {
+    "autofill": true,
+    "n": 4,
     "name": "yunjin",
     "priority": 4,
-    "n": 4,
-    "trigger": "e_ready",
-    "autofill": true
+    "trigger": "e_ready"
+  },
+  "frist": {
+    "autofill": true,
+    "n": 1,
+    "name": "yoimiya",
+    "priority": 2,
+    "trigger": "e_ready"
+  },
+  "second": {
+    "autofill": true,
+    "n": 2,
+    "name": "zhongli",
+    "priority": 1,
+    "trigger": "e_ready"
+  },
+  "third": {
+    "autofill": true,
+    "n": 3,
+    "name": "bennett",
+    "priority": 3,
+    "trigger": "e_ready"
   }
 }
