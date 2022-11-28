@@ -17,7 +17,7 @@ COLLECTION = 0
 ENEMY = 1
 MINERAL = 2
 
-def load_feature_position(text="清心", blacklist_id=[]):
+def load_feature_position(text, blacklist_id):
     ita = load_json("itemall.json", "assests")
     ret_dict=[]
     i=0
@@ -28,7 +28,7 @@ def load_feature_position(text="清心", blacklist_id=[]):
         for item in feature["features"]:
             if item["id"] in blacklist_id:
                 continue
-            if text in item["properties"]["popTitle"] :
+            if text == item["properties"]["popTitle"] :
                 ret_dict.append({
                     "id":item["id"],
                     "position":list(np.array( list(map(float,item["geometry"]["coordinates"])) )*1.5)
@@ -42,7 +42,7 @@ class CollectorFlow(BaseThreading):
     def __init__(self):
         super().__init__()
         
-        self.collector_name = "甜甜花"
+        self.collector_name = "甜甜花 - 蒙德"
         self.collector_type = ENEMY
         self.collector_blacklist_id = load_json("collection_blacklist.json", default_path="config\\auto_collector")
         self.collected_id = load_json("collected.json", default_path="config\\auto_collector")
@@ -62,7 +62,7 @@ class CollectorFlow(BaseThreading):
         
         self.collection_log = load_json("collection_log.json", default_path="config\\auto_collector")
         
-        self.collector_posi_dict = load_feature_position(self.collector_name, blacklist_id=self.collector_blacklist_id)
+        self.collector_posi_dict = load_feature_position(self.collector_name, self.collector_blacklist_id)
         self.current_state = ST.INIT_MOVETO_COLLECTOR
         self.current_position = cvAutoTrack.cvAutoTrackerLoop.get_position()[1:]
         self.last_collection_posi = [9999,9999]
@@ -147,7 +147,7 @@ class CollectorFlow(BaseThreading):
         a.append({"time":str(datetime.datetime.now()),
                   "id": self.collection_id,
                   "error_code": x,
-                  "picked item: ": self.picked_list})
+                  "picked item": self.picked_list})
         self.collection_log[self.collector_name] = a
         save_json(self.collection_log, "collection_log.json", default_path="config\\auto_collector", sort_keys=False)
         self.picked_list = []
@@ -171,7 +171,7 @@ class CollectorFlow(BaseThreading):
             
             if self.current_state == ST.INIT_MOVETO_COLLECTOR:
                 
-                self.collector_posi_dict = load_feature_position(self.collector_name, blacklist_id=self.shielded_id)
+                self.collector_posi_dict = load_feature_position(self.collector_name, self.shielded_id)
                 cvAutoTrack.wait_until_no_excessive_error()
                 self.current_position = cvAutoTrack.cvAutoTrackerLoop.get_position()[1:]
                 self.collector_posi_dict.sort(key=self.sort_by_eu)
