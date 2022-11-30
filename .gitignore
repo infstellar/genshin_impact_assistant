@@ -172,4 +172,7 @@ config/settings/auto_combat.json
 config/settings/auto_pickup.json
 config/settings/config.json
 config/settings/keymap.json
+config/auto_collector/collected.json
+config/auto_collector/collection_log.json
+config/auto_collector/collection_blacklist.json
 .idea/.gitignore
