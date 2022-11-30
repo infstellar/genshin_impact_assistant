@@ -73,8 +73,11 @@ time.time()
 def load_json(json_name='config.json', default_path='config\\settings'):
     return json.load(open(os.path.join(root_path, default_path, json_name), 'r', encoding='utf-8'))
 
-
-config_json = load_json("config.json")
+try:
+    config_json = load_json("config.json")
+except:
+    import config
+    config.template_translator()
 
 # 设置debug
 DEBUG_MODE = config_json["DEBUG"] if "DEBUG" in config_json else False
