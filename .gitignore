@@ -175,4 +175,11 @@ config/settings/keymap.json
 config/auto_collector/collected.json
 config/auto_collector/collection_log.json
 config/auto_collector/collection_blacklist.json
+toolkit/
+InstallerREADME.md
+giainstaller.py
+GIA Launcher.exe
+GIA Launcher.bat
+installer_config_cn.json
+installer_config.json
 .idea/.gitignore
