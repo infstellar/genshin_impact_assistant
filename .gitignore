@@ -129,7 +129,7 @@ dmypy.json
 test_py/
 outputimgs/
 tools/snapshot/
-config/config.json
+config/settings/config.json
 source.7z
 source.7z.tmp
 tests/

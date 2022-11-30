@@ -2,7 +2,12 @@ from util import *
 
 def template_generator():
     config_files = []
-    for root, dirs, files in os.walk(os.path.join(root_path,'config')):
+    for root, dirs, files in os.walk(os.path.join(root_path, 'config', 'settings')):
+        for f in files:
+            if f[f.index('.')+1:] == "json":
+                config_files.append({"label": f, "value": os.path.join(root, f)})
+
+    for root, dirs, files in os.walk(os.path.join(root_path, 'config', 'tastic')):
         for f in files:
             if f[f.index('.')+1:] == "json":
                 config_files.append({"label": f, "value": os.path.join(root, f)})
@@ -14,19 +19,32 @@ def template_generator():
 
 def template_translator():
     template_files = []
-    for root, dirs, files in os.walk(os.path.join(root_path,'config')):
+    for root, dirs, files in os.walk(os.path.join(root_path, 'config', 'settings')):
         for f in files:
             if f[f.index('.')+1:] == "jsontemplate":
                 template_files.append({"label": f, "value": os.path.join(root, f)})
 
-    config_files = []
-    for root, dirs, files in os.walk(os.path.join(root_path,'config')):
+    for template_file in template_files:
+        config_file_path = os.path.join( os.path.dirname(template_file["value"]), template_file["label"].replace(".jsontemplate", ".json"))
+        if os.path.exists(config_file_path) == False:
+            json.dump({}, open(config_file_path, 'w'), sort_keys=True, indent=2, ensure_ascii=False)
+        config_file = json.load(open(config_file_path, 'r', encoding='utf-8'))
+        template_json = json.load(open(template_file["value"], 'r', encoding='utf-8'))
+        for i in template_json:
+            a = config_file.setdefault(i, template_json[i])
+            print(i, a)
+
+        json.dump(config_file, open(config_file_path, 'w', encoding='utf-8'), sort_keys=True, indent=2, ensure_ascii=False)
+
+def template_translator_tastic():
+    template_files = []
+    for root, dirs, files in os.walk(os.path.join(root_path, 'config', 'tastic')):
         for f in files:
-            if f[f.index('.')+1:] == "json":
-                config_files.append({"label": f, "value": os.path.join(root, f)})
+            if f[f.index('.')+1:] == "jsontemplate":
+                template_files.append({"label": f, "value": os.path.join(root, f)})
 
     for template_file in template_files:
-        json_item = json.load(open(template_file["value"], 'r', encoding='utf-8'))
-        json.dump(json_item, open( os.path.join( os.path.dirname(template_file["value"]), template_file["label"].replace(".jsontemplate", ".json")), 'w', encoding='utf-8'), sort_keys=True, indent=2, ensure_ascii=False)
-
-# template_translator()
+        config_file_path = os.path.join( os.path.dirname(template_file["value"]), template_file["label"].replace(".jsontemplate", ".json"))
+        template_json = json.load(open(template_file["value"], 'r', encoding='utf-8'))
+        if os.path.exists(config_file_path) == False:
+            json.dump(template_json, open(config_file_path, 'w'), sort_keys=True, indent=2, ensure_ascii=False)
