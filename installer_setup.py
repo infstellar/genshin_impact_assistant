@@ -13,4 +13,4 @@ def unzip():
 def auto_setup():
     print(unzip())
     print(source.config.template_translator())
-    print(source.config.template_translator())
+    print(source.config.template_translator_tastic())
