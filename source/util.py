@@ -70,7 +70,7 @@ l10n.install()
 _ = l10n.gettext
 time.time()
 # 加载json
-def load_json(json_name='config.json', default_path='config'):
+def load_json(json_name='config.json', default_path='config\\settings'):
     return json.load(open(os.path.join(root_path, default_path, json_name), 'r', encoding='utf-8'))
 
 
