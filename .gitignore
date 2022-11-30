@@ -129,7 +129,6 @@ dmypy.json
 test_py/
 outputimgs/
 tools/snapshot/
-config/settings/config.json
 source.7z
 source.7z.tmp
 tests/
@@ -138,7 +137,6 @@ assests/imgs/common/test.jpg
 dev_tools/origin_text.txt
 source/test11.jpg
 test11 copy.jpg
-.gitignore
 source/cvAutoTrack_5/CVAUTOTRACK.dll
 source/cvAutoTrack_5/cvAutoTrack.h
 source/cvAutoTrack_5/CVAUTOTRACK.lib
@@ -164,3 +162,13 @@ source/cvAutoTrack_7.2.3/CVAUTOTRACK.dll
 .idea/libraries/base_library7.xml
 .idea/libraries/gui.xml
 .idea/libraries/jpg_0928.xml
+config/tastic/character.json
+config/tastic/character_dist.json
+config/tastic/team.json
+config/tastic/team_example_2.json
+config/tastic/tastic.json
+config/settings/auto_aim.json
+config/settings/auto_combat.json
+config/settings/auto_pickup.json
+config/settings/config.json
+config/settings/keymap.json
