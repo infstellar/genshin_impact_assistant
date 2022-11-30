@@ -76,8 +76,7 @@ def load_json(json_name='config.json', default_path='config\\settings'):
 try:
     config_json = load_json("config.json")
 except:
-    import config
-    config.template_translator()
+    logger.error("config文件导入失败，可能由于初次安装。跳过导入。")
 
 # 设置debug
 DEBUG_MODE = config_json["DEBUG"] if "DEBUG" in config_json else False
