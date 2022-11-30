@@ -1,3 +1,4 @@
+from source.util import *
 import source.config
 import os
 
