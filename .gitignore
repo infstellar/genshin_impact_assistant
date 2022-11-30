@@ -172,3 +172,4 @@ config/settings/auto_combat.json
 config/settings/auto_pickup.json
 config/settings/config.json
 config/settings/keymap.json
+.idea/.gitignore
