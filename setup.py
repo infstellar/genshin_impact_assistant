@@ -2,6 +2,7 @@ import os.path
 import shutil
 import subprocess
 import sys
+import installer_setup
 
 sys.argv.pop(0)
 
@@ -13,8 +14,7 @@ if len(sys.argv) == 1:
             subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-r', 'requirements.txt', '-i',
                                    'https://pypi.tuna.tsinghua.edu.cn/simple'])
             open('DTISTREQ', 'x')
-        import unzipfiles
-        unzipfiles.unzip()
+        installer_setup.auto_setup()
 
     elif sys.argv[0] == 'update':
         subprocess.check_call(['git', 'pull'])
@@ -22,6 +22,6 @@ if len(sys.argv) == 1:
                                'https://pypi.tuna.tsinghua.edu.cn/simple'])
         if not os.path.exists('DTISTREQ'):
             open('DTISTREQ', 'x')
-
+        installer_setup.auto_setup()
 
 
