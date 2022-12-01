@@ -59,7 +59,8 @@ To没用过github的小伙伴:描述文档中的蓝色文字是链接,可以打�
 
 要求:
 
-- python版本[3.9.6](https://www.python.org/downloads/release/python-396/).
+！！！ 重要修改 ！！！ python版本 3.7.6 (因为py3.9bug实在是太多了)
+- python版本[3.7.6](https://www.python.org/downloads/release/python-396/).
 - [git](https://git-scm.com/download/win).
 - <strong>使用管理员权限打开命令提示符和你的代码编写器(IDE)!!!</strong>
 
