@@ -75,7 +75,7 @@ class Character:
             return True
 
     def _trigger_q_ready(self):
-        # cap = self.itt.capture()
+        cap = self.itt.capture()
         cap = self.itt.png2jpg(cap, channel='ui', alpha_num=20)  # BEFOREV3D1
         # cap = self.itt.png2jpg(cap, channel='bg', alpha_num = 175)
 

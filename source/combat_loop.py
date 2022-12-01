@@ -20,8 +20,8 @@ def stop_func_example():  # True:stop;False:continue
 
 def get_chara_list(team_name='team.json'):
     team_name = config_json["teamfile"]
-    team = load_json(team_name)
-    characters = load_json("character.json")
+    team = load_json(team_name, default_path="config\\tastic")
+    characters = load_json("character.json", default_path="config\\tastic")
     chara_list = []
     for team_name in team:
         team_item = team[team_name]
