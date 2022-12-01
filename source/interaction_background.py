@@ -410,7 +410,7 @@ class InteractionBGD:
         return math.sqrt(ret / min(len(x_col), len(target_col)))
 
     # @staticmethod
-    def delay(self, x, randtime=True, isprint=True, comment=''):
+    def delay(self, x:float, randtime=True, isprint=True, comment=''):
         """延迟一段时间，单位为秒
 
         Args:
