@@ -2,9 +2,23 @@ import json
 import os
 import sys
 import time  # 8药删了，qq了
+from typing import Callable
+
 from loguru import logger
 import gettext
 
+# 配置基本目录
+root_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+source_path = root_path + '\\source'
+if sys.path[0] != root_path:
+    sys.path.insert(0, root_path)
+if sys.path[1] != source_path:
+    sys.path.insert(1, source_path)
+
+# load translation module
+l10n = gettext.translation("zh_CN", localedir=os.path.join(root_path, "language/locale"), languages=["zh_CN"])
+l10n.install()
+_ = l10n.gettext
 time.time()  # 防自动删除
 
 
@@ -57,18 +71,9 @@ def is_json_equal(j1: str, j2: str) -> bool:
         return False
 
 
-# 配置基本目录
-root_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-source_path = root_path + '\\source'
-if sys.path[0] != root_path:
-    sys.path.insert(0, root_path)
-if sys.path[1] != source_path:
-    sys.path.insert(1, source_path)
-# load translation module
-l10n = gettext.translation("zh_CN", localedir=os.path.join(root_path, "language/locale"), languages=["zh_CN"])
-l10n.install()
-_ = l10n.gettext
-time.time()
+
+
+
 # 加载json
 def load_json(json_name='config.json', default_path='config\\settings'):
     return json.load(open(os.path.join(root_path, default_path, json_name), 'r', encoding='utf-8'))
