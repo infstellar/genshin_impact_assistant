@@ -10,15 +10,16 @@
 
 位置：config/settings/config.json
 
-| 项目                | 内容                                                                                                    |
-|-------------------|-------------------------------------------------------------------------------------------------------|
-| `version`         | 版本号                                                                                                   |
-| `teamfile`        | 自动战斗使用的`team.json`文件，可在`config`目录下新建新的`teamjson`文件并设置。                                                |
-| `device_torch`    | yolox运算使用的设备，如果安装了cudnn则设为`'gpu'`，否则设为`'cpu'` 。 设置为`auto`时可以自动检测GPU可用性并自动切换。                          |
-| `device_paddle`   | paddleocr运算使用的设备，如果安装了cudnn则设为`'gpu'`，否则设为`'cpu'`。 设置为`auto`时，会自动检测GPU可用性，但不会自动切换GPU，需要根据是否可用的提示手动切换。 |
-| `debug`           | 是否启用debug模式                                                                                           |
-| `env_floder_path` | envirenment文件夹位置                                                                                      |
-| `corr_degree`     | 秘境内视角校准时的辅助参数。若在秘境内视角偏左则增大该值，反之亦然。                                                                    |
+| 项目                 | 内容                                                                                                    |
+|--------------------|-------------------------------------------------------------------------------------------------------|
+| `version`          | 版本号                                                                                                   |
+| `teamfile`         | 自动战斗使用的`team.json`文件，可在`config`目录下新建新的`teamjson`文件并设置。                                                |
+| `device_torch`     | yolox运算使用的设备，如果安装了cudnn则设为`'gpu'`，否则设为`'cpu'` 。 设置为`auto`时可以自动检测GPU可用性并自动切换。                          |
+| `device_paddle`    | paddleocr运算使用的设备，如果安装了cudnn则设为`'gpu'`，否则设为`'cpu'`。 设置为`auto`时，会自动检测GPU可用性，但不会自动切换GPU，需要根据是否可用的提示手动切换。 |
+| `debug`            | 是否启用debug模式                                                                                           |
+| `env_floder_path`  | envirenment文件夹位置                                                                                      |
+| `corr_degree`      | 秘境内视角校准时的辅助参数。若在秘境内视角偏左则增大该值，反之亦然。                                                                    |
+| `ChromelessWindow` | 如果是无边框窗口或全屏，设置为true。                                                                                  |
 
 ## auto_domain.json
 
