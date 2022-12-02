@@ -19,7 +19,9 @@ To没用过github的小伙伴:描述文档中的蓝色文字是链接,可以打�
 
 - 按下`/`以启动或结束自动战斗辅助.
 
-### 2. [自动秘境战斗](./doc/domain_assi.md)
+其他设置参见[自动战斗辅助介绍](./doc/combat_assi.md)
+
+### 2. [自动秘境辅助](./doc/domain_assi.md)
 
 1. 在config中设置挑战秘境的次数与其他设置,详见[config设置](./doc/config.md).
 2. 手动选择队伍,配置队伍,进入秘境.
@@ -27,6 +29,8 @@ To没用过github的小伙伴:描述文档中的蓝色文字是链接,可以打�
 4. 如果要终止自动战斗,按下`]`键.
 
 - 注意阅读[domain_assi.md](./doc/domain_assi.md)中的注意事项.
+
+其他设置参见[自动秘境辅助介绍](./doc/domain_assi.md)
 
 ## 更新日志 (和饼
 
