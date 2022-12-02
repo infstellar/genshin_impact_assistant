@@ -30,3 +30,5 @@ PyAutoGUI
 PyQt5
 pywebio
 pydirectinput
+
+pycocotools

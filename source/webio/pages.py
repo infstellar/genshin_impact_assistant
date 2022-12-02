@@ -15,6 +15,8 @@ from source.webio.page_manager import Page
 class MainPage(Page):
     def __init__(self):
         super().__init__()
+        self.log_list = []
+        self.log_list_lock=threading.Lock()
 
     def _on_load(self):  # 加载事件
         self._load()  # 加载主页
@@ -26,6 +28,11 @@ class MainPage(Page):
         while self.loaded:  # 当界面被加载时循环运行
             if pin.pin['FlowMode'] != listening.current_flow:  # 比较变更是否被应用
                 listening.current_flow = pin.pin['FlowMode']  # 应用变更
+            self.log_list_lock.acquire()
+            for text,color in self.log_list:
+                output.put_text(text, scope='LogArea').style(f'color: {color}')
+            self.log_list.clear()
+            self.log_list_lock.release()
             time.sleep(0.1)
 
     def _load(self):
@@ -70,7 +77,9 @@ class MainPage(Page):
 
     def logout(self, text: str, color='black'):
         if self.loaded:
-            output.put_text(text, scope='LogArea').style(f'color: {color}')
+            self.log_list_lock.acquire()
+            self.log_list.append((text, color))
+            self.log_list_lock.release()
 
     def _on_unload(self):
         pass
@@ -87,7 +96,8 @@ class SettingPage(Page):
         self.config_files_name = []
         for root, dirs, files in os.walk('config'):
             for f in files:
-                self.config_files.append({"label": f, "value": os.path.join(root, f)})
+                if f[f.index('.') + 1:] == "json":
+                    self.config_files.append({"label": f, "value": os.path.join(root, f)})
         self.can_remove_last_scope = False
 
     def _load(self):
@@ -123,7 +133,7 @@ class SettingPage(Page):
 
                 self.put_setting(pin.pin['file'])  # 配置配置页
 
-            time.sleep(0.1)
+            time.sleep(1)
 
     def put_setting(self, name=''):
         self.file_name = name
