@@ -115,7 +115,13 @@ if DEBUG_MODE:
     logger.add(sys.stdout, level="TRACE", backtrace=True)
 else:
     logger.add(sys.stdout, level="INFO", backtrace=True)
-import webio.log_handler
+
+def add_logger_to_GUI(cb_func):
+    if DEBUG_MODE:
+        logger.add(cb_func, level="TRACE", backtrace=True)
+    else:
+        logger.add(cb_func, level="INFO", backtrace=True)
+
 # logger.add(webio.log_handler.webio_handler)
 # 校验目录
 if not os.path.exists(root_path):
@@ -202,8 +208,3 @@ def is_number(s):
 
     return False
 
-
-
-
-
-print()
