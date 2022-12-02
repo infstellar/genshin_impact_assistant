@@ -35,6 +35,7 @@ def get_chara_list(team_name='team.json'):
             ctastic_group = ccharacter["tastic_group"]
             cEpress_time = ccharacter["Epress_time"]
             cQlast_time = ccharacter["Qlast_time"]
+            cQcd_time = ccharacter["Qcd_time"]
         else:
             cposition = team_item["position"]
             cpriority = team_item["priority"]
@@ -46,6 +47,7 @@ def get_chara_list(team_name='team.json'):
             ctrigger = team_item["trigger"]
             cEpress_time = team_item["Epress_time"]
             cQlast_time = team_item["Qlast_time"]
+            cQcd_time = team_item["Qcd_time"]
 
         cn = team_item["n"]
         cname = team_item['name']
@@ -60,7 +62,7 @@ def get_chara_list(team_name='team.json'):
                 name=cname, position=cposition, n=cn, priority=cpriority,
                 E_short_cd_time=cE_short_cd_time, E_long_cd_time=cE_long_cd_time, Elast_time=cElast_time,
                 Ecd_float_time=cEcd_float_time, tastic_group=ctastic_group, trigger=ctrigger,
-                Epress_time=cEpress_time, Qlast_time=cQlast_time
+                Epress_time=cEpress_time, Qlast_time=cQlast_time, Qcd_time=cQcd_time
             )
         )
     return chara_list
