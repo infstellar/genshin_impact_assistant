@@ -25,7 +25,7 @@ class Character:
                  E_short_cd_time=None, E_long_cd_time=None,
                  Elast_time=None, Ecd_float_time=None,
                  tastic_group=None, trigger: str = None,
-                 Epress_time=None, Qlast_time=0):
+                 Epress_time=None, Qlast_time = 0, Qcd_time = 12):
 
         self.name = name
         self.position = position
@@ -33,6 +33,7 @@ class Character:
         self.E_long_cd_time = E_long_cd_time
         self.Elast_time = Elast_time
         self.Qlast_time = Qlast_time
+        self.Qcd_time = Qcd_time
         self.Ecd_float_time = Ecd_float_time
         self.tastic_group = tastic_group
         self.priority = priority

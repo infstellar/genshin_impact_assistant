@@ -4,10 +4,14 @@ import posi_manager
 from interaction_background import InteractionBGD
 itt = InteractionBGD()
 
-def switchto_mainwin():
+def switchto_mainwin(max_time=30):
+    i=0
     while not itt.get_img_existence(img_manager.ui_main_win):
         itt.key_press('m')
         time.sleep(1.5)
+        if i >= max_time:
+            return
+        i+=1
     time.sleep(0.3)
 
 def switchto_bigmapwin():

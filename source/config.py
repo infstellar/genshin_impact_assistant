@@ -1,4 +1,5 @@
 from util import *
+import shutil
 
 def template_generator():
     config_files = []
@@ -53,7 +54,7 @@ def template_translator_tastic():
         config_file_path = os.path.join( os.path.dirname(template_file["value"]), template_file["label"].replace(".jsontemplate", ".json"))
         template_json = json.load(open(template_file["value"], 'r', encoding='utf-8'))
         if os.path.exists(config_file_path) == False:
-            json.dump(template_json, open(config_file_path, 'w'), sort_keys=True, indent=2, ensure_ascii=False)
+            shutil.copyfile(template_file["value"], config_file_path)
             oflag = True
 
     if oflag:

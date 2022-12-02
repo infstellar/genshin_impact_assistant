@@ -183,3 +183,4 @@ GIA Launcher.bat
 installer_config_cn.json
 installer_config.json
 .idea/.gitignore
+/config/settings/auto_domain.json

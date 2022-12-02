@@ -1,62 +1,30 @@
 {
-  "forth": {
-    "E_long_cd_time": 10,
-    "E_short_cd_time": 5,
-    "Ecd_float_time": 0,
-    "Elast_time": 0,
-    "Epress_time": 3,
-    "Qlast_time": 0,
-    "autofill": false,
-    "n": 4,
-    "name": "yunjin",
-    "position": "",
-    "priority": 4,
-    "tastic_group": "e?e~:none;q?q:none",
-    "trigger": "e_ready"
-  },
   "frist": {
-    "E_long_cd_time": 0,
-    "E_short_cd_time": 18,
-    "Ecd_float_time": 0,
-    "Elast_time": 10,
-    "Epress_time": 0,
-    "Qlast_time": 10,
-    "autofill": false,
+    "name": "ningguang",
+    "priority": 5,
     "n": 1,
-    "name": "yoimiya",
-    "position": "",
-    "priority": 2,
-    "tastic_group": "e?e:none;#@e?a:q;",
-    "trigger": "e_ready"
+    "trigger": "idle",
+    "autofill": true
   },
   "second": {
-    "E_long_cd_time": 12,
-    "E_short_cd_time": 4,
-    "Ecd_float_time": 3,
-    "Elast_time": 18,
-    "Epress_time": 2,
-    "Qlast_time": 0,
-    "autofill": false,
-    "n": 2,
     "name": "zhongli",
-    "position": "",
     "priority": 1,
-    "tastic_group": "e?e~:none;q?q:none",
-    "trigger": "e_ready"
+    "n": 2,
+    "trigger": "e_ready",
+    "autofill": true
   },
   "third": {
-    "E_long_cd_time": 10,
-    "E_short_cd_time": 3,
-    "Ecd_float_time": 0,
-    "Elast_time": 0,
-    "Epress_time": 2.5,
-    "Qlast_time": 0,
-    "autofill": false,
-    "n": 3,
     "name": "bennett",
-    "position": "",
     "priority": 3,
-    "tastic_group": "e?e~:none;q?q:none",
-    "trigger": "e_ready"
+    "n": 3,
+    "trigger": "e_ready",
+    "autofill": true
+  },
+  "forth": {
+    "name": "yunjin",
+    "priority": 4,
+    "n": 4,
+    "trigger": "e_ready",
+    "autofill": true
   }
 }
