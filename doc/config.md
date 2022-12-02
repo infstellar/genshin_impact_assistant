@@ -1,10 +1,14 @@
 # config
 
-此页面介绍config文件夹中的各个文件用途。
+此页面介绍config文件夹中的json配置文件。
 
-config.json文件位置：`genshin_assistant\config`
+可在json文件或GUI中更改。
 
-## config.json
+所有配置文件位置：`genshin_assistant\config\*.json`
+
+## config.json 
+
+位置：config/settings/config.json
 
 | 项目                | 内容                                                                                                    |
 |-------------------|-------------------------------------------------------------------------------------------------------|
@@ -22,14 +26,12 @@ config.json文件位置：`genshin_assistant\config`
 ## keymap.json
 
 可以自定义按键。详情如下：
-| 项目 | 内容 |
-| --------------- | ------------------------------------------------------------ |
-| `autoCombat`   | 开关自动战斗的按键|
-| `autoDomain`| 开关自动秘境的按键|
 
-## character.json
-
-包含了一些预设的角色策略组参数，`verify`属性可以查看该角色操作是否被验证通过。
+| 项目           | 内容               |
+|--------------|------------------|
+| `startstop`  | 在GUI中设置的功能的启停按键。 |
+| `autoCombat` | 开关自动战斗的按键        |
+| `autoDomain` | 开关自动秘境的按键        |
 
 ## character_dist.json
 
@@ -46,7 +48,7 @@ config.json文件位置：`genshin_assistant\config`
 原始文件中的队伍配置为：宵宫，钟离，班尼特，云堇
 
 | 设置项               | 介绍                                                                                                                 |
-|-------------------|--------------------------------------------------------------------------------------------------------------------|
+|:------------------|--------------------------------------------------------------------------------------------------------------------|
 | `name`            | 根据`character_dist.json`填写角色名称                                                                                      |
 | `priority`        | 出战优先级，从小到大依次降低，0为最高优先级。优先级可以同级                                                                                     |
 | `n`               | 角色在队伍中的位置（1~4），不可重复，不可为0                                                                                           |
@@ -58,15 +60,35 @@ config.json文件位置：`genshin_assistant\config`
 | `E_long_cd_time`  | 长Ecd时间，没有则为0                                                                                                       |
 | `Ecd_float_time`  | 在E技能冷却还有x秒前即切换至该角色，可以为0，建议设置的值比预计值偏小一点                                                                             |
 | `Ecd_press_time`  | 按E技能的时间                                                                                                            |
+| `Qcd_time`        | Q技能冷却时间                                                                                                            |
 | `tastic_group`    | 策略组，配置角色战斗策略，详细说明见[combat_assi.md](./combat_assi.md)                                                               |
-
-如`autofill`参数为`true`，且`character.json`文件中有此角色的配置参数时，则无需在`team.jsom`中填写`Elast_time`、`Qlast_time`
-、`E_short_cd_time`、`E_long_cd_time`、`Ecd_float_time`、`Ecd_press_time`、`tastic_group`参数。
-
-如`autofill`参数为`false`，则需要在`team.json`中填写战斗相关参数。
 
 关于参数配置的填写说明见[combat_assi.md](./combat_assi.md)
 
 ## tastic.json
 
 暂无用途
+
+## character.json
+
+包含了一些预设的角色策略组参数，`verify`属性可以查看该角色操作是否被验证通过。
+
+## auto_aim
+
+自动瞄准配置文件。
+
+| 设置项                         | 介绍              |
+|-----------------------------|-----------------|
+| `auto_distan`               | 自动保持距离，默认为false |
+| `auto_move`                 | 自动移动视角，默认为true  |
+| `fps`                       | 识别频率，默认为20      |
+| `max_number_of_enemy_loops` | 最大索敌次数，默认为50    |
+| `reset_time`                | 索敌失败后冷却时间，默认为40 |
+
+## auto_pickup
+
+自动拾取配置文件。
+
+| 设置项         | 介绍        |
+|-------------|-----------|
+| `blacklist` | 拾取物品黑名单列表 |
