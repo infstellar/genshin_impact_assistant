@@ -112,7 +112,7 @@ class AutoTrackerLoop(threading.Thread):
         self.in_excessive_error = False
         
     def run(self):
-        ct=0
+        ct = 0
         time.sleep(0.1)
         while 1:
             self.rotation = cvAutoTracker.get_rotation()
@@ -122,19 +122,19 @@ class AutoTrackerLoop(threading.Thread):
                 self.position = (False,0,0)
                 self.in_excessive_error = True
                 continue
-            if ct>=30:
+            if ct >= 30:
                 self.last_position = self.position
                 self.in_excessive_error = False
                 logger.debug("位置已重置")
-                ct=0
+                ct = 0
             if generic_lib.euclidean_distance(self.position[1:],self.last_position[1:])>=50:
                 # print("误差过大")
                 self.in_excessive_error = True
-                ct+=1
+                ct += 1
             else:
                 self.last_position = self.position
                 self.in_excessive_error = False
-                ct=0
+                ct = 0
             # print(self.last_position)
             
                 
