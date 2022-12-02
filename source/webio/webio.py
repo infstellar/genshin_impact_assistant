@@ -4,9 +4,6 @@ import threading
 import time
 
 import pywebio.session
-
-from source import webio
-from source.webio import log_handler
 from source.webio.pages import *
 
 status = True
