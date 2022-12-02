@@ -15,7 +15,7 @@ if sys.path[1] != source_path:
 
 # 加载json
 def load_json(json_name='config.json'):
-    return json.load(open('config/' + json_name, 'r'))
+    return json.load(open('config\\' + json_name, 'r'))
 
 
 config_json = load_json("config.json")
@@ -92,7 +92,7 @@ def savefileP(filename, item):
 
 def reflash_config():
     global config_json
-    config_json = load_json("config.json")
+    config_json = load_json("settings\\"+"config.json")
 
 # if __name__=='__main__':
 

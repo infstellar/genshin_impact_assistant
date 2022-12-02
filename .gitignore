@@ -52,8 +52,6 @@ coverage.xml
 .pytest_cache/
 
 # Translations
-*.mo
-*.pot
 
 # Django stuff:
 *.log
@@ -131,7 +129,6 @@ dmypy.json
 test_py/
 outputimgs/
 tools/snapshot/
-config/config.json
 source.7z
 source.7z.tmp
 tests/
@@ -140,7 +137,6 @@ assests/imgs/common/test.jpg
 dev_tools/origin_text.txt
 source/test11.jpg
 test11 copy.jpg
-.gitignore
 source/cvAutoTrack_5/CVAUTOTRACK.dll
 source/cvAutoTrack_5/cvAutoTrack.h
 source/cvAutoTrack_5/CVAUTOTRACK.lib
@@ -151,3 +147,40 @@ source/cvAutoTrack_5.7z
 source/CVAUTOTRACK732.dll
 source/cvAutoTrack_7.7z
 source/cvAutoTrack_7.2.3/CVAUTOTRACK.dll
+.idea/genshin_impact_assistant.iml
+.idea/misc.xml
+.idea/modules.xml
+.idea/vcs.xml
+.idea/inspectionProfiles/Project_Default.xml
+.idea/libraries/base_library.xml
+.idea/libraries/base_library1.xml
+.idea/libraries/base_library2.xml
+.idea/libraries/base_library3.xml
+.idea/libraries/base_library4.xml
+.idea/libraries/base_library5.xml
+.idea/libraries/base_library6.xml
+.idea/libraries/base_library7.xml
+.idea/libraries/gui.xml
+.idea/libraries/jpg_0928.xml
+config/tastic/character.json
+config/tastic/character_dist.json
+config/tastic/team.json
+config/tastic/team_example_2.json
+config/tastic/tastic.json
+config/settings/auto_aim.json
+config/settings/auto_combat.json
+config/settings/auto_pickup.json
+config/settings/config.json
+config/settings/keymap.json
+config/auto_collector/collected.json
+config/auto_collector/collection_log.json
+config/auto_collector/collection_blacklist.json
+toolkit/
+InstallerREADME.md
+giainstaller.py
+GIA Launcher.exe
+GIA Launcher.bat
+installer_config_cn.json
+installer_config.json
+.idea/.gitignore
+/config/settings/auto_domain.json

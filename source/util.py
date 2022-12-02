@@ -2,8 +2,23 @@ import json
 import os
 import sys
 import time  # 8药删了，qq了
-from loguru import logger
+from typing import Callable
 
+from loguru import logger
+import gettext
+
+# 配置基本目录
+root_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+source_path = root_path + '\\source'
+if sys.path[0] != root_path:
+    sys.path.insert(0, root_path)
+if sys.path[1] != source_path:
+    sys.path.insert(1, source_path)
+
+# load translation module
+l10n = gettext.translation("zh_CN", localedir=os.path.join(root_path, "language/locale"), languages=["zh_CN"])
+l10n.install()
+_ = l10n.gettext
 time.time()  # 防自动删除
 
 
@@ -56,31 +71,29 @@ def is_json_equal(j1: str, j2: str) -> bool:
         return False
 
 
-# 配置基本目录
-root_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-source_path = root_path + '\\source'
-if sys.path[0] != root_path:
-    sys.path.insert(0, root_path)
-if sys.path[1] != source_path:
-    sys.path.insert(1, source_path)
+
 
 
 # 加载json
-def load_json(json_name='config.json', default_path='config'):
-    return json.load(open(os.path.join(default_path, json_name), 'r', encoding='utf-8'))
+def load_json(json_name='config.json', default_path='config\\settings'):
+    return json.load(open(os.path.join(root_path, default_path, json_name), 'r', encoding='utf-8'))
 
-
-config_json = load_json("config.json")
+try:
+    config_json = load_json("config.json")
+    DEBUG_MODE = config_json["DEBUG"] if "DEBUG" in config_json else False
+except:
+    logger.error("config文件导入失败，可能由于初次安装。跳过导入。")
+    DEBUG_MODE = False
 
 # 设置debug
-DEBUG_MODE = config_json["DEBUG"] if "DEBUG" in config_json else False
+
 
 # 设置env path
-env_folder_path = config_json["env_floder_path"]
-env_path = os.path.abspath(os.path.join(root_path, env_folder_path))
-if True:
-    if sys.path[2] != env_path:
-        sys.path.insert(2, env_path)
+# env_folder_path = config_json["env_floder_path"]
+# env_path = os.path.abspath(os.path.join(root_path, env_folder_path))
+# if True:
+#     if sys.path[2] != env_path:
+#         sys.path.insert(2, env_path)
 
 # import asyncio
 # import threading
@@ -97,7 +110,7 @@ if True:
 
 # 配置logger
 logger.remove(handler_id=None)
-logger.add('runtime.log', level="TRACE", backtrace=True)
+logger.add(os.path.join(root_path, 'runtime.log'), level="TRACE", backtrace=True)
 if DEBUG_MODE:
     logger.add(sys.stdout, level="TRACE", backtrace=True)
 else:
@@ -109,8 +122,8 @@ if not os.path.exists(root_path):
     logger.error("目录不存在：" + root_path + " 请检查")
 if not os.path.exists(source_path):
     logger.error("目录不存在：" + source_path + " 请检查")
-if not os.path.exists(env_path):
-    logger.error("目录不存在：" + env_path + " 请检查")
+# if not os.path.exists(env_path):
+#     logger.error("目录不存在：" + env_path + " 请检查")
 
 import ctypes, pickle
 
@@ -139,7 +152,11 @@ def is_int(x):
         return True
 
 def save_json(x, json_name='config.json', default_path='config', sort_keys=True):
-    json.dump(x, open(os.path.join(default_path, json_name), 'w', encoding='utf-8'), sort_keys=sort_keys, indent=2,
+    if sort_keys:
+        json.dump(x, open(os.path.join(default_path, json_name), 'w', encoding='utf-8'), sort_keys=True, indent=2,
+              ensure_ascii=False)
+    else:
+        json.dump(x, open(os.path.join(default_path, json_name), 'w', encoding='utf-8'),
               ensure_ascii=False)
 
 

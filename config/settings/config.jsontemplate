@@ -1,0 +1,9 @@
+{
+  "ChromelessWindow": false,
+  "DEBUG": false,
+  "corr_degree": 0.95,
+  "device_paddle": "cpu",
+  "device_torch": "auto",
+  "teamfile": "team.json",
+  "version": "v0.3.0"
+}

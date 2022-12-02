@@ -87,7 +87,7 @@ class InteractionBGD:
         """
 
         ret = static_lib.SCREENCAPTURE.get_capture()
-        if (ret.shape == (0, 0, 3)) or (ret.shape == (0, 0, 4)):
+        if ret.shape != (1080, 1920, 4):
             logger.error("截图失败")
         # img_manager.qshow(ret)
         if posi is not None:
@@ -410,7 +410,7 @@ class InteractionBGD:
         return math.sqrt(ret / min(len(x_col), len(target_col)))
 
     # @staticmethod
-    def delay(self, x, randtime=True, isprint=True, comment=''):
+    def delay(self, x:float, randtime=True, isprint=True, comment=''):
         """延迟一段时间，单位为秒
 
         Args:
