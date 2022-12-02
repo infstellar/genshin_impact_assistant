@@ -1,5 +1,6 @@
 from ctypes import *
 from util import *
+from util import _  # IDEA Cannot recognize this unless explicit declaration. Why?
 import threading
 import timer_module
 import generic_lib
@@ -95,6 +96,7 @@ class AutoTracker:
 
 cvAutoTracker = AutoTracker(os.path.join(root_path, 'source\\cvAutoTrack_7.2.3\\CVAUTOTRACK.dll'))
 cvAutoTracker.init()
+logger.info(_("cvAutoTrack DLL has been loaded."))
 logger.info('1) err' + str(cvAutoTracker.get_last_error()))
 
 
@@ -102,7 +104,7 @@ logger.info('1) err' + str(cvAutoTracker.get_last_error()))
 class AutoTrackerLoop(threading.Thread):
     def __init__(self):
         super().__init__()
-        scene_manager.switchto_mainwin()
+        # scene_manager.switchto_mainwin(max_time=5)
         time.sleep(2)
         self.position = cvAutoTracker.get_position()
         self.last_position = self.position
