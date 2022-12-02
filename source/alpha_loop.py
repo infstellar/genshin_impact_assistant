@@ -6,6 +6,14 @@ from util import *
 
 
 class AlphaLoop(BaseThreading):
+    """创建与控制 combat loop，用于手动启动自动战斗
+
+    Args:
+        BaseThreading (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
 
     @logger.catch
     def __init__(self):

@@ -19,7 +19,9 @@ To没用过github的小伙伴:描述文档中的蓝色文字是链接,可以打�
 
 - 按下`/`以启动或结束自动战斗辅助.
 
-### 2. [自动秘境战斗](./doc/domain_assi.md)
+其他设置参见[自动战斗辅助介绍](./doc/combat_assi.md)
+
+### 2. [自动秘境辅助](./doc/domain_assi.md)
 
 1. 在config中设置挑战秘境的次数与其他设置,详见[config设置](./doc/config.md).
 2. 手动选择队伍,配置队伍,进入秘境.
@@ -28,45 +30,37 @@ To没用过github的小伙伴:描述文档中的蓝色文字是链接,可以打�
 
 - 注意阅读[domain_assi.md](./doc/domain_assi.md)中的注意事项.
 
+其他设置参见[自动秘境辅助介绍](./doc/domain_assi.md)
+
 ## 更新日志 (和饼
 
 [更新记录](update_note.md).
 
 ## 使用方法
 
-### 下载与安装
+### 快速安装
 
-1. 下载`Releases`
-   里最新版本的[`genshin_assistant.zip`](https://github.com/infstellar/genshin_impact_assistant/releases/latest)
-   并解压,之后每次更新只需要重新下载`genshin_assistant.zip`即可.
-
-2. 下载`Releases`里的[`environment_all.7z`](https://github.com/infstellar/genshin_impact_assistant/releases/tag/v0.2.0).
-
-   如果`environment_all.7z`下载过慢,也可以下载`environment_no_torch.7z`,并自行下载`torch`复制到目录中(或者加入q群下载).
-
-3. 将`genshin_assistant` 与 `environment` 文件夹置于同一目录下. 如果有能力,也可以在config中修改`env_floder_path`.
-
-4. 根据实际情况配置config文件夹中的配置文件.
-
-5. 启动原神后,以管理员权限运行`genshin_assistant.exe`.
-
-6. 实在搞不定可以加[qq群](https://jq.qq.com/?_wv=1027&k=YLTrqlzX)
-([图文教程](doc/install.md)).
+请参见[GIA Launcher自动安装器使用方法](doc/install.md)
 
 ### 从源代码构建
 
 #### 安装
 
+<strong> 注意：这里是从源代码安装，需要编程基础。快速使用请参见
+
+[GIA Launcher自动安装器使用方法](doc/install.md) </strong> 
+
 要求:
 
-- python版本[3.9.6](https://www.python.org/downloads/release/python-396/).
+- <strong>！！！ 重要修改 ！！！ python版本 3.7.6 (因为py3.9bug实在是太多了)</strong>
+- python版本[3.7.6](https://www.python.org/downloads/release/python-376/).
 - [git](https://git-scm.com/download/win).
 - <strong>使用管理员权限打开命令提示符和你的代码编写器(IDE)!!!</strong>
 
 1. 输入以下命令以完成源码和依赖的下载.
 
    ```shell
-   git clone https://github.com/infstellar/genshin_impact_assistant.git&cd genshin_impact_assistant&python setup.py install
+   git clone https://github.com/infstellar/genshin_impact_assistant.git&cd genshin_impact_assistant&python installer_setup.py install
    ```
 
 2. 输入以下命令运行程序.
@@ -88,7 +82,9 @@ To没用过github的小伙伴:描述文档中的蓝色文字是链接,可以打�
    git pull
    ```
 
-注意：需要额外解压source/cvAutoTrack_7.2.3/CVAUTOTRACK.7z文件！
+<strong> 注意：这里是从源代码安装，需要编程基础。快速使用请参见
+
+[GIA Launcher自动安装器使用方法](doc/install.md) </strong>
 
 ### 原神窗口设置
 
@@ -120,12 +116,17 @@ To没用过github的小伙伴:描述文档中的蓝色文字是链接,可以打�
 
 - [空荧酒馆原神地图 kongying-tavern/yuan-shen-map](https://github.com/kongying-tavern/yuan-shen-map)
 
-#### 其他开源库
+#### 开源库调用
 
 - [opencv](https://github.com/opencv/opencv)
 - [paddleocr](https://github.com/PaddlePaddle/PaddleOCR)
 - [yolox](https://github.com/Megvii-BaseDetection/YOLOX)
 - [pyinstaller](https://github.com/pyinstaller/pyinstaller)
+
+#### 其他
+
+- [Alas 参考了自动安装与一些实现](https://github.com/LmeSzinc/AzurLaneAutoScript)
+- [GIS 参考了自动战斗脚本的格式](https://github.com/phonowell/genshin-impact-script)
 
 ### 贡献/参与者
 

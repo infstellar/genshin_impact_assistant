@@ -44,7 +44,10 @@ def cview(angle=10, mode=HORIZONTAL):  # left<0,right>0
             angle = -1
         else:
             angle = 1
-    itt.move_to(int(angle), 0, relative=True)
+    if mode == HORIZONTAL:
+        itt.move_to(int(angle), 0, relative=True)
+    else:
+        itt.move_to(0, int(angle), relative=True)
 
 
 def move_view_p(x, y):
@@ -54,6 +57,8 @@ def move_view_p(x, y):
 
 def reset_view():
     pyautogui.click(button='middle')
+    logger.debug("press middle")
+    time.sleep(1)
 
 def view_to_angle_domain(angle=0, deltanum=0.65, maxloop=100, corrected_num=CORRECT_DEGREE):
     cap = itt.capture(posi=small_map.posi_map)
@@ -115,4 +120,4 @@ def reset_const_val():
 
 # view_to_angle(-90)
 if __name__ == '__main__':
-    view_to_angle_domain(-90)
+    cview(-90, VERTICALLY)

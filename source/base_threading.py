@@ -3,6 +3,9 @@ import time
 
 
 class BaseThreading(threading.Thread):
+    """
+    基本线程类，实现了暂停线程、继续线程、终止线程。其他具体参考基本线程规范。
+    """
     def __init__(self):
         super().__init__()
         self.pause_threading_flag = False

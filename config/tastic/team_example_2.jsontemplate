@@ -1,9 +1,9 @@
 {
   "frist": {
-    "name": "yoimiya",
-    "priority": 2,
+    "name": "ningguang",
+    "priority": 5,
     "n": 1,
-    "trigger": "e_ready",
+    "trigger": "idle",
     "autofill": true
   },
   "second": {

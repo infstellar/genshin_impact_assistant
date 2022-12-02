@@ -1,57 +1,66 @@
 {
-  "yoimiya": {
+  "frist": {
+    "name": "yoimiya",
     "position": "",
+    "priority": 2,
+    "n": 1,
     "Elast_time": 10,
     "E_short_cd_time": 18,
     "E_long_cd_time": 0,
     "Ecd_float_time": 0,
     "Epress_time": 0,
-    "tastic_group": "e?e:none;#@e?a:none;",
+    "tastic_group": "e?e:none;#@e?a:q;",
+    "trigger": "e_ready",
     "Qlast_time": 10,
-    "verify": true
+    "Qcd_time": 12,
+    "autofill": false
   },
-  "zhongli": {
-    "position": "shield",
+  "second": {
+    "name": "zhongli",
+    "position": "",
+    "priority": 1,
+    "n": 2,
     "E_short_cd_time": 4,
     "E_long_cd_time": 12,
     "Elast_time": 18,
-    "Ecd_float_time": 1.5,
+    "Ecd_float_time": 3,
     "Epress_time": 2,
     "tastic_group": "e?e~:none;q?q:none",
+    "trigger": "e_ready",
     "Qlast_time": 0,
-    "verify": true
+    "Qcd_time": 12,
+    "autofill": false
   },
-  "bennett": {
+  "third": {
+    "name": "bennett",
     "position": "",
+    "priority": 3,
+    "n": 3,
     "E_short_cd_time": 3,
     "E_long_cd_time": 10,
     "Elast_time": 0,
     "Ecd_float_time": 0,
     "Epress_time": 2.5,
     "tastic_group": "e?e~:none;q?q:none",
+    "trigger": "e_ready",
     "Qlast_time": 0,
-    "verify": true
+    "Qcd_time": 12,
+    "autofill": false
   },
-  "yunjin": {
+  "forth": {
+    "name": "yunjin",
     "position": "",
+    "priority": 4,
+    "n": 4,
     "E_short_cd_time": 5,
     "E_long_cd_time": 10,
     "Elast_time": 0,
     "Ecd_float_time": 0,
     "Epress_time": 3,
     "tastic_group": "e?e~:none;q?q:none",
+    "trigger": "e_ready",
     "Qlast_time": 0,
-    "verify": true
-  },
-  "ningguang": {
-    "position": "",
-    "E_short_cd_time": 5,
-    "E_long_cd_time": 10,
-    "Elast_time": 0,
-    "Ecd_float_time": 0,
-    "Epress_time": 3,
-    "tastic_group": "e?e.500:none;q?q:none;a,700,a,500,a~",
-    "Qlast_time": 0,
-    "verify": true
+    "Qcd_time": 12,
+    "autofill": false
   }
 }

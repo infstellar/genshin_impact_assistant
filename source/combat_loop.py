@@ -1,14 +1,13 @@
 # from interaction import *
 
-import time
-
+from util import *
 import character
 from aim_operator import AimOperator
 from base_threading import BaseThreading
 from interaction_background import InteractionBGD
 from switch_character_operator import SwitchCharacterOperator
 import combat_lib
-from util import *
+
 
 
 def sort_flag_1(x: character.Character):
@@ -21,8 +20,8 @@ def stop_func_example():  # True:stop;False:continue
 
 def get_chara_list(team_name='team.json'):
     team_name = config_json["teamfile"]
-    team = load_json(team_name)
-    characters = load_json("character.json")
+    team = load_json(team_name, default_path="config\\tastic")
+    characters = load_json("character.json", default_path="config\\tastic")
     chara_list = []
     for team_name in team:
         team_item = team[team_name]
@@ -36,6 +35,7 @@ def get_chara_list(team_name='team.json'):
             ctastic_group = ccharacter["tastic_group"]
             cEpress_time = ccharacter["Epress_time"]
             cQlast_time = ccharacter["Qlast_time"]
+            cQcd_time = ccharacter["Qcd_time"]
         else:
             cposition = team_item["position"]
             cpriority = team_item["priority"]
@@ -47,6 +47,7 @@ def get_chara_list(team_name='team.json'):
             ctrigger = team_item["trigger"]
             cEpress_time = team_item["Epress_time"]
             cQlast_time = team_item["Qlast_time"]
+            cQcd_time = team_item["Qcd_time"]
 
         cn = team_item["n"]
         cname = team_item['name']
@@ -61,7 +62,7 @@ def get_chara_list(team_name='team.json'):
                 name=cname, position=cposition, n=cn, priority=cpriority,
                 E_short_cd_time=cE_short_cd_time, E_long_cd_time=cE_long_cd_time, Elast_time=cElast_time,
                 Ecd_float_time=cEcd_float_time, tastic_group=ctastic_group, trigger=ctrigger,
-                Epress_time=cEpress_time, Qlast_time=cQlast_time
+                Epress_time=cEpress_time, Qlast_time=cQlast_time, Qcd_time=cQcd_time
             )
         )
     return chara_list
