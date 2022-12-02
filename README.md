@@ -60,7 +60,7 @@ To没用过github的小伙伴:描述文档中的蓝色文字是链接,可以打�
 1. 输入以下命令以完成源码和依赖的下载.
 
    ```shell
-   git clone https://github.com/infstellar/genshin_impact_assistant.git&cd genshin_impact_assistant&python installer_setup.py install
+   git clone https://github.com/infstellar/genshin_impact_assistant.git&cd genshin_impact_assistant&python setup.py install
    ```
 
 2. 输入以下命令运行程序.
