@@ -4,18 +4,12 @@ import math
 import random
 import string
 import time
-from ctypes.wintypes import HWND
-
 import cv2
 import numpy as np
 import win32api
 import win32con
 import win32gui
-
-import pyautogui
-import pydirectinput
 import img_manager
-import posi_manager
 import static_lib
 import vkcode
 

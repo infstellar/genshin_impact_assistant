@@ -1,9 +1,9 @@
 from util import *
-import cvAutoTrack
 import generic_lib
 import numpy as np
 import big_map
 import cv2
+import static_lib
 
 global priority_waypoints, priority_waypoints_list, priority_waypoints_array, idnum
 priority_waypoints, priority_waypoints_list, priority_waypoints_array, idnum = None, None, None, None
@@ -29,9 +29,12 @@ def show_bigmap_posi_in_window(current_teyvat_posi, bigmap_posi_list):
     for i in list(bigmap_posi_list):
         origin_show_img = cv2.drawMarker(origin_show_img, position=(int(i[0]), int(i[1])), color=(0, 0, 255), markerSize=5, markerType=cv2.MARKER_CROSS, thickness=1)
         origin_bpl = big_map.bigmap_posi2teyvat_posi(current_teyvat_posi, np.array(i))
+        cid = -1
         for ii in priority_waypoints:
-            if list(map(int,ii["position"])) == list(map(int,list(origin_bpl))):
+            if list(map(int,ii["position"])) == list(map(int, list(origin_bpl))):
                 cid = ii["id"]
+        if cid == -1:
+            logger.error(f"CANNOT FIND img id! position: {list(map(int, list(origin_bpl)))}")
         origin_show_img = cv2.putText(origin_show_img, str(cid), (int(i[0]), int(i[1])+5), cv2.FONT_HERSHEY_SIMPLEX, 0.2, (255, 255, 255), 1)
     cv2.imshow('win',origin_show_img)
     cv2.waitKey(0)
@@ -39,7 +42,7 @@ def show_bigmap_posi_in_window(current_teyvat_posi, bigmap_posi_list):
 def add_mode():
     global priority_waypoints, priority_waypoints_list, priority_waypoints_array, idnum
     while 1:
-        currentp=list(cvAutoTrack.cvAutoTrackerLoop.get_position()[1:])
+        currentp=list(static_lib.cvAutoTrackerLoop.get_position()[1:])
         if currentp == [0,0]:
             print("获取坐标失败")
             time.sleep(1)
@@ -70,7 +73,7 @@ def add_mode():
 def edit_mode():
     global priority_waypoints, priority_waypoints_list, priority_waypoints_array, idnum
     input("请切换至大世界界面后，等待数秒，按下回车")
-    cp=list(cvAutoTrack.cvAutoTrackerLoop.get_position()[1:])
+    cp=list(static_lib.cvAutoTrackerLoop.get_position()[1:])
     input("请切换至地图界面后按下回车")
     while 1:
         load_pw()
@@ -88,7 +91,7 @@ def edit_mode():
 def show_current_posi():
     while 1:
         time.sleep(0.2)
-        print(cvAutoTrack.cvAutoTrackerLoop.get_position()[1:])
+        print(static_lib.cvAutoTrackerLoop.get_position()[1:])
 
 time.sleep(1)
 # add_mode()

@@ -1,12 +1,8 @@
 import asyncio
 import threading
-
 from pywebio import platform
-
-import source.util
-import win32api, win32con, win32gui, pyautogui, requests, unittest, xml, inspect, keyboard  # 用于pyinstaller，不要删除！
-
-
+from source.webio import webio
+import source.webio.log_handler
 def server_thread():
     # https://zhuanlan.zhihu.com/p/101586682
     loop = asyncio.new_event_loop()
@@ -15,10 +11,14 @@ def server_thread():
 
     platform.tornado.start_server(webio.main, auto_open_webbrowser=True, debug=source.util.DEBUG_MODE)
 
+threading.Thread(target=server_thread, daemon=False).start()
+
+import source.util
+
 
 source.util.logger.info('正在初始化，请稍后')
 # source.unit.logger.info('Initializing, please hold on')
-from source.webio import webio
+
 
 try:
     import source.listening
@@ -29,6 +29,7 @@ except Exception as error:
 
 source.util.logger.info('初始化完成')
 
-threading.Thread(target=server_thread, daemon=False).start()
+source.util.add_logger_to_GUI(source.webio.log_handler.webio_poster)
 # source.unit.logger.info('Initialization Completed')
+
 source.listening.listening()

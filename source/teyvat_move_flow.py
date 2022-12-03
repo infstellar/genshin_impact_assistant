@@ -1,7 +1,6 @@
 from util import *
 import math
 import flow_state as ST
-import cvAutoTrack
 from interaction_background import InteractionBGD
 import teyvat_move_controller
 import generic_lib
@@ -14,6 +13,7 @@ from base_threading import BaseThreading
 import timer_module
 import combat_lib
 import scene_manager
+import static_lib
 
 IN_MOVE = 0
 IN_FLY = 1
@@ -83,7 +83,7 @@ class TeyvatMoveFlow(BaseThreading):
         self.motion_state = IN_MOVE
     
     def align_position(self, tx, ty):
-        b, x, y = cvAutoTrack.cvAutoTrackerLoop.get_position()
+        b, x, y = static_lib.cvAutoTrackerLoop.get_position()
         if b:
             angle = get_target_relative_angle(x, y, tx, ty)
             movement.view_to_angle_teyvat(angle)
@@ -136,7 +136,7 @@ class TeyvatMoveFlow(BaseThreading):
                 self.current_state = ST.IN_TEYVAT_TELEPORT
 
             if self.current_state == ST.IN_TEYVAT_TELEPORT:
-                curr_posi = cvAutoTrack.cvAutoTrackerLoop.get_position()[1:]
+                curr_posi = static_lib.cvAutoTrackerLoop.get_position()[1:]
                 scene_manager.switchto_bigmapwin()
                 # Obtain the coordinates of the transmission anchor closest to the target coordinates
                 tw_posi = big_map.nearest_big_map_tw_posi(curr_posi, self.target_posi) # 获得距离目标坐标最近的传送锚点坐标 
@@ -162,14 +162,14 @@ class TeyvatMoveFlow(BaseThreading):
                 self.itt.left_click()
                 while not self.itt.get_img_existence(img_manager.ui_main_win):
                     time.sleep(1)
-                while cvAutoTrack.cvAutoTrackerLoop.in_excessive_error:
+                while static_lib.cvAutoTrackerLoop.in_excessive_error:
                     time.sleep(1)
                 self.current_state = ST.AFTER_TEYVAT_TELEPORT
 
             if self.current_state == ST.AFTER_TEYVAT_TELEPORT:
                 scene_manager.switchto_mainwin()
                 time.sleep(2)
-                curr_posi = cvAutoTrack.cvAutoTrackerLoop.get_position()[1:]
+                curr_posi = static_lib.cvAutoTrackerLoop.get_position()[1:]
                 scene_manager.switchto_bigmapwin()
                 tw_posi = big_map.nearest_teyvat_tw_posi(curr_posi, self.target_posi)[0]
                 p1 = generic_lib.euclidean_distance(self.target_posi, tw_posi)
@@ -217,7 +217,7 @@ class TeyvatMoveFlow(BaseThreading):
                     self.tmc.continue_threading()
                     '''可能会加体力条检测'''
                     
-                if generic_lib.euclidean_distance(cvAutoTrack.cvAutoTrackerLoop.get_position()[1:], self.target_posi)<=10:
+                if generic_lib.euclidean_distance(static_lib.cvAutoTrackerLoop.get_position()[1:], self.target_posi)<=10:
                     self.current_state = ST.END_TEYVAT_MOVE
                     
             if self.current_state == ST.END_TEYVAT_MOVE:

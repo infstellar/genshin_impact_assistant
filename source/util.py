@@ -2,8 +2,8 @@ import json
 import os
 import sys
 import time  # 8药删了，qq了
-from typing import Callable
-
+import math
+import numpy as np
 from loguru import logger
 import gettext
 
@@ -95,6 +95,19 @@ except:
 #     if sys.path[2] != env_path:
 #         sys.path.insert(2, env_path)
 
+# import asyncio
+# import threading
+# from source.webio import webio
+# from pywebio import platform
+# def server_thread():
+#     # https://zhuanlan.zhihu.com/p/101586682
+#     loop = asyncio.new_event_loop()
+#     asyncio.set_event_loop(loop)
+#     ###
+
+# platform.tornado.start_server(webio.main, auto_open_webbrowser=True, debug=DEBUG_MODE)
+# threading.Thread(target=server_thread, daemon=False).start()
+
 # 配置logger
 logger.remove(handler_id=None)
 logger.add(os.path.join(root_path, 'runtime.log'), level="TRACE", backtrace=True)
@@ -103,6 +116,13 @@ if DEBUG_MODE:
 else:
     logger.add(sys.stdout, level="INFO", backtrace=True)
 
+def add_logger_to_GUI(cb_func):
+    if DEBUG_MODE:
+        logger.add(cb_func, level="TRACE", backtrace=True)
+    else:
+        logger.add(cb_func, level="INFO", backtrace=True)
+
+# logger.add(webio.log_handler.webio_handler)
 # 校验目录
 if not os.path.exists(root_path):
     logger.error("目录不存在：" + root_path + " 请检查")
@@ -161,6 +181,17 @@ def reflash_config():
     global config_json
     config_json = load_json("config.json")
 
+def euclidean_distance(p1, p2):
+    return math.sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2)
+
+def euclidean_distance_plist(p1, p2):
+    return np.sqrt((p1[0] - p2[:,0]) ** 2 + (p1[1] - p2[:,1]) ** 2)
+
+def manhattan_distance(p1, p2):
+    return abs(p1[0]-p2[0]) + abs(p1[1]-p2[1])
+
+def manhattan_distance_plist(p1, p2):
+    return abs(p1[0]-p2[:,0]) + abs(p1[1]-p2[:,1])
 
 if __name__ == '__main__':
     a = load_json("../assests/itemall.json")
@@ -187,3 +218,4 @@ def is_number(s):
         pass
 
     return False
+
