@@ -2,8 +2,8 @@ import json
 import os
 import sys
 import time  # 8药删了，qq了
-from typing import Callable
-
+import math
+import numpy as np
 from loguru import logger
 import gettext
 
@@ -181,6 +181,17 @@ def reflash_config():
     global config_json
     config_json = load_json("config.json")
 
+def euclidean_distance(p1, p2):
+    return math.sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2)
+
+def euclidean_distance_plist(p1, p2):
+    return np.sqrt((p1[0] - p2[:,0]) ** 2 + (p1[1] - p2[:,1]) ** 2)
+
+def manhattan_distance(p1, p2):
+    return abs(p1[0]-p2[0]) + abs(p1[1]-p2[1])
+
+def manhattan_distance_plist(p1, p2):
+    return abs(p1[0]-p2[:,0]) + abs(p1[1]-p2[:,1])
 
 if __name__ == '__main__':
     a = load_json("../assests/itemall.json")

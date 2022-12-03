@@ -1,10 +1,11 @@
+import time
 from ctypes import *
 from util import *
 from util import _  # IDEA Cannot recognize this unless explicit declaration. Why?
-import threading
 import timer_module
-import generic_lib
-import scene_manager
+from base_threading import BaseThreading
+
+
 class AutoTracker:
     def __init__(self, dll_path: str):
         self.__lib = CDLL(dll_path)
@@ -100,8 +101,7 @@ logger.info(_("cvAutoTrack DLL has been loaded."))
 logger.info('1) err' + str(cvAutoTracker.get_last_error()))
 
 
-
-class AutoTrackerLoop(threading.Thread):
+class AutoTrackerLoop(BaseThreading):
     def __init__(self):
         super().__init__()
         # scene_manager.switchto_mainwin(max_time=5)
@@ -110,24 +110,45 @@ class AutoTrackerLoop(threading.Thread):
         self.last_position = self.position
         self.rotation = cvAutoTracker.get_rotation()
         self.in_excessive_error = False
-        
+        self.start_sleep_timer = timer_module.Timer(diff_start_time=61)
+
     def run(self):
         ct = 0
         time.sleep(0.1)
         while 1:
+            time.sleep(self.while_sleep)
+            if self.stop_threading_flag:
+                return 0
+
+            if self.pause_threading_flag:
+                if self.working_flag:
+                    self.working_flag = False
+                time.sleep(1)
+                continue
+
+            if not self.working_flag:
+                self.working_flag = True
+
+            if self.start_sleep_timer.get_diff_time() >= 60:
+                if self.start_sleep_timer.get_diff_time() <= 65:
+                    logger.debug("cvAutoTrackerLoop switch to sleep mode.")
+                time.sleep(0.8)
+                continue
+
             self.rotation = cvAutoTracker.get_rotation()
             self.position = cvAutoTracker.get_position()
             if not self.position[0]:
                 # print("坐标获取失败")
-                self.position = (False,0,0)
+                self.position = (False, 0, 0)
                 self.in_excessive_error = True
+                time.sleep(0.5)
                 continue
             if ct >= 30:
                 self.last_position = self.position
                 self.in_excessive_error = False
                 logger.debug("位置已重置")
                 ct = 0
-            if generic_lib.euclidean_distance(self.position[1:],self.last_position[1:])>=50:
+            if euclidean_distance(self.position[1:], self.last_position[1:]) >= 50:
                 # print("误差过大")
                 self.in_excessive_error = True
                 ct += 1
@@ -136,61 +157,57 @@ class AutoTrackerLoop(threading.Thread):
                 self.in_excessive_error = False
                 ct = 0
             # print(self.last_position)
-            
-                
-    
+
     def get_position(self):
+        self.start_sleep_timer.reset()
         return self.position
 
     def get_rotation(self):
+        self.start_sleep_timer.reset()
         return self.rotation
-cvAutoTrackerLoop = AutoTrackerLoop()
-cvAutoTrackerLoop.start()
-time.sleep(1)
-def wait_until_no_excessive_error():
-    while cvAutoTrackerLoop.in_excessive_error:
-        time.sleep(1)
+
 # logger.info(cvAutoTracker.verison())
 
 # 以下是对被封装的类的简单演示。
 # 使用命令行 `python ./main.py` 直接运行本文件即可。
 if __name__ == '__main__':
-    # 等待五秒钟以便切换到原神窗口：
-    # sleep(5)
-
-    # print(cvAutoTracker.SetWorldCenter(793.9, -1237.8))
-
-    # 加载同一目录下的DLL：
-    # tracker = AutoTracker('source\\CVAUTOTRACK.dll')
-
-    # 初始化并打印错误：
-    # tracker.init()
-    # print('1) err', tracker.get_last_error(), '\n')
-
-    # 获取当前人物所在位置以及角度（箭头朝向）并打印错误：
-    print(cvAutoTrackerLoop.get_position())
-    print('2) err', cvAutoTrackerLoop.get_position(), '\n')
-
-    # 获取UID并打印错误：
-    # print(cvAutoTrackerLoop.get_uid())
-    # print('3) err', cvAutoTrackerLoop.get_last_error(), '\n')
-
-    # print(cvAutoTrackerLoop.get_direction())
-    # print('4) err', cvAutoTrackerLoop.get_last_error(), '\n')
-
-    print(cvAutoTrackerLoop.get_rotation())
-    # print('5) err', cvAutoTrackerLoop.get_last_error(), '\n')
-
-    while 1:
-        # print(cvAutoTracker.get_rotation())
-
-        # ret = cvAutoTracker.get_position()
-        # posi = cvAutoTracker.translate_posi(ret[1],ret[2])
-        print(cvAutoTrackerLoop.get_position())
-        time.sleep(0.2)
-
-    # 卸载相关内存：（这一步不是必须的，但还是建议手动调用）
-    cvAutoTracker.uninit()
+    # # 等待五秒钟以便切换到原神窗口：
+    # # sleep(5)
+    #
+    # # print(cvAutoTracker.SetWorldCenter(793.9, -1237.8))
+    #
+    # # 加载同一目录下的DLL：
+    # # tracker = AutoTracker('source\\CVAUTOTRACK.dll')
+    #
+    # # 初始化并打印错误：
+    # # tracker.init()
+    # # print('1) err', tracker.get_last_error(), '\n')
+    #
+    # # 获取当前人物所在位置以及角度（箭头朝向）并打印错误：
+    # print(cvAutoTrackerLoop.get_position())
+    # print('2) err', cvAutoTrackerLoop.get_position(), '\n')
+    #
+    # # 获取UID并打印错误：
+    # # print(cvAutoTrackerLoop.get_uid())
+    # # print('3) err', cvAutoTrackerLoop.get_last_error(), '\n')
+    #
+    # # print(cvAutoTrackerLoop.get_direction())
+    # # print('4) err', cvAutoTrackerLoop.get_last_error(), '\n')
+    #
+    # print(cvAutoTrackerLoop.get_rotation())
+    # # print('5) err', cvAutoTrackerLoop.get_last_error(), '\n')
+    #
+    # while 1:
+    #     # print(cvAutoTracker.get_rotation())
+    #
+    #     # ret = cvAutoTracker.get_position()
+    #     # posi = cvAutoTracker.translate_posi(ret[1],ret[2])
+    #     print(cvAutoTrackerLoop.get_position())
+    #     time.sleep(0.2)
+    #
+    # # 卸载相关内存：（这一步不是必须的，但还是建议手动调用）
+    # cvAutoTracker.uninit()
+    pass
 
 # 0 263.25 0 -> 793.9 -1237.8
 
