@@ -1,7 +1,6 @@
 import img_manager
 import time
 from interaction_background import InteractionBGD
-import posi_manager
 import math
 import numpy as np
 import scene_manager

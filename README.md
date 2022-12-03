@@ -13,13 +13,13 @@ To没用过github的小伙伴:描述文档中的蓝色文字是链接,可以打�
 
 <https://www.bilibili.com/video/BV1RV4y157m6>(挂了)
 
-## 目前功能及如何启动
+## 功能及其启动方式
 
 ### 1. [自动战斗辅助](./doc/combat_assi.md)
 
 - 按下`/`以启动或结束自动战斗辅助.
 
-其他设置参见[自动战斗辅助介绍](./doc/combat_assi.md)
+其他设置参见[自动战斗辅助介绍](./doc/combat_assi.md).
 
 ### 2. [自动秘境辅助](./doc/domain_assi.md)
 
@@ -30,40 +30,39 @@ To没用过github的小伙伴:描述文档中的蓝色文字是链接,可以打�
 
 - 注意阅读[domain_assi.md](./doc/domain_assi.md)中的注意事项.
 
-其他设置参见[自动秘境辅助介绍](./doc/domain_assi.md)
+其他设置参见[自动秘境辅助介绍](./doc/domain_assi.md).
 
 ## 更新日志 (和饼
 
-[更新记录](update_note.md).
+[更新记录](update_note.md)
 
 ## 使用方法
 
 ### 快速安装
 
-请参见[GIA Launcher自动安装器使用方法](doc/install.md)
+请参见[GIA Launcher自动安装器使用方法](doc/install.md).
 
 ### 从源代码构建
 
 #### 安装
 
-<strong> 注意：这里是从源代码安装，需要编程基础。快速使用请参见
+<strong>注意: 这里是从源代码运行,需要一定编程基础.快速使用请参见:</strong>
 
-[GIA Launcher自动安装器使用方法](doc/install.md) </strong> 
-
+<strong>[GIA Launcher自动安装器使用方法](doc/install.md)</strong>
 要求:
 
-- <strong>！！！ 重要修改 ！！！ python版本 3.7.6 (因为py3.9bug实在是太多了)</strong>
+- <strong>！！！ 重要修改 ！！！ python版本 3.7.6 (因为py3.9bug实在是太多了).</strong>
 - python版本[3.7.6](https://www.python.org/downloads/release/python-376/).
 - [git](https://git-scm.com/download/win).
 - <strong>使用管理员权限打开命令提示符和你的代码编写器(IDE)!!!</strong>
 
-1. 输入以下命令以完成源码和依赖的下载.
+1. 输入以下命令以完成源码和依赖的下载:
 
    ```shell
-   git clone https://github.com/infstellar/genshin_impact_assistant.git&cd genshin_impact_assistant&python installer_setup.py install
+   git clone https://github.com/infstellar/genshin_impact_assistant.git&cd genshin_impact_assistant&python setup.py install
    ```
 
-2. 输入以下命令运行程序.
+2. 输入以下命令运行程序:
 
    ```shell
    python genshin_assistant.py
@@ -73,18 +72,18 @@ To没用过github的小伙伴:描述文档中的蓝色文字是链接,可以打�
 
 提供两种方法更新:
 
-- 使用setup.py更新.
+- 使用setup.py更新:
    ```shell
    python setup.py update
    ```
-- 使用git pull更新.
+- 使用git pull更新:
    ```shell
    git pull
    ```
 
-<strong> 注意：这里是从源代码安装，需要编程基础。快速使用请参见
+<strong>注意: 这里是从源代码运行,需要一定编程基础.快速使用请参见:</strong>
 
-[GIA Launcher自动安装器使用方法](doc/install.md) </strong>
+<strong>[GIA Launcher自动安装器使用方法](doc/install.md)</strong>
 
 ### 原神窗口设置
 
@@ -134,7 +133,8 @@ To没用过github的小伙伴:描述文档中的蓝色文字是链接,可以打�
 
 ## 声明
 
-- 本软件开源免费,仅供学习交流使用,请勿用于非法用途.使用本软件进行代练的商家所收取的费用均为商家的人工/设备费用,产生的<strong>任何问题</strong>与本软件无关.
+- 本软件开源免费,仅供学习交流使用,请勿用于非法用途.使用本软件进行代练的商家所收取的费用均为商家的人工/设备费用,产生的<strong>
+任何问题</strong>与本软件无关.
 
 ## 广告
 

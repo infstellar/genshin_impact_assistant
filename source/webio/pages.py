@@ -1,4 +1,3 @@
-import asyncio
 import json
 import os
 import threading
@@ -15,6 +14,8 @@ from source.webio.page_manager import Page
 class MainPage(Page):
     def __init__(self):
         super().__init__()
+        self.log_list = []
+        self.log_list_lock = threading.Lock()
 
     def _on_load(self):  # 加载事件
         self._load()  # 加载主页
@@ -26,6 +27,11 @@ class MainPage(Page):
         while self.loaded:  # 当界面被加载时循环运行
             if pin.pin['FlowMode'] != listening.current_flow:  # 比较变更是否被应用
                 listening.current_flow = pin.pin['FlowMode']  # 应用变更
+            self.log_list_lock.acquire()
+            for text, color in self.log_list:
+                output.put_text(text, scope='LogArea').style(f'color: {color}')
+            self.log_list.clear()
+            self.log_list_lock.release()
             time.sleep(0.1)
 
     def _load(self):
@@ -70,7 +76,9 @@ class MainPage(Page):
 
     def logout(self, text: str, color='black'):
         if self.loaded:
-            output.put_text(text, scope='LogArea').style(f'color: {color}')
+            self.log_list_lock.acquire()
+            self.log_list.append((text, color))
+            self.log_list_lock.release()
 
     def _on_unload(self):
         pass
@@ -87,9 +95,11 @@ class SettingPage(Page):
         self.config_files_name = []
         for root, dirs, files in os.walk('config'):
             for f in files:
-                if f[f.index('.')+1:] == "json":
+                if f[f.index('.') + 1:] == "json":
                     self.config_files.append({"label": f, "value": os.path.join(root, f)})
         self.can_remove_last_scope = False
+        # 注释显示模式在这改
+        self.mode = True
 
     def _load(self):
         self.last_file = None
@@ -130,7 +140,12 @@ class SettingPage(Page):
         self.file_name = name
         output.put_markdown('## {}'.format(name), scope='now')  # 标题
         j = json.load(open(name, 'r', encoding='utf8'))
-        self.put_json(j, 'now', level=3)  # 载入json
+        if os.path.exists(name + '.jsondoc'):
+            with open(name + '.jsondoc', 'r', encoding='utf8') as f:
+                doc = json.load(f)
+        else:
+            doc = {}
+        self.put_json(j, doc, 'now', level=3)  # 载入json
         output.put_button('save', scope='now', onclick=self.save)
 
     def save(self):
@@ -182,23 +197,38 @@ class SettingPage(Page):
         output.close_popup()
         self.exit_popup = True
 
-    def put_json(self, j: dict, scope_name, add_name='', level=1):
+    def put_json(self, j: dict, doc: dict, scope_name, add_name='', level=1):
         for k in j:
             v = j[k]
+            # 获取注释
+            doc_now = ''
+            doc_now_data = {}
+            if k in doc:
+                if type(doc[k]) == dict:
+                    if 'doc' in doc[k]:
+                        doc_now = doc[k]['doc']
+                    if 'data' in doc[k]:
+                        doc_now_data = doc[k]['data']
+                if type(doc[k]) == str:
+                    doc_now = doc[k]
+
+            display_name = doc_now if doc_now else k if self.mode else '{} {}'.format(k, doc_now)
+            bed_scope_name='{}-{}'.format(add_name, k)
             if type(v) == str or v is None:
-                pin.put_input('{}-{}'.format(add_name, k), label=k, value=v, scope=scope_name)
+                pin.put_input(bed_scope_name, label=display_name, value=v, scope=scope_name)
             elif type(v) == bool:
-                pin.put_select('{}-{}'.format(add_name, k),
-                               [{"label": 'True', "value": True}, {"label": 'False', "value": False}], value=v, label=k,
+                pin.put_select(bed_scope_name,
+                               [{"label": 'True', "value": True}, {"label": 'False', "value": False}], value=v, label=display_name,
                                scope=scope_name)
             elif type(v) == dict:
-                output.put_scope('{}-{}'.format(add_name, k), scope=scope_name)
-                output.put_markdown('#' * level + ' ' + k, scope='{}-{}'.format(add_name, k))
-                self.put_json(v, '{}-{}'.format(add_name, k), add_name='{}-{}'.format(add_name, k), level=level + 1)
+                output.put_scope(bed_scope_name, scope=scope_name)
+                output.put_markdown('#' * level + ' ' + display_name, scope=bed_scope_name)
+                self.put_json(v, doc_now_data, bed_scope_name, add_name=bed_scope_name,
+                              level=level + 1)
             elif type(v) == list:
-                pin.put_textarea('{}-{}'.format(add_name, k), label=k, value=util.list2format_list_text(v),
+                pin.put_textarea(bed_scope_name, label=display_name, value=util.list2format_list_text(v),
                                  scope=scope_name)
             elif type(v) == int:
-                pin.put_input('{}-{}'.format(add_name, k), label=k, value=v, scope=scope_name, type='number')
+                pin.put_input(bed_scope_name, label=display_name, value=v, scope=scope_name, type='number')
             elif type(v) == float:
-                pin.put_input('{}-{}'.format(add_name, k), label=k, value=v, scope=scope_name, type='float')
+                pin.put_input(bed_scope_name, label=display_name, value=v, scope=scope_name, type='float')

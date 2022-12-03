@@ -5,6 +5,8 @@ import numpy as np
 
 from timer_module import Timer
 from util import *
+import cvAutoTrack
+
 
 
 def get_handle():
@@ -83,6 +85,14 @@ class ScreenCapture:
 SCREENCAPTURE = ScreenCapture()
 W_KEYDOWN = False
 
+cvAutoTrackerLoop = cvAutoTrack.AutoTrackerLoop()
+cvAutoTrackerLoop.setDaemon(True)
+cvAutoTrackerLoop.start()
+time.sleep(1)
+
+def wait_until_no_excessive_error():
+    while cvAutoTrackerLoop.in_excessive_error:
+        time.sleep(1)
 
 class TestTest(threading.Thread):
     def __init__(self):

@@ -6,7 +6,6 @@ from interaction_background import InteractionBGD
 from pdocr_api import ocr
 import timer_module
 import static_lib
-import cvAutoTrack
 import movement
 
 
@@ -139,11 +138,11 @@ class PickupOperator(BaseThreading):
         self.flicker_timer.reset()
 
     def cview_toward_target(self):
-        cp = cvAutoTrack.cvAutoTrackerLoop.get_position()[1:]
+        cp = static_lib.cvAutoTrackerLoop.get_position()[1:]
         if generic_lib.euclidean_distance(cp,self.target_posi)>= self.max_distance_from_target:
             movement.reset_view()
             logger.debug("too far from the target")
-            while generic_lib.euclidean_distance(cvAutoTrack.cvAutoTrackerLoop.get_position()[1:], self.target_posi) >= 8:
+            while generic_lib.euclidean_distance(static_lib.cvAutoTrackerLoop.get_position()[1:], self.target_posi) >= 8:
                 if self.checkup_stop_func():
                     return 0
                 movement.change_view_to_posi(self.target_posi)
