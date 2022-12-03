@@ -66,6 +66,8 @@ class PaddleocrAPI:
 
     @staticmethod
     def find_text(result, text, mode=APPROXIMATE_MATCHING):
+        if result == [[]]:
+            return None
         if mode == APPROXIMATE_MATCHING:
             for i in range(len(result)):
                 if text in result[i][1][0]:
