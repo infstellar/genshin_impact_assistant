@@ -82,7 +82,15 @@ class InteractionBGD:
 
         ret = static_lib.SCREENCAPTURE.get_capture()
         if ret.shape != (1080, 1920, 4):
-            logger.error("截图失败")
+            logger.error(f"截图失败, shape={ret.shape}, 将在2秒后重试。")
+            while 1:
+                time.sleep(2)
+                ret = static_lib.SCREENCAPTURE.get_capture()
+                if ret.shape == (1080, 1920, 4):
+                    break
+                else:
+                    logger.error(f"截图失败, shape={ret.shape}, 将在2秒后重试。")
+
         # img_manager.qshow(ret)
         if posi is not None:
             ret = ret[posi[0]:posi[2], posi[1]:posi[3]]
