@@ -110,7 +110,7 @@ except:
 
 # 配置logger
 logger.remove(handler_id=None)
-logger.add(os.path.join(root_path, 'runtime.log'), level="TRACE", backtrace=True)
+logger.add(os.path.join(root_path, os.path.join(root_path,'logs', 'runtime.log')), level="TRACE", backtrace=True)
 if DEBUG_MODE:
     logger.add(sys.stdout, level="TRACE", backtrace=True)
 else:
