@@ -110,7 +110,7 @@ except:
 
 # 配置logger
 logger.remove(handler_id=None)
-logger.add(os.path.join(root_path, os.path.join(root_path,'logs', 'runtime.log')), level="TRACE", backtrace=True)
+logger.add(os.path.join(root_path, os.path.join(root_path, 'Logs', "{time:YYYY-MM-DD}.log")), level="TRACE", backtrace=True, retention='15 days')
 if DEBUG_MODE:
     logger.add(sys.stdout, level="TRACE", backtrace=True)
 else:
@@ -194,9 +194,7 @@ def manhattan_distance_plist(p1, p2):
     return abs(p1[0]-p2[:,0]) + abs(p1[1]-p2[:,1])
 
 if __name__ == '__main__':
-    a = load_json("../assests/itemall.json")
-    save_json(a, "../assests/itemall.json")
-    print()
+    logger.info("test")
 
 
 def is_number(s):
