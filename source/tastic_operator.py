@@ -74,9 +74,12 @@ class TasticOperator(BaseThreading):
         else:
             return True
 
-    def _is_e_release(self):
+    def _is_e_release(self, show_res = False):
         cap = self.itt.capture(posi=posi_manager.posi_chara_e)
         cap = self.itt.png2jpg(cap, channel='ui', alpha_num=100)
+        if show_res:
+            cv2.imshow("_is_e_release", cap)
+            cv2.waitKey(10)
         ret = pdocr_api.ocr.is_img_num_plus(cap)
 
         if ret[0]:
@@ -369,5 +372,5 @@ if __name__ == '__main__':
     to.set_parameter(chara.tastic_group, chara)
     # to.setDaemon(True)
     while 1:
-        print(to.is_q_ready(is_show=True))
+        print(to._is_e_release(show_res=True))
         time.sleep(0.1)

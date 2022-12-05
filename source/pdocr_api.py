@@ -47,7 +47,7 @@ class PaddleocrAPI:
         for line in result:
             pass
             # print(line)
-        return result
+        return result[0] # py3.7
 
     # def imgAnalysePlus(self,hwnd:winInfo,rangePosition):
     #     imsrc,position=GetScrWindowsImg(hwnd,rangePosition)
@@ -111,7 +111,7 @@ class PaddleocrAPI:
 
     def get_text_position(self, im_src, text, mode=APPROXIMATE_MATCHING, returnMode=RETURN_POSITION, isprintlog=False,
                           message='', default_end='\n'):
-        res = self.img_analyse(im_src)[0] # py3.7
+        res = self.img_analyse(im_src)
         res_position = self.find_text(res, text, mode=mode)
         logger.debug('getTextPosition:  ' + message, end=' | ')
         if isprintlog:
