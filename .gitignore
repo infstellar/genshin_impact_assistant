@@ -185,3 +185,4 @@ installer_config.json
 .idea/.gitignore
 /config/settings/auto_domain.json
 .vscode/launch.json
+.vscode/settings.json

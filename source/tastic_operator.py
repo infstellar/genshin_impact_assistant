@@ -1,13 +1,17 @@
 import time
 
 import img_manager
-import pdocr_api
+if True:
+    import pdocr_api
+else:
+    pdocr_api = None
 import posi_manager
 from base_threading import BaseThreading
 from character import Character
 from interaction_background import InteractionBGD
 from timer_module import Timer
 from util import *
+import cv2
 
 E_STRICT_MODE = True  # may cause more performance overhead
 
@@ -201,7 +205,7 @@ class TasticOperator(BaseThreading):
         self.itt.key_press('q')
         self.itt.delay(0.2)
         self.chara_waiting()
-        if (not self.is_q_ready()) and E_STRICT_MODE:
+        if (self.is_q_ready()) and E_STRICT_MODE:
             logger.debug('没q到')
             self.do_use_q(times=times + 1)
         self.character.used_Q()
@@ -238,9 +242,12 @@ class TasticOperator(BaseThreading):
             return 0
         self.itt.key_press('r')
 
-    def is_q_ready(self):
+    def is_q_ready(self, is_show=False):
         cap = self.itt.capture(posi=posi_manager.posi_chara_q)
         cap = self.itt.png2jpg(cap, channel='ui', alpha_num=200)  # BEFOREV3D1
+        if is_show:
+            cv2.imshow("is_q_ready", cap)
+            cv2.waitKey(10)
         # cap = self.itt.png2jpg(cap, channel='bg', alpha_num=160)
         # img_manager.qshow(cap)
         # p = posi_manager.posi_chara_q_point
@@ -357,9 +364,10 @@ if __name__ == '__main__':
     import combat_loop
 
     to = TasticOperator()
+    itt = InteractionBGD()
     chara = combat_loop.get_chara_list()[1]
     to.set_parameter(chara.tastic_group, chara)
     # to.setDaemon(True)
     while 1:
-        print(to.is_q_ready())
+        print(to.is_q_ready(is_show=True))
         time.sleep(0.1)
