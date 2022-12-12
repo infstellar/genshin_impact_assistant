@@ -50,7 +50,8 @@ class MainPage(Page):
                     pin.put_select('FlowMode', [
                         {'label': 'Idle', 'value': listening.FLOW_IDLE},
                         {'label': 'AutoCombat', 'value': listening.FLOW_COMBAT},
-                        {'label': 'AutoDomain', 'value': listening.FLOW_DOMAIN}
+                        {'label': 'AutoDomain', 'value': listening.FLOW_DOMAIN},
+                        {'label': 'AutoCollector', 'value': listening.FLOW_COLLECTOR}
                     ])]),
                 # PickUpMode
                 output.put_row([output.put_text('PickUp'), output.put_scope('Button_PickUp')])
