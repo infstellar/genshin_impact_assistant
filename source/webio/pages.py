@@ -27,6 +27,7 @@ class MainPage(Page):
         while self.loaded:  # 当界面被加载时循环运行
             if pin.pin['FlowMode'] != listening.current_flow:  # 比较变更是否被应用
                 listening.current_flow = pin.pin['FlowMode']  # 应用变更
+                listening.import_current_module()
             self.log_list_lock.acquire()
             for text, color in self.log_list:
                 output.put_text(text, scope='LogArea').style(f'color: {color}')

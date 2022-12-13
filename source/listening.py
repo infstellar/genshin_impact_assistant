@@ -29,6 +29,19 @@ FEAT型功能：可以启动多个，用bool值控制
 
 keymap_json = load_json("keymap.json")
 
+def import_current_module():
+    try:
+        if current_flow == FLOW_IDLE:
+            pass
+        elif current_flow == FLOW_COMBAT:
+            import alpha_loop
+        elif current_flow == FLOW_DOMAIN:
+            import domain_flow
+        elif current_flow == FLOW_COLLECTOR:
+            import collector_flow
+    except:
+        logger.critical(f"IMPORT ERROR: current_flow: {current_flow}")
+        input(_("Program stop."))
 
 def switch_combat_loop():
     global t1, combat_flag
