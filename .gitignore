@@ -186,3 +186,4 @@ installer_config.json
 /config/settings/auto_domain.json
 .vscode/launch.json
 .vscode/settings.json
+source/cvAutoTrack_7.3.3/CVAUTOTRACK.dll
