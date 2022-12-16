@@ -28,22 +28,28 @@ FEAT型功能：可以启动多个，用bool值控制
 """
 
 keymap_json = load_json("keymap.json")
+global icm
+icm = False
+def call_you_import_module():
+    global icm
+    icm = True
 
 def import_current_module():
     try:
         if current_flow == FLOW_IDLE:
             pass
         elif current_flow == FLOW_COMBAT:
-            logger.log("正在导入 FLOW_COMBAT 模块，可能需要一些时间。")
+            # logger.info("正在导入 FLOW_COMBAT 模块，可能需要一些时间。")
             import alpha_loop
         elif current_flow == FLOW_DOMAIN:
-            logger.log("正在导入 FLOW_DOMAIN 模块，可能需要一些时间。")
+            # logger.info("正在导入 FLOW_DOMAIN 模块，可能需要一些时间。")
             import domain_flow
         elif current_flow == FLOW_COLLECTOR:
-            logger.log("正在导入 FLOW_COLLECTOR 模块，可能需要一些时间。")
+            # logger.info("正在导入 FLOW_COLLECTOR 模块，可能需要一些时间。")
             import collector_flow
-    except:
+    except Exception as e:
         logger.critical(f"IMPORT ERROR: current_flow: {current_flow}")
+        print(e)
         input(_("Program stop."))
 
 def switch_combat_loop():
@@ -114,9 +120,13 @@ keyboard.add_hotkey(keymap_json["startstop"], startstop)
 
 @logger.catch
 def listening():
-
+    global icm
     while 1:
         time.sleep(0.2)
+        if icm:
+            import_current_module()
+            logger.info("导入完成")
+            icm = False
         # webio.log_handler.webio_poster('213')
 
 

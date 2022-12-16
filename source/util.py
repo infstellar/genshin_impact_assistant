@@ -121,10 +121,13 @@ else:
     logger.add(sys.stdout, level="INFO", backtrace=True)
 
 def add_logger_to_GUI(cb_func):
+    logger.info("正在等待webio启动")
+    time.sleep(4) # 我也不知道为什么要加延迟，但是加了就好了所以还是加上去
     if DEBUG_MODE:
         logger.add(cb_func, level="TRACE", backtrace=True)
     else:
         logger.add(cb_func, level="INFO", backtrace=True)
+    # logger.info("test!")
 
 # logger.add(webio.log_handler.webio_handler)
 # 校验目录
