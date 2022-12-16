@@ -34,10 +34,13 @@ def import_current_module():
         if current_flow == FLOW_IDLE:
             pass
         elif current_flow == FLOW_COMBAT:
+            logger.log("正在导入 FLOW_COMBAT 模块，可能需要一些时间。")
             import alpha_loop
         elif current_flow == FLOW_DOMAIN:
+            logger.log("正在导入 FLOW_DOMAIN 模块，可能需要一些时间。")
             import domain_flow
         elif current_flow == FLOW_COLLECTOR:
+            logger.log("正在导入 FLOW_COLLECTOR 模块，可能需要一些时间。")
             import collector_flow
     except:
         logger.critical(f"IMPORT ERROR: current_flow: {current_flow}")

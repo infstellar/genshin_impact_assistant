@@ -41,9 +41,12 @@ def load_feature_position(text, blacklist_id):
 class CollectorFlow(BaseThreading):
     def __init__(self):
         super().__init__()
-        
-        self.collector_name = "史莱姆 - 蒙德"
-        self.collector_type = ENEMY
+        collector_config = load_json("auto_collector.json")
+        self.collector_name = collector_config["collection_name"]
+        if collector_config["collection_type"] == "COLLECTION":
+            self.collector_type = COLLECTION
+        elif collector_config["collection_type"] == "ENEMY":
+            self.collector_type = ENEMY
         self.collector_blacklist_id = load_json("collection_blacklist.json", default_path="config\\auto_collector")
         self.collected_id = load_json("collected.json", default_path="config\\auto_collector")
         self.shielded_id = []
