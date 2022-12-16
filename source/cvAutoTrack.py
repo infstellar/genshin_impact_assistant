@@ -45,7 +45,7 @@ class AutoTracker:
 
         self.__lib.verison.restype = c_char
         
-        self.__lib.SetDisableFileLog.restype = c_bool
+        # self.__lib.SetDisableFileLog.restype = c_bool
 
     def init(self):
         return self.__lib.init()
@@ -54,7 +54,8 @@ class AutoTracker:
         return self.__lib.verison()
 
     def disable_log(self):
-        return self.__lib.SetDisableFileLog()
+        # return self.__lib.SetDisableFileLog()
+        pass
     
     def uninit(self):
         return self.__lib.uninit()
@@ -100,7 +101,7 @@ class AutoTracker:
         return -(x - 793.9) / 2, -(y - (-1237.8)) / 2
 
 
-cvAutoTracker = AutoTracker(os.path.join(root_path, 'source\\cvAutoTrack_7.3.3\\CVAUTOTRACK.dll'))
+cvAutoTracker = AutoTracker(os.path.join(root_path, 'source\\cvAutoTrack_7.2.3\\CVAUTOTRACK.dll'))
 cvAutoTracker.init()
 logger.info(_("cvAutoTrack DLL has been loaded."))
 logger.info('1) err' + str(cvAutoTracker.get_last_error()))
@@ -109,7 +110,7 @@ logger.info('1) err' + str(cvAutoTracker.get_last_error()))
 class AutoTrackerLoop(BaseThreading):
     def __init__(self):
         super().__init__()
-        logger.debug(f"cvautotrack log: {cvAutoTracker.disable_log()}")
+        # logger.debug(f"cvautotrack log: {cvAutoTracker.disable_log()}")
         # scene_manager.switchto_mainwin(max_time=5)
         time.sleep(2)
         self.position = cvAutoTracker.get_position()
@@ -144,7 +145,7 @@ class AutoTrackerLoop(BaseThreading):
             self.rotation = cvAutoTracker.get_rotation()
             self.position = cvAutoTracker.get_position()
             if not self.position[0]:
-                # print("坐标获取失败")
+                print("坐标获取失败")
                 self.position = (False, 0, 0)
                 self.in_excessive_error = True
                 time.sleep(0.5)
@@ -172,11 +173,18 @@ class AutoTrackerLoop(BaseThreading):
         self.start_sleep_timer.reset()
         return self.rotation
 
+    def is_in_excessive_error(self):
+        self.start_sleep_timer.reset()
+        return self.in_excessive_error
+    
 # logger.info(cvAutoTracker.verison())
 
 # 以下是对被封装的类的简单演示。
 # 使用命令行 `python ./main.py` 直接运行本文件即可。
 if __name__ == '__main__':
+    cal=AutoTrackerLoop()
+    a = cal.get_position()
+    print()
     # # 等待五秒钟以便切换到原神窗口：
     # # sleep(5)
     #

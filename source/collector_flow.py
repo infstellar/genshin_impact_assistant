@@ -42,7 +42,7 @@ class CollectorFlow(BaseThreading):
     def __init__(self):
         super().__init__()
         
-        self.collector_name = "甜甜花 - 蒙德"
+        self.collector_name = "史莱姆 - 蒙德"
         self.collector_type = ENEMY
         self.collector_blacklist_id = load_json("collection_blacklist.json", default_path="config\\auto_collector")
         self.collected_id = load_json("collected.json", default_path="config\\auto_collector")
