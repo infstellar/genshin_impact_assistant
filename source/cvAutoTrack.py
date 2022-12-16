@@ -100,7 +100,20 @@ class AutoTracker:
     def translate_posi(x, y):
         return -(x - 793.9) / 2, -(y - (-1237.8)) / 2
 
-
+def del_log():
+    for root, dirs, files in os.walk(os.path.join(root_path)):
+        for f in files:
+            if f == "autoTrack.log":
+                os.remove(os.path.join(root_path, "autoTrack.log"))
+    for root, dirs, files in os.walk(os.path.join(root_path, "source")):
+        for f in files:
+            if f == "autoTrack.log":
+                os.remove(os.path.join(root_path, "source", "autoTrack.log"))
+    for root, dirs, files in os.walk(os.path.join(root_path, "source", "webio")):
+        for f in files:
+            if f == "autoTrack.log":
+                os.remove(os.path.join(root_path, "source", "webio", "autoTrack.log"))
+del_log()
 cvAutoTracker = AutoTracker(os.path.join(root_path, 'source\\cvAutoTrack_7.2.3\\CVAUTOTRACK.dll'))
 cvAutoTracker.init()
 logger.info(_("cvAutoTrack DLL has been loaded."))
@@ -118,6 +131,7 @@ class AutoTrackerLoop(BaseThreading):
         self.rotation = cvAutoTracker.get_rotation()
         self.in_excessive_error = False
         self.start_sleep_timer = timer_module.Timer(diff_start_time=61)
+        
 
     def run(self):
         ct = 0
