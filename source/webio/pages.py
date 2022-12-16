@@ -6,7 +6,7 @@ import time
 from pywebio import *
 
 from source import listening, util, webio
-from source.util import is_json_equal
+from source.util import is_json_equal, _
 from source.webio import manager
 from source.webio.page_manager import Page
 
@@ -178,8 +178,8 @@ class SettingPage(Page):
         self.exit_popup = True
         if not is_json_equal(json.dumps(self.get_json(j)), json.dumps(j)):
             self.exit_popup = False
-            output.popup('Do you need to save changes?', [
-                output.put_buttons(['No', 'Yes'], onclick=self.popup_button)
+            output.popup(_('Do you need to save changes?'), [
+                output.put_buttons([_('No'), _('Yes')], onclick=self.popup_button)
             ])
         while not self.exit_popup:
             time.sleep(0.1)

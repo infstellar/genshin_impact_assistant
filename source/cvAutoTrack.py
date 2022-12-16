@@ -101,18 +101,22 @@ class AutoTracker:
         return -(x - 793.9) / 2, -(y - (-1237.8)) / 2
 
 def del_log():
+    logger.debug(_("cleaning cvautotrack files"))
     for root, dirs, files in os.walk(os.path.join(root_path)):
         for f in files:
             if f == "autoTrack.log":
                 os.remove(os.path.join(root_path, "autoTrack.log"))
+                logger.debug(_("autoTrack.log 1 cleaned"))
     for root, dirs, files in os.walk(os.path.join(root_path, "source")):
         for f in files:
             if f == "autoTrack.log":
                 os.remove(os.path.join(root_path, "source", "autoTrack.log"))
+                logger.debug(_("autoTrack.log 2 cleaned"))
     for root, dirs, files in os.walk(os.path.join(root_path, "source", "webio")):
         for f in files:
             if f == "autoTrack.log":
                 os.remove(os.path.join(root_path, "source", "webio", "autoTrack.log"))
+                logger.debug(_("autoTrack.log 3 cleaned"))
 del_log()
 cvAutoTracker = AutoTracker(os.path.join(root_path, 'source\\cvAutoTrack_7.2.3\\CVAUTOTRACK.dll'))
 cvAutoTracker.init()
