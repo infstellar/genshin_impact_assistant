@@ -44,6 +44,8 @@ class AutoTracker:
         self.__lib.SetWorldCenter.restype = c_bool
 
         self.__lib.verison.restype = c_char
+        
+        self.__lib.SetDisableFileLog.restype = c_bool
 
     def init(self):
         return self.__lib.init()
@@ -51,6 +53,9 @@ class AutoTracker:
     def verison(self):
         return self.__lib.verison()
 
+    def disable_log(self):
+        return self.__lib.SetDisableFileLog()
+    
     def uninit(self):
         return self.__lib.uninit()
 
@@ -95,7 +100,7 @@ class AutoTracker:
         return -(x - 793.9) / 2, -(y - (-1237.8)) / 2
 
 
-cvAutoTracker = AutoTracker(os.path.join(root_path, 'source\\cvAutoTrack_7.2.3\\CVAUTOTRACK.dll'))
+cvAutoTracker = AutoTracker(os.path.join(root_path, 'source\\cvAutoTrack_7.3.3\\CVAUTOTRACK.dll'))
 cvAutoTracker.init()
 logger.info(_("cvAutoTrack DLL has been loaded."))
 logger.info('1) err' + str(cvAutoTracker.get_last_error()))
@@ -104,6 +109,7 @@ logger.info('1) err' + str(cvAutoTracker.get_last_error()))
 class AutoTrackerLoop(BaseThreading):
     def __init__(self):
         super().__init__()
+        logger.debug(f"cvautotrack log: {cvAutoTracker.disable_log()}")
         # scene_manager.switchto_mainwin(max_time=5)
         time.sleep(2)
         self.position = cvAutoTracker.get_position()
