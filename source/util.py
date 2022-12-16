@@ -76,7 +76,11 @@ def is_json_equal(j1: str, j2: str) -> bool:
 
 # 加载json
 def load_json(json_name='config.json', default_path='config\\settings'):
-    return json.load(open(os.path.join(root_path, default_path, json_name), 'r', encoding='utf-8'))
+    try:
+        return json.load(open(os.path.join(root_path, default_path, json_name), 'r', encoding='utf-8'))
+    except:
+        json.dump({}, open(os.path.join(root_path, default_path, json_name), 'w', encoding='utf-8'))
+        return json.load(open(os.path.join(root_path, default_path, json_name), 'r', encoding='utf-8'))
 
 try:
     config_json = load_json("config.json")
