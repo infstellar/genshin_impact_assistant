@@ -2,8 +2,8 @@ import json
 import os
 import sys
 import time  # 8药删了，qq了
-from typing import Callable
-
+import math
+import numpy as np
 from loguru import logger
 import gettext
 
@@ -76,7 +76,11 @@ def is_json_equal(j1: str, j2: str) -> bool:
 
 # 加载json
 def load_json(json_name='config.json', default_path='config\\settings'):
-    return json.load(open(os.path.join(root_path, default_path, json_name), 'r', encoding='utf-8'))
+    try:
+        return json.load(open(os.path.join(root_path, default_path, json_name), 'r', encoding='utf-8'))
+    except:
+        json.dump({}, open(os.path.join(root_path, default_path, json_name), 'w', encoding='utf-8'))
+        return json.load(open(os.path.join(root_path, default_path, json_name), 'r', encoding='utf-8'))
 
 try:
     config_json = load_json("config.json")
@@ -110,17 +114,20 @@ except:
 
 # 配置logger
 logger.remove(handler_id=None)
-logger.add(os.path.join(root_path, 'runtime.log'), level="TRACE", backtrace=True)
+logger.add(os.path.join(root_path, os.path.join(root_path, 'Logs', "{time:YYYY-MM-DD}.log")), level="TRACE", backtrace=True, retention='15 days')
 if DEBUG_MODE:
     logger.add(sys.stdout, level="TRACE", backtrace=True)
 else:
     logger.add(sys.stdout, level="INFO", backtrace=True)
 
 def add_logger_to_GUI(cb_func):
+    logger.info("正在等待webio启动")
+    time.sleep(4) # 我也不知道为什么要加延迟，但是加了就好了所以还是加上去
     if DEBUG_MODE:
         logger.add(cb_func, level="TRACE", backtrace=True)
     else:
         logger.add(cb_func, level="INFO", backtrace=True)
+    # logger.info("test!")
 
 # logger.add(webio.log_handler.webio_handler)
 # 校验目录
@@ -181,11 +188,20 @@ def reflash_config():
     global config_json
     config_json = load_json("config.json")
 
+def euclidean_distance(p1, p2):
+    return math.sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2)
+
+def euclidean_distance_plist(p1, p2):
+    return np.sqrt((p1[0] - p2[:,0]) ** 2 + (p1[1] - p2[:,1]) ** 2)
+
+def manhattan_distance(p1, p2):
+    return abs(p1[0]-p2[0]) + abs(p1[1]-p2[1])
+
+def manhattan_distance_plist(p1, p2):
+    return abs(p1[0]-p2[:,0]) + abs(p1[1]-p2[:,1])
 
 if __name__ == '__main__':
-    a = load_json("../assests/itemall.json")
-    save_json(a, "../assests/itemall.json")
-    print()
+    logger.info("test")
 
 
 def is_number(s):

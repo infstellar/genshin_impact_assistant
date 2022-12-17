@@ -266,10 +266,10 @@ class Predictor(object):
 
 
 def image_demo(predictor: Predictor, vis_folder, path, current_time, save_result, img_id=-1):
-    if os.path.isdir(path):
-        files = get_image_list(path)
-    else:
-        files = [path]  # path is a list in this time
+    # if os.path.isdir(path):
+    #     files = get_image_list(path)
+    # else:
+    files = [path]  # path is a list in this time
     files.sort()
     addition_info = []
 

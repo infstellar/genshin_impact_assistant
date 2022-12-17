@@ -12,6 +12,7 @@
     "tastic_group": "e?e:none;#@e?a:q;",
     "trigger": "e_ready",
     "Qlast_time": 10,
+    "Qcd_time": 12,
     "autofill": false
   },
   "second": {
@@ -27,6 +28,7 @@
     "tastic_group": "e?e~:none;q?q:none",
     "trigger": "e_ready",
     "Qlast_time": 0,
+    "Qcd_time": 12,
     "autofill": false
   },
   "third": {
@@ -42,6 +44,7 @@
     "tastic_group": "e?e~:none;q?q:none",
     "trigger": "e_ready",
     "Qlast_time": 0,
+    "Qcd_time": 12,
     "autofill": false
   },
   "forth": {
@@ -57,6 +60,7 @@
     "tastic_group": "e?e~:none;q?q:none",
     "trigger": "e_ready",
     "Qlast_time": 0,
+    "Qcd_time": 12,
     "autofill": false
   }
 }

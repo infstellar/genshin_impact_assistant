@@ -5,6 +5,8 @@ import numpy as np
 
 from timer_module import Timer
 from util import *
+import cvAutoTrack
+
 
 
 def get_handle():
@@ -38,7 +40,11 @@ class ScreenCapture:
         self.fps = 1 / 30
         self.cap_timer = Timer()
         self.wrtting_flag = False
-        self.last_cap = self.capture_handle()
+        self.last_cap1 = self.capture_handle()
+        self.last_cap2 = self.capture_handle()
+        self.ret_cap_id = 1
+        self.caping_flag = False
+        self.caping = self.capture_handle()
         self.cap_timer.reset()
 
     def capture_handle(self):
@@ -66,23 +72,45 @@ class ScreenCapture:
         return ret
 
     def get_capture(self):
-        if self.cap_timer.get_diff_time() >= self.fps:
-            # print('recap', self.cap_timer.getDiffTime())
-            self.last_cap = self.capture_handle()
-            self.cap_timer.reset()
-        else:
-            # print('recap', self.cap_timer.getDiffTime())
-            # self.last_cap = self.capture_handle()
-            # self.cap_timer.reset()
-            # print('returncap')
-            pass
-        # print(self.last_cap.shape)
-        return self.last_cap
+        # 摆烂了
+        return self.capture_handle().copy()
+        
+        # if self.cap_timer.get_diff_time() >= self.fps:
+        #     self.cap_timer.reset()
+        #     # print('recap', self.cap_timer.getDiffTime())
+        #     if self.ret_cap_id == 1:
+        #         self.last_cap2 = self.capture_handle().copy()
+        #         self.ret_cap_id = 2
+        #     else:
+        #         self.last_cap1 = self.capture_handle().copy()
+        #         self.ret_cap_id = 1
+        #     print(self.cap_timer.get_diff_time())    
+            
+        # else:
+        #     # print('recap', self.cap_timer.getDiffTime())
+        #     # self.last_cap = self.capture_handle()
+        #     # self.cap_timer.reset()
+        #     print('returncap')
+        #     pass
+        # # print(self.last_cap.shape)
+        # # print(self.ret_cap_id)
+        # if self.ret_cap_id == 1:
+        #     return self.last_cap1
+        # else:
+        #     return self.last_cap2
 
 
 SCREENCAPTURE = ScreenCapture()
 W_KEYDOWN = False
 
+cvAutoTrackerLoop = cvAutoTrack.AutoTrackerLoop()
+cvAutoTrackerLoop.setDaemon(True)
+cvAutoTrackerLoop.start()
+time.sleep(1)
+
+def wait_until_no_excessive_error():
+    while cvAutoTrackerLoop.is_in_excessive_error():
+        time.sleep(1)
 
 class TestTest(threading.Thread):
     def __init__(self):
@@ -94,9 +122,8 @@ class TestTest(threading.Thread):
 
 
 if __name__ == '__main__':
-    tt = TestTest()
-    tt1 = TestTest()
-    tt.start()
-    tt1.start()
-    for i in range(5):
-        time.sleep(2)
+    import cv2
+    wait_until_no_excessive_error()
+    while 1:
+        cv2.imshow("123",SCREENCAPTURE.get_capture())
+        cv2.waitKey(100)

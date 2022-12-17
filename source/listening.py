@@ -4,20 +4,22 @@ except:
     from source.util import *
 import time
 import keyboard
-import alpha_loop
-import domain_flow
+
 
 combat_flag = False
 domain_flag = False
+collector_flag = False
 
 t1 = None
 t2 = None
+t3 = None
 # @logger.catch
 
 
 FLOW_IDLE = 0
 FLOW_COMBAT = 1  # 自动战斗
 FLOW_DOMAIN = 2  # 自动秘境
+FLOW_COLLECTOR = 3  # 自动采集
 FEAT_PICKUP = False  # 拾取辅助
 current_flow = FLOW_IDLE
 """
@@ -26,7 +28,29 @@ FEAT型功能：可以启动多个，用bool值控制
 """
 
 keymap_json = load_json("keymap.json")
+global icm
+icm = False
+def call_you_import_module():
+    global icm
+    icm = True
 
+def import_current_module():
+    try:
+        if current_flow == FLOW_IDLE:
+            pass
+        elif current_flow == FLOW_COMBAT:
+            # logger.info("正在导入 FLOW_COMBAT 模块，可能需要一些时间。")
+            import alpha_loop
+        elif current_flow == FLOW_DOMAIN:
+            # logger.info("正在导入 FLOW_DOMAIN 模块，可能需要一些时间。")
+            import domain_flow
+        elif current_flow == FLOW_COLLECTOR:
+            # logger.info("正在导入 FLOW_COLLECTOR 模块，可能需要一些时间。")
+            import collector_flow
+    except Exception as e:
+        logger.critical(f"IMPORT ERROR: current_flow: {current_flow}")
+        print(e)
+        input(_("Program stop."))
 
 def switch_combat_loop():
     global t1, combat_flag
@@ -34,6 +58,7 @@ def switch_combat_loop():
         logger.info('正在停止自动战斗')
         t1.stop_threading()
     else:
+        import alpha_loop
         logger.info('启动自动战斗')
         t1 = alpha_loop.AlphaLoop()
         t1.setDaemon(True)
@@ -47,13 +72,25 @@ def switch_domain_loop():
         logger.info('正在停止自动秘境')
         t2.stop_threading()
     else:
+        import domain_flow
         logger.info('启动自动秘境')
-
         t2 = domain_flow.DomainFlow()
         t2.setDaemon(True)
         t2.start()
     domain_flag = not domain_flag
 
+def switch_collector_loop():
+    global t3, collector_flag
+    if collector_flag:
+        logger.info('正在停止自动采集')
+        t3.stop_threading()
+    else:
+        logger.info('启动自动采集')
+        import collector_flow
+        t3 = collector_flow.CollectorFlow()
+        t3.setDaemon(True)
+        t3.start()
+    collector_flag = not collector_flag
 
 def apply_ui_setting():  # "应用设置"按钮回调函数
     ui_FEAT_PICKUP = None  # ui的设置(bool)
@@ -72,6 +109,8 @@ def startstop():
         switch_combat_loop()
     elif current_flow == FLOW_DOMAIN:
         switch_domain_loop()
+    elif current_flow == FLOW_COLLECTOR:
+        switch_collector_loop()
 
 
 keyboard.add_hotkey(keymap_json["autoCombat"], switch_combat_loop)
@@ -81,9 +120,13 @@ keyboard.add_hotkey(keymap_json["startstop"], startstop)
 
 @logger.catch
 def listening():
-
+    global icm
     while 1:
         time.sleep(0.2)
+        if icm:
+            import_current_module()
+            logger.info("导入完成")
+            icm = False
         # webio.log_handler.webio_poster('213')
 
 

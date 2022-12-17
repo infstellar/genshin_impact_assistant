@@ -4,7 +4,6 @@ import img_manager
 import generic_lib
 from interaction_background import InteractionBGD
 import posi_manager
-import cvAutoTrack
 import small_map
 import movement
 import numpy as np
@@ -111,7 +110,7 @@ class TeyvatMoveController(BaseThreading):
                 self.working_flag = True
             '''write your code below'''
             
-            self.current_posi = cvAutoTrack.cvAutoTrackerLoop.get_position()
+            self.current_posi = static_lib.cvAutoTrackerLoop.get_position()
             if not self.current_posi[0]==False:
                 self.current_posi=self.current_posi[1:]
             else:
@@ -123,7 +122,7 @@ class TeyvatMoveController(BaseThreading):
             if (not static_lib.W_KEYDOWN) and (not self.pause_threading_flag):
                 self.itt.key_down('w')
                 
-            if generic_lib.euclidean_distance(self.target_positon, cvAutoTrack.cvAutoTrackerLoop.get_position()[1:])<=10:
+            if generic_lib.euclidean_distance(self.target_positon, static_lib.cvAutoTrackerLoop.get_position()[1:])<=10:
                 self.pause_threading()
                 logger.info("已到达目的地附近，本次导航结束。")
                 self.itt.key_up('w')

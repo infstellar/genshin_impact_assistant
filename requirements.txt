@@ -31,4 +31,4 @@ PyQt5
 pywebio
 pydirectinput
 
-pycocotools
+# pycocotools NO PYCOCOTOOLS WHEN AUTOINSTALL!

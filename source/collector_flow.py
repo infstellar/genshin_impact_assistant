@@ -1,7 +1,6 @@
 from util import *
 import math
 import flow_state as ST
-import cvAutoTrack
 from interaction_background import InteractionBGD
 import generic_lib
 import pickup_operator
@@ -12,6 +11,7 @@ import combat_lib
 import teyvat_move_flow
 import numpy as np
 import datetime
+import static_lib
 
 COLLECTION = 0
 ENEMY = 1
@@ -41,9 +41,12 @@ def load_feature_position(text, blacklist_id):
 class CollectorFlow(BaseThreading):
     def __init__(self):
         super().__init__()
-        
-        self.collector_name = "甜甜花 - 蒙德"
-        self.collector_type = ENEMY
+        collector_config = load_json("auto_collector.json")
+        self.collector_name = collector_config["collection_name"]
+        if collector_config["collection_type"] == "COLLECTION":
+            self.collector_type = COLLECTION
+        elif collector_config["collection_type"] == "ENEMY":
+            self.collector_type = ENEMY
         self.collector_blacklist_id = load_json("collection_blacklist.json", default_path="config\\auto_collector")
         self.collected_id = load_json("collected.json", default_path="config\\auto_collector")
         self.shielded_id = []
@@ -66,7 +69,7 @@ class CollectorFlow(BaseThreading):
         
         self.collector_posi_dict = load_feature_position(self.collector_name, self.collector_blacklist_id)
         self.current_state = ST.INIT_MOVETO_COLLECTOR
-        self.current_position = cvAutoTrack.cvAutoTrackerLoop.get_position()[1:]
+        self.current_position = static_lib.cvAutoTrackerLoop.get_position()[1:]
         self.last_collection_posi = [9999,9999]
         self.picked_list = []
         
@@ -174,8 +177,8 @@ class CollectorFlow(BaseThreading):
             if self.current_state == ST.INIT_MOVETO_COLLECTOR:
                 
                 self.collector_posi_dict = load_feature_position(self.collector_name, self.shielded_id)
-                cvAutoTrack.wait_until_no_excessive_error()
-                self.current_position = cvAutoTrack.cvAutoTrackerLoop.get_position()[1:]
+                static_lib.wait_until_no_excessive_error()
+                self.current_position = static_lib.cvAutoTrackerLoop.get_position()[1:]
                 self.collector_posi_dict.sort(key=self.sort_by_eu)
                 logger.info("switch Flow to: BEFORE_MOVETO_COLLECTOR")
                 self.current_state = ST.BEFORE_MOVETO_COLLECTOR
@@ -192,7 +195,7 @@ class CollectorFlow(BaseThreading):
                     continue
                 logger.info("正在前往：" + self.collector_name)
                 logger.info(f"物品id：{self.collection_id}")
-                while cvAutoTrack.cvAutoTrackerLoop.in_excessive_error:
+                while static_lib.cvAutoTrackerLoop.in_excessive_error:
                     time.sleep(1)
                 logger.info("目标坐标：" + str(self.collection_posi)+"当前坐标：" + str(self.current_position))
                 
