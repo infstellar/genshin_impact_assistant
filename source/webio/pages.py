@@ -11,7 +11,7 @@ from source import listening, util, webio
 from source.util import is_json_equal, _
 from source.webio import manager
 from source.webio.page_manager import Page
-from source.webio.log_handler import webio_poster
+# from source.webio.log_handler import webio_poster
 
 
 class MainPage(Page):
@@ -30,7 +30,9 @@ class MainPage(Page):
         while self.loaded:  # 当界面被加载时循环运行
             if pin.pin['FlowMode'] != listening.current_flow:  # 比较变更是否被应用
                 listening.current_flow = pin.pin['FlowMode']  # 应用变更
-                webio_poster(f"正在导入模块, 可能需要一些时间。")
+                self.log_list_lock.acquire()
+                output.put_text(f"正在导入模块, 可能需要一些时间。", scope='LogArea').style(f'color: black')
+                self.log_list_lock.release()
                 listening.call_you_import_module()
             self.log_list_lock.acquire()
             for text, color in self.log_list:

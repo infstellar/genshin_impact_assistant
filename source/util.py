@@ -4,7 +4,6 @@ import sys
 import time  # 8药删了，qq了
 import math
 import numpy as np
-from loguru import logger
 import gettext
 
 # 配置基本目录
@@ -14,7 +13,7 @@ if sys.path[0] != root_path:
     sys.path.insert(0, root_path)
 if sys.path[1] != source_path:
     sys.path.insert(1, source_path)
-
+from loguru import logger
 # load translation module
 l10n = gettext.translation("zh_CN", localedir=os.path.join(root_path, "language/locale"), languages=["zh_CN"])
 l10n.install()
@@ -120,15 +119,21 @@ if DEBUG_MODE:
 else:
     logger.add(sys.stdout, level="INFO", backtrace=True)
 
-def add_logger_to_GUI(cb_func):
-    logger.info("正在等待webio启动")
-    time.sleep(4) # 我也不知道为什么要加延迟，但是加了就好了所以还是加上去
+def add_logger_to_GUI(mode=0):
+    import cccloggingaaa
+    f = cccloggingaaa.flag1
+    if mode == 1:
+        cccloggingaaa.flag1 = True
+    if not f:
+        return 0
+    import webio.log_handler
+    cb_func = webio.log_handler.webio_poster
     if DEBUG_MODE:
         logger.add(cb_func, level="TRACE", backtrace=True)
     else:
         logger.add(cb_func, level="INFO", backtrace=True)
-    # logger.info("test!")
-
+    logger.info("test")
+add_logger_to_GUI()
 # logger.add(webio.log_handler.webio_handler)
 # 校验目录
 if not os.path.exists(root_path):

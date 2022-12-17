@@ -7,6 +7,7 @@ from pdocr_api import ocr
 import timer_module
 import static_lib
 import movement
+import cv2
 
 
 class PickupOperator(BaseThreading):
@@ -128,7 +129,8 @@ class PickupOperator(BaseThreading):
                 imsrc[:, :, 2] >= 253).astype('uint8')) >= 3
         outputimg = a.astype('uint8') * 255
         # print()
-
+        cv2.imshow('123', outputimg)
+        cv2.waitKey(20)
         adad = img_manager.get_rect(outputimg, self.itt.capture(jpgmode=0), ret_mode=2)
         return adad
 
@@ -178,14 +180,14 @@ class PickupOperator(BaseThreading):
         mx, my = self.itt.get_mouse_point()
         px = (px - mx) / 2.4 + 35
         py = (py - my) / 2 + 40
-        if px >= 50:
-            px = 50
-        if px <= -50:
-            px = -50
-        if py >= 50:
-            py = 50
-        if py <= -50:
-            py = -50
+        if px >= 100:
+            px = 100
+        if px <= -100:
+            px = -100
+        if py >= 100:
+            py = 100
+        if py <= -100:
+            py = -100
         # print(px, py)
 
         self.itt.move_to(px, py, relative=True)
@@ -196,7 +198,7 @@ class PickupOperator(BaseThreading):
         if self.collecor_loops < self.max_number_of_collector_loops:
             movement.reset_view()
             for i in range(5):
-                movement.cview(30, mode = movement.VERTICALLY)
+                movement.cview(60, mode = movement.VERTICALLY)
                 time.sleep(0.2)
         while self.collecor_loops < self.max_number_of_collector_loops:
             if self.checkup_stop_func():
@@ -216,8 +218,9 @@ if __name__ == '__main__':
     
     po = PickupOperator()
     # po.set_target_position([4813.5, -4180.5])
-    po.start()
+    # po.start()
     while 1:
-        time.sleep(0.1)
+        po.find_collector()
+        # time.sleep(0.1)
         # po.pickup_recognize()
         # print()

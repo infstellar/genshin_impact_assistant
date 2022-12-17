@@ -8,20 +8,20 @@ import small_map
 
 itt = InteractionBGD()
 while 1:
-    imsrc = itt.capture().copy()
-    imsrc = itt.png2jpg(imsrc, alpha_num=1)
-    # qshow(imsrc)
-    imsrc[950:1080, :, :] = 0
-    imsrc[0:150, :, :] = 0
-    imsrc[:, 0:300, :] = 0
-    imsrc[:, 1600:1920, :] = 0
-    imsrc[350:751, 1079:1300, :] = 0
-    a = ((imsrc[:, :, 0] >= 253).astype('uint8') + (imsrc[:, :, 1] >= 253).astype('uint8') + (
-            imsrc[:, :, 2] >= 253).astype('uint8')) >= 3
-    outputimg = a.astype('uint8') * 255
-    # print()
+        imsrc = itt.capture().copy()
+        imsrc = itt.png2jpg(imsrc, alpha_num=1)
+        # qshow(imsrc)
+        imsrc[950:1080, :, :] = 0
+        imsrc[0:150, :, :] = 0
+        imsrc[:, 0:300, :] = 0
+        imsrc[:, 1600:1920, :] = 0
+        imsrc[350:751, 1079:1300, :] = 0
+        a = ((imsrc[:, :, 0] >= 249).astype('uint8') + (imsrc[:, :, 1] >= 249).astype('uint8') + (imsrc[:, :, 2] >= 249).astype('uint8')) >= 3
+        outputimg = a.astype('uint8') * 255
+        # print()
+        cv2.imshow('123', outputimg)
+        cv2.waitKey(20)
+        adad = img_manager.get_rect(outputimg, itt.capture(jpgmode=0), ret_mode=2)
+    
 
-    adad = img_manager.get_rect(outputimg, itt.capture(jpgmode=0), ret_mode=1)
 
-    cv2.imshow('123', adad)
-    cv2.waitKey(100)
