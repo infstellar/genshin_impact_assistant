@@ -1,4 +1,4 @@
 {
-    "itemname":"采集物品名",
+    "itemname": {"select_items":[1,2,3]},
     "fordoc":"可采集物品如下：甜甜花 - 蒙德\n薄荷 - 蒙德"
 }
