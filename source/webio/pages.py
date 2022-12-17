@@ -1,4 +1,5 @@
 import base64
+import hashlib
 import json
 import os
 import threading
@@ -164,15 +165,15 @@ class SettingPage(Page):
     def get_json(self, j: dict, add_name=''):
         rt_json = {}
         for k in j:
-            k_base64 = base64.b64encode(k.encode('utf8')).decode('utf8').replace('=', '_')
+            k_sha1 = hashlib.sha1(k.encode('utf8')).hexdigest()
             v = j[k]
             if type(v) == dict:
-                rt_json[k] = self.get_json(v, add_name='{}-{}'.format(add_name, k_base64))
+                rt_json[k] = self.get_json(v, add_name='{}-{}'.format(add_name, k_sha1))
 
             elif type(v) == list:
-                rt_json[k] = util.list_text2list(pin.pin['{}-{}'.format(add_name, k_base64)])
+                rt_json[k] = util.list_text2list(pin.pin['{}-{}'.format(add_name, k_sha1)])
             else:
-                rt_json[k] = pin.pin['{}-{}'.format(add_name, k_base64)]
+                rt_json[k] = pin.pin['{}-{}'.format(add_name, k_sha1)]
 
         return rt_json
 
@@ -222,8 +223,9 @@ class SettingPage(Page):
                     doc_now = doc[k]
             # 取显示名称
             display_name = doc_now if doc_now else k if self.mode else '{} {}'.format(k, doc_now)
-            k_base64 = base64.b64encode(k.encode('utf8')).decode('utf8').replace('=', '_')
-            bed_scope_name = '{}-{}'.format(add_name, k_base64)
+
+            k_sha1 = hashlib.sha1(k.encode('utf8')).hexdigest()
+            bed_scope_name = '{}-{}'.format(add_name, k_sha1)
             if type(v) == str or v is None:
                 if doc_items:
                     pin.put_select(bed_scope_name,
@@ -259,5 +261,6 @@ class SettingPage(Page):
                 self.put_json(v, doc_now_data, bed_scope_name, add_name=bed_scope_name,
                               level=level + 1)
             elif type(v) == list:
+
                 pin.put_textarea(bed_scope_name, label=display_name, value=util.list2format_list_text(v),
                                  scope=scope_name)
