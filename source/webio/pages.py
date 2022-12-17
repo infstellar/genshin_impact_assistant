@@ -1,3 +1,4 @@
+import base64
 import json
 import os
 import threading
@@ -162,15 +163,15 @@ class SettingPage(Page):
     def get_json(self, j: dict, add_name=''):
         rt_json = {}
         for k in j:
-
+            k_base64 = base64.b64encode(k.encode('utf8')).decode('utf8').replace('=', '_')
             v = j[k]
             if type(v) == dict:
-                rt_json[k] = self.get_json(v, add_name='{}-{}'.format(add_name, k))
+                rt_json[k] = self.get_json(v, add_name='{}-{}'.format(add_name, k_base64 ))
 
             elif type(v) == list:
-                rt_json[k] = util.list_text2list(pin.pin['{}-{}'.format(add_name, k)])
+                rt_json[k] = util.list_text2list(pin.pin['{}-{}'.format(add_name, k_base64 )])
             else:
-                rt_json[k] = pin.pin['{}-{}'.format(add_name, k)]
+                rt_json[k] = pin.pin['{}-{}'.format(add_name, k_base64 )]
 
         return rt_json
 
@@ -216,7 +217,8 @@ class SettingPage(Page):
                     doc_now = doc[k]
 
             display_name = doc_now if doc_now else k if self.mode else '{} {}'.format(k, doc_now)
-            bed_scope_name='{}-{}'.format(add_name, k)
+            k_base64=base64.b64encode(k.encode('utf8')).decode('utf8').replace('=','_')
+            bed_scope_name='{}-{}'.format(add_name, k_base64)
             if type(v) == str or v is None:
                 pin.put_input(bed_scope_name, label=display_name, value=v, scope=scope_name)
             elif type(v) == bool:
