@@ -4,7 +4,7 @@ from pywebio import output
 class Page:
     def __init__(self):
         self.loaded = False
-        self.main_scope='Main'
+        self.main_scope = 'Main'
 
     def load(self):
         if not self.loaded:
@@ -41,7 +41,6 @@ class PageManager:
             self.page_dict[idx].load()
 
             self.last_page = self.page_dict[idx]
-
 
     def reg_page(self, idx: str, page: Page):
         self.page_dict[idx] = page
