@@ -1,10 +1,16 @@
 {
-  "itemname": {
+  "collection_name": {
     "select_items": [
       "甜甜花 - 蒙德",
       "霓裳花 - 璃月",
       "鸣草 - 稻妻"
     ],
     "doc": "物品名"
+  },
+  "collection_type": {
+    "select_items": [
+      "COLLECTION",
+      "ENEMY"
+    ]
   }
 }
