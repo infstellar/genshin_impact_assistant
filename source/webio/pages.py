@@ -6,10 +6,10 @@ import time
 from pywebio import *
 
 from source import listening, util, webio
-from source.util import is_json_equal
+from source.util import is_json_equal, _
 from source.webio import manager
 from source.webio.page_manager import Page
-
+from source.webio.log_handler import webio_poster
 
 class MainPage(Page):
     def __init__(self):
@@ -27,6 +27,8 @@ class MainPage(Page):
         while self.loaded:  # 当界面被加载时循环运行
             if pin.pin['FlowMode'] != listening.current_flow:  # 比较变更是否被应用
                 listening.current_flow = pin.pin['FlowMode']  # 应用变更
+                webio_poster(f"正在导入模块, 可能需要一些时间。")
+                listening.call_you_import_module()
             self.log_list_lock.acquire()
             for text, color in self.log_list:
                 output.put_text(text, scope='LogArea').style(f'color: {color}')
@@ -50,7 +52,8 @@ class MainPage(Page):
                     pin.put_select('FlowMode', [
                         {'label': 'Idle', 'value': listening.FLOW_IDLE},
                         {'label': 'AutoCombat', 'value': listening.FLOW_COMBAT},
-                        {'label': 'AutoDomain', 'value': listening.FLOW_DOMAIN}
+                        {'label': 'AutoDomain', 'value': listening.FLOW_DOMAIN},
+                        {'label': 'AutoCollector', 'value': listening.FLOW_COLLECTOR}
                     ])]),
                 # PickUpMode
                 output.put_row([output.put_text('PickUp'), output.put_scope('Button_PickUp')])
@@ -176,8 +179,8 @@ class SettingPage(Page):
         self.exit_popup = True
         if not is_json_equal(json.dumps(self.get_json(j)), json.dumps(j)):
             self.exit_popup = False
-            output.popup('Do you need to save changes?', [
-                output.put_buttons(['No', 'Yes'], onclick=self.popup_button)
+            output.popup(_('Do you need to save changes?'), [
+                output.put_buttons([_('No'), _('Yes')], onclick=self.popup_button)
             ])
         while not self.exit_popup:
             time.sleep(0.1)

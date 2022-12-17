@@ -4,21 +4,15 @@ import math
 import random
 import string
 import time
-from ctypes.wintypes import HWND
-
 import cv2
 import numpy as np
 import win32api
 import win32con
 import win32gui
-
-import pyautogui
-import pydirectinput
 import img_manager
-import posi_manager
 import static_lib
 import vkcode
-
+from ctypes.wintypes import RECT
 
 IMG_RATE = 0
 IMG_POSI = 1
@@ -71,6 +65,30 @@ class InteractionBGD:
         if self.handle == 0:
             logger.error("未找到句柄，请确认原神窗口是否开启。")
 
+    def capture_handle(self):
+        # 获取窗口客户区的大小
+        handle = self.handle
+        r = RECT()
+        self.GetClientRect(handle, ctypes.byref(r))
+        width, height = r.right, r.bottom
+        # 开始截图
+        dc = self.GetDC(handle)
+        cdc = self.CreateCompatibleDC(dc)
+        bitmap = self.CreateCompatibleBitmap(dc, width, height)
+        self.SelectObject(cdc, bitmap)
+        self.BitBlt(cdc, 0, 0, width, height, dc, 0, 0, self.SRCCOPY)
+        # 截图是BGRA排列，因此总元素个数需要乘以4
+        total_bytes = width * height * 4
+        buffer = bytearray(total_bytes)
+        byte_array = ctypes.c_ubyte * total_bytes
+        self.GetBitmapBits(bitmap, total_bytes, byte_array.from_buffer(buffer))
+        self.DeleteObject(bitmap)
+        self.DeleteObject(cdc)
+        self.ReleaseDC(handle, dc)
+        # 返回截图数据为numpy.ndarray
+        ret = np.frombuffer(buffer, dtype=np.uint8).reshape(height, width, 4)
+        return ret
+    
     def capture(self, posi=None, shape='yx', jpgmode=None):
         """窗口客户区截图
 
@@ -86,9 +104,17 @@ class InteractionBGD:
             numpy.ndarray: 图片数组
         """
 
-        ret = static_lib.SCREENCAPTURE.get_capture()
+        ret = self.capture_handle()
         if ret.shape != (1080, 1920, 4):
-            logger.error("截图失败")
+            logger.error(f"截图失败, shape={ret.shape}, 将在2秒后重试。")
+            while 1:
+                time.sleep(2)
+                ret = self.capture_handle()
+                if ret.shape == (1080, 1920, 4):
+                    break
+                else:
+                    logger.error(f"截图失败, shape={ret.shape}, 将在2秒后重试。")
+
         # img_manager.qshow(ret)
         if posi is not None:
             ret = ret[posi[0]:posi[2], posi[1]:posi[3]]

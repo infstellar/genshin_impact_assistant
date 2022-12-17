@@ -47,7 +47,7 @@ class PaddleocrAPI:
         for line in result:
             pass
             # print(line)
-        return result
+        return result[0] # py3.7
 
     # def imgAnalysePlus(self,hwnd:winInfo,rangePosition):
     #     imsrc,position=GetScrWindowsImg(hwnd,rangePosition)
