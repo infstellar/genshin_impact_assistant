@@ -12,6 +12,7 @@ from source.webio import manager
 from source.webio.page_manager import Page
 from source.webio.log_handler import webio_poster
 
+
 class MainPage(Page):
     def __init__(self):
         super().__init__()
@@ -156,7 +157,7 @@ class SettingPage(Page):
 
         j = json.load(open(self.file_name, 'r', encoding='utf8'))
 
-        json.dump(self.get_json(j), open(self.file_name, 'w', encoding='utf8'))
+        json.dump(self.get_json(j), open(self.file_name, 'w', encoding='utf8'),ensure_ascii=False,indent=4)
         # output.put_text('saved!', scope='now')
         output.toast('saved!')
 
@@ -166,12 +167,12 @@ class SettingPage(Page):
             k_base64 = base64.b64encode(k.encode('utf8')).decode('utf8').replace('=', '_')
             v = j[k]
             if type(v) == dict:
-                rt_json[k] = self.get_json(v, add_name='{}-{}'.format(add_name, k_base64 ))
+                rt_json[k] = self.get_json(v, add_name='{}-{}'.format(add_name, k_base64))
 
             elif type(v) == list:
-                rt_json[k] = util.list_text2list(pin.pin['{}-{}'.format(add_name, k_base64 )])
+                rt_json[k] = util.list_text2list(pin.pin['{}-{}'.format(add_name, k_base64)])
             else:
-                rt_json[k] = pin.pin['{}-{}'.format(add_name, k_base64 )]
+                rt_json[k] = pin.pin['{}-{}'.format(add_name, k_base64)]
 
         return rt_json
 
@@ -207,23 +208,50 @@ class SettingPage(Page):
             # 获取注释
             doc_now = ''
             doc_now_data = {}
+            doc_items = None
             if k in doc:
+                # 判断doc的类型
                 if type(doc[k]) == dict:
                     if 'doc' in doc[k]:
                         doc_now = doc[k]['doc']
                     if 'data' in doc[k]:
                         doc_now_data = doc[k]['data']
+                    if 'select_items' in doc[k]:
+                        doc_items = doc[k]['select_items']
                 if type(doc[k]) == str:
                     doc_now = doc[k]
-
+            # 取显示名称
             display_name = doc_now if doc_now else k if self.mode else '{} {}'.format(k, doc_now)
-            k_base64=base64.b64encode(k.encode('utf8')).decode('utf8').replace('=','_')
-            bed_scope_name='{}-{}'.format(add_name, k_base64)
+            k_base64 = base64.b64encode(k.encode('utf8')).decode('utf8').replace('=', '_')
+            bed_scope_name = '{}-{}'.format(add_name, k_base64)
             if type(v) == str or v is None:
-                pin.put_input(bed_scope_name, label=display_name, value=v, scope=scope_name)
+                if doc_items:
+                    pin.put_select(bed_scope_name,
+                                   [{"label": i, "value": i} for i in doc_items], value=v,
+                                   label=display_name,
+                                   scope=scope_name)
+                else:
+                    pin.put_input(bed_scope_name, label=display_name, value=v, scope=scope_name)
+            elif type(v) == int:
+                if doc_items:
+                    pin.put_select(bed_scope_name,
+                                   [{"label": i, "value": i} for i in doc_items], value=v,
+                                   label=display_name,
+                                   scope=scope_name)
+                else:
+                    pin.put_input(bed_scope_name, label=display_name, value=v, scope=scope_name, type='number')
+            elif type(v) == float:
+                if doc_items:
+                    pin.put_select(bed_scope_name,
+                                   [{"label": i, "value": i} for i in doc_items], value=v,
+                                   label=display_name,
+                                   scope=scope_name)
+                else:
+                    pin.put_input(bed_scope_name, label=display_name, value=v, scope=scope_name, type='float')
             elif type(v) == bool:
                 pin.put_select(bed_scope_name,
-                               [{"label": 'True', "value": True}, {"label": 'False', "value": False}], value=v, label=display_name,
+                               [{"label": 'True', "value": True}, {"label": 'False', "value": False}], value=v,
+                               label=display_name,
                                scope=scope_name)
             elif type(v) == dict:
                 output.put_scope(bed_scope_name, scope=scope_name)
@@ -233,7 +261,3 @@ class SettingPage(Page):
             elif type(v) == list:
                 pin.put_textarea(bed_scope_name, label=display_name, value=util.list2format_list_text(v),
                                  scope=scope_name)
-            elif type(v) == int:
-                pin.put_input(bed_scope_name, label=display_name, value=v, scope=scope_name, type='number')
-            elif type(v) == float:
-                pin.put_input(bed_scope_name, label=display_name, value=v, scope=scope_name, type='float')
