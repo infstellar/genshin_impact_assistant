@@ -6,6 +6,10 @@
 
 所有配置文件位置：`genshin_assistant\config\*.json`
 
+## 推荐在GUI中修改
+
+目前GUI已经可用。GUI中的设置修改更加稳定准确快速，部分GUI不支持的配置文件才需要手动修改源文件。
+
 ## config.json 
 
 位置：config/settings/config.json

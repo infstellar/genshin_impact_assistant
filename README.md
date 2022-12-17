@@ -17,7 +17,9 @@ To没用过github的小伙伴:描述文档中的蓝色文字是链接,可以打�
 
 ### 1. [自动战斗辅助](./doc/combat_assi.md)
 
-- 按下`/`以启动或结束自动战斗辅助.
+- 在GUI中将FlowMode切换到AutoCombat，等待模块导入
+
+- 按下`[`键启动/停止功能。可在`keymap.json`中更改。
 
 其他设置参见[自动战斗辅助介绍](./doc/combat_assi.md).
 
@@ -25,16 +27,28 @@ To没用过github的小伙伴:描述文档中的蓝色文字是链接,可以打�
 
 1. 在config中设置挑战秘境的次数与其他设置,详见[config设置](./doc/config.md).
 2. 手动选择队伍,配置队伍,进入秘境.
-3. 进入秘境后,按下`]`键开始刷刷刷~
-4. 如果要终止自动战斗,按下`]`键.
+3. 进入秘境后,在GUI中将FlowMode切换到AutoDomain，等待模块导入
+4. 按下`[`键启动/停止功能。可在`keymap.json`中更改。
 
 - 注意阅读[domain_assi.md](./doc/domain_assi.md)中的注意事项.
 
 其他设置参见[自动秘境辅助介绍](./doc/domain_assi.md).
 
-## 更新日志 (和饼
+### 3. [自动采集辅助](./doc/collector_assi.md)
 
-[更新记录](update_note.md)
+<strong>注:测试中功能</strong>
+
+- 在GUI中将FlowMode切换到AutoCollector，等待模块导入
+
+- 按下`[`键启动/停止功能。可在`keymap.json`中更改。
+
+- 注意阅读[collector_assi.md](./doc/collector_assi.md)中的注意事项.
+
+其他设置参见[自动采集辅助介绍](./doc/collector_assi.md).
+
+## 更新路线图
+
+[路线图](update_note.md)
 
 ## 使用方法
 
@@ -92,6 +106,22 @@ To没用过github的小伙伴:描述文档中的蓝色文字是链接,可以打�
 - 原神需要以1080p窗口化运行(全屏也可以),设置抗锯齿为SMAA,中或以上特效.
 
 - 窗口焦点应全程在原神窗口上.
+
+### GUI使用方法
+
+#### main窗口
+
+- 点击main按钮进入
+
+- FlowMode：选择当前启用的功能
+
+- Log：输出日志
+
+#### setting窗口
+
+- 点击setting按钮进入
+
+- 在下拉列表中选择对应的config，进行配置。
 
 ### config设置
 
