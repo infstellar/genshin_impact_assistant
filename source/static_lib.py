@@ -108,8 +108,10 @@ cvAutoTrackerLoop.setDaemon(True)
 cvAutoTrackerLoop.start()
 time.sleep(1)
 
-def wait_until_no_excessive_error():
+def while_until_no_excessive_error(stop_func):
     while cvAutoTrackerLoop.is_in_excessive_error():
+        if stop_func():
+            return 0
         time.sleep(1)
 
 class TestTest(threading.Thread):
@@ -123,7 +125,7 @@ class TestTest(threading.Thread):
 
 if __name__ == '__main__':
     import cv2
-    wait_until_no_excessive_error()
+    while_until_no_excessive_error()
     while 1:
         cv2.imshow("123",SCREENCAPTURE.get_capture())
         cv2.waitKey(100)

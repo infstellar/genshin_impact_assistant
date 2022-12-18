@@ -28,6 +28,7 @@ class PickupOperator(BaseThreading):
         self.target_name = 'unknow'
         self.pickup_succ = False
         self.max_distance_from_target = 20
+        self.err_code = " "
     def continue_threading(self):
         if self.pause_threading_flag != False:
             self.pause_threading_flag = False
@@ -52,6 +53,7 @@ class PickupOperator(BaseThreading):
         while 1:
             # time.sleep(0.1)
             if self.stop_threading_flag:
+                logger.info("停止自动采集")
                 return 0
 
             if self.pause_threading_flag:
@@ -80,6 +82,9 @@ class PickupOperator(BaseThreading):
                     self.pause_threading()
                     logger.info("已找到物品且无法找到下一个物品，停止拾取")
 
+    def get_err_code(self):
+        return self.err_code
+    
     def pickup_recognize(self):
         flag1 = False
         ret = generic_lib.f_recognition(self.itt)
@@ -116,7 +121,7 @@ class PickupOperator(BaseThreading):
 
         return False
 
-    def find_collector(self):
+    def find_collector(self, show_res=False):
         imsrc = self.itt.capture().copy()
         imsrc = self.itt.png2jpg(imsrc, alpha_num=1)
         # qshow(imsrc)
@@ -129,8 +134,9 @@ class PickupOperator(BaseThreading):
                 imsrc[:, :, 2] >= 253).astype('uint8')) >= 3
         outputimg = a.astype('uint8') * 255
         # print()
-        cv2.imshow('123', outputimg)
-        cv2.waitKey(20)
+        if show_res:
+            cv2.imshow('find_collector', outputimg)
+            cv2.waitKey(20)
         adad = img_manager.get_rect(outputimg, self.itt.capture(jpgmode=0), ret_mode=2)
         return adad
 
