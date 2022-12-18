@@ -111,6 +111,7 @@ class TeyvatMoveFlow(BaseThreading):
             time.sleep(self.while_sleep)
 
             if self.stop_threading_flag:
+                logger.info("停止自动移动")
                 return 0
 
             if self.pause_threading_flag:

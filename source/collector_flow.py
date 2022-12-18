@@ -162,6 +162,7 @@ class CollectorFlow(BaseThreading):
         while 1:
             time.sleep(self.while_sleep)
             if self.stop_threading_flag:
+                logger.info("停止自动采集")
                 return 0
 
             if self.pause_threading_flag:
@@ -177,7 +178,7 @@ class CollectorFlow(BaseThreading):
             if self.current_state == ST.INIT_MOVETO_COLLECTOR:
                 
                 self.collector_posi_dict = load_feature_position(self.collector_name, self.shielded_id)
-                static_lib.wait_until_no_excessive_error()
+                static_lib.while_until_no_excessive_error(self.checkup_stop_func)
                 self.current_position = static_lib.cvAutoTrackerLoop.get_position()[1:]
                 self.collector_posi_dict.sort(key=self.sort_by_eu)
                 logger.info("switch Flow to: BEFORE_MOVETO_COLLECTOR")
@@ -196,6 +197,8 @@ class CollectorFlow(BaseThreading):
                 logger.info("正在前往：" + self.collector_name)
                 logger.info(f"物品id：{self.collection_id}")
                 while static_lib.cvAutoTrackerLoop.in_excessive_error:
+                    if self.checkup_stop_func():
+                        break
                     time.sleep(1)
                 logger.info("目标坐标：" + str(self.collection_posi)+"当前坐标：" + str(self.current_position))
                 
@@ -227,9 +230,9 @@ class CollectorFlow(BaseThreading):
                 
             if self.current_state == ST.INIT_PICKUP_COLLECTOR:
                 if self.collector_type == COLLECTION:
-                    self.IN_PICKUP_COLLECTOR_timeout.set_timeout_limit(45)
+                    self.IN_PICKUP_COLLECTOR_timeout.set_timeout_limit(120)
                 elif self.collector_type == ENEMY:
-                    self.IN_PICKUP_COLLECTOR_timeout.set_timeout_limit(80)
+                    self.IN_PICKUP_COLLECTOR_timeout.set_timeout_limit(120)
                     self.puo.max_distance_from_target = 50
                 elif self.collector_type == MINERAL:
                     pass

@@ -155,7 +155,7 @@ class AutoTrackerLoop(BaseThreading):
                 self.working_flag = True
 
             if self.start_sleep_timer.get_diff_time() >= 60:
-                if self.start_sleep_timer.get_diff_time() <= 65:
+                if self.start_sleep_timer.get_diff_time() <= 62:
                     logger.debug("cvAutoTrackerLoop switch to sleep mode.")
                 time.sleep(0.8)
                 continue
