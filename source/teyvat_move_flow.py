@@ -58,9 +58,9 @@ class TeyvatMoveFlow(BaseThreading):
         self.motion_state = IN_MOVE
         
         '''设置缩放'''
-        scene_manager.switchto_bigmapwin()
+        scene_manager.switchto_bigmapwin(self.checkup_stop_func)
         big_map.reset_map_size()
-        scene_manager.switchto_mainwin()
+        scene_manager.switchto_mainwin(self.checkup_stop_func)
         
         # self.is_combat = False
 
@@ -127,18 +127,18 @@ class TeyvatMoveFlow(BaseThreading):
             if self.current_state == ST.INIT_TEYVAT_TELEPORT:
                 
                 '''切换到大世界界面'''
-                scene_manager.switchto_mainwin()
+                scene_manager.switchto_mainwin(self.checkup_stop_func)
                 self.tmc.set_target_position(self.target_posi)
                 self.current_state = ST.BEFORE_TEYVAT_TELEPORT
 
             if self.current_state == ST.BEFORE_TEYVAT_TELEPORT:
                 '''切换到大世界界面'''
-                scene_manager.switchto_mainwin()
+                scene_manager.switchto_mainwin(self.checkup_stop_func)
                 self.current_state = ST.IN_TEYVAT_TELEPORT
 
             if self.current_state == ST.IN_TEYVAT_TELEPORT:
                 curr_posi = static_lib.cvAutoTrackerLoop.get_position()[1:]
-                scene_manager.switchto_bigmapwin()
+                scene_manager.switchto_bigmapwin(self.checkup_stop_func)
                 # Obtain the coordinates of the transmission anchor closest to the target coordinates
                 tw_posi = big_map.nearest_big_map_tw_posi(curr_posi, self.target_posi) # 获得距离目标坐标最近的传送锚点坐标 
                 if len(tw_posi)==0:
@@ -168,22 +168,22 @@ class TeyvatMoveFlow(BaseThreading):
                 self.current_state = ST.AFTER_TEYVAT_TELEPORT
 
             if self.current_state == ST.AFTER_TEYVAT_TELEPORT:
-                scene_manager.switchto_mainwin()
+                scene_manager.switchto_mainwin(self.checkup_stop_func)
                 time.sleep(2)
                 curr_posi = static_lib.cvAutoTrackerLoop.get_position()[1:]
-                scene_manager.switchto_bigmapwin()
+                scene_manager.switchto_bigmapwin(self.checkup_stop_func)
                 tw_posi = big_map.nearest_teyvat_tw_posi(curr_posi, self.target_posi)[0]
                 p1 = generic_lib.euclidean_distance(self.target_posi, tw_posi)
                 p2 = generic_lib.euclidean_distance(self.target_posi, curr_posi)
                 if p1 < p2:
-                    scene_manager.switchto_mainwin()
+                    scene_manager.switchto_mainwin(self.checkup_stop_func)
                     self.itt.delay(1)
                     self.current_state = ST.BEFORE_TEYVAT_TELEPORT
                 else:
                     self.current_state = ST.AFTER_TEYVAT_TELEPORT
 
             if self.current_state == ST.AFTER_TEYVAT_TELEPORT:
-                scene_manager.switchto_mainwin()
+                scene_manager.switchto_mainwin(self.checkup_stop_func)
                 self.current_state = ST.END_TEYVAT_TELEPORT
             if self.current_state == ST.END_TEYVAT_TELEPORT:
                 self.current_state = ST.INIT_TEYVAT_MOVE
@@ -198,7 +198,7 @@ class TeyvatMoveFlow(BaseThreading):
                     if combat_lib.combat_statement_detection(self.itt):
                         '''进入战斗模式'''
                         if self.reaction_to_enemy == 'RUN':
-                            '''越级执行护盾命令 还没想好怎么写的优雅一点'''
+                            '''越级执行护盾命令 还没想好怎么写'''
                             # shield_chara_num = 2
                             # self.cct.sco._switch_character(shield_chara_num)
                             # self.cct.sco.tastic_operator.set_parameter(self.cct.sco.chara_list[shield_chara_num-1].tastic_group, self.cct.sco.chara_list[shield_chara_num-1])
