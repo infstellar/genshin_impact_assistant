@@ -113,7 +113,7 @@ def get_tw_points(bigmatMat):
         logger.warning("获取传送锚点坐标失败，正在重试")
         time.sleep(5)
         bigmatMat = itt.capture(jpgmode=0)
-        scene_manager.switchto_bigmapwin()
+        scene_manager.switchto_bigmapwin(scene_manager.default_stop_func)
         return get_tw_points(bigmatMat)
     return ret
 

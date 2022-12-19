@@ -59,8 +59,8 @@ def points_angle(p1, p2, coordinate=NORMAL):
         degree -= 360
     return degree
 
-def set_genshin_time(x=18): # 调整时间至夜晚
-    scene_manager.switchto_time_menu()
+def set_genshin_time(x=18, stop_func = scene_manager.default_stop_func): # 调整时间至夜晚
+    scene_manager.switchto_time_menu(stop_func)
     itt.move_to(img_manager.ui_time_menu_core.cap_center_position_xy[0],img_manager.ui_time_menu_core.cap_center_position_xy[1])
     itt.left_down()
     time.sleep(0.5)
