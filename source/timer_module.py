@@ -13,9 +13,9 @@ class Timer:
     def stop(self):
         self.end_time = time.time()
 
-    def get_delta_time(self):
-        self.stop()
-        return self.end_time - self.start_time
+    # def get_delta_time(self):
+    #     self.stop()
+    #     return self.end_time - self.start_time
 
     def get_diff_time(self):  # new
         self.stop()

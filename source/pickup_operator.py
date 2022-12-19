@@ -25,6 +25,7 @@ class PickupOperator(BaseThreading):
         self.max_number_of_collector_loops = 180
         self.pickup_timer = timer_module.Timer()
         self.pickup_fail_timeout = timer_module.TimeoutTimer(400)
+        self.night_timer = timer_module.Timer(diff_start_time = 900)
         self.target_posi = []
         self.target_name = 'unknow'
         self.pickup_succ = False
@@ -75,11 +76,17 @@ class PickupOperator(BaseThreading):
             ret = self.pickup_recognize()
             
             if self.search_mode == 1:
+                if self.night_timer.get_diff_time() >= 900:
+                    logger.info("正在设置时间为夜晚")
+                    generic_lib.set_genshin_time(x = 18)
+                    self.night_timer.reset()
+                
                 ret = self.auto_pickup()
                 
                 if self.target_posi:
                     self.cview_toward_target()
                 if self.flicker_timer.get_diff_time() >= 5:
+                    logger.debug("searching flicker")
                     self.collector_flag = False
                     self.finding_collector()
                     if self.search_mode == 0 and self.reset_timer.get_diff_time() >= self.reset_time:
