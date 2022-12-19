@@ -22,13 +22,17 @@ class PickupOperator(BaseThreading):
         self.reset_time = 120
         self.collecor_loops = 0
         self.collector_flag = True
-        self.max_number_of_collector_loops = 200
+        self.max_number_of_collector_loops = 180
         self.pickup_timer = timer_module.Timer()
+        self.pickup_fail_timeout = timer_module.TimeoutTimer(400)
         self.target_posi = []
         self.target_name = 'unknow'
         self.pickup_succ = False
         self.max_distance_from_target = 20
         self.err_code = " "
+        self.search_mode = 0
+        self.last_search_times = 2
+        
     def continue_threading(self):
         if self.pause_threading_flag != False:
             self.pause_threading_flag = False
@@ -46,8 +50,11 @@ class PickupOperator(BaseThreading):
     def set_target_position(self, p):
         self.target_posi = p
     
-    def set_target_name(self,x):
+    def set_target_name(self, x):
         self.target_name = x
+    
+    def set_search_mode(self, x):
+        self.search_mode = x
     
     def run(self):
         while 1:
@@ -66,21 +73,34 @@ class PickupOperator(BaseThreading):
                 self.working_flag = True
             
             ret = self.pickup_recognize()
-
-            ret = self.auto_pickup()
-            if self.target_posi:
-                self.cview_toward_target()
-            if self.flicker_timer.get_diff_time() >= 5:
-                self.collector_flag = False
-                self.finding_collector()
-                if self.reset_timer.get_diff_time() >= self.reset_time:
-                    self.reset_timer.reset()
-                    self.reset_collector_loops()
-            '''当成功找到物品且找不到下一个可能物品后自动停止。'''
-            if self.pickup_succ :
-                if self.collecor_loops > self.max_number_of_collector_loops:
+            
+            if self.search_mode == 1:
+                ret = self.auto_pickup()
+                
+                if self.target_posi:
+                    self.cview_toward_target()
+                if self.flicker_timer.get_diff_time() >= 5:
+                    self.collector_flag = False
+                    self.finding_collector()
+                    if self.search_mode == 0 and self.reset_timer.get_diff_time() >= self.reset_time:
+                        self.reset_timer.reset()
+                        self.reset_collector_loops()
+                    
+                if self.search_mode == 1 and self.last_search_times <= 0:
                     self.pause_threading()
-                    logger.info("已找到物品且无法找到下一个物品，停止拾取")
+                    logger.info("PICKUP_TIMEOUT_001")
+                    logger.info("停止拾取")
+                        
+                if self.pickup_fail_timeout.istimeout():
+                    self.pause_threading()
+                    logger.info("PICKUP_TIMEOUT_002")
+                    logger.info("停止拾取")
+                
+                '''当成功找到物品且找不到下一个可能物品后自动停止。'''
+                if self.pickup_succ :
+                    if self.collecor_loops > self.max_number_of_collector_loops:
+                        self.pause_threading()
+                        logger.info("已找到物品且无法找到下一个物品，停止拾取")
 
     def get_err_code(self):
         return self.err_code
@@ -106,6 +126,8 @@ class PickupOperator(BaseThreading):
             res = ocr.img_analyse(cap)
             if len(res) != 0:
                 if res[0][1][0] not in self.pickup_blacklist:
+                    self.pickup_fail_timeout.reset()
+                    self.last_search_times = 2
                     self.itt.key_press('f')
                     # self.itt.delay(0)
                     self.pickup_item_list.append(res[0][1][0])
@@ -206,6 +228,10 @@ class PickupOperator(BaseThreading):
             for i in range(5):
                 movement.cview(60, mode = movement.VERTICALLY)
                 time.sleep(0.2)
+        elif self.search_mode == 1 and self.last_search_times > 0:
+            self.last_search_times-=1
+            self.reset_collector_loops()
+            return
         while self.collecor_loops < self.max_number_of_collector_loops:
             if self.checkup_stop_func():
                 return 0
@@ -224,9 +250,10 @@ if __name__ == '__main__':
     
     po = PickupOperator()
     # po.set_target_position([4813.5, -4180.5])
-    # po.start()
+    po.start()
+    po.set_search_mode(1)
     while 1:
-        po.find_collector()
-        # time.sleep(0.1)
+        # po.find_collector()
+        time.sleep(0.1)
         # po.pickup_recognize()
         # print()

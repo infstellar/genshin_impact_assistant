@@ -82,6 +82,7 @@ class CollectorFlow(BaseThreading):
         self.puo.setDaemon(True)
         self.puo.pause_threading()
         self.puo.start()
+        self.puo.set_search_mode(1)
         
         chara_list = combat_loop.get_chara_list()
         self.cct = combat_loop.Combat_Controller(chara_list)
