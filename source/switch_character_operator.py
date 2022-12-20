@@ -25,6 +25,7 @@ class SwitchCharacterOperator(BaseThreading):
         self.tastic_operator = tastic_operator.TasticOperator()
         self.tastic_operator.pause_threading()
         self.tastic_operator.setDaemon(True)
+        self.tastic_operator.add_stop_func(self.checkup_stop_func)
         self.tastic_operator.start()
         self.chara_list.sort(key=sort_flag_1, reverse=False)
         self.current_num = 1
@@ -46,6 +47,9 @@ class SwitchCharacterOperator(BaseThreading):
 
             if not self.working_flag:  # tastic operator no working
                 self.working_flag = True
+            if self.checkup_stop_func():
+                self.pause_threading_flag = True
+                continue
             if self.tastic_operator.get_working_statement():  # tastic operator working
                 time.sleep(0.2)
 

@@ -7,8 +7,9 @@ from base_threading import BaseThreading
 from interaction_background import InteractionBGD
 from switch_character_operator import SwitchCharacterOperator
 import combat_lib
+import img_manager
 
-
+CHARACTER_DIED = 1
 
 def sort_flag_1(x: character.Character):
     return x.priority
@@ -81,11 +82,13 @@ class Combat_Controller(BaseThreading):
 
         self.sco = SwitchCharacterOperator(self.chara_list)
         self.sco.pause_threading()
+        self.sco.add_stop_func(self.checkup_stop_func)
         self.sco.setDaemon(True)
         self.sco.start()
 
         self.ao = AimOperator()
         self.ao.pause_threading()
+        self.ao.add_stop_func(self.checkup_stop_func)
         self.ao.setDaemon(True)
         self.ao.start()
 
@@ -124,7 +127,9 @@ class Combat_Controller(BaseThreading):
                     time.sleep(1)
                 else:
                     pass
-
+            if self.checkup_stop_func():
+                self.pause_threading_flag = True
+                continue
             # print('6')
             # time.sleep(1)
 
@@ -132,7 +137,11 @@ class Combat_Controller(BaseThreading):
         if self.pause_threading_flag or self.stop_threading_flag:
             logger.info('停止自动战斗')
             return True
-
+        if self.itt.get_img_existence(img_manager.character_died):
+            logger.info('有人嘎了，停止自动战斗')
+            self.last_err_code = CHARACTER_DIED
+            return True
+        
     def checkup_stop_threading(self):
         if self.stop_threading_flag:
             logger.info('停止自动战斗')

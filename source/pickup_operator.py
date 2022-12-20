@@ -84,6 +84,10 @@ class PickupOperator(BaseThreading):
             if not self.working_flag:
                 self.working_flag = True
             
+            if self.checkup_stop_func():
+                self.pause_threading_flag = True
+                continue
+            
             ret = self.pickup_recognize()
             
             if self.search_mode == 1:

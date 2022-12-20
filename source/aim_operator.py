@@ -53,7 +53,11 @@ class AimOperator(BaseThreading):
 
             if not self.working_flag:
                 self.working_flag = True
-
+            
+            if self.checkup_stop_func():
+                self.pause_threading_flag = True
+                continue
+            
             t = self.loop_timer.loop_time() # 设置最大检查时间
             if t <= self.fps:
                 time.sleep(self.fps - t)
@@ -78,7 +82,7 @@ class AimOperator(BaseThreading):
             _type_: _description_
         """
         if self.checkup_stop_func():
-            return 0
+            return None
         cap = self.itt.capture()
         imsrc = self.itt.png2jpg(cap, channel='ui', alpha_num=254)
         orsrc = cap.copy()
@@ -108,6 +112,8 @@ class AimOperator(BaseThreading):
         if self.checkup_stop_func():
             return 0
         ret_points = self.get_enemy_feature() # 获得敌方血条坐标
+        if ret_points is None:
+            return None
         points_length = []
         if len(ret_points) == 0:
             return -1
@@ -146,6 +152,8 @@ class AimOperator(BaseThreading):
                 return 0
             self.itt.move_to(50, 0, relative=True)
             ret_points = self.get_enemy_feature()
+            if ret_points is None:
+                return None
             if len(ret_points) != 0:
                 self.reset_enemy_loops()
                 return 0

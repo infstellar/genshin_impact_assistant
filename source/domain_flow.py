@@ -228,7 +228,9 @@ class DomainFlow(BaseThreading):
                 self.stop_threading()
                 time.sleep(2)
                 return 0
-
+            if self.checkup_stop_func():
+                self.pause_threading_flag = True
+                continue
             # if self.domaininitflag==False:
 
             #     continue

@@ -41,7 +41,11 @@ class AlphaLoop(BaseThreading):
                     self.combat_loop.pause_threading()
                 time.sleep(1)
                 continue
-
+            
+            if self.checkup_stop_func():
+                self.pause_threading_flag = True
+                continue
+            
             if not self.working_flag:
                 if not self.combat_loop.get_working_statement():
                     self.combat_loop.continue_threading()

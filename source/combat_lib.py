@@ -142,6 +142,11 @@ class CombatStatementDetectionLoop(BaseThreading):
 
             if not self.working_flag:
                 self.working_flag = True
+                
+            if self.checkup_stop_func():
+                self.pause_threading_flag = True
+                continue
+                
             '''write your code below'''
             
             state = combat_statement_detection(self.itt)

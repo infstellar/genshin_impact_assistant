@@ -121,6 +121,11 @@ class TeyvatMoveFlow(BaseThreading):
 
             if not self.working_flag:
                 self.working_flag = True
+                
+            if self.checkup_stop_func():
+                self.pause_threading_flag = True
+                continue
+                
             '''write your code below'''
 
             if self.current_state == ST.INIT_TEYVAT_TELEPORT:

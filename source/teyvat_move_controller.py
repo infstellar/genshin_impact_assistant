@@ -108,6 +108,11 @@ class TeyvatMoveController(BaseThreading):
 
             if not self.working_flag:
                 self.working_flag = True
+                
+            if self.checkup_stop_func():
+                self.pause_threading_flag = True
+                continue
+                
             '''write your code below'''
             
             self.current_posi = static_lib.cvAutoTrackerLoop.get_position()
