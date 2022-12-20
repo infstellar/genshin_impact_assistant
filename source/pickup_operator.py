@@ -8,6 +8,7 @@ import timer_module
 import static_lib
 import movement
 import cv2
+import scene_manager
 
 
 class PickupOperator(BaseThreading):
@@ -36,11 +37,21 @@ class PickupOperator(BaseThreading):
         
     def continue_threading(self):
         if self.pause_threading_flag != False:
-            self.pause_threading_flag = False
             self.pickup_timer.reset()
-            movement.change_view_to_posi(self.target_posi)
+            # movement.change_view_to_posi(self.target_posi)
             self.pickup_succ = False
             self.pickup_item_list = []
+            self.last_search_times = 2
+            self.collecor_loops = 0
+            
+            if self.search_mode == 1:
+                if self.night_timer.get_diff_time() >= 900:
+                    logger.info("正在设置时间为夜晚")
+                    self.itt.delay(1)
+                    generic_lib.set_genshin_time()
+                    # scene_manager.switchto_mainwin(self.checkup_stop_func)
+                    self.night_timer.reset()
+            self.pause_threading_flag = False
     
     def pause_threading(self):
         if self.pause_threading_flag != True:
@@ -61,7 +72,7 @@ class PickupOperator(BaseThreading):
         while 1:
             # time.sleep(0.1)
             if self.stop_threading_flag:
-                logger.info("停止自动采集")
+                logger.info("停止自动拾取")
                 return 0
 
             if self.pause_threading_flag:
@@ -76,10 +87,6 @@ class PickupOperator(BaseThreading):
             ret = self.pickup_recognize()
             
             if self.search_mode == 1:
-                if self.night_timer.get_diff_time() >= 900:
-                    logger.info("正在设置时间为夜晚")
-                    generic_lib.set_genshin_time(x = 18)
-                    self.night_timer.reset()
                 
                 ret = self.auto_pickup()
                 
@@ -127,7 +134,7 @@ class PickupOperator(BaseThreading):
                 self.itt.key_up('w')
             time.sleep(0.1)
             cap = self.itt.capture()
-            cap = self.itt.crop_image(cap, [y1 + ret[1] - 20, x1 + ret[0] + 53, y1 + ret[1] + 54, x1 + ret[0] + 361])
+            cap = crop(cap, [x1 + ret[0] + 53, y1 + ret[1] - 20, x1 + ret[0] + 361,  y1 + ret[1] + 54])
             cap = self.itt.png2jpg(cap, channel='ui', alpha_num=180)
             # img_manager.qshow(cap)
             res = ocr.img_analyse(cap)
@@ -256,9 +263,11 @@ if __name__ == '__main__':
     
     
     po = PickupOperator()
-    # po.set_target_position([4813.5, -4180.5])
+    po.set_target_position([4813.5, -4180.5])
+    po.pause_threading()
     po.start()
     po.set_search_mode(1)
+    po.continue_threading()
     while 1:
         # po.find_collector()
         time.sleep(0.1)

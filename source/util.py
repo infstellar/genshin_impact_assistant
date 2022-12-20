@@ -229,3 +229,82 @@ def is_number(s):
 
     return False
 
+import cv2
+from PIL import Image
+
+def crop(image, area):
+    """
+    Crop image like pillow, when using opencv / numpy.
+    Provides a black background if cropping outside of image.
+    Args:
+        image (np.ndarray):
+        area:
+    Returns:
+        np.ndarray:
+    """
+    x1, y1, x2, y2 = map(int, map(round, area))
+    h, w = image.shape[:2]
+    border = np.maximum((0 - y1, y2 - h, 0 - x1, x2 - w), 0)
+    x1, y1, x2, y2 = np.maximum((x1, y1, x2, y2), 0)
+    image = image[y1:y2, x1:x2].copy()
+    if sum(border) > 0:
+        image = cv2.copyMakeBorder(image, *border, borderType=cv2.BORDER_CONSTANT, value=(0, 0, 0))
+    return image
+
+def get_color(image, area):
+    """Calculate the average color of a particular area of the image.
+    Args:
+        image (np.ndarray): Screenshot.
+        area (tuple): (upper_left_x, upper_left_y, bottom_right_x, bottom_right_y)
+    Returns:
+        tuple: (r, g, b)
+    """
+    temp = crop(image, area)
+    color = cv2.mean(temp)
+    return color[:3]
+
+
+def get_bbox(image, offset=5):
+    """
+    A numpy implementation of the getbbox() in pillow.
+    Args:
+        image (np.ndarray): Screenshot.
+    Returns:
+        tuple: (upper_left_x, upper_left_y, bottom_right_x, bottom_right_y)
+    """
+    if image_channel(image) == 3:
+        image = np.max(image, axis=2)
+    x = np.where(np.max(image, axis=0) > offset)[0]
+    y = np.where(np.max(image, axis=1) > offset)[0]
+    return (x[0], y[0], x[-1] + 1, y[-1] + 1)
+
+def area_offset(area, offset):
+    """
+    Args:
+        area: (upper_left_x, upper_left_y, bottom_right_x, bottom_right_y).
+        offset: (x, y).
+    Returns:
+        tuple: (upper_left_x, upper_left_y, bottom_right_x, bottom_right_y).
+    """
+    return tuple(np.array(area) + np.append(offset, offset))
+
+def image_channel(image):
+    """
+    Args:
+        image (np.ndarray):
+    Returns:
+        int: 0 for grayscale, 3 for RGB.
+    """
+    return image.shape[2] if len(image.shape) == 3 else 0
+
+
+def image_size(image):
+    """
+    Args:
+        image (np.ndarray):
+    Returns:
+        int, int: width, height
+    """
+    shape = image.shape
+    return shape[1], shape[0]
+

@@ -121,21 +121,21 @@ class CollectorFlow(BaseThreading):
     def stop_combat(self):
         self.cct.pause_threading()
     def start_combat(self):
-        self.cct.continue_threading()
         self.stop_pickup()
         self.stop_walk()
+        self.cct.continue_threading()
     def stop_pickup(self):
         self.puo.pause_threading()
     def start_pickup(self):
-        self.puo.continue_threading()
         self.stop_combat()
         self.stop_walk()
+        self.puo.continue_threading()
     def stop_walk(self):
         self.tmf.pause_threading()
     def start_walk(self):
-        self.tmf.continue_threading()
         self.stop_combat()
         self.stop_pickup()
+        self.tmf.continue_threading()
     def stop_all(self):
         self.stop_pickup()
         self.stop_combat()

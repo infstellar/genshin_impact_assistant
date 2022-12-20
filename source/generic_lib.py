@@ -61,9 +61,10 @@ def points_angle(p1, p2, coordinate=NORMAL):
 
 def set_genshin_time(x=18, stop_func = scene_manager.default_stop_func): # 调整时间至夜晚
     scene_manager.switchto_time_menu(stop_func)
+    time.sleep(0.8)
     itt.move_to(img_manager.ui_time_menu_core.cap_center_position_xy[0],img_manager.ui_time_menu_core.cap_center_position_xy[1])
     itt.left_down()
-    time.sleep(0.5)
+    time.sleep(0.8)
     itt.move_to(-10,0,relative=True)
     time.sleep(0.2)
     itt.move_to(0,-30,relative=True)
@@ -75,6 +76,10 @@ def set_genshin_time(x=18, stop_func = scene_manager.default_stop_func): # 调�
     time.sleep(0.2)
     itt.left_up()
     itt.move_and_click(position = [1454,1021])
+    time.sleep(0.8)
+    itt.key_press('esc')
+    time.sleep(0.8)
+    itt.key_press('esc')
 
 if __name__ == '__main__':
     set_genshin_time()

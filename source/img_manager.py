@@ -22,32 +22,38 @@ class ImgIcon:
         self.bbg_posi = bbg_posi
         self.jpgmode = jpgmode
         self.threshold = threshold
+        self.raw_image = cv2.imread(self.path)
+        
+        if self.is_bbg and self.bbg_posi is None:
+            self.bbg_posi = get_bbox(self.raw_image)
         
         if cap_posi == 'bbg':
             self.cap_posi = self.bbg_posi
         else:
             self.cap_posi = cap_posi
         self.cap_center_position_xy = [(self.cap_posi[1]+self.cap_posi[3])/2, (self.cap_posi[0]+self.cap_posi[2])/2]
-        self.image = cv2.imread(self.path)
+        
 
         if self.is_bbg:
-            self.image = self.image[self.bbg_posi[0]:self.bbg_posi[2], self.bbg_posi[1]:self.bbg_posi[3]]
+            self.image = crop(self.raw_image, self.bbg_posi)
+        else:
+            self.image = self.raw_image.copy()
 
 
 imgs_dict = {}
 
 COMING_OUT_BY_SPACE = ImgIcon(name="coming_out_by_space", path="assests\\imgs\\common\\coming_out_by_space.jpg",
-                              is_bbg=True, bbg_posi=[505, 1379, 568, 1447], cap_posi='bbg', threshold=0.8, )
+                              is_bbg=True, bbg_posi=[1379,505,  1447,568, ], cap_posi='bbg', threshold=0.8, )
 IN_DOMAIN = ImgIcon(name="IN_DOMAIN", path="assests\\imgs\\common\\IN_DOMAIN.jpg",
-                    is_bbg=True, bbg_posi=[112, 25, 137, 52], cap_posi='bbg')
+                    is_bbg=True, bbg_posi=[25,112,  52, 137, ], cap_posi='bbg')
 USE_20RESIN_DOBLE_CHOICES = ImgIcon(name="USE_20RESIN_DOBLE_CHOICES",
                                     path="assests\\imgs\\common\\USE_20RESIN_DOBLE_CHOICES.jpg",
-                                    is_bbg=True, bbg_posi=[724, 985, 791, 1348], cap_posi='bbg')
+                                    is_bbg=True, bbg_posi=[985, 724, 1348, 791 ], cap_posi='bbg')
 USE_20X2RESIN_DOBLE_CHOICES = ImgIcon(name="USE_20X2RESIN_DOBLE_CHOICES",
                                       path="assests\\imgs\\common\\USE_20X2RESIN_DOBLE_CHOICES.jpg",
-                                      is_bbg=True, bbg_posi=[726, 567, 793, 934], cap_posi='bbg')
+                                      is_bbg=True, bbg_posi=[567,726 ,934, 793 ], cap_posi='bbg')
 F_BUTTON = ImgIcon(name="F_BUTTON", path="assests\\imgs\\common\\F_BUTTON.jpg",
-                   is_bbg=True, bbg_posi=[526, 1104, 550, 1128], cap_posi=[350, 1079, 751, 1162],
+                   is_bbg=True, bbg_posi=[1104,526 , 1128,550 ], cap_posi=[1079,350 ,1162, 751 ],
                    threshold=0.92)
 bigmap_TeleportWaypoint = ImgIcon(name="bigmap_TeleportWaypoint",
                                   path="assests\\imgs\\map\\big_map\\points\\TeleportWaypoint.jpg",
@@ -57,21 +63,21 @@ smallmap_AbyssMage = ImgIcon(name="smallmap_AbyssMage", path="assests\\imgs\\map
 bigmap_AbyssMage = ImgIcon(name="bigmap_AbyssMage", path="assests\\imgs\\map\\big_map\\enemies\\AbyssMage.jpg",
                            is_bbg=False)
 motion_swimming = ImgIcon(name="motion_swimming", path="assests\\imgs\\common\\motion_swimming.jpg",
-                          is_bbg=True, bbg_posi=[968, 1808, 1016, 1872], cap_posi='bbg')
+                          is_bbg=True, bbg_posi=[1808,968,  1872,1016 ], cap_posi='bbg')
 motion_climbing = ImgIcon(name="motion_climbing", path="assests\\imgs\\common\\motion_climbing.jpg",
-                          is_bbg=True, bbg_posi=[960, 1706, 1022, 1866], cap_posi='bbg')
+                          is_bbg=True, bbg_posi=[1706,960,1866, 1022 ], cap_posi='bbg')
 motion_flying = ImgIcon(name="motion_flying", path="assests\\imgs\\common\\motion_flying.jpg",
-                        is_bbg=True, bbg_posi=[960, 1706, 1022, 1866], cap_posi='bbg')
+                        is_bbg=True, bbg_posi=[1706,960, 1866, 1022 ], cap_posi='bbg')
 ui_main_win = ImgIcon(name="ui_main_win", path="assests\\imgs\\common\\ui\\emergency_food.jpg",
-                      is_bbg=True, bbg_posi=[34, 39, 78, 73], cap_posi='bbg')
+                      is_bbg=True, bbg_posi=[39,34, 73, 78 ], cap_posi='bbg')
 ui_bigmap_win = ImgIcon(name="ui_bigmap_win", path="assests\\imgs\\common\\ui\\bigmap.jpg",
-                        is_bbg=True, bbg_posi=[36, 1591, 59, 1614], cap_posi='bbg')
+                        is_bbg=True, bbg_posi=[1591,36,1614, 59 ], cap_posi='bbg')
 ui_esc_menu = ImgIcon(name="ui_esc_menu", path="assests\\imgs\\common\\ui\\esc_menu.jpg",
-                        is_bbg=True, bbg_posi=[1001, 18, 1058, 72], cap_posi='bbg')
+                        is_bbg=True, cap_posi='bbg')
 ui_switch_to_time_menu = ImgIcon(name="ui_switch_to_time_menu", path="assests\\imgs\\common\\ui\\switch_to_time_menu.jpg",
-                        is_bbg=True, bbg_posi=[689, 20, 741, 77], cap_posi='bbg')
+                        is_bbg=True, cap_posi='bbg')
 ui_time_menu_core = ImgIcon(name="ui_time_menu_core", path="assests\\imgs\\common\\ui\\time_menu_core.jpg",
-                        is_bbg=True, bbg_posi=[483, 1421, 521, 1459], cap_posi='bbg')
+                        is_bbg=True, cap_posi='bbg')
 
 matching_rate_dict = {
     "coming_out_by_space": 0.9,
@@ -89,7 +95,7 @@ def qshow(img1):
     cv2.imshow('123', img1)
     cv2.waitKey(0)
 
-
+qshow(ui_time_menu_core.image)
 # def get_img_from_name(img_name: str, reshape=True):
 #     ret_img = imgs_dict[img_name]
 #     if reshape:

@@ -126,7 +126,14 @@ class AimOperator(BaseThreading):
         px = (px - mx) / 2.4
         py = (py - my) / 2 + 35 # 获得鼠标坐标偏移量
         # print(px,py)
-
+        if px >= 100:
+            px = 100
+        if px <= -100:
+            px = -100
+        if py >= 100:
+            py = 100
+        if py <= -100:
+            py = -100
         self.itt.move_to(px, py, relative=True)
         return px
         # print()
@@ -165,14 +172,14 @@ class AimOperator(BaseThreading):
             elif px > target_px + 1:
                 movement.move(movement.BACK, distance=px - target_px)
 
-        if self.auto_move: # 绕敌旋转
-            if self.left_timer.get_diff_time() >= 15: # 每15秒重新按一次a
-                if self.checkup_stop_func():
-                    self.itt.key_up('a')
-                    return 0
-                self.itt.key_up('a')
-                self.itt.key_down('a')
-                self.left_timer.reset()
+        # if self.auto_move: # 绕敌旋转
+        #     if self.left_timer.get_diff_time() >= 15: # 每15秒重新按一次a
+        #         if self.checkup_stop_func():
+        #             self.itt.key_up('a')
+        #             return 0
+        #         self.itt.key_up('a')
+        #         self.itt.key_down('a')
+        #         self.left_timer.reset()
 
 
 if __name__ == '__main__':
