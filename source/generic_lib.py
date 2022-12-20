@@ -4,6 +4,7 @@ from interaction_background import InteractionBGD
 import math
 import numpy as np
 import scene_manager
+import button_manager
 
 NORMAL = 0
 NEGATIVE_Y = 1
@@ -60,7 +61,7 @@ def points_angle(p1, p2, coordinate=NORMAL):
     return degree
 
 def set_genshin_time(x=18, stop_func = scene_manager.default_stop_func): # 调整时间至夜晚
-    scene_manager.switchto_time_menu(stop_func)
+    scene_manager.switch_to_page(scene_manager.page_time, stop_func)
     time.sleep(0.8)
     itt.move_to(img_manager.ui_time_menu_core.cap_center_position_xy[0],img_manager.ui_time_menu_core.cap_center_position_xy[1])
     itt.left_down()
@@ -77,10 +78,15 @@ def set_genshin_time(x=18, stop_func = scene_manager.default_stop_func): # 调�
     itt.left_up()
     itt.move_and_click(position = [1454,1021])
     time.sleep(0.8)
-    itt.key_press('esc')
-    time.sleep(0.8)
-    itt.key_press('esc')
-
+    while 1:
+        ret = itt.appear_then_click(button_manager.button_exit)
+        if ret:
+            break
+        if stop_func():
+            break
+        time.sleep(1)
+    scene_manager.switch_to_page(scene_manager.page_main, stop_func)
+    
 if __name__ == '__main__':
     set_genshin_time()
     # p1 = [0,0]
