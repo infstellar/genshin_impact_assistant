@@ -33,14 +33,17 @@ class Button(ImgIcon):
         self.raw_file = cv2.imread(os.path.join(root_path, self.path))
         self.raw_name = name
         
+        
         bbg_posi = get_bbox(self.raw_file)
+        
         
         super().__init__(name=name, path=self.path, is_bbg = True, bbg_posi = bbg_posi)
         
         image_gray = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
         ___, self.image_binary = cv2.threshold(image_gray, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
         
-        self.image
+        self.center_point = [bbg_posi[0]+self.image.shape[1]/2, bbg_posi[1]+self.image.shape[0]/2]
+        
 
     def match(self, image, offset=30, threshold=0.85):
         """Detects button by template matching. To Some button, its location may not be static.
@@ -95,7 +98,8 @@ class Button(ImgIcon):
         self._button_offset = area_offset(self.raw_button, offset[:2] + np.array(point))
         return similarity > threshold
     
-    
+    def click_position(self):
+        return self.center_point
     
 if __name__ == '__main__':
     a = get_bbox(cv2.imread("assests/imgs/common/ui/emergency_food.jpg"))
