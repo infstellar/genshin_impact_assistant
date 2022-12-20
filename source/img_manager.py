@@ -36,7 +36,7 @@ class ImgIcon:
             self.cap_posi = self.bbg_posi
         else:
             self.cap_posi = cap_posi
-        self.cap_center_position_xy = [(self.cap_posi[1]+self.cap_posi[3])/2, (self.cap_posi[0]+self.cap_posi[2])/2]
+        self.cap_center_position_xy = [(self.cap_posi[0]+self.cap_posi[2])/2, (self.cap_posi[1]+self.cap_posi[3])/2]
         
 
         if self.is_bbg:
