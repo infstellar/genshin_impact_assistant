@@ -145,6 +145,8 @@ To没用过github的小伙伴:描述文档中的蓝色文字是链接,可以打�
 
 - [空荧酒馆原神地图 kongying-tavern/yuan-shen-map](https://github.com/kongying-tavern/yuan-shen-map)
 
+- [Alas 参考了自动安装和代码实现](https://github.com/LmeSzinc/AzurLaneAutoScript)
+
 #### 开源库调用
 
 - [opencv](https://github.com/opencv/opencv)
@@ -154,7 +156,6 @@ To没用过github的小伙伴:描述文档中的蓝色文字是链接,可以打�
 
 #### 其他
 
-- [Alas 参考了自动安装与一些实现](https://github.com/LmeSzinc/AzurLaneAutoScript)
 - [GIS 参考了自动战斗脚本的格式](https://github.com/phonowell/genshin-impact-script)
 
 ### 贡献/参与者

@@ -13,6 +13,7 @@ import img_manager
 import static_lib
 import vkcode
 from ctypes.wintypes import RECT
+import button_manager
 
 IMG_RATE = 0
 IMG_POSI = 1
@@ -342,8 +343,15 @@ class InteractionBGD:
                 return True
             else:
                 return False
-        elif isinstance(inputvar, str):
-            pass
+        
+        elif isinstance(inputvar, button_manager.button):
+            cbutton = inputvar
+            cap = self.capture(jpgmode=cbutton.jpgmode)
+            if cbutton.match(cap):
+                self.move_and_click(position=cbutton.click_position())
+                return True
+            else:
+                return False
 
     def appear_then_press(self, imgicon: img_manager.ImgIcon, key_name, is_gray=False):
         """appear then press
