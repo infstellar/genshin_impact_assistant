@@ -118,7 +118,7 @@ class TeyvatMoveController(BaseThreading):
                 continue
             p1 = self.caculate_next_priority_point(self.current_posi, self.target_positon)
             # print(p1)
-            movement.change_view_to_posi(p1)
+            movement.change_view_to_posi(p1, self.checkup_stop_func)
             if (not static_lib.W_KEYDOWN) and (not self.pause_threading_flag):
                 self.itt.key_down('w')
                 

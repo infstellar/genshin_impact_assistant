@@ -12,10 +12,14 @@ import teyvat_move_flow
 import numpy as np
 import datetime
 import static_lib
+import button_manager
+import img_manager
 
 COLLECTION = 0
 ENEMY = 1
 MINERAL = 2
+
+ALL_CHARACTER_DIED = 1
 
 def load_feature_position(text, blacklist_id):
     ita = load_json("itemall.json", "assests")
@@ -77,18 +81,21 @@ class CollectorFlow(BaseThreading):
         self.tmf.setDaemon(True)
         self.tmf.pause_threading()
         self.tmf.start()
+        self.tmf.add_stop_func(self.checkup_stop_func)
         
         self.puo = pickup_operator.PickupOperator()
         self.puo.setDaemon(True)
         self.puo.pause_threading()
         self.puo.start()
         self.puo.set_search_mode(1)
+        self.puo.add_stop_func(self.checkup_stop_func)
         
         chara_list = combat_loop.get_chara_list()
         self.cct = combat_loop.Combat_Controller(chara_list)
         self.cct.setDaemon(True)
         self.cct.pause_threading()
         self.cct.start()
+        self.cct.add_stop_func(self.checkup_stop_func)
         
         self.IN_PICKUP_COLLECTOR_timeout = timer_module.TimeoutTimer(45)
         self.IN_MOVETO_COLLECTOR_timeout = timer_module.TimeoutTimer(300)
@@ -113,7 +120,12 @@ class CollectorFlow(BaseThreading):
         self.tmf.stop_threading()
         self.puo.stop_threading()
         self.cct.stop_threading()
-        
+    
+    def checkup_stop_func(self):
+        if self.itt.get_img_existence(button_manager.button_all_character_died):
+            self.last_err_code = ALL_CHARACTER_DIED
+            return True
+        return super().checkup_stop_func()    
         
     def set_collector_name(self, text):
         self.collector_name = text
@@ -176,6 +188,25 @@ class CollectorFlow(BaseThreading):
                 self.working_flag = True
             '''write your code below'''
             
+            if self.last_err_code == ALL_CHARACTER_DIED:
+                logger.error("所有角色都已嘎掉，正在中断此次采集")
+                self.add_log("ALL_CHARACTER_DIED")
+                time.sleep(5)
+                while 1:
+                    time.sleep(1)
+                    if self.checkup_stop_threading():
+                        break
+                    ret = self.itt.appear_then_click(button_manager.button_all_character_died)
+                    
+                    if self.itt.get_img_existence(img_manager.ui_main_win) and not self.itt.get_img_existence(button_manager.button_all_character_died):
+                        break
+                
+                self.current_state = ST.AFTER_PICKUP_COLLECTOR
+                self.last_err_code = None
+                logger.info("重置完成。准备进行下一次采集")
+                
+                    
+                
             if self.current_state == ST.INIT_MOVETO_COLLECTOR:
                 
                 self.collector_posi_dict = load_feature_position(self.collector_name, self.shielded_id)

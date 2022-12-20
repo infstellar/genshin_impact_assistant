@@ -43,7 +43,10 @@ class ImgIcon:
             self.image = crop(self.raw_image, self.bbg_posi)
         else:
             self.image = self.raw_image.copy()
-
+    
+    def show_image(self):
+        cv2.imshow('123', self.image)
+        cv2.waitKey(0)
 
 imgs_dict = {}
 
@@ -83,7 +86,14 @@ ui_switch_to_time_menu = ImgIcon(name="ui_switch_to_time_menu", path="assests\\i
                         is_bbg=True, cap_posi='bbg')
 ui_time_menu_core = ImgIcon(name="ui_time_menu_core", path="assests\\imgs\\common\\ui\\time_menu_core.jpg",
                         is_bbg=True, cap_posi='bbg')
+character_died = ImgIcon(name="character_died", path="assests\\imgs\\cn\\character_died.jpg",
+                        is_bbg=True, cap_posi='bbg')
+
 # qshow(ui_esc_menu.image)
+
+# character_died.show_image()
+
+
 matching_rate_dict = {
     "coming_out_by_space": 0.9,
     "IN_DOMAIN": 0.98,

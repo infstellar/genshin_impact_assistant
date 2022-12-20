@@ -2,7 +2,7 @@ from util import *
 from img_manager import ImgIcon, qshow
 
 class Button(ImgIcon):
-    def __init__(self, path, button = None, name=None, black_offset=10):
+    def __init__(self, path, button = None, name=None, black_offset=10, threshold=0.85):
         self.path = path
         self.raw_file = cv2.imread(os.path.join(root_path, self.path))
         self.raw_name = name
@@ -15,16 +15,12 @@ class Button(ImgIcon):
         else:
             self.button = button
         
-        super().__init__(name=name, path=self.path, is_bbg = True, bbg_posi = bbg_posi, jpgmode = 0, threshold=0.85)
+        super().__init__(name=name, path=self.path, is_bbg = True, bbg_posi = bbg_posi, jpgmode = 0, threshold=threshold)
         
         image_gray = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
         ___, self.image_binary = cv2.threshold(image_gray, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
         
         self.center_point = [bbg_posi[0]+self.image.shape[1]/2, bbg_posi[1]+self.image.shape[0]/2]
-        
-    def show_image(self):
-        cv2.imshow('123', self.image)
-        cv2.waitKey(0)
     
     def match(self, image, offset=10, threshold=0.85):
         """Detects button by template matching. To Some button, its location may not be static.
@@ -86,6 +82,7 @@ class Button(ImgIcon):
 button_esc_page = Button(path="assests\\imgs\\common\\ui\\emergency_food.jpg")
 button_time_page = Button(path="assests\\imgs\\common\\ui\\switch_to_time_menu.jpg", black_offset = 15)
 button_exit = Button(path="assests\\imgs\\common\\button\\button_exit.jpg")
+button_all_character_died = Button(path="assests\\imgs\\cn\\all_character_died.jpg", name="all_character_died", threshold=0.96)
 
 if __name__ == '__main__':
     button_time_page.show_image()

@@ -189,7 +189,7 @@ class PickupOperator(BaseThreading):
             while generic_lib.euclidean_distance(static_lib.cvAutoTrackerLoop.get_position()[1:], self.target_posi) >= 8:
                 if self.checkup_stop_func():
                     return 0
-                movement.change_view_to_posi(self.target_posi)
+                movement.change_view_to_posi(self.target_posi, self.checkup_stop_func)
                 movement.move(movement.AHEAD, 4)
                 self.itt.key_down('spacebar')
 
