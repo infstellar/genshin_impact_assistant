@@ -106,7 +106,7 @@ class DomainFlow(BaseThreading):
         if cap is None:
             cap = self.itt.capture()
             cap = self.itt.png2jpg(cap, channel='ui')
-        if pdocr_api.ocr.get_text_position(self.itt.crop_image(cap, PosiM.posi_domain['LeavingIn']),
+        if pdocr_api.ocr.get_text_position(crop(cap, PosiM.posi_domain['LeavingIn']),
                                            textM.text(textM.LeavingIn)) != -1:
             return True
         else:

@@ -42,13 +42,13 @@ posi_suoxiaoditu = [48, 653]
 # posi_chara_e_point=[]
 posi_arrow = [111 - 3, 156 - 3, 111 + 26 + 2, 156 + 26 + 2]
 posi_domain = {
-    'LLD': [397, 832, 873, 1861],  # Ley Lind Disorder 地脉异常
+    'LLD': [832,397, 1861, 873 ],  # Ley Lind Disorder 地脉异常
     'CLLD': [940, 832],  # close lld, x,y
-    'Start': [484, 1080, 585, 1428],  # 启动
-    'LeavingIn': [870, 564, 986, 1463],
-    'ClaimRewards': [493, 1147, 583, 1418],
-    'UseResin': [714, 537, 811, 1386],
-    'LeaveOrContinue': [908, 391, 1042, 1547]
+    'Start': [1080,484,1428, 585 ],  # 启动
+    'LeavingIn': [564,870,1463, 986 ],
+    'ClaimRewards': [1147,493,1418, 583 ],
+    'UseResin': [537,714,1386, 811 ],
+    'LeaveOrContinue': [391,908,1547, 1042 ]
 }
 tp_button = [1698, 1002]
 
