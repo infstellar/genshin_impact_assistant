@@ -13,10 +13,12 @@ IMG_RATE = 0
 IMG_POSI = 1
 IMG_POINT = 2
 IMG_RECT = 3
-
+def qshow(img1):
+    cv2.imshow('123', img1)
+    cv2.waitKey(0)
 class ImgIcon:
     def __init__(self, name, path, is_bbg=True, matching_rate=None, alpha=None, bbg_posi=None, cap_posi=[0, 0, 1080, 1920],
-                 jpgmode=2, threshold=0.95):
+                 jpgmode=2, threshold=0.9):
         self.name = name
         self.path = os.path.join(root_path, path)
         self.is_bbg = is_bbg
@@ -76,12 +78,12 @@ ui_main_win = ImgIcon(name="ui_main_win", path="assests\\imgs\\common\\ui\\emerg
 ui_bigmap_win = ImgIcon(name="ui_bigmap_win", path="assests\\imgs\\common\\ui\\bigmap.jpg",
                         is_bbg=True, bbg_posi=[1591,36,1614, 59 ], cap_posi='bbg')
 ui_esc_menu = ImgIcon(name="ui_esc_menu", path="assests\\imgs\\common\\ui\\esc_menu.jpg",
-                        is_bbg=True, cap_posi='bbg')
+                        is_bbg=True, cap_posi='bbg', jpgmode=0, threshold = 0.9)
 ui_switch_to_time_menu = ImgIcon(name="ui_switch_to_time_menu", path="assests\\imgs\\common\\ui\\switch_to_time_menu.jpg",
                         is_bbg=True, cap_posi='bbg')
 ui_time_menu_core = ImgIcon(name="ui_time_menu_core", path="assests\\imgs\\common\\ui\\time_menu_core.jpg",
                         is_bbg=True, cap_posi='bbg')
-
+# qshow(ui_esc_menu.image)
 matching_rate_dict = {
     "coming_out_by_space": 0.9,
     "IN_DOMAIN": 0.98,
@@ -94,166 +96,9 @@ alpha_dict = {
 }
 
 
-def qshow(img1):
-    cv2.imshow('123', img1)
-    cv2.waitKey(0)
 
-qshow(ui_time_menu_core.image)
-def match_img(self, img_name: str, is_show_res: bool = False):
-    image = self.capture()
-    # image = (image/(image[3]+10)).astype(int)
 
-    # 转为灰度图
-    gray = cv2.cvtColor(image, cv2.COLOR_BGRA2GRAY)
-    # 读取图片，并保留Alpha通道
-    template = cv2.imread('imgs/' + img_name, cv2.IMREAD_UNCHANGED)
-    # template = template/template[3]
-    # 取出Alpha通道
-    alpha = template[:, :, 3]
-    template = cv2.cvtColor(template, cv2.COLOR_BGRA2GRAY)
-    # 模板匹配，将alpha作为mask，TM_CCORR_NORMED方法的计算结果范围为[0, 1]，越接近1越匹配
-    result = cv2.matchTemplate(gray, template, cv2.TM_CCORR_NORMED, mask=alpha)
-    # 获取结果中最大值和最小值以及他们的坐标
-    min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
-    if is_show_res:
-        cv2.imshow('template', template)
-        cv2.imshow('gray', gray)
-        cv2.waitKey()
-    top_left = max_loc
-    h, w = template.shape[:2]
-    bottom_right = top_left[0] + w, top_left[1] + h
-    # 在窗口截图中匹配位置画红色方框
-    if is_show_res:
-        cv2.rectangle(image, top_left, bottom_right, (0, 0, 255), 2)
-        cv2.imshow('Match Template', image)
-        cv2.waitKey()
-    matching_rate = max_val
-    return matching_rate, top_left, bottom_right
-
-def match_multiple_img(self, img, template, is_gray=False, is_show_res: bool = False, ret_mode=IMG_POINT,
-                        threshold=0.98):
-    """多图片识别
-
-    Args:
-        img (numpy): 截图Mat
-        template (numpy): 要匹配的样板图片
-        is_gray (bool, optional): 是否启用灰度匹配. Defaults to False.
-        is_show_res (bool, optional): 结果显示. Defaults to False.
-        ret_mode (int, optional): 返回值模式,目前只有IMG_POINT. Defaults to IMG_POINT. 
-        threshold (float, optional): 最小匹配度. Defaults to 0.98.
-
-    Returns:
-        list[list[], ...]: 匹配成功的坐标列表
-    """
-    if is_gray:
-        img = cv2.cvtColor(img, cv2.COLOR_BGRA2GRAY)
-        template = cv2.cvtColor(template, cv2.COLOR_BGRA2GRAY)
-    res_posi = []
-    result = cv2.matchTemplate(img, template, cv2.TM_CCORR_NORMED)  # TM_CCOEFF_NORMED
-    # img_manager.qshow(template)
-    h, w = template.shape[:2]  # 获取模板高和宽
-    loc = np.where(result >= threshold)  # 匹配结果小于阈值的位置
-    for pt in zip(*loc[::-1]):  # 遍历位置，zip把两个列表依次参数打包
-        right_bottom = (pt[0] + w, pt[1] + h)  # 右下角位置
-        if ret_mode == IMG_RECT:
-            res_posi.append([pt[0], pt[1], pt[0] + w, pt[1] + h])
-        else:
-            res_posi.append([pt[0] + w / 2, pt[1] + h / 2])
-        # cv2.rectangle((show_img), pt, right_bottom, (0,0,255), 2) #绘制匹配到的矩阵
-    if is_show_res:
-        show_img = img.copy()
-        # print(*loc[::-1])
-        for pt in zip(*loc[::-1]):  # 遍历位置，zip把两个列表依次参数打包
-            right_bottom = (pt[0] + w, pt[1] + h)  # 右下角位置
-            cv2.rectangle((show_img), pt, right_bottom, (0, 0, 255), 2)  # 绘制匹配到的矩阵
-        cv2.imshow("img", show_img)
-        cv2.imshow("template", template)
-        cv2.waitKey(0)  # 获取按键的ASCLL码
-        cv2.destroyAllWindows()  # 释放所有的窗口
-
-    return res_posi
-
-def similar_img(self, img, target, is_gray=False, is_show_res: bool = False, ret_mode=IMG_RATE):
-    """单个图片匹配
-
-    Args:
-        img (numpy): Mat
-        template (numpy): 要匹配的样板图片
-        is_gray (bool, optional): 是否启用灰度匹配. Defaults to False.
-        is_show_res (bool, optional): 结果显示. Defaults to False.
-        ret_mode (int, optional): 返回值模式. Defaults to IMG_RATE.
-
-    Returns:
-        float/(float, list[]): 匹配度或者匹配度和它的坐标
-    """
-    if is_gray:
-        img = cv2.cvtColor(img, cv2.COLOR_BGRA2GRAY)
-        target = cv2.cvtColor(target, cv2.COLOR_BGRA2GRAY)
-    # 模板匹配，将alpha作为mask，TM_CCORR_NORMED方法的计算结果范围为[0, 1]，越接近1越匹配
-    # img_manager.qshow(img)
-    result = cv2.matchTemplate(img, target, cv2.TM_CCORR_NORMED)  # TM_CCOEFF_NORMED
-    # 获取结果中最大值和最小值以及他们的坐标
-    min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
-    if is_show_res:
-        cv2.waitKey()
-    # 在窗口截图中匹配位置画红色方框
-    matching_rate = max_val
-    if ret_mode == IMG_RATE:
-        return matching_rate
-    elif ret_mode == IMG_POSI:
-        return matching_rate, max_loc
-
-def get_img_position(self, imgicon: ImgIcon, is_gray=False, is_log=False):
-    """获得图片在屏幕上的坐标
-
-    Args:
-        imgicon (img_manager.ImgIcon): imgicon对象
-        is_gray (bool, optional): 是否启用灰度匹配. Defaults to False.
-        is_log (bool, optional): 是否打印日志. Defaults to False.
-
-    Returns:
-        list[]/bool: 返回坐标或False
-    """
-    upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
-    # if imgname in img_manager.alpha_dict:
-    #     cap = self.capture()
-    #     cap = self.png2jpg(cap, bgcolor='black', channel='ui', alpha_num=img_manager.alpha_dict[imgname])
-    # else:
-    cap = self.capture(posi=imgicon.cap_posi, jpgmode=imgicon.jpgmode)
-
-    matching_rate, max_loc = self.similar_img(cap, imgicon.image, ret_mode=IMG_POSI)
-
-    if is_log:
-        logger.debug(
-            'imgname: ' + imgicon.name + 'max_loc: ' + str(max_loc) + ' |function name: ' + upper_func_name)
-
-    if matching_rate >= imgicon.threshold:
-        return max_loc
-    else:
-        return False
-
-def is_img_existence(self, imgicon: ImgIcon, is_gray=False, is_log=False):
-    """检测图片是否存在
-
-    Args:
-        imgicon (img_manager.ImgIcon): imgicon对象
-        is_gray (bool, optional): 是否启用灰度匹配. Defaults to False.
-        is_log (bool, optional): 是否打印日志. Defaults to False.
-
-    Returns:
-        bool: bool
-    """
-    upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
-
-    cap = self.capture(posi=imgicon.cap_posi, jpgmode=imgicon.jpgmode)
-
-    matching_rate = self.similar_img(cap, imgicon.image)
-    if is_log:
-        logger.debug(
-            'imgname: ' + imgicon.name + 'matching_rate: ' + str(
-                matching_rate) + ' |function name: ' + upper_func_name)
-
-    return matching_rate >= imgicon.threshold
+# qshow(ui_time_menu_core.image)
 
 
 def refrom_img(im_src, posi):

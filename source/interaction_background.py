@@ -118,7 +118,7 @@ class InteractionBGD:
 
         # img_manager.qshow(ret)
         if posi is not None:
-            ret = ret[posi[0]:posi[2], posi[1]:posi[3]]
+            ret = crop(ret, posi)
         if jpgmode == 0:
             ret = ret[:, :, :3]
         elif jpgmode == 1:
@@ -322,7 +322,17 @@ class InteractionBGD:
         Returns:
             bool: bool,点击操作是否成功
         """
-        if isinstance(inputvar, img_manager.ImgIcon):
+        
+        if isinstance(inputvar, button_manager.Button):
+            cbutton = inputvar
+            cap = self.capture(jpgmode=cbutton.jpgmode)
+            if cbutton.match(cap):
+                self.move_and_click(position=cbutton.click_position())
+                return True
+            else:
+                return False
+
+        elif isinstance(inputvar, img_manager.ImgIcon):
             imgicon = inputvar
             upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
 
@@ -340,15 +350,6 @@ class InteractionBGD:
                 center_p = [(p[1] + p[3]) / 2, (p[0] + p[2]) / 2]
                 self.move_to(center_p[0], center_p[1])
                 self.left_click()
-                return True
-            else:
-                return False
-        
-        elif isinstance(inputvar, button_manager.button):
-            cbutton = inputvar
-            cap = self.capture(jpgmode=cbutton.jpgmode)
-            if cbutton.match(cap):
-                self.move_and_click(position=cbutton.click_position())
                 return True
             else:
                 return False
@@ -730,8 +731,8 @@ if __name__ == '__main__':
     # print(a)
     # ib.left_down()
     # time.sleep(1)
-    ib.move_to(200, 200)
-
+    # ib.move_to(200, 200)
+    ib.appear_then_click(button_manager.button_exit)
     # for i in range(20):
     #     pydirectinput.mouseDown(0,0)
     #     pydirectinput.moveRel(10,10)
