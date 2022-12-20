@@ -85,7 +85,7 @@ class TeyvatMoveFlow(BaseThreading):
         b, x, y = static_lib.cvAutoTrackerLoop.get_position()
         if b:
             angle = get_target_relative_angle(x, y, tx, ty)
-            movement.view_to_angle_teyvat(angle)
+            movement.view_to_angle_teyvat(angle, self.checkup_stop_func)
             print(x, y, angle)
         return 0
 
@@ -139,7 +139,7 @@ class TeyvatMoveFlow(BaseThreading):
                 curr_posi = static_lib.cvAutoTrackerLoop.get_position()[1:]
                 scene_manager.switch_to_page(scene_manager.page_bigmap, self.checkup_stop_func)
                 # Obtain the coordinates of the transmission anchor closest to the target coordinates
-                tw_posi = big_map.nearest_big_map_tw_posi(curr_posi, self.target_posi) # 获得距离目标坐标最近的传送锚点坐标 
+                tw_posi = big_map.nearest_big_map_tw_posi(curr_posi, self.target_posi, self.checkup_stop_func) # 获得距离目标坐标最近的传送锚点坐标 
                 if len(tw_posi)==0:
                     logger.info("获取传送锚点失败，正在重试")
                     big_map.reset_map_size()
@@ -171,7 +171,7 @@ class TeyvatMoveFlow(BaseThreading):
                 time.sleep(2)
                 curr_posi = static_lib.cvAutoTrackerLoop.get_position()[1:]
                 scene_manager.switch_to_page(scene_manager.page_bigmap, self.checkup_stop_func)
-                tw_posi = big_map.nearest_teyvat_tw_posi(curr_posi, self.target_posi)[0]
+                tw_posi = big_map.nearest_teyvat_tw_posi(curr_posi, self.target_posi, self.checkup_stop_func)[0]
                 p1 = generic_lib.euclidean_distance(self.target_posi, tw_posi)
                 p2 = generic_lib.euclidean_distance(self.target_posi, curr_posi)
                 if p1 < p2:

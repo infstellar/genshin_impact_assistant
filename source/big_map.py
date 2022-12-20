@@ -99,7 +99,7 @@ def calculate_nearest_posi(posi_list:list, target_posi:list):
     return minposi, mind
 
 
-def get_tw_points(bigmatMat):
+def get_tw_points(bigmatMat, stop_func):
     """获得传送锚点的坐标
 
     Args:
@@ -113,9 +113,9 @@ def get_tw_points(bigmatMat):
         logger.warning("获取传送锚点坐标失败，正在重试")
         time.sleep(5)
         bigmatMat = itt.capture(jpgmode=0)
-        scene_manager.switch_to_page(scene_manager.page_bigmap, stop_func=scene_manager.default_stop_func)
+        scene_manager.switch_to_page(scene_manager.page_bigmap, stop_func=stop_func)
         # scene_manager.switchto_bigmapwin(scene_manager.default_stop_func)
-        return get_tw_points(bigmatMat)
+        return get_tw_points(bigmatMat, stop_func)
     return ret
 
 
@@ -173,7 +173,7 @@ def teyvat_posi2bigmap_posi(current_teyvat_posi, teyvat_posi_list):
     teyvat_posi_list = teyvat_posi_list + [1920 / 2, 1080 / 2]
     return teyvat_posi_list
 
-def nearest_big_map_tw_posi(current_posi, target_posi):
+def nearest_big_map_tw_posi(current_posi, target_posi, stop_func):
     """获得距离目标坐标最近的大地图传送锚点坐标
 
     Args:
@@ -183,7 +183,7 @@ def nearest_big_map_tw_posi(current_posi, target_posi):
     Returns:
         _type_: 最近的传送锚点坐标
     """
-    twpoints = np.array(get_tw_points(itt.capture(jpgmode=0))) # 获得所有传送锚点坐标
+    twpoints = np.array(get_tw_points(itt.capture(jpgmode=0), stop_func)) # 获得所有传送锚点坐标
     if len(twpoints) == 0:
         return []
     twpoints_teyvat = twpoints.copy() # 拷贝
@@ -194,7 +194,7 @@ def nearest_big_map_tw_posi(current_posi, target_posi):
     a = np.where(twpoints_teyvat == p[0])[0][-1] # 获得该坐标index
     return teyvat_posi2bigmap_posi(current_posi, twpoints_teyvat[a])
 
-def nearest_teyvat_tw_posi(current_posi, target_posi):
+def nearest_teyvat_tw_posi(current_posi, target_posi, stop_func):
     """获得距离目标坐标最近的传送锚点坐标
 
     Args:
@@ -204,7 +204,7 @@ def nearest_teyvat_tw_posi(current_posi, target_posi):
     Returns:
         _type_: _description_
     """
-    twpoints = np.array(get_tw_points(itt.capture(jpgmode=0))) # 获得传送锚点坐标
+    twpoints = np.array(get_tw_points(itt.capture(jpgmode=0), stop_func)) # 获得传送锚点坐标
     twpoints_teyvat = twpoints.copy() # copy
     twpoints_teyvat = bigmap_posi2teyvat_posi(current_posi, twpoints_teyvat) # 转换为提瓦特坐标
     p = calculate_nearest_posi(twpoints_teyvat, target_posi)

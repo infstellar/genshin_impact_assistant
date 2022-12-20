@@ -60,7 +60,7 @@ def reset_view():
     logger.debug("press middle")
     time.sleep(1)
 
-def view_to_angle_domain(angle=0, deltanum=0.65, maxloop=100, corrected_num=CORRECT_DEGREE):
+def view_to_angle_domain(angle, stop_func, deltanum=0.65, maxloop=100, corrected_num=CORRECT_DEGREE):
     cap = itt.capture(posi=small_map.posi_map)
     degree = small_map.jwa_3(cap)
     i = 0
@@ -71,12 +71,14 @@ def view_to_angle_domain(angle=0, deltanum=0.65, maxloop=100, corrected_num=CORR
         time.sleep(0.05)
         if i > maxloop:
             break
+        if stop_func():
+            break
         i += 1
     if i > 1:
         logger.debug('last degree: ' + str(degree))
 
 
-def view_to_angle_teyvat(angle=0, deltanum=1, maxloop=30, corrected_num=CORRECT_DEGREE):
+def view_to_angle_teyvat(angle, stop_func, deltanum=1, maxloop=30, corrected_num=CORRECT_DEGREE):
     '''加一个场景检测'''
     i = 0
     while 1:
@@ -90,11 +92,13 @@ def view_to_angle_teyvat(angle=0, deltanum=1, maxloop=30, corrected_num=CORRECT_
             break
         if abs(degree - (angle - corrected_num)) < deltanum:
             break
+        if stop_func():
+            break
         i += 1
     if i > 1:
         logger.debug('last degree: ' + str(degree))
 
-def change_view_to_posi(pl):
+def change_view_to_posi(pl, stop_func):
     td=0
     degree=100
     i = 0
@@ -111,6 +115,8 @@ def change_view_to_posi(pl):
             cvn=-50
         cview(cvn)
         i+=1
+        if stop_func():
+            break
         if i>=80:
             break
 

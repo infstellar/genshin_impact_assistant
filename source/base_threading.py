@@ -12,6 +12,8 @@ class BaseThreading(threading.Thread):
         self.stop_threading_flag = False
         self.working_flag = False
         self.while_sleep = 0.2
+        self.last_err_code = None
+        self.stop_func_list = []
 
     def pause_threading(self):
         if self.pause_threading_flag != True:
@@ -34,7 +36,13 @@ class BaseThreading(threading.Thread):
     def checkup_stop_func(self):
         if self.pause_threading_flag or self.stop_threading_flag:
             return True
+        for i in self.stop_func_list:
+            if i():
+                return True
 
+    def add_stop_func(self, x):
+        self.stop_func_list.append(x)
+    
     def run(self):
         '''if you're using this class, copy this'''
         while 1:
