@@ -79,23 +79,26 @@ class CollectorFlow(BaseThreading):
         
         self.tmf = teyvat_move_flow.TeyvatMoveFlow()
         self.tmf.setDaemon(True)
+        self.tmf.add_stop_func(self.checkup_stop_func)
         self.tmf.pause_threading()
         self.tmf.start()
-        self.tmf.add_stop_func(self.checkup_stop_func)
+        
         
         self.puo = pickup_operator.PickupOperator()
         self.puo.setDaemon(True)
+        self.puo.add_stop_func(self.checkup_stop_func)
         self.puo.pause_threading()
         self.puo.start()
         self.puo.set_search_mode(1)
-        self.puo.add_stop_func(self.checkup_stop_func)
+        
         
         chara_list = combat_loop.get_chara_list()
         self.cct = combat_loop.Combat_Controller(chara_list)
         self.cct.setDaemon(True)
+        self.cct.add_stop_func(self.checkup_stop_func)
         self.cct.pause_threading()
         self.cct.start()
-        self.cct.add_stop_func(self.checkup_stop_func)
+        
         
         self.IN_PICKUP_COLLECTOR_timeout = timer_module.TimeoutTimer(45)
         self.IN_MOVETO_COLLECTOR_timeout = timer_module.TimeoutTimer(300)
@@ -191,7 +194,8 @@ class CollectorFlow(BaseThreading):
             if self.last_err_code == ALL_CHARACTER_DIED:
                 logger.error("所有角色都已嘎掉，正在中断此次采集")
                 self.add_log("ALL_CHARACTER_DIED")
-                time.sleep(5)
+                self.stop_all()
+                time.sleep(15)
                 while 1:
                     time.sleep(1)
                     if self.checkup_stop_threading():
