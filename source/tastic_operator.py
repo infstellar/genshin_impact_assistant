@@ -46,7 +46,11 @@ class TasticOperator(BaseThreading):
                     self.working_flag = False
                 time.sleep(1)
                 continue
-
+            
+            if self.checkup_stop_func():
+                self.pause_threading_flag = True
+                continue
+            
             # print('5')
 
             self.working_flag = True
