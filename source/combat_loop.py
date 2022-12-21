@@ -21,8 +21,13 @@ def stop_func_example():  # True:stop;False:continue
 
 def get_chara_list(team_name='team.json'):
     team_name = config_json["teamfile"]
-    team = load_json(team_name, default_path="config\\tastic")
-    characters = load_json("character.json", default_path="config\\tastic")
+    # 拼错单词了 tastic -> tactic 两个文件夹名都能正确识别
+    if os.path.exists(root_path, "config\\tastic"):
+        dpath = "config\\tastic"
+    elif os.path.exists(root_path, "config\\tactic"):
+        dpath = "config\\tactic"
+    team = load_json(team_name, default_path=dpath)
+    characters = load_json("character.json", default_path=dpath)
     chara_list = []
     for team_name in team:
         team_item = team[team_name]
