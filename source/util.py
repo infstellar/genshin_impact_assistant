@@ -8,7 +8,15 @@ import numpy as np
 import gettext
 
 # 配置基本目录
-from path_lib import *
+try:
+    from path_lib import *
+except:
+    root_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    source_path = root_path + '\\source'
+    if sys.path[0] != root_path:
+        sys.path.insert(0, root_path)
+    if sys.path[1] != source_path:
+        sys.path.insert(1, source_path)
 # root_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # source_path = root_path + '\\source'
 # if sys.path[0] != root_path:
