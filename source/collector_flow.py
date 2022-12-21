@@ -79,6 +79,7 @@ class CollectorFlow(BaseThreading):
         self.current_position = static_lib.cvAutoTrackerLoop.get_position()[1:]
         self.last_collection_posi = [9999,9999]
         self.picked_list = []
+        self.recover_timeout = timer_module.TimeoutTimer(60)
         
         self.tmf = teyvat_move_flow.TeyvatMoveFlow()
         self.tmf.setDaemon(True)
@@ -185,13 +186,22 @@ class CollectorFlow(BaseThreading):
         d = euclidean_distance_plist(self.current_position, gs_posi)
         gs_posi = gs_posi[np.argmin(d)]
         self.tmf.set_target_position(gs_posi)
+        self.tmf.set_stop_rule(1)
         self.start_walk()
+        self.recover_timeout.reset()
         while 1:
+            time.sleep(0.05)
             if self.checkup_stop_func():
                 return
             if generic_lib.f_recognition():
+                logger.info("识别到f，正在退出")
                 break
-        time.sleep(3)
+            if self.recover_timeout.istimeout():
+                logger.info("回血超时，正在退出")
+                break
+        self.stop_all()
+        time.sleep(10)
+        self.tmf.set_stop_rule(0)
     
     def run(self):
         '''if you're using this class, copy this'''
@@ -237,8 +247,7 @@ class CollectorFlow(BaseThreading):
                 logger.warning("有人嘎了，正在停止此次采集")
                 self.add_log("CHARACTER_DIED")
                 self.stop_all()
-                time.sleep(15)
-                
+                self.recover_all()
                 self.current_state = ST.AFTER_PICKUP_COLLECTOR
                 self.last_err_code = None
                 logger.info("重置完成。准备进行下一次采集")
