@@ -41,12 +41,12 @@ class TeyvatMoveFlow(BaseThreading):
     def __init__(self):
         super().__init__()
         self.itt = InteractionBGD()
-        
+        self.stop_rule = 0
         self.tmc = teyvat_move_controller.TeyvatMoveController()
         self.tmc.setDaemon(True)
         self.tmc.pause_threading()
         self.tmc.start()
-        
+        self.tmc.set_stop_rule(self.stop_rule)
         
         
         self.jump_timer = timer_module.Timer()
@@ -88,8 +88,10 @@ class TeyvatMoveFlow(BaseThreading):
             movement.view_to_angle_teyvat(angle, self.checkup_stop_func)
             print(x, y, angle)
         return 0
-
     
+    def set_stop_rule(self, mode=0):
+        self.stop_rule = mode
+        self.tmc.set_stop_rule(self.stop_rule)
 
     def switch_motion_state(self):
         if self.itt.get_img_existence(img_manager.motion_climbing):
@@ -161,6 +163,12 @@ class TeyvatMoveFlow(BaseThreading):
                     self.itt.delay(1)
                     self.itt.left_click()
                     self.itt.delay(1)
+                p1 = pdocr_api.ocr.get_text_position(self.itt.capture(jpgmode=0), "七天神像")
+                if p1 != -1:
+                    self.itt.move_to(p1[0] + 30, p1[1] + 30)
+                    self.itt.delay(1)
+                    self.itt.left_click()
+                    self.itt.delay(1)
 
                 self.itt.move_to(posi_manager.tp_button[0], posi_manager.tp_button[1])
                 self.itt.delay(1)
@@ -181,8 +189,8 @@ class TeyvatMoveFlow(BaseThreading):
                 curr_posi = static_lib.cvAutoTrackerLoop.get_position()[1:]
                 scene_manager.switch_to_page(scene_manager.page_bigmap, self.checkup_stop_func)
                 tw_posi = big_map.nearest_teyvat_tw_posi(curr_posi, self.target_posi, self.checkup_stop_func)[0]
-                p1 = generic_lib.euclidean_distance(self.target_posi, tw_posi)
-                p2 = generic_lib.euclidean_distance(self.target_posi, curr_posi)
+                p1 = euclidean_distance(self.target_posi, tw_posi)
+                p2 = euclidean_distance(self.target_posi, curr_posi)
                 if p1 < p2:
                     scene_manager.switch_to_page(scene_manager.page_main, self.checkup_stop_func)
                     self.itt.delay(1)
@@ -225,9 +233,12 @@ class TeyvatMoveFlow(BaseThreading):
                 if (self.motion_state == IN_FLY) or (self.motion_state == IN_CLIMB) or (self.motion_state == IN_WATER):
                     self.tmc.continue_threading()
                     '''可能会加体力条检测'''
-                    
-                if generic_lib.euclidean_distance(static_lib.cvAutoTrackerLoop.get_position()[1:], self.target_posi)<=10:
-                    self.current_state = ST.END_TEYVAT_MOVE
+                if self.stop_rule == 0:    
+                    if euclidean_distance(static_lib.cvAutoTrackerLoop.get_position()[1:], self.target_posi)<=10:
+                        self.current_state = ST.END_TEYVAT_MOVE
+                elif self.stop_rule == 1:
+                    if generic_lib.f_recognition():
+                        self.current_state = ST.END_TEYVAT_MOVE
                     
             if self.current_state == ST.END_TEYVAT_MOVE:
                 self.pause_threading()

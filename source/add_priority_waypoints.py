@@ -48,11 +48,11 @@ def add_mode():
             time.sleep(1)
             continue
         # 计算当前点到所有优先点的曼哈顿距离
-        md = generic_lib.manhattan_distance_plist(currentp, priority_waypoints_array)
+        md = manhattan_distance_plist(currentp, priority_waypoints_array)
         nearly_pp_arg = np.argsort(md)
         # 计算当前点到所有优先点的欧拉距离
         nearly_pp = priority_waypoints_array[nearly_pp_arg[:9]]
-        ed = generic_lib.euclidean_distance_plist(currentp, nearly_pp)
+        ed = euclidean_distance_plist(currentp, nearly_pp)
         # 将点按欧拉距离升序排序
         nearly_pp_arg = np.argsort(ed)
         nearly_pp = nearly_pp[nearly_pp_arg]

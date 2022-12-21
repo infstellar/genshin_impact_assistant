@@ -1,6 +1,5 @@
 import numpy as np
 from util import *
-import generic_lib
 import img_manager, cv2
 import interaction_background
 import posi_manager
@@ -89,7 +88,7 @@ def calculate_nearest_posi(posi_list:list, target_posi:list):
     mind = 9999
     minposi = None
     for plist in posi_list: # 垃圾实现，以后改 XCYD
-        d = generic_lib.euclidean_distance(plist, target_posi)
+        d = euclidean_distance(plist, target_posi)
         if d <= mind:
             minposi = plist
             mind = d
@@ -127,7 +126,7 @@ def get_gs_points(bigmatMat, stop_func):
     Returns:
         list: 坐标列表
     """
-    ret = itt.match_multiple_img(bigmatMat, img_manager.bigmap_GodStatue.image)
+    ret = itt.match_multiple_img(bigmatMat, img_manager.bigmap_GodStatue.image, threshold=0.98)
     if len(ret) == 0: # 自动重试
         logger.warning("获取七天神像坐标失败，正在重试")
         time.sleep(5)
@@ -135,7 +134,7 @@ def get_gs_points(bigmatMat, stop_func):
         scene_manager.switch_to_page(scene_manager.page_bigmap, stop_func=stop_func)
         # scene_manager.switchto_bigmapwin(scene_manager.default_stop_func)
         return get_gs_points(bigmatMat, stop_func)
-    return ret
+    return np.asarray(ret)
 
 def get_middle_gs_point(stop_func):
     """获得离屏幕中心最近的七天神像的坐标
@@ -149,7 +148,7 @@ def get_middle_gs_point(stop_func):
     c = euclidean_distance_plist([1080/2,1920/2],b)
     d = np.argmin(c)
     e = b[d]
-    return [e[1],e[0]]
+    return e
 
 def get_closest_teleport_waypoint(object_img: img_manager.ImgIcon):
     """abandon
@@ -205,7 +204,7 @@ def teyvat_posi2bigmap_posi(current_teyvat_posi, teyvat_posi_list):
     teyvat_posi_list = teyvat_posi_list + [1920 / 2, 1080 / 2]
     return teyvat_posi_list
 
-def nearest_big_map_tw_posi(current_posi, target_posi, stop_func):
+def nearest_big_map_tw_posi(current_posi, target_posi, stop_func, include_gs = True):
     """获得距离目标坐标最近的大地图传送锚点坐标
 
     Args:
@@ -216,6 +215,8 @@ def nearest_big_map_tw_posi(current_posi, target_posi, stop_func):
         _type_: 最近的传送锚点坐标
     """
     twpoints = np.array(get_tw_points(itt.capture(jpgmode=0), stop_func)) # 获得所有传送锚点坐标
+    if include_gs:
+        twpoints = np.concatenate((twpoints, get_gs_points(itt.capture(jpgmode=0), stop_func)))
     if len(twpoints) == 0:
         return []
     twpoints_teyvat = twpoints.copy() # 拷贝
@@ -226,7 +227,7 @@ def nearest_big_map_tw_posi(current_posi, target_posi, stop_func):
     a = np.where(twpoints_teyvat == p[0])[0][-1] # 获得该坐标index
     return teyvat_posi2bigmap_posi(current_posi, twpoints_teyvat[a])
 
-def nearest_teyvat_tw_posi(current_posi, target_posi, stop_func):
+def nearest_teyvat_tw_posi(current_posi, target_posi, stop_func, include_gs = True):
     """获得距离目标坐标最近的传送锚点坐标
 
     Args:
@@ -237,6 +238,8 @@ def nearest_teyvat_tw_posi(current_posi, target_posi, stop_func):
         _type_: _description_
     """
     twpoints = np.array(get_tw_points(itt.capture(jpgmode=0), stop_func)) # 获得传送锚点坐标
+    if include_gs:
+        twpoints = np.concatenate((twpoints, get_gs_points(itt.capture(jpgmode=0), stop_func)))
     twpoints_teyvat = twpoints.copy() # copy
     twpoints_teyvat = bigmap_posi2teyvat_posi(current_posi, twpoints_teyvat) # 转换为提瓦特坐标
     p = calculate_nearest_posi(twpoints_teyvat, target_posi)
@@ -247,14 +250,12 @@ if __name__ == '__main__':
     # print(get_closest_TeleportWaypoint(img_manager.bigmap_AbyssMage))
     # load_pw()
     # reset_map_size()
-    a = itt.capture(jpgmode=0)
-    b = get_gs_points(a, f)
-    b = np.asarray(b)
-    c = euclidean_distance_plist([1080/2,1920/2],b)
-    d = np.argmin(c)
-    e = b[d]
+    # a = get_gs_points()
+    # a = get_middle_gs_point(f)
     # p = teyvat_posi2bigmap_posi([2625.204978515623, -5274.091235473633], np.array(priority_waypoints_list))
     # show_bigmap_posi_in_window([2625.204978515623, -5274.091235473633], p)
+    a = nearest_big_map_tw_posi([0,0],[1,1],f)
     print()
+    # itt.move_and_click(a)
     # for i in range(10):
     #     move_navigation_to_center()

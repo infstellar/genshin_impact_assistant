@@ -37,6 +37,7 @@ class TeyvatMoveController(BaseThreading):
         self.priority_waypoints_array = np.array(self.priority_waypoints_array)
         self.target_positon = [0,0]
         self.while_sleep=0.5
+        self.stop_rule = 0
     
     def set_target_position(self, posi):
         self.target_positon = posi    
@@ -47,6 +48,9 @@ class TeyvatMoveController(BaseThreading):
         else:
             return False
 
+    def set_stop_rule(self, mode=0):
+        self.stop_rule = mode
+    
     def check_climbing(self):
         if self.itt.get_img_existence(img_manager.motion_climbing):
             return True
@@ -72,17 +76,17 @@ class TeyvatMoveController(BaseThreading):
     def caculate_next_priority_point(self, currentp, targetp):
         float_distance = 35
         # 计算当前点到所有优先点的曼哈顿距离
-        md = generic_lib.manhattan_distance_plist(currentp, self.priority_waypoints_array)
+        md = manhattan_distance_plist(currentp, self.priority_waypoints_array)
         nearly_pp_arg = np.argsort(md)
         # 计算当前点到所有优先点的欧拉距离
         nearly_pp = self.priority_waypoints_array[nearly_pp_arg[:50]]
-        ed = generic_lib.euclidean_distance_plist(currentp, nearly_pp)
+        ed = euclidean_distance_plist(currentp, nearly_pp)
         # 将点按欧拉距离升序排序
         nearly_pp_arg = np.argsort(ed)
         nearly_pp = nearly_pp[nearly_pp_arg]
         # 删除距离目标比现在更远的点
-        fd = generic_lib.euclidean_distance_plist(targetp, nearly_pp)
-        c2t_distance = generic_lib.euclidean_distance(currentp, targetp)
+        fd = euclidean_distance_plist(targetp, nearly_pp)
+        c2t_distance = euclidean_distance(currentp, targetp)
         nearly_pp = np.delete(nearly_pp, (np.where(fd+float_distance >= (c2t_distance) )[0]), axis=0)
         # 获得最近点
         if len(nearly_pp) == 0:
@@ -126,11 +130,17 @@ class TeyvatMoveController(BaseThreading):
             movement.change_view_to_posi(p1, self.checkup_stop_func)
             if (not static_lib.W_KEYDOWN) and (not self.pause_threading_flag):
                 self.itt.key_down('w')
-                
-            if generic_lib.euclidean_distance(self.target_positon, static_lib.cvAutoTrackerLoop.get_position()[1:])<=10:
-                self.pause_threading()
-                logger.info("已到达目的地附近，本次导航结束。")
-                self.itt.key_up('w')
+            if self.stop_rule == 0:
+            
+                if euclidean_distance(self.target_positon, static_lib.cvAutoTrackerLoop.get_position()[1:])<=10:
+                    self.pause_threading()
+                    logger.info("已到达目的地附近，本次导航结束。")
+                    self.itt.key_up('w')
+            elif self.stop_rule == 1:
+                if generic_lib.f_recognition():
+                    self.pause_threading()
+                    logger.info("已到达F附近，本次导航结束。")
+                    self.itt.key_up('w')
             
             
 
