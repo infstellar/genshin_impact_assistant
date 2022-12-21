@@ -188,3 +188,4 @@ installer_config.json
 .vscode/settings.json
 config/settings/auto_collector.json
 source/cvAutoTrack_7.3.3/CVAUTOTRACK.dll
+config/timer/*.txt

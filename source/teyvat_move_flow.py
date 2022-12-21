@@ -58,9 +58,12 @@ class TeyvatMoveFlow(BaseThreading):
         self.motion_state = IN_MOVE
         
         '''设置缩放'''
-        scene_manager.switch_to_page(scene_manager.page_bigmap, self.checkup_stop_func)
-        big_map.reset_map_size()
-        scene_manager.switch_to_page(scene_manager.page_main, self.checkup_stop_func)
+        reset_map_size_timer = timer_module.FileTimer("reset_map_size_timer")
+        if reset_map_size_timer.get_diff_time()>=120:
+            scene_manager.switch_to_page(scene_manager.page_bigmap, self.checkup_stop_func)
+            big_map.reset_map_size()
+            scene_manager.switch_to_page(scene_manager.page_main, self.checkup_stop_func)
+            reset_map_size_timer.reset()
         # self.is_combat = False
 
     
