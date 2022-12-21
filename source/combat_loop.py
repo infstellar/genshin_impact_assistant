@@ -125,8 +125,9 @@ class Combat_Controller(BaseThreading):
                 if self.ao.get_working_statement():
                     self.ao.pause_threading()
                     time.sleep(1)
-                else:
-                    pass
+                
+                continue
+                
             if self.checkup_stop_func():
                 self.pause_threading_flag = True
                 continue

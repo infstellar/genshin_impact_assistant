@@ -5,6 +5,10 @@ import math
 import numpy as np
 import scene_manager
 import button_manager
+import big_map
+from source import static_lib
+from util import *
+import posi_manager
 
 NORMAL = 0
 NEGATIVE_Y = 1
@@ -19,17 +23,17 @@ def f_recognition(mode='button_only'):
         return False
 
 
-def euclidean_distance(p1, p2):
-    return math.sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2)
+# def euclidean_distance(p1, p2):
+#     return math.sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2)
 
-def euclidean_distance_plist(p1, p2):
-    return np.sqrt((p1[0] - p2[:,0]) ** 2 + (p1[1] - p2[:,1]) ** 2)
+# def euclidean_distance_plist(p1, p2):
+#     return np.sqrt((p1[0] - p2[:,0]) ** 2 + (p1[1] - p2[:,1]) ** 2)
 
-def manhattan_distance(p1, p2):
-    return abs(p1[0]-p2[0]) + abs(p1[1]-p2[1])
+# def manhattan_distance(p1, p2):
+#     return abs(p1[0]-p2[0]) + abs(p1[1]-p2[1])
 
-def manhattan_distance_plist(p1, p2):
-    return abs(p1[0]-p2[:,0]) + abs(p1[1]-p2[:,1])
+# def manhattan_distance_plist(p1, p2):
+#     return abs(p1[0]-p2[:,0]) + abs(p1[1]-p2[:,1])
 
 def points_angle(p1, p2, coordinate=NORMAL):
     # p1: current point
@@ -61,7 +65,34 @@ def points_angle(p1, p2, coordinate=NORMAL):
     return degree
 
 def recover_all(stop_func):
+    import pdocr_api
     scene_manager.switch_to_page(scene_manager.page_bigmap, stop_func)
+    gsp = big_map.get_middle_gs_point(stop_func)
+    if len(gsp)==0:
+        logger.info("获取传送锚点失败，正在重试")
+        big_map.reset_map_size()
+        gsp = big_map.get_middle_gs_point(stop_func)
+    itt.move_and_click(gsp)
+    time.sleep(0.5)
+    p1 = pdocr_api.ocr.get_text_position(itt.capture(jpgmode=0), "七天神像")
+    if p1 != -1:
+        itt.move_to(p1[0] + 30, p1[1] + 30)
+        itt.delay(1)
+        itt.left_click()
+        itt.delay(1)
+
+    itt.move_to(posi_manager.tp_button[0], posi_manager.tp_button[1])
+    itt.delay(1)
+    itt.left_click()
+    while not itt.get_img_existence(img_manager.ui_main_win):
+        if stop_func():
+            break
+        time.sleep(1)
+    while static_lib.cvAutoTrackerLoop.in_excessive_error:
+        if stop_func():
+            break
+        time.sleep(1)
+    
     
 
 def set_genshin_time(x=18, stop_func = scene_manager.default_stop_func): # 调整时间至夜晚
@@ -90,9 +121,12 @@ def set_genshin_time(x=18, stop_func = scene_manager.default_stop_func): # 调�
             break
         time.sleep(1)
     scene_manager.switch_to_page(scene_manager.page_main, stop_func)
-    
+
+def f():
+    return False
+
 if __name__ == '__main__':
-    set_genshin_time()
+    recover_all(f)
     # p1 = [0,0]
     # p2 = np.array([[1,1],[2,2]])
     # euclidean_distance_plist(p1,p2)

@@ -21,7 +21,7 @@ MINERAL = 2
 
 ALL_CHARACTER_DIED = 1
 
-def load_feature_position(text, blacklist_id):
+def load_feature_position(text, blacklist_id=[], ret_mode = 0):
     ita = load_json("itemall.json", "assests")
     ret_dict=[]
     i=0
@@ -32,11 +32,14 @@ def load_feature_position(text, blacklist_id):
         for item in feature["features"]:
             if item["id"] in blacklist_id:
                 continue
-            if text == item["properties"]["popTitle"] :
-                ret_dict.append({
-                    "id":item["id"],
-                    "position":list(np.array( list(map(float,item["geometry"]["coordinates"])) )*1.5)
-                })
+            if text in item["properties"]["popTitle"] :
+                if ret_mode == 0:
+                    ret_dict.append({
+                        "id":item["id"],
+                        "position":list(np.array( list(map(float,item["geometry"]["coordinates"])) )*1.5)
+                    })
+                elif ret_mode == 1:
+                     ret_dict.append(list(np.array( list(map(float,item["geometry"]["coordinates"])) )*1.5))
     # print()
     return ret_dict  
 
@@ -158,7 +161,7 @@ class CollectorFlow(BaseThreading):
         time.sleep(2)
     
     def sort_by_eu(self, x):
-        return generic_lib.euclidean_distance(x["position"], self.current_position)
+        return euclidean_distance(x["position"], self.current_position)
     
     def add_log(self, x):
         a = self.collection_log.setdefault(self.collector_name, [])
@@ -172,6 +175,23 @@ class CollectorFlow(BaseThreading):
         self.collection_log[self.collector_name] = a
         save_json(self.collection_log, "collection_log.json", default_path="config\\auto_collector", sort_keys=False)
         self.picked_list = []
+    
+    def recover_all(self):
+        self.stop_all()
+        self.current_position = static_lib.cvAutoTrackerLoop.get_position()[1:]
+        self.tmf.reset_setting()
+        gs_posi = load_feature_position(text="七天神像", ret_mode=1)
+        gs_posi = np.asarray(gs_posi)
+        d = euclidean_distance_plist(self.current_position, gs_posi)
+        gs_posi = gs_posi[np.argmin(d)]
+        self.tmf.set_target_position(gs_posi)
+        self.start_walk()
+        while 1:
+            if self.checkup_stop_func():
+                return
+            if generic_lib.f_recognition():
+                break
+        time.sleep(3)
     
     def run(self):
         '''if you're using this class, copy this'''
@@ -238,7 +258,7 @@ class CollectorFlow(BaseThreading):
                 self.collection_posi = self.collector_posi_dict[self.collector_i]["position"]
                 self.collection_id = self.collector_posi_dict[self.collector_i]["id"]
                 '''当两个collection坐标小于30时，认为是同一个。'''
-                if generic_lib.euclidean_distance(self.collection_posi, self.last_collection_posi) <= 30:
+                if euclidean_distance(self.collection_posi, self.last_collection_posi) <= 30:
                     logger.info(f"collection id: {self.collection_id} ; collection position: {self.collection_posi} ; last collection position: {self.last_collection_posi}")
                     logger.info(f"distance lower than 30, skip this collection.")
                     self.current_state = ST.AFTER_PICKUP_COLLECTOR
@@ -337,6 +357,7 @@ class CollectorFlow(BaseThreading):
                 
 if __name__ == '__main__':
     cof = CollectorFlow()
-    cof.start()
+    cof.recover_all()
+    # cof.start()
     while 1:
         time.sleep(1)
