@@ -300,7 +300,7 @@ class InteractionBGD:
         cap = self.capture(posi=imgicon.cap_posi, jpgmode=imgicon.jpgmode)
 
         matching_rate = self.similar_img(cap, imgicon.image)
-        # if matching_rate== 0:
+        # if matching_rate == 0:
         #     img_manager.qshow(cap)
         if is_log:
             logger.debug(

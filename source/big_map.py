@@ -118,6 +118,38 @@ def get_tw_points(bigmatMat, stop_func):
         return get_tw_points(bigmatMat, stop_func)
     return ret
 
+def get_gs_points(bigmatMat, stop_func):
+    """获得传送锚点的坐标
+
+    Args:
+        bigmatMat (Mat): 截图
+
+    Returns:
+        list: 坐标列表
+    """
+    ret = itt.match_multiple_img(bigmatMat, img_manager.bigmap_GodStatue.image)
+    if len(ret) == 0: # 自动重试
+        logger.warning("获取七天神像坐标失败，正在重试")
+        time.sleep(5)
+        bigmatMat = itt.capture(jpgmode=0)
+        scene_manager.switch_to_page(scene_manager.page_bigmap, stop_func=stop_func)
+        # scene_manager.switchto_bigmapwin(scene_manager.default_stop_func)
+        return get_gs_points(bigmatMat, stop_func)
+    return ret
+
+def get_middle_gs_point(stop_func):
+    """获得离屏幕中心最近的七天神像的坐标
+
+    Returns:
+        list: [x,y]
+    """
+    a = itt.capture(jpgmode=0)
+    b = get_gs_points(a, stop_func)
+    b = np.asarray(b)
+    c = euclidean_distance_plist([1080/2,1920/2],b)
+    d = np.argmin(c)
+    e = b[d]
+    return [e[1],e[0]]
 
 def get_closest_teleport_waypoint(object_img: img_manager.ImgIcon):
     """abandon
@@ -209,11 +241,18 @@ def nearest_teyvat_tw_posi(current_posi, target_posi, stop_func):
     twpoints_teyvat = bigmap_posi2teyvat_posi(current_posi, twpoints_teyvat) # 转换为提瓦特坐标
     p = calculate_nearest_posi(twpoints_teyvat, target_posi)
     return p
-
+def f():
+    return False
 if __name__ == '__main__':
     # print(get_closest_TeleportWaypoint(img_manager.bigmap_AbyssMage))
     # load_pw()
-    reset_map_size()
+    # reset_map_size()
+    a = itt.capture(jpgmode=0)
+    b = get_gs_points(a, f)
+    b = np.asarray(b)
+    c = euclidean_distance_plist([1080/2,1920/2],b)
+    d = np.argmin(c)
+    e = b[d]
     # p = teyvat_posi2bigmap_posi([2625.204978515623, -5274.091235473633], np.array(priority_waypoints_list))
     # show_bigmap_posi_in_window([2625.204978515623, -5274.091235473633], p)
     print()

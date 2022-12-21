@@ -166,8 +166,12 @@ class TeyvatMoveFlow(BaseThreading):
                 self.itt.delay(1)
                 self.itt.left_click()
                 while not self.itt.get_img_existence(img_manager.ui_main_win):
+                    if self.checkup_stop_func():
+                        break
                     time.sleep(1)
                 while static_lib.cvAutoTrackerLoop.in_excessive_error:
+                    if self.checkup_stop_func():
+                        break
                     time.sleep(1)
                 self.current_state = ST.AFTER_TEYVAT_TELEPORT
 
