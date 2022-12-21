@@ -105,7 +105,7 @@ class CollectorFlow(BaseThreading):
         
         
         self.IN_PICKUP_COLLECTOR_timeout = timer_module.TimeoutTimer(45)
-        self.IN_MOVETO_COLLECTOR_timeout = timer_module.TimeoutTimer(300)
+        self.IN_MOVETO_COLLECTOR_timeout = timer_module.TimeoutTimer(260)
         self.itt = InteractionBGD()
         
     def pause_threading(self):
