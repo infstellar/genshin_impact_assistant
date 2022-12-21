@@ -60,6 +60,10 @@ def points_angle(p1, p2, coordinate=NORMAL):
         degree -= 360
     return degree
 
+def recover_all(stop_func):
+    scene_manager.switch_to_page(scene_manager.page_bigmap, stop_func)
+    
+
 def set_genshin_time(x=18, stop_func = scene_manager.default_stop_func): # 调整时间至夜晚
     scene_manager.switch_to_page(scene_manager.page_time, stop_func)
     time.sleep(0.8)

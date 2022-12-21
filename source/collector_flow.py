@@ -213,7 +213,16 @@ class CollectorFlow(BaseThreading):
                 self.last_err_code = None
                 logger.info("重置完成。准备进行下一次采集")
                 
-                    
+            if self.cct.get_last_err_code() == combat_loop.CHARACTER_DIED:
+                logger.warning("有人嘎了，正在停止此次采集")
+                self.add_log("CHARACTER_DIED")
+                self.stop_all()
+                time.sleep(15)
+                
+                self.current_state = ST.AFTER_PICKUP_COLLECTOR
+                self.last_err_code = None
+                logger.info("重置完成。准备进行下一次采集")
+                self.cct.reset_err_code()      
                 
             if self.current_state == ST.INIT_MOVETO_COLLECTOR:
                 

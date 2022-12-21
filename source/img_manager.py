@@ -66,6 +66,9 @@ F_BUTTON = ImgIcon(name="F_BUTTON", path="assests\\imgs\\common\\F_BUTTON.jpg",
 bigmap_TeleportWaypoint = ImgIcon(name="bigmap_TeleportWaypoint",
                                   path="assests\\imgs\\map\\big_map\\points\\TeleportWaypoint.jpg",
                                   is_bbg=False)
+bigmap_GodStatue = ImgIcon(name="bigmap_GodStatue",
+                                  path="assests\\imgs\\map\\big_map\\points\\GodStatue.jpg",
+                                  is_bbg=False)
 smallmap_AbyssMage = ImgIcon(name="smallmap_AbyssMage", path="assests\\imgs\\map\\small_map\\enemies\\AbyssMage.jpg",
                              is_bbg=False)
 bigmap_AbyssMage = ImgIcon(name="bigmap_AbyssMage", path="assests\\imgs\\map\\big_map\\enemies\\AbyssMage.jpg",
