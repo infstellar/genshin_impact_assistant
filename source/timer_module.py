@@ -1,5 +1,6 @@
 import time
-
+import os
+from path_lib import *
 
 class Timer:
     def __init__(self, diff_start_time=0):
@@ -50,3 +51,26 @@ class TimeoutTimer(Timer):
             return True
         else:
             return False
+        
+class FileTimer(Timer):
+    def __init__(self, timer_name:str):
+        super().__init__()
+        self.path = os.path.join(root_path, "config\\timer", timer_name+".txt")
+        if not os.path.exists(self.path):
+            with open(self.path, 'w') as f:
+                f.write('0')
+                f.close()
+        
+        with open(self.path, 'r') as f:
+            self.start_time = float(f.read())
+            f.close()
+    
+    def reset(self):
+        self.start_time = time.time()
+        with open(self.path, 'w') as f:
+            f.write(str(self.start_time))
+            f.close()
+            
+if __name__ == '__main__':
+    a = FileTimer("test1")
+    print(a.get_diff_time())
