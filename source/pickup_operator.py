@@ -25,7 +25,7 @@ class PickupOperator(BaseThreading):
         self.collector_flag = True
         self.max_number_of_collector_loops = 180
         self.pickup_timer = timer_module.Timer()
-        self.pickup_fail_timeout = timer_module.TimeoutTimer(400)
+        self.pickup_fail_timeout = timer_module.TimeoutTimer(40)
         self.night_timer = timer_module.FileTimer("night_timer")
         self.target_posi = []
         self.target_name = 'unknow'
@@ -43,9 +43,10 @@ class PickupOperator(BaseThreading):
             self.pickup_item_list = []
             self.last_search_times = 2
             self.collecor_loops = 0
+            self.pickup_fail_timeout.reset()
             
             if self.search_mode == 1:
-                if self.night_timer.get_diff_time() >= 900:
+                if self.night_timer.get_diff_time() >= 500:
                     logger.info("正在设置时间为夜晚")
                     self.itt.delay(1)
                     generic_lib.set_genshin_time()
@@ -131,16 +132,17 @@ class PickupOperator(BaseThreading):
             ret = self.itt.get_img_position(img_manager.F_BUTTON)
             if ret == False:
                 return 0
-            y1 = img_manager.F_BUTTON.cap_posi[0]
-            x1 = img_manager.F_BUTTON.cap_posi[1]
+            y1 = img_manager.F_BUTTON.cap_posi[1]
+            x1 = img_manager.F_BUTTON.cap_posi[0]
             if static_lib.W_KEYDOWN:
                 flag1 = True
                 self.itt.key_up('w')
             time.sleep(0.1)
             cap = self.itt.capture()
             cap = crop(cap, [x1 + ret[0] + 53, y1 + ret[1] - 20, x1 + ret[0] + 361,  y1 + ret[1] + 54])
-            cap = self.itt.png2jpg(cap, channel='ui', alpha_num=180)
             # img_manager.qshow(cap)
+            cap = self.itt.png2jpg(cap, channel='ui', alpha_num=180)
+            
             res = ocr.img_analyse(cap)
             if len(res) != 0:
                 if res[0][1][0] not in self.pickup_blacklist:
@@ -270,7 +272,7 @@ if __name__ == '__main__':
     po.set_target_position([4813.5, -4180.5])
     po.pause_threading()
     po.start()
-    po.set_search_mode(1)
+    po.set_search_mode(0)
     po.continue_threading()
     while 1:
         # po.find_collector()

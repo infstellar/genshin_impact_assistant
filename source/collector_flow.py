@@ -129,9 +129,7 @@ class CollectorFlow(BaseThreading):
         self.cct.stop_threading()
     
     def checkup_stop_func(self):
-        if self.itt.get_img_existence(button_manager.button_all_character_died):
-            self.last_err_code = ALL_CHARACTER_DIED
-            return True
+        
         return super().checkup_stop_func()    
         
     def set_collector_name(self, text):
@@ -211,20 +209,6 @@ class CollectorFlow(BaseThreading):
                 logger.info("停止自动采集")
                 return 0
 
-            if self.pause_threading_flag:
-                if self.working_flag:
-                    self.working_flag = False
-                time.sleep(1)
-                continue
-
-            if not self.working_flag:
-                self.working_flag = True
-                
-            if self.checkup_stop_func():
-                self.pause_threading_flag = True
-                continue
-            '''write your code below'''
-            
             if self.last_err_code == ALL_CHARACTER_DIED:
                 logger.error("所有角色都已嘎掉，正在中断此次采集")
                 self.add_log("ALL_CHARACTER_DIED")
@@ -251,7 +235,28 @@ class CollectorFlow(BaseThreading):
                 self.current_state = ST.AFTER_PICKUP_COLLECTOR
                 self.last_err_code = None
                 logger.info("重置完成。准备进行下一次采集")
-                self.cct.reset_err_code()      
+                self.cct.reset_err_code()
+            
+            if self.itt.get_img_existence(button_manager.button_all_character_died):
+                self.last_err_code = ALL_CHARACTER_DIED
+                logger.warning("ALL_CHARACTER_DIED")
+                self.stop_all()
+            
+            if self.pause_threading_flag:
+                if self.working_flag:
+                    self.working_flag = False
+                time.sleep(1)
+                continue
+
+            if not self.working_flag:
+                self.working_flag = True
+                
+            if self.checkup_stop_func():
+                self.pause_threading_flag = True
+                continue
+            '''write your code below'''
+            
+                  
                 
             if self.current_state == ST.INIT_MOVETO_COLLECTOR:
                 
@@ -321,6 +326,7 @@ class CollectorFlow(BaseThreading):
             if self.current_state == ST.BEFORE_PICKUP_COLLECTOR:
                 if combat_lib.CSDL.get_combat_state() == False:
                     self.start_pickup()
+                    self.puo.reset_err_code()
                     logger.info(_("switch Flow to: IN_PICKUP_COLLECTOR"))
                     self.IN_PICKUP_COLLECTOR_timeout.reset()
                     self.current_state = ST.IN_PICKUP_COLLECTOR
@@ -332,7 +338,7 @@ class CollectorFlow(BaseThreading):
             if self.current_state == ST.IN_PICKUP_COLLECTOR:
                 if self.puo.pause_threading_flag:
                     logger.info(_("switch Flow to: AFTER_PICKUP_COLLECTOR"))
-                    self.add_log("None")
+                    self.add_log(str(self.puo.last_err_code))
                     self.current_state = ST.AFTER_PICKUP_COLLECTOR
                 if self.IN_PICKUP_COLLECTOR_timeout.istimeout():
                     logger.info(f"IN_PICKUP_COLLECTOR timeout: {self.IN_PICKUP_COLLECTOR_timeout.timeout_limit}")
@@ -366,7 +372,7 @@ class CollectorFlow(BaseThreading):
                 
 if __name__ == '__main__':
     cof = CollectorFlow()
-    cof.recover_all()
-    # cof.start()
+    # cof.recover_all()
+    cof.start()
     while 1:
         time.sleep(1)
