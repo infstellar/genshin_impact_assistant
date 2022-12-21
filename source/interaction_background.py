@@ -308,6 +308,7 @@ class InteractionBGD:
                     matching_rate) + ' |function name: ' + upper_func_name)
 
         if matching_rate >= imgicon.threshold:
+            print(matching_rate)
             return True
         else:
             return False

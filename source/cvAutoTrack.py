@@ -1,7 +1,6 @@
 import time
 from ctypes import *
 from util import *
-from util import _  # IDEA Cannot recognize this unless explicit declaration. Why?
 import timer_module
 from base_threading import BaseThreading
 

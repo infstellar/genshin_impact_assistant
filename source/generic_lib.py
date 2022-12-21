@@ -6,7 +6,7 @@ import numpy as np
 import scene_manager
 import button_manager
 import big_map
-from source import static_lib
+import static_lib
 from util import *
 import posi_manager
 
@@ -126,7 +126,7 @@ def f():
     return False
 
 if __name__ == '__main__':
-    recover_all(f)
+    # recover_all(f)
     # p1 = [0,0]
     # p2 = np.array([[1,1],[2,2]])
     # euclidean_distance_plist(p1,p2)
@@ -135,6 +135,6 @@ if __name__ == '__main__':
     # print(points_angle([10, 10], [0, 0], NEGATIVE_Y))
     # print(points_angle([0, 0], [20, 10], NEGATIVE_Y))
     # print(points_angle([0, 10], [10, 10], NEGATIVE_Y))
-    # while 1:
-    #     time.sleep(0.2)
-    #     print(f_recognition(itt))
+    while 1:
+        time.sleep(0.2)
+        print(f_recognition(itt))

@@ -82,7 +82,7 @@ class Button(ImgIcon):
 button_esc_page = Button(path="assests\\imgs\\common\\ui\\emergency_food.jpg")
 button_time_page = Button(path="assests\\imgs\\common\\ui\\switch_to_time_menu.jpg", black_offset = 15)
 button_exit = Button(path="assests\\imgs\\common\\button\\button_exit.jpg")
-button_all_character_died = Button(path="assests\\imgs\\cn\\all_character_died.jpg", name="all_character_died", threshold=0.96)
+button_all_character_died = Button(path="assests\\imgs\\cn\\all_character_died.jpg", name="all_character_died", threshold=0.99)
 
 if __name__ == '__main__':
     button_time_page.show_image()
