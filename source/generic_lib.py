@@ -120,6 +120,7 @@ def set_genshin_time(x=18, stop_func = scene_manager.default_stop_func): # è°ƒæ•
         if stop_func():
             break
         time.sleep(1)
+    time.sleep(2)
     scene_manager.switch_to_page(scene_manager.page_main, stop_func)
 
 def f():
@@ -130,7 +131,7 @@ if __name__ == '__main__':
     # p1 = [0,0]
     # p2 = np.array([[1,1],[2,2]])
     # euclidean_distance_plist(p1,p2)
-    
+    set_genshin_time()
     # print(points_angle([0, 0], [10, 10], NEGATIVE_Y))
     # print(points_angle([10, 10], [0, 0], NEGATIVE_Y))
     # print(points_angle([0, 0], [20, 10], NEGATIVE_Y))
