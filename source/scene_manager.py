@@ -2,7 +2,7 @@ from util import *
 import img_manager
 import posi_manager
 import button_manager
-from interaction_background import InteractionBGD
+from interaction_background import InteractionBGD, IMG_RATE
 itt = InteractionBGD()
 
 def default_stop_func():
@@ -17,7 +17,7 @@ class UIPage():
         self.to_selfpage = to_selfpage
         
     def is_current_page(self):
-        ret = itt.get_img_existence(self.check_icon)
+        ret = itt.get_img_existence(self.check_icon, ret_mode = IMG_RATE)
         return ret
     
     def get_following_page_name(self):
@@ -52,16 +52,16 @@ all_page = {
 
 def get_current_pagename():
     current_page = None
+    max_rate = 0
     for i in all_page:
-        if all_page[i].is_current_page():
+        ra = all_page[i].is_current_page()
+        if ra >= max_rate:
             current_page = all_page[i]
-    return current_page
+            max_rate = ra
+    return current_page.page_name
 
 def switch_to_page(target_page:UIPage, stop_func):
-    current_page = None
-    for i in all_page:
-        if all_page[i].is_current_page():
-            current_page = all_page[i]
+    current_page = all_page[get_current_pagename()]
     
     if current_page.page_name == target_page.page_name:
         return 0    

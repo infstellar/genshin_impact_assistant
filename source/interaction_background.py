@@ -19,8 +19,8 @@ IMG_RATE = 0
 IMG_POSI = 1
 IMG_POINT = 2
 IMG_RECT = 3
-
-
+IMG_BOOL = 4
+IMG_BOOLRATE = 5
 class InteractionBGD:
     """
     default size:1920x1080
@@ -296,7 +296,7 @@ class InteractionBGD:
         else:
             return False
 
-    def get_img_existence(self, imgicon: img_manager.ImgIcon, is_gray=False, is_log=False):
+    def get_img_existence(self, imgicon: img_manager.ImgIcon, is_gray=False, is_log=False, ret_mode = IMG_BOOL):
         """检测图片是否存在
 
         Args:
@@ -332,11 +332,18 @@ class InteractionBGD:
             logger.debug(
                 'imgname: ' + imgicon.name + 'matching_rate: ' + str(
                     matching_rate) + ' |function name: ' + upper_func_name)
-        
-        if matching_rate >= imgicon.threshold:
-            return True
-        else:
-            return False
+        if ret_mode == IMG_BOOL:
+            if matching_rate >= imgicon.threshold:
+                return True
+            else:
+                return False
+        elif ret_mode == IMG_BOOLRATE:
+            if matching_rate >= imgicon.threshold:
+                return matching_rate
+            else:
+                return False
+        elif ret_mode == IMG_RATE:
+            return matching_rate
 
     def appear_then_click(self, inputvar, is_gray=False):
         """appear then click

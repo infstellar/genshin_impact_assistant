@@ -24,7 +24,7 @@ def qshow(img1):
     cv2.waitKey(0)
 class ImgIcon:
     def __init__(self, name, path, is_bbg=True, matching_rate=None, alpha=None, bbg_posi=None, cap_posi=[0, 0, 1080, 1920],
-                 jpgmode=2, threshold=0.9, win_page = 'all', win_text = None, offset = 0, print_log = LOG_NONE):
+                 jpgmode=2, threshold=0.91, win_page = 'all', win_text = None, offset = 0, print_log = LOG_NONE):
         self.name = name
         self.path = os.path.join(root_path, path)
         self.is_bbg = is_bbg
@@ -106,7 +106,7 @@ ui_main_win = ImgIcon(name="ui_main_win", path="assests\\imgs\\common\\ui\\emerg
 ui_bigmap_win = ImgIcon(name="ui_bigmap_win", path="assests\\imgs\\common\\ui\\bigmap.jpg",
                         is_bbg=True, bbg_posi=[1591,36,1614, 59 ], cap_posi='bbg', print_log=LOG_WHEN_TRUE)
 ui_esc_menu = ImgIcon(name="ui_esc_menu", path="assests\\imgs\\common\\ui\\esc_menu.jpg",
-                        is_bbg=True, cap_posi='bbg', jpgmode=0, threshold = 0.9, print_log=LOG_WHEN_TRUE)
+                        is_bbg=True, cap_posi='bbg', jpgmode=0, print_log=LOG_WHEN_TRUE)
 ui_switch_to_time_menu = ImgIcon(name="ui_switch_to_time_menu", path="assests\\imgs\\common\\ui\\switch_to_time_menu.jpg",
                         is_bbg=True, cap_posi='bbg', print_log=LOG_WHEN_TRUE)
 ui_time_menu_core = ImgIcon(name="ui_time_menu_core", path="assests\\imgs\\common\\ui\\time_menu_core.jpg",

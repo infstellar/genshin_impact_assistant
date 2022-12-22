@@ -227,14 +227,24 @@ class TeyvatMoveFlow(BaseThreading):
                             self.tmc.pause_threading()
                     else:
                         self.tmc.continue_threading()
-                        if self.jump_timer.get_diff_time()>=10:
+                        if self.jump_timer.get_diff_time()>=2:
                             self.jump_timer.reset()
                             self.itt.key_press('spacebar')
                             time.sleep(0.3)
                             self.itt.key_press('spacebar') # fly
+                    
+                    
                         
                 if (self.motion_state == IN_FLY) or (self.motion_state == IN_CLIMB) or (self.motion_state == IN_WATER):
                     self.tmc.continue_threading()
+                    
+                if self.motion_state == IN_CLIMB:
+                    if self.jump_timer.get_diff_time()>=5:
+                        self.jump_timer.reset()
+                        self.itt.key_press('spacebar')
+                        time.sleep(0.3)
+                        self.itt.key_press('spacebar') # fly    
+                
                     '''可能会加体力条检测'''
                 if self.stop_rule == 0:    
                     if euclidean_distance(static_lib.cvAutoTrackerLoop.get_position()[1:], self.target_posi)<=10:
