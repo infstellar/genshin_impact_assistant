@@ -351,7 +351,7 @@ class TasticOperator(BaseThreading):
                 elif tas == 'rr':
                     self.do_unaim()
                 elif is_int(tas):
-                    self.itt.delay(int(tas) / 1000)
+                    self.itt.delay(int(tas) / 1000, randtime=False)
                 elif tas == '>':
                     break
 

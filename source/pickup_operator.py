@@ -25,7 +25,7 @@ class PickupOperator(BaseThreading):
         self.collector_flag = True
         self.max_number_of_collector_loops = 180
         self.pickup_timer = timer_module.Timer()
-        self.pickup_fail_timeout = timer_module.TimeoutTimer(40)
+        self.pickup_fail_timeout = timer_module.TimeoutTimer(65)
         self.night_timer = timer_module.FileTimer("night_timer")
         self.target_posi = []
         self.target_name = 'unknow'

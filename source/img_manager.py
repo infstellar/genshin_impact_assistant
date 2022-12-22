@@ -102,15 +102,15 @@ motion_climbing = ImgIcon(name="motion_climbing", path="assests\\imgs\\common\\m
 motion_flying = ImgIcon(name="motion_flying", path="assests\\imgs\\common\\motion_flying.jpg",
                         is_bbg=True, bbg_posi=[1706,960, 1866, 1022 ], cap_posi='bbg')
 ui_main_win = ImgIcon(name="ui_main_win", path="assests\\imgs\\common\\ui\\emergency_food.jpg",
-                      is_bbg=True, bbg_posi=[39,34, 73, 78 ], cap_posi='bbg', print_log=LOG_ALL)
+                      is_bbg=True, bbg_posi=[39,34, 73, 78 ], cap_posi='bbg', print_log=LOG_WHEN_TRUE)
 ui_bigmap_win = ImgIcon(name="ui_bigmap_win", path="assests\\imgs\\common\\ui\\bigmap.jpg",
-                        is_bbg=True, bbg_posi=[1591,36,1614, 59 ], cap_posi='bbg', print_log=LOG_ALL)
+                        is_bbg=True, bbg_posi=[1591,36,1614, 59 ], cap_posi='bbg', print_log=LOG_WHEN_TRUE)
 ui_esc_menu = ImgIcon(name="ui_esc_menu", path="assests\\imgs\\common\\ui\\esc_menu.jpg",
-                        is_bbg=True, cap_posi='bbg', jpgmode=0, threshold = 0.9, print_log=LOG_ALL)
+                        is_bbg=True, cap_posi='bbg', jpgmode=0, threshold = 0.9, print_log=LOG_WHEN_TRUE)
 ui_switch_to_time_menu = ImgIcon(name="ui_switch_to_time_menu", path="assests\\imgs\\common\\ui\\switch_to_time_menu.jpg",
-                        is_bbg=True, cap_posi='bbg', print_log=LOG_ALL)
+                        is_bbg=True, cap_posi='bbg', print_log=LOG_WHEN_TRUE)
 ui_time_menu_core = ImgIcon(name="ui_time_menu_core", path="assests\\imgs\\common\\ui\\time_menu_core.jpg",
-                        is_bbg=True, cap_posi='bbg', print_log=LOG_ALL)
+                        is_bbg=True, cap_posi='bbg', print_log=LOG_WHEN_TRUE)
 character_died = ImgIcon(name="character_died", path="assests\\imgs\\cn\\character_died.jpg",
                         is_bbg=True, cap_posi='bbg', win_text="使用道具", threshold=0.98, print_log=LOG_WHEN_TRUE)
 
