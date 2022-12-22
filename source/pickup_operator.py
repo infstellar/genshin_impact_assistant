@@ -17,6 +17,8 @@ class PickupOperator(BaseThreading):
         super().__init__()
         self.itt = InteractionBGD()
         self.pickup_blacklist = load_json("auto_pickup.json")["blacklist"]
+        self.pickup_blacklist += load_json("auto_pickup_default_blacklist.json")["blacklist"]
+        self.pickup_blacklist = list(set(self.pickup_blacklist))
         self.pickup_item_list = []
         self.flicker_timer = timer_module.Timer(diff_start_time=1)
         self.reset_timer = timer_module.Timer()

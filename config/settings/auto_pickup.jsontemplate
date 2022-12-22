@@ -1,7 +1,6 @@
 {
   "blacklist": [
     "钓鱼",
-    "text",
-    "烹饪"
+    "text"
   ]
 }
