@@ -166,7 +166,11 @@ class AutoTrackerLoop(BaseThreading):
             self.rotation = cvAutoTracker.get_rotation()
             self.position = cvAutoTracker.get_position()
             if not self.position[0]:
-                print("坐标获取失败")
+                import scene_manager
+                if scene_manager.get_current_pagename() == 'main':
+                    logger.warning("获取坐标失败")
+                else:
+                    time.sleep(0.5)
                 self.position = (False, 0, 0)
                 self.in_excessive_error = True
                 time.sleep(0.5)

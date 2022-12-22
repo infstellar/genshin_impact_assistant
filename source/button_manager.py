@@ -2,7 +2,7 @@ from util import *
 from img_manager import ImgIcon, qshow, LOG_NONE, LOG_ALL, LOG_WHEN_FALSE, LOG_WHEN_TRUE
 
 class Button(ImgIcon):
-    def __init__(self, path, button = None, name=None, black_offset=10, threshold=0.85, win_page = "all", win_text = None, print_log = LOG_NONE):
+    def __init__(self, path, button = None, name="button", black_offset=10, threshold=0.85, win_page = "all", win_text = None, print_log = LOG_NONE):
         self.path = path
         self.raw_file = cv2.imread(os.path.join(root_path, self.path))
         self.raw_name = name
