@@ -40,7 +40,7 @@ class PickupOperator(BaseThreading):
             self.pickup_timer.reset()
             # movement.change_view_to_posi(self.target_posi)
             self.pickup_succ = False
-            self.pickup_item_list = []
+            # self.pickup_item_list = []
             self.last_search_times = 2
             self.collecor_loops = 0
             self.pickup_fail_timeout.reset()
@@ -164,6 +164,9 @@ class PickupOperator(BaseThreading):
 
         return False
 
+    def reset_pickup_item_list(self):
+        self.pickup_item_list = []
+    
     def find_collector(self, show_res=False):
         imsrc = self.itt.capture().copy()
         imsrc = self.itt.png2jpg(imsrc, alpha_num=1)

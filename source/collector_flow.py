@@ -316,9 +316,12 @@ class CollectorFlow(BaseThreading):
                     self.IN_PICKUP_COLLECTOR_timeout.set_timeout_limit(120)
                 elif self.collector_type == ENEMY:
                     self.IN_PICKUP_COLLECTOR_timeout.set_timeout_limit(120)
-                    self.puo.max_distance_from_target = 50
+                    self.puo.max_distance_from_target = 60
                 elif self.collector_type == MINERAL:
                     pass
+                
+                self.puo.reset_pickup_item_list()
+                
                 logger.info(_("switch Flow to: BEFORE_PICKUP_COLLECTOR"))
                 time.sleep(1) # wait for CSDL detection
                 self.current_state = ST.BEFORE_PICKUP_COLLECTOR

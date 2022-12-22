@@ -24,12 +24,12 @@ class Button(ImgIcon):
     def click_position(self):
         return [int(self.center_point[0]), int(self.center_point[1])]
 
-button_esc_page = Button(path="assests\\imgs\\common\\ui\\emergency_food.jpg", print_log=LOG_WHEN_TRUE)
-button_time_page = Button(path="assests\\imgs\\common\\ui\\switch_to_time_menu.jpg", black_offset = 15, print_log=LOG_WHEN_TRUE)
+button_esc_page = Button(name="button_esc_page", path="assests\\imgs\\common\\ui\\emergency_food.jpg", print_log=LOG_WHEN_TRUE)
+button_time_page = Button(name="button_time_page",path="assests\\imgs\\common\\ui\\switch_to_time_menu.jpg", black_offset = 15, print_log=LOG_WHEN_TRUE)
 button_exit = Button(path="assests\\imgs\\common\\button\\button_exit.jpg", print_log=LOG_WHEN_TRUE)
-button_all_character_died = Button(path="assests\\imgs\\cn\\all_character_died.jpg", name="all_character_died", 
+button_all_character_died = Button( name="all_character_died", path="assests\\imgs\\cn\\all_character_died.jpg", 
                                    threshold=0.988, win_text="复苏", print_log=LOG_WHEN_TRUE)
-button_ui_cancel = Button(path="assests\\imgs\\common\\ui\\ui_cancel.jpg", name="button_ui_cancel", print_log=LOG_WHEN_TRUE)
+button_ui_cancel = Button(name="button_ui_cancel", path="assests\\imgs\\common\\ui\\ui_cancel.jpg",  print_log=LOG_WHEN_TRUE)
 
 if __name__ == '__main__':
     button_ui_cancel.show_image()
