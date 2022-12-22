@@ -79,7 +79,7 @@ class CollectorFlow(BaseThreading):
         self.current_position = static_lib.cvAutoTrackerLoop.get_position()[1:]
         self.last_collection_posi = [9999,9999]
         self.picked_list = []
-        self.recover_timeout = timer_module.TimeoutTimer(60)
+        self.recover_timeout = timer_module.TimeoutTimer(200)
         
         self.tmf = teyvat_move_flow.TeyvatMoveFlow()
         self.tmf.setDaemon(True)

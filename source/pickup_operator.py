@@ -71,6 +71,7 @@ class PickupOperator(BaseThreading):
     
     def run(self):
         while 1:
+            time.sleep(self.while_sleep)
             # time.sleep(0.1)
             if self.stop_threading_flag:
                 logger.info("停止自动拾取")

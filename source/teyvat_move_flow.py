@@ -160,13 +160,13 @@ class TeyvatMoveFlow(BaseThreading):
                 self.itt.left_click()
                 self.itt.delay(0.6)
 
-                p1 = pdocr_api.ocr.get_text_position(self.itt.capture(jpgmode=0), "传送锚点")
+                p1 = pdocr_api.ocr.get_text_position(self.itt.capture(jpgmode=0), "七天神像")
                 if p1 != -1:
                     self.itt.move_to(p1[0] + 30, p1[1] + 30)
                     self.itt.delay(1)
                     self.itt.left_click()
                     self.itt.delay(1)
-                p1 = pdocr_api.ocr.get_text_position(self.itt.capture(jpgmode=0), "七天神像")
+                p1 = pdocr_api.ocr.get_text_position(self.itt.capture(jpgmode=0), "传送锚点")
                 if p1 != -1:
                     self.itt.move_to(p1[0] + 30, p1[1] + 30)
                     self.itt.delay(1)

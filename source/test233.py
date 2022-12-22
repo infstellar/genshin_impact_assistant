@@ -3,10 +3,14 @@ import os
 import time, math
 from img_manager import qshow
 from interaction_background import InteractionBGD
-import img_manager
+import img_manager, button_manager
 import small_map
 
 itt = InteractionBGD()
+
+a = itt.get_img_existence(button_manager.button_all_character_died)
+print()
+
 while 1:
         imsrc = itt.capture().copy()
         imsrc = itt.png2jpg(imsrc, alpha_num=1)

@@ -229,6 +229,7 @@ class InteractionBGD:
             cv2.waitKey()
         # 在窗口截图中匹配位置画红色方框
         matching_rate = max_val
+        
         if ret_mode == IMG_RATE:
             return matching_rate
         elif ret_mode == IMG_POSI:
@@ -275,9 +276,20 @@ class InteractionBGD:
 
         matching_rate, max_loc = self.similar_img(cap, imgicon.image, ret_mode=IMG_POSI)
 
-        if is_log:
-            logger.debug(
-                'imgname: ' + imgicon.name + 'max_loc: ' + str(max_loc) + ' |function name: ' + upper_func_name)
+        if matching_rate >= imgicon.threshold:
+            if imgicon.win_text != None:
+                import pdocr_api
+                r = pdocr_api.ocr.get_text_position(cap, imgicon.win_text)
+                if r==-1:
+                    matching_rate = -1
+            if imgicon.win_page != 'all':
+                import scene_manager
+                pn = scene_manager.get_current_pagename()
+                if pn != imgicon.win_page:
+                    matching_rate = -2
+
+        if imgicon.is_print_log(matching_rate >= imgicon.threshold):
+            logger.debug('imgname: ' + imgicon.name + 'max_loc: ' + str(max_loc) + ' |function name: ' + upper_func_name)
 
         if matching_rate >= imgicon.threshold:
             return max_loc
@@ -300,15 +312,28 @@ class InteractionBGD:
         cap = self.capture(posi=imgicon.cap_posi, jpgmode=imgicon.jpgmode)
 
         matching_rate = self.similar_img(cap, imgicon.image)
+        
+        if matching_rate >= imgicon.threshold:
+            if imgicon.win_text != None:
+                import pdocr_api
+                r = pdocr_api.ocr.get_text_position(cap, imgicon.win_text)
+                if r==-1:
+                    matching_rate = 0
+            if imgicon.win_page != 'all':
+                import scene_manager
+                pn = scene_manager.get_current_pagename()
+                if pn != imgicon.win_page:
+                    matching_rate = 0
+        
         # if matching_rate == 0:
         #     img_manager.qshow(cap)
-        if is_log:
+
+        if imgicon.is_print_log(matching_rate >= imgicon.threshold):
             logger.debug(
                 'imgname: ' + imgicon.name + 'matching_rate: ' + str(
                     matching_rate) + ' |function name: ' + upper_func_name)
-
+        
         if matching_rate >= imgicon.threshold:
-            print(matching_rate)
             return True
         else:
             return False
@@ -325,10 +350,37 @@ class InteractionBGD:
         """
         
         if isinstance(inputvar, button_manager.Button):
-            cbutton = inputvar
-            cap = self.capture(jpgmode=cbutton.jpgmode)
-            if cbutton.match(cap):
-                self.move_and_click(position=cbutton.click_position())
+            imgicon = inputvar
+            upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
+
+            cap = self.capture(posi=imgicon.cap_posi, jpgmode=imgicon.jpgmode)
+            # min_rate = img_manager.matching_rate_dict[imgname]
+
+            matching_rate = self.similar_img(imgicon.image, cap, is_gray=is_gray)
+
+            if matching_rate >= imgicon.threshold:
+                if imgicon.win_text != None:
+                    import pdocr_api
+                    r = pdocr_api.ocr.get_text_position(cap, imgicon.win_text)
+                    if r==-1:
+                        matching_rate = 0
+                if imgicon.win_page != 'all':
+                    import scene_manager
+                    pn = scene_manager.get_current_pagename()
+                    if pn != imgicon.win_page:
+                        matching_rate = 0
+            
+            if imgicon.is_print_log(matching_rate >= imgicon.threshold):
+                logger.debug(
+                'imgname: ' + imgicon.name + 'matching_rate: ' + str(
+                    matching_rate) + ' |function name: ' + upper_func_name)
+
+            if matching_rate >= imgicon.threshold:
+                p = imgicon.cap_posi
+                center_p = [(p[1] + p[3]) / 2, (p[0] + p[2]) / 2]
+                self.move_to(center_p[0], center_p[1])
+                self.left_click()
+                self.move_and_click(position=imgicon.click_position())
                 return True
             else:
                 return False
@@ -342,15 +394,26 @@ class InteractionBGD:
 
             matching_rate = self.similar_img(imgicon.image, cap, is_gray=is_gray)
 
-            logger.debug(
-                'imgname: ' + imgicon.name + 'matching_rate: ' + str(
-                    matching_rate) + ' |function name: ' + upper_func_name)
+            if matching_rate >= imgicon.threshold:
+                if imgicon.win_text != None:
+                    import pdocr_api
+                    r = pdocr_api.ocr.get_text_position(cap, imgicon.win_text)
+                    if r==-1:
+                        matching_rate = 0
+                if imgicon.win_page != 'all':
+                    import scene_manager
+                    pn = scene_manager.get_current_pagename()
+                    if pn != imgicon.win_page:
+                        matching_rate = 0
+            
+            if imgicon.is_print_log(matching_rate >= imgicon.threshold):
+                logger.debug('imgname: ' + imgicon.name + 'matching_rate: ' + str(matching_rate) + ' |function name: ' + upper_func_name)
 
             if matching_rate >= imgicon.threshold:
                 p = imgicon.cap_posi
                 center_p = [(p[1] + p[3]) / 2, (p[0] + p[2]) / 2]
                 self.move_to(center_p[0], center_p[1])
-                self.left_click()
+                self.left_click()     
                 return True
             else:
                 return False
@@ -373,15 +436,26 @@ class InteractionBGD:
 
         matching_rate = self.similar_img(imgicon.image, cap, is_gray=is_gray)
 
-        logger.debug(
-            'imgname: ' + imgicon.name + 'matching_rate: ' + str(
-                matching_rate) + 'key_name:' + key_name + ' |function name: ' + upper_func_name)
+        if matching_rate >= imgicon.threshold:
+            if imgicon.win_text != None:
+                import pdocr_api
+                r = pdocr_api.ocr.get_text_position(cap, imgicon.win_text)
+                if r==-1:
+                    matching_rate = 0
+            if imgicon.win_page != 'all':
+                import scene_manager
+                pn = scene_manager.get_current_pagename()
+                if pn != imgicon.win_page:
+                    matching_rate = 0
+        if imgicon.is_print_log(matching_rate >= imgicon.threshold):
+            logger.debug(
+                'imgname: ' + imgicon.name + 'matching_rate: ' + str(
+                    matching_rate) + 'key_name:' + key_name + ' |function name: ' + upper_func_name)
 
         if matching_rate >= imgicon.threshold:
             self.key_press(key_name)
             return True
         else:
-
             return False
 
     def extract_white_letters(image, threshold=128):
