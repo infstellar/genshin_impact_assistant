@@ -230,16 +230,17 @@ class PickupOperator(BaseThreading):
         closest_point = ret_points[points_length.index(min(points_length))]
         px, py = closest_point
         mx, my = self.itt.get_mouse_point()
-        px = (px - mx) / 2.4 + 35
+        px = (px - mx) / 1.8 + 35
         py = (py - my) / 2 + 40
-        if px >= 100:
-            px = 100
-        if px <= -100:
-            px = -100
-        if py >= 100:
-            py = 100
-        if py <= -100:
-            py = -100
+        print(px,py)
+        # if px >= 200:
+        #     px = 200
+        # if px <= -200:
+        #     px = -200
+        # if py >= 200:
+        #     py = 200
+        # if py <= -200:
+        #     py = -200
         # print(px, py)
 
         self.itt.move_to(px, py, relative=True)
@@ -273,13 +274,14 @@ if __name__ == '__main__':
     
     
     po = PickupOperator()
-    po.set_target_position([4813.5, -4180.5])
-    po.pause_threading()
-    po.start()
-    po.set_search_mode(0)
-    po.continue_threading()
+    # po.set_target_position([4813.5, -4180.5])
+    # po.pause_threading()
+    # po.start()
+    # po.set_search_mode(0)
+    # po.continue_threading()
     while 1:
         # po.find_collector()
-        time.sleep(0.1)
+        time.sleep(0.5)
+        po.auto_pickup()
         # po.pickup_recognize()
         # print()

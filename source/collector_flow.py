@@ -172,7 +172,7 @@ class CollectorFlow(BaseThreading):
                   "error_code": x,
                   "picked item": self.picked_list})
         self.collection_log[self.collector_name] = a
-        save_json(self.collection_log, "collection_log.json", default_path="config\\auto_collector", sort_keys=False)
+        save_json(self.collection_log, "collection_log.json", default_path="config\\auto_collector")
         self.picked_list = []
     
     def recover_all(self):
