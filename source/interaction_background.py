@@ -793,9 +793,10 @@ class InteractionBGD:
     def crop_image(self, imsrc, posilist):
         return imsrc[posilist[0]:posilist[2], posilist[1]:posilist[3]]
 
-    def move_and_click(self, position, type='left'):
+    def move_and_click(self, position, type='left', delay = 0.5):
+        
         self.move_to(position[0], position[1])
-        time.sleep(0.5)
+        time.sleep(delay)
         if type == 'left':
             self.left_click()
         else:

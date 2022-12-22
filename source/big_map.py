@@ -167,12 +167,10 @@ def reset_map_size():
     """重置地图大小为标准值
     """
     for i in range(8):        
-        itt.move_and_click(position=posi_manager.posi_suoxiaoditu)
-        time.sleep(0.2)
+        itt.move_and_click(position=posi_manager.posi_suoxiaoditu, delay=0.2)
     time.sleep(1)
     for i in range(2):
-        itt.move_and_click(position=posi_manager.posi_fangdaditu)
-        time.sleep(0.2)
+        itt.move_and_click(position=posi_manager.posi_fangdaditu, delay=0.2)
 
 def bigmap_posi2teyvat_posi(current_teyvat_posi:list, bigmap_posi_list:list) -> list:
     """将大地图上的坐标转换为提瓦特世界坐标。注意：中心必须为当前位置。
