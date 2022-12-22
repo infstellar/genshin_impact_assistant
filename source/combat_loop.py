@@ -8,6 +8,7 @@ from interaction_background import InteractionBGD
 from switch_character_operator import SwitchCharacterOperator
 import combat_lib
 import img_manager
+import button_manager
 
 CHARACTER_DIED = 1
 
@@ -22,9 +23,9 @@ def stop_func_example():  # True:stop;False:continue
 def get_chara_list(team_name='team.json'):
     team_name = config_json["teamfile"]
     # 拼错单词了 tastic -> tactic 两个文件夹名都能正确识别
-    if os.path.exists(root_path, "config\\tastic"):
+    if os.path.exists(os.path.join(root_path, "config\\tastic")):
         dpath = "config\\tastic"
-    elif os.path.exists(root_path, "config\\tactic"):
+    elif os.path.exists(os.path.join(root_path, "config\\tactic")):
         dpath = "config\\tactic"
     team = load_json(team_name, default_path=dpath)
     characters = load_json("character.json", default_path=dpath)
@@ -107,6 +108,16 @@ class Combat_Controller(BaseThreading):
                 self.sco.stop_threading()
                 return 0
 
+            if self.itt.get_img_existence(img_manager.character_died):
+                logger.info('有人嘎了，停止自动战斗')
+                self.last_err_code = CHARACTER_DIED
+                while 1:
+                    time.sleep(0.5)
+                    r = self.itt.appear_then_click(button_manager.button_ui_cancel)
+                    if r:
+                        break
+                self.pause_threading()
+            
             if not self.pause_threading_flag:
                 if self.checkup_stop_func():
                     break
@@ -143,10 +154,7 @@ class Combat_Controller(BaseThreading):
         if self.pause_threading_flag or self.stop_threading_flag:
             logger.info('停止自动战斗')
             return True
-        if self.itt.get_img_existence(img_manager.character_died):
-            logger.info('有人嘎了，停止自动战斗')
-            self.last_err_code = CHARACTER_DIED
-            return True
+        
         
     def checkup_stop_threading(self):
         if self.stop_threading_flag:

@@ -13,12 +13,18 @@ IMG_RATE = 0
 IMG_POSI = 1
 IMG_POINT = 2
 IMG_RECT = 3
+
+LOG_NONE = 0
+LOG_WHEN_TRUE = 1
+LOG_WHEN_FALSE = 2
+LOG_ALL = 3
+
 def qshow(img1):
     cv2.imshow('123', img1)
     cv2.waitKey(0)
 class ImgIcon:
     def __init__(self, name, path, is_bbg=True, matching_rate=None, alpha=None, bbg_posi=None, cap_posi=[0, 0, 1080, 1920],
-                 jpgmode=2, threshold=0.9):
+                 jpgmode=2, threshold=0.9, win_page = 'all', win_text = None, offset = 0, print_log = LOG_NONE):
         self.name = name
         self.path = os.path.join(root_path, path)
         self.is_bbg = is_bbg
@@ -28,6 +34,10 @@ class ImgIcon:
         self.jpgmode = jpgmode
         self.threshold = threshold
         self.raw_image = cv2.imread(self.path)
+        self.win_page = win_page
+        self.win_text = win_text
+        self.offset = offset
+        self.print_log = print_log
         
         if self.is_bbg and self.bbg_posi is None:
             self.bbg_posi = get_bbox(self.raw_image)
@@ -47,22 +57,34 @@ class ImgIcon:
     def show_image(self):
         cv2.imshow('123', self.image)
         cv2.waitKey(0)
+        
+    def is_print_log(self, b:bool):
+        if b:
+            if self.print_log == LOG_WHEN_TRUE or self.print_log == LOG_ALL:
+                return True
+            else:
+                return False
+        else:
+            if self.print_log == LOG_WHEN_FALSE or self.print_log == LOG_ALL:
+                return True
+            else:
+                return False
 
 imgs_dict = {}
 
 COMING_OUT_BY_SPACE = ImgIcon(name="coming_out_by_space", path="assests\\imgs\\common\\coming_out_by_space.jpg",
-                              is_bbg=True, bbg_posi=[1379,505,  1447,568, ], cap_posi='bbg', threshold=0.8, )
+                              is_bbg=True, bbg_posi=[1379,505,  1447,568, ], cap_posi='bbg', threshold=0.8, print_log=LOG_WHEN_TRUE)
 IN_DOMAIN = ImgIcon(name="IN_DOMAIN", path="assests\\imgs\\common\\IN_DOMAIN.jpg",
-                    is_bbg=True, bbg_posi=[25,112,  52, 137, ], cap_posi='bbg')
+                    is_bbg=True, bbg_posi=[25,112,  52, 137, ], cap_posi='bbg', print_log=LOG_WHEN_TRUE)
 USE_20RESIN_DOBLE_CHOICES = ImgIcon(name="USE_20RESIN_DOBLE_CHOICES",
                                     path="assests\\imgs\\common\\USE_20RESIN_DOBLE_CHOICES.jpg",
-                                    is_bbg=True, bbg_posi=[985, 724, 1348, 791 ], cap_posi='bbg')
+                                    is_bbg=True, bbg_posi=[985, 724, 1348, 791 ], cap_posi='bbg', print_log=LOG_WHEN_TRUE)
 USE_20X2RESIN_DOBLE_CHOICES = ImgIcon(name="USE_20X2RESIN_DOBLE_CHOICES",
                                       path="assests\\imgs\\common\\USE_20X2RESIN_DOBLE_CHOICES.jpg",
-                                      is_bbg=True, bbg_posi=[567,726 ,934, 793 ], cap_posi='bbg')
+                                      is_bbg=True, bbg_posi=[567,726 ,934, 793 ], cap_posi='bbg', print_log=LOG_WHEN_TRUE)
 F_BUTTON = ImgIcon(name="F_BUTTON", path="assests\\imgs\\common\\F_BUTTON.jpg",
                    is_bbg=True, bbg_posi=[1104,526 , 1128,550 ], cap_posi=[1079,350 ,1162, 751 ],
-                   threshold=0.92)
+                   threshold=0.92, print_log=LOG_WHEN_TRUE)
 bigmap_TeleportWaypoint = ImgIcon(name="bigmap_TeleportWaypoint",
                                   path="assests\\imgs\\map\\big_map\\points\\TeleportWaypoint.jpg",
                                   is_bbg=False)
@@ -80,17 +102,17 @@ motion_climbing = ImgIcon(name="motion_climbing", path="assests\\imgs\\common\\m
 motion_flying = ImgIcon(name="motion_flying", path="assests\\imgs\\common\\motion_flying.jpg",
                         is_bbg=True, bbg_posi=[1706,960, 1866, 1022 ], cap_posi='bbg')
 ui_main_win = ImgIcon(name="ui_main_win", path="assests\\imgs\\common\\ui\\emergency_food.jpg",
-                      is_bbg=True, bbg_posi=[39,34, 73, 78 ], cap_posi='bbg')
+                      is_bbg=True, bbg_posi=[39,34, 73, 78 ], cap_posi='bbg', print_log=LOG_ALL)
 ui_bigmap_win = ImgIcon(name="ui_bigmap_win", path="assests\\imgs\\common\\ui\\bigmap.jpg",
-                        is_bbg=True, bbg_posi=[1591,36,1614, 59 ], cap_posi='bbg')
+                        is_bbg=True, bbg_posi=[1591,36,1614, 59 ], cap_posi='bbg', print_log=LOG_ALL)
 ui_esc_menu = ImgIcon(name="ui_esc_menu", path="assests\\imgs\\common\\ui\\esc_menu.jpg",
-                        is_bbg=True, cap_posi='bbg', jpgmode=0, threshold = 0.9)
+                        is_bbg=True, cap_posi='bbg', jpgmode=0, threshold = 0.9, print_log=LOG_ALL)
 ui_switch_to_time_menu = ImgIcon(name="ui_switch_to_time_menu", path="assests\\imgs\\common\\ui\\switch_to_time_menu.jpg",
-                        is_bbg=True, cap_posi='bbg')
+                        is_bbg=True, cap_posi='bbg', print_log=LOG_ALL)
 ui_time_menu_core = ImgIcon(name="ui_time_menu_core", path="assests\\imgs\\common\\ui\\time_menu_core.jpg",
-                        is_bbg=True, cap_posi='bbg')
+                        is_bbg=True, cap_posi='bbg', print_log=LOG_ALL)
 character_died = ImgIcon(name="character_died", path="assests\\imgs\\cn\\character_died.jpg",
-                        is_bbg=True, cap_posi='bbg')
+                        is_bbg=True, cap_posi='bbg', win_text="使用道具", threshold=0.98, print_log=LOG_WHEN_TRUE)
 
 # qshow(ui_esc_menu.image)
 

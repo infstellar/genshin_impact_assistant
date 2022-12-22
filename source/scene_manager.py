@@ -50,6 +50,13 @@ all_page = {
     "bigmap":page_bigmap
             }
 
+def get_current_pagename():
+    current_page = None
+    for i in all_page:
+        if all_page[i].is_current_page():
+            current_page = all_page[i]
+    return current_page
+
 def switch_to_page(target_page:UIPage, stop_func):
     current_page = None
     for i in all_page:
