@@ -5,9 +5,14 @@ from img_manager import qshow
 from interaction_background import InteractionBGD
 import img_manager, button_manager
 import small_map
+from util import *
 
 itt = InteractionBGD()
 
+pickup_blacklist = load_json("auto_pickup.json")["blacklist"]
+pickup_blacklist += load_json("auto_pickup_default_blacklist.json")["blacklist"]
+pickup_blacklist = list(set(pickup_blacklist))
+print()
 a = itt.get_img_existence(button_manager.button_all_character_died)
 print()
 
