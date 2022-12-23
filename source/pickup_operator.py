@@ -33,7 +33,7 @@ class PickupOperator(BaseThreading):
         self.target_name = 'unknow'
         self.pickup_succ = False
         self.max_distance_from_target = 20
-        self.err_code = " "
+        self.last_err_code = " "
         self.search_mode = 0
         self.last_search_times = 2
         
@@ -111,21 +111,24 @@ class PickupOperator(BaseThreading):
                 if self.search_mode == 1 and self.last_search_times <= 0:
                     self.pause_threading()
                     logger.info("PICKUP_TIMEOUT_001")
+                    self.last_err_code="PICKUP_TIMEOUT_001"
                     logger.info("停止拾取")
                         
                 if self.pickup_fail_timeout.istimeout():
                     self.pause_threading()
                     logger.info("PICKUP_TIMEOUT_002")
+                    self.last_err_code="PICKUP_TIMEOUT_002"
                     logger.info("停止拾取")
                 
                 '''当成功找到物品且找不到下一个可能物品后自动停止。'''
                 if self.pickup_succ :
                     if self.collecor_loops > self.max_number_of_collector_loops:
                         self.pause_threading()
+                        self.last_err_code="PICKUP_END_001"
                         logger.info("已找到物品且无法找到下一个物品，停止拾取")
 
     def get_err_code(self):
-        return self.err_code
+        return self.last_err_code
     
     def pickup_recognize(self):
         flag1 = False
