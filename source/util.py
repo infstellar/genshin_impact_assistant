@@ -69,7 +69,7 @@ def list2format_list_text(lst: list) -> str:
 
     else:
         rt_str = str(lst)
-    print(rt_str)
+    # print(rt_str)
     return rt_str
 
 

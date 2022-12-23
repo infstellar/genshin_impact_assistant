@@ -12,9 +12,9 @@ itt = InteractionBGD()
 pickup_blacklist = load_json("auto_pickup.json")["blacklist"]
 pickup_blacklist += load_json("auto_pickup_default_blacklist.json")["blacklist"]
 pickup_blacklist = list(set(pickup_blacklist))
-print()
+# print()
 a = itt.get_img_existence(button_manager.button_all_character_died)
-print()
+# print()
 
 while 1:
         imsrc = itt.capture().copy()

@@ -33,4 +33,4 @@ button_ui_cancel = Button(name="button_ui_cancel", path="assests\\imgs\\common\\
 
 if __name__ == '__main__':
     button_ui_cancel.show_image()
-print()
+# print()

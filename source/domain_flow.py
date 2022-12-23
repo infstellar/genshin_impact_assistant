@@ -211,7 +211,7 @@ class DomainFlow(BaseThreading):
             elif self.resin_mode == '20':
                 self.itt.appear_then_click(img_manager.USE_20RESIN_DOBLE_CHOICES)
 
-            if pdocr_api.ocr.get_text_position(self.itt.capture(jpgmode=3), textM.text(textM.domain_obtain)) != -1:
+            if pdocr_api.ocr.get_text_position(self.itt.capture(jpgmode=0), textM.text(textM.domain_obtain)) != -1:
                 break
 
         time.sleep(2)

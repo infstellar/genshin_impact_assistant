@@ -89,7 +89,7 @@ class TeyvatMoveFlow(BaseThreading):
         if b:
             angle = get_target_relative_angle(x, y, tx, ty)
             movement.view_to_angle_teyvat(angle, self.checkup_stop_func)
-            print(x, y, angle)
+            # print(x, y, angle)
         return 0
     
     def set_stop_rule(self, mode=0):
@@ -108,7 +108,7 @@ class TeyvatMoveFlow(BaseThreading):
     
     def set_target_position(self, pl):
         self.target_posi = pl
-        print()
+        # print()
     
     def run(self):
         while 1:
@@ -255,7 +255,7 @@ class TeyvatMoveFlow(BaseThreading):
                     
             if self.current_state == ST.END_TEYVAT_MOVE:
                 self.pause_threading()
-                print("结束自动行走")
+                logger.info("结束自动行走")
                 time.sleep(1)
                     
                     
