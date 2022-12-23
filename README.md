@@ -13,6 +13,9 @@ To没用过github的小伙伴:描述文档中的蓝色文字是链接,可以打�
 
 <https://www.bilibili.com/video/BV1RV4y157m6>(挂了)
 
+补档 <https://www.youtube.com/watch?v=ZieBDx6Go4A> v0.2.0的演示视频，可能部分过期
+
+
 ## 功能及其启动方式
 
 ### 1. [自动战斗辅助](./doc/combat_assi.md)
