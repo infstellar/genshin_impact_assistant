@@ -98,6 +98,8 @@ class Combat_Controller(BaseThreading):
         self.ao.setDaemon(True)
         self.ao.start()
 
+        self.is_check_died = False
+        
         # self.super_stop_func=super_stop_func
 
     def run(self):
@@ -107,16 +109,17 @@ class Combat_Controller(BaseThreading):
                 self.ao.stop_threading()
                 self.sco.stop_threading()
                 return 0
-
-            if self.itt.get_img_existence(img_manager.character_died):
-                logger.info('有人嘎了，停止自动战斗')
-                self.last_err_code = CHARACTER_DIED
-                while 1:
-                    time.sleep(0.5)
-                    r = self.itt.appear_then_click(button_manager.button_ui_cancel)
-                    if r:
-                        break
-                self.pause_threading()
+            
+            if self.is_check_died:
+                if self.itt.get_img_existence(img_manager.character_died):
+                    logger.info('有人嘎了，停止自动战斗')
+                    self.last_err_code = CHARACTER_DIED
+                    while 1:
+                        time.sleep(0.5)
+                        r = self.itt.appear_then_click(button_manager.button_ui_cancel)
+                        if r:
+                            break
+                    self.pause_threading()
             
             if not self.pause_threading_flag:
                 if self.checkup_stop_func():
