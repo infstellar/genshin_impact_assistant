@@ -123,7 +123,10 @@ def change_view_to_posi(pl, stop_func):
 def reset_const_val():
     pass
 
+def f():
+    return False
 
 # view_to_angle(-90)
 if __name__ == '__main__':
-    cview(-90, VERTICALLY)
+    # cview(-90, VERTICALLY)
+    view_to_angle_domain(-90,f)

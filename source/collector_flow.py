@@ -359,7 +359,7 @@ class CollectorFlow(BaseThreading):
                 self.collected_id[self.collector_name].append(self.collector_posi_dict[self.collector_i]["id"])
                 save_json(self.collected_id, "collected.json", default_path="config\\auto_collector", sort_keys=False)
                 if len(self.collector_posi_dict)-1 == self.collector_i:
-                    print("exit")
+                    logger.info("exit")
                     logger.info("switch Flow to: END_COLLECTOR")
                     self.current_state = ST.END_COLLECTOR
                 else:

@@ -9,8 +9,8 @@ from util import *
 itt = interaction_background.InteractionBGD()
 dx = 25
 dy = 25
-posi_map = [15 + dx, 57 + dy, 236 - dx, 278 - dy]
-posi_teyvat_map = [15, 57, 236, 278]
+posi_map = [57 + dy, 15 + dx,278 - dy, 236 - dy ]
+posi_teyvat_map = [57, 15, 278, 236]
 
 
 # def get_direction_angle():
