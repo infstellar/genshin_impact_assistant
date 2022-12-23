@@ -39,6 +39,8 @@ To没用过github的小伙伴:描述文档中的蓝色文字是链接,可以打�
 
 ### 3. [自动采集辅助](./doc/collector_assi.md)
 
+演示视频：<https://www.bilibili.com/video/BV163411Q7fD>
+
 <strong>注:测试中功能</strong>
 
 - 在GUI中将FlowMode切换到AutoCollector，等待模块导入
