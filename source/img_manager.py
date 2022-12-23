@@ -46,6 +46,10 @@ class ImgIcon:
             self.cap_posi = self.bbg_posi
         else:
             self.cap_posi = cap_posi
+            
+        if self.offset != 0:
+            self.cap_posi = list(np.array(self.cap_posi) + np.array([-self.offset, -self.offset, self.offset, self.offset]))
+            
         self.cap_center_position_xy = [(self.cap_posi[0]+self.cap_posi[2])/2, (self.cap_posi[1]+self.cap_posi[3])/2]
         
 
@@ -104,7 +108,7 @@ motion_flying = ImgIcon(name="motion_flying", path="assests\\imgs\\common\\motio
 ui_main_win = ImgIcon(name="ui_main_win", path="assests\\imgs\\common\\ui\\emergency_food.jpg",
                       is_bbg=True, bbg_posi=[39,34, 73, 78 ], cap_posi='bbg', print_log=LOG_WHEN_TRUE)
 ui_bigmap_win = ImgIcon(name="ui_bigmap_win", path="assests\\imgs\\common\\ui\\bigmap.jpg",
-                        is_bbg=True, bbg_posi=[1591,36,1614, 59 ], cap_posi='bbg', print_log=LOG_WHEN_TRUE, threshold=0.95)
+                        is_bbg=True, bbg_posi=[1591,36,1614, 59 ], cap_posi='bbg', print_log=LOG_WHEN_TRUE, threshold=0.95, offset=10)
 ui_esc_menu = ImgIcon(name="ui_esc_menu", path="assests\\imgs\\common\\ui\\esc_menu.jpg",
                         is_bbg=True, cap_posi='bbg', jpgmode=0, print_log=LOG_WHEN_TRUE)
 ui_switch_to_time_menu = ImgIcon(name="ui_switch_to_time_menu", path="assests\\imgs\\common\\ui\\switch_to_time_menu.jpg",
@@ -231,5 +235,6 @@ if __name__ == '__main__':
     # cv2.imwrite("assests\\imgs\\common\\coming_out_by_space.jpg", img)
     # get_img_from_imgname(COMING_OUT_BY_SPACE)
     # pname = F_BUTTON
-    p = auto_import_img("assests\\imgs\\common\\ui\\" + "time_menu_core" + ".jpg", "swimming")
-    print(p)
+    # p = auto_import_img("assests\\imgs\\common\\ui\\" + "time_menu_core" + ".jpg", "swimming")
+    # print(p)
+    pass
