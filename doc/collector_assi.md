@@ -36,6 +36,16 @@
 | error_code  | 退出原因             |
 | picked item | 在该次采集过程中采集到的所有物品 |
 
+错误码含义
+
+| err_code | item|
+|----|----|
+|`IN_PICKUP_COLLECTOR_TIMEOUT`|拾取掉落物超时|
+|`CHARACTER_DIED`|有角色死亡|
+|`ALL_CHARACTER_DIED`|所有角色死亡|
+|`PICKUP_TIMEOUT_001`|没有更多可以拾取的物品|
+|`PICKUP_TIMEOUT_002`|超过规定时间未有成功拾取到物品|
+|`PICKUP_END_001`|拾取物品正常结束 ~~（几乎不可能~~|
 
 ## 已采集地点
 
