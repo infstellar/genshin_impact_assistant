@@ -78,7 +78,7 @@ class TeyvatMoveController(BaseThreading):
         # 计算当前点到所有优先点的曼哈顿距离
         md = manhattan_distance_plist(currentp, self.priority_waypoints_array)
         nearly_pp_arg = np.argsort(md)
-        # 计算当前点到所有优先点的欧拉距离
+        # 计算当前点到距离最近的50个优先点的欧拉距离
         nearly_pp = self.priority_waypoints_array[nearly_pp_arg[:50]]
         ed = euclidean_distance_plist(currentp, nearly_pp)
         # 将点按欧拉距离升序排序

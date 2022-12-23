@@ -21,6 +21,10 @@ IMG_POINT = 2
 IMG_RECT = 3
 IMG_BOOL = 4
 IMG_BOOLRATE = 5
+
+winname_default = "原神"
+winname_cgs = "云·原神"
+
 class InteractionBGD:
     """
     default size:1920x1080
@@ -28,7 +32,7 @@ class InteractionBGD:
     thanks for https://zhuanlan.zhihu.com/p/361569101
     """
 
-    def __init__(self, hwndname="原神"):
+    def __init__(self, hwndname=winname_default):
         self.GetDC = ctypes.windll.user32.GetDC
         self.CreateCompatibleDC = ctypes.windll.gdi32.CreateCompatibleDC
         self.GetClientRect = ctypes.windll.user32.GetClientRect
@@ -90,7 +94,7 @@ class InteractionBGD:
         ret = np.frombuffer(buffer, dtype=np.uint8).reshape(height, width, 4)
         return ret
     
-    def capture(self, posi=None, shape='yx', jpgmode=None):
+    def capture(self, posi=None, shape='yx', jpgmode=None, check_shape = True):
         """窗口客户区截图
 
         Args:
@@ -106,15 +110,18 @@ class InteractionBGD:
         """
 
         ret = self.capture_handle()
-        if ret.shape != (1080, 1920, 4):
-            logger.error(f"截图失败, shape={ret.shape}, 将在2秒后重试。")
-            while 1:
-                time.sleep(2)
-                ret = self.capture_handle()
-                if ret.shape == (1080, 1920, 4):
-                    break
-                else:
-                    logger.error(f"截图失败, shape={ret.shape}, 将在2秒后重试。")
+        
+        if check_shape:
+        
+            if ret.shape != (1080, 1920, 4):
+                logger.error(f"截图失败, shape={ret.shape}, 将在2秒后重试。")
+                while 1:
+                    time.sleep(2)
+                    ret = self.capture_handle()
+                    if ret.shape == (1080, 1920, 4):
+                        break
+                    else:
+                        logger.error(f"截图失败, shape={ret.shape}, 将在2秒后重试。")
 
         # img_manager.qshow(ret)
         if posi is not None:
@@ -815,7 +822,8 @@ if __name__ == '__main__':
     # ib.left_down()
     # time.sleep(1)
     # ib.move_to(200, 200)
-    ib.appear_then_click(button_manager.button_exit)
+    img_manager.qshow(ib.capture())
+    # ib.appear_then_click(button_manager.button_exit)
     # for i in range(20):
     #     pydirectinput.mouseDown(0,0)
     #     pydirectinput.moveRel(10,10)

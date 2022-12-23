@@ -14,7 +14,7 @@
 
 ## 快速开始
 
-在GUI或config文件夹的auto_collector/common.json 文件中设置基本参数。
+在GUI或config文件夹的settings/auto_collector.json 文件中设置基本参数。
 
 从GUI界面启动自动采集。
 
