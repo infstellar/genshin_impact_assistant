@@ -115,17 +115,17 @@ class PickupOperator(BaseThreading):
                     logger.info("停止拾取")
                         
                 if self.pickup_fail_timeout.istimeout():
-                    self.pause_threading()
                     logger.info("PICKUP_TIMEOUT_002")
                     self.last_err_code="PICKUP_TIMEOUT_002"
                     logger.info("停止拾取")
+                    self.pause_threading()
                 
                 '''当成功找到物品且找不到下一个可能物品后自动停止。'''
                 if self.pickup_succ :
                     if self.collecor_loops > self.max_number_of_collector_loops:
-                        self.pause_threading()
                         self.last_err_code="PICKUP_END_001"
                         logger.info("已找到物品且无法找到下一个物品，停止拾取")
+                        self.pause_threading()
 
     def get_err_code(self):
         return self.last_err_code
