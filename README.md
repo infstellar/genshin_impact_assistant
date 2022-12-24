@@ -9,6 +9,8 @@ GIA的目标是：让程序负责玩原神，你负责抽卡和带着角色逛�
 [![GitHub Star](https://img.shields.io/github/stars/infstellar/genshin_impact_assistant?style=flat-square)](https://github.com/infstellar/genshin_impact_assistant/stargazers)
 [![Release Download](https://img.shields.io/github/downloads/infstellar/genshin_impact_assistant/total?style=flat-square)](https://github.com/infstellar/genshin_impact_assistant/releases/download/v0.3.0/GIA.Launcher.v0.3.0.7z)
 [![Release Version](https://img.shields.io/github/v/release/infstellar/genshin_impact_assistant?style=flat-square)](https://github.com/infstellar/genshin_impact_assistant/releases/latest)
+[![Python Version](https://img.shields.io/badge/python-v3.7.6-blue?style=flat-square)](https://www.python.org/downloads/release/python-376/)
+[![GitHub Repo Languages](https://img.shields.io/github/languages/top/infstellar/genshin_impact_assistant?style=flat-square)](https://github.com/infstellar/genshin_impact_assistant/search?l=Python)
 ![GitHub Repo size](https://img.shields.io/github/repo-size/infstellar/genshin_impact_assistant?style=flat-square&color=3cb371)
 
 [![Bilibili](https://img.shields.io/badge/bilibili-infstellar-blue.svg?style=flat-square&logo=bilibili)](https://space.bilibili.com/313212782)
@@ -16,12 +18,11 @@ GIA的目标是：让程序负责玩原神，你负责抽卡和带着角色逛�
 
 </div>
 
-To没用过github的小伙伴:描述文档中的蓝色文字是链接,可以打开的.
-
 # 介绍
 
 基于图像识别的原神自动操作辅助.使用图片识别与模拟键盘操作,不涉及违规操作.
-> 用别怂,怂别用 --unknown
+
+To没用过github的小伙伴: 描述文档中的蓝色文字是链接,可以打开的.
 
 ## 演示视频
 
@@ -169,7 +170,7 @@ To没用过github的小伙伴:描述文档中的蓝色文字是链接,可以打�
 
 - 本软件开源免费,仅供学习交流使用,请勿用于非法用途.使用本软件进行代练的商家所收取的费用均为商家的人工/设备费用,产生的<strong>
 任何问题</strong>与本软件无关.
-
+> 用别怂,怂别用 --unknown
 ## 广告
 
 qq群:[901372518](https://jq.qq.com/?_wv=1027&k=YLTrqlzX)
