@@ -11,6 +11,8 @@ from source import listening, util, webio
 from source.util import is_json_equal, _
 from source.webio import manager
 from source.webio.page_manager import Page
+
+
 # from source.webio.log_handler import webio_poster
 
 
@@ -161,7 +163,7 @@ class SettingPage(Page):
 
         j = json.load(open(self.file_name, 'r', encoding='utf8'))
 
-        json.dump(self.get_json(j), open(self.file_name, 'w', encoding='utf8'),ensure_ascii=False,indent=4)
+        json.dump(self.get_json(j), open(self.file_name, 'w', encoding='utf8'), ensure_ascii=False, indent=4)
         # output.put_text('saved!', scope='now')
         output.toast('saved!')
 
@@ -174,7 +176,24 @@ class SettingPage(Page):
                 rt_json[k] = self.get_json(v, add_name='{}-{}'.format(add_name, k_sha1))
 
             elif type(v) == list:
-                rt_json[k] = util.list_text2list(pin.pin['{}-{}'.format(add_name, k_sha1)])
+
+                # 判断是否为dict列表
+                is_dict_list = True
+                for i in v:
+                    is_dict_list = is_dict_list and (type(i) == dict)
+
+                if is_dict_list:
+                    # 这个是dict的id,是在列表的位置,从1开始,当然也可以改成从0开始,都一样
+                    dict_id = 0
+                    # 在当前dict列表里循环,取出每一个dict
+                    rt_list = []
+                    for i in v:
+                        # 计次+1
+                        dict_id += 1
+                        rt_list.append(self.get_json(v[dict_id-1], add_name='{}-{}-{}'.format(add_name, k_sha1,str(dict_id))))
+                    rt_json[k]=rt_list
+                else:
+                    rt_json[k] = util.list_text2list(pin.pin['{}-{}'.format(add_name, k_sha1)])
             else:
                 rt_json[k] = pin.pin['{}-{}'.format(add_name, k_sha1)]
 
@@ -228,42 +247,72 @@ class SettingPage(Page):
             display_name = doc_now if doc_now else k if self.mode else '{} {}'.format(k, doc_now)
 
             k_sha1 = hashlib.sha1(k.encode('utf8')).hexdigest()
-            bed_scope_name = '{}-{}'.format(add_name, k_sha1)
+            component_name = '{}-{}'.format(add_name, k_sha1)
             if type(v) == str or v is None:
                 if doc_items:
-                    pin.put_select(bed_scope_name,
+                    pin.put_select(component_name,
                                    [{"label": i, "value": i} for i in doc_items], value=v,
                                    label=display_name,
                                    scope=scope_name)
                 else:
-                    pin.put_input(bed_scope_name, label=display_name, value=v, scope=scope_name)
+                    pin.put_input(component_name, label=display_name, value=v, scope=scope_name)
             elif type(v) == int:
                 if doc_items:
-                    pin.put_select(bed_scope_name,
+                    pin.put_select(component_name,
                                    [{"label": i, "value": i} for i in doc_items], value=v,
                                    label=display_name,
                                    scope=scope_name)
                 else:
-                    pin.put_input(bed_scope_name, label=display_name, value=v, scope=scope_name, type='number')
+                    pin.put_input(component_name, label=display_name, value=v, scope=scope_name, type='number')
             elif type(v) == float:
                 if doc_items:
-                    pin.put_select(bed_scope_name,
+                    pin.put_select(component_name,
                                    [{"label": i, "value": i} for i in doc_items], value=v,
                                    label=display_name,
                                    scope=scope_name)
                 else:
-                    pin.put_input(bed_scope_name, label=display_name, value=v, scope=scope_name, type='float')
+                    pin.put_input(component_name, label=display_name, value=v, scope=scope_name, type='float')
             elif type(v) == bool:
-                pin.put_select(bed_scope_name,
+                pin.put_select(component_name,
                                [{"label": 'True', "value": True}, {"label": 'False', "value": False}], value=v,
                                label=display_name,
                                scope=scope_name)
             elif type(v) == dict:
-                output.put_scope(bed_scope_name, scope=scope_name)
-                output.put_markdown('#' * level + ' ' + display_name, scope=bed_scope_name)
-                self.put_json(v, doc_now_data, bed_scope_name, add_name=bed_scope_name,
+                output.put_scope(component_name, scope=scope_name)
+                output.put_markdown('#' * level + ' ' + display_name, scope=component_name)
+                self.put_json(v, doc_now_data, component_name, add_name=scope_name,
                               level=level + 1)
             elif type(v) == list:
+                # 判断是否为dict列表
+                is_dict_list = True
+                for i in v:
+                    is_dict_list = is_dict_list and (type(i) == dict)
 
-                pin.put_textarea(bed_scope_name, label=display_name, value=util.list2format_list_text(v),
-                                 scope=scope_name)
+                if is_dict_list:
+                    output.put_markdown('#' * level + ' ' + display_name,
+                                        scope=scope_name)
+                    # 差点把我绕晕....
+                    # 这个是dict的id,是在列表的位置,从1开始,当然也可以改成从0开始,都一样
+                    dict_id = 0
+                    # 在当前dict列表里循环,取出每一个dict
+                    for i in v:
+                        # 取doc
+                        if len(doc_now_data) >= dict_id+1:
+                            doc_now_data_ = doc_now_data[dict_id]
+                        else:
+                            doc_now_data_ = {}
+                        # 计次+1
+                        dict_id += 1
+
+                        # 创建一个容器以容纳接下来的dict,第一个是控件名称,为了防止重复,加上了dict id,后面那个是当前容器id
+                        output.put_scope(component_name + '-' + str(dict_id), scope=scope_name)
+                        # 写标题,第一项是标题文本,遵守markdown语法,第二项是当前容器名称
+                        output.put_markdown('#' * (level + 1) + ' ' + str(dict_id),
+                                            scope=component_name + '-' + str(dict_id))
+                        # 写dict,第一项为输入的dict,第二项为doc,第三项为当前容器名称,第四项为控件名称前缀,最后是缩进等级
+                        self.put_json(i, doc_now_data_, component_name + '-' + str(dict_id),
+                                      component_name + '-' + str(dict_id),
+                                      level=level + 2)
+                else:
+                    pin.put_textarea(component_name, label=display_name, value=util.list2format_list_text(v),
+                                     scope=scope_name)
