@@ -416,9 +416,9 @@ class InteractionBGD:
 
             if matching_rate >= imgicon.threshold:
                 p = imgicon.cap_posi
-                center_p = [(p[1] + p[3]) / 2, (p[0] + p[2]) / 2]
-                self.move_to(center_p[0], center_p[1])
-                self.left_click()
+                # center_p = [(p[1] + p[3]) / 2, (p[0] + p[2]) / 2]
+                # self.move_to(center_p[0], center_p[1])
+                # self.left_click()
                 self.move_and_click(position=imgicon.click_position())
                 return True
             else:
@@ -451,8 +451,8 @@ class InteractionBGD:
             if matching_rate >= imgicon.threshold:
                 p = imgicon.cap_posi
                 center_p = [(p[0] + p[2]) / 2, (p[1] + p[3]) / 2]
-                self.move_to(center_p[0], center_p[1])
-                self.left_click()     
+                self.move_and_click([center_p[0], center_p[1]])
+                # self.left_click()     
                 return True
             else:
                 return False
