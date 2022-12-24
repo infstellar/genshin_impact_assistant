@@ -141,12 +141,14 @@ class AimOperator(BaseThreading):
         if py <= -100:
             py = -100
         self.itt.move_to(px, py, relative=True)
+        logger.debug(f"auto_aim: x {px} y {py}")
         return px
         # print()
 
     def finding_enemy(self):
         if self.enemy_loops < self.max_number_of_enemy_loops:
             pyautogui.middleClick() # 重置视角
+            logger.debug(f" finding_enemy ")
         while self.enemy_loops < self.max_number_of_enemy_loops: # 当搜索敌人次数小于最大限制次数时，开始搜索
             if self.checkup_stop_func():
                 return 0

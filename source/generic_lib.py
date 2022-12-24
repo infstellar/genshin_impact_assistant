@@ -76,14 +76,11 @@ def recover_all(stop_func):
     time.sleep(0.5)
     p1 = pdocr_api.ocr.get_text_position(itt.capture(jpgmode=0), "七天神像")
     if p1 != -1:
-        itt.move_to(p1[0] + 30, p1[1] + 30)
-        itt.delay(1)
-        itt.left_click()
-        itt.delay(1)
+        itt.move_and_click([p1[0] + 30, p1[1] + 30], delay=1)
 
-    itt.move_to(posi_manager.tp_button[0], posi_manager.tp_button[1])
-    itt.delay(1)
-    itt.left_click()
+    itt.move_and_click([posi_manager.tp_button[0], posi_manager.tp_button[1]], delay=1)
+    # itt.delay(1)
+    # itt.left_click()
     while not itt.get_img_existence(img_manager.ui_main_win):
         if stop_func():
             break

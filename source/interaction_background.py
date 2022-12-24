@@ -34,7 +34,7 @@ def before_operation(print_log=True):
             # bb=inspect.getframeinfo(inspect.currentframe().f_back.f_back)
             # cc=inspect.getframeinfo(inspect.currentframe().f_back.f_back.f_back)
             if print_log:
-                logger.debug(f" operation: {func.__name__} | function name: {func_name} & {func_name_2}")
+                logger.debug(f" operation: {func.__name__} | args: {args[1:]} | {kwargs} | function name: {func_name} & {func_name_2}")
             winname = get_active_window_process_name()
             if winname != process_name:
                 while 1:
@@ -788,7 +788,7 @@ class InteractionBGD:
             # self.delay(self.DEFAULT_DELAY_TIME)
         # logger.debug("keyPress " + key + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
 
-    @before_operation()
+    @before_operation(print_log=False)
     def move_to(self, x: int, y: int, relative=False):
         """移动鼠标到坐标（x, y)
 
@@ -874,6 +874,7 @@ if __name__ == '__main__':
         # print(ib.get_img_existence(img_manager.motion_flying), ib.get_img_existence(img_manager.motion_climbing),
         #       ib.get_img_existence(img_manager.motion_swimming))
         time.sleep(2)
+        ib.move_and_click([100,100], type="left")
         # print(ib.get_img_existence(img_manager.USE_20X2RESIN_DOBLE_CHOICES))
         # ib.appear_then_click(imgname=img_manager.USE_20RESIN_DOBLE_CHOICES)
         # ib.move_to(100,100)

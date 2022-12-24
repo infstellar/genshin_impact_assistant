@@ -237,7 +237,7 @@ class PickupOperator(BaseThreading):
         mx, my = self.itt.get_mouse_point()
         px = (px - mx) / 1.8 + 35
         py = (py - my) / 2 + 40
-        print(px,py)
+        # print(px,py)
         # if px >= 200:
         #     px = 200
         # if px <= -200:
@@ -247,7 +247,7 @@ class PickupOperator(BaseThreading):
         # if py <= -200:
         #     py = -200
         # print(px, py)
-
+        logger.debug(f"auto_pickup: px:{px} py:{py}")
         self.itt.move_to(px, py, relative=True)
         return px
         # print()
