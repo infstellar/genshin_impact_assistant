@@ -4,6 +4,10 @@ GIA提供了自动安装/更新器。
 
 # GIA 自动安装启动器
 
+## 下载
+
+[GIA Launcher v0.3](https://github.com/infstellar/genshin_impact_assistant/releases/download/v0.3.0/GIA.Launcher.v0.3.0.7z)
+
 ## 使用方式
 
 双击`GIA Launcher.exe`运行。
