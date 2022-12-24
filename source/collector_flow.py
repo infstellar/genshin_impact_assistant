@@ -128,9 +128,9 @@ class CollectorFlow(BaseThreading):
         self.tmf.stop_threading()
         self.puo.stop_threading()
         self.cct.stop_threading()
+        self.add_log("USER_STOP")
     
     def checkup_stop_func(self):
-        
         return super().checkup_stop_func()    
         
     def set_collector_name(self, text):
