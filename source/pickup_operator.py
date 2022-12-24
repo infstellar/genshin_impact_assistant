@@ -109,10 +109,10 @@ class PickupOperator(BaseThreading):
                         self.reset_collector_loops()
                     
                 if self.search_mode == 1 and self.last_search_times <= 0:
-                    self.pause_threading()
                     logger.info("PICKUP_TIMEOUT_001")
                     self.last_err_code="PICKUP_TIMEOUT_001"
                     logger.info("停止拾取")
+                    self.pause_threading()
                         
                 if self.pickup_fail_timeout.istimeout():
                     logger.info("PICKUP_TIMEOUT_002")
