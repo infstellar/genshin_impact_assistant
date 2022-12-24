@@ -24,6 +24,28 @@ IMG_BOOLRATE = 5
 
 winname_default = "原神"
 winname_cgs = "云·原神"
+process_name = "YuanShen.exe"
+
+def before_operation(print_log=True):
+    def outwrapper(func):
+        def wrapper(*args, **kwargs):
+            func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
+            func_name_2 = inspect.getframeinfo(inspect.currentframe().f_back.f_back)[2]
+            # bb=inspect.getframeinfo(inspect.currentframe().f_back.f_back)
+            # cc=inspect.getframeinfo(inspect.currentframe().f_back.f_back.f_back)
+            if print_log:
+                logger.debug(f" operation: {func.__name__} | function name: {func_name} & {func_name_2}")
+            winname = get_active_window_process_name()
+            if winname != process_name:
+                while 1:
+                    if get_active_window_process_name() == process_name:
+                        logger.info("恢复操作")
+                        break
+                    logger.info(f"当前窗口焦点不是原神窗口，操作暂停 {10 - (time.time()%10)} 秒")
+                    time.sleep(10 - (time.time()%10))
+            return func(*args, **kwargs)
+        return wrapper
+    return outwrapper
 
 class InteractionBGD:
     """
@@ -93,6 +115,8 @@ class InteractionBGD:
         # 返回截图数据为numpy.ndarray
         ret = np.frombuffer(buffer, dtype=np.uint8).reshape(height, width, 4)
         return ret
+    
+    
     
     def capture(self, posi=None, shape='yx', jpgmode=None, check_shape = True):
         """窗口客户区截图
@@ -557,12 +581,16 @@ class InteractionBGD:
                 logger.debug('delay: ' + str(x) + ' |function name: ' + upper_func_name + ' |comment: ' + comment)
             time.sleep(x)
 
+    @before_operation(print_log = False)
     def get_mouse_point(self):
         """获得当前鼠标在窗口内的位置
 
         Returns:
             (x,y): 坐标
         """
+        
+        
+        
         p = win32api.GetCursorPos()
         # print(p[0],p[1])
         #  GetWindowRect 获得整个窗口的范围矩形，窗口的边框、标题栏、滚动条及菜单等都在这个矩形内 
@@ -587,6 +615,7 @@ class InteractionBGD:
         else:
             return self.VK_CODE[key]
 
+    @before_operation()
     def left_click(self, x=-1, y=-1):
         """左键点击
 
@@ -611,8 +640,9 @@ class InteractionBGD:
             self.PostMessageW(self.handle, self.WM_LBUTTONDOWN, wparam, lparam)
             self.delay(0.06, randtime=False, isprint=False)
             self.PostMessageW(self.handle, self.WM_LBUTTONUP, wparam, lparam)
-        logger.debug('left click ' + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
+        # logger.debug('left click ' + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
 
+    @before_operation()
     def left_down(self, x=-1, y=-1):
         """左键按下
 
@@ -638,8 +668,9 @@ class InteractionBGD:
             time.sleep(0.01)
             self.PostMessageW(self.handle, self.WM_LBUTTONDOWN, wparam, lparam)
 
-        logger.debug('left down' + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
+        # logger.debug('left down' + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
 
+    @before_operation()
     def left_up(self, x=-1, y=-1):
         """左键抬起
 
@@ -660,8 +691,9 @@ class InteractionBGD:
             time.sleep(0.01)
             self.PostMessageW(self.handle, self.WM_LBUTTONUP, wparam, lparam)
 
-        logger.debug('left up ' + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
+        # logger.debug('left up ' + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
 
+    @before_operation()
     def left_double_click(self, dt=0.05):
         """左键双击
 
@@ -672,8 +704,9 @@ class InteractionBGD:
             self.left_click()
             self.delay(0.06, randtime=False, isprint=False)
             self.left_click()
-        logger.debug('leftDoubleClick ' + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
+        # logger.debug('leftDoubleClick ' + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
 
+    @before_operation()
     def right_click(self, x=-1, y=-1):
         """右键单击
 
@@ -690,9 +723,10 @@ class InteractionBGD:
             self.delay(0.06, randtime=False, isprint=False)
             self.PostMessageW(self.handle, self.WM_RBUTTONUP, wparam, lparam)
             # pyautogui.rightClick()
-        logger.debug('rightClick ' + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
+        # logger.debug('rightClick ' + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
         self.delay(0.05)
 
+    @before_operation()
     def key_down(self, key, is_log=True):
         """按下按键
 
@@ -710,10 +744,11 @@ class InteractionBGD:
             wparam = vk_code
             lparam = (scan_code << 16) | 1
             self.PostMessageW(self.handle, self.WM_KEYDOWN, wparam, lparam)
-        if is_log:
-            logger.debug(
-                "keyDown " + key + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
+        # if is_log:
+        #     logger.debug(
+        #         "keyDown " + key + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
 
+    @before_operation()
     def key_up(self, key, is_log=True):
         """松开按键
 
@@ -731,9 +766,10 @@ class InteractionBGD:
             wparam = vk_code
             lparam = (scan_code << 16) | 0XC0000001
             self.PostMessageW(self.handle, self.WM_KEYUP, wparam, lparam)
-        if is_log:
-            logger.debug("keyUp " + key + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
+        # if is_log:
+        #     logger.debug("keyUp " + key + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
 
+    @before_operation()
     def key_press(self, key):
         """点击按键
 
@@ -750,8 +786,9 @@ class InteractionBGD:
             time.sleep(0.05)
             self.PostMessageW(self.handle, self.WM_KEYUP, wparam, lparam2)
             # self.delay(self.DEFAULT_DELAY_TIME)
-        logger.debug("keyPress " + key + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
+        # logger.debug("keyPress " + key + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
 
+    @before_operation()
     def move_to(self, x: int, y: int, relative=False):
         """移动鼠标到坐标（x, y)
 
@@ -801,6 +838,7 @@ class InteractionBGD:
     def crop_image(self, imsrc, posilist):
         return imsrc[posilist[0]:posilist[2], posilist[1]:posilist[3]]
 
+    @before_operation()
     def move_and_click(self, position, type='left', delay = 0.5):
         
         self.move_to(position[0], position[1])
@@ -823,7 +861,7 @@ if __name__ == '__main__':
     # ib.left_down()
     # time.sleep(1)
     # ib.move_to(200, 200)
-    img_manager.qshow(ib.capture())
+    # img_manager.qshow(ib.capture())
     # ib.appear_then_click(button_manager.button_exit)
     # for i in range(20):
     #     pydirectinput.mouseDown(0,0)
@@ -832,10 +870,10 @@ if __name__ == '__main__':
     # pydirectinput.
     print()
     while 1:
-        time.sleep(1)
-        print(ib.get_img_existence(img_manager.motion_flying), ib.get_img_existence(img_manager.motion_climbing),
-              ib.get_img_existence(img_manager.motion_swimming))
-
+        # time.sleep(1)
+        # print(ib.get_img_existence(img_manager.motion_flying), ib.get_img_existence(img_manager.motion_climbing),
+        #       ib.get_img_existence(img_manager.motion_swimming))
+        time.sleep(2)
         # print(ib.get_img_existence(img_manager.USE_20X2RESIN_DOBLE_CHOICES))
         # ib.appear_then_click(imgname=img_manager.USE_20RESIN_DOBLE_CHOICES)
         # ib.move_to(100,100)
