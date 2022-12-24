@@ -156,27 +156,27 @@ class TeyvatMoveFlow(BaseThreading):
                     big_map.reset_map_size()
                     self.current_state = ST.IN_TEYVAT_TELEPORT
                     continue
-                self.itt.move_to(tw_posi[0], tw_posi[1])
-                self.itt.delay(0.2)
-                self.itt.left_click()
-                self.itt.delay(0.6)
+                self.itt.move_and_click([tw_posi[0], tw_posi[1]])
+                # self.itt.delay(0.2)
+                # self.itt.left_click()
+                # self.itt.delay(0.6)
 
                 p1 = pdocr_api.ocr.get_text_position(self.itt.capture(jpgmode=0, posi=img_manager.bigmap_choose_area.cap_posi), "七天神像", cap_posi_leftup=img_manager.bigmap_choose_area.cap_posi[:2])
                 if p1 != -1:
-                    self.itt.move_to(p1[0] + 30, p1[1] + 30)
-                    self.itt.delay(1)
-                    self.itt.left_click()
-                    self.itt.delay(1)
+                    self.itt.move_and_click([p1[0] + 30, p1[1] + 30], delay=1)
+                    # self.itt.delay(1)
+                    # self.itt.left_click()
+                    # self.itt.delay(1)
                 p1 = pdocr_api.ocr.get_text_position(self.itt.capture(jpgmode=0, posi=img_manager.bigmap_choose_area.cap_posi), "传送锚点", cap_posi_leftup=img_manager.bigmap_choose_area.cap_posi[:2])
                 if p1 != -1:
-                    self.itt.move_to(p1[0] + 30, p1[1] + 30)
-                    self.itt.delay(1)
-                    self.itt.left_click()
-                    self.itt.delay(1)
+                    self.itt.move_and_click([p1[0] + 30, p1[1] + 30], delay=1)
+                    # self.itt.delay(1)
+                    # self.itt.left_click()
+                    # self.itt.delay(1)
 
-                self.itt.move_to(posi_manager.tp_button[0], posi_manager.tp_button[1])
-                self.itt.delay(1)
-                self.itt.left_click()
+                self.itt.move_and_click([posi_manager.tp_button[0], posi_manager.tp_button[1]], delay=1)
+                # self.itt.delay(1)
+                # self.itt.left_click()
                 while not self.itt.get_img_existence(img_manager.ui_main_win):
                     if self.checkup_stop_func():
                         break

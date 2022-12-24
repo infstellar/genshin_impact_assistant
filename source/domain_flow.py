@@ -141,9 +141,9 @@ class DomainFlow(BaseThreading):
 
         cap = self.itt.capture(jpgmode=2)
         if pdocr_api.ocr.get_text_position(cap, textM.text(textM.clld)) != -1:
-            self.itt.move_to(PosiM.posi_domain['CLLD'][0], PosiM.posi_domain['CLLD'][1])
-            time.sleep(1)
-            pyautogui.leftClick()
+            self.itt.move_and_click([PosiM.posi_domain['CLLD'][0], PosiM.posi_domain['CLLD'][1]], delay=1)
+            # time.sleep(1)
+            # pyautogui.leftClick()
 
         if self.checkup_stop_func():
             return 0

@@ -38,6 +38,7 @@ def move(direction, distance=1):
 
 
 def cview(angle=10, mode=HORIZONTAL):  # left<0,right>0
+    logger.debug(f"cview: angle: {angle} mode: {mode}")
     angle = (2 * angle)
     if abs(angle) < 1:
         if angle < 0:
