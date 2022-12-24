@@ -256,6 +256,9 @@ class TeyvatMoveFlow(BaseThreading):
                     
             if self.current_state == ST.END_TEYVAT_MOVE:
                 self.pause_threading()
+                if self.motion_state == IN_FLY:
+                    logger.info("正在落地")
+                    self.itt.left_click()
                 logger.info("结束自动行走")
                 time.sleep(1)
                     
