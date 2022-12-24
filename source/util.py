@@ -242,6 +242,15 @@ def is_number(s):
 import cv2
 from PIL import Image
 
+import win32gui, win32process, psutil
+
+def get_active_window_process_name():
+    try:
+        pid = win32process.GetWindowThreadProcessId(win32gui.GetForegroundWindow())
+        return(psutil.Process(pid[-1]).name())
+    except:
+        pass
+
 def crop(image, area):
     """
     Crop image like pillow, when using opencv / numpy.
