@@ -44,6 +44,7 @@ class TeyvatMoveFlow(BaseThreading):
         self.stop_rule = 0
         self.tmc = teyvat_move_controller.TeyvatMoveController()
         self.tmc.setDaemon(True)
+        self.tmc.add_stop_func(self.checkup_stop_func)
         self.tmc.pause_threading()
         self.tmc.start()
         self.tmc.set_stop_rule(self.stop_rule)

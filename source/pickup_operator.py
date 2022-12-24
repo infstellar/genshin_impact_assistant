@@ -25,7 +25,7 @@ class PickupOperator(BaseThreading):
         self.reset_time = 120
         self.collecor_loops = 0
         self.collector_flag = True
-        self.max_number_of_collector_loops = 180
+        self.max_number_of_collector_loops = 100
         self.pickup_timer = timer_module.Timer()
         self.pickup_fail_timeout = timer_module.TimeoutTimer(65)
         self.night_timer = timer_module.FileTimer("night_timer")
@@ -257,7 +257,7 @@ class PickupOperator(BaseThreading):
             movement.reset_view()
             for i in range(5):
                 movement.cview(60, mode = movement.VERTICALLY)
-                time.sleep(0.2)
+                time.sleep(0.05)
         elif self.search_mode == 1 and self.last_search_times > 0:
             self.last_search_times-=1
             self.reset_collector_loops()
@@ -265,7 +265,7 @@ class PickupOperator(BaseThreading):
         while self.collecor_loops < self.max_number_of_collector_loops:
             if self.checkup_stop_func():
                 return 0
-            self.itt.move_to(25, 0, relative=True)
+            self.itt.move_to(50, 0, relative=True)
             ret_points = self.find_collector()
             if len(ret_points) != 0:
                 self.reset_collector_loops()
