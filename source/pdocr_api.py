@@ -110,7 +110,7 @@ class PaddleocrAPI:
         return None
 
     def get_text_position(self, im_src, text, mode=APPROXIMATE_MATCHING, returnMode=RETURN_POSITION, isprintlog=False,
-                          message='', default_end='\n'):
+                          message='', default_end='\n', cap_posi_leftup = [0,0]):
         res = self.img_analyse(im_src)
         res_position = self.find_text(res, text, mode=mode)
         logger.debug('getTextPosition:  ' + message, end=' | ')
@@ -126,16 +126,16 @@ class PaddleocrAPI:
             if mode == REPEATLY_MATCHING and returnMode == RETURN_POSITION:
                 result = []
                 for i in res_position:
-                    result.append([res_position[0][0][0], res_position[0][0][1]])
+                    result.append([res_position[0][0][0]+cap_posi_leftup[0], res_position[0][0][1]+cap_posi_leftup[1]])
                 return result
             if returnMode == RETURN_POSITION:
                 logger.debug('found the text:' + text + ' |function name: ' +
                              inspect.getframeinfo(inspect.currentframe().f_back)[2])
-                return [res_position[0][0][0], res_position[0][0][1]]
+                return [res_position[0][0][0] + cap_posi_leftup[0], res_position[0][0][1] + cap_posi_leftup[1]]
             elif returnMode == RETURN_TEXT:
                 logger.debug('found the text:' + text + ' |function name: ' +
                              inspect.getframeinfo(inspect.currentframe().f_back)[2])
-                return res_position[1][0]
+                return list( np.array(res_position[1][0]) + np.array(cap_posi_leftup) )
         else:
             logger.debug('can not find the text:' + text + ' |function name: ' +
                          inspect.getframeinfo(inspect.currentframe().f_back)[2])
