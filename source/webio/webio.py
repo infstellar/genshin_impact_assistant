@@ -1,9 +1,10 @@
 from source.webio.pages import *
-
+import pywebio
 status = True
 
 
 def main():
+    pywebio.session.set_env(output_max_width='90%', title="GIA WebUI v0.5.0")
     webio.manager.reg_page('Main', MainPage())
     webio.manager.reg_page('Setting', SettingPage())
     webio.manager.load_page('Main')

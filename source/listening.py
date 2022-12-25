@@ -9,6 +9,7 @@ import keyboard
 combat_flag = False
 domain_flag = False
 collector_flag = False
+startstop_flag = False
 
 t1 = None
 t2 = None
@@ -21,6 +22,7 @@ FLOW_COMBAT = 1  # 自动战斗
 FLOW_DOMAIN = 2  # 自动秘境
 FLOW_COLLECTOR = 3  # 自动采集
 FEAT_PICKUP = False  # 拾取辅助
+
 current_flow = FLOW_IDLE
 """
 FLOW型功能：同时只能启动一个，空闲时为FLOW_IDLE
@@ -103,13 +105,17 @@ def apply_ui_setting():  # "应用设置"按钮回调函数
 
 
 def startstop():
+    global startstop_flag
     if current_flow == FLOW_IDLE:
         pass
     elif current_flow == FLOW_COMBAT:
+        startstop_flag = not startstop_flag
         switch_combat_loop()
     elif current_flow == FLOW_DOMAIN:
+        startstop_flag = not startstop_flag
         switch_domain_loop()
     elif current_flow == FLOW_COLLECTOR:
+        startstop_flag = not startstop_flag
         switch_collector_loop()
 
 
