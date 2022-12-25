@@ -114,6 +114,8 @@ To没用过github的小伙伴: 描述文档中的蓝色文字是链接,可以打
 
 - 在下拉列表中选择对应的config，进行配置。
 
+远程操作等更多GUI使用方法，参考[GUI使用](./doc/gui.md)
+
 ### config设置
 
 参考[config设置](./doc/config.md).
