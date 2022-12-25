@@ -27,7 +27,7 @@ def move_map(x:int, y:int)->None:
     """
     x = x / 6
     y = y / 6
-    logger.debug("move map")
+    logger.debug(f"move map x: {x} y: {y}")
     for i in range(6):
         itt.left_down()
         itt.move_to(x, y, relative=True)
