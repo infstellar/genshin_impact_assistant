@@ -355,14 +355,12 @@ class DomainFlow(BaseThreading):
                     logger.info('开始下一次秘境')
                     # logger.info('start next domain.')
                     self.last_domain_times -= 1
-
-                    posi = pdocr_api.ocr.get_text_position(cap, textM.text(textM.conti_challenge))
-                    if posi != -1:
-                        self.itt.move_to(posi[0], posi[1] + 30)
-                    else:
-                        self.itt.move_to(0, 0)
-                    time.sleep(0.5)
-                    self.itt.left_click()
+                    while 1:
+                        posi = pdocr_api.ocr.get_text_position(cap, textM.text(textM.conti_challenge))
+                        if posi != -1:
+                            self.itt.move_and_click([posi[0], posi[1] + 30])
+                            break
+                    
                     self.auto_start_init()
                     if self.checkup_stop_func():
                         break
@@ -372,13 +370,11 @@ class DomainFlow(BaseThreading):
                 else:
                     logger.info('次数结束。退出秘境')
                     # logger.info('no more times. exit domain.')
-                    posi = pdocr_api.ocr.get_text_position(cap, textM.text(textM.exit_challenge))
-                    if posi != -1:
-                        self.itt.move_to(posi[0], posi[1] + 30)
-                    else:
-                        self.itt.move_to(0, 0)
-                    time.sleep(0.5)
-                    self.itt.left_click()
+                    while 1:
+                        posi = pdocr_api.ocr.get_text_position(cap, textM.text(textM.exit_challenge))
+                        if posi != -1:
+                            self.itt.move_and_click([posi[0], posi[1] + 30])
+                            break
                     # exit all threads
                     self.combat_loop.stop_threading()
                     self.stop_threading()

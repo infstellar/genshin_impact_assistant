@@ -38,7 +38,7 @@ def move(direction, distance=1):
 
 
 def cview(angle=10, mode=HORIZONTAL):  # left<0,right>0
-    logger.debug(f"cview: angle: {angle} mode: {mode}")
+    # logger.debug(f"cview: angle: {angle} mode: {mode}")
     angle = (2 * angle)
     if abs(angle) < 1:
         if angle < 0:
@@ -65,6 +65,8 @@ def view_to_angle_domain(angle, stop_func, deltanum=0.65, maxloop=100, corrected
     cap = itt.capture(posi=small_map.posi_map)
     degree = small_map.jwa_3(cap)
     i = 0
+    if not abs(degree - (angle - corrected_num)) < deltanum:
+        logger.debug(f"view_to_angle_domain: angle: {angle} deltanum: {deltanum} maxloop: {maxloop} ")
     while not abs(degree - (angle - corrected_num)) < deltanum:
         degree = small_map.jwa_3(itt.capture(posi=small_map.posi_map))
         # print(degree)
@@ -82,6 +84,9 @@ def view_to_angle_domain(angle, stop_func, deltanum=0.65, maxloop=100, corrected
 def view_to_angle_teyvat(angle, stop_func, deltanum=1, maxloop=30, corrected_num=CORRECT_DEGREE):
     '''加一个场景检测'''
     i = 0
+    
+    if not abs(degree - (angle - corrected_num)) < deltanum:
+        logger.debug(f"view_to_angle_teyvat: angle: {angle} deltanum: {deltanum} maxloop: {maxloop}")
     while 1:
         b, degree = static_lib.cvAutoTrackerLoop.get_rotation()
         if not b:
@@ -103,6 +108,10 @@ def change_view_to_posi(pl, stop_func):
     td=0
     degree=100
     i = 0
+    
+    if abs(td-degree)>10:
+        logger.debug(f"change_view_to_posi: pl: {pl}")
+    
     while abs(td-degree)>10:
         '''加一个场景检测'''
         time.sleep(0.05)
@@ -110,10 +119,10 @@ def change_view_to_posi(pl, stop_func):
         td = static_lib.cvAutoTrackerLoop.get_rotation()[1]
         degree = generic_lib.points_angle([tx,ty], pl, coordinate=generic_lib.NEGATIVE_Y)
         cvn=td-degree
-        if cvn>=50:
-            cvn=50
-        if cvn<=-50:
-            cvn=-50
+        if cvn>=100:
+            cvn=100
+        if cvn<=-100:
+            cvn=-100
         cview(cvn)
         i+=1
         if stop_func():
