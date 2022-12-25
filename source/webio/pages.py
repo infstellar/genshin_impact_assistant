@@ -51,7 +51,7 @@ class MainPage(Page):
 
         # 页面切换按钮
         output.put_buttons(list(manager.page_dict), onclick=webio.manager.load_page, scope=self.main_scope)
-
+        
         output.put_row([  # 横列
             output.put_column([  # 左竖列
                 output.put_markdown('## Options'),  # 左竖列标题
@@ -65,16 +65,20 @@ class MainPage(Page):
                         {'label': 'AutoCollector', 'value': listening.FLOW_COLLECTOR}
                     ])]),
                 # PickUpMode
-                output.put_row([output.put_text('PickUp'), output.put_scope('Button_PickUp')])
+                output.put_row([output.put_text('PickUp'), output.put_scope('Button_PickUp')]),
+                # Button_StartStop
+                output.put_row([output.put_text('启动/停止'), output.put_scope('Button_StartStop')])
 
             ]), None,
             output.put_scope('Log')
 
-        ], scope=self.main_scope)
+        ], scope = self.main_scope, size='30% 10px 70%')
 
         # PickUpButton
         output.put_button(label=str(listening.FEAT_PICKUP), onclick=self.on_click_pickup, scope='Button_PickUp')
-
+        # Button_StartStop
+        output.put_button(label=str(listening.startstop_flag), onclick=self.on_click_startstop, scope='Button_StartStop')
+        
         # Log
         output.put_markdown('## Log', scope='Log')
         output.put_scrollable(output.put_scope('LogArea'), height=300, keep_bottom=True, scope='Log')
@@ -86,6 +90,11 @@ class MainPage(Page):
         listening.FEAT_PICKUP = not listening.FEAT_PICKUP
         output.put_button(label=str(listening.FEAT_PICKUP), onclick=self.on_click_pickup, scope='Button_PickUp')
 
+    def on_click_startstop(self):
+        output.clear('Button_StartStop')
+        listening.startstop()
+        output.put_button(label=str(listening.startstop_flag), onclick=self.on_click_startstop, scope='Button_StartStop')
+    
     def logout(self, text: str, color='black'):
         if self.loaded:
             self.log_list_lock.acquire()
