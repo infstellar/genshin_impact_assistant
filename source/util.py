@@ -134,6 +134,7 @@ def add_logger_to_GUI(mode=0):
     f = cccloggingaaa.flag1
     if mode == 1:
         cccloggingaaa.flag1 = True
+        f = True
     if not f:
         return 0
     import webio.log_handler
@@ -142,7 +143,7 @@ def add_logger_to_GUI(mode=0):
         logger.add(cb_func, level="TRACE", backtrace=True)
     else:
         logger.add(cb_func, level="INFO", backtrace=True)
-    logger.info("test")
+    # logger.info("test")
 add_logger_to_GUI()
 # logger.add(webio.log_handler.webio_handler)
 # 校验目录

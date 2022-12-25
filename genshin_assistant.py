@@ -31,8 +31,9 @@ except Exception as error:
 source.util.logger.info('初始化完成')
 source.util.logger.info("正在等待webio启动")
 time.sleep(4) # 我也不知道为什么要加延迟，但是加了就好了所以还是加上去
-source.util.logger.info("webio启动完成")
 source.util.add_logger_to_GUI(1)
+source.util.logger.info("webio启动完成")
+
 # source.unit.logger.info('Initialization Completed')
 
 source.listening.listening()
