@@ -36,13 +36,16 @@ class MainPage(Page):
             if pin.pin['FlowMode'] != listening.current_flow:  # 比较变更是否被应用
                 listening.current_flow = pin.pin['FlowMode']  # 应用变更
                 self.log_list_lock.acquire()
-                output.put_text(f"正在导入模块, 可能需要一些时间。", scope='LogArea').style(f'color: black')
-                output.put_text(f"在导入完成前，请不要切换页面。", scope='LogArea').style(f'color: black')
+                output.put_text(f"正在导入模块, 可能需要一些时间。", scope='LogArea').style(f'color: black; font_size: 20px')
+                output.put_text(f"在导入完成前，请不要切换页面。", scope='LogArea').style(f'color: black; font_size: 20px')
                 self.log_list_lock.release()
                 listening.call_you_import_module()
             self.log_list_lock.acquire()
             for text, color in self.log_list:
-                output.put_text(text, scope='LogArea').style(f'color: {color}')
+                if text == "$$end$$":
+                    output.put_text("", scope='LogArea')
+                else:
+                    output.put_text(text, scope='LogArea', inline=True).style(f'color: {color}; font_size: 20px')
             self.log_list.clear()
             self.log_list_lock.release()
             
