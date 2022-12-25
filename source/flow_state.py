@@ -1,3 +1,7 @@
+from util import _
+
+current_statement = 0000
+
 """
 
 STATE:
@@ -73,3 +77,52 @@ AFTER_PICKUP_COLLECTOR = 3203
 END_PICKUP_COLLECTOR = 3204
 
 END_COLLECTOR = 3900
+
+def get_statement_code_name(code):
+    name_prefixion = ""
+    name_text = ""
+    
+    if code == 0:
+        return _("空闲")
+    
+    if code%5 == 0:
+        name_prefixion = _("正在初始化")
+    elif code%5 == 1:
+        name_prefixion = _("正在准备")
+    elif code%5 == 2:
+        name_prefixion = _("正在进行")
+    elif code%5 == 3:
+        name_prefixion = _("准备结束")
+    elif code%5 == 4:
+        name_prefixion = _("结束")
+    
+    if code//100 == 10:
+        name_text = _("移动到挑战位置")
+    elif code//100 == 11:
+        name_text = _("挑战秘境中")
+    elif code//100 == 12:
+        name_text = _("准备领取奖励")
+    elif code//100 == 13:
+        name_text = _("正在寻找石化古树位置")
+    elif code//100 == 14:
+        name_text = _("移动到石化古树位置")
+    elif code//100 == 15:
+        name_text = _("领取奖励")
+    elif code//100 == 19:
+        name_text = _("结束秘境")
+    elif code//100 == 21:
+        name_text = _("在地图上传送")
+    elif code//100 == 22:
+        name_text = _("移动到目标坐标位置")
+    elif code//100 == 31:
+        name_text = _("移动到采集物位置")
+    elif code//100 == 32:
+        name_text = _("拾取采集物")
+    elif code//100 == 32:
+        name_text = _("结束自动采集")
+        
+    return f"{name_prefixion} : {name_text}"
+
+if __name__ == '__main__':
+    a = get_statement_code_name(1404)
+    print(a)

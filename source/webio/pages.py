@@ -11,7 +11,7 @@ from source import listening, util, webio
 from source.util import is_json_equal, _
 from source.webio import manager
 from source.webio.page_manager import Page
-
+import flow_state
 
 # from source.webio.log_handler import webio_poster
 
@@ -21,6 +21,7 @@ class MainPage(Page):
         super().__init__()
         self.log_list = []
         self.log_list_lock = threading.Lock()
+        self.ui_statement = -1
 
     def _on_load(self):  # 加载事件
         self._load()  # 加载主页
@@ -43,6 +44,12 @@ class MainPage(Page):
                 output.put_text(text, scope='LogArea').style(f'color: {color}')
             self.log_list.clear()
             self.log_list_lock.release()
+            
+            if flow_state.current_statement != self.ui_statement:
+                self.ui_statement = flow_state.current_statement
+                output.clear(scope="StateArea")
+                output.put_text(flow_state.get_statement_code_name(self.ui_statement), scope="StateArea")
+            
             time.sleep(0.1)
 
     def _load(self):
@@ -67,7 +74,11 @@ class MainPage(Page):
                 # PickUpMode
                 output.put_row([output.put_text('PickUp'), output.put_scope('Button_PickUp')]),
                 # Button_StartStop
-                output.put_row([output.put_text('启动/停止'), output.put_scope('Button_StartStop')])
+                output.put_row([output.put_text('启动/停止'), output.put_scope('Button_StartStop')]),
+                
+                output.put_markdown('## Statement'),
+                
+                output.put_row([output.put_text('当前状态'), output.put_scope('StateArea')])
 
             ]), None,
             output.put_scope('Log')
@@ -81,7 +92,7 @@ class MainPage(Page):
         
         # Log
         output.put_markdown('## Log', scope='Log')
-        output.put_scrollable(output.put_scope('LogArea'), height=300, keep_bottom=True, scope='Log')
+        output.put_scrollable(output.put_scope('LogArea'), height=800, keep_bottom=True, scope='Log')
         '''self.main_pin_change_thread = threading.Thread(target=self._main_pin_change_thread, daemon=False)
         self.main_pin_change_thread.start()'''
 
