@@ -4,18 +4,127 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-11-25 10:07+0800\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2022-12-25 18:29+0800\n"
+"PO-Revision-Date: 2022-12-25 18:33+0800\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh_CN\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=cp936\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: pygettext.py 1.5\n"
+"X-Generator: Poedit 3.2\n"
 
+#: ../source\collector_flow.py:300
+msgid "switch Flow to: AFTER_MOVETO_COLLECTOR"
+msgstr ""
 
-#: test.py:7
-msgid "This is a translatable string."
-msgstr "杩欐槸涓�涓炕璇戝瓧绗︿覆"
+#: ../source\collector_flow.py:326
+msgid "switch Flow to: BEFORE_PICKUP_COLLECTOR"
+msgstr ""
+
+#: ../source\collector_flow.py:334
+msgid "switch Flow to: IN_PICKUP_COLLECTOR"
+msgstr ""
+
+#: ../source\collector_flow.py:344
+msgid "switch Flow to: AFTER_PICKUP_COLLECTOR"
+msgstr ""
+
+#: ../source\cvAutoTrack.py:103
+msgid "cleaning cvautotrack files"
+msgstr "正在清理cvautotrack文件"
+
+#: ../source\cvAutoTrack.py:108
+msgid "autoTrack.log 1 cleaned"
+msgstr "autoTrack.log 1 已清理"
+
+#: ../source\cvAutoTrack.py:113
+msgid "autoTrack.log 2 cleaned"
+msgstr "autoTrack.log 2 已清理"
+
+#: ../source\cvAutoTrack.py:118
+msgid "autoTrack.log 3 cleaned"
+msgstr "autoTrack.log 3 已清理"
+
+#: ../source\cvAutoTrack.py:122
+msgid "cvAutoTrack DLL has been loaded."
+msgstr "cvAutoTrack DLL 已经加载"
+
+#: ../source\flow_state.py:86
+msgid "空闲"
+msgstr ""
+
+#: ../source\flow_state.py:89
+msgid "正在初始化"
+msgstr ""
+
+#: ../source\flow_state.py:91
+msgid "正在准备"
+msgstr ""
+
+#: ../source\flow_state.py:93
+msgid "正在进行"
+msgstr ""
+
+#: ../source\flow_state.py:95
+msgid "准备结束"
+msgstr ""
+
+#: ../source\flow_state.py:97
+msgid "结束"
+msgstr ""
+
+#: ../source\flow_state.py:100
+msgid "移动到挑战位置"
+msgstr ""
+
+#: ../source\flow_state.py:102
+msgid "挑战秘境中"
+msgstr ""
+
+#: ../source\flow_state.py:104
+msgid "准备领取奖励"
+msgstr ""
+
+#: ../source\flow_state.py:106
+msgid "正在寻找石化古树位置"
+msgstr ""
+
+#: ../source\flow_state.py:108
+msgid "移动到石化古树位置"
+msgstr ""
+
+#: ../source\flow_state.py:110
+msgid "领取奖励"
+msgstr ""
+
+#: ../source\flow_state.py:112
+msgid "结束秘境"
+msgstr ""
+
+#: ../source\flow_state.py:114
+msgid "在地图上传送"
+msgstr ""
+
+#: ../source\flow_state.py:116
+msgid "移动到目标坐标位置"
+msgstr ""
+
+#: ../source\flow_state.py:118
+msgid "移动到采集物位置"
+msgstr ""
+
+#: ../source\flow_state.py:120
+msgid "拾取采集物"
+msgstr ""
+
+#: ../source\flow_state.py:122
+msgid "结束自动采集"
+msgstr ""
+
+#: ../source\listening.py:55
+msgid "Program stop."
+msgstr ""
 
