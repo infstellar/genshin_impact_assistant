@@ -27,7 +27,8 @@ class MainPage(Page):
         t = threading.Thread(target=self._event_thread, daemon=False)  # 创建事件线程
         session.register_thread(t)  # 注册线程
         t.start()  # 启动线程
-
+        pin.pin['FlowMode'] = listening.current_flow
+        
     def _event_thread(self):
         while self.loaded:  # 当界面被加载时循环运行
             if pin.pin['FlowMode'] != listening.current_flow:  # 比较变更是否被应用
