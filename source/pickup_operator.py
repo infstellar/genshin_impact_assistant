@@ -255,6 +255,8 @@ class PickupOperator(BaseThreading):
     def finding_collector(self):
         if self.collecor_loops < self.max_number_of_collector_loops:
             movement.reset_view()
+            logger.debug("finding_collector")
+            logger.debug("finding_collector: head down")
             for i in range(5):
                 movement.cview(60, mode = movement.VERTICALLY)
                 time.sleep(0.05)
