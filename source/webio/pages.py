@@ -98,7 +98,7 @@ class MainPage(Page):
         
         # Log
         output.put_markdown('## Log', scope='Log')
-        output.put_scrollable(output.put_scope('LogArea'), height=800, keep_bottom=True, scope='Log')
+        output.put_scrollable(output.put_scope('LogArea'), height=600, keep_bottom=True, scope='Log')
         '''self.main_pin_change_thread = threading.Thread(target=self._main_pin_change_thread, daemon=False)
         self.main_pin_change_thread.start()'''
 
