@@ -140,9 +140,9 @@ def add_logger_to_GUI(mode=0):
     import webio.log_handler
     cb_func = webio.log_handler.webio_poster
     if DEBUG_MODE:
-        logger.add(cb_func, level="TRACE", backtrace=True)
+        logger.add(cb_func, level="TRACE", backtrace=True, colorize=True)
     else:
-        logger.add(cb_func, level="INFO", backtrace=True)
+        logger.add(cb_func, level="INFO", backtrace=True, colorize=True)
     # logger.info("test")
 add_logger_to_GUI()
 # logger.add(webio.log_handler.webio_handler)
