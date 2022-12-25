@@ -2,6 +2,7 @@ import base64
 import hashlib
 import json
 import os
+import socket
 import threading
 import time
 
@@ -56,8 +57,13 @@ class MainPage(Page):
         # 标题
         output.put_markdown('# Main', scope=self.main_scope)
 
-        # 页面切换按钮
-        output.put_buttons(list(manager.page_dict), onclick=webio.manager.load_page, scope=self.main_scope)
+        output.put_row([
+            # 页面切换按钮
+            output.put_buttons(list(manager.page_dict), onclick=webio.manager.load_page, scope=self.main_scope),
+            # 获得链接按钮
+            output.put_button(label=_("Get IP address"), onclick=self.on_click_ip_address, scope=self.main_scope)
+        
+        ], scope = self.main_scope)
         
         output.put_row([  # 横列
             output.put_column([  # 左竖列
@@ -105,6 +111,12 @@ class MainPage(Page):
         output.clear('Button_StartStop')
         listening.startstop()
         output.put_button(label=str(listening.startstop_flag), onclick=self.on_click_startstop, scope='Button_StartStop')
+    
+    def on_click_ip_address(self):
+        LAN_ip = f"{socket.gethostbyname(socket.gethostname())}{session.info.server_host[session.info.server_host.index(':'):]}"
+        WAN_ip = _("Not Enabled")
+        output_text=_('LAN IP') + " : " + LAN_ip + '\n' + _("WAN IP") + ' : ' + WAN_ip
+        output.popup(f'ip address', output_text, size=output.PopupSize.SMALL)
     
     def logout(self, text: str, color='black'):
         if self.loaded:

@@ -25,7 +25,7 @@ except:
 #     sys.path.insert(1, source_path)
 from loguru import logger
 # load translation module
-l10n = gettext.translation("zh_CN", localedir=os.path.join(root_path, "language/locale"), languages=["zh_CN"])
+l10n = gettext.translation("zh_CN", localedir=os.path.join(root_path, "translation/locale"), languages=["zh_CN"])
 l10n.install()
 _ = l10n.gettext
 time.time()  # 防自动删除
