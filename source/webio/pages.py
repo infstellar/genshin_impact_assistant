@@ -52,7 +52,16 @@ class MainPage(Page):
             if flow_state.current_statement != self.ui_statement:
                 self.ui_statement = flow_state.current_statement
                 output.clear(scope="StateArea")
-                output.put_text(flow_state.get_statement_code_name(self.ui_statement), scope="StateArea")
+                f = False
+                for i in self.ui_statement:
+                    t = self.ui_statement[i]
+                    if t == 0:
+                        continue
+                    else:
+                        output.put_text(flow_state.get_statement_code_name(self.ui_statement[i]), scope="StateArea")
+                        f = True
+                if not f:
+                    output.put_text(flow_state.get_statement_code_name(0), scope="StateArea")
             
             time.sleep(0.1)
 

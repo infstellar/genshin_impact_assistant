@@ -1,6 +1,11 @@
 from util import _
 
-current_statement = 0000
+current_statement = {
+    "AutoCombat":0,
+    "AutoDomain":0,
+    "AutoMove":0,
+    "AutoCollector":0
+}
 
 """
 
