@@ -129,14 +129,7 @@ if DEBUG_MODE:
 else:
     logger.add(sys.stdout, level="INFO", backtrace=True)
 
-def add_logger_to_GUI(mode=0):
-    import cccloggingaaa
-    f = cccloggingaaa.flag1
-    if mode == 1:
-        cccloggingaaa.flag1 = True
-        f = True
-    if not f:
-        return 0
+def add_logger_to_GUI():
     import webio.log_handler
     cb_func = webio.log_handler.webio_poster
     if DEBUG_MODE:
@@ -144,7 +137,6 @@ def add_logger_to_GUI(mode=0):
     else:
         logger.add(cb_func, level="INFO", backtrace=True, colorize=True)
     # logger.info("test")
-add_logger_to_GUI()
 # logger.add(webio.log_handler.webio_handler)
 # 校验目录
 if not os.path.exists(root_path):
