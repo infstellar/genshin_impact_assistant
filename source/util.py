@@ -17,12 +17,7 @@ except:
         sys.path.insert(0, root_path)
     if sys.path[1] != source_path:
         sys.path.insert(1, source_path)
-# root_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-# source_path = root_path + '\\source'
-# if sys.path[0] != root_path:
-#     sys.path.insert(0, root_path)
-# if sys.path[1] != source_path:
-#     sys.path.insert(1, source_path)
+
 from loguru import logger
 # load translation module
 l10n = gettext.translation("zh_CN", localedir=os.path.join(root_path, "translation/locale"), languages=["zh_CN"])

@@ -69,7 +69,7 @@ def recover_all(stop_func):
     scene_manager.switch_to_page(scene_manager.page_bigmap, stop_func)
     gsp = big_map.get_middle_gs_point(stop_func)
     if len(gsp)==0:
-        logger.info("获取传送锚点失败，正在重试")
+        logger.info(_("获取传送锚点失败，正在重试"))
         big_map.reset_map_size()
         gsp = big_map.get_middle_gs_point(stop_func)
     itt.move_and_click(gsp)

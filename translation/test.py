@@ -5,6 +5,8 @@ _ = l10n.gettext
 
 print(_("This is a translatable string."))
 print(_("Hello world!."))
+ab=1
+print(f"format test: {ab} 123")
 
 # python pygettext.py -d zh_CN -p locale/zh_CN/LC_MESSAGES/zh_CN.po test.py
 # python pygettext.py -d en_US -p locale/zh_CN/LC_MESSAGES/en_US.po test.py
@@ -14,3 +16,6 @@ print(_("Hello world!."))
 
 # python pygettext.py -d zh_CN -p locale/zh_CN/LC_MESSAGES ../source/*.py
 # python pygettext.py -d en_US -p locale/en_US/LC_MESSAGES ../source/*.py
+
+# python pygettext.py -d zh_CN -p locale/zh_CN/LC_MESSAGES test.py
+# python pygettext.py -d en_US -p locale/en_US/LC_MESSAGES test.py
