@@ -315,13 +315,12 @@ def image_size(image):
     shape = image.shape
     return shape[1], shape[0]
 
-def load_jsons_from_floder(path:tuple, suffix):
-    path = os.path.join(path)
+def load_jsons_from_folder(path):
     json_list = []
     for root, dirs, files in os.walk(path):
         for f in files:
             if f[f.index('.') + 1:] == "json":
-                j = json.load(open(path, 'r', encoding='utf-8'))
+                j = json.load(open(os.path.join(path, f), 'r', encoding='utf-8'))
                 json_list.append({"label": f, "json": j})
     return json_list
 
@@ -329,7 +328,7 @@ if os.path.exists(os.path.join(root_path, "config\\tastic")):
     logger.info("检测到tastic文件夹。")
     logger.info("版本v0.5.0.424后，tastic文件夹修正为tactic文件夹。")
     time.sleep(1)
-    logger.warning("正在准备将tastic文件夹中的内容迁移至tactic文件夹。")
+    logger.warning("正在准备将tastic文件夹中的json文件迁移至tactic文件夹。")
     time.sleep(1)
     logger.warning("该操作可能有风险，您可以将config/tastic文件夹中的文件备份后再继续。")
     time.sleep(1)
@@ -346,10 +345,12 @@ if os.path.exists(os.path.join(root_path, "config\\tastic")):
     logger.warning("该操作将在15秒后开始。")
     time.sleep(15)
     shutil.rmtree(os.path.join(root_path, "config\\tastic"))
-    logger.info("操作完成。")
+    logger.info("操作完成。您可以手动删除残留的config/tactic/tastic.json文件。")
     time.sleep(1)
     # os.rename(os.path.join(root_path, "config\\tastic"), os.path.join(root_path, "config\\tactic"))
 
 if __name__ == '__main__':
+    a = load_jsons_from_folder(os.path.join(root_path, "config\\tactic"))
+    print()
     pass
     # load_jsons_from_floder((root_path, "config\\tactic"))

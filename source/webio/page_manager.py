@@ -35,7 +35,8 @@ class PageManager:
         if idx in self.page_dict:
 
             if self.last_page is not None:
-                if Page in self.last_page.__class__.__bases__:
+                # if Page in self.last_page.__class__.__bases__:
+                if isinstance(self.last_page, Page):
                     self.last_page.unload()
 
             self.page_dict[idx].load()
