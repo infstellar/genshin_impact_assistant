@@ -1,6 +1,7 @@
 import inspect
 import json
 import os
+import shutil
 import sys
 import time  # 8药删了，qq了
 import math
@@ -325,7 +326,29 @@ def load_jsons_from_floder(path:tuple, suffix):
     return json_list
 
 if os.path.exists(os.path.join(root_path, "config\\tastic")):
-    os.rename(os.path.join(root_path, "config\\tastic"), os.path.join(root_path, "config\\tactic"))
+    logger.info("检测到tastic文件夹。")
+    logger.info("版本v0.5.0.424后，tastic文件夹修正为tactic文件夹。")
+    time.sleep(1)
+    logger.warning("正在准备将tastic文件夹中的内容迁移至tactic文件夹。")
+    time.sleep(1)
+    logger.warning("该操作可能有风险，您可以将config/tastic文件夹中的文件备份后再继续。")
+    time.sleep(1)
+    logger.warning("该操作将在15秒后开始。")
+    time.sleep(15)
+    for root, dirs, files in os.walk(os.path.join(root_path, "config\\tastic")):
+        for f in files:
+            if f[f.index(".")+1:] == "json":
+                shutil.copy(os.path.join(root_path, "config\\tastic", f), os.path.join(root_path, "config\\tactic", f))
+    logger.warning("准备删除tastic文件夹。")
+    time.sleep(1)
+    logger.warning("该操作可能有风险，您可以将config/tastic文件夹中的文件备份后再继续。")
+    time.sleep(1)
+    logger.warning("该操作将在15秒后开始。")
+    time.sleep(15)
+    shutil.rmtree(os.path.join(root_path, "config\\tastic"))
+    logger.info("操作完成。")
+    time.sleep(1)
+    # os.rename(os.path.join(root_path, "config\\tastic"), os.path.join(root_path, "config\\tactic"))
 
 if __name__ == '__main__':
     pass
