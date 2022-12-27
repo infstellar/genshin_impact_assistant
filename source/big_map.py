@@ -253,7 +253,8 @@ if __name__ == '__main__':
     # a = get_middle_gs_point(f)
     # p = teyvat_posi2bigmap_posi([2625.204978515623, -5274.091235473633], np.array(priority_waypoints_list))
     # show_bigmap_posi_in_window([2625.204978515623, -5274.091235473633], p)
-    a = nearest_big_map_tw_posi([0,0],[1,1],f)
+    reset_map_size()
+    #a = nearest_big_map_tw_posi([0,0],[1,1],f)
     print()
     # itt.move_and_click(a)
     # for i in range(10):
