@@ -361,3 +361,36 @@ class SettingPage(Page):
                 else:
                     pin.put_textarea(component_name, label=display_name, value=util.list2format_list_text(v),
                                      scope=scope_name)
+
+
+class CombatPage(Page):
+    def __init__(self):
+        super().__init__()
+
+    def _on_load(self):  # 加载事件
+        self._load()  # 加载主页
+        
+        # self.tactic_files = 
+        
+        t = threading.Thread(target=self._event_thread, daemon=False)  # 创建事件线程
+        session.register_thread(t)  # 注册线程
+        t.start()  # 启动线程
+        
+        
+    def _event_thread(self):
+        while self.loaded:  # 当界面被加载时循环运行
+            time.sleep(0.1)
+            pass
+
+    def _load(self):
+        # 标题
+        output.put_markdown(_('# Combat'), scope=self.main_scope)
+        
+        # 页面切换按钮
+        output.put_buttons(list(manager.page_dict), onclick=webio.manager.load_page, scope=self.main_scope)
+        
+        output.put_markdown('## tactic files:', scope=self.main_scope)
+        pin.put_select('file', self.tactic_files, scope=self.main_scope)
+
+    def _on_unload(self):
+        pass
