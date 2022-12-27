@@ -189,3 +189,4 @@ source/test234.py
 source/test235.py
 source/test236.py
 config/tactic/*.json
+config/tastic_backup/*
