@@ -203,8 +203,7 @@ def manhattan_distance(p1, p2):
 def manhattan_distance_plist(p1, p2):
     return abs(p1[0]-p2[:,0]) + abs(p1[1]-p2[:,1])
 
-if __name__ == '__main__':
-    logger.info("test")
+
 
 
 def is_number(s):
@@ -315,3 +314,19 @@ def image_size(image):
     shape = image.shape
     return shape[1], shape[0]
 
+def load_jsons_from_floder(path:tuple, suffix):
+    path = os.path.join(path)
+    json_list = []
+    for root, dirs, files in os.walk(path):
+        for f in files:
+            if f[f.index('.') + 1:] == "json":
+                j = json.load(open(path, 'r', encoding='utf-8'))
+                json_list.append({"label": f, "json": j})
+    return json_list
+
+if os.path.exists(os.path.join(root_path, "config\\tastic")):
+    os.rename(os.path.join(root_path, "config\\tastic"), os.path.join(root_path, "config\\tactic"))
+
+if __name__ == '__main__':
+    pass
+    # load_jsons_from_floder((root_path, "config\\tactic"))
