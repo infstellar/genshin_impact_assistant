@@ -7,6 +7,8 @@ Portions of this document may be machine translated.
 Portions of this document were manually proofread.
 ```
 
+<strong> The program's support for English is not yet complete. If you want to use it at this stage, please switch Genshin Impact to Simplified Chinese. Full support will be completed in January 2023 ~ February 2023.  </strong>
+
 <div align="center">
 
 Based on image recognition and simulated buttons, the multi-functional Genshin automatically assists operations, including automatic combat, automatic domain, and automatic obtain materials in the teyvat big world.
