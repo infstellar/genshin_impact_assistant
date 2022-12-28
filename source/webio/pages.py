@@ -29,6 +29,7 @@ class MainPage(Page):
     # todo:多语言支持
 
     def _on_load(self):  # 加载事件
+        super()._on_load()
         self._load()  # 加载主页
         t = threading.Thread(target=self._event_thread, daemon=False)  # 创建事件线程
         session.register_thread(t)  # 注册线程
@@ -37,6 +38,11 @@ class MainPage(Page):
 
     def _event_thread(self):
         while self.loaded:  # 当界面被加载时循环运行
+            try:
+                pin.pin['isSessionExist']
+            except SessionNotFoundException:
+                logger.info("未找到会话，可能由于窗口关闭。请刷新页面重试。")
+                return
             if pin.pin['FlowMode'] != listening.current_flow:  # 比较变更是否被应用
                 listening.current_flow = pin.pin['FlowMode']  # 应用变更
                 self.log_list_lock.acquire()
@@ -164,7 +170,6 @@ class ConfigPage(Page):
         # 注释显示模式在这改
         self.mode = True
 
-    # todo:加入collected一键清除按钮
     def _load_config_files(self):
         for root, dirs, files in os.walk('config'):
             for f in files:
@@ -187,23 +192,32 @@ class ConfigPage(Page):
         pin.put_select('file', self.config_files, scope="select_scope")
 
     def _on_load(self):
+        super()._on_load()
         self._load()  # 加载页面
         t = threading.Thread(target=self._event_thread, daemon=False)
         session.register_thread(t)  # 注册线程
         t.start()
 
+    # 重新加载选项
     def _reload_select(self):
         self.can_check_select = False
         self._load_config_files()
         output.clear("select_scope")
         pin.put_select('file', self.config_files, scope="select_scope")
         self.can_check_select = True
-
+    
+    # 循环线程
     def _event_thread(self):
         while self.loaded:
             if not self.can_check_select:
                 time.sleep(1)
                 continue
+            try:
+                pin.pin['isSessionExist']
+            except SessionNotFoundException:
+                logger.info("未找到会话，可能由于窗口关闭。请刷新页面重试。")
+                return
+                
             if pin.pin['file'] != self.last_file:  # 当下拉框被更改时
                 self.last_file = pin.pin['file']
 
@@ -218,6 +232,7 @@ class ConfigPage(Page):
 
             time.sleep(1)
 
+    # 
     def put_setting(self, name=''):
         self.file_name = name
         output.put_markdown('## {}'.format(name), scope='now')  # 标题
@@ -239,6 +254,7 @@ class ConfigPage(Page):
         self.put_json(j, doc, 'now', level=3)  # 载入json
         output.put_button('save', scope='now', onclick=self.save)
 
+    # 保存json文件
     def save(self):
 
         j = json.load(open(self.file_name, 'r', encoding='utf8'))
@@ -247,6 +263,7 @@ class ConfigPage(Page):
         # output.put_text('saved!', scope='now')
         output.toast('saved!')
 
+    # 
     def get_json(self, j: dict, add_name=''):
         rt_json = {}
         for k in j:
@@ -306,6 +323,7 @@ class ConfigPage(Page):
         output.close_popup()
         self.exit_popup = True
     
+    # 展示str型项
     def _show_str(self, doc_items, component_name, display_name, scope_name, v):
         if doc_items:
             pin.put_select(component_name,
@@ -315,6 +333,7 @@ class ConfigPage(Page):
         else:
             pin.put_input(component_name, label=display_name, value=v, scope=scope_name)
     
+    # 展示inf型项
     def _show_int(self, doc_items, component_name, display_name, scope_name, v):
         if doc_items:
             pin.put_select(component_name,
@@ -324,6 +343,7 @@ class ConfigPage(Page):
         else:
             pin.put_input(component_name, label=display_name, value=v, scope=scope_name, type='number')
     
+    # 展示float型项
     def _show_float(self, doc_items, component_name, display_name, scope_name, v):
         if doc_items:
             pin.put_select(component_name,
@@ -333,18 +353,21 @@ class ConfigPage(Page):
         else:
             pin.put_input(component_name, label=display_name, value=v, scope=scope_name, type='float')
     
+    # 展示bool型项
     def _show_bool(self, component_name, display_name, scope_name, v):
         pin.put_select(component_name,
             [{"label": 'True', "value": True}, {"label": 'False', "value": False}], value=v,
             label=display_name,
             scope=scope_name)
     
+    # 展示dict型项
     def _show_dict(self, level, component_name, display_name, scope_name, doc, v):
         output.put_scope(component_name, scope=scope_name)
         output.put_markdown('#' * level + ' ' + display_name, scope=component_name)
         self.put_json(v, doc, component_name, add_name=component_name,
                         level=level + 1)
     
+    # 展示list/list&dict型项
     def _show_list(self, level, display_name, scope_name, component_name, doc, v):
         # 判断是否为dict列表
         is_dict_list = True
@@ -375,6 +398,7 @@ class ConfigPage(Page):
             pin.put_textarea(component_name, label=display_name, value=util.list2format_list_text(v),
                                 scope=scope_name)
     
+    # 显示json
     def put_json(self, j: dict, doc: dict, scope_name, add_name='', level=1):
         for k in j:
             v = j[k]
@@ -409,7 +433,7 @@ class ConfigPage(Page):
             elif type(v) == dict:
                 self._show_dict(level, component_name, display_name, scope_name, doc, v)
             elif type(v) == list:
-                self._show_list(level,display_name,scope_name,component_name,doc,v)
+                self._show_list(level, display_name, scope_name, component_name, doc, v)
 
 
 class SettingPage(ConfigPage):
@@ -436,7 +460,8 @@ class SettingPage(ConfigPage):
             for f in files:
                 if f[f.index('.') + 1:] == "json":
                     self.config_files.append({"label": f, "value": os.path.join(root, f)})
-    
+
+
 class CombatSettingPage(ConfigPage):
     def __init__(self):
         super().__init__()
@@ -486,6 +511,7 @@ class CombatSettingPage(ConfigPage):
         self._reload_select()
         pass
 
+
 class CollectorSettingPage(ConfigPage):
     def __init__(self):
         super().__init__()
@@ -498,9 +524,10 @@ class CollectorSettingPage(ConfigPage):
                     self.config_files.append({"label": f, "value": os.path.join(root, f)})
         self.config_files.append({"label": "auto_collector.json", "value": os.path.join(root_path, "config\\settings\\auto_collector.json")})
 
+    # 重置列表
     @staticmethod
     def _reset_list_textarea(x):
-        pin.pin[x] = "[\n]"
+        pin.pin[x] = "[\n\n]"
     
     def _load(self):
         self.last_file = None
@@ -546,11 +573,14 @@ class CollectorSettingPage(ConfigPage):
                                 component_name + '-' + str(dict_id),
                                 level=level + 2)
         else:
+            # 清除按钮
             if "collected.json" in self.file_name:
                 output.put_row([
                     pin.put_textarea(component_name, label=display_name, value=util.list2format_list_text(v)),
-                    output.put_button("clean", onclick=lambda : self._reset_list_textarea(component_name))]
-                ,scope=scope_name,size="80% 10%")
+                    None,
+                    output.put_button("clean", onclick=lambda:self._reset_list_textarea(component_name))
+                    ]
+                , scope=scope_name,size="85% 5% 10%")
             else:
-                pin.put_textarea(component_name, label=display_name, value=util.list2format_list_text(v),scope=scope_name)
+                pin.put_textarea(component_name, label=display_name, value=util.list2format_list_text(v), scope=scope_name)
             
