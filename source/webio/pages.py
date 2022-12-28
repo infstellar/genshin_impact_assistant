@@ -305,7 +305,76 @@ class ConfigPage(Page):
     def close_popup(self):
         output.close_popup()
         self.exit_popup = True
+    
+    def _show_str(self, doc_items, component_name, display_name, scope_name, v):
+        if doc_items:
+            pin.put_select(component_name,
+                            [{"label": i, "value": i} for i in doc_items], value=v,
+                            label=display_name,
+                            scope=scope_name)
+        else:
+            pin.put_input(component_name, label=display_name, value=v, scope=scope_name)
+    
+    def _show_int(self, doc_items, component_name, display_name, scope_name, v):
+        if doc_items:
+            pin.put_select(component_name,
+                            [{"label": i, "value": i} for i in doc_items], value=v,
+                            label=display_name,
+                            scope=scope_name)
+        else:
+            pin.put_input(component_name, label=display_name, value=v, scope=scope_name, type='number')
+    
+    def _show_float(self, doc_items, component_name, display_name, scope_name, v):
+        if doc_items:
+            pin.put_select(component_name,
+                            [{"label": i, "value": i} for i in doc_items], value=v,
+                            label=display_name,
+                            scope=scope_name)
+        else:
+            pin.put_input(component_name, label=display_name, value=v, scope=scope_name, type='float')
+    
+    def _show_bool(self, component_name, display_name, scope_name, v):
+        pin.put_select(component_name,
+            [{"label": 'True', "value": True}, {"label": 'False', "value": False}], value=v,
+            label=display_name,
+            scope=scope_name)
+    
+    def _show_dict(self, level, component_name, display_name, scope_name, doc, v):
+        output.put_scope(component_name, scope=scope_name)
+        output.put_markdown('#' * level + ' ' + display_name, scope=component_name)
+        self.put_json(v, doc, component_name, add_name=component_name,
+                        level=level + 1)
+    
+    def _show_list(self, level, display_name, scope_name, component_name, doc, v):
+        # 判断是否为dict列表
+        is_dict_list = True
+        for i in v:
+            is_dict_list = is_dict_list and (type(i) == dict)
 
+        if is_dict_list:
+            output.put_markdown('#' * level + ' ' + display_name,
+                                scope=scope_name)
+            # 差点把我绕晕....
+            # 这个是dict的id,是在列表的位置,从1开始,当然也可以改成从0开始,都一样
+            dict_id = 0
+            # 在当前dict列表里循环,取出每一个dict
+            for i in v:
+                # 计次+1
+                dict_id += 1
+
+                # 创建一个容器以容纳接下来的dict,第一个是控件名称,为了防止重复,加上了dict id,后面那个是当前容器id
+                output.put_scope(component_name + '-' + str(dict_id), scope=scope_name)
+                # 写标题,第一项是标题文本,遵守markdown语法,第二项是当前容器名称
+                output.put_markdown('#' * (level + 1) + ' ' + str(dict_id),
+                                    scope=component_name + '-' + str(dict_id))
+                # 写dict,第一项为输入的dict,第二项为doc,第三项为当前容器名称,第四项为控件名称前缀,最后是缩进等级
+                self.put_json(i, doc, component_name + '-' + str(dict_id),
+                                component_name + '-' + str(dict_id),
+                                level=level + 2)
+        else:
+            pin.put_textarea(component_name, label=display_name, value=util.list2format_list_text(v),
+                                scope=scope_name)
+    
     def put_json(self, j: dict, doc: dict, scope_name, add_name='', level=1):
         for k in j:
             v = j[k]
@@ -330,68 +399,17 @@ class ConfigPage(Page):
             k_sha1 = hashlib.sha1(k.encode('utf8')).hexdigest()
             component_name = '{}-{}'.format(add_name, k_sha1)
             if type(v) == str or v is None:
-                if doc_items:
-                    pin.put_select(component_name,
-                                   [{"label": i, "value": i} for i in doc_items], value=v,
-                                   label=display_name,
-                                   scope=scope_name)
-                else:
-                    pin.put_input(component_name, label=display_name, value=v, scope=scope_name)
+                self._show_str(doc_items, component_name, display_name, scope_name, v)
             elif type(v) == int:
-                if doc_items:
-                    pin.put_select(component_name,
-                                   [{"label": i, "value": i} for i in doc_items], value=v,
-                                   label=display_name,
-                                   scope=scope_name)
-                else:
-                    pin.put_input(component_name, label=display_name, value=v, scope=scope_name, type='number')
+                self._show_int(doc_items, component_name, display_name, scope_name, v)
             elif type(v) == float:
-                if doc_items:
-                    pin.put_select(component_name,
-                                   [{"label": i, "value": i} for i in doc_items], value=v,
-                                   label=display_name,
-                                   scope=scope_name)
-                else:
-                    pin.put_input(component_name, label=display_name, value=v, scope=scope_name, type='float')
+                self._show_float(doc_items, component_name, display_name, scope_name, v)
             elif type(v) == bool:
-                pin.put_select(component_name,
-                               [{"label": 'True', "value": True}, {"label": 'False', "value": False}], value=v,
-                               label=display_name,
-                               scope=scope_name)
+                self._show_bool(component_name, display_name, scope_name, v)
             elif type(v) == dict:
-                output.put_scope(component_name, scope=scope_name)
-                output.put_markdown('#' * level + ' ' + display_name, scope=component_name)
-                self.put_json(v, doc, component_name, add_name=component_name,
-                              level=level + 1)
+                self._show_dict(level, component_name, display_name, scope_name, doc, v)
             elif type(v) == list:
-                # 判断是否为dict列表
-                is_dict_list = True
-                for i in v:
-                    is_dict_list = is_dict_list and (type(i) == dict)
-
-                if is_dict_list:
-                    output.put_markdown('#' * level + ' ' + display_name,
-                                        scope=scope_name)
-                    # 差点把我绕晕....
-                    # 这个是dict的id,是在列表的位置,从1开始,当然也可以改成从0开始,都一样
-                    dict_id = 0
-                    # 在当前dict列表里循环,取出每一个dict
-                    for i in v:
-                        # 计次+1
-                        dict_id += 1
-
-                        # 创建一个容器以容纳接下来的dict,第一个是控件名称,为了防止重复,加上了dict id,后面那个是当前容器id
-                        output.put_scope(component_name + '-' + str(dict_id), scope=scope_name)
-                        # 写标题,第一项是标题文本,遵守markdown语法,第二项是当前容器名称
-                        output.put_markdown('#' * (level + 1) + ' ' + str(dict_id),
-                                            scope=component_name + '-' + str(dict_id))
-                        # 写dict,第一项为输入的dict,第二项为doc,第三项为当前容器名称,第四项为控件名称前缀,最后是缩进等级
-                        self.put_json(i, doc, component_name + '-' + str(dict_id),
-                                      component_name + '-' + str(dict_id),
-                                      level=level + 2)
-                else:
-                    pin.put_textarea(component_name, label=display_name, value=util.list2format_list_text(v),
-                                     scope=scope_name)
+                self._show_list(level,display_name,scope_name,component_name,doc,v)
 
 
 class SettingPage(ConfigPage):
@@ -414,12 +432,11 @@ class SettingPage(ConfigPage):
         pin.put_select('file', self.config_files, scope="select_scope")
 
     def _load_config_files(self):
-        for root, dirs, files in os.walk('config'):
+        for root, dirs, files in os.walk('config\\settings'):
             for f in files:
-                if f[f.index('.') + 1:] == "json" and os.path.split(root)[1] != 'tactic':
+                if f[f.index('.') + 1:] == "json":
                     self.config_files.append({"label": f, "value": os.path.join(root, f)})
-
-
+    
 class CombatSettingPage(ConfigPage):
     def __init__(self):
         super().__init__()
@@ -468,3 +485,72 @@ class CombatSettingPage(ConfigPage):
                     os.path.join(root_path, "config\\tactic", n + '.json'))
         self._reload_select()
         pass
+
+class CollectorSettingPage(ConfigPage):
+    def __init__(self):
+        super().__init__()
+
+    def _load_config_files(self):
+        self.config_files = []
+        for root, dirs, files in os.walk('config\\auto_collector'):
+            for f in files:
+                if f[f.index('.') + 1:] == "json":
+                    self.config_files.append({"label": f, "value": os.path.join(root, f)})
+        self.config_files.append({"label": "auto_collector.json", "value": os.path.join(root_path, "config\\settings\\auto_collector.json")})
+
+    @staticmethod
+    def _reset_list_textarea(x):
+        pin.pin[x] = "[\n]"
+    
+    def _load(self):
+        self.last_file = None
+
+        # 标题
+        output.put_markdown('# ' + _('CollectorSetting'), scope=self.main_scope)
+
+        # 页面切换按钮
+        output.put_buttons(list(manager.page_dict), onclick=webio.manager.load_page, scope=self.main_scope)
+
+        # 配置页
+        output.put_markdown('## config:', scope=self.main_scope)
+        output.put_scope("select_scope", scope=self.main_scope)
+        pin.put_select('file', self.config_files, scope="select_scope")
+    
+    def _clean_textarea(self, set_value):
+        set_value("")
+        
+    def _show_list(self, level, display_name, scope_name, component_name, doc, v):
+        # 判断是否为dict列表
+        is_dict_list = True
+        for i in v:
+            is_dict_list = is_dict_list and (type(i) == dict)
+
+        if is_dict_list:
+            output.put_markdown('#' * level + ' ' + display_name,
+                                scope=scope_name)
+            # 差点把我绕晕....
+            # 这个是dict的id,是在列表的位置,从1开始,当然也可以改成从0开始,都一样
+            dict_id = 0
+            # 在当前dict列表里循环,取出每一个dict
+            for i in v:
+                # 计次+1
+                dict_id += 1
+
+                # 创建一个容器以容纳接下来的dict,第一个是控件名称,为了防止重复,加上了dict id,后面那个是当前容器id
+                output.put_scope(component_name + '-' + str(dict_id), scope=scope_name)
+                # 写标题,第一项是标题文本,遵守markdown语法,第二项是当前容器名称
+                output.put_markdown('#' * (level + 1) + ' ' + str(dict_id),
+                                    scope=component_name + '-' + str(dict_id))
+                # 写dict,第一项为输入的dict,第二项为doc,第三项为当前容器名称,第四项为控件名称前缀,最后是缩进等级
+                self.put_json(i, doc, component_name + '-' + str(dict_id),
+                                component_name + '-' + str(dict_id),
+                                level=level + 2)
+        else:
+            if "collected.json" in self.file_name:
+                output.put_row([
+                    pin.put_textarea(component_name, label=display_name, value=util.list2format_list_text(v)),
+                    output.put_button("clean", onclick=lambda : self._reset_list_textarea(component_name))]
+                ,scope=scope_name,size="80% 10%")
+            else:
+                pin.put_textarea(component_name, label=display_name, value=util.list2format_list_text(v),scope=scope_name)
+            
