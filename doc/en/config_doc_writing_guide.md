@@ -45,7 +45,7 @@ It is inevitable that there will be nested dicts in the writing of json, of cour
 Just fill in the value when writing:
 
 ```json
-{"doc": "your text","data":<nested dict>}
+{"doc": "your text","data":<a dict>}
 ```
 
 example:
