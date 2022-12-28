@@ -6,10 +6,9 @@ Portions of this document may be machine translated.
 
 ## naming format
 
-The name is generally the name of the target document to accelerate the suffix `.jsondoc`.
+The name is generally the name of the target document plus the suffix `{language}.jsondoc`.
 
-For example, the document name corresponding to `auto_domain.json` should be `auto_domain.json.jsondoc`.
-
+For example, `auto_domain.json` should correspond to the document name `auto_domain.json.en_us.jsondoc`.
 ## storage location
 
 It should be stored in the same directory as the corresponding configuration according to the naming convention.
