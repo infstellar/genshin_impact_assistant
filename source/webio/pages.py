@@ -361,7 +361,7 @@ class ConfigPage(Page):
             elif type(v) == dict:
                 output.put_scope(component_name, scope=scope_name)
                 output.put_markdown('#' * level + ' ' + display_name, scope=component_name)
-                self.put_json(v, doc_now_data, component_name, add_name=component_name,
+                self.put_json(v, doc, component_name, add_name=component_name,
                               level=level + 1)
             elif type(v) == list:
                 # 判断是否为dict列表
@@ -377,11 +377,6 @@ class ConfigPage(Page):
                     dict_id = 0
                     # 在当前dict列表里循环,取出每一个dict
                     for i in v:
-                        # 取doc
-                        if len(doc_now_data) >= dict_id + 1:
-                            doc_now_data_ = doc_now_data[dict_id]
-                        else:
-                            doc_now_data_ = {}
                         # 计次+1
                         dict_id += 1
 
@@ -391,7 +386,7 @@ class ConfigPage(Page):
                         output.put_markdown('#' * (level + 1) + ' ' + str(dict_id),
                                             scope=component_name + '-' + str(dict_id))
                         # 写dict,第一项为输入的dict,第二项为doc,第三项为当前容器名称,第四项为控件名称前缀,最后是缩进等级
-                        self.put_json(i, doc_now_data_, component_name + '-' + str(dict_id),
+                        self.put_json(i, doc, component_name + '-' + str(dict_id),
                                       component_name + '-' + str(dict_id),
                                       level=level + 2)
                 else:
