@@ -25,7 +25,8 @@ class MainPage(Page):
         self.log_list = []
         self.log_list_lock = threading.Lock()
         self.ui_statement = -1
-# todo:多语言支持
+
+    # todo:多语言支持
 
     def _on_load(self):  # 加载事件
         self._load()  # 加载主页
@@ -80,7 +81,6 @@ class MainPage(Page):
             # 获得链接按钮
             output.put_button(label=_("Get IP address"), onclick=self.on_click_ip_address, scope=self.main_scope)
 
-
         ], scope=self.main_scope)
 
         output.put_row([  # 横列
@@ -118,8 +118,6 @@ class MainPage(Page):
         output.put_scrollable(output.put_scope('LogArea'), height=600, keep_bottom=True, scope='Log')
         '''self.main_pin_change_thread = threading.Thread(target=self._main_pin_change_thread, daemon=False)
         self.main_pin_change_thread.start()'''
-
-
 
     def on_click_pickup(self):
         output.clear('Button_PickUp')
@@ -223,9 +221,18 @@ class ConfigPage(Page):
     def put_setting(self, name=''):
         self.file_name = name
         output.put_markdown('## {}'.format(name), scope='now')  # 标题
-        j = json.load(open(name, 'r', encoding='utf8'))
-        if os.path.exists(name + '.jsondoc'):
-            with open(name + '.jsondoc', 'r', encoding='utf8') as f:
+        with open(name, 'r', encoding='utf8') as f:
+            j = json.load(f)
+
+        with open(os.path.join("config", "settings", "config.json"), 'r', encoding='utf8') as f:
+            lang = json.load(f)["lang"]
+        doc_name = f'{name}.{lang}.jsondoc'
+
+        if os.path.exists(doc_name):
+            with open(doc_name, 'r', encoding='utf8') as f:
+                doc = json.load(f)
+        elif os.path.exists(f'{name}.en_us.jsondoc'):
+            with open(f'{name}.en_us.jsondoc', 'r', encoding='utf8') as f:
                 doc = json.load(f)
         else:
             doc = {}

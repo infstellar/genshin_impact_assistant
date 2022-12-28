@@ -1,4 +1,11 @@
 {
+  "lang": {
+    "doc": "语言(language)",
+    "select_items": [
+      "zh_cn",
+      "en_us"
+    ]
+  },
   "ChromelessWindow": "是否为无边框窗口",
   "DEBUG": "调试模式",
   "corr_degree": "视角校准",
