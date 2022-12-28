@@ -43,7 +43,7 @@ Set automatic rift assist.
 
 ## keymap.json
 
-Buttons can be customized. Details are as follows:
+Customized keys are available. Details are as follows:
 
 | Items        | Contents                                               |
 |--------------|--------------------------------------------------------|
@@ -87,7 +87,7 @@ Please refer to [combat_assi.md](./combat_assi.md) for instructions on filling i
 
 ## tastic.json
 
-no use
+No use at the moment
 
 ## character.json
 
