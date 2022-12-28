@@ -14,7 +14,7 @@ All configuration files location: `genshin_assistant\config\*.json`
 
 The GUI is currently available. The setting modification in the GUI is more stable, accurate and fast, and some configuration files that the GUI does not support need to manually modify the source file.
 
-##config.json
+## config.json
 
 Location: config/settings/config.json
 
