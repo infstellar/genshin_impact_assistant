@@ -1,0 +1,13 @@
+{
+  "domain_times": "Number of domain adventure",
+  "fast_mode": "Fast mode, turns off when walking over the head when opening a challenge",
+  "isLiYueDomain": "Whether it is a copy of the petrified ancient tree has been obscured",
+  "resin": {
+    "doc":"resin",
+    "select_items": [
+      "20",
+      "40"
+    ]
+    }
+  
+}
