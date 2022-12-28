@@ -17,7 +17,7 @@ class UIPage():
         self.to_selfpage = to_selfpage
         
     def is_current_page(self):
-        ret = itt.get_img_existence(self.check_icon, ret_mode = IMG_BOOLRATE)
+        ret = itt.get_img_existence(self.check_icon)
         return ret
     
     def get_following_page_name(self):
@@ -54,11 +54,14 @@ def get_current_pagename():
     current_page = None
     max_rate = 0
     for i in all_page:
-        ra = float(all_page[i].is_current_page())
-        if ra >= max_rate:
-            current_page = all_page[i]
-            max_rate = ra
-    return current_page.page_name
+        f = all_page[i].is_current_page()
+        if f:
+            if current_page == None:
+                current_page = i
+            else:
+                logger.warning(f"UI界面有多个检测结果：{current_page}, {i} ")
+                current_page = "ERROR"
+    return current_page
 
 def switch_to_page(target_page:UIPage, stop_func):
     current_page = all_page[get_current_pagename()]
@@ -94,7 +97,9 @@ def switch_to_page(target_page:UIPage, stop_func):
                 return
             
 if __name__ == "__main__":     
-    switch_to_page(page_bigmap)
+    while 1:
+        time.sleep(1)
+        print(get_current_pagename())
 
 # def switchto_mainwin(stop_func, max_time=30):
 #     i=0
