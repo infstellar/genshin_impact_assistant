@@ -1,0 +1,25 @@
+# 流程控制单元
+
+流程控制模块是用于控制某一个动作组的集合。以自动秘境为例，它有以下流程码：
+MOVETO_CHALLENGE = 1000
+
+CHALLENGE = 1100
+
+GETTING_REAWARD = 1200
+
+FINGING_TREE = 1300
+
+MOVETO_TREE = 1400
+
+ATTAIN_REAWARD = 1500
+
+END_DOMAIN = 1900
+
+其中，除了终止流程码END_DOMAIN外，每个流程码都有以下状态值，作为尾号：
+INIT_STATENAME=00
+BEFORE_STATENAME=01
+IN_STATENAME=02
+AFTER_STATENAME=03
+END_STATENAME=04
+
+所有流程码管理在flow_state.py中。

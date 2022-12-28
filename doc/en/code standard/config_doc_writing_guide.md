@@ -1,4 +1,4 @@
-## Configuration document writing guide
+# Configuration document writing guide
 
 ## Naming format
 
@@ -29,7 +29,7 @@ Change to
 {
   "domain_times": "secret_expedition_times",
   "fast_mode": "fast_mode",
-  "isLiYueDomain": "If or not it is a copy of Lizuki",
+  "isLiYueDomain": "Whether the domain is blocked by walls",
   "resin": "resin"
 }
 ```
