@@ -1,6 +1,6 @@
 import subprocess
 
-from pywebio import output, session
+from pywebio import output, session, pin
 
 
 class Page:
@@ -23,7 +23,7 @@ class Page:
             output.remove(self.main_scope)
 
     def _on_load(self):
-        pass
+        pin.pin['isSessionExist'] = "1"
 
     def _on_unload(self):
         pass
