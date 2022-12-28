@@ -41,7 +41,7 @@ Set automatic rift assist.
 | `resin`         | The original resin extraction mode selected when receiving rewards, `20` represents small resin, `40` represents concentrated              |
 | `fast_mode`     | Set this to false if challenges cannot be started normally                                                                                 |
 
-##keymap.json
+## keymap.json
 
 Buttons can be customized. Details are as follows:
 
@@ -57,7 +57,7 @@ Role name comparison table, the first item of each role is the role name, and th
 
 In `["albedo","Albedo","Albedo","アルベド"]`, the character name is `albedo`, and the others are aliases.
 
-##team.json
+## team.json
 
 The default team configuration file needs to be changed according to your own situation before the first use, or you can
 change your team according to the configuration in the file. Note that the order of battle must be consistent.
@@ -85,7 +85,7 @@ The team configuration in the original file is: Xiaogong, Zhongli, Bennett, Yunj
 
 Please refer to [combat_assi.md](./combat_assi.md) for instructions on filling in parameter configuration
 
-##tastic.json
+## tastic.json
 
 no use
 
