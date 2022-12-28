@@ -9,7 +9,7 @@ import time
 from pywebio import *
 
 from source import listening, util, webio
-from source.util import is_json_equal, _
+from source.util import *
 from source.webio import manager
 from source.webio.page_manager import Page
 import flow_state
@@ -139,36 +139,44 @@ class MainPage(Page):
     def _on_unload(self):
         pass
 
-
-class SettingPage(Page):
+class ConfigPage(Page):
     def __init__(self):
         super().__init__()
+        
+        # self.main_scope = "SettingPage"
+        
         self.exit_popup = None
         self.last_file = None
         self.file_name = ''
 
         self.config_files = []
         self.config_files_name = []
-        for root, dirs, files in os.walk('config'):
-            for f in files:
-                if f[f.index('.') + 1:] == "json":
-                    self.config_files.append({"label": f, "value": os.path.join(root, f)})
+        self._load_config_files()
+        self.can_check_select = True
         self.can_remove_last_scope = False
         # 注释显示模式在这改
         self.mode = True
 
+    def _load_config_files(self):
+        for root, dirs, files in os.walk('config'):
+            for f in files:
+                if f[f.index('.') + 1:] == "json":
+                    self.config_files.append({"label": f, "value": os.path.join(root, f)})
+    
     def _load(self):
         self.last_file = None
 
         # 标题
-        output.put_markdown('# Setting', scope=self.main_scope)
+        output.put_markdown('# Config', scope=self.main_scope)
 
         # 页面切换按钮
         output.put_buttons(list(manager.page_dict), onclick=webio.manager.load_page, scope=self.main_scope)
 
         # 配置页
         output.put_markdown('## config:', scope=self.main_scope)
-        pin.put_select('file', self.config_files, scope=self.main_scope)
+        
+        output.put_scope("select_scope", scope=self.main_scope)
+        pin.put_select('file', self.config_files, scope="select_scope")
 
     def _on_load(self):
         self._load()  # 加载页面
@@ -176,8 +184,18 @@ class SettingPage(Page):
         session.register_thread(t)  # 注册线程
         t.start()
 
+    def _reload_select(self):
+        self.can_check_select = False
+        self._load_config_files()
+        output.clear("select_scope")
+        pin.put_select('file', self.config_files, scope="select_scope")
+        self.can_check_select = True
+    
     def _event_thread(self):
         while self.loaded:
+            if not self.can_check_select:
+                time.sleep(1)
+                continue
             if pin.pin['file'] != self.last_file:  # 当下拉框被更改时
                 self.last_file = pin.pin['file']
 
@@ -325,7 +343,7 @@ class SettingPage(Page):
             elif type(v) == dict:
                 output.put_scope(component_name, scope=scope_name)
                 output.put_markdown('#' * level + ' ' + display_name, scope=component_name)
-                self.put_json(v, doc_now_data, component_name, add_name=scope_name,
+                self.put_json(v, doc_now_data, component_name, add_name=component_name,
                               level=level + 1)
             elif type(v) == list:
                 # 判断是否为dict列表
@@ -361,3 +379,72 @@ class SettingPage(Page):
                 else:
                     pin.put_textarea(component_name, label=display_name, value=util.list2format_list_text(v),
                                      scope=scope_name)
+    
+    
+    
+
+class SettingPage(ConfigPage):
+    def __init__(self):
+        super().__init__()
+
+    def _load(self):
+        self.last_file = None
+
+        # 标题
+        output.put_markdown('# Setting', scope=self.main_scope)
+
+        # 页面切换按钮
+        output.put_buttons(list(manager.page_dict), onclick=webio.manager.load_page, scope=self.main_scope)
+
+        # 配置页
+        output.put_markdown('## config:', scope=self.main_scope)
+        output.put_scope("select_scope", scope=self.main_scope)
+        
+        pin.put_select('file', self.config_files, scope="select_scope")
+
+
+class CombatSettingPage(ConfigPage):
+    def __init__(self):
+        super().__init__()
+    
+    def _load_config_files(self):
+        self.config_files = []
+        for root, dirs, files in os.walk('config\\tactic'):
+            for f in files:
+                if f[f.index('.') + 1:] == "json":
+                    self.config_files.append({"label": f, "value": os.path.join(root, f)})
+        
+    def _load(self):
+        self.last_file = None
+
+        # 标题
+        output.put_markdown('# CombatSetting', scope=self.main_scope)
+
+        # 页面切换按钮
+        output.put_buttons(list(manager.page_dict), onclick=webio.manager.load_page, scope=self.main_scope)
+
+        # 添加team.json
+        output.put_markdown('# Add team', scope=self.main_scope)
+        
+        # 添加team.json按钮
+        output.put_row([
+            output.put_button("Add team", onclick=self.onclick_add_teamjson, scope=self.main_scope),
+            None,
+            output.put_button("Add team with characters", onclick=self.onclick_add_teamjson_withcharacters, scope=self.main_scope)],
+                       scope=self.main_scope, size="10% 10px 20%")
+        
+        
+        # 配置页
+        output.put_markdown('## config:', scope=self.main_scope)
+        output.put_scope("select_scope", scope=self.main_scope)
+        pin.put_select('file', self.config_files, scope="select_scope")
+    
+    def onclick_add_teamjson(self):
+        n = input.input('team name')
+        shutil.copy(os.path.join(root_path, "config\\tactic\\team.uijsontemplate"), os.path.join(root_path, "config\\tactic", n+'.json'))
+        self._reload_select()
+        
+        
+    def onclick_add_teamjson_withcharacters(self):
+        pass
+    
