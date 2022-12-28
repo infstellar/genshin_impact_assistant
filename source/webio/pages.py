@@ -325,7 +325,7 @@ class SettingPage(Page):
             elif type(v) == dict:
                 output.put_scope(component_name, scope=scope_name)
                 output.put_markdown('#' * level + ' ' + display_name, scope=component_name)
-                self.put_json(v, doc_now_data, component_name, add_name=scope_name,
+                self.put_json(v, doc_now_data, component_name, add_name=component_name,
                               level=level + 1)
             elif type(v) == list:
                 # 判断是否为dict列表
