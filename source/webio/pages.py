@@ -14,6 +14,7 @@ from source.webio import manager
 from source.webio.page_manager import Page
 import flow_state
 
+
 # from source.webio.log_handler import webio_poster
 
 
@@ -30,14 +31,16 @@ class MainPage(Page):
         session.register_thread(t)  # 注册线程
         t.start()  # 启动线程
         pin.pin['FlowMode'] = listening.current_flow
-        
+
     def _event_thread(self):
         while self.loaded:  # 当界面被加载时循环运行
             if pin.pin['FlowMode'] != listening.current_flow:  # 比较变更是否被应用
                 listening.current_flow = pin.pin['FlowMode']  # 应用变更
                 self.log_list_lock.acquire()
-                output.put_text(f"正在导入模块, 可能需要一些时间。", scope='LogArea').style(f'color: black; font_size: 20px')
-                output.put_text(f"在导入完成前，请不要切换页面。", scope='LogArea').style(f'color: black; font_size: 20px')
+                output.put_text(f"正在导入模块, 可能需要一些时间。", scope='LogArea').style(
+                    f'color: black; font_size: 20px')
+                output.put_text(f"在导入完成前，请不要切换页面。", scope='LogArea').style(
+                    f'color: black; font_size: 20px')
                 self.log_list_lock.release()
                 listening.call_you_import_module()
             self.log_list_lock.acquire()
@@ -48,7 +51,7 @@ class MainPage(Page):
                     output.put_text(text, scope='LogArea', inline=True).style(f'color: {color}; font_size: 20px')
             self.log_list.clear()
             self.log_list_lock.release()
-            
+
             if flow_state.current_statement != self.ui_statement:
                 self.ui_statement = flow_state.current_statement
                 output.clear(scope="StateArea")
@@ -62,7 +65,7 @@ class MainPage(Page):
                         f = True
                 if not f:
                     output.put_text(flow_state.get_statement_code_name(0), scope="StateArea")
-            
+
             time.sleep(0.1)
 
     def _load(self):
@@ -74,9 +77,9 @@ class MainPage(Page):
             output.put_buttons(list(manager.page_dict), onclick=webio.manager.load_page, scope=self.main_scope),
             # 获得链接按钮
             output.put_button(label=_("Get IP address"), onclick=self.on_click_ip_address, scope=self.main_scope)
-        
-        ], scope = self.main_scope)
-        
+
+        ], scope=self.main_scope)
+
         output.put_row([  # 横列
             output.put_column([  # 左竖列
                 output.put_markdown('## Options'),  # 左竖列标题
@@ -93,21 +96,22 @@ class MainPage(Page):
                 output.put_row([output.put_text('PickUp'), output.put_scope('Button_PickUp')]),
                 # Button_StartStop
                 output.put_row([output.put_text('启动/停止'), output.put_scope('Button_StartStop')]),
-                
+
                 output.put_markdown('## Statement'),
-                
+
                 output.put_row([output.put_text('当前状态'), output.put_scope('StateArea')])
 
             ]), None,
             output.put_scope('Log')
 
-        ], scope = self.main_scope, size='30% 10px 70%')
+        ], scope=self.main_scope, size='30% 10px 70%')
 
         # PickUpButton
         output.put_button(label=str(listening.FEAT_PICKUP), onclick=self.on_click_pickup, scope='Button_PickUp')
         # Button_StartStop
-        output.put_button(label=str(listening.startstop_flag), onclick=self.on_click_startstop, scope='Button_StartStop')
-        
+        output.put_button(label=str(listening.startstop_flag), onclick=self.on_click_startstop,
+                          scope='Button_StartStop')
+
         # Log
         output.put_markdown('## Log', scope='Log')
         output.put_scrollable(output.put_scope('LogArea'), height=600, keep_bottom=True, scope='Log')
@@ -122,14 +126,15 @@ class MainPage(Page):
     def on_click_startstop(self):
         output.clear('Button_StartStop')
         listening.startstop()
-        output.put_button(label=str(listening.startstop_flag), onclick=self.on_click_startstop, scope='Button_StartStop')
-    
+        output.put_button(label=str(listening.startstop_flag), onclick=self.on_click_startstop,
+                          scope='Button_StartStop')
+
     def on_click_ip_address(self):
         LAN_ip = f"{socket.gethostbyname(socket.gethostname())}{session.info.server_host[session.info.server_host.index(':'):]}"
         WAN_ip = _("Not Enabled")
-        output_text=_('LAN IP') + " : " + LAN_ip + '\n' + _("WAN IP") + ' : ' + WAN_ip
+        output_text = _('LAN IP') + " : " + LAN_ip + '\n' + _("WAN IP") + ' : ' + WAN_ip
         output.popup(f'ip address', output_text, size=output.PopupSize.SMALL)
-    
+
     def logout(self, text: str, color='black'):
         if self.loaded:
             self.log_list_lock.acquire()
@@ -139,12 +144,13 @@ class MainPage(Page):
     def _on_unload(self):
         pass
 
+
 class ConfigPage(Page):
     def __init__(self):
         super().__init__()
-        
+
         # self.main_scope = "SettingPage"
-        
+
         self.exit_popup = None
         self.last_file = None
         self.file_name = ''
@@ -157,12 +163,13 @@ class ConfigPage(Page):
         # 注释显示模式在这改
         self.mode = True
 
+    # todo:加入collected一键清除按钮
     def _load_config_files(self):
         for root, dirs, files in os.walk('config'):
             for f in files:
                 if f[f.index('.') + 1:] == "json":
                     self.config_files.append({"label": f, "value": os.path.join(root, f)})
-    
+
     def _load(self):
         self.last_file = None
 
@@ -174,7 +181,7 @@ class ConfigPage(Page):
 
         # 配置页
         output.put_markdown('## config:', scope=self.main_scope)
-        
+
         output.put_scope("select_scope", scope=self.main_scope)
         pin.put_select('file', self.config_files, scope="select_scope")
 
@@ -190,7 +197,7 @@ class ConfigPage(Page):
         output.clear("select_scope")
         pin.put_select('file', self.config_files, scope="select_scope")
         self.can_check_select = True
-    
+
     def _event_thread(self):
         while self.loaded:
             if not self.can_check_select:
@@ -253,8 +260,9 @@ class ConfigPage(Page):
                     for i in v:
                         # 计次+1
                         dict_id += 1
-                        rt_list.append(self.get_json(v[dict_id-1], add_name='{}-{}-{}'.format(add_name, k_sha1,str(dict_id))))
-                    rt_json[k]=rt_list
+                        rt_list.append(
+                            self.get_json(v[dict_id - 1], add_name='{}-{}-{}'.format(add_name, k_sha1, str(dict_id))))
+                    rt_json[k] = rt_list
                 else:
                     rt_json[k] = util.list_text2list(pin.pin['{}-{}'.format(add_name, k_sha1)])
             else:
@@ -360,7 +368,7 @@ class ConfigPage(Page):
                     # 在当前dict列表里循环,取出每一个dict
                     for i in v:
                         # 取doc
-                        if len(doc_now_data) >= dict_id+1:
+                        if len(doc_now_data) >= dict_id + 1:
                             doc_now_data_ = doc_now_data[dict_id]
                         else:
                             doc_now_data_ = {}
@@ -379,9 +387,7 @@ class ConfigPage(Page):
                 else:
                     pin.put_textarea(component_name, label=display_name, value=util.list2format_list_text(v),
                                      scope=scope_name)
-    
-    
-    
+
 
 class SettingPage(ConfigPage):
     def __init__(self):
@@ -399,21 +405,27 @@ class SettingPage(ConfigPage):
         # 配置页
         output.put_markdown('## config:', scope=self.main_scope)
         output.put_scope("select_scope", scope=self.main_scope)
-        
+
         pin.put_select('file', self.config_files, scope="select_scope")
+
+    def _load_config_files(self):
+        for root, dirs, files in os.walk('config'):
+            for f in files:
+                if f[f.index('.') + 1:] == "json" and os.path.split(root)[1] != 'tactic':
+                    self.config_files.append({"label": f, "value": os.path.join(root, f)})
 
 
 class CombatSettingPage(ConfigPage):
     def __init__(self):
         super().__init__()
-    
+
     def _load_config_files(self):
         self.config_files = []
         for root, dirs, files in os.walk('config\\tactic'):
             for f in files:
                 if f[f.index('.') + 1:] == "json":
                     self.config_files.append({"label": f, "value": os.path.join(root, f)})
-        
+
     def _load(self):
         self.last_file = None
 
@@ -425,26 +437,25 @@ class CombatSettingPage(ConfigPage):
 
         # 添加team.json
         output.put_markdown('# Add team', scope=self.main_scope)
-        
+
         # 添加team.json按钮
         output.put_row([
             output.put_button("Add team", onclick=self.onclick_add_teamjson, scope=self.main_scope),
             None,
-            output.put_button("Add team with characters", onclick=self.onclick_add_teamjson_withcharacters, scope=self.main_scope)],
-                       scope=self.main_scope, size="10% 10px 20%")
-        
-        
+            output.put_button("Add team with characters", onclick=self.onclick_add_teamjson_withcharacters,
+                              scope=self.main_scope)],
+            scope=self.main_scope, size="10% 10px 20%")
+
         # 配置页
         output.put_markdown('## config:', scope=self.main_scope)
         output.put_scope("select_scope", scope=self.main_scope)
         pin.put_select('file', self.config_files, scope="select_scope")
-    
+
     def onclick_add_teamjson(self):
         n = input.input('team name')
-        shutil.copy(os.path.join(root_path, "config\\tactic\\team.uijsontemplate"), os.path.join(root_path, "config\\tactic", n+'.json'))
+        shutil.copy(os.path.join(root_path, "config\\tactic\\team.uijsontemplate"),
+                    os.path.join(root_path, "config\\tactic", n + '.json'))
         self._reload_select()
-        
-        
+
     def onclick_add_teamjson_withcharacters(self):
         pass
-    
