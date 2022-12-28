@@ -25,7 +25,7 @@ class MainPage(Page):
         self.log_list = []
         self.log_list_lock = threading.Lock()
         self.ui_statement = -1
-
+# todo:多语言支持
 
     def _on_load(self):  # 加载事件
         self._load()  # 加载主页
