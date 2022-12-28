@@ -1,103 +1,60 @@
-# Configuration document writing guide
+## Configuration document writing guide
 
-```
-Portions of this document may be machine translated.
-```
+## Naming format
 
-## naming format
+The name is usually the name of the target document plus the suffix `{language}.jsondoc`.
 
-The name is generally the name of the target document plus the suffix `{language}.jsondoc`.
+For example, `auto_domain.json` should be named `auto_domain.json.zh_cn.jsondoc`.
 
-For example, `auto_domain.json` should correspond to the document name `auto_domain.json.en_us.jsondoc`.
-## storage location
+## Storage location
 
 It should be stored in the same directory as the corresponding configuration according to the naming convention.
 
-## single layer dict
+## Translation
 
-If the document is a single-level dict, the easiest way is to copy the json file and change the value to the text you want.
-E.g:
-
-```json
-{
-   "domain_times": 1,
-   "fast_mode": true,
-   "isLiYueDomain": false,
-   "resin": "20"
-}
-```
-
-changed to
+The translation of the key is written directly into the value. For example:
 
 ```json
 {
-   "domain_times": "Times of Secret Land Exploration",
-   "fast_mode": "Fast Mode",
-   "isLiYueDomain": "Is it LiYueDomain?",
-   "resin": "resin"
+  "domain_times": 1,
+  "fast_mode": true,
+  "isLiYueDomain": false,
+  "resin": "20"
 }
 ```
 
-## nested dict
-
-It is inevitable that there will be nested dicts in the writing of json, of course, this has been considered at the beginning.
-Just fill in the value when writing:
-
-```json
-{"doc": "your text","data":<nested dict>}
-```
-
-example:
+Change to
 
 ```json
 {
-   "bennett": {
-     "E_long_cd_time": 10,
-     "E_short_cd_time": 3,
-     "Ecd_float_time": 0,
-     "Elast_time": 0
-   }
+  "domain_times": "secret_expedition_times",
+  "fast_mode": "fast_mode",
+  "isLiYueDomain": "If or not it is a copy of Lizuki",
+  "resin": "resin"
 }
 ```
 
-should be written as:
+## Select box
+
+I've thought about this before, but I didn't write it because I thought I could do without it, but this time it looks like I have to write it...
+
+As above, the selection box just needs to add an item named `select_items` to the dict.
+
+For example:
 
 ```json
 {
-   "bennett": {
-     "doc": "Bennett",
-     "data": {
-       "E_long_cd_time": "Elemental Combat Technique Long CD",
-       "E_short_cd_time": "Elemental Combat Technique Short CD",
-       "Ecd_float_time": "Ecd_float_time": "Elemental Combat Skill Float Time",
-       "Elast_time": "The time since the last elemental combat skill was performed"
-     }
-   }
+  "itemname": {
+    "select_items": [
+      "Sweet Flower - Mund",
+      "Neon flower - Riyuki",
+      "Naruto - Inawashiro"
+    ],
+    "doc": "item_name"
+  }
 }
 ```
+## Other
 
-## select box
-
-I thought about this problem before, but I didn't write it because I thought it should be unnecessary. This time it seems that I have to write it..
-
-As above, the select box only needs to add an item named `select_items` in the dict.
-
-E.g:
-
-```json
-{
-   "itemname": {
-     "select_items": [
-       "Sweet Flower - Mond",
-       "Neon Flowers - Liyue",
-       "Ningcao - Inazuma"
-     ],
-     "doc": "Item Name"
-   }
-}
-```
-
-## other
-
-- If you think there are some unnecessary translations, you can delete the key-value pair, and the program will automatically use the configured value as the title.
-- <strong>Please do not write unparseable json documents!!!</strong>
+- If you think there are some unnecessary translations then you can delete the key-value pairs and the program will automatically use the configured values as headers.
+- <strong>Please do not write json documents that cannot be parsed!!!</strong>

@@ -10,9 +10,10 @@
 
 应按命名规范存储在对应配置同目录下.
 
-## 翻译
+## 单层dict
 
-把键对应的翻译直接写入的值内.例如:
+如果文档是单层的dict的话,最简单的办法就是把json文件拷贝一份,并把值改为你想要的文字.
+例如:
 
 ```json
 {
@@ -31,6 +32,44 @@
   "fast_mode": "快速模式",
   "isLiYueDomain": "是否为璃月副本",
   "resin": "树脂"
+}
+```
+
+## 嵌套dict
+
+在json的书写中不可避免的会出现嵌套的dict,当然,在一开始考虑到了这一点.
+在书写时只需在值内填写:
+
+``` json
+{"doc": "你的文本","data":<嵌套的dict>}
+```
+
+例子:
+
+```json
+{
+  "bennett": {
+    "E_long_cd_time": 10,
+    "E_short_cd_time": 3,
+    "Ecd_float_time": 0,
+    "Elast_time": 0
+  }
+}
+```
+
+应写成:
+
+```json
+{
+  "bennett": {
+    "doc": "班尼特",
+    "data": {
+      "E_long_cd_time": "元素战技长CD",
+      "E_short_cd_time": "元素战技短CD",
+      "Ecd_float_time": "元素战技浮点时长",
+      "Elast_time": "上次施展元素战技的时长"
+    }
+  }
 }
 ```
 
