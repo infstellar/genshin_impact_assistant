@@ -4,7 +4,7 @@
 
 The name is usually the name of the target document plus the suffix `{language}.jsondoc`.
 
-For example, `auto_domain.json` should be named `auto_domain.json.zh_cn.jsondoc`.
+For example, `auto_domain.json` should be named `auto_domain.json.zh_CN.jsondoc`.
 
 ## Storage location
 
