@@ -461,4 +461,8 @@ class CombatSettingPage(ConfigPage):
         self._reload_select()
 
     def onclick_add_teamjson_withcharacters(self):
+        n = input.input('team name')
+        shutil.copy(os.path.join(root_path, "config\\tactic\\team_with_characters.uijsontemplate"),
+                    os.path.join(root_path, "config\\tactic", n + '.json'))
+        self._reload_select()
         pass
