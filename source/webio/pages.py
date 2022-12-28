@@ -1,12 +1,13 @@
-import base64
 import hashlib
 import json
 import os
 import socket
+import subprocess
 import threading
 import time
 
 from pywebio import *
+from pywebio.output import OutputPosition
 
 from source import listening, util, webio
 from source.util import *
@@ -24,6 +25,7 @@ class MainPage(Page):
         self.log_list = []
         self.log_list_lock = threading.Lock()
         self.ui_statement = -1
+
 
     def _on_load(self):  # 加载事件
         self._load()  # 加载主页
@@ -78,6 +80,7 @@ class MainPage(Page):
             # 获得链接按钮
             output.put_button(label=_("Get IP address"), onclick=self.on_click_ip_address, scope=self.main_scope)
 
+
         ], scope=self.main_scope)
 
         output.put_row([  # 横列
@@ -92,8 +95,6 @@ class MainPage(Page):
                         {'label': 'AutoDomain', 'value': listening.FLOW_DOMAIN},
                         {'label': 'AutoCollector', 'value': listening.FLOW_COLLECTOR}
                     ])]),
-                # PickUpMode
-                output.put_row([output.put_text('PickUp'), output.put_scope('Button_PickUp')]),
                 # Button_StartStop
                 output.put_row([output.put_text('启动/停止'), output.put_scope('Button_StartStop')]),
 
@@ -117,6 +118,8 @@ class MainPage(Page):
         output.put_scrollable(output.put_scope('LogArea'), height=600, keep_bottom=True, scope='Log')
         '''self.main_pin_change_thread = threading.Thread(target=self._main_pin_change_thread, daemon=False)
         self.main_pin_change_thread.start()'''
+
+
 
     def on_click_pickup(self):
         output.clear('Button_PickUp')
