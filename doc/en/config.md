@@ -1,4 +1,4 @@
-#config
+# config
 
 ```
 Portions of this document may be machine translated.
