@@ -2,8 +2,8 @@
   "lang": {
     "doc": "语言(language)",
     "select_items": [
-      "zh_cn",
-      "en_us"
+      "zh_CN",
+      "en_US"
     ]
   },
   "ChromelessWindow": "是否为无边框窗口",

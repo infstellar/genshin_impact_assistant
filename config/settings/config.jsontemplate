@@ -6,5 +6,6 @@
   "device_torch": "auto",
   "teamfile": "team.json",
   "version": "v0.3.0",
-  "check_import": false
+  "check_import": false,
+  "lang":"zh_CN"
 }

@@ -4,7 +4,7 @@
 
 名称一般为目标文档的名字加上`{语言}.jsondoc`的后缀.
 
-例如`auto_domain.json`对应的文档名应为`auto_domain.json.zh_cn.jsondoc`.
+例如`auto_domain.json`对应的文档名应为`auto_domain.json.zh_CN.jsondoc`.
 
 ## 存储位置
 
