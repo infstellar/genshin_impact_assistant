@@ -24,6 +24,7 @@ class TasticOperator(BaseThreading):
     def __init__(self):
         super().__init__()
         self.setName('Tastic_Operator')
+        self.while_sleep = 0.1
         self.hp_chara_list_green = [34, 215, 150, 255]  # BGR
         self.hp_chara_list_red = [102, 102, 255, 255]  # BGR
         self.hp_chara_list_position = [[283, 1698], [379, 1698], [475, 1698], [571, 1698]]
@@ -31,13 +32,13 @@ class TasticOperator(BaseThreading):
         self.enter_timer = Timer()
         self.itt = InteractionBGD()
 
-        self.forme_red_tastic = None
+        self.formered_tastic = None
         self.tastic_group = None
         self.character = None
 
     def run(self):
         while 1:
-            time.sleep(0.1)
+            time.sleep(self.while_sleep)
             if self.stop_threading_flag:
                 return 0
 
@@ -54,17 +55,16 @@ class TasticOperator(BaseThreading):
             # print('5')
 
             self.working_flag = True
-            if self.forme_red_tastic is None:
+            if self.formered_tastic is None:
                 self.working_flag = False
                 continue
-            self.execute_tastic(self.forme_red_tastic)
+            self.execute_tastic(self.formered_tastic)
             self.working_flag = False
-            time.sleep(0.1)
 
     def set_parameter(self, tastic_group: str, character: Character):
         self.tastic_group = tastic_group
         self.character = character
-        self.forme_red_tastic = self._tastic_group_former()
+        self.formered_tastic = self._tastic_group_former()
         self.enter_timer.reset()
 
     def _tastic_group_former(self):
@@ -125,17 +125,17 @@ class TasticOperator(BaseThreading):
             logger.debug('waiting  ')
             self.itt.delay(0.1)
 
-    def get_current_chara_num(self):
-        cap = self.itt.capture(jpgmode=2)
-        for i in range(4):
-            if self.checkup_stop_func():
-                return 0
-            p = posi_manager.chara_num_list_point[i]
+    # def get_current_chara_num(self):
+    #     cap = self.itt.capture(jpgmode=2)
+    #     for i in range(4):
+    #         if self.checkup_stop_func():
+    #             return 0
+    #         p = posi_manager.chara_num_list_point[i]
 
-            if min(cap[p[0], p[1]]) > 240:
-                continue
-            else:
-                return i + 1
+    #         if min(cap[p[0], p[1]]) > 240:
+    #             continue
+    #         else:
+    #             return i + 1
 
     def get_character_busy(self):
         cap = self.itt.capture()

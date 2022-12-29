@@ -51,8 +51,7 @@ class SwitchCharacterOperator(BaseThreading):
                 self.pause_threading_flag = True
                 continue
             if self.tastic_operator.get_working_statement():  # tastic operator working
-                time.sleep(0.2)
-
+                time.sleep(0.1)
             else:
                 ret = self.switch_character()
                 if not ret:  # able to change character

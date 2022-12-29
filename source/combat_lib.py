@@ -24,7 +24,8 @@ def get_current_chara_num(itt: InteractionBGD):
     cap = itt.capture(jpgmode=2)
     for i in range(4):
         p = posi_manager.chara_num_list_point[i]
-        if min(cap[p[0], p[1]]) > 240:
+        # print(min(cap[p[0], p[1]]))
+        if min(cap[p[0], p[1]]) > 248:
             continue
         else:
             return i + 1
@@ -168,6 +169,8 @@ CSDL = CombatStatementDetectionLoop()
 CSDL.start()
 
 if __name__ == '__main__':
+    itt = InteractionBGD()
     while 1:
-        print(CSDL.get_combat_state())
-        time.sleep(0.2)
+        # print(CSDL.get_combat_state())
+        print(get_current_chara_num(itt))
+        # time.sleep(0.2)
