@@ -1,18 +1,20 @@
-import base64
 import hashlib
 import json
 import os
 import socket
+import subprocess
 import threading
 import time
 
 from pywebio import *
+from pywebio.output import OutputPosition
 
 from source import listening, util, webio
-from source.util import is_json_equal, _
+from source.util import *
 from source.webio import manager
 from source.webio.page_manager import Page
 import flow_state
+
 
 # from source.webio.log_handler import webio_poster
 
@@ -24,20 +26,30 @@ class MainPage(Page):
         self.log_list_lock = threading.Lock()
         self.ui_statement = -1
 
+    # todo:多语言支持
+
     def _on_load(self):  # 加载事件
+        super()._on_load()
         self._load()  # 加载主页
         t = threading.Thread(target=self._event_thread, daemon=False)  # 创建事件线程
         session.register_thread(t)  # 注册线程
         t.start()  # 启动线程
         pin.pin['FlowMode'] = listening.current_flow
-        
+
     def _event_thread(self):
         while self.loaded:  # 当界面被加载时循环运行
+            try:
+                pin.pin['isSessionExist']
+            except SessionNotFoundException:
+                logger.info("未找到会话，可能由于窗口关闭。请刷新页面重试。")
+                return
             if pin.pin['FlowMode'] != listening.current_flow:  # 比较变更是否被应用
                 listening.current_flow = pin.pin['FlowMode']  # 应用变更
                 self.log_list_lock.acquire()
-                output.put_text(f"正在导入模块, 可能需要一些时间。", scope='LogArea').style(f'color: black; font_size: 20px')
-                output.put_text(f"在导入完成前，请不要切换页面。", scope='LogArea').style(f'color: black; font_size: 20px')
+                output.put_text(f"正在导入模块, 可能需要一些时间。", scope='LogArea').style(
+                    f'color: black; font_size: 20px')
+                output.put_text(f"在导入完成前，请不要切换页面。", scope='LogArea').style(
+                    f'color: black; font_size: 20px')
                 self.log_list_lock.release()
                 listening.call_you_import_module()
             self.log_list_lock.acquire()
@@ -48,7 +60,7 @@ class MainPage(Page):
                     output.put_text(text, scope='LogArea', inline=True).style(f'color: {color}; font_size: 20px')
             self.log_list.clear()
             self.log_list_lock.release()
-            
+
             if flow_state.current_statement != self.ui_statement:
                 self.ui_statement = flow_state.current_statement
                 output.clear(scope="StateArea")
@@ -62,7 +74,7 @@ class MainPage(Page):
                         f = True
                 if not f:
                     output.put_text(flow_state.get_statement_code_name(0), scope="StateArea")
-            
+
             time.sleep(0.1)
 
     def _load(self):
@@ -74,9 +86,9 @@ class MainPage(Page):
             output.put_buttons(list(manager.page_dict), onclick=webio.manager.load_page, scope=self.main_scope),
             # 获得链接按钮
             output.put_button(label=_("Get IP address"), onclick=self.on_click_ip_address, scope=self.main_scope)
-        
-        ], scope = self.main_scope)
-        
+
+        ], scope=self.main_scope)
+
         output.put_row([  # 横列
             output.put_column([  # 左竖列
                 output.put_markdown('## Options'),  # 左竖列标题
@@ -89,25 +101,24 @@ class MainPage(Page):
                         {'label': 'AutoDomain', 'value': listening.FLOW_DOMAIN},
                         {'label': 'AutoCollector', 'value': listening.FLOW_COLLECTOR}
                     ])]),
-                # PickUpMode
-                output.put_row([output.put_text('PickUp'), output.put_scope('Button_PickUp')]),
                 # Button_StartStop
                 output.put_row([output.put_text('启动/停止'), output.put_scope('Button_StartStop')]),
-                
+
                 output.put_markdown('## Statement'),
-                
+
                 output.put_row([output.put_text('当前状态'), output.put_scope('StateArea')])
 
             ]), None,
             output.put_scope('Log')
 
-        ], scope = self.main_scope, size='30% 10px 70%')
+        ], scope=self.main_scope, size='30% 10px 70%')
 
         # PickUpButton
         output.put_button(label=str(listening.FEAT_PICKUP), onclick=self.on_click_pickup, scope='Button_PickUp')
         # Button_StartStop
-        output.put_button(label=str(listening.startstop_flag), onclick=self.on_click_startstop, scope='Button_StartStop')
-        
+        output.put_button(label=str(listening.startstop_flag), onclick=self.on_click_startstop,
+                          scope='Button_StartStop')
+
         # Log
         output.put_markdown('## Log', scope='Log')
         output.put_scrollable(output.put_scope('LogArea'), height=600, keep_bottom=True, scope='Log')
@@ -122,14 +133,15 @@ class MainPage(Page):
     def on_click_startstop(self):
         output.clear('Button_StartStop')
         listening.startstop()
-        output.put_button(label=str(listening.startstop_flag), onclick=self.on_click_startstop, scope='Button_StartStop')
-    
+        output.put_button(label=str(listening.startstop_flag), onclick=self.on_click_startstop,
+                          scope='Button_StartStop')
+
     def on_click_ip_address(self):
         LAN_ip = f"{socket.gethostbyname(socket.gethostname())}{session.info.server_host[session.info.server_host.index(':'):]}"
         WAN_ip = _("Not Enabled")
-        output_text=_('LAN IP') + " : " + LAN_ip + '\n' + _("WAN IP") + ' : ' + WAN_ip
+        output_text = _('LAN IP') + " : " + LAN_ip + '\n' + _("WAN IP") + ' : ' + WAN_ip
         output.popup(f'ip address', output_text, size=output.PopupSize.SMALL)
-    
+
     def logout(self, text: str, color='black'):
         if self.loaded:
             self.log_list_lock.acquire()
@@ -140,44 +152,72 @@ class MainPage(Page):
         pass
 
 
-class SettingPage(Page):
+class ConfigPage(Page):
     def __init__(self):
         super().__init__()
+
+        # self.main_scope = "SettingPage"
+
         self.exit_popup = None
         self.last_file = None
         self.file_name = ''
 
         self.config_files = []
         self.config_files_name = []
+        self._load_config_files()
+        self.can_check_select = True
+        self.can_remove_last_scope = False
+        # 注释显示模式在这改
+        self.mode = True
+
+    def _load_config_files(self):
         for root, dirs, files in os.walk('config'):
             for f in files:
                 if f[f.index('.') + 1:] == "json":
                     self.config_files.append({"label": f, "value": os.path.join(root, f)})
-        self.can_remove_last_scope = False
-        # 注释显示模式在这改
-        self.mode = True
 
     def _load(self):
         self.last_file = None
 
         # 标题
-        output.put_markdown('# Setting', scope=self.main_scope)
+        output.put_markdown('# Config', scope=self.main_scope)
 
         # 页面切换按钮
         output.put_buttons(list(manager.page_dict), onclick=webio.manager.load_page, scope=self.main_scope)
 
         # 配置页
         output.put_markdown('## config:', scope=self.main_scope)
-        pin.put_select('file', self.config_files, scope=self.main_scope)
+
+        output.put_scope("select_scope", scope=self.main_scope)
+        pin.put_select('file', self.config_files, scope="select_scope")
 
     def _on_load(self):
+        super()._on_load()
         self._load()  # 加载页面
         t = threading.Thread(target=self._event_thread, daemon=False)
         session.register_thread(t)  # 注册线程
         t.start()
 
+    # 重新加载选项
+    def _reload_select(self):
+        self.can_check_select = False
+        self._load_config_files()
+        output.clear("select_scope")
+        pin.put_select('file', self.config_files, scope="select_scope")
+        self.can_check_select = True
+    
+    # 循环线程
     def _event_thread(self):
         while self.loaded:
+            if not self.can_check_select:
+                time.sleep(1)
+                continue
+            try:
+                pin.pin['isSessionExist']
+            except SessionNotFoundException:
+                logger.info("未找到会话，可能由于窗口关闭。请刷新页面重试。")
+                return
+                
             if pin.pin['file'] != self.last_file:  # 当下拉框被更改时
                 self.last_file = pin.pin['file']
 
@@ -192,18 +232,29 @@ class SettingPage(Page):
 
             time.sleep(1)
 
+    # 
     def put_setting(self, name=''):
         self.file_name = name
         output.put_markdown('## {}'.format(name), scope='now')  # 标题
-        j = json.load(open(name, 'r', encoding='utf8'))
-        if os.path.exists(name + '.jsondoc'):
-            with open(name + '.jsondoc', 'r', encoding='utf8') as f:
+        with open(name, 'r', encoding='utf8') as f:
+            j = json.load(f)
+
+        with open(os.path.join(root_path, "config", "settings", "config.json"), 'r', encoding='utf8') as f:
+            lang = json.load(f)["lang"]
+        doc_name = f'{name}.{lang}.jsondoc'
+
+        if os.path.exists(doc_name):
+            with open(doc_name, 'r', encoding='utf8') as f:
+                doc = json.load(f)
+        elif os.path.exists(f'{name}.en_US.jsondoc'):
+            with open(f'{name}.en_US.jsondoc', 'r', encoding='utf8') as f:
                 doc = json.load(f)
         else:
             doc = {}
         self.put_json(j, doc, 'now', level=3)  # 载入json
         output.put_button('save', scope='now', onclick=self.save)
 
+    # 保存json文件
     def save(self):
 
         j = json.load(open(self.file_name, 'r', encoding='utf8'))
@@ -212,6 +263,7 @@ class SettingPage(Page):
         # output.put_text('saved!', scope='now')
         output.toast('saved!')
 
+    # 
     def get_json(self, j: dict, add_name=''):
         rt_json = {}
         for k in j:
@@ -235,8 +287,9 @@ class SettingPage(Page):
                     for i in v:
                         # 计次+1
                         dict_id += 1
-                        rt_list.append(self.get_json(v[dict_id-1], add_name='{}-{}-{}'.format(add_name, k_sha1,str(dict_id))))
-                    rt_json[k]=rt_list
+                        rt_list.append(
+                            self.get_json(v[dict_id - 1], add_name='{}-{}-{}'.format(add_name, k_sha1, str(dict_id))))
+                    rt_json[k] = rt_list
                 else:
                     rt_json[k] = util.list_text2list(pin.pin['{}-{}'.format(add_name, k_sha1)])
             else:
@@ -269,7 +322,83 @@ class SettingPage(Page):
     def close_popup(self):
         output.close_popup()
         self.exit_popup = True
+    
+    # 展示str型项
+    def _show_str(self, doc_items, component_name, display_name, scope_name, v):
+        if doc_items:
+            pin.put_select(component_name,
+                            [{"label": i, "value": i} for i in doc_items], value=v,
+                            label=display_name,
+                            scope=scope_name)
+        else:
+            pin.put_input(component_name, label=display_name, value=v, scope=scope_name)
+    
+    # 展示inf型项
+    def _show_int(self, doc_items, component_name, display_name, scope_name, v):
+        if doc_items:
+            pin.put_select(component_name,
+                            [{"label": i, "value": i} for i in doc_items], value=v,
+                            label=display_name,
+                            scope=scope_name)
+        else:
+            pin.put_input(component_name, label=display_name, value=v, scope=scope_name, type='number')
+    
+    # 展示float型项
+    def _show_float(self, doc_items, component_name, display_name, scope_name, v):
+        if doc_items:
+            pin.put_select(component_name,
+                            [{"label": i, "value": i} for i in doc_items], value=v,
+                            label=display_name,
+                            scope=scope_name)
+        else:
+            pin.put_input(component_name, label=display_name, value=v, scope=scope_name, type='float')
+    
+    # 展示bool型项
+    def _show_bool(self, component_name, display_name, scope_name, v):
+        pin.put_select(component_name,
+            [{"label": 'True', "value": True}, {"label": 'False', "value": False}], value=v,
+            label=display_name,
+            scope=scope_name)
+    
+    # 展示dict型项
+    def _show_dict(self, level, component_name, display_name, scope_name, doc, v):
+        output.put_scope(component_name, scope=scope_name)
+        output.put_markdown('#' * level + ' ' + display_name, scope=component_name)
+        self.put_json(v, doc, component_name, add_name=component_name,
+                        level=level + 1)
+    
+    # 展示list/list&dict型项
+    def _show_list(self, level, display_name, scope_name, component_name, doc, v):
+        # 判断是否为dict列表
+        is_dict_list = True
+        for i in v:
+            is_dict_list = is_dict_list and (type(i) == dict)
 
+        if is_dict_list:
+            output.put_markdown('#' * level + ' ' + display_name,
+                                scope=scope_name)
+            # 差点把我绕晕....
+            # 这个是dict的id,是在列表的位置,从1开始,当然也可以改成从0开始,都一样
+            dict_id = 0
+            # 在当前dict列表里循环,取出每一个dict
+            for i in v:
+                # 计次+1
+                dict_id += 1
+
+                # 创建一个容器以容纳接下来的dict,第一个是控件名称,为了防止重复,加上了dict id,后面那个是当前容器id
+                output.put_scope(component_name + '-' + str(dict_id), scope=scope_name)
+                # 写标题,第一项是标题文本,遵守markdown语法,第二项是当前容器名称
+                output.put_markdown('#' * (level + 1) + ' ' + str(dict_id),
+                                    scope=component_name + '-' + str(dict_id))
+                # 写dict,第一项为输入的dict,第二项为doc,第三项为当前容器名称,第四项为控件名称前缀,最后是缩进等级
+                self.put_json(i, doc, component_name + '-' + str(dict_id),
+                                component_name + '-' + str(dict_id),
+                                level=level + 2)
+        else:
+            pin.put_textarea(component_name, label=display_name, value=util.list2format_list_text(v),
+                                scope=scope_name)
+    
+    # 显示json
     def put_json(self, j: dict, doc: dict, scope_name, add_name='', level=1):
         for k in j:
             v = j[k]
@@ -294,70 +423,190 @@ class SettingPage(Page):
             k_sha1 = hashlib.sha1(k.encode('utf8')).hexdigest()
             component_name = '{}-{}'.format(add_name, k_sha1)
             if type(v) == str or v is None:
-                if doc_items:
-                    pin.put_select(component_name,
-                                   [{"label": i, "value": i} for i in doc_items], value=v,
-                                   label=display_name,
-                                   scope=scope_name)
-                else:
-                    pin.put_input(component_name, label=display_name, value=v, scope=scope_name)
+                self._show_str(doc_items, component_name, display_name, scope_name, v)
             elif type(v) == int:
-                if doc_items:
-                    pin.put_select(component_name,
-                                   [{"label": i, "value": i} for i in doc_items], value=v,
-                                   label=display_name,
-                                   scope=scope_name)
-                else:
-                    pin.put_input(component_name, label=display_name, value=v, scope=scope_name, type='number')
+                self._show_int(doc_items, component_name, display_name, scope_name, v)
             elif type(v) == float:
-                if doc_items:
-                    pin.put_select(component_name,
-                                   [{"label": i, "value": i} for i in doc_items], value=v,
-                                   label=display_name,
-                                   scope=scope_name)
-                else:
-                    pin.put_input(component_name, label=display_name, value=v, scope=scope_name, type='float')
+                self._show_float(doc_items, component_name, display_name, scope_name, v)
             elif type(v) == bool:
-                pin.put_select(component_name,
-                               [{"label": 'True', "value": True}, {"label": 'False', "value": False}], value=v,
-                               label=display_name,
-                               scope=scope_name)
+                self._show_bool(component_name, display_name, scope_name, v)
             elif type(v) == dict:
-                output.put_scope(component_name, scope=scope_name)
-                output.put_markdown('#' * level + ' ' + display_name, scope=component_name)
-                self.put_json(v, doc_now_data, component_name, add_name=scope_name,
-                              level=level + 1)
+                self._show_dict(level, component_name, display_name, scope_name, doc, v)
             elif type(v) == list:
-                # 判断是否为dict列表
-                is_dict_list = True
-                for i in v:
-                    is_dict_list = is_dict_list and (type(i) == dict)
+                self._show_list(level, display_name, scope_name, component_name, doc, v)
 
-                if is_dict_list:
-                    output.put_markdown('#' * level + ' ' + display_name,
-                                        scope=scope_name)
-                    # 差点把我绕晕....
-                    # 这个是dict的id,是在列表的位置,从1开始,当然也可以改成从0开始,都一样
-                    dict_id = 0
-                    # 在当前dict列表里循环,取出每一个dict
-                    for i in v:
-                        # 取doc
-                        if len(doc_now_data) >= dict_id+1:
-                            doc_now_data_ = doc_now_data[dict_id]
-                        else:
-                            doc_now_data_ = {}
-                        # 计次+1
-                        dict_id += 1
 
-                        # 创建一个容器以容纳接下来的dict,第一个是控件名称,为了防止重复,加上了dict id,后面那个是当前容器id
-                        output.put_scope(component_name + '-' + str(dict_id), scope=scope_name)
-                        # 写标题,第一项是标题文本,遵守markdown语法,第二项是当前容器名称
-                        output.put_markdown('#' * (level + 1) + ' ' + str(dict_id),
-                                            scope=component_name + '-' + str(dict_id))
-                        # 写dict,第一项为输入的dict,第二项为doc,第三项为当前容器名称,第四项为控件名称前缀,最后是缩进等级
-                        self.put_json(i, doc_now_data_, component_name + '-' + str(dict_id),
-                                      component_name + '-' + str(dict_id),
-                                      level=level + 2)
-                else:
-                    pin.put_textarea(component_name, label=display_name, value=util.list2format_list_text(v),
-                                     scope=scope_name)
+class SettingPage(ConfigPage):
+    def __init__(self):
+        super().__init__()
+
+    def _load(self):
+        self.last_file = None
+
+        # 标题
+        output.put_markdown('# Setting', scope=self.main_scope)
+
+        # 页面切换按钮
+        output.put_buttons(list(manager.page_dict), onclick=webio.manager.load_page, scope=self.main_scope)
+
+        # 配置页
+        output.put_markdown('## config:', scope=self.main_scope)
+        output.put_scope("select_scope", scope=self.main_scope)
+
+        pin.put_select('file', self.config_files, scope="select_scope")
+
+    def _load_config_files(self):
+        for root, dirs, files in os.walk('config\\settings'):
+            for f in files:
+                if f[f.index('.') + 1:] == "json":
+                    self.config_files.append({"label": f, "value": os.path.join(root, f)})
+
+
+class CombatSettingPage(ConfigPage):
+    def __init__(self):
+        super().__init__()
+
+    def _load_config_files(self):
+        self.config_files = []
+        for root, dirs, files in os.walk('config\\tactic'):
+            for f in files:
+                if f[f.index('.') + 1:] == "json":
+                    self.config_files.append({"label": f, "value": os.path.join(root, f)})
+
+    def _load(self):
+        self.last_file = None
+
+        # 标题
+        output.put_markdown('# CombatSetting', scope=self.main_scope)
+
+        # 页面切换按钮
+        output.put_buttons(list(manager.page_dict), onclick=webio.manager.load_page, scope=self.main_scope)
+
+        # 添加team.json
+        output.put_markdown('# Add team', scope=self.main_scope)
+
+        # 添加team.json按钮
+        output.put_row([
+            output.put_button("Add team", onclick=self.onclick_add_teamjson, scope=self.main_scope),
+            None,
+            output.put_button("Add team with characters", onclick=self.onclick_add_teamjson_withcharacters,
+                              scope=self.main_scope)],
+            scope=self.main_scope, size="10% 10px 20%")
+
+        # 配置页
+        output.put_markdown('## config:', scope=self.main_scope)
+        output.put_scope("select_scope", scope=self.main_scope)
+        pin.put_select('file', self.config_files, scope="select_scope")
+
+    def onclick_add_teamjson(self):
+        n = input.input('team name')
+        shutil.copy(os.path.join(root_path, "config\\tactic\\team.uijsontemplate"),
+                    os.path.join(root_path, "config\\tactic", n + '.json'))
+        self._reload_select()
+
+    def onclick_add_teamjson_withcharacters(self):
+        n = input.input('team name')
+        shutil.copy(os.path.join(root_path, "config\\tactic\\team_with_characters.uijsontemplate"),
+                    os.path.join(root_path, "config\\tactic", n + '.json'))
+        self._reload_select()
+        pass
+
+
+class CollectorSettingPage(ConfigPage):
+    def __init__(self):
+        super().__init__()
+
+    def _load_config_files(self):
+        self.config_files = []
+        for root, dirs, files in os.walk('config\\auto_collector'):
+            for f in files:
+                if f[f.index('.') + 1:] == "json":
+                    self.config_files.append({"label": f, "value": os.path.join(root, f)})
+        self.config_files.append({"label": "auto_collector.json", "value": os.path.join(root_path, "config\\settings\\auto_collector.json")})
+
+    # 重置列表
+    @staticmethod
+    def _reset_list_textarea(x):
+        pin.pin[x] = "[\n\n]"
+    
+    def _load(self):
+        self.last_file = None
+
+        # 标题
+        output.put_markdown('# ' + _('CollectorSetting'), scope=self.main_scope)
+
+        # 页面切换按钮
+        output.put_buttons(list(manager.page_dict), onclick=webio.manager.load_page, scope=self.main_scope)
+
+        # 配置页
+        output.put_markdown('## config:', scope=self.main_scope)
+        output.put_scope("select_scope", scope=self.main_scope)
+        pin.put_select('file', self.config_files, scope="select_scope")
+    
+    def _clean_textarea(self, set_value):
+        set_value("")
+        
+    def _show_list(self, level, display_name, scope_name, component_name, doc, v):
+        # 判断是否为dict列表
+        is_dict_list = True
+        for i in v:
+            is_dict_list = is_dict_list and (type(i) == dict)
+
+        if is_dict_list:
+            output.put_markdown('#' * level + ' ' + display_name,
+                                scope=scope_name)
+            # 差点把我绕晕....
+            # 这个是dict的id,是在列表的位置,从1开始,当然也可以改成从0开始,都一样
+            dict_id = 0
+            # 在当前dict列表里循环,取出每一个dict
+            for i in v:
+                # 计次+1
+                dict_id += 1
+
+                # 创建一个容器以容纳接下来的dict,第一个是控件名称,为了防止重复,加上了dict id,后面那个是当前容器id
+                output.put_scope(component_name + '-' + str(dict_id), scope=scope_name)
+                # 写标题,第一项是标题文本,遵守markdown语法,第二项是当前容器名称
+                output.put_markdown('#' * (level + 1) + ' ' + str(dict_id),
+                                    scope=component_name + '-' + str(dict_id))
+                # 写dict,第一项为输入的dict,第二项为doc,第三项为当前容器名称,第四项为控件名称前缀,最后是缩进等级
+                self.put_json(i, doc, component_name + '-' + str(dict_id),
+                                component_name + '-' + str(dict_id),
+                                level=level + 2)
+        else:
+            # 清除按钮
+            if "collected.json" in self.file_name:
+                output.put_row([
+                    pin.put_textarea(component_name, label=display_name, value=util.list2format_list_text(v)),
+                    None,
+                    output.put_button("clean", onclick=lambda:self._reset_list_textarea(component_name))
+                    ]
+                , scope=scope_name,size="85% 5% 10%")
+            elif "collection_log.json" in self.file_name:
+                output.put_text(f"{display_name} : {util.list2format_list_text(v, inline=True)}", scope=scope_name)
+            else:
+                pin.put_textarea(component_name, label=display_name, value=util.list2format_list_text(v), scope=scope_name)
+    
+    def _show_str(self, doc_items, component_name, display_name, scope_name, v):
+        if doc_items:
+            pin.put_select(component_name,
+                            [{"label": i, "value": i} for i in doc_items], value=v,
+                            label=display_name,
+                            scope=scope_name)
+        else:
+            if "collection_log.json" in self.file_name:
+                output.put_text(f"{display_name} : {v}", scope=scope_name)
+            else:
+                pin.put_input(component_name, label=display_name, value=v, scope=scope_name)
+    
+    # 展示inf型项
+    def _show_int(self, doc_items, component_name, display_name, scope_name, v):
+        if doc_items:
+            pin.put_select(component_name,
+                            [{"label": i, "value": i} for i in doc_items], value=v,
+                            label=display_name,
+                            scope=scope_name)
+        else:
+            if "collection_log.json" in self.file_name:
+                output.put_text(f"{display_name} : {v}", scope=scope_name)
+            else:
+                pin.put_input(component_name, label=display_name, value=v, scope=scope_name, type='number')

@@ -1,6 +1,7 @@
 import inspect
 import json
 import os
+import shutil
 import sys
 import time  # 8药删了，qq了
 import math
@@ -55,7 +56,7 @@ def list2list_text(lst: list) -> str:
     return rt_str
 
 
-def list2format_list_text(lst: list) -> str:
+def list2format_list_text(lst: list, inline = False) -> str:
     if lst is not None:  # 判断是否为空
         try:  # 尝试转换
             rt_str = json.dumps(lst, sort_keys=False, indent=4, separators=(',', ':'), ensure_ascii=False)
@@ -65,6 +66,8 @@ def list2format_list_text(lst: list) -> str:
     else:
         rt_str = str(lst)
     # print(rt_str)
+    if inline:
+        rt_str = rt_str.replace('\n', ' ')
     return rt_str
 
 
@@ -203,8 +206,7 @@ def manhattan_distance(p1, p2):
 def manhattan_distance_plist(p1, p2):
     return abs(p1[0]-p2[:,0]) + abs(p1[1]-p2[:,1])
 
-if __name__ == '__main__':
-    logger.info("test")
+
 
 
 def is_number(s):
@@ -315,3 +317,42 @@ def image_size(image):
     shape = image.shape
     return shape[1], shape[0]
 
+def load_jsons_from_folder(path):
+    json_list = []
+    for root, dirs, files in os.walk(path):
+        for f in files:
+            if f[f.index('.') + 1:] == "json":
+                j = json.load(open(os.path.join(path, f), 'r', encoding='utf-8'))
+                json_list.append({"label": f, "json": j})
+    return json_list
+
+if os.path.exists(os.path.join(root_path, "config\\tastic")):
+    logger.info("检测到tastic文件夹。")
+    logger.info("版本v0.5.0.424后，tastic文件夹修正为tactic文件夹。")
+    time.sleep(1)
+    logger.warning("正在准备将tastic文件夹中的json文件迁移至tactic文件夹。")
+    time.sleep(1)
+    logger.warning("该操作可能有风险，您可以将config/tastic文件夹中的文件备份后再继续。")
+    time.sleep(1)
+    logger.warning("该操作将在15秒后开始。")
+    time.sleep(15)
+    for root, dirs, files in os.walk(os.path.join(root_path, "config\\tastic")):
+        for f in files:
+            if f[f.index(".")+1:] == "json":
+                shutil.copy(os.path.join(root_path, "config\\tastic", f), os.path.join(root_path, "config\\tactic", f))
+    logger.warning("准备删除tastic文件夹。")
+    time.sleep(1)
+    logger.warning("该操作可能有风险，您可以将config/tastic文件夹中的文件备份后再继续。")
+    time.sleep(1)
+    logger.warning("该操作将在15秒后开始。")
+    time.sleep(15)
+    shutil.rmtree(os.path.join(root_path, "config\\tastic"))
+    logger.info("操作完成。您可以手动删除残留的config/tactic/tastic.json文件。")
+    time.sleep(1)
+    # os.rename(os.path.join(root_path, "config\\tastic"), os.path.join(root_path, "config\\tactic"))
+
+if __name__ == '__main__':
+    a = load_jsons_from_folder(os.path.join(root_path, "config\\tactic"))
+    print()
+    pass
+    # load_jsons_from_floder((root_path, "config\\tactic"))

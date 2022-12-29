@@ -1,0 +1,7 @@
+{
+  "auto_distance": "Automatic distance control",
+  "auto_move": "Auto View Shift",
+  "fps": "Identification frequency",
+  "max_number_of_enemy_loops": "Max number of enemies",
+  "reset_time": "Cooldown time after failure to claim enemy"
+}
