@@ -581,6 +581,32 @@ class CollectorSettingPage(ConfigPage):
                     output.put_button("clean", onclick=lambda:self._reset_list_textarea(component_name))
                     ]
                 , scope=scope_name,size="85% 5% 10%")
+            elif "collection_log.json" in self.file_name:
+                output.put_text(f"{display_name} : {util.list2format_list_text(v, inline=True)}", scope=scope_name)
             else:
                 pin.put_textarea(component_name, label=display_name, value=util.list2format_list_text(v), scope=scope_name)
-            
+    
+    def _show_str(self, doc_items, component_name, display_name, scope_name, v):
+        if doc_items:
+            pin.put_select(component_name,
+                            [{"label": i, "value": i} for i in doc_items], value=v,
+                            label=display_name,
+                            scope=scope_name)
+        else:
+            if "collection_log.json" in self.file_name:
+                output.put_text(f"{display_name} : {v}", scope=scope_name)
+            else:
+                pin.put_input(component_name, label=display_name, value=v, scope=scope_name)
+    
+    # 展示inf型项
+    def _show_int(self, doc_items, component_name, display_name, scope_name, v):
+        if doc_items:
+            pin.put_select(component_name,
+                            [{"label": i, "value": i} for i in doc_items], value=v,
+                            label=display_name,
+                            scope=scope_name)
+        else:
+            if "collection_log.json" in self.file_name:
+                output.put_text(f"{display_name} : {v}", scope=scope_name)
+            else:
+                pin.put_input(component_name, label=display_name, value=v, scope=scope_name, type='number')

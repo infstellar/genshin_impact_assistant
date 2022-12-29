@@ -56,7 +56,7 @@ def list2list_text(lst: list) -> str:
     return rt_str
 
 
-def list2format_list_text(lst: list) -> str:
+def list2format_list_text(lst: list, inline = False) -> str:
     if lst is not None:  # 判断是否为空
         try:  # 尝试转换
             rt_str = json.dumps(lst, sort_keys=False, indent=4, separators=(',', ':'), ensure_ascii=False)
@@ -66,6 +66,8 @@ def list2format_list_text(lst: list) -> str:
     else:
         rt_str = str(lst)
     # print(rt_str)
+    if inline:
+        rt_str = rt_str.replace('\n', ' ')
     return rt_str
 
 
