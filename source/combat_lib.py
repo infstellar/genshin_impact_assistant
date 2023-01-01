@@ -29,6 +29,9 @@ def get_current_chara_num(itt: InteractionBGD):
             continue
         else:
             return i + 1
+        
+    logger.warning(_("获得当前角色编号失败"))
+    return 1
 
 
 def unconventionality_situlation_detection(itt: InteractionBGD,

@@ -167,7 +167,7 @@ class Combat_Controller(BaseThreading):
     def continue_threading(self):
         if self.pause_threading_flag != False:
             self.current_num = combat_lib.get_current_chara_num(self.itt)
-            self.current_num = 1
+            # self.current_num = 1
             self.pause_threading_flag = False
             self.sco.continue_threading()
             self.ao.continue_threading()
