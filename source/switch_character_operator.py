@@ -80,16 +80,22 @@ class SwitchCharacterOperator(BaseThreading):
         t = self.switch_timer.get_diff_time()
         self.tastic_operator.chara_waiting()
         logger.debug('try switching to ' + str(x))
+        switch_succ_num = 0
+        switch_target_num = 3
         for i in range(120):  # 12 sec
             if self.checkup_stop_func():
                 return 0
+            self.tastic_operator.chara_waiting()
             combat_lib.unconventionality_situlation_detection(self.itt)
             self.itt.key_press(str(x))
-            time.sleep(0.1)
+            time.sleep(0.05)
             if combat_lib.get_current_chara_num(self.itt) == x:
-                break
+                switch_succ_num += 1
             if i == 49:
                 logger.warning('角色切换失败')
+            if switch_succ_num >= switch_target_num:
+                logger.debug(f"switch chara to {x} succ")
+                break
         self.current_num = x
         self.switch_timer.reset()
         self.itt.delay(0.1)
