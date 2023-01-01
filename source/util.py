@@ -352,7 +352,7 @@ if os.path.exists(os.path.join(root_path, "config\\tastic")):
     # os.rename(os.path.join(root_path, "config\\tastic"), os.path.join(root_path, "config\\tactic"))
 
 if __name__ == '__main__':
-    a = load_jsons_from_folder(os.path.join(root_path, "config\\tactic"))
-    print()
+    # a = load_jsons_from_folder(os.path.join(root_path, "config\\tactic"))
+    print(get_active_window_process_name())
     pass
     # load_jsons_from_floder((root_path, "config\\tactic"))

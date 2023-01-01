@@ -41,8 +41,8 @@ def before_operation(print_log=True):
                     if get_active_window_process_name() == process_name:
                         logger.info("恢复操作")
                         break
-                    logger.info(f"当前窗口焦点不是原神窗口，操作暂停 {10 - (time.time()%10)} 秒")
-                    time.sleep(10 - (time.time()%10))
+                    logger.info(f"当前窗口焦点为 {winname} 不是原神窗口 {process_name}，操作暂停 {5 - (time.time()%5)} 秒")
+                    time.sleep(5 - (time.time()%5))
             return func(*args, **kwargs)
         return wrapper
     return outwrapper
