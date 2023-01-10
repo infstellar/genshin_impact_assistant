@@ -14,6 +14,7 @@ import static_lib
 import vkcode
 from ctypes.wintypes import RECT
 import button_manager
+import assest
 
 IMG_RATE = 0
 IMG_POSI = 1
@@ -453,6 +454,15 @@ class InteractionBGD:
                 center_p = [(p[0] + p[2]) / 2, (p[1] + p[3]) / 2]
                 self.move_and_click([center_p[0], center_p[1]])
                 # self.left_click()     
+                return True
+            else:
+                return False
+            
+        elif isinstance(inputvar, assest.text_manager.TextTemplate):
+            import pdocr_api
+            p1 = pdocr_api.ocr.get_text_position(self.capture(jpgmode=0, posi=inputvar.cap_area), inputvar.gettext(), cap_posi_leftup=inputvar.cap_area[:2])
+            if p1 != -1:
+                self.move_and_click([p1[0] + 30, p1[1] + 30], delay=1)
                 return True
             else:
                 return False

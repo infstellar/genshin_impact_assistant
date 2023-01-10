@@ -12,27 +12,9 @@ import numpy as np
 """
 战斗相关常用函数库。
 """
-def get_current_chara_num(itt: InteractionBGD):
-    """获得当前所选角色序号。
 
-    Args:
-        itt (InteractionBGD): InteractionBGD对象
-
-    Returns:
-        int: character num.
-    """
-    cap = itt.capture(jpgmode=2)
-    for i in range(4):
-        p = posi_manager.chara_num_list_point[i]
-        # print(min(cap[p[0], p[1]]))
-        if min(cap[p[0], p[1]]) > 248:
-            continue
-        else:
-            return i + 1
-        
-    logger.warning(_("获得当前角色编号失败"))
-    return 1
-
+def default_stop_func():
+    return False
 
 def unconventionality_situlation_detection(itt: InteractionBGD,
                                            autoDispose=True):
@@ -49,6 +31,54 @@ def unconventionality_situlation_detection(itt: InteractionBGD,
 
     return situlation_code
 
+def get_character_busy(itt: InteractionBGD, stop_func):
+    cap = itt.capture(jpgmode=2)
+    # cap = itt.png2jpg(cap, channel='ui')
+    t = 0
+    for i in range(4):
+        if stop_func():
+            return 0
+        p = posi_manager.chara_head_list_point[i]
+        if cap[p[0], p[1]][0] > 0 and cap[p[0], p[1]][1] > 0 and cap[p[0], p[1]][2] > 0:
+            t += 1
+    if t == 3:
+        return False
+    elif t == 4:
+        logger.debug("function: get_character_busy: t=4： 测试中功能，如果导致换人失败，反复输出 waiting 请上报。")
+        return True
+    else:
+        return True
+
+def chara_waiting(itt:InteractionBGD, stop_func, mode=0):
+    unconventionality_situlation_detection(itt)
+    while get_character_busy(itt, stop_func) and (not stop_func()):
+        if stop_func():
+            logger.debug('chara_waiting stop')
+            return 0
+        logger.debug('waiting')
+        itt.delay(0.1)
+
+def get_current_chara_num(itt: InteractionBGD, stop_func = default_stop_func):
+    """获得当前所选角色序号。
+
+    Args:
+        itt (InteractionBGD): InteractionBGD对象
+
+    Returns:
+        int: character num.
+    """
+    chara_waiting(itt, stop_func)
+    cap = itt.capture(jpgmode=2)
+    for i in range(4):
+        p = posi_manager.chara_num_list_point[i]
+        # print(min(cap[p[0], p[1]]))
+        if min(cap[p[0], p[1]]) > 248:
+            continue
+        else:
+            return i + 1
+        
+    logger.warning(_("获得当前角色编号失败"))
+    return 1
 
 def combat_statement_detection(itt: InteractionBGD):
     red_num = 250

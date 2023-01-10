@@ -119,10 +119,10 @@ def change_view_to_posi(pl, stop_func):
         td = static_lib.cvAutoTrackerLoop.get_rotation()[1]
         degree = generic_lib.points_angle([tx,ty], pl, coordinate=generic_lib.NEGATIVE_Y)
         cvn=td-degree
-        if cvn>=100:
-            cvn=100
-        if cvn<=-100:
-            cvn=-100
+        if cvn>=50:
+            cvn=50
+        if cvn<=-50:
+            cvn=-50
         cview(cvn)
         i+=1
         if stop_func():
