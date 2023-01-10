@@ -118,7 +118,7 @@ ui_time_menu_core = ImgIcon(name="ui_time_menu_core", path="assests\\imgs\\commo
 character_died = ImgIcon(name="character_died", path="assests\\imgs\\cn\\character_died.jpg",
                         is_bbg=True, cap_posi='bbg', win_text="使用道具", threshold=0.98, print_log=LOG_WHEN_TRUE)
 bigmap_choose_area = ImgIcon(name="bigmap_choose_area", path="assests\\imgs\\common\\ui\\bigmap_choose_area.jpg", is_bbg=True, cap_posi='bbg')
-
+bigmap_tp = ImgIcon(name="bigmap_tp", path="assests\\imgs\\cn\\bigmap_tp.jpg", is_bbg=True, cap_posi='bbg')
 
 # qshow(ui_esc_menu.image)
 

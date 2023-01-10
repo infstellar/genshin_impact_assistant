@@ -112,7 +112,7 @@ class Combat_Controller(BaseThreading):
             
             if self.is_check_died:
                 if self.itt.get_img_existence(img_manager.character_died):
-                    logger.info('有人嘎了，停止自动战斗')
+                    logger.info(_('有人嘎了，停止自动战斗'))
                     self.last_err_code = CHARACTER_DIED
                     while 1:
                         time.sleep(0.5)
@@ -166,7 +166,7 @@ class Combat_Controller(BaseThreading):
 
     def continue_threading(self):
         if self.pause_threading_flag != False:
-            self.current_num = combat_lib.get_current_chara_num(self.itt)
+            self.current_num = combat_lib.get_current_chara_num(self.itt, self.checkup_stop_func)
             # self.current_num = 1
             self.pause_threading_flag = False
             self.sco.continue_threading()

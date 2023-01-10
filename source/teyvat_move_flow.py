@@ -14,6 +14,7 @@ import timer_module
 import combat_lib
 import scene_manager
 import static_lib
+import assest
 
 IN_MOVE = 0
 IN_FLY = 1
@@ -161,22 +162,28 @@ class TeyvatMoveFlow(BaseThreading):
                 # self.itt.left_click()
                 # self.itt.delay(0.6)
 
-                p1 = pdocr_api.ocr.get_text_position(self.itt.capture(jpgmode=0, posi=img_manager.bigmap_choose_area.cap_posi), "七天神像", cap_posi_leftup=img_manager.bigmap_choose_area.cap_posi[:2])
-                if p1 != -1:
-                    self.itt.move_and_click([p1[0] + 30, p1[1] + 30], delay=1)
-                    # self.itt.delay(1)
-                    # self.itt.left_click()
-                    # self.itt.delay(1)
-                p1 = pdocr_api.ocr.get_text_position(self.itt.capture(jpgmode=0, posi=img_manager.bigmap_choose_area.cap_posi), "传送锚点", cap_posi_leftup=img_manager.bigmap_choose_area.cap_posi[:2])
-                if p1 != -1:
-                    self.itt.move_and_click([p1[0] + 30, p1[1] + 30], delay=1)
-                    # self.itt.delay(1)
-                    # self.itt.left_click()
-                    # self.itt.delay(1)
+                while 1:
+                    if self.checkup_stop_func():
+                        break
+                    
+                    r = self.itt.appear_then_click(img_manager.bigmap_tp)
+                    
+                    if r:
+                        break
+                    
+                    self.itt.appear_then_click(assest.CSMD)
+                    
+                    self.itt.appear_then_click(assest.QTSX)
+                    # p1 = pdocr_api.ocr.get_text_position(self.itt.capture(jpgmode=0, posi=img_manager.bigmap_choose_area.cap_posi), "七天神像", cap_posi_leftup=img_manager.bigmap_choose_area.cap_posi[:2])
+                    # if p1 != -1:
+                    #     self.itt.move_and_click([p1[0] + 30, p1[1] + 30], delay=1)
+                    
+                    # p1 = pdocr_api.ocr.get_text_position(self.itt.capture(jpgmode=0, posi=img_manager.bigmap_choose_area.cap_posi), "传送锚点", cap_posi_leftup=img_manager.bigmap_choose_area.cap_posi[:2])
+                    # if p1 != -1:
+                    #     self.itt.move_and_click([p1[0] + 30, p1[1] + 30], delay=1)
 
                 self.itt.move_and_click([posi_manager.tp_button[0], posi_manager.tp_button[1]], delay=1)
-                # self.itt.delay(1)
-                # self.itt.left_click()
+                
                 while not self.itt.get_img_existence(img_manager.ui_main_win):
                     if self.checkup_stop_func():
                         break

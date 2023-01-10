@@ -22,6 +22,7 @@ class AimOperator(BaseThreading):
         self.loop_timer = Timer()
         auto_aim_json = load_json("auto_aim.json")
         self.fps = 1 / auto_aim_json["fps"]
+        self.fps = 5
         self.max_number_of_enemy_loops = auto_aim_json["max_number_of_enemy_loops"]
         self.auto_distance = auto_aim_json["auto_distance"]
         self.auto_move = auto_aim_json["auto_move"]
@@ -45,7 +46,7 @@ class AimOperator(BaseThreading):
             t = self.loop_timer.loop_time() # 设置最大检查时间
             if t <= self.fps:
                 time.sleep(self.fps - t)
-            logger.trace(f"cost time: {t} | {self.fps}")
+            # logger.trace(f"cost time: {t} | {self.fps}")
                 
             if self.stop_threading_flag:
                 return 0
@@ -142,7 +143,7 @@ class AimOperator(BaseThreading):
         if py <= -100:
             py = -100
         self.itt.move_to(px, py, relative=True)
-        logger.debug(f"auto_aim: x {px} y {py}")
+        # logger.debug(f"auto_aim: x {px} y {py}")
         return px
         # print()
 
