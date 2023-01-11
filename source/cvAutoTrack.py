@@ -117,29 +117,42 @@ def del_log():
                 os.remove(os.path.join(root_path, "source", "webio", "autoTrack.log"))
                 logger.debug(_("autoTrack.log 3 cleaned"))
 del_log()
-cvAutoTracker = AutoTracker(os.path.join(root_path, 'source\\cvAutoTrack_7.2.3\\CVAUTOTRACK.dll'))
-cvAutoTracker.init()
-logger.info(_("cvAutoTrack DLL has been loaded."))
-logger.info('1) err' + str(cvAutoTracker.get_last_error()))
+
 
 
 class AutoTrackerLoop(BaseThreading):
     def __init__(self):
         super().__init__()
-        # logger.debug(f"cvautotrack log: {cvAutoTracker.disable_log()}")
-        # scene_manager.switchto_mainwin(max_time=5)
-        time.sleep(2)
-        self.position = cvAutoTracker.get_position()
+        self.setName("AutoTrackerLoop")
+        self.loaded_flag = False
+        self.position = [0,0]
         self.last_position = self.position
-        self.rotation = cvAutoTracker.get_rotation()
         self.in_excessive_error = False
         self.start_sleep_timer = timer_module.Timer(diff_start_time=61)
-        
+        # logger.debug(f"cvautotrack log: {cvAutoTracker.disable_log()}")
+        # scene_manager.switchto_mainwin(max_time=5)
+    
+    def load_dll(self):
+        self.cvAutoTracker = AutoTracker(os.path.join(root_path, 'source\\cvAutoTrack_7.2.3\\CVAUTOTRACK.dll'))
+        self.cvAutoTracker.init()
+        logger.info(_("cvAutoTrack DLL has been loaded."))
+        logger.info('1) err' + str(self.cvAutoTracker.get_last_error()))
+        time.sleep(2)
+        self.position = self.cvAutoTracker.get_position()
+        self.last_position = self.position
+        self.rotation = self.cvAutoTracker.get_rotation()
+        self.in_excessive_error = False
+        self.start_sleep_timer = timer_module.Timer(diff_start_time=61)
+        self.loaded_flag = True
 
     def run(self):
         ct = 0
         time.sleep(0.1)
         while 1:
+            if not self.loaded_flag:
+                time.sleep(2)
+                continue
+            
             time.sleep(self.while_sleep)
             if self.stop_threading_flag:
                 return 0
@@ -163,8 +176,8 @@ class AutoTrackerLoop(BaseThreading):
                 time.sleep(0.8)
                 continue
 
-            self.rotation = cvAutoTracker.get_rotation()
-            self.position = cvAutoTracker.get_position()
+            self.rotation = self.cvAutoTracker.get_rotation()
+            self.position = self.cvAutoTracker.get_position()
             if not self.position[0]:
                 import scene_manager
                 if scene_manager.get_current_pagename() == 'main':
@@ -191,14 +204,23 @@ class AutoTrackerLoop(BaseThreading):
             # print(self.last_position)
 
     def get_position(self):
+        if not self.loaded_flag:
+            self.load_dll()
+            time.sleep(3)
         self.start_sleep_timer.reset()
         return self.position
 
     def get_rotation(self):
+        if not self.loaded_flag:
+            self.load_dll()
+            time.sleep(3)
         self.start_sleep_timer.reset()
         return self.rotation
 
     def is_in_excessive_error(self):
+        if not self.loaded_flag:
+            self.load_dll()
+            time.sleep(3)
         self.start_sleep_timer.reset()
         return self.in_excessive_error
     

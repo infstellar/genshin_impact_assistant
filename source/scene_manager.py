@@ -2,7 +2,7 @@ from util import *
 import img_manager
 import posi_manager
 import button_manager
-from interaction_background import InteractionBGD, IMG_BOOLRATE
+from interaction_background import InteractionBGD
 itt = InteractionBGD()
 
 def default_stop_func():
@@ -50,7 +50,7 @@ all_page = {
     "bigmap":page_bigmap
             }
 
-def get_current_pagename():
+def get_current_pagename(retry=0):
     current_page = None
     max_rate = 0
     for i in all_page:
@@ -61,6 +61,23 @@ def get_current_pagename():
             else:
                 logger.warning(f"UI界面有多个检测结果：{current_page}, {i} ")
                 current_page = "ERROR"
+    if current_page == None:
+        if retry>=40:
+            logger.warning(_("UI界面检测失败，正在尝试按esc返回"))
+            itt.key_press("esc")
+            logger.warning(_("将在1秒后再次尝试获取UI界面"))
+            logger.warning(_("尝试次数：") + f"{retry}")
+            time.sleep(1)
+            return get_current_pagename(retry+1)
+        else:
+            logger.info(_("UI界面检测失败"))
+            logger.info(_("将在0.2秒后再次尝试获取UI界面"))
+            logger.info(_("尝试次数：") + f"{retry}")
+            if retry<=10:
+                time.sleep(0.2)
+            else:
+                time.sleep(1)
+            return get_current_pagename(retry+1)
     return current_page
 
 def switch_to_page(target_page:UIPage, stop_func):

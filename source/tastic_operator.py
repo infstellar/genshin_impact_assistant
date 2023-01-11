@@ -12,6 +12,7 @@ from interaction_background import InteractionBGD
 from timer_module import Timer
 from util import *
 import cv2
+import combat_lib
 
 E_STRICT_MODE = True  # may cause more performance overhead
 
@@ -24,27 +25,52 @@ class TasticOperator(BaseThreading):
     def __init__(self):
         super().__init__()
         self.setName('Tastic_Operator')
+        self.while_sleep = 0.1
         self.hp_chara_list_green = [34, 215, 150, 255]  # BGR
         self.hp_chara_list_red = [102, 102, 255, 255]  # BGR
         self.hp_chara_list_position = [[283, 1698], [379, 1698], [475, 1698], [571, 1698]]
         self.chara_num = 4
         self.enter_timer = Timer()
         self.itt = InteractionBGD()
-
-        self.forme_red_tastic = None
+        self.working_flag = False # out of class
+        self.flag_tactic_executing = False # in class
+        self.pause_tactic_flag = False
+        self.formered_tastic = None
         self.tastic_group = None
         self.character = None
 
+    def pause_threading(self):
+        if self.pause_threading_flag != True:
+            self.pause_threading_flag = True
+            self.tastic_group = None
+            self.formered_tastic = None
+    
+    def continue_threading(self):
+        if self.pause_threading_flag != False:
+            self.pause_threading_flag = False
+            self.tastic_group = None
+            self.formered_tastic = None
+    
+    def restart_executor(self):
+        logger.trace("restart_executor start")
+        self.pause_tactic_flag = True
+        while self.flag_tactic_executing:
+            time.sleep(0.1)
+            if self.checkup_stop_func():
+                break
+        self.pause_tactic_flag = False
+        logger.trace("restart_executor end")
+    
     def run(self):
         while 1:
-            time.sleep(0.1)
+            time.sleep(self.while_sleep)
             if self.stop_threading_flag:
                 return 0
 
             if self.pause_threading_flag:
                 if self.working_flag:
                     self.working_flag = False
-                time.sleep(1)
+                time.sleep(0.3)
                 continue
             
             if self.checkup_stop_func():
@@ -54,17 +80,22 @@ class TasticOperator(BaseThreading):
             # print('5')
 
             self.working_flag = True
-            if self.forme_red_tastic is None:
+            if self.formered_tastic is None:
                 self.working_flag = False
                 continue
-            self.execute_tastic(self.forme_red_tastic)
-            self.working_flag = False
-            time.sleep(0.1)
+            if not self.pause_tactic_flag:
+                self.execute_tastic(self.formered_tastic)
+                self.flag_tactic_executing = False
+                self.working_flag = False
 
     def set_parameter(self, tastic_group: str, character: Character):
+        if tastic_group is None:
+            self.tastic_group = None
+            self.formered_tastic = None
+            return
         self.tastic_group = tastic_group
         self.character = character
-        self.forme_red_tastic = self._tastic_group_former()
+        self.formered_tastic = self._tastic_group_former()
         self.enter_timer.reset()
 
     def _tastic_group_former(self):
@@ -106,6 +137,8 @@ class TasticOperator(BaseThreading):
         while self.itt.get_img_existence(img_manager.COMING_OUT_BY_SPACE):
             if self.checkup_stop_func():
                 return 0
+            if self.pause_tactic_flag:
+                return 0
             situation_code = 1
             self.itt.key_press('spacebar')
             logger.debug('Unconventionality Situation: COMING_OUT_BY_SPACE')
@@ -122,35 +155,38 @@ class TasticOperator(BaseThreading):
             if self.checkup_stop_func():
                 logger.debug('chara_waiting stop')
                 return 0
+            if self.pause_tactic_flag:
+                return 0
             logger.debug('waiting  ')
             self.itt.delay(0.1)
 
-    def get_current_chara_num(self):
-        cap = self.itt.capture(jpgmode=2)
-        for i in range(4):
-            if self.checkup_stop_func():
-                return 0
-            p = posi_manager.chara_num_list_point[i]
+    # def get_current_chara_num(self):
+    #     cap = self.itt.capture(jpgmode=2)
+    #     for i in range(4):
+    #         if self.checkup_stop_func():
+    #             return 0
+    #         p = posi_manager.chara_num_list_point[i]
 
-            if min(cap[p[0], p[1]]) > 240:
-                continue
-            else:
-                return i + 1
+    #         if min(cap[p[0], p[1]]) > 240:
+    #             continue
+    #         else:
+    #             return i + 1
 
     def get_character_busy(self):
-        cap = self.itt.capture()
-        cap = self.itt.png2jpg(cap, channel='ui')
-        t = 0
-        for i in range(self.chara_num):
-            if self.checkup_stop_func():
-                return 0
-            p = posi_manager.chara_head_list_point[i]
-            if cap[p[0], p[1]][0] > 0 and cap[p[0], p[1]][1] > 0 and cap[p[0], p[1]][2] > 0:
-                t += 1
-        if t >= 3:
-            return False
-        else:
-            return True
+        return combat_lib.get_character_busy(self.itt, self.checkup_stop_func)
+        # cap = self.itt.capture()
+        # cap = self.itt.png2jpg(cap, channel='ui')
+        # t = 0
+        # for i in range(self.chara_num):
+        #     if self.checkup_stop_func():
+        #         return 0
+        #     p = posi_manager.chara_head_list_point[i]
+        #     if cap[p[0], p[1]][0] > 0 and cap[p[0], p[1]][1] > 0 and cap[p[0], p[1]][2] > 0:
+        #         t += 1
+        # if t >= 3:
+        #     return False
+        # else:
+        #     return True
 
     def do_attack(self):
         self.chara_waiting()
@@ -163,6 +199,8 @@ class TasticOperator(BaseThreading):
 
     def do_use_e(self, times=0):
         if self.checkup_stop_func():
+            return 0
+        if self.pause_tactic_flag:
             return 0
         if times >= 2:
             return -1
@@ -182,6 +220,8 @@ class TasticOperator(BaseThreading):
     def do_use_longe(self, times=0):
         if self.checkup_stop_func():
             return 0
+        if self.pause_tactic_flag:
+            return 0
         if times >= 2:
             return -1
 
@@ -196,6 +236,8 @@ class TasticOperator(BaseThreading):
         self.itt.key_up('e')
         if self.checkup_stop_func():
             return 0
+        if self.pause_tactic_flag:
+            return 0
         self.itt.key_press('w')
         self.itt.delay(0.2)
         if (not self._is_e_release()) and E_STRICT_MODE:
@@ -204,6 +246,8 @@ class TasticOperator(BaseThreading):
 
     def do_use_q(self, times=0):
         if self.checkup_stop_func():
+            return 0
+        if self.pause_tactic_flag:
             return 0
         if times > 2:
             return -1
@@ -219,6 +263,8 @@ class TasticOperator(BaseThreading):
 
     def do_long_attack(self):
         if self.checkup_stop_func():
+            return 0
+        if self.pause_tactic_flag:
             return 0
         self.chara_waiting(mode=1)
         self.itt.left_down()
@@ -241,11 +287,15 @@ class TasticOperator(BaseThreading):
     def do_aim(self):
         if self.checkup_stop_func():
             return 0
+        if self.pause_tactic_flag:
+            return 0
         self.chara_waiting(mode=1)
         self.itt.key_press('r')
 
     def do_unaim(self):
         if self.checkup_stop_func():
+            return 0
+        if self.pause_tactic_flag:
             return 0
         self.itt.key_press('r')
 
@@ -294,6 +344,8 @@ class TasticOperator(BaseThreading):
             while (not self.character.is_E_pass()) and (not self.checkup_stop_func()):
                 if self.checkup_stop_func():
                     return 0
+                if self.pause_tactic_flag:
+                    return 0
                 self.unconventionality_situation_detection()
                 self.execute_tastic([tas[0]])
         else:
@@ -308,8 +360,12 @@ class TasticOperator(BaseThreading):
             tas[0].replace('.', ',')
             if self.checkup_stop_func():
                 logger.debug('lock stop')
+            if self.pause_tactic_flag:
+                return 0
             while (not self.character.is_Q_pass()) and (not self.checkup_stop_func()):
                 if self.checkup_stop_func():
+                    return 0
+                if self.pause_tactic_flag:
                     return 0
                 self.unconventionality_situation_detection()
                 self.execute_tastic([tas[0]])
@@ -318,16 +374,20 @@ class TasticOperator(BaseThreading):
             self.execute_tastic([tas[1]])
 
     def execute_tastic(self, tastic_list):
-
+        self.flag_tactic_executing = True
         self.unconventionality_situation_detection()
 
         for tastic in tastic_list:
             if self.checkup_stop_func():
                 return 0
+            if self.pause_tactic_flag:
+                break
             tastic = tastic.split(',')
             for tas in tastic:
                 if self.checkup_stop_func():
-                    return 0
+                    break
+                if self.pause_tactic_flag:
+                    break
                 if tas == 'a':
                     self.do_attack()
                 elif tas == 'da':
@@ -365,7 +425,8 @@ class TasticOperator(BaseThreading):
                         self.estimate_q_ready(tas)
                     elif tas1 == '#@q?':
                         self.estimate_lock_q_ready(tas)
-
+        
+        
 
 if __name__ == '__main__':
     import combat_loop

@@ -8,27 +8,17 @@ from interaction_background import InteractionBGD
 from util import *
 from base_threading import BaseThreading
 import numpy as np
+import timer_module
 
 """
 战斗相关常用函数库。
 """
-def get_current_chara_num(itt: InteractionBGD):
-    """获得当前所选角色序号。
 
-    Args:
-        itt (InteractionBGD): InteractionBGD对象
+global only_arror_timer
+only_arror_timer = timer_module.Timer()
 
-    Returns:
-        int: character num.
-    """
-    cap = itt.capture(jpgmode=2)
-    for i in range(4):
-        p = posi_manager.chara_num_list_point[i]
-        if min(cap[p[0], p[1]]) > 240:
-            continue
-        else:
-            return i + 1
-
+def default_stop_func():
+    return False
 
 def unconventionality_situlation_detection(itt: InteractionBGD,
                                            autoDispose=True):
@@ -45,15 +35,88 @@ def unconventionality_situlation_detection(itt: InteractionBGD,
 
     return situlation_code
 
+def get_character_busy(itt: InteractionBGD, stop_func):
+    cap = itt.capture(jpgmode=2)
+    # cap = itt.png2jpg(cap, channel='ui')
+    t = 0
+    for i in range(4):
+        if stop_func():
+            return 0
+        p = posi_manager.chara_head_list_point[i]
+        if cap[p[0], p[1]][0] > 0 and cap[p[0], p[1]][1] > 0 and cap[p[0], p[1]][2] > 0:
+            t += 1
+    if t == 3:
+        return False
+    elif t == 4:
+        logger.debug("function: get_character_busy: t=4： 测试中功能，如果导致换人失败，反复输出 waiting 请上报。")
+        return True
+    else:
+        return True
+
+def chara_waiting(itt:InteractionBGD, stop_func, mode=0):
+    unconventionality_situlation_detection(itt)
+    while get_character_busy(itt, stop_func) and (not stop_func()):
+        if stop_func():
+            logger.debug('chara_waiting stop')
+            return 0
+        logger.debug('waiting')
+        itt.delay(0.1)
+
+def get_current_chara_num(itt: InteractionBGD, stop_func = default_stop_func):
+    """获得当前所选角色序号。
+
+    Args:
+        itt (InteractionBGD): InteractionBGD对象
+
+    Returns:
+        int: character num.
+    """
+    chara_waiting(itt, stop_func)
+    cap = itt.capture(jpgmode=2)
+    for i in range(4):
+        p = posi_manager.chara_num_list_point[i]
+        # print(min(cap[p[0], p[1]]))
+        if min(cap[p[0], p[1]]) > 248:
+            continue
+        else:
+            return i + 1
+        
+    logger.warning(_("获得当前角色编号失败"))
+    return 1
 
 def combat_statement_detection(itt: InteractionBGD):
+    
+    im_src = itt.capture()
+    orsrc = im_src.copy()
+    
+    red_num = 245
+    bg_num = 100
+
+    im_src = orsrc.copy()
+    im_src = itt.png2jpg(im_src, channel='ui', alpha_num=254)
+
+    im_src[990:1080, :, :] = 0
+    im_src[0:150, :, :] = 0
+    im_src[:, 1650:1920, :] = 0
+    
+    im_src[:, :, 2][im_src[:, :, 2] < red_num] = 0
+    im_src[:, :, 2][im_src[:, :, 0] > bg_num] = 0
+    im_src[:, :, 2][im_src[:, :, 1] > bg_num] = 0
+    # _, imsrc2 = cv2.threshold(imsrc[:, :, 2], 1, 255, cv2.THRESH_BINARY)
+    
+    flag_is_lifebar_exist = im_src[:, :, 2].max() > 0
+    # print('flag_is_lifebar_exist ',flag_is_lifebar_exist)
+    if flag_is_lifebar_exist:
+        only_arror_timer.reset()
+        return True
+    
+    '''-----------------------------'''
+    
     red_num = 250
     blue_num = 90
     green_num = 90
     float_num = 30
-
-    im_src = itt.capture()
-    orsrc = im_src.copy()
+    im_src = orsrc.copy()
     im_src = itt.png2jpg(im_src, channel='ui', alpha_num=150)
     # img_manager.qshow(imsrc)
 
@@ -76,6 +139,8 @@ def combat_statement_detection(itt: InteractionBGD):
     ret_contours = img_manager.get_rect(imsrc2, orsrc, ret_mode=3)
     ret_range = img_manager.get_rect(imsrc2, orsrc, ret_mode=0)
     
+    
+    
     if False:
         if len(ret_contours) != 0:
             angle = cv2.minAreaRect(ret_contours)[2]
@@ -94,31 +159,14 @@ def combat_statement_detection(itt: InteractionBGD):
         return True
     # print('flag_is_arrow_exist', flag_is_arrow_exist)
 
-    red_num = 245
-    bg_num = 100
-
-    im_src = orsrc.copy()
-    im_src = itt.png2jpg(im_src, channel='ui', alpha_num=254)
-
-    im_src[990:1080, :, :] = 0
-    im_src[0:150, :, :] = 0
-    im_src[:, 1650:1920, :] = 0
     
-    im_src[:, :, 2][im_src[:, :, 2] < red_num] = 0
-    im_src[:, :, 2][im_src[:, :, 0] > bg_num] = 0
-    im_src[:, :, 2][im_src[:, :, 1] > bg_num] = 0
-    # _, imsrc2 = cv2.threshold(imsrc[:, :, 2], 1, 255, cv2.THRESH_BINARY)
-    
-    flag_is_lifebar_exist = im_src[:, :, 2].max() > 0
-    # print('flag_is_lifebar_exist ',flag_is_lifebar_exist)
-    if flag_is_lifebar_exist:
-        return True
 
     return False
 
 class CombatStatementDetectionLoop(BaseThreading):
     def __init__(self):
         super().__init__()
+        self.setName("CombatStatementDetectionLoop")
         self.itt = InteractionBGD()
         self.current_state = False
         self.state_counter = 0
@@ -148,26 +196,38 @@ class CombatStatementDetectionLoop(BaseThreading):
                 continue
                 
             '''write your code below'''
-            
-            state = combat_statement_detection(self.itt)
+            if only_arror_timer.get_diff_time()>=30 and self.current_state == True:
+                logger.debug("only arror but lifebar is not exist over 30s, ready to exit combat mode.")
+                state = combat_statement_detection(self.itt)
+                state = False
+            else:
+                state = combat_statement_detection(self.itt)
             if state != self.current_state:
-                self.state_counter += 1
+                
                 if self.current_state == True: # 切换到无敌人慢一点, 8s
+                    self.state_counter += 1
                     self.while_sleep = 0.8
                 elif self.current_state == False: # 快速切换到遇敌
                     self.while_sleep = 0.02
+                    self.state_counter += 1
             else:
                 self.state_counter = 0
                 self.while_sleep = 0.2
             if self.state_counter >= 10:
                 logger.debug('combat_statement_detection change state')
+                if self.current_state == False:
+                    only_arror_timer.reset()
                 self.state_counter = 0
                 self.current_state = state
+            
+                
 
 CSDL = CombatStatementDetectionLoop()
 CSDL.start()
 
 if __name__ == '__main__':
+    itt = InteractionBGD()
     while 1:
-        print(CSDL.get_combat_state())
-        time.sleep(0.2)
+        # print(CSDL.get_combat_state())
+        print(get_current_chara_num(itt))
+        # time.sleep(0.2)

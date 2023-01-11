@@ -14,6 +14,7 @@ import datetime
 import static_lib
 import button_manager
 import img_manager
+import scene_manager
 
 COLLECTION = 0
 ENEMY = 1
@@ -48,6 +49,7 @@ def load_feature_position(text, blacklist_id=[], ret_mode = 0):
 class CollectorFlow(BaseThreading):
     def __init__(self):
         super().__init__()
+        self.setName("CollectorFlow")
         collector_config = load_json("auto_collector.json")
         self.collector_name = collector_config["collection_name"]
         if collector_config["collection_type"] == "COLLECTION":
@@ -262,6 +264,7 @@ class CollectorFlow(BaseThreading):
             if self.current_state == ST.INIT_MOVETO_COLLECTOR:
                 
                 self.collector_posi_dict = load_feature_position(self.collector_name, self.shielded_id)
+                scene_manager.switch_to_page(scene_manager.page_main, self.checkup_stop_func)
                 static_lib.while_until_no_excessive_error(self.checkup_stop_func)
                 self.current_position = static_lib.cvAutoTrackerLoop.get_position()[1:]
                 self.collector_posi_dict.sort(key=self.sort_by_eu)

@@ -2,12 +2,28 @@ from source.webio.pages import *
 import pywebio
 status = True
 
+def get_branch_commit_id():
+    res = subprocess.Popen('git rev-parse --short HEAD', shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                           stderr=subprocess.PIPE)
+    res.wait()
+    commit_id = res.stdout.read().decode('utf8').replace('\n', '')
 
+    res = subprocess.Popen('git symbolic-ref --short -q HEAD', shell=True, stdin=subprocess.PIPE,
+                           stdout=subprocess.PIPE,
+                           stderr=subprocess.PIPE)
+    res.wait()
+    branch = res.stdout.read().decode('utf8').replace('\n', '')
+    return branch,commit_id
 def main():
     pywebio.session.set_env(output_max_width='80%', title="GIA WebUI v0.5.0")
-    webio.manager.reg_page('Main', MainPage())
-    webio.manager.reg_page('Setting', SettingPage())
+    session.run_js(f'document.querySelector("body > footer").innerHTML+="| GIA: {"-".join(get_branch_commit_id())}"')
+    webio.manager.reg_page(_('Main'), MainPage())
+    webio.manager.reg_page(_('Setting'), SettingPage())
+    webio.manager.reg_page(_('CombatSetting'), CombatSettingPage())
+    webio.manager.reg_page(_("CollectorSetting"), CollectorSettingPage())
     webio.manager.load_page('Main')
+    util.add_logger_to_GUI()
+    util.logger.info("webio启动完成")
 
 
 '''    handler = log_handler.WebioHandler()

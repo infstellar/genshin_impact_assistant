@@ -22,6 +22,7 @@ class AimOperator(BaseThreading):
         self.loop_timer = Timer()
         auto_aim_json = load_json("auto_aim.json")
         self.fps = 1 / auto_aim_json["fps"]
+        self.fps = 5
         self.max_number_of_enemy_loops = auto_aim_json["max_number_of_enemy_loops"]
         self.auto_distance = auto_aim_json["auto_distance"]
         self.auto_move = auto_aim_json["auto_move"]
@@ -31,6 +32,7 @@ class AimOperator(BaseThreading):
         self.left_timer = Timer()
         self.reset_timer = Timer()
         self.kdwe_timer = Timer()
+        self.corr_rate = 1
 
     def pause_threading(self):
         if self.pause_threading_flag != True:
@@ -41,7 +43,11 @@ class AimOperator(BaseThreading):
     
     def run(self):
         while 1:
-            time.sleep(self.while_sleep)
+            t = self.loop_timer.loop_time() # 设置最大检查时间
+            if t <= self.fps:
+                time.sleep(self.fps - t)
+            # logger.trace(f"cost time: {t} | {self.fps}")
+                
             if self.stop_threading_flag:
                 return 0
 
@@ -58,10 +64,6 @@ class AimOperator(BaseThreading):
                 self.pause_threading_flag = True
                 continue
             
-            t = self.loop_timer.loop_time() # 设置最大检查时间
-            if t <= self.fps:
-                time.sleep(self.fps - t)
-
             ret = self.auto_aim() # 自动瞄准
             if ret == -1:
                 self.enemy_flag = False # 没找到敌人
@@ -129,8 +131,8 @@ class AimOperator(BaseThreading):
         closest_point = ret_points[points_length.index(min(points_length))] # 获得距离鼠标坐标最近的一个坐标
         px, py = closest_point
         mx, my = self.itt.get_mouse_point()
-        px = (px - mx) / 2.4
-        py = (py - my) / 2 + 35 # 获得鼠标坐标偏移量
+        px = (px - mx) / (2.4*self.corr_rate)
+        py = (py - my) / (2*self.corr_rate) + 35 # 获得鼠标坐标偏移量
         # print(px,py)
         if px >= 100:
             px = 100
@@ -141,7 +143,7 @@ class AimOperator(BaseThreading):
         if py <= -100:
             py = -100
         self.itt.move_to(px, py, relative=True)
-        logger.debug(f"auto_aim: x {px} y {py}")
+        # logger.debug(f"auto_aim: x {px} y {py}")
         return px
         # print()
 
