@@ -29,6 +29,7 @@ statement: in water; in climb; in move; in fly
 class TeyvatMoveController(BaseThreading):
     def __init__(self):
         super().__init__()
+        self.setName("TeyvatMoveController")
         self.itt = InteractionBGD()
         self.priority_waypoints = load_json("priority_waypoints.json", default_path='assests')
         self.priority_waypoints_array = []

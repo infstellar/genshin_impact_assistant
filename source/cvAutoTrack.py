@@ -123,6 +123,7 @@ del_log()
 class AutoTrackerLoop(BaseThreading):
     def __init__(self):
         super().__init__()
+        self.setName("AutoTrackerLoop")
         self.loaded_flag = False
         self.position = [0,0]
         self.last_position = self.position

@@ -73,6 +73,7 @@ class SwitchCharacterOperator(BaseThreading):
                 if chara.n != self.current_num:
                     self._switch_character(chara.n)
                 self.tastic_operator.set_parameter(chara.tastic_group, chara)
+                self.tastic_operator.restart_executor()
                 idle = False
                 return idle
         return idle
@@ -108,6 +109,7 @@ class SwitchCharacterOperator(BaseThreading):
 
     def continue_threading(self):
         self.pause_threading_flag = False
+        self.tastic_operator.set_parameter(None, None)
         self.tastic_operator.continue_threading()
 
 
