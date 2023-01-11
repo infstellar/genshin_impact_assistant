@@ -215,7 +215,8 @@ class CombatStatementDetectionLoop(BaseThreading):
                 self.while_sleep = 0.2
             if self.state_counter >= 10:
                 logger.debug('combat_statement_detection change state')
-                only_arror_timer.reset()
+                if self.current_state == False:
+                    only_arror_timer.reset()
                 self.state_counter = 0
                 self.current_state = state
             
