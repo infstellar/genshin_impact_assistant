@@ -35,7 +35,7 @@ clld = {
 conti_challenge = {
     'zh_CN': '继续挑战'
 }
-exit_zh_CNallenge = {
+exit_challenge = {
     'zh_CN': '退出秘境'
 }
 domain_obtain = {
