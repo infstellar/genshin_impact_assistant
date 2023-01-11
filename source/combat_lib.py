@@ -45,11 +45,11 @@ def get_character_busy(itt: InteractionBGD, stop_func):
         p = posi_manager.chara_head_list_point[i]
         if cap[p[0], p[1]][0] > 0 and cap[p[0], p[1]][1] > 0 and cap[p[0], p[1]][2] > 0:
             t += 1
-    if t == 3:
+    if t >= 3:
         return False
-    elif t == 4:
-        logger.debug("function: get_character_busy: t=4： 测试中功能，如果导致换人失败，反复输出 waiting 请上报。")
-        return True
+    # elif t == 4:
+    #     logger.debug("function: get_character_busy: t=4： 测试中功能，如果导致换人失败，反复输出 waiting 请上报。")
+    #     return True
     else:
         return True
 
