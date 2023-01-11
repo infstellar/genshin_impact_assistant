@@ -15,6 +15,7 @@ class PickupOperator(BaseThreading):
 
     def __init__(self):
         super().__init__()
+        self.setName("PickupOperator")
         self.itt = InteractionBGD()
         self.pickup_blacklist = load_json("auto_pickup.json")["blacklist"]
         self.pickup_blacklist += load_json("auto_pickup_default_blacklist.json")["blacklist"]

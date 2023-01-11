@@ -8,10 +8,14 @@ from interaction_background import InteractionBGD
 from util import *
 from base_threading import BaseThreading
 import numpy as np
+import timer_module
 
 """
 战斗相关常用函数库。
 """
+
+global only_arror_timer
+only_arror_timer = timer_module.Timer()
 
 def default_stop_func():
     return False
@@ -81,13 +85,38 @@ def get_current_chara_num(itt: InteractionBGD, stop_func = default_stop_func):
     return 1
 
 def combat_statement_detection(itt: InteractionBGD):
+    
+    im_src = itt.capture()
+    orsrc = im_src.copy()
+    
+    red_num = 245
+    bg_num = 100
+
+    im_src = orsrc.copy()
+    im_src = itt.png2jpg(im_src, channel='ui', alpha_num=254)
+
+    im_src[990:1080, :, :] = 0
+    im_src[0:150, :, :] = 0
+    im_src[:, 1650:1920, :] = 0
+    
+    im_src[:, :, 2][im_src[:, :, 2] < red_num] = 0
+    im_src[:, :, 2][im_src[:, :, 0] > bg_num] = 0
+    im_src[:, :, 2][im_src[:, :, 1] > bg_num] = 0
+    # _, imsrc2 = cv2.threshold(imsrc[:, :, 2], 1, 255, cv2.THRESH_BINARY)
+    
+    flag_is_lifebar_exist = im_src[:, :, 2].max() > 0
+    # print('flag_is_lifebar_exist ',flag_is_lifebar_exist)
+    if flag_is_lifebar_exist:
+        only_arror_timer.reset()
+        return True
+    
+    '''-----------------------------'''
+    
     red_num = 250
     blue_num = 90
     green_num = 90
     float_num = 30
-
-    im_src = itt.capture()
-    orsrc = im_src.copy()
+    im_src = orsrc.copy()
     im_src = itt.png2jpg(im_src, channel='ui', alpha_num=150)
     # img_manager.qshow(imsrc)
 
@@ -110,6 +139,8 @@ def combat_statement_detection(itt: InteractionBGD):
     ret_contours = img_manager.get_rect(imsrc2, orsrc, ret_mode=3)
     ret_range = img_manager.get_rect(imsrc2, orsrc, ret_mode=0)
     
+    
+    
     if False:
         if len(ret_contours) != 0:
             angle = cv2.minAreaRect(ret_contours)[2]
@@ -128,31 +159,14 @@ def combat_statement_detection(itt: InteractionBGD):
         return True
     # print('flag_is_arrow_exist', flag_is_arrow_exist)
 
-    red_num = 245
-    bg_num = 100
-
-    im_src = orsrc.copy()
-    im_src = itt.png2jpg(im_src, channel='ui', alpha_num=254)
-
-    im_src[990:1080, :, :] = 0
-    im_src[0:150, :, :] = 0
-    im_src[:, 1650:1920, :] = 0
     
-    im_src[:, :, 2][im_src[:, :, 2] < red_num] = 0
-    im_src[:, :, 2][im_src[:, :, 0] > bg_num] = 0
-    im_src[:, :, 2][im_src[:, :, 1] > bg_num] = 0
-    # _, imsrc2 = cv2.threshold(imsrc[:, :, 2], 1, 255, cv2.THRESH_BINARY)
-    
-    flag_is_lifebar_exist = im_src[:, :, 2].max() > 0
-    # print('flag_is_lifebar_exist ',flag_is_lifebar_exist)
-    if flag_is_lifebar_exist:
-        return True
 
     return False
 
 class CombatStatementDetectionLoop(BaseThreading):
     def __init__(self):
         super().__init__()
+        self.setName("CombatStatementDetectionLoop")
         self.itt = InteractionBGD()
         self.current_state = False
         self.state_counter = 0
@@ -182,21 +196,30 @@ class CombatStatementDetectionLoop(BaseThreading):
                 continue
                 
             '''write your code below'''
-            
-            state = combat_statement_detection(self.itt)
+            if only_arror_timer.get_diff_time()>=30 and self.current_state == True:
+                logger.debug("only arror but lifebar is not exist over 30s, ready to exit combat mode.")
+                state = combat_statement_detection(self.itt)
+                state = False
+            else:
+                state = combat_statement_detection(self.itt)
             if state != self.current_state:
-                self.state_counter += 1
+                
                 if self.current_state == True: # 切换到无敌人慢一点, 8s
+                    self.state_counter += 1
                     self.while_sleep = 0.8
                 elif self.current_state == False: # 快速切换到遇敌
                     self.while_sleep = 0.02
+                    self.state_counter += 1
             else:
                 self.state_counter = 0
                 self.while_sleep = 0.2
             if self.state_counter >= 10:
                 logger.debug('combat_statement_detection change state')
+                only_arror_timer.reset()
                 self.state_counter = 0
                 self.current_state = state
+            
+                
 
 CSDL = CombatStatementDetectionLoop()
 CSDL.start()

@@ -41,6 +41,7 @@ def get_target_relative_angle(x, y, tx, ty):
 class TeyvatMoveFlow(BaseThreading):
     def __init__(self):
         super().__init__()
+        self.setName("TeyvatMoveFlow")
         self.itt = InteractionBGD()
         self.stop_rule = 0
         self.tmc = teyvat_move_controller.TeyvatMoveController()
