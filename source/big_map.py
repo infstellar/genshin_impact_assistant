@@ -167,6 +167,11 @@ def get_closest_teleport_waypoint(object_img: img_manager.ImgIcon):
 def reset_map_size():
     """重置地图大小为标准值
     """
+    while scene_manager.get_current_pagename() != "bigmap":
+        scene_manager.switch_to_page(scene_manager.page_bigmap, stop_func = scene_manager.default_stop_func)
+        time.sleep(2)
+        
+    
     for i in range(8):        
         itt.move_and_click(position=posi_manager.posi_suoxiaoditu, delay=0.2)
     time.sleep(1)

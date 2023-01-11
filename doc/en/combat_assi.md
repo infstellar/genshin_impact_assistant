@@ -35,15 +35,18 @@ Auto Combat Assist supports the following strategies:
 | `j` | jump |
 | `ja` | jump attack |
 | `sp` | sprint |
-| `r` | aim |
-| `rr` | cancel targeting |
 | Number | Delay in `milliseconds` |
 
 Each strategy keyword is separated by `,`; different strategy groups are separated by `;`. When a group of policies is executed, the next policy group is executed.
 
 Notice:
 
-- Since the automatic recognition of monsters has not been implemented in the current version, the aiming operation has not been verified and optimized.
+```
+waiting for translate
+- 瞄准射箭的角色可以用重击代替。
+- 自动瞄准在射箭蓄力状态下，会被巨大的蓄力特效所干扰，导致识别混乱。所以尽量少使用单体伤害弓箭类角色，甘雨等范围伤害角色除外。
+```
+
 - Spaces cannot be added.
 
 - In the judgment expression, the strategy keywords are separated by `.`.

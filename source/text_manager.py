@@ -1,31 +1,45 @@
-lang = 'ch'
-start_challenge = {
-    'ch': '启动',
-    'en': 'start'
+global lang
+lang = 'zh_CN'
+
+class TextTemplate():
+    def __init__(self, text, cap_area) -> None:
+        self.text = text
+        self.cap_area = cap_area
+        
+    def gettext(self):
+        global lang
+        return self.text[lang]
+
+
+
+
+start_zh_CNallenge = {
+    'zh_CN': '启动',
+    'en_US': 'start'
 }
 LeavingIn = {
-    'ch': '自动退出'
+    'zh_CN': '自动退出'
 }
 claim_rewards = {
-    'ch': '领取奖励'
+    'zh_CN': '领取奖励'
 }
 use_20x2resin = {
-    'ch': '使用浓缩树脂'
+    'zh_CN': '使用浓缩树脂'
 }
 use_20resin = {
-    'ch': '使用原粹树脂'
+    'zh_CN': '使用原粹树脂'
 }
 clld = {
-    'ch': '地脉异常'
+    'zh_CN': '地脉异常'
 }
-conti_challenge = {
-    'ch': '继续挑战'
+conti_zh_CNallenge = {
+    'zh_CN': '继续挑战'
 }
-exit_challenge = {
-    'ch': '退出秘境'
+exit_zh_CNallenge = {
+    'zh_CN': '退出秘境'
 }
 domain_obtain = {
-    'ch': '获得'
+    'zh_CN': '获得'
 }
 
 

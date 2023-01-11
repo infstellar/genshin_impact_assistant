@@ -1,9 +1,0 @@
-{
-  "ChromelessWindow": "是否为无边框窗口",
-  "DEBUG": "调试模式",
-  "corr_degree": "视角校准",
-  "device_paddle": "paddle运算设备(cpu/gpu/auto)",
-  "device_torch": "torch运算设备(cpu/gpu/auto)",
-  "teamfile": "配队文件",
-  "version": "版本"
-}
