@@ -11,7 +11,7 @@ Portions of this document were manually proofread.
 
 <div align="center">
 
-Based on image recognition and simulated buttons, the multi-functional Genshin automatically assists operations, including automatic combat, automatic domain, and automatic obtain materials in the teyvat big world.
+Based on image recognition and simulated keyboard operations, the multi-functional Genshin automatically assists operations, including automatic combat, automatic domain, and automatic obtain materials in the teyvat big world.
 
 The goal of GIA is: Let the program be responsible for playing Genshin, and you are responsible for get various characters and have fun with characters~~playn with ur wifes~~
 
