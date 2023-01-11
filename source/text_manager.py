@@ -32,7 +32,7 @@ use_20resin = {
 clld = {
     'zh_CN': '地脉异常'
 }
-conti_zh_CNallenge = {
+conti_challenge = {
     'zh_CN': '继续挑战'
 }
 exit_zh_CNallenge = {
