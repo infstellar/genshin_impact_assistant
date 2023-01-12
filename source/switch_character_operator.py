@@ -28,9 +28,9 @@ class SwitchCharacterOperator(BaseThreading):
         self.tastic_operator.add_stop_func(self.checkup_stop_func)
         self.tastic_operator.start()
         self.chara_list.sort(key=sort_flag_1, reverse=False)
-        self.current_num = combat_lib.get_current_chara_num(self.itt, self.checkup_stop_func)
+        self.current_num = 1 # combat_lib.get_current_chara_num(self.itt, self.checkup_stop_func)
         self.switch_timer = Timer(diff_start_time=2)
-
+    
     def run(self):
         while 1:
             time.sleep(0.2)
@@ -111,6 +111,7 @@ class SwitchCharacterOperator(BaseThreading):
         self.pause_threading_flag = False
         self.tastic_operator.set_parameter(None, None)
         self.tastic_operator.continue_threading()
+        self.current_num = combat_lib.get_current_chara_num(self.itt, self.checkup_stop_func)
 
 
 if __name__ == '__main__':
