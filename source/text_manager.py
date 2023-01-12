@@ -45,3 +45,6 @@ domain_obtain = {
 
 def text(x):
     return x[lang]
+
+if __name__ == '__main__':  
+    print(text(conti_challenge))

@@ -48,8 +48,8 @@ class TasticOperator(BaseThreading):
     def continue_threading(self):
         if self.pause_threading_flag != False:
             self.pause_threading_flag = False
-            self.tastic_group = None
-            self.formered_tastic = None
+            # self.tastic_group = None
+            # self.formered_tastic = None
     
     def restart_executor(self):
         logger.trace("restart_executor start")
