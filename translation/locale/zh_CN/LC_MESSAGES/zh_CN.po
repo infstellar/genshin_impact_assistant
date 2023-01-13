@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2022-12-25 18:29+0800\n"
-"PO-Revision-Date: 2022-12-25 18:33+0800\n"
+"POT-Creation-Date: 2023-01-13 16:47+0800\n"
+"PO-Revision-Date: 2023-01-13 17:30+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -16,20 +16,40 @@ msgstr ""
 "Generated-By: pygettext.py 1.5\n"
 "X-Generator: Poedit 3.2\n"
 
-#: ../source\collector_flow.py:300
+#: ../source\collector_flow.py:303
 msgid "switch Flow to: AFTER_MOVETO_COLLECTOR"
 msgstr ""
 
-#: ../source\collector_flow.py:326
+#: ../source\collector_flow.py:329
 msgid "switch Flow to: BEFORE_PICKUP_COLLECTOR"
 msgstr ""
 
-#: ../source\collector_flow.py:334
+#: ../source\collector_flow.py:337
 msgid "switch Flow to: IN_PICKUP_COLLECTOR"
 msgstr ""
 
-#: ../source\collector_flow.py:344
+#: ../source\collector_flow.py:347
 msgid "switch Flow to: AFTER_PICKUP_COLLECTOR"
+msgstr ""
+
+#: ../source\combat_lib.py:84
+msgid "获得当前角色编号失败"
+msgstr ""
+
+#: ../source\combat_loop.py:65
+msgid " 的Ecd_float_time大于0，请确定该角色不是多段e技能角色。"
+msgstr ""
+
+#: ../source\combat_loop.py:65
+msgid "角色 "
+msgstr ""
+
+#: ../source\combat_loop.py:115
+msgid "有人嘎了，停止自动战斗"
+msgstr ""
+
+#: ../source\combat_loop.py:158 ../source\combat_loop.py:164
+msgid "停止自动战斗"
 msgstr ""
 
 #: ../source\cvAutoTrack.py:103
@@ -48,83 +68,279 @@ msgstr "autoTrack.log 2 已清理"
 msgid "autoTrack.log 3 cleaned"
 msgstr "autoTrack.log 3 已清理"
 
-#: ../source\cvAutoTrack.py:122
+#: ../source\cvAutoTrack.py:138
 msgid "cvAutoTrack DLL has been loaded."
 msgstr "cvAutoTrack DLL 已经加载"
 
-#: ../source\flow_state.py:86
-msgid "空闲"
+#: ../source\domain_flow.py:38
+msgid "请输入秘境次数"
 msgstr ""
 
-#: ../source\flow_state.py:89
-msgid "正在初始化"
+#: ../source\domain_flow.py:53
+msgid "秘境次数："
+msgstr ""
+
+#: ../source\domain_flow.py:56
+msgid "停止自动秘境"
+msgstr ""
+
+#: ../source\domain_flow.py:124
+msgid "正在开始挑战秘境"
+msgstr ""
+
+#: ../source\domain_flow.py:274
+msgid "正在开始战斗"
+msgstr ""
+
+#: ../source\domain_flow.py:288
+msgid "正在停止战斗"
+msgstr ""
+
+#: ../source\domain_flow.py:291
+msgid "等待岩造物消失"
+msgstr ""
+
+#: ../source\domain_flow.py:299
+msgid "正在激活石化古树"
+msgstr ""
+
+#: ../source\domain_flow.py:344
+msgid "秘境结束。"
+msgstr ""
+
+#: ../source\domain_flow.py:355
+msgid "开始下一次秘境"
+msgstr ""
+
+#: ../source\domain_flow.py:371
+msgid "次数结束。退出秘境"
 msgstr ""
 
 #: ../source\flow_state.py:91
+msgid "空闲"
+msgstr ""
+
+#: ../source\flow_state.py:94
+msgid "正在初始化"
+msgstr ""
+
+#: ../source\flow_state.py:96
 msgid "正在准备"
 msgstr ""
 
-#: ../source\flow_state.py:93
+#: ../source\flow_state.py:98
 msgid "正在进行"
 msgstr ""
 
-#: ../source\flow_state.py:95
+#: ../source\flow_state.py:100
 msgid "准备结束"
 msgstr ""
 
-#: ../source\flow_state.py:97
+#: ../source\flow_state.py:102
 msgid "结束"
 msgstr ""
 
-#: ../source\flow_state.py:100
+#: ../source\flow_state.py:105
 msgid "移动到挑战位置"
 msgstr ""
 
-#: ../source\flow_state.py:102
+#: ../source\flow_state.py:107
 msgid "挑战秘境中"
 msgstr ""
 
-#: ../source\flow_state.py:104
+#: ../source\flow_state.py:109
 msgid "准备领取奖励"
 msgstr ""
 
-#: ../source\flow_state.py:106
+#: ../source\flow_state.py:111
 msgid "正在寻找石化古树位置"
 msgstr ""
 
-#: ../source\flow_state.py:108
+#: ../source\flow_state.py:113
 msgid "移动到石化古树位置"
 msgstr ""
 
-#: ../source\flow_state.py:110
+#: ../source\flow_state.py:115
 msgid "领取奖励"
 msgstr ""
 
-#: ../source\flow_state.py:112
+#: ../source\flow_state.py:117
 msgid "结束秘境"
 msgstr ""
 
-#: ../source\flow_state.py:114
+#: ../source\flow_state.py:119
 msgid "在地图上传送"
 msgstr ""
 
-#: ../source\flow_state.py:116
+#: ../source\flow_state.py:121
 msgid "移动到目标坐标位置"
 msgstr ""
 
-#: ../source\flow_state.py:118
+#: ../source\flow_state.py:123
 msgid "移动到采集物位置"
 msgstr ""
 
-#: ../source\flow_state.py:120
+#: ../source\flow_state.py:125
 msgid "拾取采集物"
 msgstr ""
 
-#: ../source\flow_state.py:122
+#: ../source\flow_state.py:127
 msgid "结束自动采集"
+msgstr ""
+
+#: ../source\generic_lib.py:72 ../source\teyvat_move_flow.py:157
+msgid "获取传送锚点失败，正在重试"
+msgstr ""
+
+#: ../source\interaction_background.py:43
+msgid "恢复操作"
+msgstr ""
+
+#: ../source\interaction_background.py:45
+msgid "当前窗口焦点为"
 msgstr ""
 
 #: ../source\listening.py:55
 msgid "Program stop."
+msgstr "程序终止"
+
+#: ../source\listening.py:60
+msgid "正在停止自动战斗"
 msgstr ""
+
+#: ../source\listening.py:64
+msgid "启动自动战斗"
+msgstr ""
+
+#: ../source\listening.py:74
+msgid "正在停止自动秘境"
+msgstr ""
+
+#: ../source\listening.py:78
+msgid "启动自动秘境"
+msgstr ""
+
+#: ../source\listening.py:87
+msgid "正在停止自动采集"
+msgstr ""
+
+#: ../source\listening.py:90
+msgid "启动自动采集"
+msgstr ""
+
+#: ../source\listening.py:134
+msgid "导入完成"
+msgstr ""
+
+#: ../source\pdocr_api.py:3
+msgid "Creating ocr object."
+msgstr "正在创建OCR对象"
+
+#: ../source\pdocr_api.py:14
+msgid "导入paddleocr时错误; err code: 001"
+msgstr ""
+
+#: ../source\pdocr_api.py:40
+msgid "ocr device: "
+msgstr "OCR 运行设备："
+
+#: ../source\pickup_operator.py:53
+msgid "正在设置时间为夜晚"
+msgstr ""
+
+#: ../source\pickup_operator.py:80
+msgid "停止自动拾取"
+msgstr ""
+
+#: ../source\pickup_operator.py:113
+msgid "PICKUP_TIMEOUT_001"
+msgstr ""
+
+#: ../source\pickup_operator.py:115 ../source\pickup_operator.py:121
+msgid "停止拾取"
+msgstr ""
+
+#: ../source\pickup_operator.py:119
+msgid "PICKUP_TIMEOUT_002"
+msgstr ""
+
+#: ../source\pickup_operator.py:128
+msgid "已找到物品且无法找到下一个物品，停止拾取"
+msgstr ""
+
+#: ../source\pickup_operator.py:161
+msgid "pickup: "
+msgstr "拾取到："
+
+#: ../source\pickup_operator.py:163
+msgid "已找到："
+msgstr ""
+
+#: ../source\scene_manager.py:66
+msgid "UI界面检测失败，正在尝试按esc返回"
+msgstr ""
+
+#: ../source\scene_manager.py:68
+msgid "将在1秒后再次尝试获取UI界面"
+msgstr ""
+
+#: ../source\scene_manager.py:69 ../source\scene_manager.py:75
+msgid "尝试次数："
+msgstr ""
+
+#: ../source\scene_manager.py:73
+msgid "UI界面检测失败"
+msgstr ""
+
+#: ../source\scene_manager.py:74
+msgid "将在0.2秒后再次尝试获取UI界面"
+msgstr ""
+
+#: ../source\static_lib.py:32
+msgid "等待cvautotrack获取坐标"
+msgstr ""
+
+#: ../source\teyvat_move_controller.py:138
+msgid "已到达目的地附近，本次导航结束。"
+msgstr ""
+
+#: ../source\teyvat_move_controller.py:143
+msgid "已到达F附近，本次导航结束。"
+msgstr ""
+
+#: ../source\teyvat_move_flow.py:121
+msgid "停止自动移动"
+msgstr ""
+
+#: ../source\teyvat_move_flow.py:268
+msgid "正在落地"
+msgstr ""
+
+#: ../source\teyvat_move_flow.py:270
+msgid "结束自动行走"
+msgstr ""
+
+#: ../source\util.py:80 ../source\util.py:82
+msgid " 请检查"
+msgstr ""
+
+#: ../source\util.py:80 ../source\util.py:82
+msgid "目录不存在："
+msgstr ""
+
+#: ../source\util.py:95
+msgid "请用管理员权限运行"
+msgstr ""
+
+#: ../source\yolox_api.py:6
+msgid "Creating yolox obj. It may takes a few second."
+msgstr "正在创建YOLOX对象。这可能需要一些时间。"
+
+#: ../source\yolox_api.py:23
+msgid "导入torch时错误; err code: 002"
+msgstr ""
+
+#: ../source\yolox_api.py:535
+msgid "Created yolox obj."
+msgstr "YOLOX对象已创建"
 

@@ -1,0 +1,23 @@
+# Translate Guide
+
+## Generate POT file
+
+To Generate POT file, use follow command:
+
+```
+python pygettext.py -d zh_CN -p locale/zh_CN/LC_MESSAGES ../genshin_assistant.py
+python pygettext.py -d en_US -p locale/en_US/LC_MESSAGES ../genshin_assistant.py
+python pygettext.py -d zh_CN -p locale/zh_CN/LC_MESSAGES ../source/*.py
+python pygettext.py -d en_US -p locale/en_US/LC_MESSAGES ../source/*.py
+```
+
+## Translate In PoEdit
+
+- open .po file in PoEdit
+
+- click `translate` `update from POT file`
+
+- select .pot file
+
+## Generate mo file
+

@@ -13,9 +13,10 @@ print(f"format test: {ab} 123")
 # python msgfmt.py -o locale/zh_CN/LC_MESSAGES/zh_CN.mo locale/zh_CN/LC_MESSAGES/zh_CN.pot
 # python msgfmt.py -o locale/en_US/LC_MESSAGES/en_US.mo locale/en_US/LC_MESSAGES/en_US.pot
 
+'''
+python pygettext.py -d zh_CN -p locale/zh_CN/LC_MESSAGES ../source/*.py
+python pygettext.py -d en_US -p locale/en_US/LC_MESSAGES ../source/*.py
 
-# python pygettext.py -d zh_CN -p locale/zh_CN/LC_MESSAGES ../source/*.py
-# python pygettext.py -d en_US -p locale/en_US/LC_MESSAGES ../source/*.py
-
-# python pygettext.py -d zh_CN -p locale/zh_CN/LC_MESSAGES test.py
-# python pygettext.py -d en_US -p locale/en_US/LC_MESSAGES test.py
+python pygettext.py -d zh_CN -p locale/zh_CN/LC_MESSAGES test.py
+python pygettext.py -d en_US -p locale/en_US/LC_MESSAGES test.py
+'''
