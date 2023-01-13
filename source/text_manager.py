@@ -2,18 +2,19 @@ global lang
 lang = 'zh_CN'
 
 class TextTemplate():
-    def __init__(self, text, cap_area) -> None:
-        self.text = text
+    def __init__(self, text:dict, cap_area) -> None:
+        self.origin_text = text
         self.cap_area = cap_area
+        self.text = self.gettext(self.origin_text)
         
     def gettext(self):
         global lang
-        return self.text[lang]
+        return self.origin_text[lang]
 
 
 
 
-start_zh_CNallenge = {
+start_challenge = {
     'zh_CN': '启动',
     'en_US': 'start'
 }

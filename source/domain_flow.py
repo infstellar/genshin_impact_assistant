@@ -7,9 +7,9 @@ import interaction_background
 import movement
 import pdocr_api
 import posi_manager as PosiM
-import text_manager as textM
 import timer_module
 import yolox_api
+import assest
 from base_threading import BaseThreading
 from util import *
 
@@ -35,7 +35,7 @@ class DomainFlow(BaseThreading):
 
         domain_times = domain_json["domain_times"]
         if domain_times == 0:
-            x = input("请输入秘境次数")
+            x = input(_("请输入秘境次数"))
             # x.replace(']','')
             domain_times = int(x)
         self.lockOnFlag = 0
@@ -50,10 +50,10 @@ class DomainFlow(BaseThreading):
         self.fast_move_timer = timer_module.Timer()
 
         self.last_domain_times = domain_times - 1
-        logger.info('秘境次数：' + str(domain_times))
+        logger.info(_('秘境次数：') + str(domain_times))
 
     def stop_threading(self):
-        logger.info('停止自动秘境')
+        logger.info(_('停止自动秘境'))
         self.combat_loop.stop_threading()
         self.stop_threading_flag = True
 
@@ -107,7 +107,7 @@ class DomainFlow(BaseThreading):
             cap = self.itt.capture()
             cap = self.itt.png2jpg(cap, channel='ui')
         if pdocr_api.ocr.get_text_position(crop(cap, PosiM.posi_domain['LeavingIn']),
-                                           textM.text(textM.LeavingIn)) != -1:
+                                           assest.LeavingIn.text) != -1:
             return True
         else:
             return False
@@ -129,7 +129,7 @@ class DomainFlow(BaseThreading):
             if self.checkup_stop_func():
                 return 0
 
-            if pdocr_api.ocr.get_text_position(cap, textM.text(textM.clld)) != -1:
+            if pdocr_api.ocr.get_text_position(cap, assest.clld.text) != -1:
                 break
             if self.itt.get_img_existence(img_manager.IN_DOMAIN):
                 break
@@ -140,7 +140,7 @@ class DomainFlow(BaseThreading):
             return 0
 
         cap = self.itt.capture(jpgmode=2)
-        if pdocr_api.ocr.get_text_position(cap, textM.text(textM.clld)) != -1:
+        if pdocr_api.ocr.get_text_position(cap, assest.clld.text) != -1:
             self.itt.move_and_click([PosiM.posi_domain['CLLD'][0], PosiM.posi_domain['CLLD'][1]], delay=1)
             # time.sleep(1)
             # pyautogui.leftClick()
@@ -211,7 +211,7 @@ class DomainFlow(BaseThreading):
             elif self.resin_mode == '20':
                 self.itt.appear_then_click(img_manager.USE_20RESIN_DOBLE_CHOICES)
 
-            if pdocr_api.ocr.get_text_position(self.itt.capture(jpgmode=0), textM.text(textM.domain_obtain)) != -1:
+            if pdocr_api.ocr.get_text_position(self.itt.capture(jpgmode=0), assest.domain_obtain.text) != -1:
                 break
 
         time.sleep(2)
@@ -271,7 +271,7 @@ class DomainFlow(BaseThreading):
 
             elif self.current_state == ST.INIT_CHALLENGE:
                 self.itt.key_up('w')
-                logger.info('正在开始战斗')
+                logger.info(_('正在开始战斗'))
                 self.combat_loop.continue_threading()
                 self.itt.key_press('f')
                 time.sleep(0.1)
@@ -285,10 +285,10 @@ class DomainFlow(BaseThreading):
                     self.current_state = ST.AFTER_CHALLENGE
 
             elif self.current_state == ST.AFTER_CHALLENGE:
-                logger.info('正在停止战斗')
+                logger.info(_('正在停止战斗'))
                 self.combat_loop.pause_threading()
                 time.sleep(5)
-                logger.info('等待岩造物消失')
+                logger.info(_('等待岩造物消失'))
                 time.sleep(20)
                 self.current_state = ST.END_CHALLENGE
 
@@ -296,7 +296,7 @@ class DomainFlow(BaseThreading):
                 self.current_state = ST.INIT_FINGING_TREE
 
             elif self.current_state == ST.INIT_FINGING_TREE:
-                logger.info('正在激活石化古树')
+                logger.info(_('正在激活石化古树'))
                 self.lockOnFlag = 0
                 self.current_state = ST.IN_FINGING_TREE
 
@@ -341,7 +341,7 @@ class DomainFlow(BaseThreading):
                 self.current_state = ST.END_GETTING_REAWARD
 
             elif self.current_state == ST.END_GETTING_REAWARD:
-                logger.info('秘境结束。')
+                logger.info(_('秘境结束。'))
                 # logger.info('domain over. restart next domain in 5 sec.')
                 self.current_state = ST.END_DOMAIN
 
@@ -352,11 +352,11 @@ class DomainFlow(BaseThreading):
                 cap = self.itt.capture()
                 cap = self.itt.png2jpg(cap, channel='ui')
                 if self.last_domain_times >= 1:
-                    logger.info('开始下一次秘境')
+                    logger.info(_('开始下一次秘境'))
                     # logger.info('start next domain.')
                     self.last_domain_times -= 1
                     while 1:
-                        posi = pdocr_api.ocr.get_text_position(cap, textM.text(textM.conti_challenge))
+                        posi = pdocr_api.ocr.get_text_position(cap, assest.conti_challenge.text)
                         if posi != -1:
                             self.itt.move_and_click([posi[0], posi[1] + 30])
                             break
@@ -368,10 +368,10 @@ class DomainFlow(BaseThreading):
                     if self.checkup_stop_func():
                         break
                 else:
-                    logger.info('次数结束。退出秘境')
+                    logger.info(_('次数结束。退出秘境'))
                     # logger.info('no more times. exit domain.')
                     while 1:
-                        posi = pdocr_api.ocr.get_text_position(cap, textM.text(textM.exit_challenge))
+                        posi = pdocr_api.ocr.get_text_position(cap, assest.exit_challenge.text)
                         if posi != -1:
                             self.itt.move_and_click([posi[0], posi[1] + 30])
                             break

@@ -7,5 +7,5 @@
   "teamfile": "team.json",
   "version": "v0.3.0",
   "check_import": false,
-  "lang":"zh_CN"
+  "lang":"$local$"
 }
