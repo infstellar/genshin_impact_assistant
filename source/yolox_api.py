@@ -3,7 +3,7 @@
 # Copyright (c) Megvii, Inc. and its affiliates.
 from util import *
 
-logger.info('Creating yolox obj. It may takes a few second.')
+logger.info(_('Creating yolox obj. It may takes a few second.'))
 
 import sys, os
 
@@ -20,7 +20,7 @@ import cv2
 try:
     import torch
 except Exception as error:
-    logger.critical("导入torch时错误; err code: 002")
+    logger.critical(_("导入torch时错误; err code: 002"))
     logger.exception(error)
 from yolox.data.data_augment import ValTransform
 from yolox.data.datasets import COCO_CLASSES
@@ -532,7 +532,7 @@ class Yolox_Api:
 
 
 yolo_tree = Yolox_Api()
-logger.info('Created yolox obj.')
+logger.info(_('Created yolox obj.'))
 if __name__ == "__main__":
     # yolox=yolox_api_custom()
     # yolox.predicte(cv2.imread("D:\\Program Data\\IDEA\\yolo3_test1\\YOLOX\\assets\\head.jpg",1))

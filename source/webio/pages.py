@@ -41,14 +41,14 @@ class MainPage(Page):
             try:
                 pin.pin['isSessionExist']
             except SessionNotFoundException:
-                logger.info("未找到会话，可能由于窗口关闭。请刷新页面重试。")
+                logger.info(_("未找到会话，可能由于窗口关闭。请刷新页面重试。"))
                 return
             if pin.pin['FlowMode'] != listening.current_flow:  # 比较变更是否被应用
                 listening.current_flow = pin.pin['FlowMode']  # 应用变更
                 self.log_list_lock.acquire()
-                output.put_text(f"正在导入模块, 可能需要一些时间。", scope='LogArea').style(
+                output.put_text(_("正在导入模块, 可能需要一些时间。"), scope='LogArea').style(
                     f'color: black; font_size: 20px')
-                output.put_text(f"在导入完成前，请不要切换页面。", scope='LogArea').style(
+                output.put_text(_("在导入完成前，请不要切换页面。"), scope='LogArea').style(
                     f'color: black; font_size: 20px')
                 self.log_list_lock.release()
                 listening.call_you_import_module()
@@ -91,22 +91,22 @@ class MainPage(Page):
 
         output.put_row([  # 横列
             output.put_column([  # 左竖列
-                output.put_markdown('## Options'),  # 左竖列标题
+                output.put_markdown(_('## Options')),  # 左竖列标题
 
                 output.put_row([  # FlowMode
-                    output.put_text('FlowMode'),
-                    pin.put_select('FlowMode', [
-                        {'label': 'Idle', 'value': listening.FLOW_IDLE},
-                        {'label': 'AutoCombat', 'value': listening.FLOW_COMBAT},
-                        {'label': 'AutoDomain', 'value': listening.FLOW_DOMAIN},
-                        {'label': 'AutoCollector', 'value': listening.FLOW_COLLECTOR}
+                    output.put_text(_('FlowMode')),
+                    pin.put_select(_('FlowMode'), [
+                        {'label': _('Idle'), 'value': listening.FLOW_IDLE},
+                        {'label': _('AutoCombat'), 'value': listening.FLOW_COMBAT},
+                        {'label': _('AutoDomain'), 'value': listening.FLOW_DOMAIN},
+                        {'label': _('AutoCollector'), 'value': listening.FLOW_COLLECTOR}
                     ])]),
                 # Button_StartStop
-                output.put_row([output.put_text('启动/停止'), output.put_scope('Button_StartStop')]),
+                output.put_row([output.put_text(_('启动/停止')), output.put_scope('Button_StartStop')]),
 
-                output.put_markdown('## Statement'),
+                output.put_markdown(_('## Statement')),
 
-                output.put_row([output.put_text('当前状态'), output.put_scope('StateArea')])
+                output.put_row([output.put_text(_('当前状态')), output.put_scope('StateArea')])
 
             ]), None,
             output.put_scope('Log')
@@ -120,7 +120,7 @@ class MainPage(Page):
                           scope='Button_StartStop')
 
         # Log
-        output.put_markdown('## Log', scope='Log')
+        output.put_markdown(_('## Log'), scope='Log')
         output.put_scrollable(output.put_scope('LogArea'), height=600, keep_bottom=True, scope='Log')
         '''self.main_pin_change_thread = threading.Thread(target=self._main_pin_change_thread, daemon=False)
         self.main_pin_change_thread.start()'''
@@ -180,13 +180,13 @@ class ConfigPage(Page):
         self.last_file = None
 
         # 标题
-        output.put_markdown('# Config', scope=self.main_scope)
+        output.put_markdown(_('# Config'), scope=self.main_scope)
 
         # 页面切换按钮
         output.put_buttons(list(manager.page_dict), onclick=webio.manager.load_page, scope=self.main_scope)
 
         # 配置页
-        output.put_markdown('## config:', scope=self.main_scope)
+        output.put_markdown(_('## config:'), scope=self.main_scope)
 
         output.put_scope("select_scope", scope=self.main_scope)
         pin.put_select('file', self.config_files, scope="select_scope")
@@ -215,7 +215,7 @@ class ConfigPage(Page):
             try:
                 pin.pin['isSessionExist']
             except SessionNotFoundException:
-                logger.info("未找到会话，可能由于窗口关闭。请刷新页面重试。")
+                logger.info(_("未找到会话，可能由于窗口关闭。请刷新页面重试。"))
                 return
                 
             if pin.pin['file'] != self.last_file:  # 当下拉框被更改时
@@ -261,7 +261,7 @@ class ConfigPage(Page):
 
         json.dump(self.get_json(j), open(self.file_name, 'w', encoding='utf8'), ensure_ascii=False, indent=4)
         # output.put_text('saved!', scope='now')
-        output.toast('saved!')
+        output.toast(_('saved!'))
 
     # 
     def get_json(self, j: dict, add_name=''):
@@ -444,13 +444,13 @@ class SettingPage(ConfigPage):
         self.last_file = None
 
         # 标题
-        output.put_markdown('# Setting', scope=self.main_scope)
+        output.put_markdown(_('# Setting'), scope=self.main_scope)
 
         # 页面切换按钮
         output.put_buttons(list(manager.page_dict), onclick=webio.manager.load_page, scope=self.main_scope)
 
         # 配置页
-        output.put_markdown('## config:', scope=self.main_scope)
+        output.put_markdown(_('## config:'), scope=self.main_scope)
         output.put_scope("select_scope", scope=self.main_scope)
 
         pin.put_select('file', self.config_files, scope="select_scope")
@@ -477,24 +477,24 @@ class CombatSettingPage(ConfigPage):
         self.last_file = None
 
         # 标题
-        output.put_markdown('# CombatSetting', scope=self.main_scope)
+        output.put_markdown(_('# CombatSetting'), scope=self.main_scope)
 
         # 页面切换按钮
         output.put_buttons(list(manager.page_dict), onclick=webio.manager.load_page, scope=self.main_scope)
 
         # 添加team.json
-        output.put_markdown('# Add team', scope=self.main_scope)
+        output.put_markdown(_('# Add team'), scope=self.main_scope)
 
         # 添加team.json按钮
         output.put_row([
-            output.put_button("Add team", onclick=self.onclick_add_teamjson, scope=self.main_scope),
+            output.put_button(_("Add team"), onclick=self.onclick_add_teamjson, scope=self.main_scope),
             None,
-            output.put_button("Add team with characters", onclick=self.onclick_add_teamjson_withcharacters,
+            output.put_button(_("Add team with characters"), onclick=self.onclick_add_teamjson_withcharacters,
                               scope=self.main_scope)],
             scope=self.main_scope, size="10% 10px 20%")
 
         # 配置页
-        output.put_markdown('## config:', scope=self.main_scope)
+        output.put_markdown(_('## config:'), scope=self.main_scope)
         output.put_scope("select_scope", scope=self.main_scope)
         pin.put_select('file', self.config_files, scope="select_scope")
 
@@ -539,7 +539,7 @@ class CollectorSettingPage(ConfigPage):
         output.put_buttons(list(manager.page_dict), onclick=webio.manager.load_page, scope=self.main_scope)
 
         # 配置页
-        output.put_markdown('## config:', scope=self.main_scope)
+        output.put_markdown(_('## config:'), scope=self.main_scope)
         output.put_scope("select_scope", scope=self.main_scope)
         pin.put_select('file', self.config_files, scope="select_scope")
     
@@ -578,7 +578,7 @@ class CollectorSettingPage(ConfigPage):
                 output.put_row([
                     pin.put_textarea(component_name, label=display_name, value=util.list2format_list_text(v)),
                     None,
-                    output.put_button("clean", onclick=lambda:self._reset_list_textarea(component_name))
+                    output.put_button(_("clean list"), onclick=lambda:self._reset_list_textarea(component_name))
                     ]
                 , scope=scope_name,size="85% 5% 10%")
             elif "collection_log.json" in self.file_name:

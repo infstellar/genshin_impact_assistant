@@ -62,7 +62,7 @@ def get_chara_list(team_name='team.json'):
         ctrigger = team_item["trigger"]
 
         if cEcd_float_time > 0:
-            logger.info("角色 " + cname + " 的Ecd_float_time大于0，请确定该角色不是多段e技能角色。")
+            logger.info(_("角色 ") + cname + _(" 的Ecd_float_time大于0，请确定该角色不是多段e技能角色。"))
 
         chara_list.append(
             character.Character(
@@ -155,13 +155,13 @@ class Combat_Controller(BaseThreading):
 
     def checkup_stop_func(self):
         if self.pause_threading_flag or self.stop_threading_flag:
-            logger.info('停止自动战斗')
+            logger.info(_('停止自动战斗'))
             return True
         
         
     def checkup_stop_threading(self):
         if self.stop_threading_flag:
-            logger.info('停止自动战斗')
+            logger.info(_('停止自动战斗'))
             return True
 
     def continue_threading(self):

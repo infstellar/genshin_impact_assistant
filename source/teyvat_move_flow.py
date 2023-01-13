@@ -118,7 +118,7 @@ class TeyvatMoveFlow(BaseThreading):
             time.sleep(self.while_sleep)
 
             if self.stop_threading_flag:
-                logger.info("停止自动移动")
+                logger.info(_("停止自动移动"))
                 return 0
 
             if self.pause_threading_flag:
@@ -154,7 +154,7 @@ class TeyvatMoveFlow(BaseThreading):
                 # Obtain the coordinates of the transmission anchor closest to the target coordinates
                 tw_posi = big_map.nearest_big_map_tw_posi(curr_posi, self.target_posi, self.checkup_stop_func) # 获得距离目标坐标最近的传送锚点坐标 
                 if len(tw_posi)==0:
-                    logger.info("获取传送锚点失败，正在重试")
+                    logger.info(_("获取传送锚点失败，正在重试"))
                     big_map.reset_map_size()
                     self.current_state = ST.IN_TEYVAT_TELEPORT
                     continue
@@ -265,9 +265,9 @@ class TeyvatMoveFlow(BaseThreading):
             if self.current_state == ST.END_TEYVAT_MOVE:
                 self.pause_threading()
                 if self.motion_state == IN_FLY:
-                    logger.info("正在落地")
+                    logger.info(_("正在落地"))
                     self.itt.left_click()
-                logger.info("结束自动行走")
+                logger.info(_("结束自动行走"))
                 time.sleep(1)
                     
                     
