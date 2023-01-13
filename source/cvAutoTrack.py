@@ -136,7 +136,7 @@ class AutoTrackerLoop(BaseThreading):
         self.cvAutoTracker = AutoTracker(os.path.join(root_path, 'source\\cvAutoTrack_7.2.3\\CVAUTOTRACK.dll'))
         self.cvAutoTracker.init()
         logger.info(_("cvAutoTrack DLL has been loaded."))
-        logger.info('1) err' + str(self.cvAutoTracker.get_last_error()))
+        logger.debug('1) err' + str(self.cvAutoTracker.get_last_error()))
         time.sleep(2)
         self.position = self.cvAutoTracker.get_position()
         self.last_position = self.position

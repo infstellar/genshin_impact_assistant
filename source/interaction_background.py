@@ -40,9 +40,9 @@ def before_operation(print_log=True):
             if winname not in process_name:
                 while 1:
                     if get_active_window_process_name() in process_name:
-                        logger.info("恢复操作")
+                        logger.info(_("恢复操作"))
                         break
-                    logger.info(f"当前窗口焦点为 {winname} 不是原神窗口 {process_name}，操作暂停 {5 - (time.time()%5)} 秒")
+                    logger.info(_("当前窗口焦点为") + str(winname) + "不是原神窗口" + str(process_name) + "，操作暂停 " + str(5 - (time.time()%5)) +" 秒")
                     time.sleep(5 - (time.time()%5))
             return func(*args, **kwargs)
         return wrapper

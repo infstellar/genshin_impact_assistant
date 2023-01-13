@@ -67,7 +67,8 @@ def get_local_lang():
 
 if global_lang == "$locale$":
     global_lang = get_local_lang()
-l10n = gettext.translation(global_lang, localedir=os.path.join(root_path, "translation/locale"), languages=["zh_CN"])
+    logger.info(f"language set as: {global_lang}")
+l10n = gettext.translation(global_lang, localedir=os.path.join(root_path, "translation/locale"), languages=[global_lang])
 l10n.install()
 _ = l10n.gettext
 # load translation module over

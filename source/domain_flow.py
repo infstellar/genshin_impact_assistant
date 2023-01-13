@@ -121,7 +121,7 @@ class DomainFlow(BaseThreading):
             return False
 
     def Flow_INIT_MOVETO_CHALLENGE(self):
-        logger.info('正在开始挑战秘境')
+        logger.info(_('正在开始挑战秘境'))
         movement.reset_view()
         # cap=self.itt.capture(jpgmode=2)
         while 1:

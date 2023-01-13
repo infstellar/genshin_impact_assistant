@@ -135,12 +135,12 @@ class TeyvatMoveController(BaseThreading):
             
                 if euclidean_distance(self.target_positon, static_lib.cvAutoTrackerLoop.get_position()[1:])<=10:
                     self.pause_threading()
-                    logger.info("已到达目的地附近，本次导航结束。")
+                    logger.info(_("已到达目的地附近，本次导航结束。"))
                     self.itt.key_up('w')
             elif self.stop_rule == 1:
                 if generic_lib.f_recognition():
                     self.pause_threading()
-                    logger.info("已到达F附近，本次导航结束。")
+                    logger.info(_("已到达F附近，本次导航结束。"))
                     self.itt.key_up('w')
             
             

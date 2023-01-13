@@ -23,7 +23,7 @@ def main():
     webio.manager.reg_page(_("CollectorSetting"), CollectorSettingPage())
     webio.manager.load_page('Main')
     util.add_logger_to_GUI()
-    util.logger.info("webio启动完成")
+    util.logger.info(_("webio启动完成"))
 
 
 '''    handler = log_handler.WebioHandler()
