@@ -24,7 +24,7 @@ IMG_BOOL = 4
 IMG_BOOLRATE = 5
 
 winname_default = "原神"
-winname_cgs = "云·原神"
+# winname_cgs = "云·原神"
 process_name = ["YuanShen.exe", "GenshinImpact.exe"]
 
 def before_operation(print_log=True):

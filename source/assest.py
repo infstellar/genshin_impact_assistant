@@ -1,5 +1,6 @@
 import text_manager
 import img_manager
+import button_manager
 # import scene_manager
 QTSX = text_manager.TextTemplate(text=
 {

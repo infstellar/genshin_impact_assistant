@@ -26,8 +26,8 @@ class ImgIcon:
     def __init__(self, name, path, is_bbg=True, matching_rate=None, alpha=None, bbg_posi=None, cap_posi=[0, 0, 1080, 1920],
                  jpgmode=2, threshold=0.91, win_page = 'all', win_text = None, offset = 0, print_log = LOG_NONE):
         self.name = name
-        self.path = os.path.join(root_path, path)
-        self.path = self.path.replace("$lang$", global_lang)
+        self.origin_path = os.path.join(root_path, path)
+        self.path = self.origin_path.replace("$lang$", global_lang)
         self.is_bbg = is_bbg
         self.mr = matching_rate
         self.alpha = alpha
