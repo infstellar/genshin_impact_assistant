@@ -193,3 +193,6 @@ source/test236.py
 config/tactic/*.json
 config/tastic_backup/*
 .vs/*
+translation/locale/en_US/LC_MESSAGES/en_US.pot
+.gitignore
+translation/locale/zh_CN/LC_MESSAGES/zh_CN.pot
