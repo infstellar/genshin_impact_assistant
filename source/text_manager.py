@@ -1,15 +1,13 @@
-global lang
-lang = 'zh_CN'
+from util import *
 
 class TextTemplate():
-    def __init__(self, text:dict, cap_area) -> None:
+    def __init__(self, text:dict, cap_area=[0,0,1920,1080]) -> None:
         self.origin_text = text
         self.cap_area = cap_area
-        self.text = self.gettext(self.origin_text)
+        self.text = self.origin_text[global_lang]
         
     def gettext(self):
-        global lang
-        return self.origin_text[lang]
+        return self.origin_text[global_lang]
 
 
 
@@ -45,7 +43,7 @@ domain_obtain = {
 
 
 def text(x):
-    return x[lang]
+    return x[global_lang]
 
 if __name__ == '__main__':  
     print(text(conti_challenge))
