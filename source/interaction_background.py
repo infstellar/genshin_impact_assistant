@@ -25,7 +25,7 @@ IMG_BOOLRATE = 5
 
 winname_default = "原神"
 winname_cgs = "云·原神"
-process_name = "YuanShen.exe"
+process_name = ["YuanShen.exe", "GenshinImpact.exe"]
 
 def before_operation(print_log=True):
     def outwrapper(func):
@@ -37,9 +37,9 @@ def before_operation(print_log=True):
             if print_log:
                 logger.debug(f" operation: {func.__name__} | args: {args[1:]} | {kwargs} | function name: {func_name} & {func_name_2}")
             winname = get_active_window_process_name()
-            if winname != process_name:
+            if winname not in process_name:
                 while 1:
-                    if get_active_window_process_name() == process_name:
+                    if get_active_window_process_name() in process_name:
                         logger.info("恢复操作")
                         break
                     logger.info(f"当前窗口焦点为 {winname} 不是原神窗口 {process_name}，操作暂停 {5 - (time.time()%5)} 秒")
