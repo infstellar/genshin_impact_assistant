@@ -7,8 +7,11 @@ import time  # 8药删了，qq了
 import math
 import numpy as np
 import gettext
+from loguru import logger
 
-# 配置基本目录
+time.time()  # 防自动删除
+
+# configurate paths
 try:
     from path_lib import *
 except:
@@ -18,13 +21,79 @@ except:
         sys.path.insert(0, root_path)
     if sys.path[1] != source_path:
         sys.path.insert(1, source_path)
+# configurate paths over
 
-from loguru import logger
+
+
+# load config file
+def load_json(json_name='config.json', default_path='config\\settings'):
+    try:
+        return json.load(open(os.path.join(root_path, default_path, json_name), 'r', encoding='utf-8'))
+    except:
+        json.dump({}, open(os.path.join(root_path, default_path, json_name), 'w', encoding='utf-8'))
+        return json.load(open(os.path.join(root_path, default_path, json_name), 'r', encoding='utf-8'))
+try:
+    config_json = load_json("config.json")
+    DEBUG_MODE = config_json["DEBUG"] if "DEBUG" in config_json else False
+    global_lang = config_json["lang"]
+except:
+    logger.error("config文件导入失败，可能由于初次安装。跳过导入。")
+    DEBUG_MODE = False
+    global_lang = "$locale$"
+# load config file over
+
+
+
+# configurate loguru
+logger.remove(handler_id=None)
+logger.add(os.path.join(root_path, os.path.join(root_path, 'Logs', "{time:YYYY-MM-DD}.log")), level="TRACE", backtrace=True, retention='15 days')
+if DEBUG_MODE:
+    logger.add(sys.stdout, level="TRACE", backtrace=True)
+else:
+    logger.add(sys.stdout, level="INFO", backtrace=True)
+# configurate loguru over
+
+
+
 # load translation module
-l10n = gettext.translation("zh_CN", localedir=os.path.join(root_path, "translation/locale"), languages=["zh_CN"])
+def get_local_lang():
+    import locale
+    lang = locale.getdefaultlocale()[0]
+    logger.debug(f"locale: {locale.getdefaultlocale()}")
+    if lang in ["zh_CN", "zh_SG", "zh_MO", "zh_HK"]:
+        return "zh_CN"
+    else:
+        return "en_US"
+
+if global_lang == "$locale$":
+    global_lang = get_local_lang()
+l10n = gettext.translation(global_lang, localedir=os.path.join(root_path, "translation/locale"), languages=["zh_CN"])
 l10n.install()
 _ = l10n.gettext
-time.time()  # 防自动删除
+# load translation module over
+
+
+
+# verify path
+if not os.path.exists(root_path):
+    logger.error(_("目录不存在：") + root_path + _(" 请检查"))
+if not os.path.exists(source_path):
+    logger.error(_("目录不存在：") + source_path + _(" 请检查"))
+# verify path over
+
+
+
+# verify administration
+import ctypes, pickle
+def is_admin():
+    try:
+        return ctypes.windll.shell32.IsUserAnAdmin()
+    except:
+        return False
+if not is_admin():
+    logger.error(_("请用管理员权限运行"))
+# verify administration over
+
 
 
 def list_text2list(text: str) -> list:
@@ -41,7 +110,6 @@ def list_text2list(text: str) -> list:
         rt_list = []
 
     return rt_list
-
 
 def list2list_text(lst: list) -> str:
     if lst is not None:  # 判断是否为空
@@ -77,56 +145,6 @@ def is_json_equal(j1: str, j2: str) -> bool:
     except:
         return False
 
-
-
-
-
-# 加载json
-def load_json(json_name='config.json', default_path='config\\settings'):
-    try:
-        return json.load(open(os.path.join(root_path, default_path, json_name), 'r', encoding='utf-8'))
-    except:
-        json.dump({}, open(os.path.join(root_path, default_path, json_name), 'w', encoding='utf-8'))
-        return json.load(open(os.path.join(root_path, default_path, json_name), 'r', encoding='utf-8'))
-
-try:
-    config_json = load_json("config.json")
-    DEBUG_MODE = config_json["DEBUG"] if "DEBUG" in config_json else False
-except:
-    logger.error("config文件导入失败，可能由于初次安装。跳过导入。")
-    DEBUG_MODE = False
-
-# 设置debug
-
-
-# 设置env path
-# env_folder_path = config_json["env_floder_path"]
-# env_path = os.path.abspath(os.path.join(root_path, env_folder_path))
-# if True:
-#     if sys.path[2] != env_path:
-#         sys.path.insert(2, env_path)
-
-# import asyncio
-# import threading
-# from source.webio import webio
-# from pywebio import platform
-# def server_thread():
-#     # https://zhuanlan.zhihu.com/p/101586682
-#     loop = asyncio.new_event_loop()
-#     asyncio.set_event_loop(loop)
-#     ###
-
-# platform.tornado.start_server(webio.main, auto_open_webbrowser=True, debug=DEBUG_MODE)
-# threading.Thread(target=server_thread, daemon=False).start()
-
-# 配置logger
-logger.remove(handler_id=None)
-logger.add(os.path.join(root_path, os.path.join(root_path, 'Logs', "{time:YYYY-MM-DD}.log")), level="TRACE", backtrace=True, retention='15 days')
-if DEBUG_MODE:
-    logger.add(sys.stdout, level="TRACE", backtrace=True)
-else:
-    logger.add(sys.stdout, level="INFO", backtrace=True)
-
 def add_logger_to_GUI():
     import webio.log_handler
     cb_func = webio.log_handler.webio_poster
@@ -134,32 +152,7 @@ def add_logger_to_GUI():
         logger.add(cb_func, level="TRACE", backtrace=True, colorize=True)
     else:
         logger.add(cb_func, level="INFO", backtrace=True, colorize=True)
-    # logger.info("test")
-# logger.add(webio.log_handler.webio_handler)
-# 校验目录
-if not os.path.exists(root_path):
-    logger.error("目录不存在：" + root_path + " 请检查")
-if not os.path.exists(source_path):
-    logger.error("目录不存在：" + source_path + " 请检查")
-# if not os.path.exists(env_path):
-#     logger.error("目录不存在：" + env_path + " 请检查")
 
-import ctypes, pickle
-
-
-# 检查管理员
-def is_admin():
-    try:
-        return ctypes.windll.shell32.IsUserAnAdmin()
-    except:
-        return False
-
-
-if not is_admin():
-    # print('try to get administrator')
-    # ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, __file__, None, 1)
-    # print('administrator have been obtained')
-    logger.error("请用管理员权限运行")
 
 
 def is_int(x):
@@ -326,6 +319,8 @@ def load_jsons_from_folder(path):
                 json_list.append({"label": f, "json": j})
     return json_list
 
+
+# Update for a program used before version v0.5.0.424
 if os.path.exists(os.path.join(root_path, "config\\tastic")):
     logger.info("检测到tastic文件夹。")
     logger.info("版本v0.5.0.424后，tastic文件夹修正为tactic文件夹。")
@@ -350,6 +345,8 @@ if os.path.exists(os.path.join(root_path, "config\\tastic")):
     logger.info("操作完成。您可以手动删除残留的config/tactic/tastic.json文件。")
     time.sleep(1)
     # os.rename(os.path.join(root_path, "config\\tastic"), os.path.join(root_path, "config\\tactic"))
+# Over
+
 
 if __name__ == '__main__':
     # a = load_jsons_from_folder(os.path.join(root_path, "config\\tactic"))

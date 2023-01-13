@@ -27,6 +27,7 @@ class ImgIcon:
                  jpgmode=2, threshold=0.91, win_page = 'all', win_text = None, offset = 0, print_log = LOG_NONE):
         self.name = name
         self.path = os.path.join(root_path, path)
+        self.path = self.path.replace("$lang$", global_lang)
         self.is_bbg = is_bbg
         self.mr = matching_rate
         self.alpha = alpha
@@ -81,10 +82,10 @@ COMING_OUT_BY_SPACE = ImgIcon(name="coming_out_by_space", path="assests\\imgs\\c
 IN_DOMAIN = ImgIcon(name="IN_DOMAIN", path="assests\\imgs\\common\\IN_DOMAIN.jpg",
                     is_bbg=True, bbg_posi=[25,112,  52, 137, ], cap_posi='bbg', print_log=LOG_WHEN_TRUE)
 USE_20RESIN_DOBLE_CHOICES = ImgIcon(name="USE_20RESIN_DOBLE_CHOICES",
-                                    path="assests\\imgs\\common\\USE_20RESIN_DOBLE_CHOICES.jpg",
+                                    path="assests\\imgs\\$lang$\\USE_20RESIN_DOBLE_CHOICES.jpg",
                                     is_bbg=True, bbg_posi=[985, 724, 1348, 791 ], cap_posi='bbg', print_log=LOG_WHEN_TRUE)
 USE_20X2RESIN_DOBLE_CHOICES = ImgIcon(name="USE_20X2RESIN_DOBLE_CHOICES",
-                                      path="assests\\imgs\\common\\USE_20X2RESIN_DOBLE_CHOICES.jpg",
+                                      path="assests\\imgs\\$lang$\\USE_20X2RESIN_DOBLE_CHOICES.jpg",
                                       is_bbg=True, bbg_posi=[567,726 ,934, 793 ], cap_posi='bbg', print_log=LOG_WHEN_TRUE)
 F_BUTTON = ImgIcon(name="F_BUTTON", path="assests\\imgs\\common\\F_BUTTON.jpg",
                    is_bbg=True, bbg_posi=[1104,526 , 1128,550 ], cap_posi=[1079,350 ,1162, 751 ],
@@ -115,10 +116,10 @@ ui_switch_to_time_menu = ImgIcon(name="ui_switch_to_time_menu", path="assests\\i
                         is_bbg=True, cap_posi='bbg', print_log=LOG_WHEN_TRUE)
 ui_time_menu_core = ImgIcon(name="ui_time_menu_core", path="assests\\imgs\\common\\ui\\time_menu_core.jpg",
                         is_bbg=True, cap_posi='bbg', print_log=LOG_WHEN_TRUE, threshold=0.89)
-character_died = ImgIcon(name="character_died", path="assests\\imgs\\cn\\character_died.jpg",
+character_died = ImgIcon(name="character_died", path="assests\\imgs\\$lang$\\character_died.jpg",
                         is_bbg=True, cap_posi='bbg', win_text="使用道具", threshold=0.98, print_log=LOG_WHEN_TRUE)
 bigmap_choose_area = ImgIcon(name="bigmap_choose_area", path="assests\\imgs\\common\\ui\\bigmap_choose_area.jpg", is_bbg=True, cap_posi='bbg')
-bigmap_tp = ImgIcon(name="bigmap_tp", path="assests\\imgs\\cn\\bigmap_tp.jpg", is_bbg=True, cap_posi='bbg')
+bigmap_tp = ImgIcon(name="bigmap_tp", path="assests\\imgs\\$lang$\\bigmap_tp.jpg", is_bbg=True, cap_posi='bbg')
 
 # qshow(ui_esc_menu.image)
 
@@ -231,6 +232,9 @@ def get_rect(im_src, origin_img, ret_mode=0):
     elif ret_mode == 3:
         return max_contour
 
+
+
+    
 
 if __name__ == '__main__':
     # img = refrom_img(cv2.imread("assests\\imgs\\common\\coming_out_by_space.jpg"),posi_manager.get_posi_from_str('coming_out_by_space'))
