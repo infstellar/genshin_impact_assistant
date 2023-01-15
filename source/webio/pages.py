@@ -95,7 +95,7 @@ class MainPage(Page):
 
                 output.put_row([  # FlowMode
                     output.put_text(_('FlowMode')),
-                    pin.put_select(_('FlowMode'), [
+                    pin.put_select(('FlowMode'), [
                         {'label': _('Idle'), 'value': listening.FLOW_IDLE},
                         {'label': _('AutoCombat'), 'value': listening.FLOW_COMBAT},
                         {'label': _('AutoDomain'), 'value': listening.FLOW_DOMAIN},

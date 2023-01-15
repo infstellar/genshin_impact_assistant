@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2023-01-13 16:47+0800\n"
-"PO-Revision-Date: 2023-01-13 17:30+0800\n"
+"POT-Creation-Date: 2023-01-13 18:01+0800\n"
+"PO-Revision-Date: 2023-01-13 18:05+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -15,6 +15,167 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: pygettext.py 1.5\n"
 "X-Generator: Poedit 3.2\n"
+
+#: ../genshin_assistant.py:20
+msgid "正在初始化，请稍后"
+msgstr ""
+
+#: ../genshin_assistant.py:27
+msgid "导入依赖时错误; err code: 001_1"
+msgstr ""
+
+#: ../genshin_assistant.py:29
+msgid "程序暂停。按任意键退出"
+msgstr ""
+
+#: ../genshin_assistant.py:31
+msgid "初始化完成"
+msgstr ""
+
+#: ../genshin_assistant.py:32
+msgid "正在等待webio启动"
+msgstr ""
+
+#: ../genshin_assistant.py:33
+msgid "启动键盘监听"
+msgstr ""
+
+#: ../source/webio\pages.py:44 ../source/webio\pages.py:218
+msgid "未找到会话，可能由于窗口关闭。请刷新页面重试。"
+msgstr ""
+
+#: ../source/webio\pages.py:49
+msgid "正在导入模块, 可能需要一些时间。"
+msgstr ""
+
+#: ../source/webio\pages.py:51
+msgid "在导入完成前，请不要切换页面。"
+msgstr ""
+
+#: ../source/webio\pages.py:88
+msgid "Get IP address"
+msgstr "获取IP地址"
+
+#: ../source/webio\pages.py:94
+msgid "## Options"
+msgstr "## 选项"
+
+#: ../source/webio\pages.py:97 ../source/webio\pages.py:98
+msgid "FlowMode"
+msgstr "流程模式"
+
+#: ../source/webio\pages.py:99
+msgid "Idle"
+msgstr "空闲"
+
+#: ../source/webio\pages.py:100
+msgid "AutoCombat"
+msgstr "自动战斗"
+
+#: ../source/webio\pages.py:101
+msgid "AutoDomain"
+msgstr "自动秘境"
+
+#: ../source/webio\pages.py:102
+msgid "AutoCollector"
+msgstr "自动采集"
+
+#: ../source/webio\pages.py:105
+msgid "启动/停止"
+msgstr ""
+
+#: ../source/webio\pages.py:107
+msgid "## Statement"
+msgstr "## 状态"
+
+#: ../source/webio\pages.py:109
+msgid "当前状态"
+msgstr ""
+
+#: ../source/webio\pages.py:123
+msgid "## Log"
+msgstr "## 日志"
+
+#: ../source/webio\pages.py:141
+msgid "Not Enabled"
+msgstr "未启用"
+
+#: ../source/webio\pages.py:142
+msgid "LAN IP"
+msgstr "局域网IP"
+
+#: ../source/webio\pages.py:142
+msgid "WAN IP"
+msgstr "以太网IP"
+
+#: ../source/webio\pages.py:183
+msgid "# Config"
+msgstr "# 设置"
+
+#: ../source/webio\pages.py:189 ../source/webio\pages.py:453
+#: ../source/webio\pages.py:497 ../source/webio\pages.py:542
+msgid "## config:"
+msgstr "## 设置："
+
+#: ../source/webio\pages.py:264
+msgid "saved!"
+msgstr "保存成功！"
+
+#: ../source/webio\pages.py:305
+msgid "Do you need to save changes?"
+msgstr "你要保存设置吗？"
+
+#: ../source/webio\pages.py:306
+msgid "No"
+msgstr "否"
+
+#: ../source/webio\pages.py:306
+msgid "Yes"
+msgstr "是"
+
+#: ../source/webio\pages.py:447
+msgid "# Setting"
+msgstr "# 设置"
+
+#: ../source/webio\pages.py:480
+msgid "# CombatSetting"
+msgstr "# 自动战斗设置"
+
+#: ../source/webio\pages.py:486
+msgid "# Add team"
+msgstr "# 增加队伍"
+
+#: ../source/webio\pages.py:490
+msgid "Add team"
+msgstr "增加队伍"
+
+#: ../source/webio\pages.py:492
+msgid "Add team with characters"
+msgstr "增加队伍（使用character.json的配置）"
+
+#: ../source/webio\pages.py:536 ../source/webio\webio.py:23
+msgid "CollectorSetting"
+msgstr "自动采集设置"
+
+#: ../source/webio\pages.py:581
+msgid "clean list"
+msgstr "清空列表"
+
+#: ../source/webio\webio.py:20
+msgid "Main"
+msgstr "主页面"
+
+#: ../source/webio\webio.py:21
+msgid "Setting"
+msgstr "设置页面"
+
+#: ../source/webio\webio.py:22
+msgid "CombatSetting"
+msgstr "自动战斗设置"
+
+#: ../source/webio\webio.py:26
+msgid "webio启动完成"
+msgstr ""
 
 #: ../source\collector_flow.py:303
 msgid "switch Flow to: AFTER_MOVETO_COLLECTOR"

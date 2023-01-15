@@ -5,10 +5,10 @@
 To Generate POT file, use follow command:
 
 ```
-python pygettext.py -d zh_CN -p locale/zh_CN/LC_MESSAGES ../genshin_assistant.py
-python pygettext.py -d en_US -p locale/en_US/LC_MESSAGES ../genshin_assistant.py
-python pygettext.py -d zh_CN -p locale/zh_CN/LC_MESSAGES ../source/*.py
-python pygettext.py -d en_US -p locale/en_US/LC_MESSAGES ../source/*.py
+cd translation
+python pygettext.py -d zh_CN -p locale/zh_CN/LC_MESSAGES ../genshin_assistant.py ../source/*.py ../source/webio/*.py
+python pygettext.py -d en_US -p locale/en_US/LC_MESSAGES ../genshin_assistant.py ../source/*.py ../source/webio/*.py
+cd ../
 ```
 
 ## Translate In PoEdit

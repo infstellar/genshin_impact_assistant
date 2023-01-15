@@ -42,7 +42,7 @@ def before_operation(print_log=True):
                     if get_active_window_process_name() in process_name:
                         logger.info(_("恢复操作"))
                         break
-                    logger.info(_("当前窗口焦点为") + str(winname) + "不是原神窗口" + str(process_name) + "，操作暂停 " + str(5 - (time.time()%5)) +" 秒")
+                    logger.info(_("当前窗口焦点为") + str(winname) + _("不是原神窗口") + str(process_name) + _("，操作暂停 ") + str(5 - (time.time()%5)) +_(" 秒"))
                     time.sleep(5 - (time.time()%5))
             return func(*args, **kwargs)
         return wrapper
@@ -91,7 +91,7 @@ class InteractionBGD:
             self.handle = static_lib.get_handle()
 
         if self.handle == 0:
-            logger.error("未找到句柄，请确认原神窗口是否开启。")
+            logger.error(_("未找到句柄，请确认原神窗口是否开启。"))
 
     def capture_handle(self):
         # 获取窗口客户区的大小
@@ -139,14 +139,14 @@ class InteractionBGD:
         if check_shape:
         
             if ret.shape != (1080, 1920, 4):
-                logger.error(f"截图失败, shape={ret.shape}, 将在2秒后重试。")
+                logger.error(_("截图失败, shape=") + str(ret.shape) + _("将在2秒后重试。"))
                 while 1:
                     time.sleep(2)
                     ret = self.capture_handle()
                     if ret.shape == (1080, 1920, 4):
                         break
                     else:
-                        logger.error(f"截图失败, shape={ret.shape}, 将在2秒后重试。")
+                        logger.error(_("截图失败, shape=") + str(ret.shape) + _("将在2秒后重试。"))
 
         # img_manager.qshow(ret)
         if posi is not None:
