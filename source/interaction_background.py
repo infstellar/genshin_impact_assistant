@@ -23,7 +23,7 @@ IMG_RECT = 3
 IMG_BOOL = 4
 IMG_BOOLRATE = 5
 
-winname_default = "原神"
+winname_default = ["原神", "Genshin Impact"]
 # winname_cgs = "云·原神"
 process_name = ["YuanShen.exe", "GenshinImpact.exe"]
 
@@ -55,7 +55,7 @@ class InteractionBGD:
     thanks for https://zhuanlan.zhihu.com/p/361569101
     """
 
-    def __init__(self, hwndname=winname_default):
+    def __init__(self, hwndname:list=winname_default):
         self.GetDC = ctypes.windll.user32.GetDC
         self.CreateCompatibleDC = ctypes.windll.gdi32.CreateCompatibleDC
         self.GetClientRect = ctypes.windll.user32.GetClientRect
@@ -85,8 +85,13 @@ class InteractionBGD:
         self.CONSOLE_ONLY = False
 
         self.isChromelessWindow = config_json["ChromelessWindow"]
-        self.handle = ctypes.windll.user32.FindWindowW(None, hwndname)
-
+        for i in hwndname:
+            handle = ctypes.windll.user32.FindWindowW(None, i)
+            if handle != 0:
+                self.handle = handle
+                logger.info(f"handle: {self.handle}")
+                break
+        
         if self.handle == 0:
             self.handle = static_lib.get_handle()
 
@@ -377,6 +382,17 @@ class InteractionBGD:
                 return False
         elif ret_mode == IMG_RATE:
             return matching_rate
+        
+    def get_text_existence(self, textobj: assest.text_manager.TextTemplate, is_gray=False, is_log = True, ret_mode = IMG_BOOL, show_res = False):
+        import pdocr_api
+        cap = self.capture(posi = textobj.cap_area, jpgmode = 0)
+        if pdocr_api.ocr.get_text_position(cap, textobj.text) != -1:
+            if is_log:
+                logger.debug(f"get_text_existence: text: {textobj.text} Found")
+            return True
+        else:
+            logger.debug(f"get_text_existence: text: {textobj.text} Not Found")
+            return False
 
     def appear_then_click(self, inputvar, is_gray=False):
         """appear then click
@@ -878,6 +894,8 @@ if __name__ == '__main__':
     #     pydirectinput.moveRel(10,10)
     # win32api.SetCursorPos((300, 300))
     # pydirectinput.
+    a = ib.get_text_existence(assest.LEYLINEDISORDER)
+    print(a)
     print()
     while 1:
         # time.sleep(1)

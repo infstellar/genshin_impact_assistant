@@ -1,6 +1,7 @@
 import text_manager
 import img_manager
 import button_manager
+from util import *
 # import scene_manager
 QTSX = text_manager.TextTemplate(text=
 {
@@ -12,11 +13,11 @@ CSMD = text_manager.TextTemplate(text=
     "zh_CN":"传送锚点",
     "en_US": "Teleport Waypoint"
 }, cap_area = img_manager.bigmap_choose_area.cap_posi)
-LeavingIn = text_manager.TextTemplate(text=
+LEAVINGIN = text_manager.TextTemplate(text=
 {
     'zh_CN': '自动退出',
     "en_US": 'Leaving in'
-})
+}, cap_area = get_bbox(cv2.imread(os.path.join(root_path, "assests\\imgs\\common\\area\\LEAVINGIN.jpg"))))
 claim_rewards = text_manager.TextTemplate(text=
 {
     'zh_CN': '领取奖励',
@@ -25,18 +26,18 @@ claim_rewards = text_manager.TextTemplate(text=
 use_20x2resin = text_manager.TextTemplate(text=
 {
     'zh_CN': '使用浓缩树脂',
-    "en_US": ""
+    "en_US": "Use Condensed Resin"
 })
 use_20resin = text_manager.TextTemplate(text=
 {
     'zh_CN': '使用原粹树脂',
-    "en_US": ""
+    "en_US": "Use Original Resin"
 })
-clld = text_manager.TextTemplate(text=
+LEYLINEDISORDER = text_manager.TextTemplate(text=
 {
     'zh_CN': '地脉异常',
     "en_US": "Ley Line Disorder"
-})
+}, cap_area = get_bbox(cv2.imread(os.path.join(root_path, "assests\\imgs\\common\\area\\LEYLINEDISORDER.jpg"))))
 conti_challenge = text_manager.TextTemplate(text=
 {
     'zh_CN': '继续挑战',
