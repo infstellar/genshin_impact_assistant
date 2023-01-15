@@ -103,11 +103,7 @@ class DomainFlow(BaseThreading):
             return False
 
     def _Trigger_AFTER_CHALLENGE(self, cap=None):
-        if cap is None:
-            cap = self.itt.capture()
-            cap = self.itt.png2jpg(cap, channel='ui')
-        if pdocr_api.ocr.get_text_position(crop(cap, PosiM.posi_domain['LeavingIn']),
-                                           assest.LEAVINGIN.text) != -1:
+        if self.itt.get_text_existence(assest.LEAVINGIN):
             return True
         else:
             return False
@@ -129,7 +125,7 @@ class DomainFlow(BaseThreading):
             if self.checkup_stop_func():
                 return 0
 
-            if pdocr_api.ocr.get_text_position(cap, assest.LEYLINEDISORDER.text) != -1:
+            if self.itt.get_text_existence(assest.LEYLINEDISORDER):
                 break
             if self.itt.get_img_existence(img_manager.IN_DOMAIN):
                 break
@@ -140,7 +136,7 @@ class DomainFlow(BaseThreading):
             return 0
 
         cap = self.itt.capture(jpgmode=2)
-        if pdocr_api.ocr.get_text_position(cap, assest.LEYLINEDISORDER.text) != -1:
+        if self.itt.get_text_existence(assest.LEYLINEDISORDER):
             self.itt.move_and_click([PosiM.posi_domain['CLLD'][0], PosiM.posi_domain['CLLD'][1]], delay=1)
             # time.sleep(1)
             # pyautogui.leftClick()
@@ -211,7 +207,7 @@ class DomainFlow(BaseThreading):
             elif self.resin_mode == '20':
                 self.itt.appear_then_click(img_manager.USE_20RESIN_DOBLE_CHOICES)
 
-            if pdocr_api.ocr.get_text_position(self.itt.capture(jpgmode=0), assest.domain_obtain.text) != -1:
+            if self.itt.get_text_existence(assest.domain_obtain):
                 break
 
         time.sleep(2)
@@ -356,8 +352,7 @@ class DomainFlow(BaseThreading):
                     # logger.info('start next domain.')
                     self.last_domain_times -= 1
                     while 1:
-                        posi = pdocr_api.ocr.get_text_position(cap, assest.conti_challenge.text)
-                        if posi != -1:
+                        if self.itt.get_text_existence(assest.conti_challenge):
                             self.itt.move_and_click([posi[0], posi[1] + 30])
                             break
                     
@@ -371,9 +366,8 @@ class DomainFlow(BaseThreading):
                     logger.info(_('次数结束。退出秘境'))
                     # logger.info('no more times. exit domain.')
                     while 1:
-                        posi = pdocr_api.ocr.get_text_position(cap, assest.exit_challenge.text)
-                        if posi != -1:
-                            self.itt.move_and_click([posi[0], posi[1] + 30])
+                        r = self.itt.appear_then_click(assest.exit_challenge)
+                        if r:
                             break
                     # exit all threads
                     self.combat_loop.stop_threading()
