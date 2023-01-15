@@ -35,21 +35,30 @@ def unconventionality_situlation_detection(itt: InteractionBGD,
 
     return situlation_code
 
-def get_character_busy(itt: InteractionBGD, stop_func):
+def get_character_busy(itt: InteractionBGD, stop_func, print_log = True):
     cap = itt.capture(jpgmode=2)
     # cap = itt.png2jpg(cap, channel='ui')
-    t = 0
+    t1 = 0
+    t2 = 0
     for i in range(4):
         if stop_func():
             return 0
         p = posi_manager.chara_head_list_point[i]
         if cap[p[0], p[1]][0] > 0 and cap[p[0], p[1]][1] > 0 and cap[p[0], p[1]][2] > 0:
-            t += 1
-    if t >= 3:
-        return False
+            t1 += 1
+    for i in range(4):
+        p = posi_manager.chara_num_list_point[i]
+        # print(min(cap[p[0], p[1]]))
+        if min(cap[p[0], p[1]]) > 248:
+            t2 += 1
+    
     # elif t == 4:
     #     logger.debug("function: get_character_busy: t=4： 测试中功能，如果导致换人失败，反复输出 waiting 请上报。")
     #     return True
+    if print_log:
+        logger.debug(f"character busy: t1{t1} t2{t2}")
+    if t1 >= 3 and t2 == 3:
+        return False
     else:
         return True
 
@@ -228,6 +237,7 @@ CSDL.start()
 if __name__ == '__main__':
     itt = InteractionBGD()
     while 1:
+        time.sleep(0.02)
         # print(CSDL.get_combat_state())
-        print(get_current_chara_num(itt))
+        print(get_character_busy(itt, default_stop_func))
         # time.sleep(0.2)
