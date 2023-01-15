@@ -113,7 +113,7 @@ class PaddleocrAPI:
                           message='', default_end='\n', cap_posi_leftup = [0,0]):
         res = self.img_analyse(im_src)
         res_position = self.find_text(res, text, mode=mode)
-        logger.debug('getTextPosition:  ' + message, end=' | ')
+        # logger.debug('getTextPosition:  ' + message, end=' | ')
         if isprintlog:
             logger.debug('res: ' + '|function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
             for i in res:
@@ -174,6 +174,9 @@ class PaddleocrAPI:
                      inspect.getframeinfo(inspect.currentframe().f_back)[2])
         return ret1, ret2
 
-
-ocr = PaddleocrAPI()
+if global_lang == "zh_CN":
+    lang = 'ch'
+elif global_lang == "en_US":
+    lang = 'en'
+ocr = PaddleocrAPI(lang=lang)
 logger.info('created pdocr. cost ' + str(pdocr_timer_performance.get_diff_time()) + ' second.')

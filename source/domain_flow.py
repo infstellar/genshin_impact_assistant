@@ -107,7 +107,7 @@ class DomainFlow(BaseThreading):
             cap = self.itt.capture()
             cap = self.itt.png2jpg(cap, channel='ui')
         if pdocr_api.ocr.get_text_position(crop(cap, PosiM.posi_domain['LeavingIn']),
-                                           assest.LeavingIn.text) != -1:
+                                           assest.LEAVINGIN.text) != -1:
             return True
         else:
             return False
@@ -129,7 +129,7 @@ class DomainFlow(BaseThreading):
             if self.checkup_stop_func():
                 return 0
 
-            if pdocr_api.ocr.get_text_position(cap, assest.clld.text) != -1:
+            if pdocr_api.ocr.get_text_position(cap, assest.LEYLINEDISORDER.text) != -1:
                 break
             if self.itt.get_img_existence(img_manager.IN_DOMAIN):
                 break
@@ -140,7 +140,7 @@ class DomainFlow(BaseThreading):
             return 0
 
         cap = self.itt.capture(jpgmode=2)
-        if pdocr_api.ocr.get_text_position(cap, assest.clld.text) != -1:
+        if pdocr_api.ocr.get_text_position(cap, assest.LEYLINEDISORDER.text) != -1:
             self.itt.move_and_click([PosiM.posi_domain['CLLD'][0], PosiM.posi_domain['CLLD'][1]], delay=1)
             # time.sleep(1)
             # pyautogui.leftClick()

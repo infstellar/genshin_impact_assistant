@@ -267,7 +267,7 @@ def get_color(image, area):
     return color[:3]
 
 
-def get_bbox(image, offset=5):
+def get_bbox(image, black_offset=15):
     """
     A numpy implementation of the getbbox() in pillow.
     Args:
@@ -277,8 +277,8 @@ def get_bbox(image, offset=5):
     """
     if image_channel(image) == 3:
         image = np.max(image, axis=2)
-    x = np.where(np.max(image, axis=0) > offset)[0]
-    y = np.where(np.max(image, axis=1) > offset)[0]
+    x = np.where(np.max(image, axis=0) > black_offset)[0]
+    y = np.where(np.max(image, axis=1) > black_offset)[0]
     return (x[0], y[0], x[-1] + 1, y[-1] + 1)
 
 def area_offset(area, offset):
