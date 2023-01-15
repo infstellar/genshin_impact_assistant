@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2023-01-13 16:46+0800\n"
-"PO-Revision-Date: 2023-01-13 17:53+0800\n"
+"POT-Creation-Date: 2023-01-13 18:01+0800\n"
+"PO-Revision-Date: 2023-01-13 18:08+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_US\n"
@@ -15,6 +15,167 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: pygettext.py 1.5\n"
 "X-Generator: Poedit 3.2\n"
+
+#: ../genshin_assistant.py:20
+msgid "正在初始化，请稍后"
+msgstr "Initializing, please wait"
+
+#: ../genshin_assistant.py:27
+msgid "导入依赖时错误; err code: 001_1"
+msgstr "Error importing dependencies; err code: 001_1"
+
+#: ../genshin_assistant.py:29
+msgid "程序暂停。按任意键退出"
+msgstr "Program paused. press any key to exit"
+
+#: ../genshin_assistant.py:31
+msgid "初始化完成"
+msgstr "Initializing successfully"
+
+#: ../genshin_assistant.py:32
+msgid "正在等待webio启动"
+msgstr "Waiting for webio to start"
+
+#: ../genshin_assistant.py:33
+msgid "启动键盘监听"
+msgstr "Start keyboard listening"
+
+#: ../source/webio\pages.py:44 ../source/webio\pages.py:218
+msgid "未找到会话，可能由于窗口关闭。请刷新页面重试。"
+msgstr "Session not found, possibly due to window being closed. Please refresh the page and try again."
+
+#: ../source/webio\pages.py:49
+msgid "正在导入模块, 可能需要一些时间。"
+msgstr "Modules are being imported and may take some time."
+
+#: ../source/webio\pages.py:51
+msgid "在导入完成前，请不要切换页面。"
+msgstr "Please do not switch pages until the import is complete."
+
+#: ../source/webio\pages.py:88
+msgid "Get IP address"
+msgstr ""
+
+#: ../source/webio\pages.py:94
+msgid "## Options"
+msgstr ""
+
+#: ../source/webio\pages.py:97 ../source/webio\pages.py:98
+msgid "FlowMode"
+msgstr ""
+
+#: ../source/webio\pages.py:99
+msgid "Idle"
+msgstr ""
+
+#: ../source/webio\pages.py:100
+msgid "AutoCombat"
+msgstr ""
+
+#: ../source/webio\pages.py:101
+msgid "AutoDomain"
+msgstr ""
+
+#: ../source/webio\pages.py:102
+msgid "AutoCollector"
+msgstr ""
+
+#: ../source/webio\pages.py:105
+msgid "启动/停止"
+msgstr "Start/Stop"
+
+#: ../source/webio\pages.py:107
+msgid "## Statement"
+msgstr ""
+
+#: ../source/webio\pages.py:109
+msgid "当前状态"
+msgstr "Current status"
+
+#: ../source/webio\pages.py:123
+msgid "## Log"
+msgstr ""
+
+#: ../source/webio\pages.py:141
+msgid "Not Enabled"
+msgstr ""
+
+#: ../source/webio\pages.py:142
+msgid "LAN IP"
+msgstr ""
+
+#: ../source/webio\pages.py:142
+msgid "WAN IP"
+msgstr ""
+
+#: ../source/webio\pages.py:183
+msgid "# Config"
+msgstr ""
+
+#: ../source/webio\pages.py:189 ../source/webio\pages.py:453
+#: ../source/webio\pages.py:497 ../source/webio\pages.py:542
+msgid "## config:"
+msgstr ""
+
+#: ../source/webio\pages.py:264
+msgid "saved!"
+msgstr ""
+
+#: ../source/webio\pages.py:305
+msgid "Do you need to save changes?"
+msgstr ""
+
+#: ../source/webio\pages.py:306
+msgid "No"
+msgstr ""
+
+#: ../source/webio\pages.py:306
+msgid "Yes"
+msgstr ""
+
+#: ../source/webio\pages.py:447
+msgid "# Setting"
+msgstr ""
+
+#: ../source/webio\pages.py:480
+msgid "# CombatSetting"
+msgstr ""
+
+#: ../source/webio\pages.py:486
+msgid "# Add team"
+msgstr ""
+
+#: ../source/webio\pages.py:490
+msgid "Add team"
+msgstr ""
+
+#: ../source/webio\pages.py:492
+msgid "Add team with characters"
+msgstr ""
+
+#: ../source/webio\pages.py:536 ../source/webio\webio.py:23
+msgid "CollectorSetting"
+msgstr ""
+
+#: ../source/webio\pages.py:581
+msgid "clean list"
+msgstr ""
+
+#: ../source/webio\webio.py:20
+msgid "Main"
+msgstr ""
+
+#: ../source/webio\webio.py:21
+msgid "Setting"
+msgstr ""
+
+#: ../source/webio\webio.py:22
+msgid "CombatSetting"
+msgstr ""
+
+#: ../source/webio\webio.py:26
+msgid "webio启动完成"
+msgstr "webio startup successfully"
 
 #: ../source\collector_flow.py:303
 msgid "switch Flow to: AFTER_MOVETO_COLLECTOR"
