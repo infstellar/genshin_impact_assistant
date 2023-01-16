@@ -23,9 +23,10 @@ IMG_RECT = 3
 IMG_BOOL = 4
 IMG_BOOLRATE = 5
 
-winname_default = ["原神", "Genshin Impact"]
+winname_default = ["Genshin Impact", "原神"]
 # winname_cgs = "云·原神"
 process_name = ["YuanShen.exe", "GenshinImpact.exe"]
+# process_name_cloud = ["云·原神"]
 
 def before_operation(print_log=True):
     def outwrapper(func):
@@ -83,18 +84,15 @@ class InteractionBGD:
         self.DEFAULT_DELAY_TIME = 0.05
         self.DEBUG_MODE = False
         self.CONSOLE_ONLY = False
-
+        self.handle = 0
         self.isChromelessWindow = config_json["ChromelessWindow"]
         for i in hwndname:
-            handle = ctypes.windll.user32.FindWindowW(None, i)
+            handle = static_lib.get_handle()
             if handle != 0:
                 self.handle = handle
                 logger.info(f"handle: {self.handle}")
                 break
         
-        if self.handle == 0:
-            self.handle = static_lib.get_handle()
-
         if self.handle == 0:
             logger.error(_("未找到句柄，请确认原神窗口是否开启。"))
 
@@ -894,8 +892,9 @@ if __name__ == '__main__':
     #     pydirectinput.moveRel(10,10)
     # win32api.SetCursorPos((300, 300))
     # pydirectinput.
-    a = ib.get_text_existence(assest.LEYLINEDISORDER)
-    print(a)
+    # a = ib.get_text_existence(assest.LEYLINEDISORDER)
+    # print(a)
+    img_manager.qshow(ib.capture())
     print()
     while 1:
         # time.sleep(1)

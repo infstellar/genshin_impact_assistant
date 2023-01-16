@@ -12,12 +12,17 @@ cvAutoTrackerLoop = None
 
 
 def get_handle():
-    handle = ctypes.windll.user32.FindWindowW(None, '原神')
-    if handle != 0:
-        return handle
-    handle = ctypes.windll.user32.FindWindowW(None, 'Genshin Impact')
-    if handle != 0:
-        return handle
+    if not config_json["cloud_genshin"]:
+        handle = ctypes.windll.user32.FindWindowW(None, '原神')
+        if handle != 0:
+            return handle
+        handle = ctypes.windll.user32.FindWindowW(None, 'Genshin Impact')
+        if handle != 0:
+            return handle
+    else:
+        handle = ctypes.windll.user32.FindWindowW("Qt5152QWindowIcon", '云·原神')
+        if handle != 0:
+            return 331454
 
 
 def static_lib_init():
