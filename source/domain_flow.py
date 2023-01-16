@@ -352,10 +352,9 @@ class DomainFlow(BaseThreading):
                     # logger.info('start next domain.')
                     self.last_domain_times -= 1
                     while 1:
-                        if self.itt.get_text_existence(assest.conti_challenge):
-                            self.itt.move_and_click([posi[0], posi[1] + 30])
+                        r = self.itt.appear_then_click(assest.conti_challenge)
+                        if r:
                             break
-                    
                     self.auto_start_init()
                     if self.checkup_stop_func():
                         break

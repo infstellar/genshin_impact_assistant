@@ -476,9 +476,9 @@ class InteractionBGD:
             
         elif isinstance(inputvar, assest.text_manager.TextTemplate):
             import pdocr_api
-            p1 = pdocr_api.ocr.get_text_position(self.capture(jpgmode=0, posi=inputvar.cap_area), inputvar.gettext(), cap_posi_leftup=inputvar.cap_area[:2])
+            p1 = pdocr_api.ocr.get_text_position(self.capture(jpgmode=0, posi=inputvar.cap_area), inputvar.text, cap_posi_leftup=inputvar.cap_area[:2])
             if p1 != -1:
-                self.move_and_click([p1[0] + 30, p1[1] + 30], delay=1)
+                self.move_and_click([p1[0] + 5, p1[1] + 5], delay=1)
                 return True
             else:
                 return False
