@@ -103,7 +103,7 @@ def apply_ui_setting():  # "应用设置"按钮回调函数
         else:
             pass  # 关闭自动拾取
 
-
+@logger.catch
 def startstop():
     global startstop_flag
     if current_flow == FLOW_IDLE:
