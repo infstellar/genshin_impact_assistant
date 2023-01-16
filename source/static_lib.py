@@ -30,6 +30,7 @@ class GenericEvent(BaseThreading):
         super().__init__()
         self.w_down_timer = Timer()
         self.w_down_flag = False
+        self.setName("GenericEvent")
     
     def run(self):
         '''if you're using this class, copy this'''
@@ -64,10 +65,12 @@ class GenericEvent(BaseThreading):
                     itt.key_up('w')
 def static_lib_init():
     global W_KEYDOWN, cvAutoTrackerLoop
+    logger.debug("import cvAutoTrack")
     import cvAutoTrack
     cvAutoTrackerLoop = cvAutoTrack.AutoTrackerLoop()
     cvAutoTrackerLoop.setDaemon(True)
     cvAutoTrackerLoop.start()
+    logger.debug("start GenericEventThread")
     generic_event = GenericEvent()
     generic_event.setDaemon(True)
     generic_event.start()

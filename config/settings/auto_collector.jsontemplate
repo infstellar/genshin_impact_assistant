@@ -1,4 +1,5 @@
 {
     "collection_name": "史莱姆 - 蒙德",
-    "collection_type": "ENEMY"
+    "collection_type": "ENEMY",
+    "collect mode": "Auto"
 }
