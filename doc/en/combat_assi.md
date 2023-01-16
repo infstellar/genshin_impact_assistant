@@ -102,7 +102,6 @@ Priority can be the same level.
 | `Epress_time` | The time of long pressing E, otherwise it will be 0 |
 | `E_long_cd_time` | long Ecd time, 0 if no |
 | `Ecd_float_time` | Switch to this character before the cooldown of E skill x seconds, can be 0 |
-| `Ecd_press_time` | Time to press Ecd skill |
 | `Qcd_time`| Q skill cooldown time|
 | `n` | The position of the character in the team (1~4), cannot be repeated, cannot be 0 |
 
