@@ -92,8 +92,13 @@ class PickupOperator(BaseThreading):
             if self.checkup_stop_func():
                 self.pause_threading_flag = True
                 continue
-            
-            ret = self.pickup_recognize()
+            while 1:
+                if self.checkup_stop_func():
+                    break
+                ret = self.pickup_recognize()
+                if not ret:
+                    break
+                self.itt.delay(1, comment="Waiting for Genshin picking animation")
             
             if self.search_mode == 1:
                 
@@ -162,12 +167,9 @@ class PickupOperator(BaseThreading):
                     if str(res[0][1][0]) in self.target_name:
                         logger.info(_("已找到：") + self.target_name)
                         self.pickup_succ = True
-                        
-                        # self.pause_threading()
-                    if flag1:
-                        self.itt.key_down('w')
                     return True
-
+        if flag1:
+            self.itt.key_down('w')
         return False
 
     def reset_pickup_item_list(self):

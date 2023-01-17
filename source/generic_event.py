@@ -41,6 +41,7 @@ class GenericEvent(BaseThreading):
                     self.w_down_timer.reset()
                 if self.w_down_timer.get_diff_time() >= 15:
                     itt.key_down('w')
+                    self.w_down_timer.reset()
                     logger.debug("static lib keydown: w")
             else:
                 if self.w_down_flag == True:
