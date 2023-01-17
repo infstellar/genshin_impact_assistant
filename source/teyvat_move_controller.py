@@ -9,6 +9,7 @@ import movement
 import numpy as np
 import static_lib
 import timer_module
+from err_code_lib import ERR_PASS, ERR_STUCK
 '''
 提瓦特大陆移动辅助控制，包括：
 自动F控制 pickup_operator
@@ -22,8 +23,6 @@ stamina_check low-> press x left click
 
 statement: in water; in climb; in move; in fly
 '''
-
-
 
 
 class TeyvatMoveController(BaseThreading):
@@ -72,6 +71,7 @@ class TeyvatMoveController(BaseThreading):
     def continue_threading(self):
         if self.pause_threading_flag != False:
             self.pause_threading_flag = False
+            static_lib.cvAutoTrackerLoop.history_posi = [static_lib.cvAutoTrackerLoop.history_posi[-1]]
 
     
     def caculate_next_priority_point(self, currentp, targetp):
@@ -131,14 +131,24 @@ class TeyvatMoveController(BaseThreading):
             movement.change_view_to_posi(p1, self.checkup_stop_func)
             if (not static_lib.W_KEYDOWN) and (not self.pause_threading_flag):
                 self.itt.key_down('w')
-            if self.stop_rule == 0:
+                
+            if len(static_lib.cvAutoTrackerLoop.history_posi) >= 29:
+                p1 = static_lib.cvAutoTrackerLoop.history_posi[0][1:]
+                p2 = static_lib.cvAutoTrackerLoop.history_posi[-1][1:]
+                if euclidean_distance(p1,p2)<=30:
+                    logger.warning("检测到移动卡住，正在退出")
+                    self.last_err_code = ERR_STUCK
+                    self.pause_threading()
             
+            if self.stop_rule == 0:
                 if euclidean_distance(self.target_positon, static_lib.cvAutoTrackerLoop.get_position()[1:])<=10:
+                    self.last_err_code = ERR_PASS
                     self.pause_threading()
                     logger.info(_("已到达目的地附近，本次导航结束。"))
                     self.itt.key_up('w')
             elif self.stop_rule == 1:
                 if generic_lib.f_recognition():
+                    self.last_err_code = ERR_PASS
                     self.pause_threading()
                     logger.info(_("已到达F附近，本次导航结束。"))
                     self.itt.key_up('w')

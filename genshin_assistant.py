@@ -28,6 +28,13 @@ except Exception as error:
     source.util.logger.exception(error)
     input(source.util._('程序暂停。按任意键退出'))
 
+try:
+    import source.generic_event
+except Exception as error:
+    source.util.logger.critical(source.util._("导入依赖时错误; err code: 001_2"))
+    source.util.logger.exception(error)
+    input(source.util._('程序暂停。按任意键退出'))
+
 source.util.logger.info(source.util._('初始化完成'))
 source.util.logger.info(source.util._("正在等待webio启动"))
 source.util.logger.info(source.util._("启动键盘监听"))

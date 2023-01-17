@@ -205,8 +205,9 @@ class CombatStatementDetectionLoop(BaseThreading):
                 continue
                 
             '''write your code below'''
-            if only_arror_timer.get_diff_time()>=30 and self.current_state == True:
-                logger.debug("only arror but lifebar is not exist over 30s, ready to exit combat mode.")
+            if only_arror_timer.get_diff_time()>=30:
+                if self.current_state == True:
+                    logger.debug("only arror but lifebar is not exist over 30s, ready to exit combat mode.")
                 state = combat_statement_detection(self.itt)
                 state = False
             else:
@@ -224,8 +225,8 @@ class CombatStatementDetectionLoop(BaseThreading):
                 self.while_sleep = 0.2
             if self.state_counter >= 10:
                 logger.debug('combat_statement_detection change state')
-                if self.current_state == False:
-                    only_arror_timer.reset()
+                # if self.current_state == False:
+                #     only_arror_timer.reset()
                 self.state_counter = 0
                 self.current_state = state
             
@@ -237,7 +238,7 @@ CSDL.start()
 if __name__ == '__main__':
     itt = InteractionBGD()
     while 1:
-        time.sleep(0.02)
-        # print(CSDL.get_combat_state())
-        print(get_character_busy(itt, default_stop_func))
+        time.sleep(0.5)
+        print(CSDL.get_combat_state())
+        # print(get_character_busy(itt, default_stop_func))
         # time.sleep(0.2)

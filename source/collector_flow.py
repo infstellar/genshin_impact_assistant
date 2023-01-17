@@ -15,6 +15,7 @@ import static_lib
 import button_manager
 import img_manager
 import scene_manager
+from err_code_lib import ERR_PASS, ERR_STUCK
 
 COLLECTION = 0
 ENEMY = 1
@@ -299,9 +300,17 @@ class CollectorFlow(BaseThreading):
                 self.current_state = ST.IN_MOVETO_COLLECTOR
                 
             if self.current_state == ST.IN_MOVETO_COLLECTOR:
-                if self.tmf.pause_threading_flag:
+                if self.tmf.get_last_err_code() == ERR_PASS:
+                    self.tmf.reset_err_code()
                     logger.info(_("switch Flow to: AFTER_MOVETO_COLLECTOR"))
                     self.current_state = ST.AFTER_MOVETO_COLLECTOR
+                elif self.tmf.get_last_err_code() == ERR_STUCK:
+                    self.tmf.reset_err_code()
+                    logger.info(_("collect in") +f"{self.collector_name} {self.collection_id} {self.collection_posi} "+_("failed. reason: stuck"))
+                    logger.info("switch Flow to: AFTER_PICKUP_COLLECTOR")
+                    self.add_log("IN_PICKUP_COLLECTOR_STUCK")
+                    self.current_state = ST.AFTER_PICKUP_COLLECTOR
+
                 if self.IN_MOVETO_COLLECTOR_timeout.istimeout():
                     logger.info(f"IN_MOVETO_COLLECTOR timeout: {self.IN_MOVETO_COLLECTOR_timeout.timeout_limit}")
                     logger.info(f"collect in{self.collector_name} {self.collection_id} {self.collection_posi} failed.")
