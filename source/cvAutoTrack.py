@@ -129,6 +129,8 @@ class AutoTrackerLoop(BaseThreading):
         self.last_position = self.position
         self.in_excessive_error = False
         self.start_sleep_timer = timer_module.Timer(diff_start_time=61)
+        self.history_posi = []
+        self.history_timer = timer_module.Timer()
         # logger.debug(f"cvautotrack log: {cvAutoTracker.disable_log()}")
         # scene_manager.switchto_mainwin(max_time=5)
     
@@ -175,9 +177,13 @@ class AutoTrackerLoop(BaseThreading):
                     logger.debug("cvAutoTrackerLoop switch to sleep mode.")
                 time.sleep(0.8)
                 continue
-
+            
+            
+            
             self.rotation = self.cvAutoTracker.get_rotation()
             self.position = self.cvAutoTracker.get_position()
+            
+            
             if not self.position[0]:
                 import scene_manager
                 if scene_manager.get_current_pagename() == 'main':
@@ -188,7 +194,7 @@ class AutoTrackerLoop(BaseThreading):
                 self.in_excessive_error = True
                 time.sleep(0.5)
                 continue
-            if ct >= 30:
+            if ct >= 20:
                 self.last_position = self.position
                 self.in_excessive_error = False
                 logger.debug("位置已重置")
@@ -201,6 +207,13 @@ class AutoTrackerLoop(BaseThreading):
                 self.last_position = self.position
                 self.in_excessive_error = False
                 ct = 0
+            if self.history_timer.get_diff_time()>=1:
+                self.history_timer.reset()
+                if len(self.history_posi)<30:
+                    self.history_posi.append(self.position)
+                else:
+                    del(self.history_posi[0])
+                    self.history_posi.append(self.position)
             # print(self.last_position)
 
     def get_position(self):

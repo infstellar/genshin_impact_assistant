@@ -14,7 +14,7 @@ import static_lib
 import vkcode
 from ctypes.wintypes import RECT
 import button_manager
-import assest
+import text_manager
 
 IMG_RATE = 0
 IMG_POSI = 1
@@ -86,12 +86,10 @@ class InteractionBGD:
         self.CONSOLE_ONLY = False
         self.handle = 0
         self.isChromelessWindow = config_json["ChromelessWindow"]
-        for i in hwndname:
-            handle = static_lib.get_handle()
-            if handle != 0:
-                self.handle = handle
-                logger.info(f"handle: {self.handle}")
-                break
+        handle = static_lib.get_handle()
+        if handle != 0:
+            self.handle = handle
+            logger.info(f"handle: {self.handle}")
         
         if self.handle == 0:
             logger.error(_("未找到句柄，请确认原神窗口是否开启。"))
@@ -381,7 +379,7 @@ class InteractionBGD:
         elif ret_mode == IMG_RATE:
             return matching_rate
         
-    def get_text_existence(self, textobj: assest.text_manager.TextTemplate, is_gray=False, is_log = True, ret_mode = IMG_BOOL, show_res = False):
+    def get_text_existence(self, textobj: text_manager.TextTemplate, is_gray=False, is_log = True, ret_mode = IMG_BOOL, show_res = False):
         import pdocr_api
         cap = self.capture(posi = textobj.cap_area, jpgmode = 0)
         if pdocr_api.ocr.get_text_position(cap, textobj.text) != -1:
@@ -472,7 +470,7 @@ class InteractionBGD:
             else:
                 return False
             
-        elif isinstance(inputvar, assest.text_manager.TextTemplate):
+        elif isinstance(inputvar, text_manager.TextTemplate):
             import pdocr_api
             p1 = pdocr_api.ocr.get_text_position(self.capture(jpgmode=0, posi=inputvar.cap_area), inputvar.text, cap_posi_leftup=inputvar.cap_area[:2])
             if p1 != -1:

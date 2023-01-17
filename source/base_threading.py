@@ -1,6 +1,6 @@
 import threading
 import time
-
+from err_code_lib import ERR_NONE
 
 class BaseThreading(threading.Thread):
     """
@@ -12,7 +12,7 @@ class BaseThreading(threading.Thread):
         self.stop_threading_flag = False
         self.working_flag = False
         self.while_sleep = 0.2
-        self.last_err_code = None
+        self.last_err_code = ERR_NONE
         self.stop_func_list = []
 
     def pause_threading(self):
@@ -47,7 +47,7 @@ class BaseThreading(threading.Thread):
         return self.last_err_code
     
     def reset_err_code(self):
-        self.last_err_code = None
+        self.last_err_code = ERR_NONE
     
     def run(self):
         '''if you're using this class, copy this'''

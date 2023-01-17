@@ -15,6 +15,7 @@ import combat_lib
 import scene_manager
 import static_lib
 import assest
+from err_code_lib import ERR_PASS, ERR_STUCK
 
 IN_MOVE = 0
 IN_FLY = 1
@@ -200,7 +201,7 @@ class TeyvatMoveFlow(BaseThreading):
                 time.sleep(2)
                 curr_posi = static_lib.cvAutoTrackerLoop.get_position()[1:]
                 scene_manager.switch_to_page(scene_manager.page_bigmap, self.checkup_stop_func)
-                tw_posi = big_map.nearest_teyvat_tw_posi(curr_posi, self.target_posi, self.checkup_stop_func)[0]
+                tw_posi = big_map.nearest_teyvat_tw_posi(curr_posi, self.target_posi, self.checkup_stop_func)
                 p1 = euclidean_distance(self.target_posi, tw_posi)
                 p2 = euclidean_distance(self.target_posi, curr_posi)
                 if p1 < p2:
@@ -255,13 +256,23 @@ class TeyvatMoveFlow(BaseThreading):
                         self.itt.key_press('spacebar') # fly    
                 
                     '''可能会加体力条检测'''
-                if self.stop_rule == 0:    
-                    if euclidean_distance(static_lib.cvAutoTrackerLoop.get_position()[1:], self.target_posi)<=10:
-                        self.current_state = ST.END_TEYVAT_MOVE
-                elif self.stop_rule == 1:
-                    if generic_lib.f_recognition():
-                        self.current_state = ST.END_TEYVAT_MOVE
-                    
+                # if self.stop_rule == 0:    
+                #     if euclidean_distance(static_lib.cvAutoTrackerLoop.get_position()[1:], self.target_posi)<=10:
+                #         self.current_state = ST.END_TEYVAT_MOVE
+                # elif self.stop_rule == 1:
+                #     if generic_lib.f_recognition():
+                #         self.current_state = ST.END_TEYVAT_MOVE
+                # elif self.
+                
+                if self.tmc.get_last_err_code() == ERR_PASS:
+                    self.tmc.reset_err_code()
+                    self.last_err_code = ERR_PASS
+                    self.current_state = ST.END_TEYVAT_MOVE
+                elif self.tmc.get_last_err_code() == ERR_STUCK:
+                    self.tmc.reset_err_code()
+                    self.last_err_code = ERR_STUCK
+                    self.current_state = ST.END_TEYVAT_MOVE
+                
             if self.current_state == ST.END_TEYVAT_MOVE:
                 self.pause_threading()
                 if self.motion_state == IN_FLY:

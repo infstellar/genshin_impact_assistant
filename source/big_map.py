@@ -227,9 +227,8 @@ def nearest_big_map_tw_posi(current_posi, target_posi, stop_func, include_gs = T
     twpoints_teyvat = np.delete(twpoints_teyvat, np.where(abs(twpoints_teyvat[:,0]-1920/2)>(1920/2-80))[0], axis=0) # 删除x方向上超过限定值的坐标，避免误触
     twpoints_teyvat = np.delete(twpoints_teyvat, np.where(abs(twpoints_teyvat[:,1]-1080/2)>(1080/2-55))[0], axis=0) # 删除y方向上超过限定值的坐标，避免误触
     twpoints_teyvat = bigmap_posi2teyvat_posi(current_posi, twpoints_teyvat) # 将大地图坐标转换为提瓦特坐标
-    p = calculate_nearest_posi(twpoints_teyvat, target_posi) # 计算最近的目标坐标（提瓦特）
-    a = np.where(twpoints_teyvat == p[0])[0][-1] # 获得该坐标index
-    return teyvat_posi2bigmap_posi(current_posi, twpoints_teyvat[a])
+    p = np.argmin(euclidean_distance_plist(target_posi, twpoints_teyvat)) # 计算最近的目标坐标（提瓦特）# 获得该坐标index
+    return teyvat_posi2bigmap_posi(current_posi, twpoints_teyvat[p])
 
 def nearest_teyvat_tw_posi(current_posi, target_posi, stop_func, include_gs = True):
     """获得距离目标坐标最近的传送锚点坐标
@@ -246,8 +245,9 @@ def nearest_teyvat_tw_posi(current_posi, target_posi, stop_func, include_gs = Tr
         twpoints = np.concatenate((twpoints, get_gs_points(itt.capture(jpgmode=0), stop_func)))
     twpoints_teyvat = twpoints.copy() # copy
     twpoints_teyvat = bigmap_posi2teyvat_posi(current_posi, twpoints_teyvat) # 转换为提瓦特坐标
-    p = calculate_nearest_posi(twpoints_teyvat, target_posi)
-    return p
+    p = np.argmin(euclidean_distance_plist(target_posi, twpoints_teyvat))
+    # p = calculate_nearest_posi(twpoints_teyvat, target_posi)
+    return twpoints_teyvat[p]
 def f():
     return False
 if __name__ == '__main__':

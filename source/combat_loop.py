@@ -9,6 +9,7 @@ from switch_character_operator import SwitchCharacterOperator
 import combat_lib
 import img_manager
 import button_manager
+import assest
 
 CHARACTER_DIED = 1
 
@@ -111,7 +112,7 @@ class Combat_Controller(BaseThreading):
                 return 0
             
             if self.is_check_died:
-                if self.itt.get_img_existence(img_manager.character_died):
+                if self.itt.get_img_existence(assest.character_died):
                     logger.info(_('有人嘎了，停止自动战斗'))
                     self.last_err_code = CHARACTER_DIED
                     while 1:

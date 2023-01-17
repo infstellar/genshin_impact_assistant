@@ -53,3 +53,17 @@ domain_obtain = text_manager.TextTemplate(text=
     'zh_CN': '获得',
     "en_US": "Obtained"
 })
+use_revival_item = text_manager.TextTemplate(text=
+{
+    'zh_CN': '使用道具',
+    "en_US": "Use revival item"
+})
+revival = text_manager.TextTemplate(text=
+{
+    'zh_CN': '复苏',
+    "en_US": "Revive"
+})
+character_died = img_manager.ImgIcon(name="character_died", path="assests\\imgs\\$lang$\\character_died.jpg",
+                        is_bbg=True, cap_posi='bbg', win_text=use_revival_item.text, threshold=0.98, print_log=img_manager.LOG_WHEN_TRUE)
+button_all_character_died = button_manager.Button( name="all_character_died", path="assests\\imgs\\$lang$\\all_character_died.jpg", 
+                                   threshold=0.988, win_text=revival.text, print_log=img_manager.LOG_WHEN_TRUE)
