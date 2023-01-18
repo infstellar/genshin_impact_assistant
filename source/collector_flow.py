@@ -15,7 +15,7 @@ import static_lib
 import button_manager
 import img_manager
 import scene_manager
-from err_code_lib import ERR_PASS, ERR_STUCK
+from err_code_lib import ERR_PASS, ERR_STUCK, ERR_COLLECTOR_FLOW_TIMEOUT
 
 COLLECTION = 0
 ENEMY = 1
@@ -109,7 +109,8 @@ class CollectorFlow(BaseThreading):
         
         
         self.IN_PICKUP_COLLECTOR_timeout = timer_module.TimeoutTimer(45)
-        self.IN_MOVETO_COLLECTOR_timeout = timer_module.TimeoutTimer(260)
+        self.IN_MOVETO_COLLECTOR_timeout = timer_module.TimeoutTimer(240)
+        self.Flow_timeout = timer_module.TimeoutTimer(340)
         self.itt = InteractionBGD()
         
     def pause_threading(self):
@@ -134,6 +135,9 @@ class CollectorFlow(BaseThreading):
         self.add_log("USER_STOP")
     
     def checkup_stop_func(self):
+        if self.Flow_timeout.istimeout():
+            self.last_err_code = ERR_COLLECTOR_FLOW_TIMEOUT
+            return True
         return super().checkup_stop_func()    
         
     def set_collector_name(self, text):
@@ -210,11 +214,11 @@ class CollectorFlow(BaseThreading):
         while 1:
             time.sleep(self.while_sleep)
             if self.stop_threading_flag:
-                logger.info("停止自动采集")
+                logger.info(_("停止自动采集"))
                 return 0
 
             if self.last_err_code == ALL_CHARACTER_DIED:
-                logger.error("所有角色都已嘎掉，正在中断此次采集")
+                logger.error(_("所有角色都已嘎掉，正在中断此次采集"))
                 self.add_log("ALL_CHARACTER_DIED")
                 self.stop_all()
                 time.sleep(15)
@@ -228,17 +232,27 @@ class CollectorFlow(BaseThreading):
                         break
                 
                 self.current_state = ST.AFTER_PICKUP_COLLECTOR
-                self.last_err_code = None
-                logger.info("重置完成。准备进行下一次采集")
-                
+                self.reset_err_code()
+                logger.info(_("重置完成。准备进行下一次采集"))
+            elif self.last_err_code == ERR_COLLECTOR_FLOW_TIMEOUT:
+                self.stop_all()
+                logger.warning(_("Flow timeout"))
+                self.add_log("FLOW_TIMEOUT")
+                self.current_state = ST.AFTER_PICKUP_COLLECTOR
+                logger.info(_("重置完成。准备进行下一次采集"))
+                self.reset_err_code()
+            elif self.checkup_stop_func():
+                self.pause_threading_flag = True
+                continue
+            
             if self.cct.get_last_err_code() == combat_loop.CHARACTER_DIED:
-                logger.warning("有人嘎了，正在停止此次采集")
+                logger.warning(_("有人嘎了，正在停止此次采集"))
                 self.add_log("CHARACTER_DIED")
                 self.stop_all()
                 self.recover_all()
                 self.current_state = ST.AFTER_PICKUP_COLLECTOR
-                self.last_err_code = None
-                logger.info("重置完成。准备进行下一次采集")
+                self.reset_err_code()
+                logger.info(_("重置完成。准备进行下一次采集"))
                 self.cct.reset_err_code()
             
             if self.itt.get_img_existence(button_manager.button_all_character_died):
@@ -255,9 +269,7 @@ class CollectorFlow(BaseThreading):
             if not self.working_flag:
                 self.working_flag = True
                 
-            if self.checkup_stop_func():
-                self.pause_threading_flag = True
-                continue
+            
             '''write your code below'''
             
                   
@@ -274,6 +286,7 @@ class CollectorFlow(BaseThreading):
                 self.collector_i = 0
                 
             if self.current_state == ST.BEFORE_MOVETO_COLLECTOR:
+                self.Flow_timeout.reset()
                 self.collection_posi = self.collector_posi_dict[self.collector_i]["position"]
                 self.collection_id = self.collector_posi_dict[self.collector_i]["id"]
                 '''当两个collection坐标小于30时，认为是同一个。'''
