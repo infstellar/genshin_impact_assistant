@@ -153,7 +153,12 @@ class TeyvatMoveFlow(BaseThreading):
                 curr_posi = static_lib.cvAutoTrackerLoop.get_position()[1:]
                 scene_manager.switch_to_page(scene_manager.page_bigmap, self.checkup_stop_func)
                 # Obtain the coordinates of the transmission anchor closest to the target coordinates
-                tw_posi = big_map.nearest_big_map_tw_posi(curr_posi, self.target_posi, self.checkup_stop_func) # 获得距离目标坐标最近的传送锚点坐标 
+                tw_posi = big_map.nearest_big_map_tw_posi(curr_posi, self.target_posi, self.checkup_stop_func, include_gs=True) # 获得距离目标坐标最近的传送锚点坐标 
+                tw_posi2 = big_map.nearest_big_map_tw_posi(curr_posi, self.target_posi, self.checkup_stop_func, include_gs=False) # 获得距离目标坐标最近的传送锚点坐标 
+                if list(tw_posi) != list(tw_posi2):
+                    check_mode = 0 # Statues of the seven
+                else:
+                    check_mode = 1 # Teleport Waypoint
                 if len(tw_posi)==0:
                     logger.info(_("获取传送锚点失败，正在重试"))
                     big_map.reset_map_size()
@@ -168,17 +173,18 @@ class TeyvatMoveFlow(BaseThreading):
                     if self.checkup_stop_func():
                         break
                     
-                    r = self.itt.appear_then_click(img_manager.bigmap_tp)
-                    if r:
-                        break
-                    
-                    self.itt.appear_then_click(assest.CSMD)
-                    
-                    self.itt.appear_then_click(assest.QTSX)
+                    if self.itt.appear_then_click(img_manager.bigmap_tp) : break
+                    if check_mode == 1:
+                        logger.debug("tp to tw")
+                        self.itt.appear_then_click(assest.CSMD)
+                    else:
+                        logger.debug("tp to ss")
+                        self.itt.appear_then_click(assest.QTSX)
                     if temporary_timeout_1.istimeout():
                         scene_manager.switch_to_page(scene_manager.page_bigmap, self.checkup_stop_func)
                         self.itt.move_and_click([tw_posi[0], tw_posi[1]])
                         temporary_timeout_1.reset()
+                    time.sleep(1)
                     # p1 = pdocr_api.ocr.get_text_position(self.itt.capture(jpgmode=0, posi=img_manager.bigmap_choose_area.cap_posi), "七天神像", cap_posi_leftup=img_manager.bigmap_choose_area.cap_posi[:2])
                     # if p1 != -1:
                     #     self.itt.move_and_click([p1[0] + 30, p1[1] + 30], delay=1)
