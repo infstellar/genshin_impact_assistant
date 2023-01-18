@@ -163,19 +163,22 @@ class TeyvatMoveFlow(BaseThreading):
                 # self.itt.delay(0.2)
                 # self.itt.left_click()
                 # self.itt.delay(0.6)
-
+                temporary_timeout_1 = timer_module.TimeoutTimer(25)
                 while 1:
                     if self.checkup_stop_func():
                         break
                     
                     r = self.itt.appear_then_click(img_manager.bigmap_tp)
-                    
                     if r:
                         break
                     
                     self.itt.appear_then_click(assest.CSMD)
                     
                     self.itt.appear_then_click(assest.QTSX)
+                    if temporary_timeout_1.istimeout():
+                        scene_manager.switch_to_page(scene_manager.page_bigmap, self.checkup_stop_func)
+                        self.itt.move_and_click([tw_posi[0], tw_posi[1]])
+                        temporary_timeout_1.reset()
                     # p1 = pdocr_api.ocr.get_text_position(self.itt.capture(jpgmode=0, posi=img_manager.bigmap_choose_area.cap_posi), "七天神像", cap_posi_leftup=img_manager.bigmap_choose_area.cap_posi[:2])
                     # if p1 != -1:
                     #     self.itt.move_and_click([p1[0] + 30, p1[1] + 30], delay=1)
