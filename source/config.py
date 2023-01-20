@@ -8,7 +8,7 @@ def template_generator():
             if f[f.index('.')+1:] == "json":
                 config_files.append({"label": f, "value": os.path.join(root, f)})
 
-    for root, dirs, files in os.walk(os.path.join(root_path, 'config', 'tastic')):
+    for root, dirs, files in os.walk(os.path.join(root_path, 'config', 'tactic')):
         for f in files:
             if f[f.index('.')+1:] == "json":
                 config_files.append({"label": f, "value": os.path.join(root, f)})
@@ -45,7 +45,7 @@ def template_translator():
 def template_translator_tastic():
     template_files = []
     oflag = False
-    for root, dirs, files in os.walk(os.path.join(root_path, 'config', 'tastic')):
+    for root, dirs, files in os.walk(os.path.join(root_path, 'config', 'tactic')):
         for f in files:
             if f[f.index('.')+1:] == "jsontemplate":
                 template_files.append({"label": f, "value": os.path.join(root, f)})
