@@ -559,6 +559,19 @@ class CollectorSettingPage(ConfigPage):
         else:
             self.read_only = False
         return super()._before_load_setting()
+    
+    def _on_click_collectionlog(self, btn_value:str):
+        # btn value: $AddToBlackList$#KEY#ID
+        collect_key = btn_value.split('#')[1]
+        collect_id = int(btn_value.split('#')[2])
+        import collector_lib
+        if "$AddToBlackList$" in btn_value:
+            collector_lib.add_to_blacklist(collect_key, collect_id)
+            output.toast(f'succ!', position='right', color='#2188ff', duration=2)
+        elif "$AddToCollected$" in btn_value:
+            collector_lib.add_to_collected(collect_key, collect_id)
+            output.toast(f'succ!', position='right', color='#2188ff', duration=2)
+            
         
     def _show_list(self, level, display_name, scope_name, component_name, doc, v):
         # 判断是否为dict列表
@@ -574,8 +587,16 @@ class CollectorSettingPage(ConfigPage):
                 for iii in range(len(v)):
                     v[iii]["picked item"] = str(v[iii]["picked item"])
                 v = v[::-1]
+                show_list = []
+                for iii in range(len(v)):
+                    ctime = v[iii]["time"][:v[iii]["time"].index('.')]
+                    show_list.append( [v[iii]["error_code"], v[iii]["id"], v[iii]["picked item"], ctime, 
+                                 output.put_buttons([
+                                     (_("Add to blacklist"), f"$AddToBlackList$#{display_name}#{v[iii]['id']}"),
+                                     (_("Add to collected"), f"$AddToCollected$#{display_name}#{v[iii]['id']}")],
+                                 onclick=self._on_click_collectionlog, small=True)])
                 output.put_collapse(_("展开/收起"), [
-                    output.put_table(v, header=["error_code", "id", "picked item", "time"])
+                    output.put_table(show_list, header=["error_code", "id", "picked item", "time", "buttons"])
                 ], scope=scope_name)
                 
                 
