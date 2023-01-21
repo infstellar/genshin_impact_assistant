@@ -1,7 +1,7 @@
 import subprocess
 
 from pywebio import output, session, pin
-
+from source.util import *
 
 class Page:
     def __init__(self):
@@ -28,6 +28,16 @@ class Page:
     def _on_unload(self):
         pass
 
+    def _value_list2buttons_type(self, l1):
+        replace_dict = {
+            "MainPage": _("Main"),
+            "SettingPage": _("Setting"),
+            "CombatSettingPage": _("CombatSetting"),
+            "CollectorSettingPage": _("CollectorSetting")
+        }
+        for i in range(len(l1)):
+            l1[i] = (replace_dict[l1[i]], l1[i])
+        return l1
 
 class PageManager:
     def __init__(self):
