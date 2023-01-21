@@ -262,12 +262,12 @@ class ConfigPage(Page):
 
             time.sleep(1)
 
-    def _before_load_setting(self):
+    def _before_load_json(self):
         pass
      
     def put_setting(self, name=''):
         self.file_name = name
-        self._before_load_setting()
+        self._before_load_json()
         output.put_markdown('## {}'.format(name), scope='now')  # 标题
         with open(name, 'r', encoding='utf8') as f:
             j = json.load(f)
@@ -333,15 +333,16 @@ class ConfigPage(Page):
         return rt_json
 
     def _on_unload(self):
-        j = json.load(open(self.file_name, 'r', encoding='utf8'))
-        self.exit_popup = True
-        if not is_json_equal(json.dumps(self.get_json(j)), json.dumps(j)):
-            self.exit_popup = False
-            output.popup(_('Do you need to save changes?'), [
-                output.put_buttons([_('No'), _('Yes')], onclick=self.popup_button)
-            ])
-        while not self.exit_popup:
-            time.sleep(0.1)
+        if not self.read_only:
+            j = json.load(open(self.file_name, 'r', encoding='utf8'))
+            self.exit_popup = True
+            if not is_json_equal(json.dumps(self.get_json(j)), json.dumps(j)):
+                self.exit_popup = False
+                output.popup(_('Do you need to save changes?'), [
+                    output.put_buttons([(_('No'), 'No'), (_('Yes'), 'Yes')], onclick=self.popup_button)
+                ])
+            while not self.exit_popup:
+                time.sleep(0.1)
 
     def popup_button(self, val):
         if val == 'No':
@@ -581,12 +582,12 @@ class CollectorSettingPage(ConfigPage):
     def _clean_textarea(self, set_value):
         set_value("")
     
-    def _before_load_setting(self):
+    def _before_load_json(self):
         if "collection_log.json" in self.file_name:
             self.read_only = True
         else:
             self.read_only = False
-        return super()._before_load_setting()
+        return super()._before_load_json()
     
     def _on_click_collectionlog(self, btn_value:str):
         # btn value: $AddToBlackList$#KEY#ID
