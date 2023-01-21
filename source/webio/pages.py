@@ -77,13 +77,17 @@ class MainPage(Page):
 
             time.sleep(0.1)
 
+    
+        
+    
     def _load(self):
         # 标题
         output.put_markdown('# Main', scope=self.main_scope)
 
         output.put_row([
             # 页面切换按钮
-            output.put_buttons(list(manager.page_dict), onclick=webio.manager.load_page, scope=self.main_scope),
+            
+            output.put_buttons(self._value_list2buttons_type(list(manager.page_dict)), onclick=webio.manager.load_page, scope=self.main_scope),
             # 获得链接按钮
             output.put_button(label=_("Get IP address"), onclick=self.on_click_ip_address, scope=self.main_scope)
 
@@ -184,7 +188,7 @@ class ConfigPage(Page):
         output.put_markdown(_('# Config'), scope=self.main_scope)
 
         # 页面切换按钮
-        output.put_buttons(list(manager.page_dict), onclick=webio.manager.load_page, scope=self.main_scope)
+        output.put_buttons(self._value_list2buttons_type(list(manager.page_dict)), onclick=webio.manager.load_page, scope=self.main_scope)
 
         # 配置页
         output.put_markdown(_('## config:'), scope=self.main_scope)
@@ -454,7 +458,7 @@ class SettingPage(ConfigPage):
         output.put_markdown(_('# Setting'), scope=self.main_scope)
 
         # 页面切换按钮
-        output.put_buttons(list(manager.page_dict), onclick=webio.manager.load_page, scope=self.main_scope)
+        output.put_buttons(self._value_list2buttons_type(list(manager.page_dict)), onclick=webio.manager.load_page, scope=self.main_scope)
 
         # 配置页
         output.put_markdown(_('## config:'), scope=self.main_scope)
@@ -487,7 +491,7 @@ class CombatSettingPage(ConfigPage):
         output.put_markdown(_('# CombatSetting'), scope=self.main_scope)
 
         # 页面切换按钮
-        output.put_buttons(list(manager.page_dict), onclick=webio.manager.load_page, scope=self.main_scope)
+        output.put_buttons(self._value_list2buttons_type(list(manager.page_dict)), onclick=webio.manager.load_page, scope=self.main_scope)
 
         # 添加team.json
         output.put_markdown(_('# Add team'), scope=self.main_scope)
@@ -543,7 +547,7 @@ class CollectorSettingPage(ConfigPage):
         output.put_markdown('# ' + _('CollectorSetting'), scope=self.main_scope)
 
         # 页面切换按钮
-        output.put_buttons(list(manager.page_dict), onclick=webio.manager.load_page, scope=self.main_scope)
+        output.put_buttons(self._value_list2buttons_type(list(manager.page_dict)), onclick=webio.manager.load_page, scope=self.main_scope)
 
         # 配置页
         output.put_markdown(_('## config:'), scope=self.main_scope)
