@@ -272,8 +272,8 @@ class ConfigPage(Page):
         with open(name, 'r', encoding='utf8') as f:
             j = json.load(f)
 
-        with open(os.path.join(root_path, "config", "settings", "config.json"), 'r', encoding='utf8') as f:
-            lang = json.load(f)["lang"]
+        # with open(os.path.join(root_path, "config", "settings", "config.json"), 'r', encoding='utf8') as f:
+        #     lang = json.load(f)["lang"]
         doc_name = f'{name}.{global_lang}.jsondoc'
 
         if os.path.exists(doc_name):
