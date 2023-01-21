@@ -169,6 +169,7 @@ class ConfigPage(Page):
         self.can_remove_last_scope = False
         # 注释显示模式在这改
         self.mode = True
+        self.read_only = False
 
     def _load_config_files(self):
         for root, dirs, files in os.walk('config'):
@@ -227,14 +228,18 @@ class ConfigPage(Page):
                     self.can_remove_last_scope = True
 
                 output.put_scope('now', scope=self.main_scope)  # 创建配置页scope
-
+                
+                
                 self.put_setting(pin.pin['file'])  # 配置配置页
 
             time.sleep(1)
 
-    # 
+    def _before_load_setting(self):
+        pass
+     
     def put_setting(self, name=''):
         self.file_name = name
+        self._before_load_setting()
         output.put_markdown('## {}'.format(name), scope='now')  # 标题
         with open(name, 'r', encoding='utf8') as f:
             j = json.load(f)
@@ -252,7 +257,9 @@ class ConfigPage(Page):
         else:
             doc = {}
         self.put_json(j, doc, 'now', level=3)  # 载入json
-        output.put_button('save', scope='now', onclick=self.save)
+        
+        if not self.read_only:
+            output.put_button('save', scope='now', onclick=self.save)
 
     # 保存json文件
     def save(self):
@@ -545,6 +552,13 @@ class CollectorSettingPage(ConfigPage):
     
     def _clean_textarea(self, set_value):
         set_value("")
+    
+    def _before_load_setting(self):
+        if "collection_log.json" in self.file_name:
+            self.read_only = True
+        else:
+            self.read_only = False
+        return super()._before_load_setting()
         
     def _show_list(self, level, display_name, scope_name, component_name, doc, v):
         # 判断是否为dict列表
@@ -553,25 +567,37 @@ class CollectorSettingPage(ConfigPage):
             is_dict_list = is_dict_list and (type(i) == dict)
 
         if is_dict_list:
+            
             output.put_markdown('#' * level + ' ' + display_name,
                                 scope=scope_name)
-            # 差点把我绕晕....
-            # 这个是dict的id,是在列表的位置,从1开始,当然也可以改成从0开始,都一样
-            dict_id = 0
-            # 在当前dict列表里循环,取出每一个dict
-            for i in v:
-                # 计次+1
-                dict_id += 1
-
+            if "collection_log.json" in self.file_name:
+                for iii in range(len(v)):
+                    v[iii]["picked item"] = str(v[iii]["picked item"])
+                v = v[::-1]
+                output.put_collapse(_("展开/收起"), [
+                    output.put_table(v, header=["error_code", "id", "picked item", "time"])
+                ], scope=scope_name)
+                
+                
+            else:
+                # 差点把我绕晕....
+                # 这个是dict的id,是在列表的位置,从1开始,当然也可以改成从0开始,都一样
+                dict_id = 0
+                # 在当前dict列表里循环,取出每一个dict
+                for i in v:
+                    # 计次+1
+                    dict_id += 1
+                    
+                    
                 # 创建一个容器以容纳接下来的dict,第一个是控件名称,为了防止重复,加上了dict id,后面那个是当前容器id
-                output.put_scope(component_name + '-' + str(dict_id), scope=scope_name)
-                # 写标题,第一项是标题文本,遵守markdown语法,第二项是当前容器名称
-                output.put_markdown('#' * (level + 1) + ' ' + str(dict_id),
-                                    scope=component_name + '-' + str(dict_id))
-                # 写dict,第一项为输入的dict,第二项为doc,第三项为当前容器名称,第四项为控件名称前缀,最后是缩进等级
-                self.put_json(i, doc, component_name + '-' + str(dict_id),
-                                component_name + '-' + str(dict_id),
-                                level=level + 2)
+                    output.put_scope(component_name + '-' + str(dict_id), scope=scope_name)
+                    # 写标题,第一项是标题文本,遵守markdown语法,第二项是当前容器名称
+                    output.put_markdown('#' * (level + 1) + ' ' + str(dict_id),
+                                        scope=component_name + '-' + str(dict_id))
+                    # 写dict,第一项为输入的dict,第二项为doc,第三项为当前容器名称,第四项为控件名称前缀,最后是缩进等级
+                    self.put_json(i, doc, component_name + '-' + str(dict_id),
+                                    component_name + '-' + str(dict_id),
+                                    level=level + 2)
         else:
             # 清除按钮
             if "collected.json" in self.file_name:
@@ -582,9 +608,11 @@ class CollectorSettingPage(ConfigPage):
                     ]
                 , scope=scope_name,size="85% 5% 10%")
             elif "collection_log.json" in self.file_name:
+                # output.put_table()
                 output.put_text(f"{display_name} : {util.list2format_list_text(v, inline=True)}", scope=scope_name)
             else:
                 pin.put_textarea(component_name, label=display_name, value=util.list2format_list_text(v), scope=scope_name)
+                
     
     def _show_str(self, doc_items, component_name, display_name, scope_name, v):
         if doc_items:
