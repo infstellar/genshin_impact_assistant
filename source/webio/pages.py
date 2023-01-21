@@ -194,7 +194,7 @@ class ConfigPage(Page):
         output.put_markdown(_('## config:'), scope=self.main_scope)
 
         output.put_scope("select_scope", scope=self.main_scope)
-        pin.put_select('file', self.config_files, scope="select_scope")
+        pin.put_select('file', self._config_file2lableAfile(self.config_files), scope="select_scope")
 
     def _on_load(self):
         super()._on_load()
@@ -203,12 +203,36 @@ class ConfigPage(Page):
         session.register_thread(t)  # 注册线程
         t.start()
 
+    def _config_file2lableAfile(self, l1):
+        replace_dict = {
+            "auto_aim.json": _("auto_aim.json"),
+            "auto_collector.json": _("auto_collector.json"),
+            "auto_combat.json": _("auto_combat.json"),
+            "auto_domain.json": _("auto_domain.json"),
+            "auto_pickup.json": _("auto_pickup.json"),
+            "auto_pickup_default_blacklist.json": _("auto_pickup_default_blacklist.json"),
+            "config.json": _("config.json"),
+            "keymap.json": _("keymap.json"),
+            "character.json": _("character.json"),
+            "character_dist.json": _("character_dist.json"),
+            "team.json": _("team.json"),
+            "team_example_2.json": _("team_example_2.json"),
+            "collected.json": _("collected.json"),
+            "collection_blacklist.json": _("collection_blacklist.json"),
+            "collection_log.json": _("collection_log.json"),
+            "auto_collector.json": _("auto_collector.json")
+        }
+        
+        for i in range(len(l1)):
+            l1[i]["label"] = replace_dict.setdefault(l1[i]["label"], l1[i]["label"])
+        return l1
+    
     # 重新加载选项
     def _reload_select(self):
         self.can_check_select = False
         self._load_config_files()
         output.clear("select_scope")
-        pin.put_select('file', self.config_files, scope="select_scope")
+        pin.put_select('file', self._config_file2lableAfile(self.config_files), scope="select_scope")
         self.can_check_select = True
     
     # 循环线程
@@ -250,7 +274,7 @@ class ConfigPage(Page):
 
         with open(os.path.join(root_path, "config", "settings", "config.json"), 'r', encoding='utf8') as f:
             lang = json.load(f)["lang"]
-        doc_name = f'{name}.{lang}.jsondoc'
+        doc_name = f'{name}.{global_lang}.jsondoc'
 
         if os.path.exists(doc_name):
             with open(doc_name, 'r', encoding='utf8') as f:
@@ -464,7 +488,7 @@ class SettingPage(ConfigPage):
         output.put_markdown(_('## config:'), scope=self.main_scope)
         output.put_scope("select_scope", scope=self.main_scope)
 
-        pin.put_select('file', self.config_files, scope="select_scope")
+        pin.put_select('file', self._config_file2lableAfile(self.config_files), scope="select_scope")
 
     def _load_config_files(self):
         for root, dirs, files in os.walk('config\\settings'):
@@ -507,7 +531,7 @@ class CombatSettingPage(ConfigPage):
         # 配置页
         output.put_markdown(_('## config:'), scope=self.main_scope)
         output.put_scope("select_scope", scope=self.main_scope)
-        pin.put_select('file', self.config_files, scope="select_scope")
+        pin.put_select('file', self._config_file2lableAfile(self.config_files), scope="select_scope")
 
     def onclick_add_teamjson(self):
         n = input.input('team name')
@@ -552,7 +576,7 @@ class CollectorSettingPage(ConfigPage):
         # 配置页
         output.put_markdown(_('## config:'), scope=self.main_scope)
         output.put_scope("select_scope", scope=self.main_scope)
-        pin.put_select('file', self.config_files, scope="select_scope")
+        pin.put_select('file', self._config_file2lableAfile(self.config_files), scope="select_scope")
     
     def _clean_textarea(self, set_value):
         set_value("")
