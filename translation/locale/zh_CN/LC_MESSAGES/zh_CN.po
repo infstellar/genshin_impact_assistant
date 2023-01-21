@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2023-01-13 18:01+0800\n"
-"PO-Revision-Date: 2023-01-13 18:05+0800\n"
+"POT-Creation-Date: 2023-01-21 20:15+0800\n"
+"PO-Revision-Date: 2023-01-21 20:20+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=cp936\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: pygettext.py 1.5\n"
-"X-Generator: Poedit 3.2\n"
+"X-Generator: Poedit 2.4.1\n"
 
 #: ../genshin_assistant.py:20
 msgid "正在初始化，请稍后"
@@ -24,23 +24,43 @@ msgstr ""
 msgid "导入依赖时错误; err code: 001_1"
 msgstr ""
 
-#: ../genshin_assistant.py:29
+#: ../genshin_assistant.py:29 ../genshin_assistant.py:36
 msgid "程序暂停。按任意键退出"
 msgstr ""
 
-#: ../genshin_assistant.py:31
+#: ../genshin_assistant.py:34
+msgid "导入依赖时错误; err code: 001_2"
+msgstr ""
+
+#: ../genshin_assistant.py:38
 msgid "初始化完成"
 msgstr ""
 
-#: ../genshin_assistant.py:32
+#: ../genshin_assistant.py:39
 msgid "正在等待webio启动"
 msgstr ""
 
-#: ../genshin_assistant.py:33
+#: ../genshin_assistant.py:40
 msgid "启动键盘监听"
 msgstr ""
 
-#: ../source/webio\pages.py:44 ../source/webio\pages.py:218
+#: ../source/webio\page_manager.py:33
+msgid "Main"
+msgstr "主页面"
+
+#: ../source/webio\page_manager.py:34
+msgid "Setting"
+msgstr "设置页面"
+
+#: ../source/webio\page_manager.py:35
+msgid "CombatSetting"
+msgstr "自动战斗设置"
+
+#: ../source/webio\page_manager.py:36 ../source/webio\pages.py:572
+msgid "CollectorSetting"
+msgstr "自动采集设置"
+
+#: ../source/webio\pages.py:44 ../source/webio\pages.py:248
 msgid "未找到会话，可能由于窗口关闭。请刷新页面重试。"
 msgstr ""
 
@@ -52,164 +72,249 @@ msgstr ""
 msgid "在导入完成前，请不要切换页面。"
 msgstr ""
 
-#: ../source/webio\pages.py:88
+#: ../source/webio\pages.py:92
 msgid "Get IP address"
 msgstr "获取IP地址"
 
-#: ../source/webio\pages.py:94
+#: ../source/webio\pages.py:98
 msgid "## Options"
 msgstr "## 选项"
 
-#: ../source/webio\pages.py:97 ../source/webio\pages.py:98
+#: ../source/webio\pages.py:101
 msgid "FlowMode"
 msgstr "流程模式"
 
-#: ../source/webio\pages.py:99
+#: ../source/webio\pages.py:103
 msgid "Idle"
 msgstr "空闲"
 
-#: ../source/webio\pages.py:100
+#: ../source/webio\pages.py:104
 msgid "AutoCombat"
 msgstr "自动战斗"
 
-#: ../source/webio\pages.py:101
+#: ../source/webio\pages.py:105
 msgid "AutoDomain"
 msgstr "自动秘境"
 
-#: ../source/webio\pages.py:102
+#: ../source/webio\pages.py:106
 msgid "AutoCollector"
 msgstr "自动采集"
 
-#: ../source/webio\pages.py:105
+#: ../source/webio\pages.py:109
 msgid "启动/停止"
 msgstr ""
 
-#: ../source/webio\pages.py:107
+#: ../source/webio\pages.py:111
 msgid "## Statement"
 msgstr "## 状态"
 
-#: ../source/webio\pages.py:109
+#: ../source/webio\pages.py:113
 msgid "当前状态"
 msgstr ""
 
-#: ../source/webio\pages.py:123
+#: ../source/webio\pages.py:127
 msgid "## Log"
 msgstr "## 日志"
 
-#: ../source/webio\pages.py:141
+#: ../source/webio\pages.py:145
 msgid "Not Enabled"
 msgstr "未启用"
 
-#: ../source/webio\pages.py:142
+#: ../source/webio\pages.py:146
 msgid "LAN IP"
 msgstr "局域网IP"
 
-#: ../source/webio\pages.py:142
+#: ../source/webio\pages.py:146
 msgid "WAN IP"
 msgstr "以太网IP"
 
-#: ../source/webio\pages.py:183
+#: ../source/webio\pages.py:188
 msgid "# Config"
 msgstr "# 设置"
 
-#: ../source/webio\pages.py:189 ../source/webio\pages.py:453
-#: ../source/webio\pages.py:497 ../source/webio\pages.py:542
+#: ../source/webio\pages.py:194 ../source/webio\pages.py:489
+#: ../source/webio\pages.py:533 ../source/webio\pages.py:578
 msgid "## config:"
 msgstr "## 设置："
 
-#: ../source/webio\pages.py:264
+#: ../source/webio\pages.py:208
+msgid "auto_aim.json"
+msgstr "自动瞄准设置"
+
+#: ../source/webio\pages.py:209 ../source/webio\pages.py:223
+msgid "auto_collector.json"
+msgstr "自动采集设置"
+
+#: ../source/webio\pages.py:210
+msgid "auto_combat.json"
+msgstr "自动战斗设置"
+
+#: ../source/webio\pages.py:211
+msgid "auto_domain.json"
+msgstr "自动秘境设置"
+
+#: ../source/webio\pages.py:212
+msgid "auto_pickup.json"
+msgstr "自动采集设置"
+
+#: ../source/webio\pages.py:213
+msgid "auto_pickup_default_blacklist.json"
+msgstr "自动采集黑名单设置"
+
+#: ../source/webio\pages.py:214
+msgid "config.json"
+msgstr "通用设置"
+
+#: ../source/webio\pages.py:215
+msgid "keymap.json"
+msgstr "快捷键"
+
+#: ../source/webio\pages.py:216
+msgid "character.json"
+msgstr "默认角色配置"
+
+#: ../source/webio\pages.py:217
+msgid "character_dist.json"
+msgstr "角色名列表"
+
+#: ../source/webio\pages.py:218
+msgid "team.json"
+msgstr "team示例文件1"
+
+#: ../source/webio\pages.py:219
+msgid "team_example_2.json"
+msgstr "team示例文件2"
+
+#: ../source/webio\pages.py:220
+msgid "collected.json"
+msgstr "自动采集-已采集id"
+
+#: ../source/webio\pages.py:221
+msgid "collection_blacklist.json"
+msgstr "自动采集-黑名单id"
+
+#: ../source/webio\pages.py:222
+msgid "collection_log.json"
+msgstr "自动采集记录"
+
+#: ../source/webio\pages.py:300
 msgid "saved!"
 msgstr "保存成功！"
 
-#: ../source/webio\pages.py:305
+#: ../source/webio\pages.py:341
 msgid "Do you need to save changes?"
 msgstr "你要保存设置吗？"
 
-#: ../source/webio\pages.py:306
+#: ../source/webio\pages.py:342
 msgid "No"
 msgstr "否"
 
-#: ../source/webio\pages.py:306
+#: ../source/webio\pages.py:342
 msgid "Yes"
 msgstr "是"
 
-#: ../source/webio\pages.py:447
+#: ../source/webio\pages.py:483
 msgid "# Setting"
 msgstr "# 设置"
 
-#: ../source/webio\pages.py:480
+#: ../source/webio\pages.py:516
 msgid "# CombatSetting"
 msgstr "# 自动战斗设置"
 
-#: ../source/webio\pages.py:486
+#: ../source/webio\pages.py:522
 msgid "# Add team"
 msgstr "# 增加队伍"
 
-#: ../source/webio\pages.py:490
+#: ../source/webio\pages.py:526
 msgid "Add team"
 msgstr "增加队伍"
 
-#: ../source/webio\pages.py:492
+#: ../source/webio\pages.py:528
 msgid "Add team with characters"
 msgstr "增加队伍（使用character.json的配置）"
 
-#: ../source/webio\pages.py:536 ../source/webio\webio.py:23
-msgid "CollectorSetting"
-msgstr "自动采集设置"
+#: ../source/webio\pages.py:624
+msgid "Add to blacklist"
+msgstr "添加到黑名单"
 
-#: ../source/webio\pages.py:581
+#: ../source/webio\pages.py:625
+msgid "Add to collected"
+msgstr "添加到已采集"
+
+#: ../source/webio\pages.py:627
+msgid "展开/收起"
+msgstr ""
+
+#: ../source/webio\pages.py:657
 msgid "clean list"
 msgstr "清空列表"
-
-#: ../source/webio\webio.py:20
-msgid "Main"
-msgstr "主页面"
-
-#: ../source/webio\webio.py:21
-msgid "Setting"
-msgstr "设置页面"
-
-#: ../source/webio\webio.py:22
-msgid "CombatSetting"
-msgstr "自动战斗设置"
 
 #: ../source/webio\webio.py:26
 msgid "webio启动完成"
 msgstr ""
 
-#: ../source\collector_flow.py:303
+#: ../source\collector_flow.py:217
+msgid "停止自动采集"
+msgstr ""
+
+#: ../source\collector_flow.py:221
+msgid "所有角色都已嘎掉，正在中断此次采集"
+msgstr ""
+
+#: ../source\collector_flow.py:236 ../source\collector_flow.py:242
+#: ../source\collector_flow.py:255
+msgid "重置完成。准备进行下一次采集"
+msgstr ""
+
+#: ../source\collector_flow.py:239
+msgid "Flow timeout"
+msgstr ""
+
+#: ../source\collector_flow.py:249
+msgid "有人嘎了，正在停止此次采集"
+msgstr ""
+
+#: ../source\collector_flow.py:318
 msgid "switch Flow to: AFTER_MOVETO_COLLECTOR"
 msgstr ""
 
-#: ../source\collector_flow.py:329
+#: ../source\collector_flow.py:322
+msgid "collect in"
+msgstr ""
+
+#: ../source\collector_flow.py:322
+msgid "failed. reason: stuck"
+msgstr ""
+
+#: ../source\collector_flow.py:351
 msgid "switch Flow to: BEFORE_PICKUP_COLLECTOR"
 msgstr ""
 
-#: ../source\collector_flow.py:337
+#: ../source\collector_flow.py:359
 msgid "switch Flow to: IN_PICKUP_COLLECTOR"
 msgstr ""
 
-#: ../source\collector_flow.py:347
+#: ../source\collector_flow.py:369
 msgid "switch Flow to: AFTER_PICKUP_COLLECTOR"
 msgstr ""
 
-#: ../source\combat_lib.py:84
+#: ../source\combat_lib.py:93
 msgid "获得当前角色编号失败"
 msgstr ""
 
-#: ../source\combat_loop.py:65
+#: ../source\combat_loop.py:66
 msgid " 的Ecd_float_time大于0，请确定该角色不是多段e技能角色。"
 msgstr ""
 
-#: ../source\combat_loop.py:65
+#: ../source\combat_loop.py:66
 msgid "角色 "
 msgstr ""
 
-#: ../source\combat_loop.py:115
+#: ../source\combat_loop.py:116
 msgid "有人嘎了，停止自动战斗"
 msgstr ""
 
-#: ../source\combat_loop.py:158 ../source\combat_loop.py:164
+#: ../source\combat_loop.py:159 ../source\combat_loop.py:165
 msgid "停止自动战斗"
 msgstr ""
 
@@ -229,7 +334,7 @@ msgstr "autoTrack.log 2 已清理"
 msgid "autoTrack.log 3 cleaned"
 msgstr "autoTrack.log 3 已清理"
 
-#: ../source\cvAutoTrack.py:138
+#: ../source\cvAutoTrack.py:140
 msgid "cvAutoTrack DLL has been loaded."
 msgstr "cvAutoTrack DLL 已经加载"
 
@@ -245,35 +350,35 @@ msgstr ""
 msgid "停止自动秘境"
 msgstr ""
 
-#: ../source\domain_flow.py:124
+#: ../source\domain_flow.py:120
 msgid "正在开始挑战秘境"
 msgstr ""
 
-#: ../source\domain_flow.py:274
+#: ../source\domain_flow.py:270
 msgid "正在开始战斗"
 msgstr ""
 
-#: ../source\domain_flow.py:288
+#: ../source\domain_flow.py:284
 msgid "正在停止战斗"
 msgstr ""
 
-#: ../source\domain_flow.py:291
+#: ../source\domain_flow.py:287
 msgid "等待岩造物消失"
 msgstr ""
 
-#: ../source\domain_flow.py:299
+#: ../source\domain_flow.py:295
 msgid "正在激活石化古树"
 msgstr ""
 
-#: ../source\domain_flow.py:344
+#: ../source\domain_flow.py:340
 msgid "秘境结束。"
 msgstr ""
 
-#: ../source\domain_flow.py:355
+#: ../source\domain_flow.py:351
 msgid "开始下一次秘境"
 msgstr ""
 
-#: ../source\domain_flow.py:371
+#: ../source\domain_flow.py:365
 msgid "次数结束。退出秘境"
 msgstr ""
 
@@ -349,16 +454,42 @@ msgstr ""
 msgid "结束自动采集"
 msgstr ""
 
-#: ../source\generic_lib.py:72 ../source\teyvat_move_flow.py:157
+#: ../source\generic_lib.py:72 ../source\teyvat_move_flow.py:163
 msgid "获取传送锚点失败，正在重试"
 msgstr ""
 
-#: ../source\interaction_background.py:43
+#: ../source\interaction_background.py:44
 msgid "恢复操作"
 msgstr ""
 
-#: ../source\interaction_background.py:45
+#: ../source\interaction_background.py:46
+msgid " 秒"
+msgstr ""
+
+#: ../source\interaction_background.py:46
+msgid "不是原神窗口"
+msgstr ""
+
+#: ../source\interaction_background.py:46
 msgid "当前窗口焦点为"
+msgstr ""
+
+#: ../source\interaction_background.py:46
+msgid "，操作暂停 "
+msgstr ""
+
+#: ../source\interaction_background.py:95
+msgid "未找到句柄，请确认原神窗口是否开启。"
+msgstr ""
+
+#: ../source\interaction_background.py:143
+#: ../source\interaction_background.py:150
+msgid "将在2秒后重试。"
+msgstr ""
+
+#: ../source\interaction_background.py:143
+#: ../source\interaction_background.py:150
+msgid "截图失败, shape="
 msgstr ""
 
 #: ../source\listening.py:55
@@ -413,27 +544,27 @@ msgstr ""
 msgid "停止自动拾取"
 msgstr ""
 
-#: ../source\pickup_operator.py:113
+#: ../source\pickup_operator.py:118
 msgid "PICKUP_TIMEOUT_001"
 msgstr ""
 
-#: ../source\pickup_operator.py:115 ../source\pickup_operator.py:121
+#: ../source\pickup_operator.py:120 ../source\pickup_operator.py:126
 msgid "停止拾取"
 msgstr ""
 
-#: ../source\pickup_operator.py:119
+#: ../source\pickup_operator.py:124
 msgid "PICKUP_TIMEOUT_002"
 msgstr ""
 
-#: ../source\pickup_operator.py:128
+#: ../source\pickup_operator.py:133
 msgid "已找到物品且无法找到下一个物品，停止拾取"
 msgstr ""
 
-#: ../source\pickup_operator.py:161
+#: ../source\pickup_operator.py:166
 msgid "pickup: "
 msgstr "拾取到："
 
-#: ../source\pickup_operator.py:163
+#: ../source\pickup_operator.py:168
 msgid "已找到："
 msgstr ""
 
@@ -457,27 +588,27 @@ msgstr ""
 msgid "将在0.2秒后再次尝试获取UI界面"
 msgstr ""
 
-#: ../source\static_lib.py:32
+#: ../source\static_lib.py:33
 msgid "等待cvautotrack获取坐标"
 msgstr ""
 
-#: ../source\teyvat_move_controller.py:138
+#: ../source\teyvat_move_controller.py:147
 msgid "已到达目的地附近，本次导航结束。"
 msgstr ""
 
-#: ../source\teyvat_move_controller.py:143
+#: ../source\teyvat_move_controller.py:153
 msgid "已到达F附近，本次导航结束。"
 msgstr ""
 
-#: ../source\teyvat_move_flow.py:121
+#: ../source\teyvat_move_flow.py:122
 msgid "停止自动移动"
 msgstr ""
 
-#: ../source\teyvat_move_flow.py:268
+#: ../source\teyvat_move_flow.py:288
 msgid "正在落地"
 msgstr ""
 
-#: ../source\teyvat_move_flow.py:270
+#: ../source\teyvat_move_flow.py:290
 msgid "结束自动行走"
 msgstr ""
 
