@@ -201,3 +201,4 @@ changelog_option.js
 .gitignore
 CHANGELOG.md
 node_modules/*
+assets/inference/*

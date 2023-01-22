@@ -17,11 +17,11 @@ def get_branch_commit_id():
 def main():
     pywebio.session.set_env(output_max_width='80%', title="GIA WebUI v0.5.0")
     session.run_js(f'document.querySelector("body > footer").innerHTML+="| GIA: {"-".join(get_branch_commit_id())}"')
-    webio.manager.reg_page('Main', MainPage())
-    webio.manager.reg_page('Setting', SettingPage())
-    webio.manager.reg_page('CombatSetting', CombatSettingPage())
-    webio.manager.reg_page("CollectorSetting", CollectorSettingPage())
-    webio.manager.load_page('Main')
+    webio.manager.reg_page('MainPage', MainPage())
+    webio.manager.reg_page('SettingPage', SettingPage())
+    webio.manager.reg_page('CombatSettingPage', CombatSettingPage())
+    webio.manager.reg_page("CollectorSettingPage", CollectorSettingPage())
+    webio.manager.load_page('MainPage')
     util.add_logger_to_GUI()
     util.logger.info(_("webio启动完成"))
 

@@ -35,9 +35,9 @@ def webio_poster(record:str):
         if c != "NO_COL":
             color = ansl_code2col(ansl_code)
         text = text[text.index("m")+1:]
-        manager.get_page('Main').logout(text, color=color)
+        manager.get_page('MainPage').logout(text, color=color)
     
-    manager.get_page('Main').logout("$$end$$")
+    manager.get_page('MainPage').logout("$$end$$")
 
 class WebioHandler(TextIO):
 
