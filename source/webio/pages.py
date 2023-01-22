@@ -1,19 +1,19 @@
+from source.util import *
+from pywebio import *
+from webio.util import *
+
 import hashlib
 import json
 import os
 import socket
-import subprocess
 import threading
 import time
 
-from pywebio import *
-from pywebio.output import OutputPosition
-
-from source import listening, util, webio
-from source.util import *
+from source import listening, webio
 from source.webio import manager
 from source.webio.page_manager import Page
 import flow_state
+import collector_lib
 
 
 # from source.webio.log_handler import webio_poster
@@ -326,7 +326,7 @@ class ConfigPage(Page):
                             self.get_json(v[dict_id - 1], add_name='{}-{}-{}'.format(add_name, k_sha1, str(dict_id))))
                     rt_json[k] = rt_list
                 else:
-                    rt_json[k] = util.list_text2list(pin.pin['{}-{}'.format(add_name, k_sha1)])
+                    rt_json[k] = list_text2list(pin.pin['{}-{}'.format(add_name, k_sha1)])
             else:
                 rt_json[k] = pin.pin['{}-{}'.format(add_name, k_sha1)]
 
@@ -431,7 +431,7 @@ class ConfigPage(Page):
                                 component_name + '-' + str(dict_id),
                                 level=level + 2)
         else:
-            pin.put_textarea(component_name, label=display_name, value=util.list2format_list_text(v),
+            pin.put_textarea(component_name, label=display_name, value=list2format_list_text(v),
                                 scope=scope_name)
     
     # 显示json
@@ -582,9 +582,22 @@ class CollectorSettingPage(ConfigPage):
     def _clean_textarea(self, set_value):
         set_value("")
     
+    def _onclick_col_log_operate(self, btn_value:str):
+        if btn_value == "$COLLECTED$":
+            collector_lib.generate_collected_from_log()
+            toast_succ()
+        elif btn_value == "$BLACKLIST$":
+            toast_succ()
+    
     def _before_load_json(self):
         if "collection_log.json" in self.file_name:
             self.read_only = True
+            output.put_buttons([
+                (_("Automatic generate a list of collected items"), "$COLLECTED$"),
+                (_("Automatic generate a list of blacklist items"), "$BLACKLIST$")], 
+                onclick=self._onclick_col_log_operate,
+                scope="now"
+            )
         else:
             self.read_only = False
         return super()._before_load_json()
@@ -593,13 +606,12 @@ class CollectorSettingPage(ConfigPage):
         # btn value: $AddToBlackList$#KEY#ID
         collect_key = btn_value.split('#')[1]
         collect_id = int(btn_value.split('#')[2])
-        import collector_lib
         if "$AddToBlackList$" in btn_value:
             collector_lib.add_to_blacklist(collect_key, collect_id)
-            output.toast(f'succ!', position='right', color='#2188ff', duration=2)
+            toast_succ()
         elif "$AddToCollected$" in btn_value:
             collector_lib.add_to_collected(collect_key, collect_id)
-            output.toast(f'succ!', position='right', color='#2188ff', duration=2)
+            toast_succ()
             
         
     def _show_list(self, level, display_name, scope_name, component_name, doc, v):
@@ -652,16 +664,16 @@ class CollectorSettingPage(ConfigPage):
             # 清除按钮
             if "collected.json" in self.file_name:
                 output.put_row([
-                    pin.put_textarea(component_name, label=display_name, value=util.list2format_list_text(v)),
+                    pin.put_textarea(component_name, label=display_name, value=list2format_list_text(v)),
                     None,
                     output.put_button(_("clean list"), onclick=lambda:self._reset_list_textarea(component_name))
                     ]
                 , scope=scope_name,size="85% 5% 10%")
             elif "collection_log.json" in self.file_name:
                 # output.put_table()
-                output.put_text(f"{display_name} : {util.list2format_list_text(v, inline=True)}", scope=scope_name)
+                output.put_text(f"{display_name} : {list2format_list_text(v, inline=True)}", scope=scope_name)
             else:
-                pin.put_textarea(component_name, label=display_name, value=util.list2format_list_text(v), scope=scope_name)
+                pin.put_textarea(component_name, label=display_name, value=list2format_list_text(v), scope=scope_name)
                 
     
     def _show_str(self, doc_items, component_name, display_name, scope_name, v):

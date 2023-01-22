@@ -1,4 +1,6 @@
+from source.util import *
 from source.webio.pages import *
+import subprocess
 import pywebio
 status = True
 
@@ -22,8 +24,8 @@ def main():
     webio.manager.reg_page('CombatSettingPage', CombatSettingPage())
     webio.manager.reg_page("CollectorSettingPage", CollectorSettingPage())
     webio.manager.load_page('MainPage')
-    util.add_logger_to_GUI()
-    util.logger.info(_("webio启动完成"))
+    add_logger_to_GUI()
+    logger.info(_("webio启动完成"))
 
 
 '''    handler = log_handler.WebioHandler()

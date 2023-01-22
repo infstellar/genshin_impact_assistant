@@ -21,6 +21,33 @@ def add_to_collected(key:str, id: Union[int,list]) -> None:
         collectedlist[key].append(i)
     save_json(collectedlist, json_name="collected.json", default_path="config\\auto_collector")    
 
+def is_col_refreshed(col_name, col_time):
+    col_time = col_time[:col_time.index('.')]
+    time_stamp = time.mktime(time.strptime(col_time, "%Y-%m-%d %H:%M:%S"))
+    now_stamp = time.time()
+    reflash_period = 48
+    reflash_sec = reflash_period*60*60
+    if now_stamp - time_stamp > reflash_sec:
+        return True
+    else:
+        return False
+def generate_collected_from_log(regenerate = True):
+    loglist = load_json("collection_log.json", "config\\auto_collector")
+    if regenerate:
+        collected_list = {}
+    else:
+        collected_list = load_json("collected.json", "config\\auto_collector")
+    for i in loglist:
+        key_name = i
+        collected_list.setdefault(key_name, [])
+        for ii in loglist[i]:
+            col_id = ii["id"]
+            col_time = ii["time"]
+            if not is_col_refreshed(key_name, col_time):
+                collected_list[key_name].append(col_id)
+                print(col_id)
+    save_json(collected_list, "collected.json", "config\\auto_collector")
+
 all_list = ['突发委托', '雷神瞳2', '兽肉 - 稻妻', '相位之门', '石碑', '深海龙蜥 - 渊下宫', '键纹基座Ⅰ',
             '禽肉 - 稻妻', '雪山迷踪', '摩拉调查点 - 稻妻', '武器调查点 - 鹤观', '愚人众先遣队 - 璃月',
             '【「清籁岛」的记录画片 · 之二】对应拍照点', '史莱姆 - 鹤观', '盗宝团 - 璃月', '发光髓-群岛',
@@ -254,4 +281,5 @@ def get_all_collection_name()->list:
     """
     return list(set(ret_list) - set())
 
-
+if __name__ == '__main__':
+    generate_collected_from_log()
