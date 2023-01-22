@@ -38,8 +38,12 @@ class PaddleocrAPI:
     def __init__(self, lang='ch', device='gpu'):
         device = globaldevice
         logger.info(_("ocr device: ") + device)
+        inference_path = os.path.join(root_path, f'assets\\inference\\{global_lang}\\')
         self.ocr = PaddleOCR(use_angle_cls=True, lang=lang, show_log=False,
-                             device=device)  # need to run only once to download and load model into memory
+                             device=device, 
+                             det_model_dir=inference_path+"det_model\\",
+                             rec_model_dir=inference_path+"rec_model\\",
+                             cls_model_dir=inference_path+"cls_model\\")  # need to run only once to download and load model into memory
         # self.
 
     def img_analyse(self, im_src):

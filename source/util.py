@@ -26,7 +26,7 @@ except:
 
 
 # load config file
-def load_json(json_name='config.json', default_path='config\\settings'):
+def load_json(json_name='config.json', default_path='config\\settings') -> dict:
     try:
         return json.load(open(os.path.join(root_path, default_path, json_name), 'r', encoding='utf-8'))
     except:
