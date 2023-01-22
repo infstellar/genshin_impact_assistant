@@ -23,8 +23,10 @@ MINERAL = 2
 
 ALL_CHARACTER_DIED = 1
 
-def load_feature_position(text, blacklist_id=[], ret_mode = 0):
+def load_feature_position(text, blacklist_id=None, ret_mode = 0, check_mode = 0):
     ita = load_json("itemall.json", "assests")
+    if blacklist_id == None:
+        blacklist_id = []
     ret_dict=[]
     i=0
     for feature in ita:
@@ -32,8 +34,12 @@ def load_feature_position(text, blacklist_id=[], ret_mode = 0):
         if feature == None:
             continue
         for item in feature["features"]:
-            if item["id"] in blacklist_id:
-                continue
+            if check_mode == 0:
+                if item["id"] in blacklist_id:
+                    continue
+            elif check_mode == 1:
+                if item["id"] not in blacklist_id:
+                    continue
             if text in item["properties"]["popTitle"] :
                 if ret_mode == 0:
                     ret_dict.append({
@@ -77,7 +83,7 @@ class CollectorFlow(BaseThreading):
             save_json({}, os.path.join(root_path, "config\\auto_collector", "collection_log.json"))
         self.collection_log = load_json("collection_log.json", default_path="config\\auto_collector")
         
-        self.collector_posi_dict = load_feature_position(self.collector_name, self.collector_blacklist_id)
+        self.collector_posi_dict = None
         self.current_state = ST.INIT_MOVETO_COLLECTOR
         self.current_position = static_lib.cvAutoTrackerLoop.get_position()[1:]
         self.last_collection_posi = [9999,9999]
@@ -277,6 +283,7 @@ class CollectorFlow(BaseThreading):
             if self.current_state == ST.INIT_MOVETO_COLLECTOR:
                 
                 self.collector_posi_dict = load_feature_position(self.collector_name, self.shielded_id)
+                self.shielded_posi_list = load_feature_position(self.collector_name, self.shielded_id, ret_mode=1, check_mode=1)
                 scene_manager.switch_to_page(scene_manager.page_main, self.checkup_stop_func)
                 static_lib.while_until_no_excessive_error(self.checkup_stop_func)
                 self.current_position = static_lib.cvAutoTrackerLoop.get_position()[1:]
@@ -290,8 +297,13 @@ class CollectorFlow(BaseThreading):
                 self.collection_posi = self.collector_posi_dict[self.collector_i]["position"]
                 self.collection_id = self.collector_posi_dict[self.collector_i]["id"]
                 '''当两个collection坐标小于30时，认为是同一个。'''
-                if euclidean_distance(self.collection_posi, self.last_collection_posi) <= 30:
-                    logger.info(f"collection id: {self.collection_id} ; collection position: {self.collection_posi} ; last collection position: {self.last_collection_posi}")
+                f1 = euclidean_distance(self.collection_posi, self.last_collection_posi) <= 30
+                f2 = euclidean_distance_plist(self.collection_posi, self.shielded_posi_list).min() <= 30
+                if f1 or f2:
+                    if f1:
+                        logger.info(f"collection id: {self.collection_id} ; collection position: {self.collection_posi} ; last collection position: {self.last_collection_posi}")
+                    if f2:
+                        logger.info(f"collection id: {self.collection_id} ; collection position: {self.collection_posi} ; closest collection position distance: {euclidean_distance_plist(self.collection_posi, self.shielded_posi_list).min()}")
                     logger.info(f"distance lower than 30, skip this collection.")
                     self.current_state = ST.AFTER_PICKUP_COLLECTOR
                     continue
