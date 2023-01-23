@@ -1,5 +1,6 @@
 {
     "collection_name": "史莱姆 - 蒙德",
     "collection_type": "ENEMY",
-    "collect mode": "Auto"
+    "collect mode": "Auto",
+    "minimum_times_mask_col_id": 2
 }

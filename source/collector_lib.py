@@ -48,6 +48,27 @@ def generate_collected_from_log(regenerate = True):
                 print(col_id)
     save_json(collected_list, "collected.json", "config\\auto_collector")
 
+def generate_masked_col_from_log(regenerate = True):
+    min_times = load_json("auto_collector.json")["minimum_times_mask_col_id"]
+    loglist = load_json("collection_log.json", "config\\auto_collector")
+    if regenerate:
+        bla_list = {}
+    else:
+        bla_list = load_json("collection_blacklist.json", "config\\auto_collector")
+    for i in loglist:
+        key_name = i
+        bla_list.setdefault(key_name, [])
+        fail_times = {}
+        for ii in loglist[i]:
+            col_id = ii["id"]
+            col_time = ii["picked item"]
+            if col_time == ["None"]:
+                fail_times[str(col_id)] = fail_times.setdefault(str(col_id), 0) + 1
+        for ii in fail_times:
+            if int(fail_times[str(ii)]) >= min_times:
+                bla_list[key_name].append(int(ii))
+    save_json(bla_list, "collection_blacklist.json", "config\\auto_collector")
+
 all_list = ['突发委托', '雷神瞳2', '兽肉 - 稻妻', '相位之门', '石碑', '深海龙蜥 - 渊下宫', '键纹基座Ⅰ',
             '禽肉 - 稻妻', '雪山迷踪', '摩拉调查点 - 稻妻', '武器调查点 - 鹤观', '愚人众先遣队 - 璃月',
             '【「清籁岛」的记录画片 · 之二】对应拍照点', '史莱姆 - 鹤观', '盗宝团 - 璃月', '发光髓-群岛',
@@ -282,4 +303,4 @@ def get_all_collection_name()->list:
     return list(set(ret_list) - set())
 
 if __name__ == '__main__':
-    generate_collected_from_log()
+    generate_masked_col_from_log()
