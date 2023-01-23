@@ -69,6 +69,30 @@ def generate_masked_col_from_log(regenerate = True):
                 bla_list[key_name].append(int(ii))
     save_json(bla_list, "collection_blacklist.json", "config\\auto_collector")
 
+def col_succ_times_from_log(key_name, day=1):
+    loglist = load_json("collection_log.json", "config\\auto_collector")
+    total_n = 0
+    succ_n = 0
+    t = day*3600*24
+    for i in loglist[key_name]:
+        col_time = i["time"]
+        col_time = col_time[:col_time.index('.')]
+        time_stamp = time.mktime(time.strptime(col_time, "%Y-%m-%d %H:%M:%S"))
+        now_stamp = time.time()
+        if now_stamp - time_stamp <= t:
+            total_n+=1
+            if i["picked item"] != ["None"]:
+                succ_n+=1
+    fail_n = total_n - succ_n
+    if total_n == 0:
+        succ_rate = 1
+    else:
+        succ_rate = succ_n/total_n
+    return round(succ_rate*100, 1), total_n, succ_n, fail_n
+
+if __name__ == '__main__':
+    print(col_succ_times_from_log("清心"))
+
 all_list = ['突发委托', '雷神瞳2', '兽肉 - 稻妻', '相位之门', '石碑', '深海龙蜥 - 渊下宫', '键纹基座Ⅰ',
             '禽肉 - 稻妻', '雪山迷踪', '摩拉调查点 - 稻妻', '武器调查点 - 鹤观', '愚人众先遣队 - 璃月',
             '【「清籁岛」的记录画片 · 之二】对应拍照点', '史莱姆 - 鹤观', '盗宝团 - 璃月', '发光髓-群岛',
@@ -302,5 +326,3 @@ def get_all_collection_name()->list:
     """
     return list(set(ret_list) - set())
 
-if __name__ == '__main__':
-    generate_masked_col_from_log()
