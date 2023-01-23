@@ -2,7 +2,7 @@
 
 ## 简介
 
-- 位置：`config/settings/tastic`
+- 位置：`config/settings/tactic`
 
 - 自动战斗辅助可以按照设定的角色、策略、优先级、触发条件等自动切换角色和执行攻击，使用元素战技和元素爆发。
 
