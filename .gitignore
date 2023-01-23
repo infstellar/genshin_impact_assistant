@@ -199,4 +199,5 @@ changelog_option.js
 .gitignore
 CHANGELOG.md
 node_modules/*
-assets/inference/*
+assets/inference/zh_CN/*
+assets/inference/en_US/*
