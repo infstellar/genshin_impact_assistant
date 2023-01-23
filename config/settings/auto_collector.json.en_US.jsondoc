@@ -43,5 +43,8 @@
       "Auto",
       "ManualAssi"
     ]
+  },
+  "minimum_times_mask_col_id":{
+    "doc": "Minimum number of times to mask the collector id"
   }
 }

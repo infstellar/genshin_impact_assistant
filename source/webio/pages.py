@@ -587,6 +587,7 @@ class CollectorSettingPage(ConfigPage):
             collector_lib.generate_collected_from_log()
             toast_succ()
         elif btn_value == "$BLACKLIST$":
+            collector_lib.generate_masked_col_from_log()
             toast_succ()
     
     def _before_load_json(self):
