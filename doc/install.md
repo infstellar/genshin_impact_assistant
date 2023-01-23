@@ -1,3 +1,46 @@
+# English | 英文
+
+# Installation method
+
+GIA provides an automatic installer/updater.
+
+# GIA Auto Install Launcher
+
+## Download
+
+[GIA Launcher v0.3](https://github.com/infstellar/genshin_impact_assistant/releases/download/v0.3.0/GIA.Launcher.v0.3.0.7z)
+
+## How to use
+
+Double click on `GIA Launcher.exe` to run it.
+
+## Configuration file
+
+For Chinese users, you can use the `installer_config_cn.json` configuration file, which has been individually configured according to the Chinese characteristic network environment.
+
+Usage: Delete `installer_config.json` and keep `installer_config_cn.json` to automatically enable `installer_config_cn.json`.
+
+Specific configuration.
+
+| project | content |
+|---------------------|---------------------|
+| RequirementsFile | requirements.txt file location |
+| InstallDependencies | Whether to install dependencies, default is true |
+| PypiMirror | Pypi mirror site, for domestic users set to `https://pypi.tuna.tsinghua.edu.cn/simple` or other domestic mirror source.    |
+| Repository | The address of the repository. Default is `https://github.com/infstellar/genshin_impact_assistant`, domestic users can set it to `https://gitee.com/infstellar/genshin_impact_assistant` to speed up access. |
+| GitProxy | Switch Git SSL authentication. Defaults to false |
+| KeepLocalChanges | Keeps local changes to files. Defaults to false |
+| AutoUpdate | Update automatically. Defaults to true |
+| Branch | The branch where the code will be downloaded. The following branches are available: |
+
+| Branch | Contents |
+|--------------|------------|
+| main | Default main branch, stable version |
+| beta_version | test_version |
+| dev | Under development |
+
+# 简体中文 | Simplified Chinese
+
 # 安装方法
 
 GIA提供了自动安装/更新器。
@@ -36,5 +79,3 @@ GIA提供了自动安装/更新器。
 | main         | 默认主分支，稳定版本 |
 | beta_version | 测试版本       |
 | dev          | 开发中版本      |
- 
-3. 以管理员权限运行GIAStart.exe
