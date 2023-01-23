@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2023-01-23 11:09+0800\n"
-"PO-Revision-Date: 2023-01-23 11:11+0800\n"
+"POT-Creation-Date: 2023-01-23 11:18+0800\n"
+"PO-Revision-Date: 2023-01-23 11:18+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -481,6 +481,10 @@ msgstr "成功次数"
 #: ../source\forgettext.py:6
 msgid "fail num"
 msgstr "失败次数"
+
+#: ../source\forgettext.py:7
+msgid "Within"
+msgstr "在"
 
 #: ../source\generic_lib.py:72 ../source\teyvat_move_flow.py:163
 msgid "获取传送锚点失败，正在重试"
