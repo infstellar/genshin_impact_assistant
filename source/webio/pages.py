@@ -637,7 +637,16 @@ class CollectorSettingPage(ConfigPage):
                                      (_("Add to blacklist"), f"$AddToBlackList$#{display_name}#{v[iii]['id']}"),
                                      (_("Add to collected"), f"$AddToCollected$#{display_name}#{v[iii]['id']}")],
                                  onclick=self._on_click_collectionlog, small=True)])
+                a1,a2,a3,a4 = collector_lib.col_succ_times_from_log(display_name, day=1)
+                b1,b2,b3,b4 = collector_lib.col_succ_times_from_log(display_name, day=7)
+                c1,c2,c3,c4 = collector_lib.col_succ_times_from_log(display_name, day=15)
+                d1,d2,d3,d4 = collector_lib.col_succ_times_from_log(display_name, day=900)
                 output.put_collapse(_("展开/收起"), [
+                    
+                    output.put_text(f"{_('Within')} 1   {_('day(s)')} {_('success rate')}:{a1} {_('total num')}:{a2} {_('success num')}:{a3} {_('fail num')}:{a4}"),
+                    output.put_text(f"{_('Within')} 7   {_('day(s)')} {_('success rate')}:{b1} {_('total num')}:{b2} {_('success num')}:{b3} {_('fail num')}:{b4}"),
+                    output.put_text(f"{_('Within')} 15  {_('day(s)')} {_('success rate')}:{c1} {_('total num')}:{c2} {_('success num')}:{c3} {_('fail num')}:{c4}"),
+                    output.put_text(f"{_('Within')} 900 {_('day(s)')} {_('success rate')}:{d1} {_('total num')}:{d2} {_('success num')}:{d3} {_('fail num')}:{d4}"),
                     output.put_table(show_list, header=["error_code", "id", "picked item", "time", "buttons"])
                 ], scope=scope_name)
                 

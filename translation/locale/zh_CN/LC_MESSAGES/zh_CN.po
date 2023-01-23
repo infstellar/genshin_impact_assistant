@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2023-01-21 20:15+0800\n"
-"PO-Revision-Date: 2023-01-21 20:20+0800\n"
+"POT-Creation-Date: 2023-01-23 11:09+0800\n"
+"PO-Revision-Date: 2023-01-23 11:11+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -60,7 +60,7 @@ msgstr "自动战斗设置"
 msgid "CollectorSetting"
 msgstr "自动采集设置"
 
-#: ../source/webio\pages.py:44 ../source/webio\pages.py:248
+#: ../source/webio\pages.py:44 ../source/webio\pages.py:247
 msgid "未找到会话，可能由于窗口关闭。请刷新页面重试。"
 msgstr ""
 
@@ -197,7 +197,7 @@ msgstr "自动采集-黑名单id"
 msgid "collection_log.json"
 msgstr "自动采集记录"
 
-#: ../source/webio\pages.py:300
+#: ../source/webio\pages.py:299
 msgid "saved!"
 msgstr "保存成功！"
 
@@ -233,68 +233,76 @@ msgstr "增加队伍"
 msgid "Add team with characters"
 msgstr "增加队伍（使用character.json的配置）"
 
-#: ../source/webio\pages.py:624
+#: ../source/webio\pages.py:597
+msgid "Automatic generate a list of collected items"
+msgstr "从采集日志中自动生成已采集列表id"
+
+#: ../source/webio\pages.py:598
+msgid "Automatic generate a list of blacklist items"
+msgstr "从采集日志中自动生成黑名单列表id"
+
+#: ../source/webio\pages.py:637
 msgid "Add to blacklist"
 msgstr "添加到黑名单"
 
-#: ../source/webio\pages.py:625
+#: ../source/webio\pages.py:638
 msgid "Add to collected"
 msgstr "添加到已采集"
 
-#: ../source/webio\pages.py:627
+#: ../source/webio\pages.py:644
 msgid "展开/收起"
 msgstr ""
 
-#: ../source/webio\pages.py:657
+#: ../source/webio\pages.py:679
 msgid "clean list"
 msgstr "清空列表"
 
-#: ../source/webio\webio.py:26
+#: ../source/webio\webio.py:28
 msgid "webio启动完成"
 msgstr ""
 
-#: ../source\collector_flow.py:217
+#: ../source\collector_flow.py:223
 msgid "停止自动采集"
 msgstr ""
 
-#: ../source\collector_flow.py:221
+#: ../source\collector_flow.py:227
 msgid "所有角色都已嘎掉，正在中断此次采集"
 msgstr ""
 
-#: ../source\collector_flow.py:236 ../source\collector_flow.py:242
-#: ../source\collector_flow.py:255
+#: ../source\collector_flow.py:242 ../source\collector_flow.py:248
+#: ../source\collector_flow.py:261
 msgid "重置完成。准备进行下一次采集"
 msgstr ""
 
-#: ../source\collector_flow.py:239
+#: ../source\collector_flow.py:245
 msgid "Flow timeout"
 msgstr ""
 
-#: ../source\collector_flow.py:249
+#: ../source\collector_flow.py:255
 msgid "有人嘎了，正在停止此次采集"
 msgstr ""
 
-#: ../source\collector_flow.py:318
+#: ../source\collector_flow.py:330
 msgid "switch Flow to: AFTER_MOVETO_COLLECTOR"
 msgstr ""
 
-#: ../source\collector_flow.py:322
+#: ../source\collector_flow.py:334
 msgid "collect in"
-msgstr ""
+msgstr "在采集"
 
-#: ../source\collector_flow.py:322
+#: ../source\collector_flow.py:334
 msgid "failed. reason: stuck"
-msgstr ""
+msgstr "失败。原因：卡住"
 
-#: ../source\collector_flow.py:351
+#: ../source\collector_flow.py:363
 msgid "switch Flow to: BEFORE_PICKUP_COLLECTOR"
 msgstr ""
 
-#: ../source\collector_flow.py:359
+#: ../source\collector_flow.py:371
 msgid "switch Flow to: IN_PICKUP_COLLECTOR"
 msgstr ""
 
-#: ../source\collector_flow.py:369
+#: ../source\collector_flow.py:381
 msgid "switch Flow to: AFTER_PICKUP_COLLECTOR"
 msgstr ""
 
@@ -453,6 +461,26 @@ msgstr ""
 #: ../source\flow_state.py:127
 msgid "结束自动采集"
 msgstr ""
+
+#: ../source\forgettext.py:2
+msgid "day(s)"
+msgstr "天"
+
+#: ../source\forgettext.py:3
+msgid "success rate"
+msgstr "成功率"
+
+#: ../source\forgettext.py:4
+msgid "total num"
+msgstr "总次数"
+
+#: ../source\forgettext.py:5
+msgid "success num"
+msgstr "成功次数"
+
+#: ../source\forgettext.py:6
+msgid "fail num"
+msgstr "失败次数"
 
 #: ../source\generic_lib.py:72 ../source\teyvat_move_flow.py:163
 msgid "获取传送锚点失败，正在重试"
