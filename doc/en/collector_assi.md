@@ -4,8 +4,6 @@
 Portions of this document may be machine translated.
 ```
 
-## NOTE: This feature is in beta. If there is any problem, please submit an issue or give direct feedback. Log files should be provided when submitting, preferably with pictures or videos. Thanks♪(･ω･)ﾉ
-
 ## Introduction
 
 Auto Gathering Assist can automatically get most of the materials in Teyvat world, such as collectables, loot, etc.
@@ -14,7 +12,17 @@ Examples: Automatic collection of sweet flowers and glass lilies, automatic brus
 
 This function integrates automatic combat assistance, automatic movement assistance, and pickup assistance. Make sure to read the configuration information about them before using them.
 
-Note: For the time being, only some items in the Mond area are supported. The scope will be gradually expanded in the future.
+Note: For the time being, only some items in the Mond and Liyue area are supported. The scope will be gradually expanded in the future.
+
+## Feature description
+
+- Specify a collector, select the closest collector from the database to the location at startup to collect
+
+- Resource/monster collection possible
+
+- Automatic continuous harvesting
+
+- Automatically go to Statues of The Seven to regain blood when a character dies
 
 ## Quick start
 
@@ -30,6 +38,7 @@ Start automatic acquisition from the GUI interface.
 |--------------|------------------|
 | collection_name | The name of the item to be collected |
 | collection_type | The type of collected items, divided into `COLLECTION` (general collection items) and `ENEMY` (combat drop items) |
+| minimum_times_mask_col_id | When the blacklist is automatically generated, if the number of failed collection attempts exceeds this value, it will be entered into the blacklist and will not be collected again|
 
 ## Collect logs
 
@@ -59,8 +68,12 @@ The collected location (collected.json) holds the id of the collected item.
 
 Auto Gathering Assist automatically ignores these locations. Delete it to recover.
 
+You can select Auto Collector Log -> Generate Collected in the GUI Auto Collector Settings One-click generation will automatically determine whether the material has been refreshed based on the material refresh time.
+
 ## Blacklist settings
 
 These collection items can be blocked by adding ids to the list of corresponding items.
 
 If the collection of some ids often fails, you can add them to the blacklist, and they will be automatically skipped in the next collection.
+
+This can be generated with one click in the GUI Auto Collector Settings by selecting Auto Collector Records - Generate Blacklist.
