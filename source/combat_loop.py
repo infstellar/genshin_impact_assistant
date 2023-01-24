@@ -9,7 +9,7 @@ from switch_character_operator import SwitchCharacterOperator
 import combat_lib
 import img_manager
 import button_manager
-import assest
+import asset
 
 CHARACTER_DIED = 1
 
@@ -23,11 +23,8 @@ def stop_func_example():  # True:stop;False:continue
 
 def get_chara_list(team_name='team.json'):
     team_name = config_json["teamfile"]
-    # 拼错单词了 tastic -> tactic 两个文件夹名都能正确识别
-    if os.path.exists(os.path.join(root_path, "config\\tastic")):
-        dpath = "config\\tastic"
-    elif os.path.exists(os.path.join(root_path, "config\\tactic")):
-        dpath = "config\\tactic"
+    dpath = "config\\tactic"
+    
     team = load_json(team_name, default_path=dpath)
     characters = load_json("character.json", default_path=dpath)
     chara_list = []
@@ -40,7 +37,11 @@ def get_chara_list(team_name='team.json'):
             cE_long_cd_time = ccharacter["E_long_cd_time"]
             cElast_time = ccharacter["Elast_time"]
             cEcd_float_time = ccharacter["Ecd_float_time"]
-            ctastic_group = ccharacter["tastic_group"]
+            try:
+                ctactic_group = ccharacter["tactic_group"]
+            except:
+                ctactic_group = ccharacter["tastic_group"]
+                logger.critical(_("请将配对文件中的tastic_gruop更名为tactic. 已自动识别。"))
             cEpress_time = ccharacter["Epress_time"]
             cQlast_time = ccharacter["Qlast_time"]
             cQcd_time = ccharacter["Qcd_time"]
@@ -51,7 +52,11 @@ def get_chara_list(team_name='team.json'):
             cE_long_cd_time = team_item["E_long_cd_time"]
             cElast_time = team_item["Elast_time"]
             cEcd_float_time = team_item["Ecd_float_time"]
-            ctastic_group = team_item["tastic_group"]
+            try:
+                ctactic_group = ccharacter["tactic_group"]
+            except:
+                ctactic_group = ccharacter["tastic_group"]
+                logger.critical(_("请将配对文件中的tastic_gruop更名为tactic_gruop. 已自动识别。"))
             ctrigger = team_item["trigger"]
             cEpress_time = team_item["Epress_time"]
             cQlast_time = team_item["Qlast_time"]
@@ -69,7 +74,7 @@ def get_chara_list(team_name='team.json'):
             character.Character(
                 name=cname, position=cposition, n=cn, priority=cpriority,
                 E_short_cd_time=cE_short_cd_time, E_long_cd_time=cE_long_cd_time, Elast_time=cElast_time,
-                Ecd_float_time=cEcd_float_time, tastic_group=ctastic_group, trigger=ctrigger,
+                Ecd_float_time=cEcd_float_time, tactic_group=ctactic_group, trigger=ctrigger,
                 Epress_time=cEpress_time, Qlast_time=cQlast_time, Qcd_time=cQcd_time
             )
         )
@@ -112,7 +117,7 @@ class Combat_Controller(BaseThreading):
                 return 0
             
             if self.is_check_died:
-                if self.itt.get_img_existence(assest.character_died):
+                if self.itt.get_img_existence(asset.character_died):
                     logger.info(_('有人嘎了，停止自动战斗'))
                     self.last_err_code = CHARACTER_DIED
                     while 1:

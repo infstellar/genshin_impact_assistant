@@ -30,7 +30,7 @@ class TeyvatMoveController(BaseThreading):
         super().__init__()
         self.setName("TeyvatMoveController")
         self.itt = InteractionBGD()
-        self.priority_waypoints = load_json("priority_waypoints.json", default_path='assests')
+        self.priority_waypoints = load_json("priority_waypoints.json", default_path='assets')
         self.priority_waypoints_array = []
         for i in self.priority_waypoints:
             self.priority_waypoints_array.append(i["position"])

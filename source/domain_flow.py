@@ -9,7 +9,7 @@ import pdocr_api
 import posi_manager as PosiM
 import timer_module
 import yolox_api
-import assest
+import asset
 from base_threading import BaseThreading
 from util import *
 
@@ -103,7 +103,7 @@ class DomainFlow(BaseThreading):
             return False
 
     def _Trigger_AFTER_CHALLENGE(self, cap=None):
-        if self.itt.get_text_existence(assest.LEAVINGIN):
+        if self.itt.get_text_existence(asset.LEAVINGIN):
             return True
         else:
             return False
@@ -125,7 +125,7 @@ class DomainFlow(BaseThreading):
             if self.checkup_stop_func():
                 return 0
 
-            if self.itt.get_text_existence(assest.LEYLINEDISORDER):
+            if self.itt.get_text_existence(asset.LEYLINEDISORDER):
                 break
             if self.itt.get_img_existence(img_manager.IN_DOMAIN):
                 break
@@ -136,7 +136,7 @@ class DomainFlow(BaseThreading):
             return 0
 
         cap = self.itt.capture(jpgmode=2)
-        if self.itt.get_text_existence(assest.LEYLINEDISORDER):
+        if self.itt.get_text_existence(asset.LEYLINEDISORDER):
             self.itt.move_and_click([PosiM.posi_domain['CLLD'][0], PosiM.posi_domain['CLLD'][1]], delay=1)
             # time.sleep(1)
             # pyautogui.leftClick()
@@ -207,7 +207,7 @@ class DomainFlow(BaseThreading):
             elif self.resin_mode == '20':
                 self.itt.appear_then_click(img_manager.USE_20RESIN_DOBLE_CHOICES)
 
-            if self.itt.get_text_existence(assest.domain_obtain):
+            if self.itt.get_text_existence(asset.domain_obtain):
                 break
 
         time.sleep(2)
@@ -352,7 +352,7 @@ class DomainFlow(BaseThreading):
                     # logger.info('start next domain.')
                     self.last_domain_times -= 1
                     while 1:
-                        r = self.itt.appear_then_click(assest.conti_challenge)
+                        r = self.itt.appear_then_click(asset.conti_challenge)
                         if r:
                             break
                     self.auto_start_init()
@@ -365,7 +365,7 @@ class DomainFlow(BaseThreading):
                     logger.info(_('次数结束。退出秘境'))
                     # logger.info('no more times. exit domain.')
                     while 1:
-                        r = self.itt.appear_then_click(assest.exit_challenge)
+                        r = self.itt.appear_then_click(asset.exit_challenge)
                         if r:
                             break
                     # exit all threads

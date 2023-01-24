@@ -74,11 +74,11 @@
 | `Ecd_float_time`  | 在E技能冷却还有x秒前即切换至该角色，可以为0，建议设置的值比预计值偏小一点                                                                             |
 | `Ecd_press_time`  | 按E技能的时间                                                                                                            |
 | `Qcd_time`        | Q技能冷却时间                                                                                                            |
-| `tastic_group`    | 策略组，配置角色战斗策略，详细说明见[combat_assi.md](./combat_assi.md)                                                               |
+| `tactic_group`    | 策略组，配置角色战斗策略，详细说明见[combat_assi.md](./combat_assi.md)                                                               |
 
 关于参数配置的填写说明见[combat_assi.md](./combat_assi.md)
 
-## tastic.json
+## tactic.json
 
 暂无用途
 

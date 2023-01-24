@@ -890,7 +890,7 @@ if __name__ == '__main__':
     #     pydirectinput.moveRel(10,10)
     # win32api.SetCursorPos((300, 300))
     # pydirectinput.
-    # a = ib.get_text_existence(assest.LEYLINEDISORDER)
+    # a = ib.get_text_existence(asset.LEYLINEDISORDER)
     # print(a)
     img_manager.qshow(ib.capture())
     print()

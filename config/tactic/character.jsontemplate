@@ -7,7 +7,7 @@
     "Epress_time": 2.5,
     "Qlast_time": 0,
     "position": "",
-    "tastic_group": "e?e~:none;q?q:none",
+    "tactic_group": "e?e~:none;q?q:none",
     "verify": true
   },
   "ningguang": {
@@ -18,7 +18,7 @@
     "Epress_time": 3,
     "Qlast_time": 0,
     "position": "",
-    "tastic_group": "e?e.500:none;q?q:none;a,700,a,500,a~",
+    "tactic_group": "e?e.500:none;q?q:none;a,700,a,500,a~",
     "verify": true
   },
   "yoimiya": {
@@ -29,7 +29,7 @@
     "Epress_time": 0,
     "Qlast_time": 10,
     "position": "",
-    "tastic_group": "e?e:none;#@e?a:none;",
+    "tactic_group": "e?e:none;#@e?a:none;",
     "verify": true
   },
   "yunjin": {
@@ -40,7 +40,7 @@
     "Epress_time": 3,
     "Qlast_time": 0,
     "position": "",
-    "tastic_group": "e?e~:none;q?q:none",
+    "tactic_group": "e?e~:none;q?q:none",
     "verify": true
   },
   "zhongli": {
@@ -51,7 +51,7 @@
     "Epress_time": 2,
     "Qlast_time": 0,
     "position": "shield",
-    "tastic_group": "e?e~:none;q?q:none",
+    "tactic_group": "e?e~:none;q?q:none",
     "verify": true
   }
 }

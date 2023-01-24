@@ -1,4 +1,4 @@
-from assest import *
+from asset import *
 import cv2, numpy as np
 from interaction_background import InteractionBGD
 itt = InteractionBGD()

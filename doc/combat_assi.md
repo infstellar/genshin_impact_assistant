@@ -14,7 +14,7 @@
 
 - 需要设置`team.json`文件，设置方法如下所示。
 
-## 策略组 tastic_group
+## 策略组 tactic_group
 
 自动战斗辅助支持以下策略：
 
@@ -139,4 +139,4 @@
 
 [文件示例3 凌人 钟离 班尼特 纳西妲](./team_example3.json)
 
-在tastic文件夹中也有该示例文件。
+在tactic文件夹中也有该示例文件。

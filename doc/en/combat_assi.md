@@ -6,7 +6,7 @@ Portions of this document may be machine translated.
 
 ## Introduction
 
-- Location: `config/settings/tastic`
+- Location: `config/settings/tactic`
 
 - Automatic combat assistance can automatically switch roles and execute attacks according to the set roles, strategies, priorities, trigger conditions, etc., and use elemental combat skills and elemental bursts.
 
@@ -18,7 +18,7 @@ Portions of this document may be machine translated.
 
 - The `team.json` file needs to be set, and the setting method is as follows.
 
-## strategy group tastic_group
+## strategy group tactic_group
 
 Auto Combat Assist supports the following strategies:
 
@@ -145,4 +145,4 @@ File example:
 
 [File example 2 Ningguang Zhongli Bennett Yunjin](./team_example2.json)
 
-There is also the sample file in the tastic folder.
+There is also the sample file in the tactic folder.

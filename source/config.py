@@ -42,7 +42,7 @@ def template_translator():
     else:
         return "no operation required"
 
-def template_translator_tastic():
+def template_translator_tactic():
     template_files = []
     oflag = False
     for root, dirs, files in os.walk(os.path.join(root_path, 'config', 'tactic')):

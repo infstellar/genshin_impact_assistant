@@ -81,11 +81,11 @@ The team configuration in the original file is: Xiaogong, Zhongli, Bennett, Yunj
 | `Ecd_float_time`  | Switch to this character before the cooldown of E skill x seconds, it can be 0, it is recommended to set the value a little smaller than the expected value                                                             |
 | `Ecd_press_time`  | Time to press Ecd skill                                                                                                                                                                                                 |
 | `Qcd_time`        | Q skill cooldown time                                                                                                                                                                                                   |
-| `tastic_group`    | Strategy group, configure the combat strategy of characters, see [combat_assi.md](./combat_assi.md) for details                                                                                                         |
+| `tactic_group`    | Strategy group, configure the combat strategy of characters, see [combat_assi.md](./combat_assi.md) for details                                                                                                         |
 
 Please refer to [combat_assi.md](./combat_assi.md) for instructions on filling in parameter configuration
 
-## tastic.json
+## tactic.json
 
 No use at the moment
 

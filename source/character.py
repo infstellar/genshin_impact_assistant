@@ -24,7 +24,7 @@ class Character:
     def __init__(self, name=None, position=None, n=None, priority=None,
                  E_short_cd_time=None, E_long_cd_time=None,
                  Elast_time=None, Ecd_float_time=None,
-                 tastic_group=None, trigger: str = None,
+                 tactic_group=None, trigger: str = None,
                  Epress_time=None, Qlast_time = 0, Qcd_time = 12):
 
         self.name = name
@@ -35,7 +35,7 @@ class Character:
         self.Qlast_time = Qlast_time
         self.Qcd_time = Qcd_time
         self.Ecd_float_time = Ecd_float_time
-        self.tastic_group = tastic_group
+        self.tactic_group = tactic_group
         self.priority = priority
         self.n = n
         self.Epress_time = Epress_time
@@ -64,7 +64,7 @@ class Character:
         log_format(self.Elast_time, 'Elast_time')
         log_format(self.Qlast_time, 'Qlast_time')
         log_format(self.Ecd_float_time, 'Ecd_float_time')
-        log_format(self.tastic_group, 'tastic_group')
+        log_format(self.tactic_group, 'tactic_group')
         log_format(self.priority, 'priority')
         log_format(self.n, 'n')
         log_format(self.Epress_time, 'Epress_time')

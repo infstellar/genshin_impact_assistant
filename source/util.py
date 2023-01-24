@@ -326,30 +326,30 @@ def load_jsons_from_folder(path):
 
 
 # Update for a program used before version v0.5.0.424
-if os.path.exists(os.path.join(root_path, "config\\tastic")):
-    logger.info("检测到tastic文件夹。")
-    logger.info("版本v0.5.0.424后，tastic文件夹修正为tactic文件夹。")
+if os.path.exists(os.path.join(root_path, "config\\tactic")):
+    logger.info("检测到tactic文件夹。")
+    logger.info("版本v0.5.0.424后，tactic文件夹修正为tactic文件夹。")
     time.sleep(1)
-    logger.warning("正在准备将tastic文件夹中的json文件迁移至tactic文件夹。")
+    logger.warning("正在准备将tactic文件夹中的json文件迁移至tactic文件夹。")
     time.sleep(1)
-    logger.warning("该操作可能有风险，您可以将config/tastic文件夹中的文件备份后再继续。")
+    logger.warning("该操作可能有风险，您可以将config/tactic文件夹中的文件备份后再继续。")
     time.sleep(1)
     logger.warning("该操作将在15秒后开始。")
     time.sleep(15)
-    for root, dirs, files in os.walk(os.path.join(root_path, "config\\tastic")):
+    for root, dirs, files in os.walk(os.path.join(root_path, "config\\tactic")):
         for f in files:
             if f[f.index(".")+1:] == "json":
-                shutil.copy(os.path.join(root_path, "config\\tastic", f), os.path.join(root_path, "config\\tactic", f))
-    logger.warning("准备删除tastic文件夹。")
+                shutil.copy(os.path.join(root_path, "config\\tactic", f), os.path.join(root_path, "config\\tactic", f))
+    logger.warning("准备删除tactic文件夹。")
     time.sleep(1)
-    logger.warning("该操作可能有风险，您可以将config/tastic文件夹中的文件备份后再继续。")
+    logger.warning("该操作可能有风险，您可以将config/tactic文件夹中的文件备份后再继续。")
     time.sleep(1)
     logger.warning("该操作将在15秒后开始。")
     time.sleep(15)
-    shutil.rmtree(os.path.join(root_path, "config\\tastic"))
-    logger.info("操作完成。您可以手动删除残留的config/tactic/tastic.json文件。")
+    shutil.rmtree(os.path.join(root_path, "config\\tactic"))
+    logger.info("操作完成。您可以手动删除残留的config/tactic/tactic.json文件。")
     time.sleep(1)
-    # os.rename(os.path.join(root_path, "config\\tastic"), os.path.join(root_path, "config\\tactic"))
+    # os.rename(os.path.join(root_path, "config\\tactic"), os.path.join(root_path, "config\\tactic"))
 # Over
 
 

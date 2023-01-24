@@ -4,7 +4,7 @@ import pyautogui
 
 import character
 import combat_lib
-import tastic_operator
+import tactic_operator
 from base_threading import BaseThreading
 from interaction_background import InteractionBGD
 from timer_module import Timer
@@ -22,11 +22,11 @@ class SwitchCharacterOperator(BaseThreading):
         self.chara_list = chara_list
         self.itt = InteractionBGD()
 
-        self.tastic_operator = tastic_operator.TasticOperator()
-        self.tastic_operator.pause_threading()
-        self.tastic_operator.setDaemon(True)
-        self.tastic_operator.add_stop_func(self.checkup_stop_func)
-        self.tastic_operator.start()
+        self.tactic_operator = tactic_operator.TacticOperator()
+        self.tactic_operator.pause_threading()
+        self.tactic_operator.setDaemon(True)
+        self.tactic_operator.add_stop_func(self.checkup_stop_func)
+        self.tactic_operator.start()
         self.chara_list.sort(key=sort_flag_1, reverse=False)
         self.current_num = 1 # combat_lib.get_current_chara_num(self.itt, self.checkup_stop_func)
         self.switch_timer = Timer(diff_start_time=2)
@@ -35,7 +35,7 @@ class SwitchCharacterOperator(BaseThreading):
         while 1:
             time.sleep(0.2)
             if self.stop_threading_flag:
-                self.tastic_operator.stop_threading()
+                self.tactic_operator.stop_threading()
                 return 0
 
             if self.pause_threading_flag:
@@ -45,17 +45,17 @@ class SwitchCharacterOperator(BaseThreading):
 
                 continue
 
-            if not self.working_flag:  # tastic operator no working
+            if not self.working_flag:  # tactic operator no working
                 self.working_flag = True
             if self.checkup_stop_func():
                 self.pause_threading_flag = True
                 continue
-            if self.tastic_operator.get_working_statement():  # tastic operator working
+            if self.tactic_operator.get_working_statement():  # tactic operator working
                 time.sleep(0.1)
             else:
                 ret = self.switch_character()
                 if not ret:  # able to change character
-                    self.tastic_operator.continue_threading()
+                    self.tactic_operator.continue_threading()
                     time.sleep(1)
 
                 else:  # no changable character
@@ -72,8 +72,8 @@ class SwitchCharacterOperator(BaseThreading):
                 logger.debug(f"switch_character: targetnum: {chara.n} current num: {self.current_num}")
                 if chara.n != self.current_num:
                     self._switch_character(chara.n)
-                self.tastic_operator.set_parameter(chara.tastic_group, chara)
-                self.tastic_operator.restart_executor()
+                self.tactic_operator.set_parameter(chara.tactic_group, chara)
+                self.tactic_operator.restart_executor()
                 idle = False
                 return idle
         return idle
@@ -81,14 +81,14 @@ class SwitchCharacterOperator(BaseThreading):
     def _switch_character(self, x: int):
         pyautogui.click(button='middle')
         t = self.switch_timer.get_diff_time()
-        self.tastic_operator.chara_waiting()
+        self.tactic_operator.chara_waiting()
         logger.debug('try switching to ' + str(x))
         switch_succ_num = 0
         switch_target_num = 3
         for i in range(120):  # 12 sec
             if self.checkup_stop_func():
                 return 0
-            self.tastic_operator.chara_waiting()
+            self.tactic_operator.chara_waiting()
             combat_lib.unconventionality_situlation_detection(self.itt)
             self.itt.key_press(str(x))
             time.sleep(0.05)
@@ -105,12 +105,12 @@ class SwitchCharacterOperator(BaseThreading):
 
     def pause_threading(self):
         self.pause_threading_flag = True
-        self.tastic_operator.pause_threading()
+        self.tactic_operator.pause_threading()
 
     def continue_threading(self):
         self.pause_threading_flag = False
-        self.tastic_operator.set_parameter(None, None)
-        self.tastic_operator.continue_threading()
+        self.tactic_operator.set_parameter(None, None)
+        self.tactic_operator.continue_threading()
         self.current_num = combat_lib.get_current_chara_num(self.itt, self.checkup_stop_func)
 
 
@@ -120,5 +120,5 @@ if __name__ == '__main__':
     # chara=combat_loop.get_chara_list()
     # sco=Switch_Character_Operator(chara)
 
-    # to.set_parameter(chara.tastic_group,chara)
+    # to.set_parameter(chara.tactic_group,chara)
     # sco.start()

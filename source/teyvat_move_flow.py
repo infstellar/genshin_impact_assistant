@@ -14,7 +14,7 @@ import timer_module
 import combat_lib
 import scene_manager
 import static_lib
-import assest
+import asset
 from err_code_lib import ERR_PASS, ERR_STUCK
 
 IN_MOVE = 0
@@ -176,10 +176,10 @@ class TeyvatMoveFlow(BaseThreading):
                     if self.itt.appear_then_click(img_manager.bigmap_tp) : break
                     if check_mode == 1:
                         logger.debug("tp to tw")
-                        self.itt.appear_then_click(assest.CSMD)
+                        self.itt.appear_then_click(asset.CSMD)
                     else:
                         logger.debug("tp to ss")
-                        self.itt.appear_then_click(assest.QTSX)
+                        self.itt.appear_then_click(asset.QTSX)
                     if temporary_timeout_1.istimeout():
                         scene_manager.switch_to_page(scene_manager.page_bigmap, self.checkup_stop_func)
                         self.itt.move_and_click([tw_posi[0], tw_posi[1]])
@@ -239,8 +239,8 @@ class TeyvatMoveFlow(BaseThreading):
                             '''越级执行护盾命令 还没想好怎么写'''
                             # shield_chara_num = 2
                             # self.cct.sco._switch_character(shield_chara_num)
-                            # self.cct.sco.tastic_operator.set_parameter(self.cct.sco.chara_list[shield_chara_num-1].tastic_group, self.cct.sco.chara_list[shield_chara_num-1])
-                            # self.cct.sco.tastic_operator.continue_threading()
+                            # self.cct.sco.tactic_operator.set_parameter(self.cct.sco.chara_list[shield_chara_num-1].tactic_group, self.cct.sco.chara_list[shield_chara_num-1])
+                            # self.cct.sco.tactic_operator.continue_threading()
                             pass
                         else:
                             self.tmc.pause_threading()

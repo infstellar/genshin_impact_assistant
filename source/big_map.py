@@ -9,7 +9,7 @@ itt = interaction_background.InteractionBGD()
 
 global priority_waypoints, priority_waypoints_list, priority_waypoints_array, idnum
 priority_waypoints, priority_waypoints_list, priority_waypoints_array, idnum = None, None, None, None
-priority_waypoints = load_json("priority_waypoints.json", default_path='assests')
+priority_waypoints = load_json("priority_waypoints.json", default_path='assets')
 def load_pw(): # 加载json中的所有优先点
     global priority_waypoints, priority_waypoints_list, priority_waypoints_array, idnum
     priority_waypoints_list = []

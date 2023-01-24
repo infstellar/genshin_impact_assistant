@@ -219,7 +219,7 @@ def exec1():
         print(all_list)
 
 def get_all_collection_name()->list:
-    ita = load_json("itemall.json", "assests")
+    ita = load_json("itemall.json", "assets")
     ret_list=[]
     i=0
     for feature in ita:

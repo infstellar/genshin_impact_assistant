@@ -21,10 +21,10 @@ def stop_func_example():  # True:stop;False:continue
     return False
 
 
-class TasticOperator(BaseThreading):
+class TacticOperator(BaseThreading):
     def __init__(self):
         super().__init__()
-        self.setName('Tastic_Operator')
+        self.setName('Tactic_Operator')
         self.while_sleep = 0.1
         self.hp_chara_list_green = [34, 215, 150, 255]  # BGR
         self.hp_chara_list_red = [102, 102, 255, 255]  # BGR
@@ -35,21 +35,21 @@ class TasticOperator(BaseThreading):
         self.working_flag = False # out of class
         self.flag_tactic_executing = False # in class
         self.pause_tactic_flag = False
-        self.formered_tastic = None
-        self.tastic_group = None
+        self.formered_tactic = None
+        self.tactic_group = None
         self.character = None
 
     def pause_threading(self):
         if self.pause_threading_flag != True:
             self.pause_threading_flag = True
-            self.tastic_group = None
-            self.formered_tastic = None
+            self.tactic_group = None
+            self.formered_tactic = None
     
     def continue_threading(self):
         if self.pause_threading_flag != False:
             self.pause_threading_flag = False
-            # self.tastic_group = None
-            # self.formered_tastic = None
+            # self.tactic_group = None
+            # self.formered_tactic = None
     
     def restart_executor(self):
         logger.trace("restart_executor start")
@@ -80,27 +80,27 @@ class TasticOperator(BaseThreading):
             # print('5')
 
             self.working_flag = True
-            if self.formered_tastic is None:
+            if self.formered_tactic is None:
                 self.working_flag = False
                 continue
             if not self.pause_tactic_flag:
-                self.execute_tastic(self.formered_tastic)
+                self.execute_tactic(self.formered_tactic)
                 self.flag_tactic_executing = False
                 self.working_flag = False
 
-    def set_parameter(self, tastic_group: str, character: Character):
-        if tastic_group is None:
-            self.tastic_group = None
-            self.formered_tastic = None
+    def set_parameter(self, tactic_group: str, character: Character):
+        if tactic_group is None:
+            self.tactic_group = None
+            self.formered_tactic = None
             return
-        self.tastic_group = tastic_group
+        self.tactic_group = tactic_group
         self.character = character
-        self.formered_tastic = self._tastic_group_former()
+        self.formered_tactic = self._tactic_group_former()
         self.enter_timer.reset()
 
-    def _tastic_group_former(self):
-        tastic = self.tastic_group.split(';')
-        return tastic
+    def _tactic_group_former(self):
+        tactic = self.tactic_group.split(';')
+        return tactic
 
     def is_e_available(self):  # 被击飞时不可用
         cap = self.itt.capture(posi=posi_manager.posi_chara_smaller_e, jpgmode=2)
@@ -316,28 +316,28 @@ class TasticOperator(BaseThreading):
             # print(cap.max())
             return False
 
-    def estimate_e_ready(self, tastic):
+    def estimate_e_ready(self, tactic):
         is_ready = self.character.is_E_ready()
-        tas = tastic[tastic.index('?') + 1:]
+        tas = tactic[tactic.index('?') + 1:]
         tas = tas.split(':')
         if is_ready:
-            self.execute_tastic([tas[0].replace('.', ',')])
+            self.execute_tactic([tas[0].replace('.', ',')])
         else:
-            self.execute_tastic([tas[1].replace('.', ',')])
+            self.execute_tactic([tas[1].replace('.', ',')])
 
-    def estimate_q_ready(self, tastic):
+    def estimate_q_ready(self, tactic):
         is_ready = self.is_q_ready()
         # print(is_ready)
-        tas = tastic[tastic.index('?') + 1:]
+        tas = tactic[tactic.index('?') + 1:]
         tas = tas.split(':')
         if is_ready:
-            self.execute_tastic([tas[0].replace('.', ',')])
+            self.execute_tactic([tas[0].replace('.', ',')])
         else:
-            self.execute_tastic([tas[1].replace('.', ',')])
+            self.execute_tactic([tas[1].replace('.', ',')])
 
-    def estimate_lock_e_ready(self, tastic):  # #@e?
+    def estimate_lock_e_ready(self, tactic):  # #@e?
         is_ready = not self.character.is_E_pass()
-        tas = tastic[4:]
+        tas = tactic[4:]
         tas = tas.split(':')
         if is_ready:
             tas[0].replace('.', ',')
@@ -347,14 +347,14 @@ class TasticOperator(BaseThreading):
                 if self.pause_tactic_flag:
                     return 0
                 self.unconventionality_situation_detection()
-                self.execute_tastic([tas[0]])
+                self.execute_tactic([tas[0]])
         else:
             tas[1].replace('.', ',')
-            self.execute_tastic([tas[1]])
+            self.execute_tactic([tas[1]])
 
-    def estimate_lock_q_ready(self, tastic):  # #@q?
+    def estimate_lock_q_ready(self, tactic):  # #@q?
         is_ready = not self.character.is_Q_pass()
-        tas = tastic[4:]
+        tas = tactic[4:]
         tas = tas.split(':')
         if is_ready:
             tas[0].replace('.', ',')
@@ -368,22 +368,22 @@ class TasticOperator(BaseThreading):
                 if self.pause_tactic_flag:
                     return 0
                 self.unconventionality_situation_detection()
-                self.execute_tastic([tas[0]])
+                self.execute_tactic([tas[0]])
         else:
             tas[1].replace('.', ',')
-            self.execute_tastic([tas[1]])
+            self.execute_tactic([tas[1]])
 
-    def execute_tastic(self, tastic_list):
+    def execute_tactic(self, tactic_list):
         self.flag_tactic_executing = True
         self.unconventionality_situation_detection()
 
-        for tastic in tastic_list:
+        for tactic in tactic_list:
             if self.checkup_stop_func():
                 return 0
             if self.pause_tactic_flag:
                 break
-            tastic = tastic.split(',')
-            for tas in tastic:
+            tactic = tactic.split(',')
+            for tas in tactic:
                 if self.checkup_stop_func():
                     break
                 if self.pause_tactic_flag:
@@ -431,10 +431,10 @@ class TasticOperator(BaseThreading):
 if __name__ == '__main__':
     import combat_loop
 
-    to = TasticOperator()
+    to = TacticOperator()
     itt = InteractionBGD()
     chara = combat_loop.get_chara_list()[1]
-    to.set_parameter(chara.tastic_group, chara)
+    to.set_parameter(chara.tactic_group, chara)
     # to.setDaemon(True)
     while 1:
         print(to._is_e_release(show_res=True))

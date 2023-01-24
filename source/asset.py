@@ -17,7 +17,7 @@ LEAVINGIN = text_manager.TextTemplate(text=
 {
     'zh_CN': '自动退出',
     "en_US": 'Leaving in'
-}, cap_area = get_bbox(cv2.imread(os.path.join(root_path, "assests\\imgs\\common\\area\\LEAVINGIN.jpg"))))
+}, cap_area = get_bbox(cv2.imread(os.path.join(root_path, "assets\\imgs\\common\\area\\LEAVINGIN.jpg"))))
 claim_rewards = text_manager.TextTemplate(text=
 {
     'zh_CN': '领取奖励',
@@ -37,7 +37,7 @@ LEYLINEDISORDER = text_manager.TextTemplate(text=
 {
     'zh_CN': '地脉异常',
     "en_US": "Ley Line Disorder"
-}, cap_area = get_bbox(cv2.imread(os.path.join(root_path, "assests\\imgs\\common\\area\\LEYLINEDISORDER.jpg"))))
+}, cap_area = get_bbox(cv2.imread(os.path.join(root_path, "assets\\imgs\\common\\area\\LEYLINEDISORDER.jpg"))))
 conti_challenge = text_manager.TextTemplate(text=
 {
     'zh_CN': '继续挑战',
@@ -63,7 +63,7 @@ revival = text_manager.TextTemplate(text=
     'zh_CN': '复苏',
     "en_US": "Revive"
 })
-character_died = img_manager.ImgIcon(name="character_died", path="assests\\imgs\\$lang$\\character_died.jpg",
+character_died = img_manager.ImgIcon(name="character_died", path="assets\\imgs\\$lang$\\character_died.jpg",
                         is_bbg=True, cap_posi='bbg', win_text=use_revival_item.text, threshold=0.98, print_log=img_manager.LOG_WHEN_TRUE)
-button_all_character_died = button_manager.Button( name="all_character_died", path="assests\\imgs\\$lang$\\all_character_died.jpg", 
+button_all_character_died = button_manager.Button( name="all_character_died", path="assets\\imgs\\$lang$\\all_character_died.jpg", 
                                    threshold=0.988, win_text=revival.text, print_log=img_manager.LOG_WHEN_TRUE)

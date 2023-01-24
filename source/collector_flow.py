@@ -24,7 +24,7 @@ MINERAL = 2
 ALL_CHARACTER_DIED = 1
 
 def load_feature_position(text, blacklist_id=None, ret_mode = 0, check_mode = 0):
-    ita = load_json("itemall.json", "assests")
+    ita = load_json("itemall.json", "assets")
     if blacklist_id == None:
         blacklist_id = []
     ret_dict=[]

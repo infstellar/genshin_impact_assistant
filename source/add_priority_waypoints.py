@@ -7,7 +7,7 @@ import static_lib
 
 global priority_waypoints, priority_waypoints_list, priority_waypoints_array, idnum
 priority_waypoints, priority_waypoints_list, priority_waypoints_array, idnum = None, None, None, None
-priority_waypoints = load_json("priority_waypoints.json", default_path='assests')
+priority_waypoints = load_json("priority_waypoints.json", default_path='assets')
 itt = big_map.itt
 def load_pw():
     global priority_waypoints, priority_waypoints_list, priority_waypoints_array, idnum
@@ -66,7 +66,7 @@ def add_mode():
             }
                 )
             load_pw()
-            save_json(priority_waypoints, "priority_waypoints.json", default_path='assests')
+            save_json(priority_waypoints, "priority_waypoints.json", default_path='assets')
             print('add position', list(currentp))
         # print()
         
@@ -86,7 +86,7 @@ def edit_mode():
             for i in priority_waypoints:
                 if i["id"] == ii:
                     del(priority_waypoints[priority_waypoints.index(i)])
-    save_json(priority_waypoints, json_name="priority_waypoints.json", default_path='assests')
+    save_json(priority_waypoints, json_name="priority_waypoints.json", default_path='assets')
 
 def show_current_posi():
     while 1:
