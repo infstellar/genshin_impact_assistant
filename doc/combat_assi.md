@@ -137,4 +137,6 @@
 
 [文件示例2 凝光 钟离 班尼特 云堇](./team_example2.json)
 
+[文件示例3 凌人 钟离 班尼特 纳西妲](./team_example3.json)
+
 在tastic文件夹中也有该示例文件。
