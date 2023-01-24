@@ -201,3 +201,5 @@ CHANGELOG.md
 node_modules/*
 assets/inference/zh_CN/*
 assets/inference/en_US/*
+.vscode/*.sql
+source/git_downloader.py

@@ -1,0 +1,3 @@
+[submodule "GIA_POI_JSON_API"]
+	path = assets/POI_JSON_API
+	url = git@github.com:GenshinImpactAssistant/GIA_POI_JSON_API.git

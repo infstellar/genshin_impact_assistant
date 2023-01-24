@@ -8,6 +8,7 @@ import combat_loop
 from base_threading import BaseThreading
 import timer_module
 import combat_lib
+import collector_lib
 import teyvat_move_flow
 import numpy as np
 import datetime
@@ -23,33 +24,7 @@ MINERAL = 2
 
 ALL_CHARACTER_DIED = 1
 
-def load_feature_position(text, blacklist_id=None, ret_mode = 0, check_mode = 0):
-    ita = load_json("itemall.json", "assets")
-    if blacklist_id == None:
-        blacklist_id = []
-    ret_dict=[]
-    i=0
-    for feature in ita:
-        i+=1
-        if feature == None:
-            continue
-        for item in feature["features"]:
-            if check_mode == 0:
-                if item["id"] in blacklist_id:
-                    continue
-            elif check_mode == 1:
-                if item["id"] not in blacklist_id:
-                    continue
-            if text in item["properties"]["popTitle"] :
-                if ret_mode == 0:
-                    ret_dict.append({
-                        "id":item["id"],
-                        "position":list(np.array( list(map(float,item["geometry"]["coordinates"])) )*1.5)
-                    })
-                elif ret_mode == 1:
-                     ret_dict.append(list(np.array( list(map(float,item["geometry"]["coordinates"])) )*1.5))
-    # print()
-    return ret_dict  
+
 
 
 
@@ -193,7 +168,7 @@ class CollectorFlow(BaseThreading):
         self.stop_all()
         self.current_position = static_lib.cvAutoTrackerLoop.get_position()[1:]
         self.tmf.reset_setting()
-        gs_posi = load_feature_position(text="七天神像", ret_mode=1)
+        gs_posi = collector_lib.load_feature_position(text="七天神像", ret_mode=1)
         gs_posi = np.asarray(gs_posi)
         d = euclidean_distance_plist(self.current_position, gs_posi)
         gs_posi = gs_posi[np.argmin(d)]
@@ -282,8 +257,8 @@ class CollectorFlow(BaseThreading):
                 
             if self.current_state == ST.INIT_MOVETO_COLLECTOR:
                 
-                self.collector_posi_dict = load_feature_position(self.collector_name, self.shielded_id)
-                self.shielded_posi_list = load_feature_position(self.collector_name, self.shielded_id, ret_mode=1, check_mode=1)
+                self.collector_posi_dict = collector_lib.load_feature_position(self.collector_name, blacklist_id=self.shielded_id)
+                self.shielded_posi_list = collector_lib.load_feature_position(self.collector_name, blacklist_id=self.shielded_id, ret_mode=1, check_mode=1)
                 scene_manager.switch_to_page(scene_manager.page_main, self.checkup_stop_func)
                 static_lib.while_until_no_excessive_error(self.checkup_stop_func)
                 self.current_position = static_lib.cvAutoTrackerLoop.get_position()[1:]

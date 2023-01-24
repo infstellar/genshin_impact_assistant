@@ -362,7 +362,7 @@ class InteractionBGD:
             cv2.imshow(imgicon.name, cap)
             cv2.waitKey(100)
 
-        if imgicon.is_print_log(matching_rate >= imgicon.threshold):
+        if imgicon.is_print_log(matching_rate >= imgicon.threshold) or is_log:
             logger.debug(
                 'imgname: ' + imgicon.name + 'matching_rate: ' + str(
                     matching_rate) + ' |function name: ' + upper_func_name)

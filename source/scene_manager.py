@@ -16,8 +16,8 @@ class UIPage():
         self.to_mainpage = to_mainpage
         self.to_selfpage = to_selfpage
         
-    def is_current_page(self):
-        ret = itt.get_img_existence(self.check_icon)
+    def is_current_page(self, print_log=False):
+        ret = itt.get_img_existence(self.check_icon, is_log=print_log)
         return ret
     
     def get_following_page_name(self):
@@ -54,7 +54,10 @@ def get_current_pagename(retry=0):
     current_page = None
     max_rate = 0
     for i in all_page:
-        f = all_page[i].is_current_page()
+        if retry>=30:
+            f = all_page[i].is_current_page(print_log=True)
+        else:
+            f = all_page[i].is_current_page()
         if f:
             if current_page == None:
                 current_page = i
