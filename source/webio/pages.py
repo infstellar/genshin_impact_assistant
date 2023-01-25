@@ -194,7 +194,7 @@ class ConfigPage(Page):
         output.put_markdown(_('## config:'), scope=self.main_scope)
 
         output.put_scope("select_scope", scope=self.main_scope)
-        pin.put_select('file', self._config_file2lableAfile(self.config_files), scope="select_scope")
+        pin.put_select('file', self._config_file2lableAfile(self.config_files), scope="select_scope", value="config.json")
 
     def _on_load(self):
         super()._on_load()
@@ -492,7 +492,7 @@ class SettingPage(ConfigPage):
         output.put_markdown(_('## config:'), scope=self.main_scope)
         output.put_scope("select_scope", scope=self.main_scope)
 
-        pin.put_select('file', self._config_file2lableAfile(self.config_files), scope="select_scope")
+        pin.put_select('file', self._config_file2lableAfile(self.config_files), scope="select_scope", value="config\\settings\\config.json")
 
     def _load_config_files(self):
         for root, dirs, files in os.walk('config\\settings'):
@@ -535,7 +535,7 @@ class CombatSettingPage(ConfigPage):
         # 配置页
         output.put_markdown(_('## config:'), scope=self.main_scope)
         output.put_scope("select_scope", scope=self.main_scope)
-        pin.put_select('file', self._config_file2lableAfile(self.config_files), scope="select_scope")
+        pin.put_select('file', self._config_file2lableAfile(self.config_files), scope="select_scope", value="config\\settings\\auto_combat.json")
 
     def onclick_add_teamjson(self):
         n = input.input('team name')
@@ -562,7 +562,7 @@ class CollectorSettingPage(ConfigPage):
             for f in files:
                 if f[f.index('.') + 1:] == "json":
                     self.config_files.append({"label": f, "value": os.path.join(root, f)})
-        self.config_files.append({"label": "auto_collector.json", "value": os.path.join(root_path, "config\\settings\\auto_collector.json")})
+        self.config_files.append({"label": "auto_collector.json", "value": os.path.join("config\\settings\\auto_collector.json")})
 
     # 重置列表
     @staticmethod
@@ -581,7 +581,7 @@ class CollectorSettingPage(ConfigPage):
         # 配置页
         output.put_markdown(_('## config:'), scope=self.main_scope)
         output.put_scope("select_scope", scope=self.main_scope)
-        pin.put_select('file', self._config_file2lableAfile(self.config_files), scope="select_scope")
+        pin.put_select('file', self._config_file2lableAfile(self.config_files), scope="select_scope", value="config\\settings\\auto_collector.json")
     
     def _clean_textarea(self, set_value):
         set_value("")
