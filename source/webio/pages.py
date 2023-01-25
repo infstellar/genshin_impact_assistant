@@ -360,7 +360,7 @@ class ConfigPage(Page):
         self.exit_popup = True
     
     # 展示str型项
-    def _show_str(self, doc_items, component_name, display_name, scope_name, v):
+    def _show_str(self, doc_items, component_name, display_name, scope_name, v, doc_special):
         if doc_items:
             pin.put_select(component_name,
                             [{"label": i, "value": i} for i in doc_items], value=v,
@@ -370,7 +370,7 @@ class ConfigPage(Page):
             pin.put_input(component_name, label=display_name, value=v, scope=scope_name)
     
     # 展示inf型项
-    def _show_int(self, doc_items, component_name, display_name, scope_name, v):
+    def _show_int(self, doc_items, component_name, display_name, scope_name, v, doc_special):
         if doc_items:
             pin.put_select(component_name,
                             [{"label": i, "value": i} for i in doc_items], value=v,
@@ -380,7 +380,7 @@ class ConfigPage(Page):
             pin.put_input(component_name, label=display_name, value=v, scope=scope_name, type='number')
     
     # 展示float型项
-    def _show_float(self, doc_items, component_name, display_name, scope_name, v):
+    def _show_float(self, doc_items, component_name, display_name, scope_name, v, doc_special):
         if doc_items:
             pin.put_select(component_name,
                             [{"label": i, "value": i} for i in doc_items], value=v,
@@ -390,21 +390,21 @@ class ConfigPage(Page):
             pin.put_input(component_name, label=display_name, value=v, scope=scope_name, type='float')
     
     # 展示bool型项
-    def _show_bool(self, component_name, display_name, scope_name, v):
+    def _show_bool(self, component_name, display_name, scope_name, v, doc_special):
         pin.put_select(component_name,
             [{"label": 'True', "value": True}, {"label": 'False', "value": False}], value=v,
             label=display_name,
             scope=scope_name)
     
     # 展示dict型项
-    def _show_dict(self, level, component_name, display_name, scope_name, doc, v):
+    def _show_dict(self, level, component_name, display_name, scope_name, doc, v, doc_special):
         output.put_scope(component_name, scope=scope_name)
         output.put_markdown('#' * level + ' ' + display_name, scope=component_name)
         self.put_json(v, doc, component_name, add_name=component_name,
                         level=level + 1)
     
     # 展示list/list&dict型项
-    def _show_list(self, level, display_name, scope_name, component_name, doc, v):
+    def _show_list(self, level, display_name, scope_name, component_name, doc, v, doc_special):
         # 判断是否为dict列表
         is_dict_list = True
         for i in v:
@@ -442,6 +442,7 @@ class ConfigPage(Page):
             doc_now = ''
             doc_now_data = {}
             doc_items = None
+            doc_special = None
             if k in doc:
                 # 判断doc的类型
                 if type(doc[k]) == dict:
@@ -451,6 +452,8 @@ class ConfigPage(Page):
                         doc_now_data = doc[k]['data']
                     if 'select_items' in doc[k]:
                         doc_items = doc[k]['select_items']
+                    if 'special_index' in doc[k]:
+                        doc_special = doc[k]['special_index']
                 if type(doc[k]) == str:
                     doc_now = doc[k]
             # 取显示名称
@@ -459,17 +462,17 @@ class ConfigPage(Page):
             k_sha1 = hashlib.sha1(k.encode('utf8')).hexdigest()
             component_name = '{}-{}'.format(add_name, k_sha1)
             if type(v) == str or v is None:
-                self._show_str(doc_items, component_name, display_name, scope_name, v)
+                self._show_str(doc_items, component_name, display_name, scope_name, v, doc_special)
             elif type(v) == int:
-                self._show_int(doc_items, component_name, display_name, scope_name, v)
+                self._show_int(doc_items, component_name, display_name, scope_name, v, doc_special)
             elif type(v) == float:
-                self._show_float(doc_items, component_name, display_name, scope_name, v)
+                self._show_float(doc_items, component_name, display_name, scope_name, v, doc_special)
             elif type(v) == bool:
-                self._show_bool(component_name, display_name, scope_name, v)
+                self._show_bool(component_name, display_name, scope_name, v, doc_special)
             elif type(v) == dict:
-                self._show_dict(level, component_name, display_name, scope_name, doc, v)
+                self._show_dict(level, component_name, display_name, scope_name, doc, v, doc_special)
             elif type(v) == list:
-                self._show_list(level, display_name, scope_name, component_name, doc, v)
+                self._show_list(level, display_name, scope_name, component_name, doc, v, doc_special)
 
 
 class SettingPage(ConfigPage):
@@ -551,6 +554,7 @@ class CombatSettingPage(ConfigPage):
 class CollectorSettingPage(ConfigPage):
     def __init__(self):
         super().__init__()
+        self.collection_names = load_json("ITEM_NAME.json", "assets\\POI_JSON_API\\$lang$")
 
     def _load_config_files(self):
         self.config_files = []
@@ -615,7 +619,7 @@ class CollectorSettingPage(ConfigPage):
             toast_succ()
             
         
-    def _show_list(self, level, display_name, scope_name, component_name, doc, v):
+    def _show_list(self, level, display_name, scope_name, component_name, doc, v, doc_special):
         # 判断是否为dict列表
         is_dict_list = True
         for i in v:
@@ -685,13 +689,43 @@ class CollectorSettingPage(ConfigPage):
             else:
                 pin.put_textarea(component_name, label=display_name, value=list2format_list_text(v), scope=scope_name)
                 
+    def _onchange_collection_name(self, x):
+        if x in self.collection_names:
+            output.clear_scope("PREDICT_AND_VERIFY_01_scope")
+            output.put_text(_("Verified!"), scope="PREDICT_AND_VERIFY_01_scope").style(f'color: green; font_size: 20px')
+            return
+        else:
+            f1 = False
+            sl = []
+            for i in self.collection_names:
+                if x in i:
+                    f1 = True
+                    output.clear_scope("PREDICT_AND_VERIFY_01_scope")
+                    output.put_text(_("Waiting..."), scope="PREDICT_AND_VERIFY_01_scope").style(f'color: black; font_size: 20px')
+                    if len(sl)<=15:
+                        sl.append(i)
+            
+        if f1:
+            output.put_text(_("You may want to enter: "), scope="PREDICT_AND_VERIFY_01_scope").style(f'color: black; font_size: 20px')
+            for i in sl:
+                output.put_text(i, scope="PREDICT_AND_VERIFY_01_scope").style(f'color: black; font_size: 12px; font-style:italic')
+        else:
+            output.clear_scope("PREDICT_AND_VERIFY_01_scope")
+            output.put_text(_("Not a valid name"), scope="PREDICT_AND_VERIFY_01_scope").style(f'color: red; font_size: 20px')
     
-    def _show_str(self, doc_items, component_name, display_name, scope_name, v):
+    def _show_str(self, doc_items, component_name, display_name, scope_name, v, doc_special):
         if doc_items:
             pin.put_select(component_name,
                             [{"label": i, "value": i} for i in doc_items], value=v,
                             label=display_name,
                             scope=scope_name)
+        elif doc_special:
+            if doc_special == "$PREDICT_AND_VERIFY_01$":
+                pin.put_input(component_name, label=display_name, value=v, scope=scope_name)
+                output.put_scope(name="PREDICT_AND_VERIFY_01_scope", content=[
+                    output.put_text("")
+                ], scope=scope_name)
+                pin.pin_on_change(component_name, onchange=self._onchange_collection_name, clear=False, init_run=True)
         else:
             if "collection_log.json" in self.file_name:
                 output.put_text(f"{display_name} : {v}", scope=scope_name)
@@ -699,7 +733,7 @@ class CollectorSettingPage(ConfigPage):
                 pin.put_input(component_name, label=display_name, value=v, scope=scope_name)
     
     # 展示inf型项
-    def _show_int(self, doc_items, component_name, display_name, scope_name, v):
+    def _show_int(self, doc_items, component_name, display_name, scope_name, v, doc_special):
         if doc_items:
             pin.put_select(component_name,
                             [{"label": i, "value": i} for i in doc_items], value=v,

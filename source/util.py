@@ -28,6 +28,8 @@ except:
 
 # load config file
 def load_json(json_name='config.json', default_path='config\\settings') -> dict:
+    if "$lang$" in default_path:
+        default_path = default_path.replace("$lang$", global_lang)
     try:
         return json.load(open(os.path.join(root_path, default_path, json_name), 'r', encoding='utf-8'))
     except:

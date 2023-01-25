@@ -1,6 +1,7 @@
 {
   "collection_name": {
-    "doc": "物品名"
+    "doc": "物品名",
+    "special_index":"$PREDICT_AND_VERIFY_01$"
   },
   "collection_type": {
     "select_items": [
