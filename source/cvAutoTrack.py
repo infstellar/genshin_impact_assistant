@@ -45,6 +45,8 @@ class AutoTrackerLoop(BaseThreading):
         self.cvAutoTracker.init()
         logger.info(_("cvAutoTrack DLL has been loaded."))
         logger.debug('1) err' + str(self.cvAutoTracker.get_last_error()))
+        r = self.cvAutoTracker.disable_log()
+        logger.debug(f"disable log {r}")
         time.sleep(2)
         self.position = self.cvAutoTracker.get_position()
         self.last_position = self.position

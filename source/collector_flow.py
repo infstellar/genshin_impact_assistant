@@ -168,7 +168,7 @@ class CollectorFlow(BaseThreading):
         self.stop_all()
         self.current_position = static_lib.cvAutoTrackerLoop.get_position()[1:]
         self.tmf.reset_setting()
-        gs_posi = collector_lib.load_feature_position(text="七天神像", ret_mode=1)
+        gs_posi = collector_lib.load_items_position(text="七天神像", ret_mode=1)
         gs_posi = np.asarray(gs_posi)
         d = euclidean_distance_plist(self.current_position, gs_posi)
         gs_posi = gs_posi[np.argmin(d)]
@@ -257,8 +257,8 @@ class CollectorFlow(BaseThreading):
                 
             if self.current_state == ST.INIT_MOVETO_COLLECTOR:
                 
-                self.collector_posi_dict = collector_lib.load_feature_position(self.collector_name, blacklist_id=self.shielded_id)
-                self.shielded_posi_list = collector_lib.load_feature_position(self.collector_name, blacklist_id=self.shielded_id, ret_mode=1, check_mode=1)
+                self.collector_posi_dict = collector_lib.load_items_position(self.collector_name, blacklist_id=self.shielded_id)
+                self.shielded_posi_list = collector_lib.load_items_position(self.collector_name, blacklist_id=self.shielded_id, ret_mode=1, check_mode=1)
                 scene_manager.switch_to_page(scene_manager.page_main, self.checkup_stop_func)
                 static_lib.while_until_no_excessive_error(self.checkup_stop_func)
                 self.current_position = static_lib.cvAutoTrackerLoop.get_position()[1:]
@@ -273,7 +273,10 @@ class CollectorFlow(BaseThreading):
                 self.collection_id = self.collector_posi_dict[self.collector_i]["id"]
                 '''当两个collection坐标小于30时，认为是同一个。'''
                 f1 = euclidean_distance(self.collection_posi, self.last_collection_posi) <= 30
-                f2 = euclidean_distance_plist(self.collection_posi, self.shielded_posi_list).min() <= 30
+                if len(self.shielded_posi_list)>0:
+                    f2 = euclidean_distance_plist(self.collection_posi, self.shielded_posi_list).min() <= 30
+                else:
+                    f2=False
                 if f1 or f2:
                     if f1:
                         logger.info(f"collection id: {self.collection_id} ; collection position: {self.collection_posi} ; last collection position: {self.last_collection_posi}")

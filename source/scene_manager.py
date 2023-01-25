@@ -54,7 +54,7 @@ def get_current_pagename(retry=0):
     current_page = None
     max_rate = 0
     for i in all_page:
-        if retry>=30:
+        if retry>=35:
             f = all_page[i].is_current_page(print_log=True)
         else:
             f = all_page[i].is_current_page()
@@ -73,12 +73,17 @@ def get_current_pagename(retry=0):
             time.sleep(1)
             return get_current_pagename(retry+1)
         else:
-            logger.info(_("UI界面检测失败"))
-            logger.info(_("将在0.2秒后再次尝试获取UI界面"))
-            logger.info(_("尝试次数：") + f"{retry}")
+            if retry == 1:
+                logger.debug(_("UI界面检测失败"))
+            if retry == 11:
+                logger.info(_("UI界面检测失败"))
+                logger.info(_("将在0.2秒后再次尝试获取UI界面"))
+            
             if retry<=10:
+                logger.debug(_("尝试次数：") + f"{retry}")
                 time.sleep(0.2)
             else:
+                logger.info(_("尝试次数：") + f"{retry}")
                 time.sleep(1)
             return get_current_pagename(retry+1)
     return current_page

@@ -53,9 +53,9 @@ def get_chara_list(team_name='team.json'):
             cElast_time = team_item["Elast_time"]
             cEcd_float_time = team_item["Ecd_float_time"]
             try:
-                ctactic_group = ccharacter["tactic_group"]
+                ctactic_group = team_item["tactic_group"]
             except:
-                ctactic_group = ccharacter["tastic_group"]
+                ctactic_group = team_item["tastic_group"]
                 logger.critical(_("请将配对文件中的tastic_gruop更名为tactic_gruop. 已自动识别。"))
             ctrigger = team_item["trigger"]
             cEpress_time = team_item["Epress_time"]
