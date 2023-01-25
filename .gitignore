@@ -203,3 +203,4 @@ assets/inference/zh_CN/*
 assets/inference/en_US/*
 .vscode/*.sql
 source/git_downloader.py
+cvAutoTrack_Cache.xml

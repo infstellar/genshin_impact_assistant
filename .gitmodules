@@ -1,3 +1,6 @@
 [submodule "assets/POI_JSON_API"]
 	path = assets/POI_JSON_API
 	url = https://github.com/GenshinImpactAssistant/GIA_POI_JSON_API.git
+[submodule "assets/AutoTrackDLLAPI"]
+	path = assets/AutoTrackDLLAPI
+	url = https://github.com/GenshinImpactAssistant/GIA_AutoTrackDLL_API.git

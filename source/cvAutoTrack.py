@@ -3,101 +3,7 @@ from ctypes import *
 from util import *
 import timer_module
 from base_threading import BaseThreading
-
-
-class AutoTracker:
-    def __init__(self, dll_path: str):
-        self.__lib = CDLL(dll_path)
-
-        # bool init();
-        self.__lib.init.restype = c_bool
-
-        # bool uninit();
-        self.__lib.uninit.restype = c_bool
-
-        # bool SetHandle(long long int handle);
-        self.__lib.SetHandle.argtypes = [c_longlong]
-        self.__lib.SetHandle.restype = c_bool
-
-        # bool GetTransform(float &x, float &y, float &a)
-        self.__lib.GetTransformOfMap.argtypes = [POINTER(c_float), POINTER(c_float), POINTER(c_float), POINTER(c_int)]
-        self.__lib.GetTransformOfMap.restype = c_bool
-
-        # bool GetPosition(double & x, double & y)
-        self.__lib.GetPositionOfMap.argtypes = [POINTER(c_double), POINTER(c_double), POINTER(c_int)]
-        self.__lib.GetPositionOfMap.restype = c_bool
-
-        # bool GetDirection(double &a);
-        self.__lib.GetDirection.argtypes = [POINTER(c_double)]
-        self.__lib.GetDirection.restype = c_bool
-
-        # bool GetUID(int &uid);
-        self.__lib.GetUID.argtypes = [POINTER(c_int)]
-        self.__lib.GetUID.restype = c_bool
-
-        # bool GetRotation(double &a);
-        self.__lib.GetRotation.argtypes = [POINTER(c_double)]
-        self.__lib.GetRotation.restype = c_bool
-
-        self.__lib.SetWorldCenter.argtypes = [POINTER(c_double), POINTER(c_double)]
-        self.__lib.SetWorldCenter.restype = c_bool
-
-        self.__lib.verison.restype = c_char
-        
-        # self.__lib.SetDisableFileLog.restype = c_bool
-
-    def init(self):
-        return self.__lib.init()
-
-    def verison(self):
-        return self.__lib.verison()
-
-    def disable_log(self):
-        # return self.__lib.SetDisableFileLog()
-        pass
-    
-    def uninit(self):
-        return self.__lib.uninit()
-
-    def get_last_error(self):
-        return self.__lib.GetLastErr()
-
-    def set_handle(self, hwnd: int):
-        return self.__lib.SetHandle(hwnd)
-
-    def get_transform(self):
-        x, y, a, b = c_double(0), c_double(0), c_double(0), c_int(0)
-        ret = self.__lib.GetTransformOfMap(x, y, a, b)
-        return ret, x.value, y.value, a.value
-
-    def get_position(self):
-        x, y, b = c_double(0), c_double(0), c_int(0)
-        ret = self.__lib.GetPositionOfMap(x, y, b)
-        # retx,rety=self.translate_posi(x.value, y.value)
-        return ret, x.value, y.value
-
-    def get_direction(self):
-        a = c_double(0)
-        ret = self.__lib.GetDirection(a)
-        return ret, a.value
-
-    def get_uid(self):
-        uid = c_int(0)
-        ret = self.__lib.GetUID(uid)
-        return ret, uid.value
-
-    def get_rotation(self):
-        a = c_double(0)
-        ret = self.__lib.GetRotation(a)
-        return ret, a.value
-
-    def set_world_center(self, x, y):
-        ret = self.__lib.SetWorldCenter(c_double(x), c_double(y))
-        return ret
-
-    @staticmethod
-    def translate_posi(x, y):
-        return -(x - 793.9) / 2, -(y - (-1237.8)) / 2
+from assets.AutoTrackDLLAPI.AutoTrackAPI import AutoTracker
 
 def del_log():
     logger.debug(_("cleaning cvautotrack files"))
@@ -135,7 +41,7 @@ class AutoTrackerLoop(BaseThreading):
         # scene_manager.switchto_mainwin(max_time=5)
     
     def load_dll(self):
-        self.cvAutoTracker = AutoTracker(os.path.join(root_path, 'source\\cvAutoTrack_7.2.3\\CVAUTOTRACK.dll'))
+        self.cvAutoTracker = AutoTracker() # os.path.join(root_path, 'source\\cvAutoTrack_7.2.3\\CVAUTOTRACK.dll')
         self.cvAutoTracker.init()
         logger.info(_("cvAutoTrack DLL has been loaded."))
         logger.debug('1) err' + str(self.cvAutoTracker.get_last_error()))
