@@ -89,7 +89,7 @@ class InteractionBGD:
         handle = static_lib.get_handle()
         if handle != 0:
             self.handle = handle
-            logger.info(f"handle: {self.handle}")
+            logger.debug(f"handle: {self.handle}")
         
         if self.handle == 0:
             logger.error(_("未找到句柄，请确认原神窗口是否开启。"))

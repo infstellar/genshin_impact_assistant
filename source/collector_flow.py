@@ -163,6 +163,7 @@ class CollectorFlow(BaseThreading):
         self.collection_log[self.collector_name] = a
         save_json(self.collection_log, "collection_log.json", default_path="config\\auto_collector")
         self.picked_list = []
+        self.puo.reset_pickup_item_list()
     
     def recover_all(self):
         self.stop_all()
@@ -336,7 +337,7 @@ class CollectorFlow(BaseThreading):
                 elif self.collector_type == MINERAL:
                     pass
                 
-                self.puo.reset_pickup_item_list()
+                
                 
                 logger.info(_("switch Flow to: BEFORE_PICKUP_COLLECTOR"))
                 time.sleep(1) # wait for CSDL detection

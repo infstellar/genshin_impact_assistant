@@ -168,7 +168,7 @@ def load_items_position(item_name:str, area_id=None, blacklist_id=None, ret_mode
                 "refreshTime":item["refreshTime"]
             })
         elif ret_mode == 1: # posi list only
-                ret_dict.append(list(np.array( list(map(float,item["geometry"]["coordinates"])) )*1.5))
+                ret_dict.append(list(np.array( list(map(float,item["position"].split(','))))*1.5))
     # print()
     return ret_dict  
 if __name__ == '__main__':
