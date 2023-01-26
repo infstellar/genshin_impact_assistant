@@ -3,7 +3,8 @@
     "doc": "语言(language)",
     "select_items": [
       "zh_CN",
-      "en_US"
+      "en_US",
+      "$locale$"
     ]
   },
   "ChromelessWindow": "是否为无边框窗口",

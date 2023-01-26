@@ -194,7 +194,7 @@ class ConfigPage(Page):
         output.put_markdown(_('## config:'), scope=self.main_scope)
 
         output.put_scope("select_scope", scope=self.main_scope)
-        pin.put_select('file', self._config_file2lableAfile(self.config_files), scope="select_scope", value="config.json")
+        pin.put_select('file', self._config_file2lableAfile(self.config_files), scope="select_scope")
 
     def _on_load(self):
         super()._on_load()
@@ -366,6 +366,18 @@ class ConfigPage(Page):
                             [{"label": i, "value": i} for i in doc_items], value=v,
                             label=display_name,
                             scope=scope_name)
+        elif doc_special:
+            doc_special = doc_special.split('#')
+            if doc_special[0] == "$FILE_IN_FOLDER$":
+                
+                json_dict = load_jsons_from_folder(os.path.join(root_path, doc_special[1]), black_file=["character","character_dist",""])
+                sl = []
+                for i in json_dict:
+                    sl.append({"label": i["label"], "value": i["label"]})
+                pin.put_select(component_name,
+                    sl, value=v,
+                    label=display_name,
+                    scope=scope_name)
         else:
             pin.put_input(component_name, label=display_name, value=v, scope=scope_name)
     
@@ -511,6 +523,7 @@ class CombatSettingPage(ConfigPage):
             for f in files:
                 if f[f.index('.') + 1:] == "json":
                     self.config_files.append({"label": f, "value": os.path.join(root, f)})
+        self.config_files.append({"label": "auto_combat.json", "value": "config\\settings\\auto_combat.json"})
 
     def _load(self):
         self.last_file = None

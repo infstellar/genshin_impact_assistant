@@ -1,0 +1,5 @@
+{
+    "teamfile":{
+        "special_index":"$FILE_IN_FOLDER$#config\\tactic"
+    }
+}

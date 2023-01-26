@@ -3,7 +3,8 @@
     "doc": "Language",
     "select_items": [
       "zh_CN",
-      "en_US"
+      "en_US",
+      "$locale$"
     ]
   },
   "corr_degree": "Viewing angle calibration",

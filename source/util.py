@@ -318,14 +318,16 @@ def image_size(image):
     shape = image.shape
     return shape[1], shape[0]
 
-def load_jsons_from_folder(path):
+def load_jsons_from_folder(path, black_file:list=None):
     json_list = []
     for root, dirs, files in os.walk(path):
         for f in files:
             if f[f.index('.') + 1:] == "json":
-                j = json.load(open(os.path.join(path, f), 'r', encoding='utf-8'))
-                json_list.append({"label": f, "json": j})
+                if f[:f.index('.')] not in black_file:
+                    j = json.load(open(os.path.join(path, f), 'r', encoding='utf-8'))
+                    json_list.append({"label": f, "json": j})
     return json_list
+
 
 
 # Update for a program used before version v0.5.0.424
