@@ -128,7 +128,7 @@
 
 ## team.json文件示例
 
-你可以基于自己的需求在`示例json`中修改，或者新建新的`json`并将`config.json`中的
+你可以基于自己的需求在`示例json`中修改，或者新建新的`json`并将`auto_combat.json`中的
 `teamfile`修改为你自己的`json`.
 
 文件示例：

@@ -16,10 +16,6 @@ Double click on `GIA Launcher.exe` to run it.
 
 ## Configuration file
 
-For Chinese users, you can use the `installer_config_cn.json` configuration file, which has been individually configured according to the Chinese characteristic network environment.
-
-Usage: Delete `installer_config.json` and keep `installer_config_cn.json` to automatically enable `installer_config_cn.json`.
-
 Specific configuration.
 
 | project | content |
