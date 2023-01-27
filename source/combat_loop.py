@@ -42,7 +42,7 @@ def get_chara_list(team_name='team.json'):
                 ctactic_group = ccharacter["tactic_group"]
             except:
                 ctactic_group = ccharacter["tastic_group"]
-                logger.critical(_("请将配对文件中的tastic_gruop更名为tactic. 已自动识别。"))
+                logger.warning(_("请将配对文件中的tastic_group更名为tactic_group. 已自动识别。"))
             cEpress_time = ccharacter["Epress_time"]
             cQlast_time = ccharacter["Qlast_time"]
             cQcd_time = ccharacter["Qcd_time"]
@@ -57,7 +57,7 @@ def get_chara_list(team_name='team.json'):
                 ctactic_group = team_item["tactic_group"]
             except:
                 ctactic_group = team_item["tastic_group"]
-                logger.critical(_("请将配对文件中的tastic_gruop更名为tactic_gruop. 已自动识别。"))
+                logger.warning(_("请将配对文件中的tastic_group更名为tactic_group. 已自动识别。"))
             ctrigger = team_item["trigger"]
             cEpress_time = team_item["Epress_time"]
             cQlast_time = team_item["Qlast_time"]
