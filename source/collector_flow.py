@@ -16,6 +16,7 @@ import static_lib
 import button_manager
 import img_manager
 import scene_manager
+import asset
 from err_code_lib import ERR_PASS, ERR_STUCK, ERR_COLLECTOR_FLOW_TIMEOUT
 
 COLLECTION = 0
@@ -24,7 +25,7 @@ MINERAL = 2
 
 ALL_CHARACTER_DIED = 1
 
-
+SUCC_RATE_WEIGHTING = 20
 
 
 
@@ -92,7 +93,14 @@ class CollectorFlow(BaseThreading):
         self.IN_PICKUP_COLLECTOR_timeout = timer_module.TimeoutTimer(45)
         self.IN_MOVETO_COLLECTOR_timeout = timer_module.TimeoutTimer(240)
         self.Flow_timeout = timer_module.TimeoutTimer(340)
+        # collector_lib.generate_masked_col_from_log()
+        collector_lib.generate_collected_from_log()
+        collector_lib.generate_col_succ_rate_from_log()
+        logger.debug(f"generate collection_id_details succ")
+        self.collection_details = load_json("collection_id_details.json", "config\\auto_collector")
         self.itt = InteractionBGD()
+        
+        
         
     def pause_threading(self):
         if self.pause_threading_flag != True:
@@ -151,6 +159,25 @@ class CollectorFlow(BaseThreading):
     def sort_by_eu(self, x):
         return euclidean_distance(x["position"], self.current_position)
     
+    def sort_by_succ_rate(self, x):
+        try:
+            ret = self.collection_details[str(x["id"])]
+        except KeyError as e:
+            return 0.8
+        return self.collection_details[str(x["id"])]
+    
+    def sort_by_distance_and_succrate(self, x):
+        distance = euclidean_distance(x["position"], self.current_position)
+        try:
+            rate = float(self.collection_details[str(x["id"])]["succ_rate"])
+        except KeyError as e:
+            rate = 0.8
+        if rate == 0:
+            rate = 0.1
+        ret = ((1/rate)*SUCC_RATE_WEIGHTING) * distance
+        logger.trace(f"ret: {ret} rate: {rate} distance:{distance} rate_weight: {(1/rate)*SUCC_RATE_WEIGHTING}")
+        return ret
+    
     def add_log(self, x):
         a = self.collection_log.setdefault(self.collector_name, [])
         self.picked_list = self.puo.pickup_item_list.copy()
@@ -169,7 +196,7 @@ class CollectorFlow(BaseThreading):
         self.stop_all()
         self.current_position = static_lib.cvAutoTrackerLoop.get_position()[1:]
         self.tmf.reset_setting()
-        gs_posi = collector_lib.load_items_position(text="七天神像", ret_mode=1)
+        gs_posi = collector_lib.load_items_position(item_name=asset.QTSX.text, ret_mode=1)
         gs_posi = np.asarray(gs_posi)
         d = euclidean_distance_plist(self.current_position, gs_posi)
         gs_posi = gs_posi[np.argmin(d)]
@@ -222,6 +249,7 @@ class CollectorFlow(BaseThreading):
                 self.add_log("FLOW_TIMEOUT")
                 self.current_state = ST.AFTER_PICKUP_COLLECTOR
                 logger.info(_("重置完成。准备进行下一次采集"))
+                self.Flow_timeout.reset()
                 self.reset_err_code()
             elif self.checkup_stop_func():
                 self.pause_threading_flag = True
@@ -263,7 +291,11 @@ class CollectorFlow(BaseThreading):
                 scene_manager.switch_to_page(scene_manager.page_main, self.checkup_stop_func)
                 static_lib.while_until_no_excessive_error(self.checkup_stop_func)
                 self.current_position = static_lib.cvAutoTrackerLoop.get_position()[1:]
-                self.collector_posi_dict.sort(key=self.sort_by_eu)
+                self.collection_details = load_json("collection_id_details.json", "config\\auto_collector")
+                if True:
+                    self.collector_posi_dict.sort(key=self.sort_by_distance_and_succrate)
+                else:
+                    self.collector_posi_dict.sort(key=self.sort_by_eu)
                 logger.info("switch Flow to: BEFORE_MOVETO_COLLECTOR")
                 self.current_state = ST.BEFORE_MOVETO_COLLECTOR
                 self.collector_i = 0

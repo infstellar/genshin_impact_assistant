@@ -26,6 +26,17 @@ def create_name():
     s=list(set(s))
     save_json(s, "ITEM_NAME.json", "assets\\POI_JSON_API\\zh_CN")
 
-reshape_json()
-create_indexes()
-create_name()
+def create_refreshTime():
+    s = {}
+    for ii in range(1,14):
+        j = load_json(json_name=str(ii)+".json", default_path="assets\\POI_JSON_API\\zh_CN\\dataset")
+        for i in j:
+            if int(i["refreshTime"]) not in [-1,0]:
+                s[str(i["id"])]=i["refreshTime"]
+        # print(s)
+    save_json(s, "REFRESHTIME_INDEX.json", "assets\\POI_JSON_API\\zh_CN")
+
+create_refreshTime()
+# reshape_json()
+# create_indexes()
+# create_name()

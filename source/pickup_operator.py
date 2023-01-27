@@ -106,7 +106,7 @@ class PickupOperator(BaseThreading):
                 
                 if self.target_posi:
                     self.cview_toward_target()
-                if self.flicker_timer.get_diff_time() >= 5:
+                if self.flicker_timer.get_diff_time() >= 2:
                     logger.debug("searching flicker")
                     self.collector_flag = False
                     self.finding_collector()

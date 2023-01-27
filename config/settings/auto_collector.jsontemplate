@@ -3,5 +3,5 @@
     "collection_type": "ENEMY",
     "collection_area": "ALL",
     "collect mode": "Auto",
-    "minimum_times_mask_col_id": 2
+    "minimum_times_mask_col_id": 10000
 }

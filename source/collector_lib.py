@@ -20,14 +20,21 @@ def add_to_collected(key:str, id: Union[int,list]) -> None:
     for i in id:
         collectedlist[key].append(i)
     save_json(collectedlist, json_name="collected.json", default_path="config\\auto_collector")    
-
-def is_col_refreshed(col_name, col_time):
+global REFRESH_TIME_JSON
+REFRESH_TIME_JSON = None
+def is_col_refreshed(col_id, col_time):
     col_time = col_time[:col_time.index('.')]
     time_stamp = time.mktime(time.strptime(col_time, "%Y-%m-%d %H:%M:%S"))
     now_stamp = time.time()
-    reflash_period = 48
-    reflash_sec = reflash_period*60*60
-    if now_stamp - time_stamp > reflash_sec:
+    global REFRESH_TIME_JSON
+    if REFRESH_TIME_JSON is None:
+        REFRESH_TIME_JSON = load_json("REFRESHTIME_INDEX.json", "assets\\POI_JSON_API")
+    try:
+        t = REFRESH_TIME_JSON[str(col_id)]/1000
+    except KeyError as e:
+        t = 72*3600
+    # logger.trace(t)
+    if now_stamp - time_stamp > t:
         return True
     else:
         return False
@@ -43,11 +50,30 @@ def generate_collected_from_log(regenerate = True):
         for ii in loglist[i]:
             col_id = ii["id"]
             col_time = ii["time"]
-            if not is_col_refreshed(key_name, col_time):
+            if not is_col_refreshed(col_id, col_time):
                 collected_list[key_name].append(col_id)
-                print(col_id)
+                # print(col_id)
     save_json(collected_list, "collected.json", "config\\auto_collector")
 
+def generate_col_succ_rate_from_log():
+    loglist = load_json("collection_log.json", "config\\auto_collector")
+    dict1 = {}
+    for i in loglist:
+        for ii in loglist[i]:
+            col_id = ii["id"]
+            dict1.setdefault(col_id, {
+                "total_times":0,
+                "succ_times":0,
+                "succ_rate":0.0
+            })
+            col_time = ii["picked item"]
+            dict1[col_id]["total_times"]+=1
+            if col_time != ["None"]:
+                dict1[col_id]["succ_times"]+=1
+    for i in dict1:
+        dict1[i]["succ_rate"]=round(dict1[i]["succ_times"]/dict1[i]["total_times"],2)
+    save_json(dict1, "collection_id_details.json", "config\\auto_collector")
+    
 def generate_masked_col_from_log(regenerate = True):
     min_times = load_json("auto_collector.json")["minimum_times_mask_col_id"]
     loglist = load_json("collection_log.json", "config\\auto_collector")
@@ -172,7 +198,7 @@ def load_items_position(item_name:str, area_id=None, blacklist_id=None, ret_mode
     # print()
     return ret_dict  
 if __name__ == '__main__':
-    s = (load_items_position("清心"))
+    s = (generate_collected_from_log())
     print()
 def load_feature_position(text, blacklist_id=None, ret_mode = 0, check_mode = 0):
     ita = load_json("itemall.json", "assets")
