@@ -118,10 +118,12 @@ def startstop():
         startstop_flag = not startstop_flag
         switch_collector_loop()
 
-
-keyboard.add_hotkey(keymap_json["autoCombat"], switch_combat_loop)
-keyboard.add_hotkey(keymap_json["autoDomain"], switch_domain_loop)
-keyboard.add_hotkey(keymap_json["startstop"], startstop)
+if keymap_json["autoCombat"] != "":
+    keyboard.add_hotkey(keymap_json["autoCombat"], switch_combat_loop)
+if keymap_json["autoDomain"] != "":
+    keyboard.add_hotkey(keymap_json["autoDomain"], switch_domain_loop)
+if keymap_json["startstop"] != "":
+    keyboard.add_hotkey(keymap_json["startstop"], startstop)
 
 
 @logger.catch

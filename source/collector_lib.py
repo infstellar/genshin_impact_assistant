@@ -127,13 +127,17 @@ AREA_XM = [18,19,21,22]
 AREA_XM_CORE = [18]
 AREA_XM_FOREST = [19]
 AREA_XM_DESERT = [21,22]
-def get_item_id(item_name:str, area_id:list) -> list:
+def get_item_id(item_name:str, area_id:list, match_mode = 0) -> list:
     j = load_json("item.json", "assets\\POI_JSON_API\\zh_CN\\dataset")
     ret_id = []
     for i in j:
         if int(i["areaId"]) in area_id:
-            if i["name"] == item_name:
-                ret_id.append(i["itemId"])
+            if match_mode == 0:
+                if i["name"] == item_name:
+                    ret_id.append(i["itemId"])
+            elif match_mode == 1:
+                if i["name"] in item_name:
+                    ret_id.append(i["itemId"])
     ret_id = list(set(ret_id))
     return ret_id
     if len(ret_id) == 1:
@@ -144,7 +148,7 @@ def get_item_id(item_name:str, area_id:list) -> list:
 
 
 
-def load_items_position(item_name:str, area_id=None, blacklist_id=None, ret_mode = 0, check_mode = 0):
+def load_items_position(item_name:str, area_id=None, blacklist_id=None, ret_mode = 0, check_mode = 0, match_mode = 0):
     if area_id == None:
         area_i = load_json("auto_collector.json", "config\\settings")["collection_area"]
         if area_i == 'ALL':
@@ -158,13 +162,16 @@ def load_items_position(item_name:str, area_id=None, blacklist_id=None, ret_mode
         elif area_i == 'XM':
             area_id = AREA_XM
     logger.debug(f"item_name {item_name} area_id {area_i}")
-    id_index = load_json("ID_INDEX.json", "assets\\POI_JSON_API\\zh_CN")[item_name]
+    if match_mode == 0:
+        id_index = load_json("ID_INDEX.json", "assets\\POI_JSON_API\\zh_CN")[item_name]
+    elif match_mode == 1:
+        id_index = list(range(1,15))
     ita = []
     for i in id_index:
         ita += load_json(str(i)+".json", "assets\\POI_JSON_API\\zh_CN\\dataset")
-    print()
+    # print()
     
-    item_id = get_item_id(item_name, area_id)
+    item_id = get_item_id(item_name, area_id, match_mode=match_mode)
     common_name = []
     for i in ita:
         if len(i["itemList"])>0:
@@ -198,7 +205,8 @@ def load_items_position(item_name:str, area_id=None, blacklist_id=None, ret_mode
     # print()
     return ret_dict  
 if __name__ == '__main__':
-    s = (generate_collected_from_log())
+    import asset
+    s = load_items_position(item_name=asset.QTSX.text, ret_mode=1, match_mode=1)
     print()
 def load_feature_position(text, blacklist_id=None, ret_mode = 0, check_mode = 0):
     ita = load_json("itemall.json", "assets")

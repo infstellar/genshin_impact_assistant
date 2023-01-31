@@ -196,7 +196,7 @@ class CollectorFlow(BaseThreading):
         self.stop_all()
         self.current_position = static_lib.cvAutoTrackerLoop.get_position()[1:]
         self.tmf.reset_setting()
-        gs_posi = collector_lib.load_items_position(item_name=asset.QTSX.text, ret_mode=1)
+        gs_posi = collector_lib.load_items_position(item_name=asset.QTSX.text, ret_mode=1, match_mode=1)
         gs_posi = np.asarray(gs_posi)
         d = euclidean_distance_plist(self.current_position, gs_posi)
         gs_posi = gs_posi[np.argmin(d)]
@@ -243,6 +243,7 @@ class CollectorFlow(BaseThreading):
                 self.current_state = ST.AFTER_PICKUP_COLLECTOR
                 self.reset_err_code()
                 logger.info(_("重置完成。准备进行下一次采集"))
+                self.pause_threading_flag = False
             elif self.last_err_code == ERR_COLLECTOR_FLOW_TIMEOUT:
                 self.stop_all()
                 logger.warning(_("Flow timeout"))
@@ -251,6 +252,7 @@ class CollectorFlow(BaseThreading):
                 logger.info(_("重置完成。准备进行下一次采集"))
                 self.Flow_timeout.reset()
                 self.reset_err_code()
+                self.pause_threading_flag = False
             elif self.checkup_stop_func():
                 self.pause_threading_flag = True
                 continue
@@ -363,9 +365,11 @@ class CollectorFlow(BaseThreading):
             if self.current_state == ST.INIT_PICKUP_COLLECTOR:
                 if self.collector_type == COLLECTION:
                     self.IN_PICKUP_COLLECTOR_timeout.set_timeout_limit(120)
+                    self.Flow_timeout.set_timeout_limit(300)
                 elif self.collector_type == ENEMY:
                     self.IN_PICKUP_COLLECTOR_timeout.set_timeout_limit(120)
                     self.puo.max_distance_from_target = 60
+                    self.Flow_timeout.set_timeout_limit(380)
                 elif self.collector_type == MINERAL:
                     pass
                 
