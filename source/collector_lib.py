@@ -165,7 +165,7 @@ def load_items_position(item_name:str, area_id=None, blacklist_id=None, ret_mode
     if match_mode == 0:
         id_index = load_json("ID_INDEX.json", "assets\\POI_JSON_API\\zh_CN")[item_name]
     elif match_mode == 1:
-        id_index = list(range(1,15))
+        id_index = list(range(1,14))
     ita = []
     for i in id_index:
         ita += load_json(str(i)+".json", "assets\\POI_JSON_API\\zh_CN\\dataset")
