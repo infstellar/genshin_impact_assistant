@@ -89,7 +89,7 @@ class SwitchCharacterOperator(BaseThreading):
             if self.checkup_stop_func():
                 return 0
             self.tactic_operator.chara_waiting()
-            combat_lib.unconventionality_situlation_detection(self.itt)
+            combat_lib.unconventionality_situation_detection(self.itt)
             self.itt.key_press(str(x))
             time.sleep(0.05)
             if combat_lib.get_current_chara_num(self.itt, self.checkup_stop_func) == x:

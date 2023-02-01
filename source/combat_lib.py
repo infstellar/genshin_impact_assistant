@@ -14,34 +14,34 @@ import timer_module
 战斗相关常用函数库。
 """
 
-global only_arror_timer
-only_arror_timer = timer_module.Timer()
+global only_arrow_timer
+only_arrow_timer = timer_module.Timer()
 
 def default_stop_func():
     return False
 
-def unconventionality_situlation_detection(itt: InteractionBGD,
+def unconventionality_situation_detection(itt: InteractionBGD,
                                            autoDispose=True):
     # unconventionality situlation detection
     # situlation 1: coming_out_by_space
 
-    situlation_code = -1
+    situation_code = -1
 
     while itt.get_img_existence(img_manager.COMING_OUT_BY_SPACE):
-        situlation_code = 1
+        situation_code = 1
         itt.key_press('spacebar')
-        logger.debug('Unconventionality Situlation: COMING_OUT_BY_SPACE')
+        logger.debug('Unconventionality Situation: COMING_OUT_BY_SPACE')
         time.sleep(0.1)
     while itt.get_img_existence(img_manager.motion_swimming):
-        situlation_code = 2
+        situation_code = 2
         itt.key_down('w')
-        logger.debug('Unconventionality Situlation: SWIMMING')
+        logger.debug('Unconventionality Situation: SWIMMING')
         if autoDispose:
             time.sleep(5)
         itt.key_up('w')
         time.sleep(0.1)
 
-    return situlation_code
+    return situation_code
 
 def get_character_busy(itt: InteractionBGD, stop_func, print_log = True):
     cap = itt.capture(jpgmode=2)
@@ -71,7 +71,7 @@ def get_character_busy(itt: InteractionBGD, stop_func, print_log = True):
         return True
 
 def chara_waiting(itt:InteractionBGD, stop_func, mode=0):
-    unconventionality_situlation_detection(itt)
+    unconventionality_situation_detection(itt)
     while get_character_busy(itt, stop_func) and (not stop_func()):
         if stop_func():
             logger.debug('chara_waiting stop')
@@ -121,10 +121,10 @@ def combat_statement_detection(itt: InteractionBGD):
     im_src[:, :, 2][im_src[:, :, 1] > bg_num] = 0
     # _, imsrc2 = cv2.threshold(imsrc[:, :, 2], 1, 255, cv2.THRESH_BINARY)
     
-    flag_is_lifebar_exist = im_src[:, :, 2].max() > 0
-    # print('flag_is_lifebar_exist ',flag_is_lifebar_exist)
-    if flag_is_lifebar_exist:
-        only_arror_timer.reset()
+    flag_is_blood_bar_exist = im_src[:, :, 2].max() > 0
+    # print('flag_is_blood_bar_exist ',flag_is_blood_bar_exist)
+    if flag_is_blood_bar_exist:
+        only_arrow_timer.reset()
         return True
     
     '''-----------------------------'''
@@ -213,9 +213,9 @@ class CombatStatementDetectionLoop(BaseThreading):
                 continue
                 
             '''write your code below'''
-            if only_arror_timer.get_diff_time()>=30:
+            if only_arrow_timer.get_diff_time()>=30:
                 if self.current_state == True:
-                    logger.debug("only arror but lifebar is not exist over 30s, ready to exit combat mode.")
+                    logger.debug("only arrow but blood bar is not exist over 30s, ready to exit combat mode.")
                 state = combat_statement_detection(self.itt)
                 state = False
             else:
@@ -234,7 +234,7 @@ class CombatStatementDetectionLoop(BaseThreading):
             if self.state_counter >= 10:
                 logger.debug('combat_statement_detection change state')
                 # if self.current_state == False:
-                #     only_arror_timer.reset()
+                #     only_arrow_timer.reset()
                 self.state_counter = 0
                 self.current_state = state
             
