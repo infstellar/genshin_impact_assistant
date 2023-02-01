@@ -37,6 +37,6 @@ def create_refreshTime():
     save_json(s, "REFRESHTIME_INDEX.json", "assets\\POI_JSON_API\\zh_CN")
 
 create_refreshTime()
-# reshape_json()
-# create_indexes()
-# create_name()
+reshape_json()
+create_indexes()
+create_name()
