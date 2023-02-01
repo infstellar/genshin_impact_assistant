@@ -32,6 +32,14 @@ def unconventionality_situlation_detection(itt: InteractionBGD,
         itt.key_press('spacebar')
         logger.debug('Unconventionality Situlation: COMING_OUT_BY_SPACE')
         time.sleep(0.1)
+    while itt.get_img_existence(img_manager.motion_swimming):
+        situlation_code = 2
+        itt.key_down('w')
+        logger.debug('Unconventionality Situlation: SWIMMING')
+        if autoDispose:
+            time.sleep(5)
+        itt.key_up('w')
+        time.sleep(0.1)
 
     return situlation_code
 
