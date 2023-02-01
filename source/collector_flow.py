@@ -25,7 +25,7 @@ MINERAL = 2
 
 ALL_CHARACTER_DIED = 1
 
-SUCC_RATE_WEIGHTING = 20
+SUCC_RATE_WEIGHTING = 6
 
 
 
@@ -172,7 +172,7 @@ class CollectorFlow(BaseThreading):
             rate = float(self.collection_details[str(x["id"])]["succ_rate"])
         except KeyError as e:
             rate = 0.8
-        if rate == 0:
+        if rate < 0.1:
             rate = 0.1
         ret = ((1/rate)*SUCC_RATE_WEIGHTING) * distance
         logger.trace(f"ret: {ret} rate: {rate} distance:{distance} rate_weight: {(1/rate)*SUCC_RATE_WEIGHTING}")

@@ -43,6 +43,9 @@ class MainPage(Page):
             except SessionNotFoundException:
                 logger.info(_("未找到会话，可能由于窗口关闭。请刷新页面重试。"))
                 return
+            except SessionClosedException:
+                logger.info(_("未找到会话，可能由于窗口关闭。请刷新页面重试。"))
+                return
             if pin.pin['FlowMode'] != listening.current_flow:  # 比较变更是否被应用
                 listening.current_flow = pin.pin['FlowMode']  # 应用变更
                 self.log_list_lock.acquire()
