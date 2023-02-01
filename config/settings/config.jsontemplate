@@ -4,7 +4,6 @@
   "corr_degree": 0.95,
   "device_paddle": "cpu",
   "device_torch": "auto",
-  "teamfile": "team.json",
   "version": "v0.3.0",
   "check_import": false,
   "lang":"$locale$",

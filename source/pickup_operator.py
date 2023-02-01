@@ -49,7 +49,7 @@ class PickupOperator(BaseThreading):
             self.pickup_fail_timeout.reset()
             
             if self.search_mode == 1:
-                if self.night_timer.get_diff_time() >= 800:
+                if self.night_timer.get_diff_time() >= 600:
                     logger.info(_("正在设置时间为夜晚"))
                     self.itt.delay(1)
                     generic_lib.set_genshin_time()

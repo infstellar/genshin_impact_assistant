@@ -613,12 +613,14 @@ class CollectorSettingPage(ConfigPage):
     def _before_load_json(self):
         if "collection_log.json" in self.file_name:
             self.read_only = True
-            output.put_buttons([
-                (_("Automatic generate a list of collected items"), "$COLLECTED$"),
-                (_("Automatic generate a list of blacklist items"), "$BLACKLIST$")], 
-                onclick=self._onclick_col_log_operate,
-                scope="now"
-            )
+            # output.put_buttons([
+                
+            #     (_("Automatic generate a list of collected items"), "$COLLECTED$"),
+            #     (_("Automatic generate a list of blacklist items"), "$BLACKLIST$")
+            #     ], 
+            #     onclick=self._onclick_col_log_operate,
+            #     scope="now"
+            # )
         else:
             self.read_only = False
         return super()._before_load_json()
@@ -655,7 +657,8 @@ class CollectorSettingPage(ConfigPage):
                     show_list.append( [v[iii]["error_code"], v[iii]["id"], v[iii]["picked item"], ctime, 
                                  output.put_buttons([
                                      (_("Add to blacklist"), f"$AddToBlackList$#{display_name}#{v[iii]['id']}"),
-                                     (_("Add to collected"), f"$AddToCollected$#{display_name}#{v[iii]['id']}")],
+                                     # (_("Add to collected"), f"$AddToCollected$#{display_name}#{v[iii]['id']}")
+                                     ],
                                  onclick=self._on_click_collectionlog, small=True)])
                 a1,a2,a3,a4 = collector_lib.col_succ_times_from_log(display_name, day=1)
                 b1,b2,b3,b4 = collector_lib.col_succ_times_from_log(display_name, day=7)
