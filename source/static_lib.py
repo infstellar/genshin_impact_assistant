@@ -4,8 +4,11 @@ from util import *
 global W_KEYDOWN, cvAutoTrackerLoop
 W_KEYDOWN = False
 cvAutoTrackerLoop = None
-
-
+if config_json["capture_mode"] == "compatibility":
+    import d3dshot
+    d3d_capture = d3dshot.create(capture_output="numpy")
+else:
+    d3d_capture = None
 def get_handle():
     if not config_json["cloud_genshin"]:
         handle = ctypes.windll.user32.FindWindowW(None, 'Genshin Impact')

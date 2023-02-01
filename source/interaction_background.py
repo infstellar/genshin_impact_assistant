@@ -96,29 +96,38 @@ class InteractionBGD:
 
     def capture_handle(self):
         # 获取窗口客户区的大小
-        handle = self.handle
-        r = RECT()
-        self.GetClientRect(handle, ctypes.byref(r))
-        width, height = r.right, r.bottom
-        # 开始截图
-        dc = self.GetDC(handle)
-        cdc = self.CreateCompatibleDC(dc)
-        bitmap = self.CreateCompatibleBitmap(dc, width, height)
-        self.SelectObject(cdc, bitmap)
-        self.BitBlt(cdc, 0, 0, width, height, dc, 0, 0, self.SRCCOPY)
-        # 截图是BGRA排列，因此总元素个数需要乘以4
-        total_bytes = width * height * 4
-        buffer = bytearray(total_bytes)
-        byte_array = ctypes.c_ubyte * total_bytes
-        self.GetBitmapBits(bitmap, total_bytes, byte_array.from_buffer(buffer))
-        self.DeleteObject(bitmap)
-        self.DeleteObject(cdc)
-        self.ReleaseDC(handle, dc)
-        # 返回截图数据为numpy.ndarray
-        ret = np.frombuffer(buffer, dtype=np.uint8).reshape(height, width, 4)
-        return ret
-    
-    
+        if config_json["capture_mode"] == "fast":
+            handle = self.handle
+            r = RECT()
+            self.GetClientRect(handle, ctypes.byref(r))
+            width, height = r.right, r.bottom
+            # 开始截图
+            dc = self.GetDC(handle)
+            cdc = self.CreateCompatibleDC(dc)
+            bitmap = self.CreateCompatibleBitmap(dc, width, height)
+            self.SelectObject(cdc, bitmap)
+            self.BitBlt(cdc, 0, 0, width, height, dc, 0, 0, self.SRCCOPY)
+            # 截图是BGRA排列，因此总元素个数需要乘以4
+            total_bytes = width * height * 4
+            buffer = bytearray(total_bytes)
+            byte_array = ctypes.c_ubyte * total_bytes
+            self.GetBitmapBits(bitmap, total_bytes, byte_array.from_buffer(buffer))
+            self.DeleteObject(bitmap)
+            self.DeleteObject(cdc)
+            self.ReleaseDC(handle, dc)
+            # 返回截图数据为numpy.ndarray
+            ret = np.frombuffer(buffer, dtype=np.uint8).reshape(height, width, 4)
+            img_manager.qshow(ret)
+            return ret
+        elif config_json["capture_mode"] == "compatibility":
+            wx, wy, w, h = win32gui.GetWindowRect(self.handle)
+            r = static_lib.d3d_capture.screenshot()
+            
+            r = crop(r, area=[wx,wy,wx+w,wy+h])
+            r = cv2.cvtColor(r, cv2.COLOR_RGB2BGR)
+            img_manager.qshow(r)
+            print()
+            return r
     
     def capture(self, posi=None, shape='yx', jpgmode=None, check_shape = True):
         """窗口客户区截图

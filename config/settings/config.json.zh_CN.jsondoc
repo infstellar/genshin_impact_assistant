@@ -27,5 +27,10 @@
     ]
   },
   "teamfile": "配队文件",
-  "version": "版本"
+  "version": "版本",
+  "capture_mode":{
+    "select_items":[
+      "fast"
+    ]
+  }
 }

@@ -25,5 +25,10 @@
     ]
   },
   "teamfile": "Time file",
-  "version": "Version"
+  "version": "Version",
+  "capture_mode":{
+    "select_items":[
+      "fast"
+    ]
+  }
 }
