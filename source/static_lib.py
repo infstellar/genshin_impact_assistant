@@ -5,8 +5,7 @@ global W_KEYDOWN, cvAutoTrackerLoop
 W_KEYDOWN = False
 cvAutoTrackerLoop = None
 if config_json["capture_mode"] == "compatibility":
-    import d3dshot
-    d3d_capture = d3dshot.create(capture_output="numpy")
+    d3d_capture = None
 else:
     d3d_capture = None
 def get_handle():

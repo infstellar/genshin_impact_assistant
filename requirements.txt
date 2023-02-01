@@ -25,7 +25,6 @@ matplotlib
 keyboard
 scipy
 py7zr
-d3dshot
 
 PyAutoGUI
 PyQt5
