@@ -230,7 +230,7 @@ class TacticOperator(BaseThreading):
 
         self.chara_waiting()
         logger.debug('do_use_longe')
-        self.itt.key_press('s')
+        # self.itt.key_press('s')
         self.itt.key_down('e')
         self.itt.delay(self.character.Epress_time)
         self.itt.key_up('e')
@@ -238,7 +238,7 @@ class TacticOperator(BaseThreading):
             return 0
         if self.pause_tactic_flag:
             return 0
-        self.itt.key_press('w')
+        # self.itt.key_press('w')
         self.itt.delay(0.2)
         if (not self._is_e_release()) and E_STRICT_MODE:
             self.do_use_longe(times=times + 1)
@@ -300,6 +300,14 @@ class TacticOperator(BaseThreading):
         self.itt.key_press('r')
 
     def is_q_ready(self, is_show=False):
+        """Check Q-State by image recognition
+
+        Args:
+            is_show (bool, optional): Whether to display recognized image. Defaults to False.
+
+        Returns:
+            bool: Whether Q-Skill can be triggered
+        """
         cap = self.itt.capture(posi=posi_manager.posi_chara_q)
         cap = self.itt.png2jpg(cap, channel='ui', alpha_num=200)  # BEFOREV3D1
         if is_show:
