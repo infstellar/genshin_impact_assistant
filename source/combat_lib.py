@@ -98,7 +98,7 @@ def get_current_chara_num(itt: InteractionBGD, stop_func = default_stop_func):
         else:
             return i + 1
         
-    logger.warning(_("获得当前角色编号失败"))
+    logger.warning(t2t("获得当前角色编号失败"))
     return 1
 
 def combat_statement_detection(itt: InteractionBGD):

@@ -50,7 +50,7 @@ class PickupOperator(BaseThreading):
             
             if self.search_mode == 1:
                 if self.night_timer.get_diff_time() >= 600:
-                    logger.info(_("正在设置时间为夜晚"))
+                    logger.info(t2t("正在设置时间为夜晚"))
                     self.itt.delay(1)
                     generic_lib.set_genshin_time()
                     # scene_manager.switchto_mainwin(self.checkup_stop_func)
@@ -77,7 +77,7 @@ class PickupOperator(BaseThreading):
             time.sleep(self.while_sleep)
             # time.sleep(0.1)
             if self.stop_threading_flag:
-                logger.info(_("停止自动拾取"))
+                logger.info(t2t("停止自动拾取"))
                 return 0
 
             if self.pause_threading_flag:
@@ -115,22 +115,22 @@ class PickupOperator(BaseThreading):
                         self.reset_collector_loops()
                     
                 if self.search_mode == 1 and self.last_search_times <= 0:
-                    logger.info(_("PICKUP_TIMEOUT_001"))
+                    logger.info(t2t("PICKUP_TIMEOUT_001"))
                     self.last_err_code="PICKUP_TIMEOUT_001"
-                    logger.info(_("停止拾取"))
+                    logger.info(t2t("停止拾取"))
                     self.pause_threading()
                         
                 if self.pickup_fail_timeout.istimeout():
-                    logger.info(_("PICKUP_TIMEOUT_002"))
+                    logger.info(t2t("PICKUP_TIMEOUT_002"))
                     self.last_err_code="PICKUP_TIMEOUT_002"
-                    logger.info(_("停止拾取"))
+                    logger.info(t2t("停止拾取"))
                     self.pause_threading()
                 
                 '''当成功找到物品且找不到下一个可能物品后自动停止。'''
                 if self.pickup_succ :
                     if self.collecor_loops > self.max_number_of_collector_loops:
                         self.last_err_code="PICKUP_END_001"
-                        logger.info(_("已找到物品且无法找到下一个物品，停止拾取"))
+                        logger.info(t2t("已找到物品且无法找到下一个物品，停止拾取"))
                         self.pause_threading()
 
     def get_err_code(self):
@@ -163,9 +163,9 @@ class PickupOperator(BaseThreading):
                     self.itt.key_press('f')
                     # self.itt.delay(0)
                     self.pickup_item_list.append(res[0][1][0])
-                    logger.info(_('pickup: ') + str(res[0][1][0]))
+                    logger.info(t2t('pickup: ') + str(res[0][1][0]))
                     if str(res[0][1][0]) in self.target_name:
-                        logger.info(_("已找到：") + self.target_name)
+                        logger.info(t2t("已找到：") + self.target_name)
                         self.pickup_succ = True
                     return True
         if flag1:

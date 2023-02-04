@@ -1,6 +1,6 @@
 from util import *
 
-logger.info(_('Creating ocr object.'))
+logger.info(t2t('Creating ocr object.'))
 from timer_module import Timer
 
 pdocr_timer_performance = Timer()
@@ -11,7 +11,7 @@ try:
     from paddleocr import PaddleOCR
     from paddleocr import draw_ocr
 except Exception as error:
-    logger.critical(_("导入paddleocr时错误; err code: 001"))
+    logger.critical(t2t("导入paddleocr时错误; err code: 001"))
     logger.exception(error)
 
 globaldevice = config_json["device_paddle"]
@@ -37,7 +37,7 @@ class PaddleocrAPI:
 
     def __init__(self, lang='ch', device='gpu'):
         device = globaldevice
-        logger.info(_("ocr device: ") + device)
+        logger.info(t2t("ocr device: ") + device)
         inference_path = os.path.join(root_path, f'assets\\inference\\{global_lang}\\')
         self.ocr = PaddleOCR(use_angle_cls=True, lang=lang, show_log=False,
                              device=device, 

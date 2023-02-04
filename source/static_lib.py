@@ -32,7 +32,7 @@ def static_lib_init():
     time.sleep(1)
 
 def while_until_no_excessive_error(stop_func):
-    logger.info(_("等待cvautotrack获取坐标"))
+    logger.info(t2t("等待cvautotrack获取坐标"))
     cvAutoTrackerLoop.start_sleep_timer.reset()
     while cvAutoTrackerLoop.is_in_excessive_error():
         if stop_func():

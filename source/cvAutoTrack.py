@@ -6,22 +6,22 @@ from base_threading import BaseThreading
 from assets.AutoTrackDLLAPI.AutoTrackAPI import AutoTracker
 
 def del_log():
-    logger.debug(_("cleaning cvautotrack files"))
+    logger.debug(t2t("cleaning cvautotrack files"))
     for root, dirs, files in os.walk(os.path.join(root_path)):
         for f in files:
             if f == "autoTrack.log":
                 os.remove(os.path.join(root_path, "autoTrack.log"))
-                logger.debug(_("autoTrack.log 1 cleaned"))
+                logger.debug(t2t("autoTrack.log 1 cleaned"))
     for root, dirs, files in os.walk(os.path.join(root_path, "source")):
         for f in files:
             if f == "autoTrack.log":
                 os.remove(os.path.join(root_path, "source", "autoTrack.log"))
-                logger.debug(_("autoTrack.log 2 cleaned"))
+                logger.debug(t2t("autoTrack.log 2 cleaned"))
     for root, dirs, files in os.walk(os.path.join(root_path, "source", "webio")):
         for f in files:
             if f == "autoTrack.log":
                 os.remove(os.path.join(root_path, "source", "webio", "autoTrack.log"))
-                logger.debug(_("autoTrack.log 3 cleaned"))
+                logger.debug(t2t("autoTrack.log 3 cleaned"))
 del_log()
 
 
@@ -43,7 +43,7 @@ class AutoTrackerLoop(BaseThreading):
     def load_dll(self):
         self.cvAutoTracker = AutoTracker() # os.path.join(root_path, 'source\\cvAutoTrack_7.2.3\\CVAUTOTRACK.dll')
         self.cvAutoTracker.init()
-        logger.info(_("cvAutoTrack DLL has been loaded."))
+        logger.info(t2t("cvAutoTrack DLL has been loaded."))
         logger.debug('1) err' + str(self.cvAutoTracker.get_last_error()))
         r = self.cvAutoTracker.disable_log()
         logger.debug(f"disable log {r}")

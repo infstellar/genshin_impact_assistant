@@ -42,7 +42,7 @@ def get_chara_list(team_name='team.json'):
                 ctactic_group = ccharacter["tactic_group"]
             except:
                 ctactic_group = ccharacter["tastic_group"]
-                logger.warning(_("请将配对文件中的tastic_group更名为tactic_group. 已自动识别。"))
+                logger.warning(t2t("请将配对文件中的tastic_group更名为tactic_group. 已自动识别。"))
             cEpress_time = ccharacter["Epress_time"]
             cQlast_time = ccharacter["Qlast_time"]
             cQcd_time = ccharacter["Qcd_time"]
@@ -57,7 +57,7 @@ def get_chara_list(team_name='team.json'):
                 ctactic_group = team_item["tactic_group"]
             except:
                 ctactic_group = team_item["tastic_group"]
-                logger.warning(_("请将配对文件中的tastic_group更名为tactic_group. 已自动识别。"))
+                logger.warning(t2t("请将配对文件中的tastic_group更名为tactic_group. 已自动识别。"))
             ctrigger = team_item["trigger"]
             cEpress_time = team_item["Epress_time"]
             cQlast_time = team_item["Qlast_time"]
@@ -69,7 +69,7 @@ def get_chara_list(team_name='team.json'):
         ctrigger = team_item["trigger"]
 
         if cEcd_float_time > 0:
-            logger.info(_("角色 ") + cname + _(" 的Ecd_float_time大于0，请确定该角色不是多段e技能角色。"))
+            logger.info(t2t("角色 ") + cname + t2t(" 的Ecd_float_time大于0，请确定该角色不是多段e技能角色。"))
 
         chara_list.append(
             character.Character(
@@ -119,7 +119,7 @@ class Combat_Controller(BaseThreading):
             
             if self.is_check_died:
                 if self.itt.get_img_existence(asset.character_died):
-                    logger.info(_('有人嘎了，停止自动战斗'))
+                    logger.info(t2t('有人嘎了，停止自动战斗'))
                     self.last_err_code = CHARACTER_DIED
                     while 1:
                         time.sleep(0.5)
@@ -162,13 +162,13 @@ class Combat_Controller(BaseThreading):
 
     def checkup_stop_func(self):
         if self.pause_threading_flag or self.stop_threading_flag:
-            logger.info(_('停止自动战斗'))
+            logger.info(t2t('停止自动战斗'))
             return True
         
         
     def checkup_stop_threading(self):
         if self.stop_threading_flag:
-            logger.info(_('停止自动战斗'))
+            logger.info(t2t('停止自动战斗'))
             return True
 
     def continue_threading(self):

@@ -66,24 +66,24 @@ def get_current_pagename(retry=0):
                 current_page = "ERROR"
     if current_page == None:
         if retry>=40:
-            logger.warning(_("UI界面检测失败，正在尝试按esc返回"))
+            logger.warning(t2t("UI界面检测失败，正在尝试按esc返回"))
             itt.key_press("esc")
-            logger.warning(_("将在1秒后再次尝试获取UI界面"))
-            logger.warning(_("尝试次数：") + f"{retry}")
+            logger.warning(t2t("将在1秒后再次尝试获取UI界面"))
+            logger.warning(t2t("尝试次数：") + f"{retry}")
             time.sleep(1)
             return get_current_pagename(retry+1)
         else:
             if retry == 1:
-                logger.debug(_("UI界面检测失败"))
+                logger.debug(t2t("UI界面检测失败"))
             if retry == 11:
-                logger.info(_("UI界面检测失败"))
-                logger.info(_("将在0.2秒后再次尝试获取UI界面"))
+                logger.info(t2t("UI界面检测失败"))
+                logger.info(t2t("将在0.2秒后再次尝试获取UI界面"))
             
             if retry<=10:
-                logger.debug(_("尝试次数：") + f"{retry}")
+                logger.debug(t2t("尝试次数：") + f"{retry}")
                 time.sleep(0.2)
             else:
-                logger.info(_("尝试次数：") + f"{retry}")
+                logger.info(t2t("尝试次数：") + f"{retry}")
                 time.sleep(1)
             return get_current_pagename(retry+1)
     return current_page

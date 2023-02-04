@@ -35,7 +35,7 @@ class DomainFlow(BaseThreading):
 
         domain_times = domain_json["domain_times"]
         if domain_times == 0:
-            x = input(_("请输入秘境次数"))
+            x = input(t2t("请输入秘境次数"))
             # x.replace(']','')
             domain_times = int(x)
         self.lockOnFlag = 0
@@ -50,10 +50,10 @@ class DomainFlow(BaseThreading):
         self.fast_move_timer = timer_module.Timer()
 
         self.last_domain_times = domain_times - 1
-        logger.info(_('秘境次数：') + str(domain_times))
+        logger.info(t2t('秘境次数：') + str(domain_times))
 
     def stop_threading(self):
-        logger.info(_('停止自动秘境'))
+        logger.info(t2t('停止自动秘境'))
         self.combat_loop.stop_threading()
         self.stop_threading_flag = True
 
@@ -117,7 +117,7 @@ class DomainFlow(BaseThreading):
             return False
 
     def Flow_INIT_MOVETO_CHALLENGE(self):
-        logger.info(_('正在开始挑战秘境'))
+        logger.info(t2t('正在开始挑战秘境'))
         movement.reset_view()
         # cap=self.itt.capture(jpgmode=2)
         while 1:
@@ -267,7 +267,7 @@ class DomainFlow(BaseThreading):
 
             elif self.current_state == ST.INIT_CHALLENGE:
                 self.itt.key_up('w')
-                logger.info(_('正在开始战斗'))
+                logger.info(t2t('正在开始战斗'))
                 self.combat_loop.continue_threading()
                 self.itt.key_press('f')
                 time.sleep(0.1)
@@ -281,10 +281,10 @@ class DomainFlow(BaseThreading):
                     self.current_state = ST.AFTER_CHALLENGE
 
             elif self.current_state == ST.AFTER_CHALLENGE:
-                logger.info(_('正在停止战斗'))
+                logger.info(t2t('正在停止战斗'))
                 self.combat_loop.pause_threading()
                 time.sleep(5)
-                logger.info(_('等待岩造物消失'))
+                logger.info(t2t('等待岩造物消失'))
                 time.sleep(20)
                 self.current_state = ST.END_CHALLENGE
 
@@ -292,7 +292,7 @@ class DomainFlow(BaseThreading):
                 self.current_state = ST.INIT_FINGING_TREE
 
             elif self.current_state == ST.INIT_FINGING_TREE:
-                logger.info(_('正在激活石化古树'))
+                logger.info(t2t('正在激活石化古树'))
                 self.lockOnFlag = 0
                 self.current_state = ST.IN_FINGING_TREE
 
@@ -337,7 +337,7 @@ class DomainFlow(BaseThreading):
                 self.current_state = ST.END_GETTING_REAWARD
 
             elif self.current_state == ST.END_GETTING_REAWARD:
-                logger.info(_('秘境结束。'))
+                logger.info(t2t('秘境结束。'))
                 # logger.info('domain over. restart next domain in 5 sec.')
                 self.current_state = ST.END_DOMAIN
 
@@ -348,7 +348,7 @@ class DomainFlow(BaseThreading):
                 cap = self.itt.capture()
                 cap = self.itt.png2jpg(cap, channel='ui')
                 if self.last_domain_times >= 1:
-                    logger.info(_('开始下一次秘境'))
+                    logger.info(t2t('开始下一次秘境'))
                     # logger.info('start next domain.')
                     self.last_domain_times -= 1
                     while 1:
@@ -362,7 +362,7 @@ class DomainFlow(BaseThreading):
                     if self.checkup_stop_func():
                         break
                 else:
-                    logger.info(_('次数结束。退出秘境'))
+                    logger.info(t2t('次数结束。退出秘境'))
                     # logger.info('no more times. exit domain.')
                     while 1:
                         r = self.itt.appear_then_click(asset.exit_challenge)

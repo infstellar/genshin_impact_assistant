@@ -52,16 +52,16 @@ def import_current_module():
     except Exception as e:
         logger.critical(f"IMPORT ERROR: current_flow: {current_flow}")
         print(e)
-        input(_("Program stop."))
+        input(t2t("Program stop."))
 
 def switch_combat_loop():
     global t1, combat_flag
     if combat_flag:
-        logger.info(_('正在停止自动战斗'))
+        logger.info(t2t('正在停止自动战斗'))
         t1.stop_threading()
     else:
         import alpha_loop
-        logger.info(_('启动自动战斗'))
+        logger.info(t2t('启动自动战斗'))
         t1 = alpha_loop.AlphaLoop()
         t1.setDaemon(True)
         t1.start()
@@ -71,11 +71,11 @@ def switch_combat_loop():
 def switch_domain_loop():
     global t2, domain_flag
     if domain_flag:
-        logger.info(_('正在停止自动秘境'))
+        logger.info(t2t('正在停止自动秘境'))
         t2.stop_threading()
     else:
         import domain_flow
-        logger.info(_('启动自动秘境'))
+        logger.info(t2t('启动自动秘境'))
         t2 = domain_flow.DomainFlow()
         t2.setDaemon(True)
         t2.start()
@@ -84,10 +84,10 @@ def switch_domain_loop():
 def switch_collector_loop():
     global t3, collector_flag
     if collector_flag:
-        logger.info(_('正在停止自动采集'))
+        logger.info(t2t('正在停止自动采集'))
         t3.stop_threading()
     else:
-        logger.info(_('启动自动采集'))
+        logger.info(t2t('启动自动采集'))
         import collector_flow
         t3 = collector_flow.CollectorFlow()
         t3.setDaemon(True)
@@ -133,7 +133,7 @@ def listening():
         time.sleep(0.2)
         if icm:
             import_current_module()
-            logger.info(_("导入完成"))
+            logger.info(t2t("导入完成"))
             icm = False
         # webio.log_handler.webio_poster('213')
 

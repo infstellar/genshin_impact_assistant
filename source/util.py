@@ -73,16 +73,16 @@ if global_lang == "$locale$":
     logger.info(f"language set as: {global_lang}")
 l10n = gettext.translation(global_lang, localedir=os.path.join(root_path, "translation/locale"), languages=[global_lang])
 l10n.install()
-_ = l10n.gettext
+t2t = l10n.gettext
 # load translation module over
 
 
 
 # verify path
 if not os.path.exists(root_path):
-    logger.error(_("目录不存在：") + root_path + _(" 请检查"))
+    logger.error(t2t("目录不存在：") + root_path + t2t(" 请检查"))
 if not os.path.exists(source_path):
-    logger.error(_("目录不存在：") + source_path + _(" 请检查"))
+    logger.error(t2t("目录不存在：") + source_path + t2t(" 请检查"))
 # verify path over
 
 
@@ -95,7 +95,7 @@ def is_admin():
     except:
         return False
 if not is_admin():
-    logger.error(_("请用管理员权限运行"))
+    logger.error(t2t("请用管理员权限运行"))
 # verify administration over
 
 

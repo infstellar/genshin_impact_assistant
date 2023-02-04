@@ -1,7 +1,7 @@
 from source.util import *
-_("day(s)")
-_("success rate")
-_("total num")
-_("success num")
-_("fail num")
-_("Within")
+t2t("day(s)")
+t2t("success rate")
+t2t("total num")
+t2t("success num")
+t2t("fail num")
+t2t("Within")

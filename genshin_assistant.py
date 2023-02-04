@@ -17,25 +17,25 @@ threading.Thread(target=server_thread, daemon=False).start()
 import source.util
 
 
-source.util.logger.info(source.util._('正在初始化，请稍后'))
+source.util.logger.info(source.util.t2t('正在初始化，请稍后'))
 # source.unit.logger.info('Initializing, please hold on')
 
 
 try:
     import source.listening
 except Exception as error:
-    source.util.logger.critical(source.util._("导入依赖时错误; err code: 001_1"))
+    source.util.logger.critical(source.util.t2t("导入依赖时错误; err code: 001_1"))
     source.util.logger.exception(error)
-    input(source.util._('程序暂停。按任意键退出'))
+    input(source.util.t2t('程序暂停。按任意键退出'))
 
 try:
     import source.generic_event
 except Exception as error:
-    source.util.logger.critical(source.util._("导入依赖时错误; err code: 001_2"))
+    source.util.logger.critical(source.util.t2t("导入依赖时错误; err code: 001_2"))
     source.util.logger.exception(error)
-    input(source.util._('程序暂停。按任意键退出'))
+    input(source.util.t2t('程序暂停。按任意键退出'))
 
-source.util.logger.info(source.util._('初始化完成'))
-source.util.logger.info(source.util._("正在等待webio启动"))
-source.util.logger.info(source.util._("启动键盘监听"))
+source.util.logger.info(source.util.t2t('初始化完成'))
+source.util.logger.info(source.util.t2t("正在等待webio启动"))
+source.util.logger.info(source.util.t2t("启动键盘监听"))
 source.listening.listening()

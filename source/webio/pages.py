@@ -41,17 +41,17 @@ class MainPage(Page):
             try:
                 pin.pin['isSessionExist']
             except SessionNotFoundException:
-                logger.info(_("未找到会话，可能由于窗口关闭。请刷新页面重试。"))
+                logger.info(t2t("未找到会话，可能由于窗口关闭。请刷新页面重试。"))
                 return
             except SessionClosedException:
-                logger.info(_("未找到会话，可能由于窗口关闭。请刷新页面重试。"))
+                logger.info(t2t("未找到会话，可能由于窗口关闭。请刷新页面重试。"))
                 return
             if pin.pin['FlowMode'] != listening.current_flow:  # 比较变更是否被应用
                 listening.current_flow = pin.pin['FlowMode']  # 应用变更
                 self.log_list_lock.acquire()
-                output.put_text(_("正在导入模块, 可能需要一些时间。"), scope='LogArea').style(
+                output.put_text(t2t("正在导入模块, 可能需要一些时间。"), scope='LogArea').style(
                     f'color: black; font_size: 20px')
-                output.put_text(_("在导入完成前，请不要切换页面。"), scope='LogArea').style(
+                output.put_text(t2t("在导入完成前，请不要切换页面。"), scope='LogArea').style(
                     f'color: black; font_size: 20px')
                 self.log_list_lock.release()
                 listening.call_you_import_module()
@@ -92,28 +92,28 @@ class MainPage(Page):
             
             output.put_buttons(self._value_list2buttons_type(list(manager.page_dict)), onclick=webio.manager.load_page, scope=self.main_scope),
             # 获得链接按钮
-            output.put_button(label=_("Get IP address"), onclick=self.on_click_ip_address, scope=self.main_scope)
+            output.put_button(label=t2t("Get IP address"), onclick=self.on_click_ip_address, scope=self.main_scope)
 
         ], scope=self.main_scope)
 
         output.put_row([  # 横列
             output.put_column([  # 左竖列
-                output.put_markdown(_('## Options')),  # 左竖列标题
+                output.put_markdown(t2t('## Options')),  # 左竖列标题
 
                 output.put_row([  # FlowMode
-                    output.put_text(_('FlowMode')),
+                    output.put_text(t2t('FlowMode')),
                     pin.put_select(('FlowMode'), [
-                        {'label': _('Idle'), 'value': listening.FLOW_IDLE},
-                        {'label': _('AutoCombat'), 'value': listening.FLOW_COMBAT},
-                        {'label': _('AutoDomain'), 'value': listening.FLOW_DOMAIN},
-                        {'label': _('AutoCollector'), 'value': listening.FLOW_COLLECTOR}
+                        {'label': t2t('Idle'), 'value': listening.FLOW_IDLE},
+                        {'label': t2t('AutoCombat'), 'value': listening.FLOW_COMBAT},
+                        {'label': t2t('AutoDomain'), 'value': listening.FLOW_DOMAIN},
+                        {'label': t2t('AutoCollector'), 'value': listening.FLOW_COLLECTOR}
                     ])]),
                 # Button_StartStop
-                output.put_row([output.put_text(_('启动/停止')), output.put_scope('Button_StartStop')]),
+                output.put_row([output.put_text(t2t('启动/停止')), output.put_scope('Button_StartStop')]),
 
-                output.put_markdown(_('## Statement')),
+                output.put_markdown(t2t('## Statement')),
 
-                output.put_row([output.put_text(_('当前状态')), output.put_scope('StateArea')])
+                output.put_row([output.put_text(t2t('当前状态')), output.put_scope('StateArea')])
 
             ]), None,
             output.put_scope('Log')
@@ -127,7 +127,7 @@ class MainPage(Page):
                           scope='Button_StartStop')
 
         # Log
-        output.put_markdown(_('## Log'), scope='Log')
+        output.put_markdown(t2t('## Log'), scope='Log')
         output.put_scrollable(output.put_scope('LogArea'), height=600, keep_bottom=True, scope='Log')
         '''self.main_pin_change_thread = threading.Thread(target=self._main_pin_change_thread, daemon=False)
         self.main_pin_change_thread.start()'''
@@ -145,8 +145,8 @@ class MainPage(Page):
 
     def on_click_ip_address(self):
         LAN_ip = f"{socket.gethostbyname(socket.gethostname())}{session.info.server_host[session.info.server_host.index(':'):]}"
-        WAN_ip = _("Not Enabled")
-        output_text = _('LAN IP') + " : " + LAN_ip + '\n' + _("WAN IP") + ' : ' + WAN_ip
+        WAN_ip = t2t("Not Enabled")
+        output_text = t2t('LAN IP') + " : " + LAN_ip + '\n' + t2t("WAN IP") + ' : ' + WAN_ip
         output.popup(f'ip address', output_text, size=output.PopupSize.SMALL)
 
     def logout(self, text: str, color='black'):
@@ -188,13 +188,13 @@ class ConfigPage(Page):
         self.last_file = None
 
         # 标题
-        output.put_markdown(_('# Config'), scope=self.main_scope)
+        output.put_markdown(t2t('# Config'), scope=self.main_scope)
 
         # 页面切换按钮
         output.put_buttons(self._value_list2buttons_type(list(manager.page_dict)), onclick=webio.manager.load_page, scope=self.main_scope)
 
         # 配置页
-        output.put_markdown(_('## config:'), scope=self.main_scope)
+        output.put_markdown(t2t('## config:'), scope=self.main_scope)
 
         output.put_scope("select_scope", scope=self.main_scope)
         pin.put_select('file', self._config_file2lableAfile(self.config_files), scope="select_scope")
@@ -208,22 +208,22 @@ class ConfigPage(Page):
 
     def _config_file2lableAfile(self, l1):
         replace_dict = {
-            "auto_aim.json": _("auto_aim.json"),
-            "auto_collector.json": _("auto_collector.json"),
-            "auto_combat.json": _("auto_combat.json"),
-            "auto_domain.json": _("auto_domain.json"),
-            "auto_pickup.json": _("auto_pickup.json"),
-            "auto_pickup_default_blacklist.json": _("auto_pickup_default_blacklist.json"),
-            "config.json": _("config.json"),
-            "keymap.json": _("keymap.json"),
-            "character.json": _("character.json"),
-            "character_dist.json": _("character_dist.json"),
-            "team.json": _("team.json"),
-            "team_example_2.json": _("team_example_2.json"),
-            "collected.json": _("collected.json"),
-            "collection_blacklist.json": _("collection_blacklist.json"),
-            "collection_log.json": _("collection_log.json"),
-            "auto_collector.json": _("auto_collector.json")
+            "auto_aim.json": t2t("auto_aim.json"),
+            "auto_collector.json": t2t("auto_collector.json"),
+            "auto_combat.json": t2t("auto_combat.json"),
+            "auto_domain.json": t2t("auto_domain.json"),
+            "auto_pickup.json": t2t("auto_pickup.json"),
+            "auto_pickup_default_blacklist.json": t2t("auto_pickup_default_blacklist.json"),
+            "config.json": t2t("config.json"),
+            "keymap.json": t2t("keymap.json"),
+            "character.json": t2t("character.json"),
+            "character_dist.json": t2t("character_dist.json"),
+            "team.json": t2t("team.json"),
+            "team_example_2.json": t2t("team_example_2.json"),
+            "collected.json": t2t("collected.json"),
+            "collection_blacklist.json": t2t("collection_blacklist.json"),
+            "collection_log.json": t2t("collection_log.json"),
+            "auto_collector.json": t2t("auto_collector.json")
         }
         
         for i in range(len(l1)):
@@ -247,7 +247,7 @@ class ConfigPage(Page):
             try:
                 pin.pin['isSessionExist']
             except SessionNotFoundException:
-                logger.info(_("未找到会话，可能由于窗口关闭。请刷新页面重试。"))
+                logger.info(t2t("未找到会话，可能由于窗口关闭。请刷新页面重试。"))
                 return
                 
             if pin.pin['file'] != self.last_file:  # 当下拉框被更改时
@@ -299,7 +299,7 @@ class ConfigPage(Page):
 
         json.dump(self.get_json(j), open(self.file_name, 'w', encoding='utf8'), ensure_ascii=False, indent=4)
         # output.put_text('saved!', scope='now')
-        output.toast(_('saved!'))
+        output.toast(t2t('saved!'))
 
     # 
     def get_json(self, j: dict, add_name=''):
@@ -341,8 +341,8 @@ class ConfigPage(Page):
             self.exit_popup = True
             if not is_json_equal(json.dumps(self.get_json(j)), json.dumps(j)):
                 self.exit_popup = False
-                output.popup(_('Do you need to save changes?'), [
-                    output.put_buttons([(_('No'), 'No'), (_('Yes'), 'Yes')], onclick=self.popup_button)
+                output.popup(t2t('Do you need to save changes?'), [
+                    output.put_buttons([(t2t('No'), 'No'), (t2t('Yes'), 'Yes')], onclick=self.popup_button)
                 ])
             while not self.exit_popup:
                 time.sleep(0.1)
@@ -498,13 +498,13 @@ class SettingPage(ConfigPage):
         self.last_file = None
 
         # 标题
-        output.put_markdown(_('# Setting'), scope=self.main_scope)
+        output.put_markdown(t2t('# Setting'), scope=self.main_scope)
 
         # 页面切换按钮
         output.put_buttons(self._value_list2buttons_type(list(manager.page_dict)), onclick=webio.manager.load_page, scope=self.main_scope)
 
         # 配置页
-        output.put_markdown(_('## config:'), scope=self.main_scope)
+        output.put_markdown(t2t('## config:'), scope=self.main_scope)
         output.put_scope("select_scope", scope=self.main_scope)
 
         pin.put_select('file', self._config_file2lableAfile(self.config_files), scope="select_scope", value="config\\settings\\config.json")
@@ -532,24 +532,24 @@ class CombatSettingPage(ConfigPage):
         self.last_file = None
 
         # 标题
-        output.put_markdown(_('# CombatSetting'), scope=self.main_scope)
+        output.put_markdown(t2t('# CombatSetting'), scope=self.main_scope)
 
         # 页面切换按钮
         output.put_buttons(self._value_list2buttons_type(list(manager.page_dict)), onclick=webio.manager.load_page, scope=self.main_scope)
 
         # 添加team.json
-        output.put_markdown(_('# Add team'), scope=self.main_scope)
+        output.put_markdown(t2t('# Add team'), scope=self.main_scope)
 
         # 添加team.json按钮
         output.put_row([
-            output.put_button(_("Add team"), onclick=self.onclick_add_teamjson, scope=self.main_scope),
+            output.put_button(t2t("Add team"), onclick=self.onclick_add_teamjson, scope=self.main_scope),
             None,
-            output.put_button(_("Add team with characters"), onclick=self.onclick_add_teamjson_withcharacters,
+            output.put_button(t2t("Add team with characters"), onclick=self.onclick_add_teamjson_withcharacters,
                               scope=self.main_scope)],
             scope=self.main_scope, size="10% 10px 20%")
 
         # 配置页
-        output.put_markdown(_('## config:'), scope=self.main_scope)
+        output.put_markdown(t2t('## config:'), scope=self.main_scope)
         output.put_scope("select_scope", scope=self.main_scope)
         pin.put_select('file', self._config_file2lableAfile(self.config_files), scope="select_scope", value="config\\settings\\auto_combat.json")
 
@@ -589,13 +589,13 @@ class CollectorSettingPage(ConfigPage):
         self.last_file = None
 
         # 标题
-        output.put_markdown('# ' + _('CollectorSetting'), scope=self.main_scope)
+        output.put_markdown('# ' + t2t('CollectorSetting'), scope=self.main_scope)
 
         # 页面切换按钮
         output.put_buttons(self._value_list2buttons_type(list(manager.page_dict)), onclick=webio.manager.load_page, scope=self.main_scope)
 
         # 配置页
-        output.put_markdown(_('## config:'), scope=self.main_scope)
+        output.put_markdown(t2t('## config:'), scope=self.main_scope)
         output.put_scope("select_scope", scope=self.main_scope)
         pin.put_select('file', self._config_file2lableAfile(self.config_files), scope="select_scope", value="config\\settings\\auto_collector.json")
     
@@ -656,7 +656,7 @@ class CollectorSettingPage(ConfigPage):
                     ctime = v[iii]["time"][:v[iii]["time"].index('.')]
                     show_list.append( [v[iii]["error_code"], v[iii]["id"], v[iii]["picked item"], ctime, 
                                  output.put_buttons([
-                                     (_("Add to blacklist"), f"$AddToBlackList$#{display_name}#{v[iii]['id']}"),
+                                     (t2t("Add to blacklist"), f"$AddToBlackList$#{display_name}#{v[iii]['id']}"),
                                      # (_("Add to collected"), f"$AddToCollected$#{display_name}#{v[iii]['id']}")
                                      ],
                                  onclick=self._on_click_collectionlog, small=True)])
@@ -664,12 +664,12 @@ class CollectorSettingPage(ConfigPage):
                 b1,b2,b3,b4 = collector_lib.col_succ_times_from_log(display_name, day=7)
                 c1,c2,c3,c4 = collector_lib.col_succ_times_from_log(display_name, day=15)
                 d1,d2,d3,d4 = collector_lib.col_succ_times_from_log(display_name, day=900)
-                output.put_collapse(_("展开/收起"), [
+                output.put_collapse(t2t("展开/收起"), [
                     
-                    output.put_text(f"{_('Within')} 1   {_('day(s)')} {_('success rate')}:{a1} {_('total num')}:{a2} {_('success num')}:{a3} {_('fail num')}:{a4}"),
-                    output.put_text(f"{_('Within')} 7   {_('day(s)')} {_('success rate')}:{b1} {_('total num')}:{b2} {_('success num')}:{b3} {_('fail num')}:{b4}"),
-                    output.put_text(f"{_('Within')} 15  {_('day(s)')} {_('success rate')}:{c1} {_('total num')}:{c2} {_('success num')}:{c3} {_('fail num')}:{c4}"),
-                    output.put_text(f"{_('Within')} 900 {_('day(s)')} {_('success rate')}:{d1} {_('total num')}:{d2} {_('success num')}:{d3} {_('fail num')}:{d4}"),
+                    output.put_text(f"{t2t('Within')} 1   {t2t('day(s)')} {t2t('success rate')}:{a1} {t2t('total num')}:{a2} {t2t('success num')}:{a3} {t2t('fail num')}:{a4}"),
+                    output.put_text(f"{t2t('Within')} 7   {t2t('day(s)')} {t2t('success rate')}:{b1} {t2t('total num')}:{b2} {t2t('success num')}:{b3} {t2t('fail num')}:{b4}"),
+                    output.put_text(f"{t2t('Within')} 15  {t2t('day(s)')} {t2t('success rate')}:{c1} {t2t('total num')}:{c2} {t2t('success num')}:{c3} {t2t('fail num')}:{c4}"),
+                    output.put_text(f"{t2t('Within')} 900 {t2t('day(s)')} {t2t('success rate')}:{d1} {t2t('total num')}:{d2} {t2t('success num')}:{d3} {t2t('fail num')}:{d4}"),
                     output.put_table(show_list, header=["error_code", "id", "picked item", "time", "buttons"])
                 ], scope=scope_name)
                 
@@ -699,7 +699,7 @@ class CollectorSettingPage(ConfigPage):
                 output.put_row([
                     pin.put_textarea(component_name, label=display_name, value=list2format_list_text(v)),
                     None,
-                    output.put_button(_("clean list"), onclick=lambda:self._reset_list_textarea(component_name))
+                    output.put_button(t2t("clean list"), onclick=lambda:self._reset_list_textarea(component_name))
                     ]
                 , scope=scope_name,size="85% 5% 10%")
             elif "collection_log.json" in self.file_name:
@@ -711,7 +711,7 @@ class CollectorSettingPage(ConfigPage):
     def _onchange_collection_name(self, x):
         if x in self.collection_names:
             output.clear_scope("PREDICT_AND_VERIFY_01_scope")
-            output.put_text(_("Verified!"), scope="PREDICT_AND_VERIFY_01_scope").style(f'color: green; font_size: 20px')
+            output.put_text(t2t("Verified!"), scope="PREDICT_AND_VERIFY_01_scope").style(f'color: green; font_size: 20px')
             return
         else:
             f1 = False
@@ -720,17 +720,17 @@ class CollectorSettingPage(ConfigPage):
                 if x in i:
                     f1 = True
                     output.clear_scope("PREDICT_AND_VERIFY_01_scope")
-                    output.put_text(_("Waiting..."), scope="PREDICT_AND_VERIFY_01_scope").style(f'color: black; font_size: 20px')
+                    output.put_text(t2t("Waiting..."), scope="PREDICT_AND_VERIFY_01_scope").style(f'color: black; font_size: 20px')
                     if len(sl)<=15:
                         sl.append(i)
             
         if f1:
-            output.put_text(_("You may want to enter: "), scope="PREDICT_AND_VERIFY_01_scope").style(f'color: black; font_size: 20px')
+            output.put_text(t2t("You may want to enter: "), scope="PREDICT_AND_VERIFY_01_scope").style(f'color: black; font_size: 20px')
             for i in sl:
                 output.put_text(i, scope="PREDICT_AND_VERIFY_01_scope").style(f'color: black; font_size: 12px; font-style:italic')
         else:
             output.clear_scope("PREDICT_AND_VERIFY_01_scope")
-            output.put_text(_("Not a valid name"), scope="PREDICT_AND_VERIFY_01_scope").style(f'color: red; font_size: 20px')
+            output.put_text(t2t("Not a valid name"), scope="PREDICT_AND_VERIFY_01_scope").style(f'color: red; font_size: 20px')
     
     def _show_str(self, doc_items, component_name, display_name, scope_name, v, doc_special):
         if doc_items:
