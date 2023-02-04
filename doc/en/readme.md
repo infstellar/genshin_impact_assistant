@@ -157,6 +157,8 @@ If you encounter problems during use, you can take a look at the FAQ first:
 
 - [GenshinImpact AutoTrack DLL for coordinate positioning based on image algorithm](https://github.com/GengGode/GenshinImpact_AutoTrack_DLL)
 
+Original address: https://github.com/GengGode/GenshinImpact_AutoTrack_DLL
+
 - [Kongying Tavern Yuanshen Map kongying-tavern/yuan-shen-map](https://github.com/kongying-tavern/yuan-shen-map)
 
 - [Alas referenced automatic installation and code implementation](https://github.com/LmeSzinc/AzurLaneAutoScript)

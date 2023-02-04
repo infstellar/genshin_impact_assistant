@@ -148,7 +148,9 @@ To没用过github的小伙伴: 描述文档中的蓝色文字是链接,可以打
 
 #### 特别感谢
 
-- [原神-基于图像算法的坐标定位 GenshinImpact AutoTrack DLL](https://github.com/GengGode/GenshinImpact_AutoTrack_DLL)
+- [原神-基于图像算法的坐标定位 GenshinImpact AutoTrack DLL](https://github.com/GengGode/cvAutoTrack)
+
+原地址：https://github.com/GengGode/GenshinImpact_AutoTrack_DLL
 
 - [空荧酒馆原神地图 kongying-tavern/yuan-shen-map](https://github.com/kongying-tavern/yuan-shen-map)
 
