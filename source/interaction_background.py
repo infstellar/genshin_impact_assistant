@@ -117,7 +117,7 @@ class InteractionBGD:
             self.ReleaseDC(handle, dc)
             # 返回截图数据为numpy.ndarray
             ret = np.frombuffer(buffer, dtype=np.uint8).reshape(height, width, 4)
-            img_manager.qshow(ret)
+            # img_manager.qshow(ret)
             return ret
         elif config_json["capture_mode"] == "compatibility":
             wx, wy, w, h = win32gui.GetWindowRect(self.handle)
@@ -125,7 +125,7 @@ class InteractionBGD:
             
             r = crop(r, area=[wx,wy,wx+w,wy+h])
             r = cv2.cvtColor(r, cv2.COLOR_RGB2BGR)
-            img_manager.qshow(r)
+            # img_manager.qshow(r)
             print()
             return r
     
