@@ -31,6 +31,7 @@ posi_chara_list = [[218, 1779, 218 + 68, 1779 + 61], [218 + ly, 1779, 218 + ly +
                    [218 + 3 * ly, 1779, 218 + 3 * ly + 68, 1779 + 61]]
 # posi_chara_q=[915+d2x,1766+d2y,1015,1866]
 posi_chara_q = [1788,943, 1845, 1002 ]
+posi_complete_chara_q = [1763,916, 1876, 1026 ]
 posi_chara_q_point = [981, 1812]
 posi_chara_e = [1666,965, 1716, 1015 ]
 posi_chara_smaller_e = [1671,974, 1710, 1013 ]

@@ -1,5 +1,6 @@
 {
   "ChromelessWindow": false,
+  "using_alpha_channel": true,
   "DEBUG": false,
   "corr_degree": 0.95,
   "device_paddle": "cpu",
@@ -8,5 +9,7 @@
   "check_import": false,
   "lang":"$locale$",
   "cloud_genshin": false,
-  "capture_mode":"fast"
+  "capture_mode":"fast",
+  "determining_strict_weight":0.9
+
 }

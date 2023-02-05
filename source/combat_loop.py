@@ -10,7 +10,7 @@ import combat_lib
 import img_manager
 import button_manager
 import asset
-from path_lib import CONFIG_SETTING_PATH
+from path_lib import CONFIGPATH_SETTING
 
 CHARACTER_DIED = 1
 
@@ -23,7 +23,7 @@ def stop_func_example():  # True:stop;False:continue
 
 
 def get_chara_list(team_name='team.json'):
-    team_name = load_json("auto_combat.json",CONFIG_SETTING_PATH)["teamfile"]
+    team_name = load_json("auto_combat.json",CONFIGPATH_SETTING)["teamfile"]
     dpath = "config\\tactic"
     
     team = load_json(team_name, default_path=dpath)

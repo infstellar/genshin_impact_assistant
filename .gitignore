@@ -202,3 +202,4 @@ assets/inference/en_US/*
 source/git_downloader.py
 cvAutoTrack_Cache.xml
 source/test239.py
+source/test240.py

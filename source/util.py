@@ -9,7 +9,10 @@ import numpy as np
 import gettext
 from loguru import logger
 
+
+
 time.time()  # 防自动删除
+
 
 # configurate paths
 try:
@@ -260,6 +263,12 @@ def crop(image, area):
     if sum(border) > 0:
         image = cv2.copyMakeBorder(image, *border, borderType=cv2.BORDER_CONSTANT, value=(0, 0, 0))
     return image
+
+def recorp(image, size, area):
+    r = np.zeros((size[1], size[0], size[2]), dtype='uint8')
+    r[area[1]:area[3], area[0]:area[2], :] = image
+    return r
+    
 
 def get_color(image, area):
     """Calculate the average color of a particular area of the image.

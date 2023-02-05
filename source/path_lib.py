@@ -7,4 +7,5 @@ if sys.path[0] != root_path:
 if sys.path[1] != source_path:
     sys.path.insert(1, source_path)
     
-CONFIG_SETTING_PATH = os.path.join(root_path,"config\\settings")
+CONFIGPATH_SETTING = os.path.join(root_path,"config\\settings")
+JSONNAME_CONFIG = "config.json"

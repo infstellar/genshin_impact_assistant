@@ -13,9 +13,11 @@ from timer_module import Timer
 from util import *
 import cv2
 import combat_lib
+from path_lib import *
 
 E_STRICT_MODE = True  # may cause more performance overhead
-
+DETERMINING_WEIGHT = load_json(JSONNAME_CONFIG, CONFIGPATH_SETTING)["determining_strict_weight"]
+USING_ALPHA_CHANNEL = load_json(JSONNAME_CONFIG, CONFIGPATH_SETTING)["using_alpha_channel"]
 
 def stop_func_example():  # True:stop;False:continue
     return False
@@ -299,7 +301,7 @@ class TacticOperator(BaseThreading):
             return 0
         self.itt.key_press('r')
 
-    def is_q_ready(self, is_show=False):
+    def is_q_ready(self, show_res=False):
         """Check Q-State by image recognition
 
         Args:
@@ -308,21 +310,63 @@ class TacticOperator(BaseThreading):
         Returns:
             bool: Whether Q-Skill can be triggered
         """
-        cap = self.itt.capture(posi=posi_manager.posi_chara_q)
-        cap = self.itt.png2jpg(cap, channel='ui', alpha_num=200)  # BEFOREV3D1
-        if is_show:
-            cv2.imshow("is_q_ready", cap)
-            cv2.waitKey(10)
-        # cap = self.itt.png2jpg(cap, channel='bg', alpha_num=160)
-        # img_manager.qshow(cap)
-        # p = posi_manager.posi_chara_q_point
-        if cap.max() > 10:
-            # print(cap.max())
-            return True
-
+        if USING_ALPHA_CHANNEL:
+            cap = self.itt.capture()
+            cap = self.itt.png2jpg(cap, channel='ui', alpha_num=200)  # BEFOREV3D1
         else:
-            # print(cap.max())
-            return False
+            cap = self.itt.capture(jpgmode=0)
+        
+        imsrc = cap
+        imsrc_q_skill = crop(imsrc, posi_manager.posi_complete_chara_q)
+        mask = np.zeros_like(imsrc_q_skill[:,:,0])
+        hh, ww = imsrc_q_skill.shape[:2]
+        xc = hh // 2
+        yc = ww // 2
+        radius1 = 55
+        radius2 = 47
+        cv2.circle(mask, (xc,yc), radius1, (255,255,255), -1)
+        cv2.circle(mask, (xc,yc), radius2, (0,0,0), -1)
+        # mask = cv2.subtract(mask2, mask1)
+        res1 = cv2.bitwise_and(imsrc_q_skill,imsrc_q_skill,mask=mask)
+        # res1 = imsrc_q_skill.copy()
+        HUE_DELTA = 5
+        fire_lower = np.array([9-HUE_DELTA,100,100])
+        fire_upper = np.array([9+HUE_DELTA,255,255])
+
+        rock_lower = np.array([21-HUE_DELTA,100,100])
+        rock_upper = np.array([21+HUE_DELTA,255,255])
+
+        water_lower = np.array([17-HUE_DELTA,100,100])
+        water_upper = np.array([17+HUE_DELTA,255,255])
+
+        wind_lower = np.array([17-HUE_DELTA,100,100])
+        wind_upper = np.array([17+HUE_DELTA,255,255])
+
+        hsv = cv2.cvtColor(res1.copy(), cv2.COLOR_BGR2HSV)
+
+        mask2 = cv2.inRange(hsv, fire_lower, fire_upper)
+        res = len(np.where(mask2==255)[0])
+        if show_res:
+            print(f"num: {res}")
+            # res2 = cv2.bitwise_and(hsv,hsv, mask=mask2)
+            cv2.imshow("res", mask2)
+            cv2.waitKey(100)
+        r = res>=(2520*DETERMINING_WEIGHT)
+        return r
+            
+        # if is_show:
+        #     cv2.imshow("is_q_ready", cap)
+        #     cv2.waitKey(10)
+        # # cap = self.itt.png2jpg(cap, channel='bg', alpha_num=160)
+        # # img_manager.qshow(cap)
+        # # p = posi_manager.posi_chara_q_point
+        # if cap.max() > 10:
+        #     # print(cap.max())
+        #     return True
+
+        # else:
+        #     # print(cap.max())
+        #     return False
 
     def estimate_e_ready(self, tactic):
         is_ready = self.character.is_E_ready()
