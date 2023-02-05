@@ -9,16 +9,88 @@ from util import *
 from base_threading import BaseThreading
 import numpy as np
 import timer_module
+import character
 
 """
 战斗相关常用函数库。
 """
 
-global only_arrow_timer
+global only_arrow_timer, characters
 only_arrow_timer = timer_module.Timer()
+characters = load_json("character.json", default_path="config\\tactic")
 
 def default_stop_func():
     return False
+
+class TacticKeyNotFoundError(RuntimeError):
+    def __init__(self, arg):
+        self.args = arg
+
+CREATE_WHEN_NOTFOUND = 0
+RAISE_WHEN_NOTFOUND = 1
+
+
+def get_param(team_item, para_name, auto_fill_flag, chara_name="", exception_mode = RAISE_WHEN_NOTFOUND, value_when_empty = None):
+    if para_name not in team_item:
+        if exception_mode == RAISE_WHEN_NOTFOUND:
+            logger.error(f"{t2t('Tactic ERROR: INDEX NOT FOUND')}")
+            raise TacticKeyNotFoundError(f"Key: {para_name}")
+        elif exception_mode == CREATE_WHEN_NOTFOUND:
+            pass
+    else:
+        if not auto_fill_flag:
+            r = team_item[para_name]
+        else:
+            r = characters[chara_name]
+    if value_when_empty != None:
+        if r == '' or r == None:
+            r = value_when_empty
+    logger.debug(f"character: {chara_name} para_name: {para_name} value: {r}")
+    return r
+
+def get_chara_list(team_name='team.json'):
+    team_name = load_json("auto_combat.json",CONFIGPATH_SETTING)["teamfile"]
+    dpath = "config\\tactic"
+    
+    team = load_json(team_name, default_path=dpath)
+    # characters = load_json("character.json", default_path=dpath)
+    chara_list = []
+    for team_name in team:
+        team_item = team[team_name]
+        autofill_flag = False
+        # autofill_flag = team_item["autofill"]
+        cname = get_param(team_item, "cname", autofill_flag, chara_name="")
+        cposition = get_param(team_item, "position", autofill_flag, chara_name=cname)
+        cpriority = get_param(team_item, "priority", autofill_flag, chara_name=cname)
+        cE_short_cd_time = get_param(team_item, "E_short_cd_time", autofill_flag, chara_name=cname)
+        cE_long_cd_time = get_param(team_item, "E_long_cd_time", autofill_flag, chara_name=cname)
+        cElast_time = get_param(team_item, "Elast_time", autofill_flag, chara_name=cname)
+        cEcd_float_time = get_param(team_item, "Ecd_float_time", autofill_flag, chara_name=cname)
+        cn = get_param(team_item, "n", autofill_flag, chara_name=cname)
+        try:
+            ctactic_group = team_item["tactic_group"]
+        except:
+            ctactic_group = team_item["tastic_group"]
+            logger.warning(t2t("请将配对文件中的tastic_group更名为tactic_group. 已自动识别。"))
+            
+        ctrigger = get_param(team_item, "trigger", autofill_flag, chara_name=cname, value_when_empty="e_ready")
+        cEpress_time = get_param(team_item, "Epress_time", autofill_flag, chara_name=cname, value_when_empty=2)
+        cQlast_time = get_param(team_item, "Qlast_time", autofill_flag, chara_name=cname, value_when_empty=5)
+        cQcd_time = get_param(team_item, "Qcd_time", autofill_flag, chara_name=cname, value_when_empty=12)
+        
+        
+        if cEcd_float_time > 0:
+            logger.info(t2t("角色 ") + cname + t2t(" 的Ecd_float_time大于0，请确定该角色不是多段e技能角色。"))
+
+        chara_list.append(
+            character.Character(
+                name=cname, position=cposition, n=cn, priority=cpriority,
+                E_short_cd_time=cE_short_cd_time, E_long_cd_time=cE_long_cd_time, Elast_time=cElast_time,
+                Ecd_float_time=cEcd_float_time, tactic_group=ctactic_group, trigger=ctrigger,
+                Epress_time=cEpress_time, Qlast_time=cQlast_time, Qcd_time=cQcd_time
+            )
+        )
+    return chara_list
 
 def unconventionality_situation_detection(itt: InteractionBGD,
                                            autoDispose=True):

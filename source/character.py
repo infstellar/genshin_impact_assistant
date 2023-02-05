@@ -51,8 +51,12 @@ class Character:
         self.Ecd_timer = Timer(diff_start_time=self.Ecd_time)
         self.Elast_timer = Timer(diff_start_time=Elast_time)
         self.Qlast_timer = Timer(diff_start_time=Qlast_time)
+        
+        
 
-        self._init_log()
+        
+        # self._init_log()
+        self.trigger_list = []
         self._trigger_analyse()
 
     def _init_log(self):
@@ -94,13 +98,27 @@ class Character:
         """
         将str分析为函数，并加入trigger。
         """
-        if self.triggers == 'e_ready':
-            self.trigger = self._trigger_e_ready
-        elif self.triggers == 'q_ready':
-            self.trigger = self._trigger_q_ready
-        elif self.triggers == 'idle':
-            self.trigger = self._trigger_idle
+        # if self.triggers == 'e_ready':
+        #     self.trigger = self._trigger_e_ready
+        # elif self.triggers == 'q_ready':
+        #     self.trigger = self._trigger_q_ready
+        # elif self.triggers == 'idle':
+        #     self.trigger = self._trigger_idle
+        ctriggers = self.trigger_list.split(',')
+        if 'e_ready' in ctriggers:
+            self.trigger_list.append(self._trigger_e_ready)
+        elif 'q_ready' in ctriggers:
+             self.trigger_list.append(self._trigger_q_ready)
+        elif 'idle' in ctriggers:
+             self.trigger_list.append(self._trigger_idle)
 
+        self.trigger = self._is_trigger
+        
+    def _is_trigger(self):
+        for func_i in self.trigger_list:
+            if func_i():
+                return True
+    
     def get_Ecd_time(self):
         """获得该角色E技能cd剩余时间。
 
