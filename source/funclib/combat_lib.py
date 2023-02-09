@@ -1,10 +1,11 @@
 from source.manager import img_manager, posi_manager
-from source.interaction.interaction_background import InteractionBGD
+from source.interaction import interaction_core
 from source.util import *
 from source.common.base_threading import BaseThreading
 import numpy as np
 from source.base import timer_module
 from source.common import character
+from source.interaction import interaction_core
 
 """
 战斗相关常用函数库。
@@ -87,7 +88,7 @@ def get_chara_list(team_name='team.json'):
         )
     return chara_list
 
-def unconventionality_situation_detection(itt: InteractionBGD,
+def unconventionality_situation_detection(itt: interaction_core.InteractionBGD,
                                            autoDispose=True):
     # unconventionality situlation detection
     # situlation 1: coming_out_by_space
@@ -110,7 +111,7 @@ def unconventionality_situation_detection(itt: InteractionBGD,
 
     return situation_code
 
-def get_character_busy(itt: InteractionBGD, stop_func, print_log = True):
+def get_character_busy(itt: interaction_core.InteractionBGD, stop_func, print_log = True):
     cap = itt.capture(jpgmode=2)
     # cap = itt.png2jpg(cap, channel='ui')
     t1 = 0
@@ -137,7 +138,7 @@ def get_character_busy(itt: InteractionBGD, stop_func, print_log = True):
     else:
         return True
 
-def chara_waiting(itt:InteractionBGD, stop_func, mode=0):
+def chara_waiting(itt:interaction_core.InteractionBGD, stop_func, mode=0):
     unconventionality_situation_detection(itt)
     while get_character_busy(itt, stop_func) and (not stop_func()):
         if stop_func():
@@ -146,7 +147,7 @@ def chara_waiting(itt:InteractionBGD, stop_func, mode=0):
         logger.debug('waiting')
         itt.delay(0.1)
 
-def get_current_chara_num(itt: InteractionBGD, stop_func = default_stop_func):
+def get_current_chara_num(itt: interaction_core.InteractionBGD, stop_func = default_stop_func):
     """获得当前所选角色序号。
 
     Args:
@@ -168,7 +169,7 @@ def get_current_chara_num(itt: InteractionBGD, stop_func = default_stop_func):
     logger.warning(t2t("获得当前角色编号失败"))
     return 1
 
-def combat_statement_detection(itt: InteractionBGD):
+def combat_statement_detection(itt: interaction_core.InteractionBGD):
     
     im_src = itt.capture()
     orsrc = im_src.copy()
@@ -251,7 +252,7 @@ class CombatStatementDetectionLoop(BaseThreading):
     def __init__(self):
         super().__init__()
         self.setName("CombatStatementDetectionLoop")
-        self.itt = InteractionBGD()
+        self.itt = interaction_core.InteractionBGD()
         self.current_state = False
         self.state_counter = 0
         self.while_sleep = 0.1
@@ -311,7 +312,7 @@ CSDL = CombatStatementDetectionLoop()
 CSDL.start()
 
 if __name__ == '__main__':
-    itt = InteractionBGD()
+    itt = interaction_core.InteractionBGD()
     while 1:
         time.sleep(0.5)
         print(CSDL.get_combat_state())

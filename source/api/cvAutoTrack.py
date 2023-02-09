@@ -1,8 +1,8 @@
 from source.util import *
 from source.base import timer_module
-from manager import scene_manager
 from source.common.base_threading import BaseThreading
 from assets.AutoTrackDLLAPI.AutoTrackAPI import AutoTracker
+from source.funclib import scene_lib
 
 def del_log():
     logger.debug(t2t("cleaning cvautotrack files"))
@@ -92,7 +92,7 @@ class AutoTrackerLoop(BaseThreading):
             
             
             if not self.position[0]:
-                if scene_manager.get_current_pagename() == 'main':
+                if scene_lib.get_current_pagename() == 'main':
                     logger.warning("获取坐标失败")
                 else:
                     time.sleep(0.5)

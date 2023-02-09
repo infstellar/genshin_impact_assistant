@@ -1,6 +1,6 @@
 from source.util import *
 from source.common.base_threading import BaseThreading
-from source.interaction.interaction_background import InteractionBGD
+from source.interaction import interaction_core
 from source.funclib import generic_lib, movement, static_lib
 from source.manager import img_manager
 import numpy as np
@@ -24,7 +24,7 @@ class TeyvatMoveController(BaseThreading):
     def __init__(self):
         super().__init__()
         self.setName("TeyvatMoveController")
-        self.itt = InteractionBGD()
+        self.itt = interaction_core.InteractionBGD()
         self.priority_waypoints = load_json("priority_waypoints.json", default_path='assets')
         self.priority_waypoints_array = []
         for i in self.priority_waypoints:

@@ -1,7 +1,7 @@
 from source.manager.asset import *
 import cv2, numpy as np
-from source.interaction.interaction_background import InteractionBGD
-itt = InteractionBGD()
+from source.interaction import interaction_core
+itt = interaction_core.InteractionBGD()
 
 def recaputer(img_obj: img_manager.ImgIcon, lang):
     cap_imsrc = itt.capture(posi=img_obj.cap_posi, jpgmode=img_obj.jpgmode)

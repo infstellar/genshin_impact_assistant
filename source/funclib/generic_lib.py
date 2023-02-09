@@ -1,14 +1,14 @@
-from source.interaction.interaction_background import InteractionBGD
+from source.interaction import interaction_core
 from source.manager import scene_manager, img_manager, posi_manager, button_manager
-from source.funclib import big_map
-import static_lib
+from source.funclib import big_map, static_lib
 from source.util import *
+from source.funclib import scene_lib
 
 NORMAL = 0
 NEGATIVE_Y = 1
 NEGATIVE_X = 2
 NEGATIVE_XY = 3
-itt = InteractionBGD()
+itt = interaction_core.InteractionBGD()
 
 def f_recognition(mode='button_only'):
     if itt.get_img_existence(img_manager.F_BUTTON):
@@ -60,7 +60,7 @@ def points_angle(p1, p2, coordinate=NORMAL):
 
 def recover_all(stop_func):
     from source.api import pdocr_api
-    scene_manager.switch_to_page(scene_manager.page_bigmap, stop_func)
+    scene_lib.switch_to_page(scene_manager.page_bigmap, stop_func)
     gsp = big_map.get_middle_gs_point(stop_func)
     if len(gsp)==0:
         logger.info(t2t("获取传送锚点失败，正在重试"))
@@ -87,7 +87,7 @@ def recover_all(stop_func):
     
 
 def set_genshin_time(x=18, stop_func = scene_manager.default_stop_func): # 调整时间至夜晚
-    scene_manager.switch_to_page(scene_manager.page_time, stop_func)
+    scene_lib.switch_to_page(scene_manager.page_time, stop_func)
     time.sleep(0.8)
     itt.move_to(img_manager.ui_time_menu_core.cap_center_position_xy[0],
                 img_manager.ui_time_menu_core.cap_center_position_xy[1])
@@ -113,7 +113,7 @@ def set_genshin_time(x=18, stop_func = scene_manager.default_stop_func): # 调�
             break
         time.sleep(1)
     time.sleep(2)
-    scene_manager.switch_to_page(scene_manager.page_main, stop_func)
+    scene_lib.switch_to_page(scene_manager.page_main, stop_func)
 
 def f():
     return False

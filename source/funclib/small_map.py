@@ -1,8 +1,8 @@
-from source.interaction import interaction_background
+from source.interaction import interaction_core
 from source.manager import img_manager
 from source.util import *
 
-itt = interaction_background.InteractionBGD()
+itt = interaction_core.InteractionBGD()
 dx = 25
 dy = 25
 posi_map = [57 + dy, 15 + dx,278 - dy, 236 - dy ]
@@ -129,11 +129,11 @@ def jwa_3(imsrc):
     # return p,Line2Angle(p)
 
 
-def teyvat_smallmap_crusade_target_search(itt: interaction_background.InteractionBGD):
+def teyvat_smallmap_crusade_target_search(itt: interaction_core.InteractionBGD):
     imsrc = itt.capture(posi=posi_teyvat_map)
     imsrc = itt.png2jpg(imsrc, channel='ui')
     img_target = img_manager.smallmap_AbyssMage.image
-    r, pp = itt.similar_img(imsrc, img_target, ret_mode=interaction_background.IMG_POSI)
+    r, pp = itt.similar_img(imsrc, img_target, ret_mode=interaction_core.IMG_POSI)
     p = [0, 0]
     p[0] = pp[0] + img_target.shape[1] / 2
     p[1] = pp[1] + img_target.shape[0] / 2

@@ -2,9 +2,9 @@ import pyautogui
 
 from source.common import character
 from source.funclib import combat_lib
-import tactic_operator
+from source.operator import tactic_operator
 from source.common.base_threading import BaseThreading
-from source.interaction.interaction_background import InteractionBGD
+from source.interaction import interaction_core
 from source.base.timer_module import Timer
 from source.util import *
 
@@ -18,7 +18,7 @@ class SwitchCharacterOperator(BaseThreading):
         super().__init__()
         self.setName('Switch_Character_Operator')
         self.chara_list = chara_list
-        self.itt = InteractionBGD()
+        self.itt = interaction_core.InteractionBGD()
 
         self.tactic_operator = tactic_operator.TacticOperator()
         self.tactic_operator.pause_threading()

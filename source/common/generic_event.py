@@ -1,6 +1,6 @@
 from source.util import *
-from source.interaction.interaction_background import InteractionBGD
-itt = InteractionBGD()
+from source.interaction import interaction_core
+itt = interaction_core.InteractionBGD()
 from source.common.base_threading import BaseThreading
 from source.funclib import static_lib
 from source.base.timer_module import Timer
@@ -47,6 +47,25 @@ class GenericEvent(BaseThreading):
                 if self.w_down_flag == True:
                     self.w_down_flag = False
                     itt.key_up('w')
+def static_lib_init():
+    global W_KEYDOWN, cvAutoTrackerLoop
+    logger.debug("import cvAutoTrack")
+    from source.api import cvAutoTrack
+    cvAutoTrackerLoop = cvAutoTrack.AutoTrackerLoop()
+    cvAutoTrackerLoop.setDaemon(True)
+    cvAutoTrackerLoop.start()
+    time.sleep(1)
+
+def while_until_no_excessive_error(stop_func):
+    logger.info(t2t("等待cvautotrack获取坐标"))
+    cvAutoTrackerLoop.start_sleep_timer.reset()
+    while cvAutoTrackerLoop.is_in_excessive_error():
+        if stop_func():
+            return 0
+        time.sleep(1)
+
+static_lib_init()
+
 
 logger.debug("start GenericEventThread")
 generic_event = GenericEvent()

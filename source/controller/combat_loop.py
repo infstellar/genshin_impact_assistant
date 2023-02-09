@@ -6,7 +6,7 @@ from source.funclib import combat_lib
 from source.manager import asset, button_manager
 from source.operator.aim_operator import AimOperator
 from source.common.base_threading import BaseThreading
-from source.interaction.interaction_background import InteractionBGD
+from source.interaction import interaction_core
 from source.operator.switch_character_operator import SwitchCharacterOperator
 from source.path_lib import CONFIGPATH_SETTING
 
@@ -89,7 +89,7 @@ class Combat_Controller(BaseThreading):
 
         self.chara_list = chara_list
         self.pause_threading_flag = False
-        self.itt = InteractionBGD()
+        self.itt = interaction_core.InteractionBGD()
 
         self.sco = SwitchCharacterOperator(self.chara_list)
         self.sco.pause_threading()

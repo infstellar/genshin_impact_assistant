@@ -1,8 +1,8 @@
-from source.interaction.interaction_background import InteractionBGD
-from manager import img_manager, button_manager
+from source.interaction import interaction_core
+from source.manager import img_manager, button_manager
 from source.util import *
 
-itt = InteractionBGD()
+itt = interaction_core.InteractionBGD()
 
 pickup_blacklist = load_json("auto_pickup.json")["blacklist"]
 pickup_blacklist += load_json("auto_pickup_default_blacklist.json")["blacklist"]

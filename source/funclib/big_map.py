@@ -1,8 +1,9 @@
 from source.util import *
-from source.interaction import interaction_background
+from source.interaction import interaction_core
 from source.manager import scene_manager, img_manager, posi_manager
+from source.funclib import scene_lib
 
-itt = interaction_background.InteractionBGD()
+itt = interaction_core.InteractionBGD()
 
 global priority_waypoints, priority_waypoints_list, priority_waypoints_array, idnum
 priority_waypoints, priority_waypoints_list, priority_waypoints_array, idnum = None, None, None, None
@@ -110,7 +111,7 @@ def get_tw_points(bigmatMat, stop_func):
         logger.warning("获取传送锚点坐标失败，正在重试")
         time.sleep(5)
         bigmatMat = itt.capture(jpgmode=0)
-        scene_manager.switch_to_page(scene_manager.page_bigmap, stop_func=stop_func)
+        scene_lib.switch_to_page(scene_manager.page_bigmap, stop_func=stop_func)
         # scene_manager.switchto_bigmapwin(scene_manager.default_stop_func)
         return get_tw_points(bigmatMat, stop_func)
     return ret
@@ -129,7 +130,7 @@ def get_gs_points(bigmatMat, stop_func):
         logger.warning("获取七天神像坐标失败，正在重试")
         time.sleep(5)
         bigmatMat = itt.capture(jpgmode=0)
-        scene_manager.switch_to_page(scene_manager.page_bigmap, stop_func=stop_func)
+        scene_lib.switch_to_page(scene_manager.page_bigmap, stop_func=stop_func)
         # scene_manager.switchto_bigmapwin(scene_manager.default_stop_func)
         return get_gs_points(bigmatMat, stop_func)
     return np.asarray(ret)
@@ -164,8 +165,8 @@ def get_closest_teleport_waypoint(object_img: img_manager.ImgIcon):
 def reset_map_size():
     """重置地图大小为标准值
     """
-    while scene_manager.get_current_pagename() != "bigmap":
-        scene_manager.switch_to_page(scene_manager.page_bigmap, stop_func = scene_manager.default_stop_func)
+    while scene_lib.get_current_pagename() != "bigmap":
+        scene_lib.switch_to_page(scene_manager.page_bigmap, stop_func = scene_manager.default_stop_func)
         time.sleep(2)
         
     

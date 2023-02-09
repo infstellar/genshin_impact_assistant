@@ -1,6 +1,6 @@
 from source.util import *
 from source.constant import flow_state as ST
-from source.interaction.interaction_background import InteractionBGD
+from source.interaction import interaction_core
 from source.operator import pickup_operator
 from source.flow import teyvat_move_flow
 from source.controller import combat_loop
@@ -11,6 +11,8 @@ import datetime
 from source.manager import scene_manager, img_manager, button_manager, asset
 from funclib.err_code_lib import ERR_PASS, ERR_STUCK, ERR_COLLECTOR_FLOW_TIMEOUT
 from source.base import timer_module
+from source.funclib import scene_lib
+from source.common import generic_event
 
 COLLECTION = 0
 ENEMY = 1
@@ -91,7 +93,7 @@ class CollectorFlow(BaseThreading):
         collector_lib.generate_col_succ_rate_from_log()
         logger.debug(f"generate collection_id_details succ")
         self.collection_details = load_json("collection_id_details.json", "config\\auto_collector")
-        self.itt = InteractionBGD()
+        self.itt = interaction_core.InteractionBGD()
         
         
         
@@ -284,8 +286,8 @@ class CollectorFlow(BaseThreading):
                 
                 self.collector_posi_dict = collector_lib.load_items_position(self.collector_name, blacklist_id=self.shielded_id)
                 self.shielded_posi_list = collector_lib.load_items_position(self.collector_name, blacklist_id=self.shielded_id, ret_mode=1, check_mode=1)
-                scene_manager.switch_to_page(scene_manager.page_main, self.checkup_stop_func)
-                static_lib.while_until_no_excessive_error(self.checkup_stop_func)
+                scene_lib.switch_to_page(scene_manager.page_main, self.checkup_stop_func)
+                generic_event.while_until_no_excessive_error(self.checkup_stop_func)
                 self.current_position = static_lib.cvAutoTrackerLoop.get_position()[1:]
                 self.collection_details = load_json("collection_id_details.json", "config\\auto_collector")
                 if True:

@@ -1,2 +1,2 @@
-from source.interaction.interaction_background import InteractionBGD
-itt = InteractionBGD()
+from source.interaction import interaction_core
+itt = interaction_core.InteractionBGD()

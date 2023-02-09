@@ -11,8 +11,8 @@ import win32con
 import win32gui
 from source.base import vkcode
 from ctypes.wintypes import RECT
-from funclib import static_lib
-from manager import scene_manager, img_manager, text_manager, button_manager
+from source.funclib import static_lib
+from source.manager import img_manager, text_manager, button_manager
 
 IMG_RATE = 0
 IMG_POSI = 1
@@ -322,10 +322,10 @@ class InteractionBGD:
                 r = pdocr_api.ocr.get_text_position(cap, imgicon.win_text)
                 if r==-1:
                     matching_rate = -1
-            if imgicon.win_page != 'all':
-                pn = scene_manager.get_current_pagename()
-                if pn != imgicon.win_page:
-                    matching_rate = -2
+            # if imgicon.win_page != 'all':
+            #     pn = scene_lib.get_current_pagename()
+            #     if pn != imgicon.win_page:
+            #         matching_rate = -2
 
         if imgicon.is_print_log(matching_rate >= imgicon.threshold):
             logger.debug('imgname: ' + imgicon.name + 'max_loc: ' + str(max_loc) + ' |function name: ' + upper_func_name)
@@ -358,10 +358,10 @@ class InteractionBGD:
                 r = pdocr_api.ocr.get_text_position(cap, imgicon.win_text)
                 if r==-1:
                     matching_rate = 0
-            if imgicon.win_page != 'all':
-                pn = scene_manager.get_current_pagename()
-                if pn != imgicon.win_page:
-                    matching_rate = 0
+            # if imgicon.win_page != 'all':
+            #     pn = scene_lib.get_current_pagename()
+            #     if pn != imgicon.win_page:
+            #         matching_rate = 0
         
         if show_res:
             cv2.imshow(imgicon.name, cap)
@@ -421,10 +421,10 @@ class InteractionBGD:
                     r = pdocr_api.ocr.get_text_position(cap, imgicon.win_text)
                     if r==-1:
                         matching_rate = 0
-                if imgicon.win_page != 'all':
-                    pn = scene_manager.get_current_pagename()
-                    if pn != imgicon.win_page:
-                        matching_rate = 0
+                # if imgicon.win_page != 'all':
+                #     pn = scene_lib.get_current_pagename()
+                #     if pn != imgicon.win_page:
+                #         matching_rate = 0
             
             if imgicon.is_print_log(matching_rate >= imgicon.threshold):
                 logger.debug(
@@ -456,10 +456,10 @@ class InteractionBGD:
                     r = pdocr_api.ocr.get_text_position(cap, imgicon.win_text)
                     if r==-1:
                         matching_rate = 0
-                if imgicon.win_page != 'all':
-                    pn = scene_manager.get_current_pagename()
-                    if pn != imgicon.win_page:
-                        matching_rate = 0
+                # if imgicon.win_page != 'all':
+                #     pn = scene_lib.get_current_pagename()
+                #     if pn != imgicon.win_page:
+                #         matching_rate = 0
             
             if imgicon.is_print_log(matching_rate >= imgicon.threshold):
                 logger.debug('imgname: ' + imgicon.name + 'matching_rate: ' + str(matching_rate) + ' |function name: ' + upper_func_name)
@@ -506,10 +506,10 @@ class InteractionBGD:
                 r = pdocr_api.ocr.get_text_position(cap, imgicon.win_text)
                 if r==-1:
                     matching_rate = 0
-            if imgicon.win_page != 'all':
-                pn = scene_manager.get_current_pagename()
-                if pn != imgicon.win_page:
-                    matching_rate = 0
+            # if imgicon.win_page != 'all':
+            #     pn = scene_lib.get_current_pagename()
+            #     if pn != imgicon.win_page:
+            #         matching_rate = 0
         if imgicon.is_print_log(matching_rate >= imgicon.threshold):
             logger.debug(
                 'imgname: ' + imgicon.name + 'matching_rate: ' + str(

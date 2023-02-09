@@ -3,9 +3,9 @@ import cv2
 import os
 import time, math
 
-from source.interaction.interaction_background import InteractionBGD
+from source.interaction import interaction_core
 
-itt = InteractionBGD()
+itt = interaction_core.InteractionBGD()
 i = 0
 
 SA_name = 'test'

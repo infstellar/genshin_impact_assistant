@@ -4,7 +4,7 @@ else:
     pdocr_api = None
 from source.common.base_threading import BaseThreading
 from source.common.character import Character
-from source.interaction.interaction_background import InteractionBGD
+from source.interaction import interaction_core
 from source.base.timer_module import Timer
 from source.util import *
 import cv2
@@ -30,7 +30,7 @@ class TacticOperator(BaseThreading):
         self.hp_chara_list_position = [[283, 1698], [379, 1698], [475, 1698], [571, 1698]]
         self.chara_num = 4
         self.enter_timer = Timer()
-        self.itt = InteractionBGD()
+        self.itt = interaction_core.InteractionBGD()
         self.working_flag = False # out of class
         self.flag_tactic_executing = False # in class
         self.pause_tactic_flag = False
@@ -481,7 +481,7 @@ if __name__ == '__main__':
     from source.controller import combat_loop
 
     to = TacticOperator()
-    itt = InteractionBGD()
+    itt = interaction_core.InteractionBGD()
     chara = combat_loop.get_chara_list()[1]
     to.set_parameter(chara.tactic_group, chara)
     # to.setDaemon(True)

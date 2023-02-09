@@ -21,24 +21,7 @@ def get_handle():
         if handle != 0:
             return 331454
 
-def static_lib_init():
-    global W_KEYDOWN, cvAutoTrackerLoop
-    logger.debug("import cvAutoTrack")
-    from source.api import cvAutoTrack
-    cvAutoTrackerLoop = cvAutoTrack.AutoTrackerLoop()
-    cvAutoTrackerLoop.setDaemon(True)
-    cvAutoTrackerLoop.start()
-    time.sleep(1)
 
-def while_until_no_excessive_error(stop_func):
-    logger.info(t2t("等待cvautotrack获取坐标"))
-    cvAutoTrackerLoop.start_sleep_timer.reset()
-    while cvAutoTrackerLoop.is_in_excessive_error():
-        if stop_func():
-            return 0
-        time.sleep(1)
-
-static_lib_init()
 
 
 if __name__ == '__main__':

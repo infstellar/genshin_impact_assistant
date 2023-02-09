@@ -2,8 +2,6 @@ import cv2
 import numpy as np
 from source.util import *
 
-import posi_manager
-
 # COMING_OUT_BY_SPACE = 
 IN_DOMAIN = "IN_DOMAIN"
 USE_20RESIN_DOBLE_CHOICES = "USE_20RESIN_DOBLE_CHOICES"

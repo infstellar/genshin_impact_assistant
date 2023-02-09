@@ -37,7 +37,7 @@ def call_you_import_module():
     icm = True
 
 def import_current_module():
-    try:
+    if True:
         if current_flow == FLOW_IDLE:
             pass
         elif current_flow == FLOW_COMBAT:
@@ -49,10 +49,23 @@ def import_current_module():
         elif current_flow == FLOW_COLLECTOR:
             # logger.info("正在导入 FLOW_COLLECTOR 模块，可能需要一些时间。")
             from source.flow import collector_flow
-    except Exception as e:
-        logger.critical(f"IMPORT ERROR: current_flow: {current_flow}")
-        print(e)
-        input(t2t("Program stop."))
+    else:
+        try:
+            if current_flow == FLOW_IDLE:
+                pass
+            elif current_flow == FLOW_COMBAT:
+                # logger.info("正在导入 FLOW_COMBAT 模块，可能需要一些时间。")
+                from source.flow import alpha_loop
+            elif current_flow == FLOW_DOMAIN:
+                # logger.info("正在导入 FLOW_DOMAIN 模块，可能需要一些时间。")
+                from source.flow import domain_flow
+            elif current_flow == FLOW_COLLECTOR:
+                # logger.info("正在导入 FLOW_COLLECTOR 模块，可能需要一些时间。")
+                from source.flow import collector_flow
+        except Exception as e:
+            logger.critical(f"IMPORT ERROR: current_flow: {current_flow}")
+            print(e)
+            input(t2t("Program stop."))
 
 def switch_combat_loop():
     global t1, combat_flag

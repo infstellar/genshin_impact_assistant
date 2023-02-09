@@ -1,4 +1,4 @@
-from source.manager import img_manager, text_manager, button_manager
+from source.manager import img_manager, text_manager, button_manager, scene_manager
 from source.util import *
 # import scene_manager
 QTSX = text_manager.TextTemplate(text=
@@ -65,3 +65,4 @@ character_died = img_manager.ImgIcon(name="character_died", path="assets\\imgs\\
                                      is_bbg=True, cap_posi='bbg', win_text=use_revival_item.text, threshold=0.98, print_log=img_manager.LOG_WHEN_TRUE)
 button_all_character_died = button_manager.Button(name="all_character_died", path="assets\\imgs\\$lang$\\all_character_died.jpg",
                                                   threshold=0.988, win_text=revival.text, print_log=img_manager.LOG_WHEN_TRUE)
+

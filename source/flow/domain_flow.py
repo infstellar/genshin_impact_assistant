@@ -1,9 +1,9 @@
 from source.controller import combat_loop
-from source.common.constant import flow_state as ST
+from source.constant import flow_state as ST
 from source.base import timer_module
 from funclib import generic_lib, movement
 from manager import img_manager, posi_manager as PosiM, asset
-from source.interaction import interaction_background
+from source.interaction import interaction_core
 from source.api import yolox_api
 from source.common.base_threading import BaseThreading
 from source.util import *
@@ -18,7 +18,7 @@ class DomainFlow(BaseThreading):
         self.current_state = ST.INIT_MOVETO_CHALLENGE
         # self.current_state = ST.IN_MOVETO_TREE
 
-        self.itt = interaction_background.InteractionBGD()
+        self.itt = interaction_core.InteractionBGD()
         chara_list = combat_loop.get_chara_list()
         self.combat_loop = combat_loop.Combat_Controller(chara_list)
         self.combat_loop.setDaemon(True)

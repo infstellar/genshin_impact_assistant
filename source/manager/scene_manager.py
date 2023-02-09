@@ -1,8 +1,7 @@
 from source.util import *
-import img_manager
+from source.manager import img_manager
 from source.manager import button_manager
-from source.interaction.interaction_background import InteractionBGD
-itt = InteractionBGD()
+
 
 def default_stop_func():
     return False
@@ -15,7 +14,7 @@ class UIPage():
         self.to_mainpage = to_mainpage
         self.to_selfpage = to_selfpage
         
-    def is_current_page(self, print_log=False):
+    def is_current_page(self, itt, print_log=False):
         ret = itt.get_img_existence(self.check_icon, is_log=print_log)
         return ret
     
@@ -49,81 +48,12 @@ all_page = {
     "bigmap":page_bigmap
             }
 
-def get_current_pagename(retry=0):
-    current_page = None
-    max_rate = 0
-    for i in all_page:
-        if retry>=35:
-            f = all_page[i].is_current_page(print_log=True)
-        else:
-            f = all_page[i].is_current_page()
-        if f:
-            if current_page == None:
-                current_page = i
-            else:
-                logger.warning(f"UI界面有多个检测结果：{current_page}, {i} ")
-                current_page = "ERROR"
-    if current_page == None:
-        if retry>=40:
-            logger.warning(t2t("UI界面检测失败，正在尝试按esc返回"))
-            itt.key_press("esc")
-            logger.warning(t2t("将在1秒后再次尝试获取UI界面"))
-            logger.warning(t2t("尝试次数：") + f"{retry}")
-            time.sleep(1)
-            return get_current_pagename(retry+1)
-        else:
-            if retry == 1:
-                logger.debug(t2t("UI界面检测失败"))
-            if retry == 11:
-                logger.info(t2t("UI界面检测失败"))
-                logger.info(t2t("将在0.2秒后再次尝试获取UI界面"))
-            
-            if retry<=10:
-                logger.debug(t2t("尝试次数：") + f"{retry}")
-                time.sleep(0.2)
-            else:
-                logger.info(t2t("尝试次数：") + f"{retry}")
-                time.sleep(1)
-            return get_current_pagename(retry+1)
-    return current_page
 
-def switch_to_page(target_page:UIPage, stop_func):
-    current_page = all_page[get_current_pagename()]
-    
-    if current_page.page_name == target_page.page_name:
-        return 0    
             
-    if current_page.page_name != "main":
-        for i in range(len(current_page.to_mainpage)-1):
-            following_button = all_page[current_page.to_mainpage[i]].following_page[current_page.to_mainpage[i+1]]
-            while 1:
-                if isinstance(following_button, button_manager.Button):
-                    itt.appear_then_click(following_button)
-                elif isinstance(following_button, str):
-                    itt.key_press(following_button)
-                time.sleep(3)
-                if all_page[current_page.to_mainpage[i+1]].is_current_page():
-                    break
-                if stop_func():
-                    return
-    
-    for i in range(len(target_page.to_selfpage)-1):
-        following_button = all_page[target_page.to_selfpage[i]].following_page[target_page.to_selfpage[i+1]]
-        while 1:
-            if isinstance(following_button, button_manager.Button):
-                itt.appear_then_click(following_button)
-            elif isinstance(following_button, str):
-                itt.key_press(following_button)
-            time.sleep(3)
-            if all_page[target_page.to_selfpage[i+1]].is_current_page():
-                break
-            if stop_func():
-                return
-            
-if __name__ == "__main__":     
-    while 1:
-        time.sleep(1)
-        print(get_current_pagename())
+# if __name__ == "__main__":     
+#     while 1:
+#         time.sleep(1)
+#         print(get_current_pagename())
 
 # def switchto_mainwin(stop_func, max_time=30):
 #     i=0
