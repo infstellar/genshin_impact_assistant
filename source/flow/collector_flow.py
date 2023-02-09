@@ -8,7 +8,7 @@ from source.common.base_threading import BaseThreading
 from source.funclib import collector_lib, generic_lib, static_lib, combat_lib
 import numpy as np
 import datetime
-from source.manager import scene_manager, img_manager, button_manager
+from source.manager import scene_manager, img_manager, button_manager, asset
 from funclib.err_code_lib import ERR_PASS, ERR_STUCK, ERR_COLLECTOR_FLOW_TIMEOUT
 from source.base import timer_module
 

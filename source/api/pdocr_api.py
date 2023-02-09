@@ -8,8 +8,8 @@ pdocr_timer_performance.reset()
 import inspect
 
 try:
-    from source.paddleocr import PaddleOCR
-    from source.paddleocr import draw_ocr
+    from paddleocr import PaddleOCR
+    from paddleocr import draw_ocr
 except Exception as error:
     logger.critical(t2t("导入paddleocr时错误; err code: 001"))
     logger.exception(error)
