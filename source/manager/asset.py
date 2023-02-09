@@ -1,5 +1,5 @@
-from common.manager import img_manager, text_manager, button_manager
-from util import *
+from manager import img_manager, text_manager, button_manager
+from source.util import *
 # import scene_manager
 QTSX = text_manager.TextTemplate(text=
 {

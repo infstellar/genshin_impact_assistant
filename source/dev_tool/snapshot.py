@@ -1,9 +1,9 @@
-# from util import *
+# from source.util import *
 import cv2
 import os
 import time, math
 
-from interaction.interaction_background import InteractionBGD
+from source.interaction.interaction_background import InteractionBGD
 
 itt = InteractionBGD()
 i = 0

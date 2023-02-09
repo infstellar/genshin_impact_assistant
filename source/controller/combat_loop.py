@@ -1,14 +1,14 @@
-# from interaction import *
+# from source.interaction import *
 
-from util import *
-from common import character
-from common.funclib import combat_lib
-from common.manager import button_manager, asset
-from operator.aim_operator import AimOperator
-from common.base_threading import BaseThreading
-from interaction.interaction_background import InteractionBGD
-from operator.switch_character_operator import SwitchCharacterOperator
-from path_lib import CONFIGPATH_SETTING
+from source.util import *
+from source.common import character
+from funclib import combat_lib
+from manager import asset, button_manager
+from source.operator.aim_operator import AimOperator
+from source.common.base_threading import BaseThreading
+from source.interaction.interaction_background import InteractionBGD
+from source.operator.switch_character_operator import SwitchCharacterOperator
+from source.path_lib import CONFIGPATH_SETTING
 
 CHARACTER_DIED = 1
 

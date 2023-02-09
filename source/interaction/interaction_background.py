@@ -1,4 +1,4 @@
-from util import *
+from source.util import *
 import inspect
 import math
 import random
@@ -9,10 +9,10 @@ import numpy as np
 import win32api
 import win32con
 import win32gui
-from base import vkcode
-from ctypes.wintypes import RECT
-from common.funclib import static_lib
-from common.manager import scene_manager, img_manager, text_manager, button_manager
+from source.base import vkcode
+from source.ctypes.wintypes import RECT
+from funclib import static_lib
+from manager import scene_manager, img_manager, text_manager, button_manager
 
 IMG_RATE = 0
 IMG_POSI = 1
@@ -318,7 +318,7 @@ class InteractionBGD:
 
         if matching_rate >= imgicon.threshold:
             if imgicon.win_text != None:
-                from api import pdocr_api
+                from source.api import pdocr_api
                 r = pdocr_api.ocr.get_text_position(cap, imgicon.win_text)
                 if r==-1:
                     matching_rate = -1
@@ -354,7 +354,7 @@ class InteractionBGD:
         
         if matching_rate >= imgicon.threshold:
             if imgicon.win_text != None:
-                from api import pdocr_api
+                from source.api import pdocr_api
                 r = pdocr_api.ocr.get_text_position(cap, imgicon.win_text)
                 if r==-1:
                     matching_rate = 0
@@ -385,7 +385,7 @@ class InteractionBGD:
             return matching_rate
         
     def get_text_existence(self, textobj: text_manager.TextTemplate, is_gray=False, is_log = True, ret_mode = IMG_BOOL, show_res = False):
-        from api import pdocr_api
+        from source.api import pdocr_api
         cap = self.capture(posi = textobj.cap_area, jpgmode = 0)
         if pdocr_api.ocr.get_text_position(cap, textobj.text) != -1:
             if is_log:
@@ -417,7 +417,7 @@ class InteractionBGD:
 
             if matching_rate >= imgicon.threshold:
                 if imgicon.win_text != None:
-                    from api import pdocr_api
+                    from source.api import pdocr_api
                     r = pdocr_api.ocr.get_text_position(cap, imgicon.win_text)
                     if r==-1:
                         matching_rate = 0
@@ -452,7 +452,7 @@ class InteractionBGD:
 
             if matching_rate >= imgicon.threshold:
                 if imgicon.win_text != None:
-                    from api import pdocr_api
+                    from source.api import pdocr_api
                     r = pdocr_api.ocr.get_text_position(cap, imgicon.win_text)
                     if r==-1:
                         matching_rate = 0
@@ -474,7 +474,7 @@ class InteractionBGD:
                 return False
             
         elif isinstance(inputvar, text_manager.TextTemplate):
-            from api import pdocr_api
+            from source.api import pdocr_api
             p1 = pdocr_api.ocr.get_text_position(self.capture(jpgmode=0, posi=inputvar.cap_area), inputvar.text, cap_posi_leftup=inputvar.cap_area[:2])
             if p1 != -1:
                 self.move_and_click([p1[0] + 5, p1[1] + 5], delay=1)
@@ -502,7 +502,7 @@ class InteractionBGD:
 
         if matching_rate >= imgicon.threshold:
             if imgicon.win_text != None:
-                from api import pdocr_api
+                from source.api import pdocr_api
                 r = pdocr_api.ocr.get_text_position(cap, imgicon.win_text)
                 if r==-1:
                     matching_rate = 0

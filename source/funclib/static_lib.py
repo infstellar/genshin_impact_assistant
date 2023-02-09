@@ -1,4 +1,4 @@
-from util import *
+from source.util import *
 
 global W_KEYDOWN, cvAutoTrackerLoop
 W_KEYDOWN = False
@@ -24,7 +24,7 @@ def get_handle():
 def static_lib_init():
     global W_KEYDOWN, cvAutoTrackerLoop
     logger.debug("import cvAutoTrack")
-    from api import cvAutoTrack
+    from source.api import cvAutoTrack
     cvAutoTrackerLoop = cvAutoTrack.AutoTrackerLoop()
     cvAutoTrackerLoop.setDaemon(True)
     cvAutoTrackerLoop.start()

@@ -1,8 +1,8 @@
-from interaction.interaction_background import InteractionBGD
-from common.manager import scene_manager, img_manager, posi_manager, button_manager
-from common.funclib import big_map
+from source.interaction.interaction_background import InteractionBGD
+from manager import scene_manager, img_manager, posi_manager, button_manager
+from funclib import big_map
 import static_lib
-from util import *
+from source.util import *
 
 NORMAL = 0
 NEGATIVE_Y = 1
@@ -59,7 +59,7 @@ def points_angle(p1, p2, coordinate=NORMAL):
     return degree
 
 def recover_all(stop_func):
-    from api import pdocr_api
+    from source.api import pdocr_api
     scene_manager.switch_to_page(scene_manager.page_bigmap, stop_func)
     gsp = big_map.get_middle_gs_point(stop_func)
     if len(gsp)==0:

@@ -1,7 +1,7 @@
-from util import *
-from base import timer_module
-from common.manager import scene_manager
-from base_threading import BaseThreading
+from source.util import *
+from source.base import timer_module
+from manager import scene_manager
+from source.common.base_threading import BaseThreading
 from assets.AutoTrackDLLAPI.AutoTrackAPI import AutoTracker
 
 def del_log():

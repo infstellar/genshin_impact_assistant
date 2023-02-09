@@ -1,15 +1,15 @@
-from util import *
+from source.util import *
 
 logger.info(t2t('Creating ocr object.'))
-from base.timer_module import Timer
+from source.base.timer_module import Timer
 
 pdocr_timer_performance = Timer()
 pdocr_timer_performance.reset()
 import inspect
 
 try:
-    from paddleocr import PaddleOCR
-    from paddleocr import draw_ocr
+    from source.paddleocr import PaddleOCR
+    from source.paddleocr import draw_ocr
 except Exception as error:
     logger.critical(t2t("导入paddleocr时错误; err code: 001"))
     logger.exception(error)
@@ -59,7 +59,7 @@ class PaddleocrAPI:
     #     return res,position
 
     # def SaveResult(self,imsrc,result):
-    #     from PIL import Image
+    #     from source.PIL import Image
     #     #image = Image.open(img_path).convert('RGB')
     #     boxes = [line[0] for line in result]
     #     txts = [line[1][0] for line in result]

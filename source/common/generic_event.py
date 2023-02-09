@@ -1,9 +1,9 @@
-from util import *
-from interaction.interaction_background import InteractionBGD
+from source.util import *
+from source.interaction.interaction_background import InteractionBGD
 itt = InteractionBGD()
-from common.base_threading import BaseThreading
-from common.funclib import static_lib
-from base.timer_module import Timer
+from source.common.base_threading import BaseThreading
+from funclib import static_lib
+from source.base.timer_module import Timer
 
 
 

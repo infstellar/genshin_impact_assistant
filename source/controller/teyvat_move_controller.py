@@ -1,10 +1,10 @@
-from util import *
-from common.base_threading import BaseThreading
-from interaction.interaction_background import InteractionBGD
-from common.funclib import generic_lib, static_lib, movement
-from common.manager import img_manager
+from source.util import *
+from source.common.base_threading import BaseThreading
+from source.interaction.interaction_background import InteractionBGD
+from funclib import generic_lib, movement, static_lib
+from manager import img_manager
 import numpy as np
-from common.funclib.err_code_lib import ERR_PASS, ERR_STUCK
+from funclib.err_code_lib import ERR_PASS, ERR_STUCK
 '''
 提瓦特大陆移动辅助控制，包括：
 自动F控制 pickup_operator

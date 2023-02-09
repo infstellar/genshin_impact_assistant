@@ -1,6 +1,6 @@
 import subprocess
 
-from pywebio import output, session, pin
+from source.pywebio import output, session, pin
 from source.util import *
 
 class Page:

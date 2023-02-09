@@ -1,6 +1,6 @@
-from util import *
+from source.util import *
 import numpy as np
-from common.funclib import static_lib, big_map
+from funclib import big_map, static_lib
 import cv2
 
 global priority_waypoints, priority_waypoints_list, priority_waypoints_array, idnum

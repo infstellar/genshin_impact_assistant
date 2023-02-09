@@ -1,16 +1,16 @@
 if True:
-    from api import pdocr_api
+    from source.api import pdocr_api
 else:
     pdocr_api = None
-from common.base_threading import BaseThreading
-from common.character import Character
-from interaction.interaction_background import InteractionBGD
-from base.timer_module import Timer
-from util import *
+from source.common.base_threading import BaseThreading
+from source.common.character import Character
+from source.interaction.interaction_background import InteractionBGD
+from source.base.timer_module import Timer
+from source.util import *
 import cv2
-from common.funclib import combat_lib
-from common.manager import img_manager, posi_manager
-from path_lib import *
+from funclib import combat_lib
+from manager import img_manager, posi_manager
+from source.path_lib import *
 
 E_STRICT_MODE = True  # may cause more performance overhead
 DETERMINING_WEIGHT = load_json(JSONNAME_CONFIG, CONFIGPATH_SETTING)["determining_strict_weight"]
@@ -478,7 +478,7 @@ class TacticOperator(BaseThreading):
         
 
 if __name__ == '__main__':
-    from controller import combat_loop
+    from source.controller import combat_loop
 
     to = TacticOperator()
     itt = InteractionBGD()

@@ -1,5 +1,5 @@
 import time
-from path_lib import *
+from source.path_lib import *
 
 class Timer:
     def __init__(self, diff_start_time=0):

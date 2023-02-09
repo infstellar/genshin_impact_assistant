@@ -1,4 +1,4 @@
-from util import t2t
+from source.util import t2t
 
 current_statement = {
     "AutoCombat":0,

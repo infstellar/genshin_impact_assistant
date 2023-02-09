@@ -1,9 +1,9 @@
 import pyautogui
 
-from interaction import interaction_background
+from source.interaction import interaction_background
 import small_map
-from util import *
-from common.funclib import generic_lib, static_lib
+from source.util import *
+from funclib import generic_lib, static_lib
 
 itt = interaction_background.InteractionBGD()
 AHEAD = 0

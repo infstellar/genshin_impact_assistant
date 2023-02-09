@@ -1,7 +1,7 @@
-from util import *
+from source.util import *
 import img_manager
-from common.manager import button_manager
-from interaction.interaction_background import InteractionBGD
+from manager import button_manager
+from source.interaction.interaction_background import InteractionBGD
 itt = InteractionBGD()
 
 def default_stop_func():

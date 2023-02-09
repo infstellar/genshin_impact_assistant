@@ -1,6 +1,6 @@
-from controller import combat_loop
-from common.base_threading import BaseThreading
-from util import *
+from source.controller import combat_loop
+from source.common.base_threading import BaseThreading
+from source.util import *
 
 
 class AlphaLoop(BaseThreading):

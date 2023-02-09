@@ -1,10 +1,10 @@
-from common.base_threading import BaseThreading
-from util import *
-from interaction.interaction_background import InteractionBGD
-from api.pdocr_api import ocr
-from base import timer_module
-from common.funclib import generic_lib, static_lib, movement
-from common.manager import img_manager
+from source.common.base_threading import BaseThreading
+from source.util import *
+from source.interaction.interaction_background import InteractionBGD
+from source.api.pdocr_api import ocr
+from source.base import timer_module
+from funclib import generic_lib, movement, static_lib
+from manager import img_manager
 import cv2
 
 
@@ -200,7 +200,7 @@ class PickupOperator(BaseThreading):
         cp = static_lib.cvAutoTrackerLoop.get_position()[1:]
         if euclidean_distance(cp,self.target_posi)>= self.max_distance_from_target:
             movement.reset_view()
-            logger.debug("too far from the target")
+            logger.debug("too far from source.the target")
             while euclidean_distance(static_lib.cvAutoTrackerLoop.get_position()[1:], self.target_posi) >= 8:
                 if self.checkup_stop_func():
                     return 0

@@ -1,6 +1,6 @@
-from common.manager.asset import *
+from manager.asset import *
 import cv2, numpy as np
-from interaction.interaction_background import InteractionBGD
+from source.interaction.interaction_background import InteractionBGD
 itt = InteractionBGD()
 
 def recaputer(img_obj: img_manager.ImgIcon, lang):

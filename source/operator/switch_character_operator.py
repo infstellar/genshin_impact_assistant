@@ -1,12 +1,12 @@
 import pyautogui
 
-from common import character
-from common.funclib import combat_lib
+from source.common import character
+from funclib import combat_lib
 import tactic_operator
-from common.base_threading import BaseThreading
-from interaction.interaction_background import InteractionBGD
-from base.timer_module import Timer
-from util import *
+from source.common.base_threading import BaseThreading
+from source.interaction.interaction_background import InteractionBGD
+from source.base.timer_module import Timer
+from source.util import *
 
 
 def sort_flag_1(x: character.Character):

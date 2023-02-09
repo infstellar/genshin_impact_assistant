@@ -1,5 +1,6 @@
-from util import *
-from img_manager import ImgIcon, qshow, LOG_NONE, LOG_ALL, LOG_WHEN_FALSE, LOG_WHEN_TRUE
+from source.manager.img_manager import ImgIcon, LOG_NONE, LOG_WHEN_TRUE
+from source.util import *
+
 
 def get_cap_posi(path, black_offset):
     path = path.replace("$lang$", global_lang)

@@ -1,4 +1,4 @@
-from util import *
+from source.util import *
 
 class TextTemplate():
     def __init__(self, text:dict, cap_area=[0,0,1920,1080]) -> None:

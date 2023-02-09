@@ -1,19 +1,19 @@
-from util import *
+from source.util import *
 import math
-from common.constant import flow_state as ST
-from base import timer_module
-from common.funclib import static_lib, combat_lib, big_map, movement
-from common.manager import scene_manager, img_manager, posi_manager, asset
-from interaction.interaction_background import InteractionBGD
-from controller import teyvat_move_controller
-from common.base_threading import BaseThreading
-from common.funclib.err_code_lib import ERR_PASS, ERR_STUCK
+from source.common.constant import flow_state as ST
+from source.base import timer_module
+from funclib import big_map, movement, static_lib, combat_lib
+from manager import scene_manager, img_manager, posi_manager, asset
+from source.interaction.interaction_background import InteractionBGD
+from source.controller import teyvat_move_controller
+from source.common.base_threading import BaseThreading
+from funclib.err_code_lib import ERR_PASS, ERR_STUCK
 
 IN_MOVE = 0
 IN_FLY = 1
 IN_WATER = 2
 IN_CLIMB = 3
-# from pdocr_api import ocr
+# from source.pdocr_api import ocr
 
 def get_target_relative_angle(x, y, tx, ty):
     x = -x

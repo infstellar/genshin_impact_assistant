@@ -1,6 +1,6 @@
 import threading
 import time
-from common.funclib.err_code_lib import ERR_NONE
+from funclib.err_code_lib import ERR_NONE
 
 class BaseThreading(threading.Thread):
     """

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 # Copyright (c) Megvii, Inc. and its affiliates.
-from util import *
+from source.util import *
 
 logger.info(t2t('Creating yolox obj. It may takes a few second.'))
 
@@ -13,7 +13,7 @@ import argparse
 import datetime
 import os
 import time
-# from loguru import logger
+# from source.loguru import logger
 
 import cv2
 
@@ -24,7 +24,7 @@ except Exception as error:
     logger.exception(error)
 from yolox.data.data_augment import ValTransform
 from yolox.data.datasets import COCO_CLASSES
-# from yolox.data.datasets import VOC_CLASSES
+# from source.yolox.data.datasets import VOC_CLASSES
 from yolox.exp import get_exp
 from yolox.utils import fuse_model, get_model_info, postprocess, vis
 
@@ -199,7 +199,7 @@ class Predictor(object):
         self.preproc = ValTransform(legacy=legacy)
         if trt_file is not None:
             # torch2trt=None
-            # from torch2trt import TRTModule
+            # from source.torch2trt import TRTModule
 
             # model_trt = TRTModule()
             # model_trt.load_state_dict(torch.load(trt_file))

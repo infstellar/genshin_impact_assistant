@@ -1,7 +1,7 @@
-from common.manager import posi_manager
-from interaction.interaction_background import InteractionBGD
-from base.timer_module import Timer
-from util import *
+from manager import posi_manager
+from source.interaction.interaction_background import InteractionBGD
+from source.base.timer_module import Timer
+from source.util import *
 
 
 def default_trigger_func():

@@ -7,7 +7,8 @@ import math
 import numpy as np
 import gettext
 from loguru import logger
-
+import cv2
+import win32gui, win32process, psutil
 
 
 time.time()  # 防自动删除
@@ -15,7 +16,7 @@ time.time()  # 防自动删除
 
 # configurate paths
 try:
-    from path_lib import *
+    from source.path_lib import *
 except:
     root_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     source_path = root_path + '\\source'
@@ -232,9 +233,7 @@ def is_number(s):
 
     return False
 
-import cv2
 
-import win32gui, win32process, psutil
 
 def get_active_window_process_name():
     try:

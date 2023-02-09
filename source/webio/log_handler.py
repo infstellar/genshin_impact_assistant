@@ -1,7 +1,7 @@
-from source.util import *
-from typing import TextIO
+from source.typing import TextIO
 
 from source.webio import manager
+
 
 def ansl_code2col(ansl_code):
     if ansl_code == "0":

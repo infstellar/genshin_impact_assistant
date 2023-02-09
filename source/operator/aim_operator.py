@@ -1,11 +1,11 @@
 import pyautogui
 
-from common.funclib import movement
-from common.manager import img_manager
-from common.base_threading import BaseThreading
-from interaction.interaction_background import InteractionBGD
-from base.timer_module import Timer
-from util import *
+from funclib import movement
+from manager import img_manager
+from source.common.base_threading import BaseThreading
+from source.interaction.interaction_background import InteractionBGD
+from source.base.timer_module import Timer
+from source.util import *
 
 red_num = 245
 BG_num = 100

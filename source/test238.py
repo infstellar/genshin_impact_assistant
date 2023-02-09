@@ -1,4 +1,4 @@
-from util import *
+from source.util import *
 
 
 # save_json(load_json(json_name="icon.json", default_path="assets\\POI_JSON_API"),json_name="icon.json", default_path="assets\\POI_JSON_API")

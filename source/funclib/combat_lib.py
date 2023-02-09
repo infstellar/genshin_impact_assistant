@@ -1,10 +1,8 @@
-from common.manager import img_manager, posi_manager
-from interaction.interaction_background import InteractionBGD
-from util import *
-from common.base_threading import BaseThreading
+from manager import img_manager, posi_manager
+from source.interaction.interaction_background import InteractionBGD
+from source.util import *
+from source.common.base_threading import BaseThreading
 import numpy as np
-import timer_module
-import character
 
 """
 战斗相关常用函数库。
