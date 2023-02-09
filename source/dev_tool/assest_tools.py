@@ -1,4 +1,4 @@
-from manager.asset import *
+from source.manager.asset import *
 import cv2, numpy as np
 from source.interaction.interaction_background import InteractionBGD
 itt = InteractionBGD()

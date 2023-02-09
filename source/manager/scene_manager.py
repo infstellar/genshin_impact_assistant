@@ -1,6 +1,6 @@
 from source.util import *
 import img_manager
-from manager import button_manager
+from source.manager import button_manager
 from source.interaction.interaction_background import InteractionBGD
 itt = InteractionBGD()
 

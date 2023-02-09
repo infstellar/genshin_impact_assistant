@@ -2,7 +2,7 @@ from source.util import *
 from source.interaction.interaction_background import InteractionBGD
 itt = InteractionBGD()
 from source.common.base_threading import BaseThreading
-from funclib import static_lib
+from source.funclib import static_lib
 from source.base.timer_module import Timer
 
 

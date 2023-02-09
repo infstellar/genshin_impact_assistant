@@ -1,4 +1,4 @@
-from manager import img_manager, text_manager, button_manager
+from source.manager import img_manager, text_manager, button_manager
 from source.util import *
 # import scene_manager
 QTSX = text_manager.TextTemplate(text=

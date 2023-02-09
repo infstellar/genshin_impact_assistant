@@ -1,4 +1,4 @@
-from source.pywebio import output
+from pywebio import output
 
 
 def toast_succ(text="succ!", duration=2):

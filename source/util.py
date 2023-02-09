@@ -153,8 +153,8 @@ def is_json_equal(j1: str, j2: str) -> bool:
         return False
 
 def add_logger_to_GUI():
-    import webio.log_handler
-    cb_func = webio.log_handler.webio_poster
+    import source.webio.log_handler
+    cb_func = source.webio.log_handler.webio_poster
     if DEBUG_MODE:
         logger.add(cb_func, level="TRACE", backtrace=True, colorize=True)
     else:

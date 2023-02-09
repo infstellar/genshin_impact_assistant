@@ -1,4 +1,4 @@
-from source.typing import TextIO
+from typing import TextIO
 
 from source.webio import manager
 

@@ -10,7 +10,7 @@ import win32api
 import win32con
 import win32gui
 from source.base import vkcode
-from source.ctypes.wintypes import RECT
+from ctypes.wintypes import RECT
 from funclib import static_lib
 from manager import scene_manager, img_manager, text_manager, button_manager
 

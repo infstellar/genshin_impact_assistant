@@ -1,4 +1,4 @@
-from source.typing import Union
+from typing import Union
 from source.util import *
 
 AREA1 = ['发光髓 - 蒙德', '逐月符 - 蒙德', '魔晶矿 - 蒙德', '电气水晶 - 蒙德', '蒙德-薄荷', '垂香木 - 蒙德', '蜥蜴尾巴 - 蒙德', '禽肉-璃月 - 蒙德', '星银矿石 - 蒙德', '冰雾花花朵 - 蒙德', '蒙德-蘑菇', '兽肉 - 蒙德', '射手丘丘人 - 蒙德', '白铁矿 - 蒙德', '食材调查点 - 蒙德', '遗迹重机 - 蒙德', '松木 - 蒙德']
@@ -205,7 +205,7 @@ def load_items_position(item_name:str, area_id=None, blacklist_id=None, ret_mode
     # print()
     return ret_dict  
 if __name__ == '__main__':
-    import asset
+    from source.manager import asset
     s = load_items_position(item_name=asset.QTSX.text, ret_mode=1, match_mode=1)
     print()
 def load_feature_position(text, blacklist_id=None, ret_mode = 0, check_mode = 0):

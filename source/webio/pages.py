@@ -13,7 +13,7 @@ from source import listening, webio
 from source.webio import manager
 from source.webio.page_manager import Page
 from source.constant import flow_state
-from funclib import collector_lib
+from source.funclib import collector_lib
 
 
 # from source.webio.log_handler import webio_poster

@@ -2,8 +2,8 @@
 
 from source.util import *
 from source.common import character
-from funclib import combat_lib
-from manager import asset, button_manager
+from source.funclib import combat_lib
+from source.manager import asset, button_manager
 from source.operator.aim_operator import AimOperator
 from source.common.base_threading import BaseThreading
 from source.interaction.interaction_background import InteractionBGD

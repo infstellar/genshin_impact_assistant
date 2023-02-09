@@ -1,8 +1,8 @@
 from source.util import *
 from source.common.base_threading import BaseThreading
 from source.interaction.interaction_background import InteractionBGD
-from funclib import generic_lib, movement, static_lib
-from manager import img_manager
+from source.funclib import generic_lib, movement, static_lib
+from source.manager import img_manager
 import numpy as np
 from funclib.err_code_lib import ERR_PASS, ERR_STUCK
 '''

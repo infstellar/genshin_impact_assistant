@@ -1,7 +1,7 @@
 import pyautogui
 
-from funclib import movement
-from manager import img_manager
+from source.funclib import movement
+from source.manager import img_manager
 from source.common.base_threading import BaseThreading
 from source.interaction.interaction_background import InteractionBGD
 from source.base.timer_module import Timer

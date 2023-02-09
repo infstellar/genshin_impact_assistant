@@ -1,15 +1,16 @@
 from source.util import *
-from source.common.constant import flow_state as ST
+from source.constant import flow_state as ST
 from source.interaction.interaction_background import InteractionBGD
 from source.operator import pickup_operator
 from source.flow import teyvat_move_flow
 from source.controller import combat_loop
 from source.common.base_threading import BaseThreading
-from funclib import collector_lib, generic_lib, static_lib, combat_lib
+from source.funclib import collector_lib, generic_lib, static_lib, combat_lib
 import numpy as np
 import datetime
-from manager import scene_manager, img_manager, button_manager
+from source.manager import scene_manager, img_manager, button_manager
 from funclib.err_code_lib import ERR_PASS, ERR_STUCK, ERR_COLLECTOR_FLOW_TIMEOUT
+from source.base import timer_module
 
 COLLECTION = 0
 ENEMY = 1

@@ -1,6 +1,6 @@
 from source.interaction.interaction_background import InteractionBGD
-from manager import scene_manager, img_manager, posi_manager, button_manager
-from funclib import big_map
+from source.manager import scene_manager, img_manager, posi_manager, button_manager
+from source.funclib import big_map
 import static_lib
 from source.util import *
 

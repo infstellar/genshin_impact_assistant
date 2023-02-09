@@ -1,5 +1,5 @@
 if True:
-    from source.api import pdocr_api
+    import source.api.pdocr_api as pdocr_api
 else:
     pdocr_api = None
 from source.common.base_threading import BaseThreading
@@ -8,8 +8,8 @@ from source.interaction.interaction_background import InteractionBGD
 from source.base.timer_module import Timer
 from source.util import *
 import cv2
-from funclib import combat_lib
-from manager import img_manager, posi_manager
+from source.funclib import combat_lib
+from source.manager import img_manager, posi_manager
 from source.path_lib import *
 
 E_STRICT_MODE = True  # may cause more performance overhead

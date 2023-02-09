@@ -3,8 +3,8 @@ from source.util import *
 from source.interaction.interaction_background import InteractionBGD
 from source.api.pdocr_api import ocr
 from source.base import timer_module
-from funclib import generic_lib, movement, static_lib
-from manager import img_manager
+from source.funclib import generic_lib, movement, static_lib
+from source.manager import img_manager
 import cv2
 
 

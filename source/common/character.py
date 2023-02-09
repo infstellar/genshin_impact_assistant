@@ -1,4 +1,4 @@
-from manager import posi_manager
+from source.manager import posi_manager
 from source.interaction.interaction_background import InteractionBGD
 from source.base.timer_module import Timer
 from source.util import *

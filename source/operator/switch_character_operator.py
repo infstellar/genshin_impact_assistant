@@ -1,7 +1,7 @@
 import pyautogui
 
 from source.common import character
-from funclib import combat_lib
+from source.funclib import combat_lib
 import tactic_operator
 from source.common.base_threading import BaseThreading
 from source.interaction.interaction_background import InteractionBGD

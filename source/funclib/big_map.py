@@ -1,6 +1,6 @@
 from source.util import *
 from source.interaction import interaction_background
-from manager import scene_manager, img_manager, posi_manager
+from source.manager import scene_manager, img_manager, posi_manager
 
 itt = interaction_background.InteractionBGD()
 
