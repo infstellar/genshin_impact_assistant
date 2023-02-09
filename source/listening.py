@@ -42,13 +42,13 @@ def import_current_module():
             pass
         elif current_flow == FLOW_COMBAT:
             # logger.info("正在导入 FLOW_COMBAT 模块，可能需要一些时间。")
-            import alpha_loop
+            from flow import alpha_loop
         elif current_flow == FLOW_DOMAIN:
             # logger.info("正在导入 FLOW_DOMAIN 模块，可能需要一些时间。")
-            import domain_flow
+            from flow import domain_flow
         elif current_flow == FLOW_COLLECTOR:
             # logger.info("正在导入 FLOW_COLLECTOR 模块，可能需要一些时间。")
-            import collector_flow
+            from flow import collector_flow
     except Exception as e:
         logger.critical(f"IMPORT ERROR: current_flow: {current_flow}")
         print(e)
@@ -60,7 +60,7 @@ def switch_combat_loop():
         logger.info(t2t('正在停止自动战斗'))
         t1.stop_threading()
     else:
-        import alpha_loop
+        from flow import alpha_loop
         logger.info(t2t('启动自动战斗'))
         t1 = alpha_loop.AlphaLoop()
         t1.setDaemon(True)
@@ -74,7 +74,7 @@ def switch_domain_loop():
         logger.info(t2t('正在停止自动秘境'))
         t2.stop_threading()
     else:
-        import domain_flow
+        from flow import domain_flow
         logger.info(t2t('启动自动秘境'))
         t2 = domain_flow.DomainFlow()
         t2.setDaemon(True)
@@ -88,7 +88,7 @@ def switch_collector_loop():
         t3.stop_threading()
     else:
         logger.info(t2t('启动自动采集'))
-        import collector_flow
+        from flow import collector_flow
         t3 = collector_flow.CollectorFlow()
         t3.setDaemon(True)
         t3.start()

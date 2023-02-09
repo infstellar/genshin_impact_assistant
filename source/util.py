@@ -1,4 +1,3 @@
-import inspect
 import json
 import os
 import shutil
@@ -234,7 +233,6 @@ def is_number(s):
     return False
 
 import cv2
-from PIL import Image
 
 import win32gui, win32process, psutil
 

@@ -1,5 +1,6 @@
 from util import *
-from collector_lib import get_item_id
+
+
 # save_json(load_json(json_name="icon.json", default_path="assets\\POI_JSON_API"),json_name="icon.json", default_path="assets\\POI_JSON_API")
 
 def reshape_json():

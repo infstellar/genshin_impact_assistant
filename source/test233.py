@@ -1,10 +1,5 @@
-import cv2
-import os
-import time, math
-from img_manager import qshow
-from interaction_background import InteractionBGD
-import img_manager, button_manager
-import small_map
+from interaction.interaction_background import InteractionBGD
+from common.manager import img_manager, button_manager
 from util import *
 
 itt = InteractionBGD()

@@ -1,9 +1,9 @@
 import asyncio
 import threading
-import time
 from pywebio import platform
 from source.webio import webio
-import source.webio.log_handler
+
+
 def server_thread():
     # https://zhuanlan.zhihu.com/p/101586682
     loop = asyncio.new_event_loop()
@@ -29,7 +29,7 @@ except Exception as error:
     input(source.util.t2t('程序暂停。按任意键退出'))
 
 try:
-    import source.generic_event
+    import common.generic_event
 except Exception as error:
     source.util.logger.critical(source.util.t2t("导入依赖时错误; err code: 001_2"))
     source.util.logger.exception(error)

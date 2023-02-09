@@ -12,8 +12,8 @@ import time
 from source import listening, webio
 from source.webio import manager
 from source.webio.page_manager import Page
-import flow_state
-import collector_lib
+from common.constant import flow_state
+from common.funclib import collector_lib
 
 
 # from source.webio.log_handler import webio_poster
