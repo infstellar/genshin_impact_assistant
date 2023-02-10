@@ -198,7 +198,7 @@ class DomainFlow(BaseThreading):
 
         while 1:
             if self.resin_mode == '40':
-                self.itt.appear_then_click(img_manager.USE_20X2RESIN_DOBLE_CHOICES)
+                self.itt.appear_then_click(asset.USE_20X2RESIN_DOBLE_CHOICES)
             elif self.resin_mode == '20':
                 self.itt.appear_then_click(asset.USE_20RESIN_DOBLE_CHOICES)
 
