@@ -4,7 +4,7 @@ from source.interaction import interaction_core
 from source.api.pdocr_api import ocr
 from source.base import timer_module
 from source.funclib import generic_lib, movement, static_lib
-from source.manager import img_manager
+from source.manager import img_manager, asset
 import cv2
 
 
@@ -138,11 +138,11 @@ class PickupOperator(BaseThreading):
         ret = generic_lib.f_recognition(self.itt)
         if ret:
             time.sleep(0.05)
-            ret = self.itt.get_img_position(img_manager.F_BUTTON)
+            ret = self.itt.get_img_position(asset.F_BUTTON)
             if ret == False:
                 return 0
-            y1 = img_manager.F_BUTTON.cap_posi[1]
-            x1 = img_manager.F_BUTTON.cap_posi[0]
+            y1 = asset.F_BUTTON.cap_posi[1]
+            x1 = asset.F_BUTTON.cap_posi[0]
             if static_lib.W_KEYDOWN:
                 flag1 = True
                 self.itt.key_up('w')

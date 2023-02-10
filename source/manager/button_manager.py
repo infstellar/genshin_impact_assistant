@@ -34,13 +34,6 @@ class Button(ImgIcon):
     def click_position(self):
         return [int(self.center_point[0]), int(self.center_point[1])]
 
-button_esc_page = Button(name="button_esc_page", path="assets\\imgs\\common\\ui\\emergency_food.jpg", print_log=LOG_WHEN_TRUE)
-button_time_page = Button(name="button_time_page",path="assets\\imgs\\common\\ui\\switch_to_time_menu.jpg", black_offset = 15, print_log=LOG_WHEN_TRUE)
-button_exit = Button(path="assets\\imgs\\common\\button\\button_exit.jpg", print_log=LOG_WHEN_TRUE)
-button_all_character_died = Button( name="all_character_died", path="assets\\imgs\\$lang$\\all_character_died.jpg", 
-                                   threshold=0.988, win_text="复苏", print_log=LOG_WHEN_TRUE)
-button_ui_cancel = Button(name="button_ui_cancel", path="assets\\imgs\\common\\ui\\ui_cancel.jpg",  print_log=LOG_WHEN_TRUE)
-
 if __name__ == '__main__':
-    button_ui_cancel.show_image()
+    pass # button_ui_cancel.show_image()
 # print()

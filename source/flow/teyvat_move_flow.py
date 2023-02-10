@@ -3,7 +3,7 @@ import math
 from source.constant import flow_state as ST
 from source.base import timer_module
 from funclib import big_map, movement, static_lib, combat_lib
-from manager import scene_manager, img_manager, posi_manager, asset
+from source.manager import scene_manager, img_manager, posi_manager, asset
 from source.interaction import interaction_core
 from source.controller import teyvat_move_controller
 from source.common.base_threading import BaseThreading
@@ -94,11 +94,11 @@ class TeyvatMoveFlow(BaseThreading):
         self.tmc.set_stop_rule(self.stop_rule)
 
     def switch_motion_state(self):
-        if self.itt.get_img_existence(img_manager.motion_climbing):
+        if self.itt.get_img_existence(asset.motion_climbing):
             self.motion_state = IN_CLIMB
-        elif self.itt.get_img_existence(img_manager.motion_flying):
+        elif self.itt.get_img_existence(asset.motion_flying):
             self.motion_state = IN_FLY
-        elif self.itt.get_img_existence(img_manager.motion_swimming):
+        elif self.itt.get_img_existence(asset.motion_swimming):
             self.motion_state = IN_WATER
         else:
             self.motion_state = IN_MOVE
@@ -166,7 +166,7 @@ class TeyvatMoveFlow(BaseThreading):
                     if self.checkup_stop_func():
                         break
                     
-                    if self.itt.appear_then_click(img_manager.bigmap_tp) : break
+                    if self.itt.appear_then_click(asset.bigmap_tp) : break
                     if check_mode == 1:
                         logger.debug("tp to tw")
                         self.itt.appear_then_click(asset.CSMD)
@@ -188,7 +188,7 @@ class TeyvatMoveFlow(BaseThreading):
 
                 self.itt.move_and_click([posi_manager.tp_button[0], posi_manager.tp_button[1]], delay=1)
                 
-                while not self.itt.get_img_existence(img_manager.ui_main_win):
+                while not self.itt.get_img_existence(asset.ui_main_win):
                     if self.checkup_stop_func():
                         break
                     time.sleep(1)

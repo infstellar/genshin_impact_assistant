@@ -899,9 +899,9 @@ if __name__ == '__main__':
     while 1:
         # time.sleep(1)
         # print(ib.get_img_existence(img_manager.motion_flying), ib.get_img_existence(img_manager.motion_climbing),
-        #       ib.get_img_existence(img_manager.motion_swimming))
+        #       ib.get_img_existence(asset.motion_swimming))
         time.sleep(2)
         ib.move_and_click([100,100], type="left")
         # print(ib.get_img_existence(img_manager.USE_20X2RESIN_DOBLE_CHOICES))
-        # ib.appear_then_click(imgname=img_manager.USE_20RESIN_DOBLE_CHOICES)
+        # ib.appear_then_click(imgname=asset.USE_20RESIN_DOBLE_CHOICES)
         # ib.move_to(100,100)

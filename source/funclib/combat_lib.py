@@ -1,4 +1,4 @@
-from source.manager import img_manager, posi_manager
+from source.manager import img_manager, posi_manager, asset
 from source.interaction import interaction_core
 from source.util import *
 from source.common.base_threading import BaseThreading
@@ -95,12 +95,12 @@ def unconventionality_situation_detection(itt: interaction_core.InteractionBGD,
 
     situation_code = -1
 
-    while itt.get_img_existence(img_manager.COMING_OUT_BY_SPACE):
+    while itt.get_img_existence(asset.COMING_OUT_BY_SPACE):
         situation_code = 1
         itt.key_press('spacebar')
         logger.debug('Unconventionality Situation: COMING_OUT_BY_SPACE')
         time.sleep(0.1)
-    while itt.get_img_existence(img_manager.motion_swimming):
+    while itt.get_img_existence(asset.motion_swimming):
         situation_code = 2
         itt.key_down('w')
         logger.debug('Unconventionality Situation: SWIMMING')

@@ -1,6 +1,6 @@
 from source.util import *
 from source.interaction import interaction_core
-from source.manager import scene_manager, img_manager, posi_manager
+from source.manager import scene_manager, img_manager, posi_manager, asset
 from source.funclib import scene_lib
 
 itt = interaction_core.InteractionBGD()
@@ -35,7 +35,7 @@ def move_map(x:int, y:int)->None:
     itt.move_to(-x * 6, -y * 6, relative=True)
 
 
-def move_navigation_to_center(object_name: img_manager.ImgIcon= img_manager.bigmap_AbyssMage)->None:
+def move_navigation_to_center(object_name: img_manager.ImgIcon= asset.bigmap_AbyssMage)->None:
     """移动导航点到中心，暂不使用。
 
     Args:
@@ -61,7 +61,7 @@ def move_navigation_to_center(object_name: img_manager.ImgIcon= img_manager.bigm
     # itt.move_to(1920/2,1080/2)
 
 
-def get_navigation_posi(object_name: img_manager.ImgIcon= img_manager.bigmap_AbyssMage)->list:
+def get_navigation_posi(object_name: img_manager.ImgIcon= asset.bigmap_AbyssMage)->list:
     """获得导航点的坐标，暂不使用。
 
     Args:
@@ -106,7 +106,7 @@ def get_tw_points(bigmatMat, stop_func):
     Returns:
         list: 坐标列表
     """
-    ret = itt.match_multiple_img(bigmatMat, img_manager.bigmap_TeleportWaypoint.image)
+    ret = itt.match_multiple_img(bigmatMat, asset.bigmap_TeleportWaypoint.image)
     if len(ret) == 0: # 自动重试
         logger.warning("获取传送锚点坐标失败，正在重试")
         time.sleep(5)
@@ -125,7 +125,7 @@ def get_gs_points(bigmatMat, stop_func):
     Returns:
         list: 坐标列表
     """
-    ret = itt.match_multiple_img(bigmatMat, img_manager.bigmap_GodStatue.image, threshold=0.98)
+    ret = itt.match_multiple_img(bigmatMat, asset.bigmap_GodStatue.image, threshold=0.98)
     if len(ret) == 0: # 自动重试
         logger.warning("获取七天神像坐标失败，正在重试")
         time.sleep(5)

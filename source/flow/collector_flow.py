@@ -230,10 +230,10 @@ class CollectorFlow(BaseThreading):
                     time.sleep(1)
                     if self.checkup_stop_threading():
                         break
-                    ret = self.itt.appear_then_click(button_manager.button_all_character_died)
+                    ret = self.itt.appear_then_click(asset.button_all_character_died)
                     
-                    if self.itt.get_img_existence(img_manager.ui_main_win) and not self.itt.get_img_existence(
-                            button_manager.button_all_character_died):
+                    if self.itt.get_img_existence(asset.ui_main_win) and not self.itt.get_img_existence(
+                            asset.button_all_character_died):
                         break
                 
                 self.current_state = ST.AFTER_PICKUP_COLLECTOR
@@ -263,7 +263,7 @@ class CollectorFlow(BaseThreading):
                 logger.info(t2t("重置完成。准备进行下一次采集"))
                 self.cct.reset_err_code()
             
-            if self.itt.get_img_existence(button_manager.button_all_character_died):
+            if self.itt.get_img_existence(asset.button_all_character_died):
                 self.last_err_code = ALL_CHARACTER_DIED
                 logger.warning("ALL_CHARACTER_DIED")
                 self.stop_all()

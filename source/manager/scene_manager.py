@@ -1,6 +1,6 @@
 from source.util import *
 from source.manager import img_manager
-from source.manager import button_manager
+from source.manager import asset
 
 
 def default_stop_func():
@@ -28,16 +28,16 @@ class UIPage():
         self.following_page[page_name]=switch_button
         
     
-page_main = UIPage(check_icon = img_manager.ui_main_win, page_name ="main", to_mainpage = [""], to_selfpage = [""])
+page_main = UIPage(check_icon = asset.ui_main_win, page_name ="main", to_mainpage = [""], to_selfpage = [""])
 page_main.add_following_page('bigmap', 'm')
 page_main.add_following_page('esc', 'esc')
-page_esc = UIPage(check_icon = img_manager.ui_esc_menu, page_name ="esc", to_mainpage = ["esc", "main"], to_selfpage = ["main", "esc"])
-page_esc.add_following_page('time', button_manager.button_time_page)
+page_esc = UIPage(check_icon = asset.ui_esc_menu, page_name ="esc", to_mainpage = ["esc", "main"], to_selfpage = ["main", "esc"])
+page_esc.add_following_page('time', asset.button_time_page)
 page_esc.add_following_page('main', 'esc')
-page_time = UIPage(check_icon = img_manager.ui_time_menu_core, page_name ="time",
+page_time = UIPage(check_icon = asset.ui_time_menu_core, page_name ="time",
                    to_mainpage = ["time", "esc", "main"], to_selfpage = ["main","esc","time"])
-page_time.add_following_page('esc', button_manager.button_exit)
-page_bigmap = UIPage(check_icon = img_manager.ui_bigmap_win, page_name ="bigmap",
+page_time.add_following_page('esc', asset.button_exit)
+page_bigmap = UIPage(check_icon = asset.ui_bigmap_win, page_name ="bigmap",
                      to_mainpage=["bigmap", "main"], to_selfpage=["main", "bigmap"])
 page_bigmap.add_following_page('main', 'm')
 
@@ -57,7 +57,7 @@ all_page = {
 
 # def switchto_mainwin(stop_func, max_time=30):
 #     i=0
-#     while not itt.get_img_existence(img_manager.ui_main_win):
+#     while not itt.get_img_existence(asset.ui_main_win):
 #         if stop_func():
 #             return
 #         itt.key_press('m')

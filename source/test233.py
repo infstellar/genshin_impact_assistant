@@ -1,5 +1,5 @@
 from source.interaction import interaction_core
-from source.manager import img_manager, button_manager
+from source.manager import img_manager, asset
 from source.util import *
 
 itt = interaction_core.InteractionBGD()
@@ -8,7 +8,7 @@ pickup_blacklist = load_json("auto_pickup.json")["blacklist"]
 pickup_blacklist += load_json("auto_pickup_default_blacklist.json")["blacklist"]
 pickup_blacklist = list(set(pickup_blacklist))
 # print()
-a = itt.get_img_existence(button_manager.button_all_character_died)
+a = itt.get_img_existence(asset.button_all_character_died)
 # print()
 
 while 1:

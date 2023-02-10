@@ -2,7 +2,7 @@ from source.util import *
 from source.common.base_threading import BaseThreading
 from source.interaction import interaction_core
 from source.funclib import generic_lib, movement, static_lib
-from source.manager import img_manager
+from source.manager import img_manager, asset
 import numpy as np
 from funclib.err_code_lib import ERR_PASS, ERR_STUCK
 '''
@@ -38,7 +38,7 @@ class TeyvatMoveController(BaseThreading):
         self.target_positon = posi    
 
     def check_flying(self):
-        if self.itt.get_img_existence(img_manager.motion_flying):
+        if self.itt.get_img_existence(asset.motion_flying):
             return True
         else:
             return False
@@ -47,7 +47,7 @@ class TeyvatMoveController(BaseThreading):
         self.stop_rule = mode
     
     def check_climbing(self):
-        if self.itt.get_img_existence(img_manager.motion_climbing):
+        if self.itt.get_img_existence(asset.motion_climbing):
             return True
         else:
             return False
@@ -58,7 +58,7 @@ class TeyvatMoveController(BaseThreading):
             self.itt.key_up('w')
     
     def check_swimming(self):
-        if self.itt.get_img_existence(img_manager.motion_swimming):
+        if self.itt.get_img_existence(asset.motion_swimming):
             return True
         else:
             return False

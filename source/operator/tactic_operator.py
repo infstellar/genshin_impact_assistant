@@ -9,7 +9,7 @@ from source.base.timer_module import Timer
 from source.util import *
 import cv2
 from source.funclib import combat_lib
-from source.manager import img_manager, posi_manager
+from source.manager import img_manager, posi_manager, asset
 from source.path_lib import *
 
 E_STRICT_MODE = True  # may cause more performance overhead
@@ -133,7 +133,7 @@ class TacticOperator(BaseThreading):
 
         situation_code = -1
 
-        while self.itt.get_img_existence(img_manager.COMING_OUT_BY_SPACE):
+        while self.itt.get_img_existence(asset.COMING_OUT_BY_SPACE):
             if self.checkup_stop_func():
                 return 0
             if self.pause_tactic_flag:

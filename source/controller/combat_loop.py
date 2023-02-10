@@ -121,7 +121,7 @@ class Combat_Controller(BaseThreading):
                     self.last_err_code = CHARACTER_DIED
                     while 1:
                         time.sleep(0.5)
-                        r = self.itt.appear_then_click(button_manager.button_ui_cancel)
+                        r = self.itt.appear_then_click(asset.button_ui_cancel)
                         if r:
                             break
                     self.pause_threading()
