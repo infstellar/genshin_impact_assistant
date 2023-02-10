@@ -25,4 +25,5 @@ def get_handle():
 
 
 if __name__ == '__main__':
-    while_until_no_excessive_error()
+    pass
+    # while_until_no_excessive_error()

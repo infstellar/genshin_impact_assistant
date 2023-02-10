@@ -3,7 +3,7 @@ import math
 from source.constant import flow_state as ST
 from source.base import timer_module
 from funclib import big_map, movement, static_lib, combat_lib
-from source.manager import scene_manager, img_manager, posi_manager, asset
+from source.manager import scene_manager, posi_manager, asset
 from source.interaction import interaction_core
 from source.controller import teyvat_move_controller
 from source.common.base_threading import BaseThreading

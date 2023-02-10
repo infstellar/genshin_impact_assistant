@@ -1,8 +1,8 @@
 from source.controller import combat_loop
 from source.constant import flow_state as ST
 from source.base import timer_module
-from funclib import generic_lib, movement
-from manager import img_manager, posi_manager as PosiM, asset
+from source.funclib import generic_lib, movement
+from source.manager import posi_manager as PosiM, asset
 from source.interaction import interaction_core
 from source.api import yolox_api
 from source.common.base_threading import BaseThreading

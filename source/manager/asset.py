@@ -1,6 +1,6 @@
-from source.manager import img_manager, text_manager, button_manager, scene_manager
+from source.manager import img_manager, text_manager, button_manager
 from source.util import *
-from img_manager import LOG_WHEN_TRUE, LOG_ALL, LOG_NONE, LOG_WHEN_FALSE
+from source.manager.img_manager import LOG_WHEN_TRUE, LOG_ALL, LOG_NONE, LOG_WHEN_FALSE, ImgIcon
 
 # import scene_manager
 
@@ -64,9 +64,6 @@ button_exit = button_manager.Button(path="assets\\imgs\\common\\button\\button_e
 button_all_character_died = button_manager.Button( name="all_character_died", path="assets\\imgs\\$lang$\\all_character_died.jpg", 
                                    threshold=0.988, win_text="复苏", print_log=LOG_WHEN_TRUE)
 button_ui_cancel = button_manager.Button(name="button_ui_cancel", path="assets\\imgs\\common\\ui\\ui_cancel.jpg",  print_log=LOG_WHEN_TRUE)
-
-# img #
-from img_manager import ImgIcon
 
 COMING_OUT_BY_SPACE = ImgIcon(name="coming_out_by_space", path="assets\\imgs\\common\\coming_out_by_space.jpg",
                               is_bbg=True, bbg_posi=[1379,505,  1447,568, ], cap_posi='bbg', threshold=0.8, print_log=LOG_WHEN_TRUE)
