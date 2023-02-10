@@ -874,7 +874,7 @@ class InteractionBGD:
 
 if __name__ == '__main__':
     ib = InteractionBGD()
-    rootpath = "D:\Program Data\\vscode\GIA\genshin_impact_assistant\dist\imgs"
+    rootpath = "D:\\Program Data\\vscode\\GIA\\genshin_impact_assistant\\dist\\imgs"
     # ib.similar_img_pixel(cv2.imread(rootpath+"\\yunjin_q.png"),cv2.imread(rootpath+"\\zhongli_q.png"))
 
     # print(win32api.GetCursorPos())

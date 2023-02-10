@@ -15,7 +15,7 @@ class GenericEvent(BaseThreading):
         self.w_down_flag = False
         self.setName("GenericEvent")
     
-    def run(self):
+    def run(self) -> None:
         '''if you're using this class, copy this'''
         while 1:
             time.sleep(self.while_sleep)

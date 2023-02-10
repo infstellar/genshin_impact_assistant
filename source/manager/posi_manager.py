@@ -65,5 +65,5 @@ if __name__ == '__main__':
     p = posi_coming_out_by_space
     b = a[p[0]:p[2], p[1]:p[3]]
     cv2.imshow("123", b)
-    cv2.imwrite("assets\imgs\common\coming_out_by_space.jpg", b)
+    cv2.imwrite("assets\\imgs\\common\\coming_out_by_space.jpg", b)
     cv2.waitKey(0)

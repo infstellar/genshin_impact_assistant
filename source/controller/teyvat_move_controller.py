@@ -93,7 +93,7 @@ class TeyvatMoveController(BaseThreading):
         return closest_pp
     
     
-    def run(self):
+    def run(self) -> None:
         '''if you're using this class, copy this'''
         while 1:
             time.sleep(self.while_sleep)

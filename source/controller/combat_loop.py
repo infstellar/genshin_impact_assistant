@@ -4,7 +4,7 @@
 from source.util import *
 from source.common import character
 from source.funclib import combat_lib
-from source.manager import asset, button_manager
+from source.manager import asset
 from source.operator.aim_operator import AimOperator
 from source.common.base_threading import BaseThreading
 from source.interaction import interaction_core
@@ -108,7 +108,7 @@ class Combat_Controller(BaseThreading):
         
         # self.super_stop_func=super_stop_func
 
-    def run(self):
+    def run(self) -> None:
         while 1:
             time.sleep(0.2)
             if self.checkup_stop_threading():

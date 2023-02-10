@@ -49,7 +49,7 @@ class BaseThreading(threading.Thread):
     def reset_err_code(self):
         self.last_err_code = ERR_NONE
     
-    def run(self):
+    def run(self) -> None:
         '''if you're using this class, copy this'''
         while 1:
             time.sleep(self.while_sleep)

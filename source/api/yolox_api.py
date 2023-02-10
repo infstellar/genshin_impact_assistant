@@ -11,7 +11,6 @@ root_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, root_path)
 import argparse
 import datetime
-import os
 import time
 # from source.loguru import logger
 
@@ -130,7 +129,7 @@ def make_parser_2(
         demo="image",
         experiment_name=None,
         name='yolox-s',
-        path='D:\Program Data\IDEA\yolo3_test1\YOLOX\\assets/head2.jpg',
+        path='D:\\Program Data\\IDEA\\yolo3_test1\\YOLOX\\assets\\head2.jpg',
         camid=0,
         save_result=True,
         exp_file=None,
@@ -141,11 +140,11 @@ def make_parser_2(
         fp16=True,
         legacy=False,
         trt=False,
-        ckpt="D:\Program Data\\vscode\yolox_test4\YOLOX_outputs/tree_exp/best_ckpt.pth"
+        ckpt="D:\\Program Data\\vscode\\yolox_test4\\YOLOX_outputs\\tree_exp\\best_ckpt.pth"
 
 ):
-    path1 = "D:\Program Data\IDEA\yolo3_test1\yoloxmodel\yolox_ss.pth"
-    path2 = "D:\Program Data\IDEA\yolo3_test1\YOLOX\YOLOX_outputs/yolox_voc_s/best_ckpt.pth"
+    path1 = "D:\\Program Data\\IDEA\\yolo3_test1\\yoloxmodel\\yolox_ss.pth"
+    path2 = "D:\\Program Data\\IDEA\\yolo3_test1\\YOLOX\\YOLOX_outputs\\yolox_voc_s\\best_ckpt.pth"
     args = Sim_Args(demo=demo,
                     experiment_name=experiment_name,
                     name=name,
@@ -544,5 +543,5 @@ if __name__ == "__main__":
 
     # main(exp, args)
     # ya = Yolox_Api()
-    a = yolo_tree.predicte(cv2.imread("D:\Program Data\\vscode\yolox_test4\\assets\\84.jpg"))
+    a = yolo_tree.predicte(cv2.imread("D:\\Program Data\\vscode\\yolox_test4\\assets\\84.jpg"))
     # print()
