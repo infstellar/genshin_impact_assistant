@@ -9,7 +9,7 @@ import gettext
 from loguru import logger
 import cv2
 import win32gui, win32process, psutil
-
+import ctypes, pickle
 
 time.time()  # 防自动删除
 
@@ -91,7 +91,7 @@ if not os.path.exists(source_path):
 
 
 # verify administration
-import ctypes, pickle
+
 def is_admin():
     try:
         return ctypes.windll.shell32.IsUserAnAdmin()
@@ -152,9 +152,7 @@ def is_json_equal(j1: str, j2: str) -> bool:
     except:
         return False
 
-def add_logger_to_GUI():
-    import source.webio.log_handler
-    cb_func = source.webio.log_handler.webio_poster
+def add_logger_to_GUI(cb_func):
     if DEBUG_MODE:
         logger.add(cb_func, level="TRACE", backtrace=True, colorize=True)
     else:

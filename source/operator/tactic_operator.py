@@ -1,7 +1,4 @@
-if True:
-    import source.api.pdocr_api as pdocr_api
-else:
-    pdocr_api = None
+import source.api.pdocr_api as pdocr_api
 from source.common.base_threading import BaseThreading
 from source.common.character import Character
 from source.interaction import interaction_core
@@ -9,7 +6,7 @@ from source.base.timer_module import Timer
 from source.util import *
 import cv2
 from source.funclib import combat_lib
-from source.manager import img_manager, posi_manager, asset
+from source.manager import posi_manager, asset
 from source.path_lib import *
 
 E_STRICT_MODE = True  # may cause more performance overhead
@@ -478,13 +475,14 @@ class TacticOperator(BaseThreading):
         
 
 if __name__ == '__main__':
-    from source.controller import combat_loop
+    # from source.controller import combat_loop
 
-    to = TacticOperator()
-    itt = interaction_core.InteractionBGD()
-    chara = combat_loop.get_chara_list()[1]
-    to.set_parameter(chara.tactic_group, chara)
-    # to.setDaemon(True)
-    while 1:
-        print(to._is_e_release(show_res=True))
-        time.sleep(0.1)
+    # to = TacticOperator()
+    # itt = interaction_core.InteractionBGD()
+    # chara = combat_loop.get_chara_list()[1]
+    # to.set_parameter(chara.tactic_group, chara)
+    # # to.setDaemon(True)
+    # while 1:
+    #     print(to._is_e_release(show_res=True))
+    #     time.sleep(0.1)
+    pass

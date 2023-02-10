@@ -7,10 +7,14 @@ def default_stop_func():
     return False
 
 class UIPage():
-    def __init__(self, check_icon: img_manager.ImgIcon, page_name:str = None, to_mainpage = [""], to_selfpage = [""]):
+    def __init__(self, check_icon: img_manager.ImgIcon, page_name:str = None, to_mainpage = None, to_selfpage = None):
         self.check_icon = check_icon
         self.page_name = page_name
         self.following_page={}
+        if to_mainpage == None:
+            to_mainpage = [""]
+        if to_selfpage == None:
+            to_selfpage = [""]
         self.to_mainpage = to_mainpage
         self.to_selfpage = to_selfpage
         

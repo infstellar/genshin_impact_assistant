@@ -114,7 +114,9 @@ class PaddleocrAPI:
         return None
 
     def get_text_position(self, im_src, text, mode=APPROXIMATE_MATCHING, returnMode=RETURN_POSITION, isprintlog=False,
-                          message='', default_end='\n', cap_posi_leftup = [0,0]):
+                          message='', default_end='\n', cap_posi_leftup = None):
+        if cap_posi_leftup == None:
+            cap_posi_leftup = [0,0]
         res = self.img_analyse(im_src)
         res_position = self.find_text(res, text, mode=mode)
         # logger.debug('getTextPosition:  ' + message, end=' | ')

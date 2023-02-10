@@ -1,7 +1,9 @@
 from source.util import *
 
 class TextTemplate():
-    def __init__(self, text:dict, cap_area=[0,0,1920,1080]) -> None:
+    def __init__(self, text:dict, cap_area=None) -> None:
+        if cap_area == None:
+            cap_area = [0,0,1920,1080]
         self.origin_text = text
         self.cap_area = cap_area
         self.text = self.origin_text[global_lang]

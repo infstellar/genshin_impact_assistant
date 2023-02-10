@@ -24,7 +24,7 @@ def main():
     webio.manager.reg_page('CombatSettingPage', CombatSettingPage())
     webio.manager.reg_page("CollectorSettingPage", CollectorSettingPage())
     webio.manager.load_page('MainPage')
-    add_logger_to_GUI()
+    add_logger_to_GUI(webio.log_handler.webio_poster)
     logger.info(t2t("webio启动完成"))
 
 

@@ -21,8 +21,10 @@ def qshow(img1):
     cv2.imshow('123', img1)
     cv2.waitKey(0)
 class ImgIcon:
-    def __init__(self, name, path, is_bbg=True, matching_rate=None, alpha=None, bbg_posi=None, cap_posi=[0, 0, 1080, 1920],
+    def __init__(self, name, path, is_bbg=True, matching_rate=None, alpha=None, bbg_posi=None, cap_posi=None,
                  jpgmode=2, threshold=0.91, win_page = 'all', win_text = None, offset = 0, print_log = LOG_NONE):
+        if cap_posi == None:
+            cap_posi = [0, 0, 1080, 1920]
         self.name = name
         self.origin_path = os.path.join(root_path, path)
         self.path = self.origin_path.replace("$lang$", global_lang)
