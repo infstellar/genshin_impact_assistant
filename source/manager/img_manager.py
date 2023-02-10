@@ -73,7 +73,7 @@ class ImgIcon:
             else:
                 return False
 
-imgs_dict = {}
+# imgs_dict = {}
 
 #COMING_OUT_BY_SPACE = ImgIcon(name="coming_out_by_space", path="assets\\imgs\\common\\coming_out_by_space.jpg",
 #                              is_bbg=True, bbg_posi=[1379,505,  1447,568, ], cap_posi='bbg', threshold=0.8, print_log=LOG_WHEN_TRUE)
@@ -122,16 +122,16 @@ imgs_dict = {}
 # character_died.show_image()
 
 
-matching_rate_dict = {
-    "coming_out_by_space": 0.9,
-    "IN_DOMAIN": 0.98,
-    "USE_20RESIN_DOBLE_CHOICES": 0.88,
-    "USE_20X2RESIN_DOBLE_CHOICES": 0.88,
-}
+# matching_rate_dict = {
+#     "coming_out_by_space": 0.9,
+#     "IN_DOMAIN": 0.98,
+#     "USE_20RESIN_DOBLE_CHOICES": 0.88,
+#     "USE_20X2RESIN_DOBLE_CHOICES": 0.88,
+# }
 
-alpha_dict = {
-    "F_BUTTON": 254
-}
+# alpha_dict = {
+#     "F_BUTTON": 254
+# }
 
 
 
