@@ -1,5 +1,5 @@
 import cv2
-
+from source.util import *
 ly = 96
 dx = 0
 dy = 0
@@ -13,6 +13,37 @@ d2y = 5
 #     "USE_20X2RESIN_DOBLE_CHOICES": [726, 567, 793, 934],
 #     "F_BUTTON": [526, 1104, 550, 1128]
 # }
+
+class PosiTemplate():
+    def __init__(self, posi=None, img_path=None):
+        """坐标管理类
+
+        Args:
+            posi (list, optional): 可选。若有，则使用该坐标. Defaults to None.
+            img_path (str, optional): 可选。若有，则使用该图片。图片应符合bbg格式. Defaults to None.
+        """
+        self.posi_list = []
+        self.position = None
+        self.add_posi(posi=posi, img_path=img_path)
+    
+    def add_posi(self, posi=None, img_path=None):
+        """添加坐标
+        
+        Args:
+            posi (list, optional): 可选。若有，则使用该坐标. Defaults to None.
+            img_path (str, optional): 可选。若有，则使用该图片。图片应符合bbg格式. Defaults to None.
+        """
+        if posi != None:
+            position = posi
+        if img_path != None:
+            image = cv2.imread(img_path)
+            position = get_bbox(image, black_offset=18)
+        self.posi_list.append(position)
+        
+        if len(self.posi_list) <= 1:
+            self.position = self.posi_list[0]
+        else:
+            self.position = self.posi_list
 
 posi_charalist_q = [[339 - ly + dy, 1591 + dx, 339 - ly + 55, 1591 + 55], [339 + dy, 1591 + dx, 339 + 55, 1591 + 55],
                     [339 + ly + dy, 1591 + dx, 339 + ly + 55, 1591 + 55],
