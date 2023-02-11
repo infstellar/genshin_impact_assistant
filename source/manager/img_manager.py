@@ -21,15 +21,31 @@ def qshow(img1):
     cv2.imshow('123', img1)
     cv2.waitKey(0)
 class ImgIcon:
-    def __init__(self, name, path, is_bbg=True, matching_rate=None, alpha=None, bbg_posi=None, cap_posi=None,
+    def __init__(self, name, path, is_bbg=True, alpha=None, bbg_posi=None, cap_posi=None,
                  jpgmode=2, threshold=0.91, win_page = 'all', win_text = None, offset = 0, print_log = LOG_NONE):
+        """创建一个img对象，用于图片识别等。
+
+        Args:
+            name (str): 图片名称
+            path (str): 图片路径
+            is_bbg (bool, optional): 是否为黑色背景图片. Defaults to True.
+            matching_rate (float, optional): 匹配成功的匹配率. Defaults to None.
+            alpha (int, optional): 截图时的alpha通道，已废弃. Defaults to None.
+            bbg_posi (list/None, optional): 黑色背景的图片坐标，默认自动识别坐标. Defaults to None.
+            cap_posi (list/str, optional): 截图坐标。注意：可以填入'bbg'字符串关键字，使用bbg坐标. Defaults to None.
+            jpgmode (int, optional): 截图时的jpgmode，将废弃. Defaults to 2.
+            threshold (float, optional): 匹配阈值. Defaults to 0.91.
+            win_page (str, optional): 匹配时的UI界面. Defaults to 'all'.
+            win_text (str, optional): 匹配时图片内应该包含的文字. Defaults to None.
+            offset (int, optional): 截图偏移. Defaults to 0.
+            print_log (int, optional): 打印日志模式. Defaults to LOG_NONE.
+        """
         if cap_posi == None:
             cap_posi = [0, 0, 1080, 1920]
         self.name = name
         self.origin_path = os.path.join(root_path, path)
         self.path = self.origin_path.replace("$lang$", global_lang)
         self.is_bbg = is_bbg
-        self.mr = matching_rate
         self.alpha = alpha
         self.bbg_posi = bbg_posi
         self.jpgmode = jpgmode
@@ -141,51 +157,51 @@ class ImgIcon:
 # qshow(ui_time_menu_core.image)
 
 
-def refrom_img(im_src, posi):
-    img = np.zeros((1080, 1920, 3), dtype=np.uint8)
-    img[posi[0]:posi[2], posi[1]:posi[3]] = im_src
-    cv2.imshow('12', img)
-    cv2.imshow('123', im_src)
-    cv2.waitKey(0)
-    return img
+# def refrom_img(im_src, posi):
+#     img = np.zeros((1080, 1920, 3), dtype=np.uint8)
+#     img[posi[0]:posi[2], posi[1]:posi[3]] = im_src
+#     cv2.imshow('12', img)
+#     cv2.imshow('123', im_src)
+#     cv2.waitKey(0)
+#     return img
 
 
-def auto_import_img(im_path, name):
-    im_src = cv2.imread(im_path)
-    origin_img = im_src.copy()
-    gray_img = cv2.cvtColor(im_src, cv2.COLOR_BGR2GRAY)  # 先要转换为灰度图片
-    ret, im_src = cv2.threshold(gray_img, 1, 255, cv2.THRESH_BINARY)  # 这里的第二个参数要调，是阈值！！
-    qshow(origin_img)
+# def auto_import_img(im_path, name):
+#     im_src = cv2.imread(im_path)
+#     origin_img = im_src.copy()
+#     gray_img = cv2.cvtColor(im_src, cv2.COLOR_BGR2GRAY)  # 先要转换为灰度图片
+#     ret, im_src = cv2.threshold(gray_img, 1, 255, cv2.THRESH_BINARY)  # 这里的第二个参数要调，是阈值！！
+#     qshow(origin_img)
 
-    contours, hierarchy = cv2.findContours(im_src, 0, 1)
-    # qshow(Alpha)
+#     contours, hierarchy = cv2.findContours(im_src, 0, 1)
+#     # qshow(Alpha)
 
-    max_black = 0
-    max_id = 0
-    bound_rect = []
-    for i in range(len(contours)):
-        bound_rect.append([])
-        if len(contours[i]) > max_black:
-            max_black = len(contours[i])
-            max_id = i
-        bound_rect[i] = cv2.boundingRect(cv2.Mat(contours[i]))
+#     max_black = 0
+#     max_id = 0
+#     bound_rect = []
+#     for i in range(len(contours)):
+#         bound_rect.append([])
+#         if len(contours[i]) > max_black:
+#             max_black = len(contours[i])
+#             max_id = i
+#         bound_rect[i] = cv2.boundingRect(cv2.Mat(contours[i]))
 
-    x, y, w, h = bound_rect[max_id]
-    while 1:
-        d = origin_img.copy()
-        draw_1 = cv2.rectangle(d, (x, y), (x + w, y + h), (0, 255, 0), 2)
-        qshow(draw_1)
-        print('\"' + name + '\"', ':', [y, x, y + h, x + w])
-        a, b, c, d = map(int, input('x,y,w,h: ').split(','))
-        if a == 0 and b == 0 and c == 0 and d == 0:
-            break
-        else:
-            x += a
-            y += b
-            w += c
-            h += d
-    return [y, x, y + h, x + w]
-    # p = [x + w / 2, y + h / 2]
+#     x, y, w, h = bound_rect[max_id]
+#     while 1:
+#         d = origin_img.copy()
+#         draw_1 = cv2.rectangle(d, (x, y), (x + w, y + h), (0, 255, 0), 2)
+#         qshow(draw_1)
+#         print('\"' + name + '\"', ':', [y, x, y + h, x + w])
+#         a, b, c, d = map(int, input('x,y,w,h: ').split(','))
+#         if a == 0 and b == 0 and c == 0 and d == 0:
+#             break
+#         else:
+#             x += a
+#             y += b
+#             w += c
+#             h += d
+#     return [y, x, y + h, x + w]
+#     # p = [x + w / 2, y + h / 2]
 
 
 def get_rect(im_src, origin_img, ret_mode=0):
