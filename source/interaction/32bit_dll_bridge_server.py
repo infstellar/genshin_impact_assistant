@@ -24,6 +24,12 @@ def exec_rdata(rdata):
         return dmdll.EnableBind(int(parameters[0]))
     elif func_name == 'UnBindWindow':
         return dmdll.UnBindWindow()
+    elif func_name == 'KeyDown':
+        return dmdll.KeyDown(int(parameters[0]))
+    elif func_name == 'KeyUp':
+        return dmdll.KeyUp(int(parameters[0]))
+    elif func_name == 'KeyPress':
+        return dmdll.KeyPress(int(parameters[0]))
 class server(threading.Thread):
     def __init__(self):
         super().__init__()

@@ -102,6 +102,15 @@ class DMDLL(DLLClient):
     def UnBindWindow(self):
         print("unbind: ", self._send_function('UnBindWindow'))
 
+    def KeyDown(self,vkcode):
+        return self._send_function('KeyDown',(vkcode))
+    
+    def KeyUp(self,vkcode):
+        return self._send_function('KeyUp',(vkcode))
+    
+    def KeyPress(self,vkcode):
+        return self._send_function('KeyPress',(vkcode))
+    
 if __name__ == "__main__":
     start_server(python_path="D:\\Program Files\\Anaconda\\envs\\GIA3732\\python.exe")
     connect()
