@@ -57,6 +57,38 @@ if DEBUG_MODE:
     logger.add(sys.stdout, level="TRACE", backtrace=True)
 else:
     logger.add(sys.stdout, level="INFO", backtrace=True)
+
+
+def hr(title, level=3):
+    title = str(title).upper()
+    if level == 1:
+        logger.info('=' * 20 + ' ' + title + ' ' + '=' * 20)
+    if level == 2:
+        logger.info('-' * 20 + ' ' + title + ' ' + '-' * 20)
+    if level == 3:
+        logger.info('<' * 3 + ' ' + title + ' ' + '>' * 3)
+    if level == 0:
+        middle = '|' + ' ' * 20 + title + ' ' * 20 + '|'
+        border = '+' + '-' * (len(middle) - 2) + '+'
+        logger.info(border)
+        logger.info(middle)
+        logger.info(border)
+
+
+def attr(name, text):
+    logger.info('[%s] %s' % (str(name), str(text)))
+
+
+def attr_align(name, text, front='', align=22):
+    name = str(name).rjust(align)
+    if front:
+        name = front + name[len(front):]
+    logger.info('%s: %s' % (name, str(text)))
+
+
+logger.hr = hr
+logger.attr = attr
+logger.attr_align = attr_align
 # configurate loguru over
 
 
