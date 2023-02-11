@@ -10,7 +10,7 @@ class AppControl(Adb, Uiautomator2):
     hierarchy: etree._Element
     _app_u2_family = ['uiautomator2', 'minitouch', 'scrcpy', 'MaaTouch']
 
-    def app_is_running(self) -> bool:
+    def app_current(self) -> str:
         method = self.config.Emulator_ControlMethod
         # if self.is_wsa:
         #     package = self.app_current_wsa()
@@ -20,6 +20,10 @@ class AppControl(Adb, Uiautomator2):
             package = self.app_current_adb()
 
         package = package.strip(' \t\r\n')
+        return package
+
+    def app_is_running(self) -> bool:
+        package = self.app_current()
         logger.attr('Package_name', package)
         return package == self.package
 
@@ -53,7 +57,7 @@ class AppControl(Adb, Uiautomator2):
             self.hierarchy = self.dump_hierarchy_adb()
         return self.hierarchy
 
-    def xpath_to_button(self, xpath: str) -> HierarchyButton:
+    def xpath(self, xpath: str) -> HierarchyButton:
         """
         Args:
             xpath (str):

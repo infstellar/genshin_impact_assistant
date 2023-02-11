@@ -274,7 +274,7 @@ class HierarchyButton:
         if res:
             return res[0]
         else:
-            return 'HierarchyButton'
+            return self.xpath
 
     @cached_property
     def count(self):
@@ -285,9 +285,16 @@ class HierarchyButton:
         return self.count == 1
 
     @cached_property
+    def attrib(self):
+        if self.exist:
+            return self.nodes[0].attrib
+        else:
+            return {}
+
+    @cached_property
     def area(self):
         if self.exist:
-            bounds = self.nodes[0].attrib.get("bounds")
+            bounds = self.attrib.get("bounds")
             lx, ly, rx, ry = map(int, re.findall(r"\d+", bounds))
             return lx, ly, rx, ry
         else:
@@ -306,6 +313,28 @@ class HierarchyButton:
     @cached_property
     def focused(self):
         if self.exist:
-            return self.nodes[0].attrib.get("focused").lower() == 'true'
+            return self.attrib.get("focused").lower() == 'true'
         else:
             return False
+
+    @cached_property
+    def text(self):
+        if self.exist:
+            return self.attrib.get("text")
+        else:
+            return ""
+
+
+class AreaButton:
+    def __init__(self, area, name='AREA_BUTTON'):
+        self.area = area
+        self.color = ()
+        self.name = name
+        self.button = area
+
+    def __str__(self):
+        return self.name
+
+    def __bool__(self):
+        # Cannot appear
+        return False
