@@ -1,5 +1,6 @@
 import re
 
+from source.device.alas.exception import RequestHumanTakeover
 from source.device.alas.utils import area_offset
 from source.device.cloud.base import AppBase, func_debug
 from source.device.method.utils import AreaButton
@@ -7,6 +8,10 @@ from source.util import logger
 
 # 每日登录奖励的弹窗，每天首次登录奖励15分钟时长
 LOGIN_REWARD = '//*[@resource-id="com.miHoYo.cloudgames.ys:id/mTvPopTitle"]'
+# 点击任意地方登录
+LOGIN_BUTTON = '//*[@resource-id="com.miHoYo.cloudgames.ys:id/btnLogin"]'
+# 登录界面，进入游戏按钮
+LOGIN_CONFIRM = '//*[@text="进入游戏"]'
 # 免费游戏时长
 STATUS_FREE = '//*[@resource-id="com.miHoYo.cloudgames.ys:id/tvRemainingFreeTimeNum"]'
 # 米云币
@@ -54,6 +59,11 @@ class CloudGenshin(AppBase):
                     self.click(self.xpath(CONFIRM))
                     self.interval_reset(TITLE)
                     continue
+            if self.appear_then_click(LOGIN_BUTTON, interval=3):
+                continue
+            if self.appear(LOGIN_CONFIRM):
+                logger.error('请先在云原神上登录你的帐号')
+                raise RequestHumanTakeover
 
     def _cloud_get_duration(self) -> int:
         """
