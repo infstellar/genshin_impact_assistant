@@ -32,6 +32,7 @@ class Button(ImgIcon):
     
     
     def click_position(self):
+        # 在一个范围内随机生成点击位置 还没写
         return [int(self.center_point[0]), int(self.center_point[1])]
 
 if __name__ == '__main__':
