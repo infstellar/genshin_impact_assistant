@@ -2,6 +2,7 @@ from source.util import *
 from source.webio.pages import *
 import subprocess
 import pywebio
+import source.webio.log_handler
 status = True
 
 def get_branch_commit_id():
@@ -24,7 +25,7 @@ def main():
     webio.manager.reg_page('CombatSettingPage', CombatSettingPage())
     webio.manager.reg_page("CollectorSettingPage", CollectorSettingPage())
     webio.manager.load_page('MainPage')
-    add_logger_to_GUI(webio.log_handler.webio_poster)
+    add_logger_to_GUI(source.webio.log_handler.webio_poster)
     logger.info(t2t("webio启动完成"))
 
 

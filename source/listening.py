@@ -37,7 +37,7 @@ def call_you_import_module():
     icm = True
 
 def import_current_module():
-    if True:
+    if False:
         if current_flow == FLOW_IDLE:
             pass
         elif current_flow == FLOW_COMBAT:
@@ -64,7 +64,7 @@ def import_current_module():
                 from source.flow import collector_flow
         except Exception as e:
             logger.critical(f"IMPORT ERROR: current_flow: {current_flow}")
-            print(e)
+            logger.exception(e)
             input(t2t("Program stop."))
 
 def switch_combat_loop():
