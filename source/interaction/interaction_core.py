@@ -26,10 +26,14 @@ ITT_ADB = 12
 
 winname_default = ["Genshin Impact", "原神"]
 # winname_cgs = "云·原神"
-process_name = ["YuanShen.exe", "GenshinImpact.exe"]
-# process_name_cloud = ["云·原神"]
 
-itt_exec_mode = ITT_DM
+# process_name_cloud = ["云·原神"]
+if load_json("config.json", CONFIGPATH_SETTING)["interaction_mode"] == 'Normal':
+    itt_exec_mode = ITT_NORMAL
+elif load_json("config.json", CONFIGPATH_SETTING)["interaction_mode"] == 'ADB':
+    itt_exec_mode = ITT_ADB
+elif load_json("config.json", CONFIGPATH_SETTING)["interaction_mode"] == 'Dm':
+    itt_exec_mode = ITT_DM
 def before_operation(print_log=True):
     def outwrapper(func):
         def wrapper(*args, **kwargs):
@@ -39,7 +43,7 @@ def before_operation(print_log=True):
             # cc=inspect.getframeinfo(inspect.currentframe().f_back.f_back.f_back)
             if print_log:
                 logger.debug(f" operation: {func.__name__} | args: {args[1:]} | {kwargs} | function name: {func_name} & {func_name_2}")
-            if itt_exec_mode==ITT_NORMAL:
+            if itt_exec_mode == ITT_NORMAL:
                 winname = get_active_window_process_name()
                 if winname not in process_name:
                     while 1:
@@ -74,6 +78,7 @@ class InteractionBGD:
     """
 
     def __init__(self):
+        logger.info("InteractionBGD created")
         self.WHEEL_DELTA = 120
         self.DEFAULT_DELAY_TIME = 0.05
         self.DEBUG_MODE = False
@@ -641,6 +646,18 @@ class InteractionBGD:
         self.delay(0.05)
 
     @before_operation()
+    def middle_click(self):
+        """按下按键
+
+        Args:
+            key (str): 按键代号。查阅vkCode.py
+        """
+        self.operation_lock.acquire()
+        print('lock!')
+        self.itt_exec.middle_click()
+        self.operation_lock.release()
+    
+    @before_operation()
     def key_down(self, key):
         """按下按键
 
@@ -696,7 +713,7 @@ class InteractionBGD:
         """
         self.operation_lock.acquire()
         print('lock!')
-        self.itt_exec.move_to(x, y, relative=relative, isChromelessWindow=self.isChromelessWindow)
+        self.itt_exec.move_to(int(x), int(y), relative=relative, isChromelessWindow=self.isChromelessWindow)
         self.operation_lock.release()
 
     # @staticmethod

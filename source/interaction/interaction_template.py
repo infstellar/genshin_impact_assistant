@@ -23,6 +23,9 @@ class InteractionTemplate():
     def right_click(self):
         pass
     
+    def middle_click(self):
+        pass
+    
     def key_down(self, key):
         pass
     

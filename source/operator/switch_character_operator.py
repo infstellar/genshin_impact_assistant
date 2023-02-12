@@ -1,5 +1,3 @@
-import pyautogui
-
 from source.common import character
 from source.funclib import combat_lib
 from source.operator import tactic_operator
@@ -77,7 +75,7 @@ class SwitchCharacterOperator(BaseThreading):
         return idle
 
     def _switch_character(self, x: int):
-        pyautogui.click(button='middle')
+        self.itt.middle_click()
         t = self.switch_timer.get_diff_time()
         self.tactic_operator.chara_waiting()
         logger.debug('try switching to ' + str(x))

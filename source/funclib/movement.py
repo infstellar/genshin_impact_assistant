@@ -1,5 +1,3 @@
-import pyautogui
-
 from source.interaction.interaction_core import global_itt
 from source.funclib import small_map
 from source.util import *
@@ -56,8 +54,7 @@ def move_view_p(x, y):
 
 
 def reset_view():
-    pyautogui.click(button='middle')
-    logger.debug("press middle")
+    itt.middle_click()
     time.sleep(1)
 
 def view_to_angle_domain(angle, stop_func, deltanum=0.65, maxloop=100, corrected_num=CORRECT_DEGREE):

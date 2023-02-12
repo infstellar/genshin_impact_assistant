@@ -103,7 +103,7 @@ class DMDLL(DLLClient):
         return self._send_function('EnableBind',[enable])
     
     def UnBindWindow(self):
-        print("unbind: ", self._send_function(['UnBindWindow']))
+        return self._send_function('UnBindWindow')
 
     def KeyDown(self,vkcode):
         return self._send_function('KeyDown',[vkcode])

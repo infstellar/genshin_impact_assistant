@@ -2,7 +2,7 @@ from source.util import *
 from source.interaction.interaction_template import InteractionTemplate
 from source.base import vkcode
 from source.funclib import static_lib
-import win32api, win32con
+import win32api, win32con, pyautogui
 
 
 class InteractionNormal(InteractionTemplate):
@@ -79,6 +79,9 @@ class InteractionNormal(InteractionTemplate):
             self.PostMessageW(self.handle, self.WM_RBUTTONDOWN, wparam, lparam)
             time.sleep(0.06)
             self.PostMessageW(self.handle, self.WM_RBUTTONUP, wparam, lparam)
+    
+    def middle_click(self):
+        pyautogui.click(button='middle')
     
     def key_down(self, key):
         if key == 'w':

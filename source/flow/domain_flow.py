@@ -134,7 +134,6 @@ class DomainFlow(BaseThreading):
         if self.itt.get_text_existence(asset.LEYLINEDISORDER):
             self.itt.move_and_click([PosiM.posi_domain['CLLD'][0], PosiM.posi_domain['CLLD'][1]], delay=1)
             # time.sleep(1)
-            # pyautogui.leftClick()
 
         if self.checkup_stop_func():
             return 0
