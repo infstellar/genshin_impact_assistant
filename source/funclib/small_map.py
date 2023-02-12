@@ -129,10 +129,10 @@ def jwa_3(imsrc):
     # return p,Line2Angle(p)
 
 
-def teyvat_smallmap_crusade_target_search(itt: interaction_core.InteractionBGD):
+def teyvat_smallmap_crusade_target_search(itt: interaction_core.InteractionBGD, imgicon):
     imsrc = itt.capture(posi=posi_teyvat_map)
     imsrc = itt.png2jpg(imsrc, channel='ui')
-    img_target = asset.smallmap_AbyssMage.image
+    img_target = imgicon.image
     r, pp = itt.similar_img(imsrc, img_target, ret_mode=interaction_core.IMG_POSI)
     p = [0, 0]
     p[0] = pp[0] + img_target.shape[1] / 2

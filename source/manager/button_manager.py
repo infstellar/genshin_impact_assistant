@@ -3,7 +3,6 @@ from source.util import *
 
 
 def get_cap_posi(path, black_offset):
-    path = path.replace("$lang$", global_lang)
     raw_file = cv2.imread(os.path.join(root_path, path))
     bbg_posi = get_bbox(raw_file, black_offset=black_offset)
     return bbg_posi

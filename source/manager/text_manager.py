@@ -4,12 +4,14 @@ class TextTemplate():
     def __init__(self, text:dict, cap_area=None) -> None:
         if cap_area == None:
             cap_area = [0,0,1920,1080]
+        elif isinstance(cap_area, str):
+            cap_area = get_bbox(cv2.imread(os.path.join(root_path, cap_area)))
         self.origin_text = text
         self.cap_area = cap_area
-        self.text = self.origin_text[global_lang]
+        self.text = self.origin_text[GLOBAL_LANG]
         
     def gettext(self):
-        return self.origin_text[global_lang]
+        return self.origin_text[GLOBAL_LANG]
 
 
 

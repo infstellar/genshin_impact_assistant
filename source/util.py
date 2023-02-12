@@ -12,7 +12,7 @@ import win32gui, win32process, psutil
 import ctypes, pickle
 
 time.time()  # 防自动删除
-
+BBG = 100001
 
 # configurate paths
 try:
@@ -31,8 +31,8 @@ except:
 
 # load config file
 def load_json(json_name='config.json', default_path='config\\settings') -> dict:
-    if "$lang$" in default_path:
-        default_path = default_path.replace("$lang$", global_lang)
+    # if "$lang$" in default_path:
+    #     default_path = default_path.replace("$lang$", GLOBAL_LANG)
     try:
         return json.load(open(os.path.join(root_path, default_path, json_name), 'r', encoding='utf-8'))
     except:
@@ -41,11 +41,11 @@ def load_json(json_name='config.json', default_path='config\\settings') -> dict:
 try:
     config_json = load_json("config.json")
     DEBUG_MODE = config_json["DEBUG"] if "DEBUG" in config_json else False
-    global_lang = config_json["lang"]
+    GLOBAL_LANG = config_json["lang"]
 except:
     logger.error("config文件导入失败，可能由于初次安装。跳过导入。")
     DEBUG_MODE = False
-    global_lang = "$locale$"
+    GLOBAL_LANG = "$locale$"
 # load config file over
 
 
@@ -71,10 +71,10 @@ def get_local_lang():
     else:
         return "en_US"
 
-if global_lang == "$locale$":
-    global_lang = get_local_lang()
-    logger.info(f"language set as: {global_lang}")
-l10n = gettext.translation(global_lang, localedir=os.path.join(root_path, "translation/locale"), languages=[global_lang])
+if GLOBAL_LANG == "$locale$":
+    GLOBAL_LANG = get_local_lang()
+    logger.info(f"language set as: {GLOBAL_LANG}")
+l10n = gettext.translation(GLOBAL_LANG, localedir=os.path.join(root_path, "translation/locale"), languages=[GLOBAL_LANG])
 l10n.install()
 t2t = l10n.gettext
 # load translation module over

@@ -35,7 +35,7 @@ def move_map(x:int, y:int)->None:
     itt.move_to(-x * 6, -y * 6, relative=True)
 
 
-def move_navigation_to_center(object_name: img_manager.ImgIcon= asset.bigmap_AbyssMage)->None:
+def move_navigation_to_center(object_name: img_manager.ImgIcon)->None:
     """移动导航点到中心，暂不使用。
 
     Args:
@@ -61,7 +61,7 @@ def move_navigation_to_center(object_name: img_manager.ImgIcon= asset.bigmap_Aby
     # itt.move_to(1920/2,1080/2)
 
 
-def get_navigation_posi(object_name: img_manager.ImgIcon= asset.bigmap_AbyssMage)->list:
+def get_navigation_posi(object_name: img_manager.ImgIcon)->list:
     """获得导航点的坐标，暂不使用。
 
     Args:

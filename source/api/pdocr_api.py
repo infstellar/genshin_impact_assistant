@@ -38,7 +38,7 @@ class PaddleocrAPI:
     def __init__(self, lang='ch', device='gpu'):
         device = globaldevice
         logger.info(t2t("ocr device: ") + device)
-        inference_path = os.path.join(root_path, f'assets\\inference\\{global_lang}\\')
+        inference_path = os.path.join(root_path, f'assets\\inference\\{GLOBAL_LANG}\\')
         self.ocr = PaddleOCR(use_angle_cls=True, lang=lang, show_log=False,
                              device=device, 
                              det_model_dir=inference_path+"det_model\\",
@@ -180,9 +180,9 @@ class PaddleocrAPI:
                      inspect.getframeinfo(inspect.currentframe().f_back)[2])
         return ret1, ret2
 
-if global_lang == "zh_CN":
+if GLOBAL_LANG == "zh_CN":
     lang = 'ch'
-elif global_lang == "en_US":
+elif GLOBAL_LANG == "en_US":
     lang = 'en'
 ocr = PaddleocrAPI(lang=lang)
 logger.info('created pdocr. cost ' + str(pdocr_timer_performance.get_diff_time()) + ' second.')

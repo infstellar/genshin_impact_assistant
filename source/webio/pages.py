@@ -277,7 +277,7 @@ class ConfigPage(Page):
 
         # with open(os.path.join(root_path, "config", "settings", "config.json"), 'r', encoding='utf8') as f:
         #     lang = json.load(f)["lang"]
-        doc_name = f'{name}.{global_lang}.jsondoc'
+        doc_name = f'{name}.{GLOBAL_LANG}.jsondoc'
 
         if os.path.exists(doc_name):
             with open(doc_name, 'r', encoding='utf8') as f:
@@ -570,7 +570,7 @@ class CombatSettingPage(ConfigPage):
 class CollectorSettingPage(ConfigPage):
     def __init__(self):
         super().__init__()
-        self.collection_names = load_json("ITEM_NAME.json", "assets\\POI_JSON_API\\$lang$")
+        self.collection_names = load_json("ITEM_NAME.json", f"assets\\POI_JSON_API\\{GLOBAL_LANG}")
 
     def _load_config_files(self):
         self.config_files = []
