@@ -170,36 +170,36 @@ class InteractionBGD:
             ret = ret[:, :, :3]
         return ret
 
-    def match_img(self, img_name: str, is_show_res: bool = False):
-        image = self.capture()
-        # image = (image/(image[3]+10)).astype(int)
+    # def match_img(self, img_name: str, is_show_res: bool = False):
+    #     image = self.capture()
+    #     # image = (image/(image[3]+10)).astype(int)
 
-        # 转为灰度图
-        gray = cv2.cvtColor(image, cv2.COLOR_BGRA2GRAY)
-        # 读取图片，并保留Alpha通道
-        template = cv2.imread('imgs/' + img_name, cv2.IMREAD_UNCHANGED)
-        # template = template/template[3]
-        # 取出Alpha通道
-        alpha = template[:, :, 3]
-        template = cv2.cvtColor(template, cv2.COLOR_BGRA2GRAY)
-        # 模板匹配，将alpha作为mask，TM_CCORR_NORMED方法的计算结果范围为[0, 1]，越接近1越匹配
-        result = cv2.matchTemplate(gray, template, cv2.TM_CCORR_NORMED, mask=alpha)
-        # 获取结果中最大值和最小值以及他们的坐标
-        min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
-        if is_show_res:
-            cv2.imshow('template', template)
-            cv2.imshow('gray', gray)
-            cv2.waitKey()
-        top_left = max_loc
-        h, w = template.shape[:2]
-        bottom_right = top_left[0] + w, top_left[1] + h
-        # 在窗口截图中匹配位置画红色方框
-        if is_show_res:
-            cv2.rectangle(image, top_left, bottom_right, (0, 0, 255), 2)
-            cv2.imshow('Match Template', image)
-            cv2.waitKey()
-        matching_rate = max_val
-        return matching_rate, top_left, bottom_right
+    #     # 转为灰度图
+    #     gray = cv2.cvtColor(image, cv2.COLOR_BGRA2GRAY)
+    #     # 读取图片，并保留Alpha通道
+    #     template = cv2.imread('imgs/' + img_name, cv2.IMREAD_UNCHANGED)
+    #     # template = template/template[3]
+    #     # 取出Alpha通道
+    #     alpha = template[:, :, 3]
+    #     template = cv2.cvtColor(template, cv2.COLOR_BGRA2GRAY)
+    #     # 模板匹配，将alpha作为mask，TM_CCORR_NORMED方法的计算结果范围为[0, 1]，越接近1越匹配
+    #     result = cv2.matchTemplate(gray, template, cv2.TM_CCORR_NORMED, mask=alpha)
+    #     # 获取结果中最大值和最小值以及他们的坐标
+    #     min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
+    #     if is_show_res:
+    #         cv2.imshow('template', template)
+    #         cv2.imshow('gray', gray)
+    #         cv2.waitKey()
+    #     top_left = max_loc
+    #     h, w = template.shape[:2]
+    #     bottom_right = top_left[0] + w, top_left[1] + h
+    #     # 在窗口截图中匹配位置画红色方框
+    #     if is_show_res:
+    #         cv2.rectangle(image, top_left, bottom_right, (0, 0, 255), 2)
+    #         cv2.imshow('Match Template', image)
+    #         cv2.waitKey()
+    #     matching_rate = max_val
+    #     return matching_rate, top_left, bottom_right
 
     def match_multiple_img(self, img, template, is_gray=False, is_show_res: bool = False, ret_mode=IMG_POINT,
                            threshold=0.98):
