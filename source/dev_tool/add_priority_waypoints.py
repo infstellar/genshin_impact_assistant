@@ -1,6 +1,7 @@
 from source.util import *
 import numpy as np
 from source.funclib import big_map, static_lib
+from source.common import generic_event
 import cv2
 
 global priority_waypoints, priority_waypoints_list, priority_waypoints_array, idnum
@@ -40,7 +41,7 @@ def show_bigmap_posi_in_window(current_teyvat_posi, bigmap_posi_list):
 def add_mode():
     global priority_waypoints, priority_waypoints_list, priority_waypoints_array, idnum
     while 1:
-        currentp=list(static_lib.cvAutoTrackerLoop.get_position()[1:])
+        currentp=list(generic_event.cvAutoTrackerLoop.get_position()[1:])
         if currentp == [0,0]:
             print("获取坐标失败")
             time.sleep(1)
@@ -71,7 +72,7 @@ def add_mode():
 def edit_mode():
     global priority_waypoints, priority_waypoints_list, priority_waypoints_array, idnum
     input("请切换至大世界界面后，等待数秒，按下回车")
-    cp=list(static_lib.cvAutoTrackerLoop.get_position()[1:])
+    cp=list(generic_event.cvAutoTrackerLoop.get_position()[1:])
     input("请切换至地图界面后按下回车")
     while 1:
         load_pw()
@@ -89,7 +90,7 @@ def edit_mode():
 def show_current_posi():
     while 1:
         time.sleep(0.2)
-        print(static_lib.cvAutoTrackerLoop.get_position()[1:])
+        print(generic_event.cvAutoTrackerLoop.get_position()[1:])
 
 time.sleep(1)
 # add_mode()

@@ -2,6 +2,7 @@ from source.interaction.interaction_core import global_itt
 from source.funclib import small_map
 from source.util import *
 from source.funclib import generic_lib, static_lib
+from source.common import generic_event
 
 itt = global_itt
 AHEAD = 0
@@ -84,7 +85,7 @@ def view_to_angle_teyvat(angle, stop_func, deltanum=1, maxloop=30, corrected_num
     if not abs(degree - (angle - corrected_num)) < deltanum:
         logger.debug(f"view_to_angle_teyvat: angle: {angle} deltanum: {deltanum} maxloop: {maxloop}")
     while 1:
-        b, degree = static_lib.cvAutoTrackerLoop.get_rotation()
+        b, degree = generic_event.cvAutoTrackerLoop.get_rotation()
         if not b:
             time.sleep(0.1)
             continue
@@ -111,8 +112,8 @@ def change_view_to_posi(pl, stop_func):
     while abs(td-degree)>10:
         '''加一个场景检测'''
         time.sleep(0.05)
-        tx, ty = static_lib.cvAutoTrackerLoop.get_position()[1:]
-        td = static_lib.cvAutoTrackerLoop.get_rotation()[1]
+        tx, ty = generic_event.cvAutoTrackerLoop.get_position()[1:]
+        td = generic_event.cvAutoTrackerLoop.get_rotation()[1]
         degree = generic_lib.points_angle([tx, ty], pl, coordinate=generic_lib.NEGATIVE_Y)
         cvn=td-degree
         if cvn>=50:
