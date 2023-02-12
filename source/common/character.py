@@ -102,7 +102,7 @@ class Character:
         #     self.trigger = self._trigger_q_ready
         # elif self.triggers == 'idle':
         #     self.trigger = self._trigger_idle
-        ctriggers = self.trigger_list.split(',')
+        ctriggers = self.triggers.split(',')
         if 'e_ready' in ctriggers:
             self.trigger_list.append(self._trigger_e_ready)
         elif 'q_ready' in ctriggers:

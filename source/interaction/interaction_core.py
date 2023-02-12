@@ -47,6 +47,22 @@ def before_operation(print_log=True):
         return wrapper
     return outwrapper
 
+GetDC = ctypes.windll.user32.GetDC
+CreateCompatibleDC = ctypes.windll.gdi32.CreateCompatibleDC
+GetClientRect = ctypes.windll.user32.GetClientRect
+CreateCompatibleBitmap = ctypes.windll.gdi32.CreateCompatibleBitmap
+SelectObject = ctypes.windll.gdi32.SelectObject
+BitBlt = ctypes.windll.gdi32.BitBlt
+SRCCOPY = 0x00CC0020
+GetBitmapBits = ctypes.windll.gdi32.GetBitmapBits
+DeleteObject = ctypes.windll.gdi32.DeleteObject
+ReleaseDC = ctypes.windll.user32.ReleaseDC
+PostMessageW = ctypes.windll.user32.PostMessageW
+MapVirtualKeyW = ctypes.windll.user32.MapVirtualKeyW
+ITT_NORMAL = 0
+ITT_DM = 1
+ITT_ADB = 2
+
 class InteractionBGD:
     """
     default size:1920x1080
@@ -54,65 +70,48 @@ class InteractionBGD:
     thanks for https://zhuanlan.zhihu.com/p/361569101
     """
 
-    def __init__(self, hwndname:list=winname_default):
-        self.GetDC = ctypes.windll.user32.GetDC
-        self.CreateCompatibleDC = ctypes.windll.gdi32.CreateCompatibleDC
-        self.GetClientRect = ctypes.windll.user32.GetClientRect
-        self.CreateCompatibleBitmap = ctypes.windll.gdi32.CreateCompatibleBitmap
-        self.SelectObject = ctypes.windll.gdi32.SelectObject
-        self.BitBlt = ctypes.windll.gdi32.BitBlt
-        self.SRCCOPY = 0x00CC0020
-        self.GetBitmapBits = ctypes.windll.gdi32.GetBitmapBits
-        self.DeleteObject = ctypes.windll.gdi32.DeleteObject
-        self.ReleaseDC = ctypes.windll.user32.ReleaseDC
-        self.VK_CODE = vkcode.VK_CODE
-        self.PostMessageW = ctypes.windll.user32.PostMessageW
-        self.MapVirtualKeyW = ctypes.windll.user32.MapVirtualKeyW
-        self.VkKeyScanA = ctypes.windll.user32.VkKeyScanA
-        self.WM_MOUSEMOVE = 0x0200
-        self.WM_LBUTTONDOWN = 0x0201
-        self.WM_LBUTTONUP = 0x202
-        self.WM_MOUSEWHEEL = 0x020A
-        self.WM_RBUTTONDOWN = 0x0204
-        self.WM_RBUTTONDBLCLK = 0x0206
-        self.WM_RBUTTONUP = 0x0205
-        self.WM_KEYDOWN = 0x100
-        self.WM_KEYUP = 0x101
+    def __init__(self):
         self.WHEEL_DELTA = 120
         self.DEFAULT_DELAY_TIME = 0.05
         self.DEBUG_MODE = False
         self.CONSOLE_ONLY = False
-        self.handle = 0
         self.isChromelessWindow = config_json["ChromelessWindow"]
-        handle = static_lib.get_handle()
-        if handle != 0:
-            self.handle = handle
-            logger.debug(f"handle: {self.handle}")
+        self.handle = static_lib.get_handle()
+        self.itt_exec = None
+        itt_exec_mode = ITT_NORMAL
+        if itt_exec_mode == ITT_NORMAL:
+            import source.interaction.interaction_normal
+            self.itt_exec = source.interaction.interaction_normal.InteractionNormal()
         
-        if self.handle == 0:
-            logger.error(t2t("未找到句柄，请确认原神窗口是否开启。"))
+        
+        # if handle != 0:
+        #     self.handle = handle
+        #     logger.debug(f"handle: {self.handle}")
+        
+        # if self.handle == 0:
+        #     logger.error(t2t("未找到句柄，请确认原神窗口是否开启。"))
 
     def capture_handle(self):
         # 获取窗口客户区的大小
         if config_json["capture_mode"] == "fast":
             handle = self.handle
             r = RECT()
-            self.GetClientRect(handle, ctypes.byref(r))
+            GetClientRect(handle, ctypes.byref(r))
             width, height = r.right, r.bottom
             # 开始截图
-            dc = self.GetDC(handle)
-            cdc = self.CreateCompatibleDC(dc)
-            bitmap = self.CreateCompatibleBitmap(dc, width, height)
-            self.SelectObject(cdc, bitmap)
-            self.BitBlt(cdc, 0, 0, width, height, dc, 0, 0, self.SRCCOPY)
+            dc = GetDC(handle)
+            cdc = CreateCompatibleDC(dc)
+            bitmap = CreateCompatibleBitmap(dc, width, height)
+            SelectObject(cdc, bitmap)
+            BitBlt(cdc, 0, 0, width, height, dc, 0, 0, SRCCOPY)
             # 截图是BGRA排列，因此总元素个数需要乘以4
             total_bytes = width * height * 4
             buffer = bytearray(total_bytes)
             byte_array = ctypes.c_ubyte * total_bytes
-            self.GetBitmapBits(bitmap, total_bytes, byte_array.from_buffer(buffer))
-            self.DeleteObject(bitmap)
-            self.DeleteObject(cdc)
-            self.ReleaseDC(handle, dc)
+            GetBitmapBits(bitmap, total_bytes, byte_array.from_buffer(buffer))
+            DeleteObject(bitmap)
+            DeleteObject(cdc)
+            ReleaseDC(handle, dc)
             # 返回截图数据为numpy.ndarray
             ret = np.frombuffer(buffer, dtype=np.uint8).reshape(height, width, 4)
             # img_manager.qshow(ret)
@@ -169,37 +168,6 @@ class InteractionBGD:
         elif jpgmode == 3:
             ret = ret[:, :, :3]
         return ret
-
-    # def match_img(self, img_name: str, is_show_res: bool = False):
-    #     image = self.capture()
-    #     # image = (image/(image[3]+10)).astype(int)
-
-    #     # 转为灰度图
-    #     gray = cv2.cvtColor(image, cv2.COLOR_BGRA2GRAY)
-    #     # 读取图片，并保留Alpha通道
-    #     template = cv2.imread('imgs/' + img_name, cv2.IMREAD_UNCHANGED)
-    #     # template = template/template[3]
-    #     # 取出Alpha通道
-    #     alpha = template[:, :, 3]
-    #     template = cv2.cvtColor(template, cv2.COLOR_BGRA2GRAY)
-    #     # 模板匹配，将alpha作为mask，TM_CCORR_NORMED方法的计算结果范围为[0, 1]，越接近1越匹配
-    #     result = cv2.matchTemplate(gray, template, cv2.TM_CCORR_NORMED, mask=alpha)
-    #     # 获取结果中最大值和最小值以及他们的坐标
-    #     min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
-    #     if is_show_res:
-    #         cv2.imshow('template', template)
-    #         cv2.imshow('gray', gray)
-    #         cv2.waitKey()
-    #     top_left = max_loc
-    #     h, w = template.shape[:2]
-    #     bottom_right = top_left[0] + w, top_left[1] + h
-    #     # 在窗口截图中匹配位置画红色方框
-    #     if is_show_res:
-    #         cv2.rectangle(image, top_left, bottom_right, (0, 0, 255), 2)
-    #         cv2.imshow('Match Template', image)
-    #         cv2.waitKey()
-    #     matching_rate = max_val
-    #     return matching_rate, top_left, bottom_right
 
     def match_multiple_img(self, img, template, is_gray=False, is_show_res: bool = False, ret_mode=IMG_POINT,
                            threshold=0.98):
@@ -274,27 +242,6 @@ class InteractionBGD:
             return matching_rate
         elif ret_mode == IMG_POSI:
             return matching_rate, max_loc
-
-    # def similar_img_pixel(self, img, target, is_gray=False):
-    #     """ABANDON
-
-    #     Args:
-    #         img (_type_): _description_
-    #         target (_type_): _description_
-    #         is_gray (bool, optional): _description_. Defaults to False.
-
-    #     Returns:
-    #         _type_: _description_
-    #     """
-    #     img1 = img.astype('int')
-    #     target1 = target.astype('int')
-    #     # cv2.imshow('1',img)
-    #     # cv2.imshow('2',target)
-    #     # cv2.waitKey(0)
-    #     s = np.sum(img1 - target1)
-    #     s = abs(s)
-    #     matching_rate = 1 - s / ((img1.shape[0] * img1.shape[1]) * 765)
-    #     return matching_rate
 
     def get_img_position(self, imgicon: img_manager.ImgIcon, is_gray=False, is_log=False):
         """获得图片在屏幕上的坐标
@@ -613,8 +560,6 @@ class InteractionBGD:
             (x,y): 坐标
         """
         
-        
-        
         p = win32api.GetCursorPos()
         # print(p[0],p[1])
         #  GetWindowRect 获得整个窗口的范围矩形，窗口的边框、标题栏、滚动条及菜单等都在这个矩形内 
@@ -624,96 +569,30 @@ class InteractionBGD:
         pos_y = p[1] - y
         return pos_x, pos_y
 
-    def get_virtual_keycode(self, key: str):
-        """根据按键名获取虚拟按键码
-
-        Args:
-            key (str): 按键名
-
-        Returns:
-            int: 虚拟按键码
-        """
-        if len(key) == 1 and key in string.printable:
-            # https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-vkkeyscana
-            return self.VkKeyScanA(ord(key)) & 0xff
-        else:
-            return self.VK_CODE[key]
-
     @before_operation()
-    def left_click(self, x=-1, y=-1):
+    def left_click(self):
         """左键点击
-
-        Args:
-            x (int, optional): x. Defaults to -1.
-            y (int, optional): y. Defaults to -1.
+        
         """
-        if type(x) == list:  # x为list类型时
-            y = x[1]
-            x = x[0]
-        if x == -1:  # x为空时
-            x, y = self.get_mouse_point()
-        else:
-            x = int(x)
-            y = int(y)
-            self.move_to(x, y)
-            self.delay(0.8)
-
-        if not self.CONSOLE_ONLY:
-            wparam = 0
-            lparam = 0 << 16 | 0
-            self.PostMessageW(self.handle, self.WM_LBUTTONDOWN, wparam, lparam)
-            self.delay(0.06, randtime=False, isprint=False)
-            self.PostMessageW(self.handle, self.WM_LBUTTONUP, wparam, lparam)
+        self.itt_exec.left_click()
+        
         # logger.debug('left click ' + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
 
     @before_operation()
-    def left_down(self, x=-1, y=-1):
+    def left_down(self):
         """左键按下
 
-        Args:
-            x (int, optional): _description_. Defaults to -1.
-            y (int, optional): _description_. Defaults to -1.
         """
-        if type(x) == list:  # x为list类型时
-            y = x[1]
-            x = x[0]
-        if x == -1:  # x为空时
-            x, y = self.get_mouse_point()
-        x = int(x)
-        y = int(y)
-        if not self.CONSOLE_ONLY:
-            # win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN, 0, 0)
-            # pyautogui.mouseDown()
-            wparam = 0
-            lparam = y << 16 | x
-            self.PostMessageW(self.handle, self.WM_LBUTTONDOWN, wparam, lparam)
-            time.sleep(0.01)
-            self.PostMessageW(self.handle, self.WM_LBUTTONDOWN, wparam, lparam)
-            time.sleep(0.01)
-            self.PostMessageW(self.handle, self.WM_LBUTTONDOWN, wparam, lparam)
+        self.itt_exec.left_down()
 
         # logger.debug('left down' + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
 
     @before_operation()
-    def left_up(self, x=-1, y=-1):
+    def left_up(self):
         """左键抬起
 
-        Args:
-            x (int, optional): _description_. Defaults to -1.
-            y (int, optional): _description_. Defaults to -1.
         """
-        if x == -1:
-            x, y = self.get_mouse_point()
-        if not self.CONSOLE_ONLY:
-            # win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP, 0, 0)
-            # pyautogui.mouseUp()
-            wparam = 0
-            lparam = y << 16 | x
-            self.PostMessageW(self.handle, self.WM_LBUTTONUP, wparam, lparam)
-            time.sleep(0.01)
-            self.PostMessageW(self.handle, self.WM_LBUTTONUP, wparam, lparam)
-            time.sleep(0.01)
-            self.PostMessageW(self.handle, self.WM_LBUTTONUP, wparam, lparam)
+        self.itt_exec.left_up()
 
         # logger.debug('left up ' + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
 
@@ -724,72 +603,43 @@ class InteractionBGD:
         Args:
             dt (float, optional): 间隔时间. Defaults to 0.05.
         """
-        if not self.CONSOLE_ONLY:
-            self.left_click()
-            self.delay(0.06, randtime=False, isprint=False)
-            self.left_click()
+        self.itt_exec.left_double_click(dt=dt)
+        
+        
         # logger.debug('leftDoubleClick ' + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
 
     @before_operation()
-    def right_click(self, x=-1, y=-1):
+    def right_click(self):
         """右键单击
 
-        Args:
-            x (int, optional): _description_. Defaults to -1.
-            y (int, optional): _description_. Defaults to -1.
         """
-        if x == -1:
-            x, y = self.get_mouse_point()
-        if not self.CONSOLE_ONLY:
-            wparam = 0
-            lparam = y << 16 | x
-            self.PostMessageW(self.handle, self.WM_RBUTTONDOWN, wparam, lparam)
-            self.delay(0.06, randtime=False, isprint=False)
-            self.PostMessageW(self.handle, self.WM_RBUTTONUP, wparam, lparam)
-            # pyautogui.rightClick()
+        self.itt_exec.right_click()
+        
         # logger.debug('rightClick ' + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
         self.delay(0.05)
 
     @before_operation()
-    def key_down(self, key, is_log=True):
+    def key_down(self, key):
         """按下按键
 
         Args:
             key (str): 按键代号。查阅vkCode.py
-            is_log (bool, optional): 是否打印日志. Defaults to True.
         """
-        if key == 'w':
-            static_lib.W_KEYDOWN = True
-
-        if not self.CONSOLE_ONLY:
-            vk_code = self.get_virtual_keycode(key)
-            scan_code = self.MapVirtualKeyW(vk_code, 0)
-            # https://docs.microsoft.com/en-us/windows/win32/inputdev/wm-keydown
-            wparam = vk_code
-            lparam = (scan_code << 16) | 1
-            self.PostMessageW(self.handle, self.WM_KEYDOWN, wparam, lparam)
+        self.itt_exec.key_down(key)
+        
         # if is_log:
         #     logger.debug(
         #         "keyDown " + key + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
 
     @before_operation()
-    def key_up(self, key, is_log=True):
+    def key_up(self, key):
         """松开按键
 
         Args:
             key (str): 按键代号。查阅vkCode.py
-            is_log (bool, optional): 是否打印日志. Defaults to True.
         """
-        if key == 'w':
-            static_lib.W_KEYDOWN = False
-
-        if not self.CONSOLE_ONLY:
-            vk_code = self.get_virtual_keycode(key)
-            scan_code = self.MapVirtualKeyW(vk_code, 0)
-            # https://docs.microsoft.com/en-us/windows/win32/inputdev/wm-keyup
-            wparam = vk_code
-            lparam = (scan_code << 16) | 0XC0000001
-            self.PostMessageW(self.handle, self.WM_KEYUP, wparam, lparam)
+        self.itt_exec.key_up(key)
+        
         # if is_log:
         #     logger.debug("keyUp " + key + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
 
@@ -800,16 +650,8 @@ class InteractionBGD:
         Args:
             key (str): 按键代号。查阅vkCode.py
         """
-        if not self.CONSOLE_ONLY:
-            vk_code = self.get_virtual_keycode(key)
-            scan_code = self.MapVirtualKeyW(vk_code, 0)
-            wparam = vk_code
-            lparam = (scan_code << 16) | 1
-            lparam2 = (scan_code << 16) | 0XC0000001
-            self.PostMessageW(self.handle, self.WM_KEYDOWN, wparam, lparam)
-            time.sleep(0.05)
-            self.PostMessageW(self.handle, self.WM_KEYUP, wparam, lparam2)
-            # self.delay(self.DEFAULT_DELAY_TIME)
+        self.itt_exec.key_press(key)
+        
         # logger.debug("keyPress " + key + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
 
     @before_operation(print_log=False)
@@ -821,42 +663,8 @@ class InteractionBGD:
             y (int): 纵坐标
             relative (bool): 是否为相对移动。
         """
-        x = int(x)
-        y = int(y)
-        # https://docs.microsoft.com/en-us/windows/win32/inputdev/wm-mousemove
-
-        if relative:
-            win32api.mouse_event(win32con.MOUSEEVENTF_MOVE, x, y)
-            # pydirectinput.moveRel(x,y)
-        else:
-
-            # print(x,y)
-
-            # lx,ly,w,h = win32gui.GetWindowRect(self.handle)
-
-            # pyautogui.moveRel()
-            # p = win32api.GetCursorPos()
-            # mx=p[0]
-            # my=p[1]
-            # win32api.mouse_event(win32con.MOUSEEVENTF_MOVE, x, y)
-            wx, wy, w, h = win32gui.GetWindowRect(self.handle)
-            x += wx
-            if self.isChromelessWindow:
-                y += wy
-            else:
-                y = y + wy + 26
-                
-            # print(mx,my)
-            # print(int((x-mx)/1.5), int((y-my)/1.5))
-            # pydirectinput.moveTo(wx+x,wy+y)
-            # win32api.mouse_event(win32con.MOUSEEVENTF_MOVE, int((x-mx)/1.5), int((y-my)/1.5))
-            win32api.SetCursorPos((x, y))
-
-            # wparam = 0
-            # lparam = y << 16 | x
-            # self.PostMessageW(self.handle, self.WM_MOUSEMOVE, wparam, lparam)
-            # self.PostMessageW(self.handle, self.WM_MOUSEMOVE, wparam, lparam)
-            # self.PostMessageW(self.handle, self.WM_MOUSEMOVE, wparam, lparam)
+        self.itt_exec.move_to(x, y, relative=relative, isChromelessWindow=self.isChromelessWindow)
+        
 
     # @staticmethod
     def crop_image(self, imsrc, posilist):
@@ -871,6 +679,9 @@ class InteractionBGD:
             self.left_click()
         else:
             self.right_click()
+
+def itt_test(itt: InteractionBGD):
+    pass
 
 if __name__ == '__main__':
     ib = InteractionBGD()

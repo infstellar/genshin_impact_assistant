@@ -206,3 +206,4 @@ source/test240.py
 out/*
 assets/dm/*
 config/settings/damo.json
+config/settings/dm.json

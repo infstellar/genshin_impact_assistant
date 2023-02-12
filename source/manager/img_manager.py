@@ -49,7 +49,7 @@ class ImgIcon:
         self.bbg_posi = bbg_posi
         self.jpgmode = jpgmode
         self.threshold = threshold
-        self.raw_image = cv2.imread(self.path)
+        self.raw_image = cv2.imread(self.origin_path)
         self.win_page = win_page
         self.win_text = win_text
         self.offset = offset

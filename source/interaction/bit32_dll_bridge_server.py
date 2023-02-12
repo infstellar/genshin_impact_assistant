@@ -1,6 +1,6 @@
 from socket import *
 from time import ctime
-import damo, threading
+import dmlib, threading, json, os
 HOST = '127.0.0.1'
 PORT = 21568
 BUFSIZE = 1024
@@ -10,7 +10,12 @@ tcpSerSock = socket(AF_INET,SOCK_STREAM)
 tcpSerSock.bind(ADDR)
 tcpSerSock.listen(5)
 
-dmdll = damo.DM()
+root_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+jso = json.load(open(os.path.join(root_path, "config\\settings\\dm.json"), 'r', encoding='utf-8'))
+key = jso[0]
+addition_key = jso[1]
+
+dmdll = dmlib.DM(key, addition_key)
 
 def exec_rdata(rdata):
     func_name = rdata.split('$')[0]
@@ -30,6 +35,20 @@ def exec_rdata(rdata):
         return dmdll.KeyUp(int(parameters[0]))
     elif func_name == 'KeyPress':
         return dmdll.KeyPress(int(parameters[0]))
+    elif func_name == 'LeftDown':
+        return dmdll.LeftDown()
+    elif func_name == 'LeftUp':
+        return dmdll.LeftUp()
+    elif func_name == 'LeftClick':
+        return dmdll.LeftClick()
+    elif func_name == 'RightClick':
+        return dmdll.RightClick()
+    elif func_name == 'MiddleClick':
+        return dmdll.MiddleClick()
+    elif func_name == 'MoveR':
+        return dmdll.MoveR(int(parameters[0]), int(parameters[1]))
+    elif func_name == 'MoveTo':
+        return dmdll.MoveTo(int(parameters[0]), int(parameters[1]))
 class server(threading.Thread):
     def __init__(self):
         super().__init__()

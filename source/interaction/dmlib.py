@@ -24,7 +24,7 @@ class DM:
 
     """
 
-    def __init__(self, dll_path: str = None) -> None:
+    def __init__(self, key, addtion_key) -> None:
         """
         初始化并且完成注册
 
@@ -37,11 +37,6 @@ class DM:
         #     return None
         # else:
         self.dll_prefix = "dm.dll"
-        self.dll_path = dll_path
-        if dll_path is None:
-            self.dll_path = os.path.join(os.path.dirname(__file__.replace('/', '\\')), self.dll_prefix)
-        # self.cmd_dll = 'regsvr32 \"' + self.dll_path + '\" /s'
-        # print(self.cmd_dll)
 
         # 判断是否已经注册注册成功返回版本信息
         if self.__is_reg:
@@ -56,7 +51,7 @@ class DM:
                 print("注册失败：" + time.strftime('%Y-%m-%d-%H:%M:%S',
                                               time.localtime(time.time())) + self.dll_path + "：注册失败")
 
-        r = self.dm.Reg()
+        r = self.dm.Reg(key, addtion_key)
         print("注册结果：", r)
         
     def __unreg_as_admin(self) -> None:

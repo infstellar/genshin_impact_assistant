@@ -19,21 +19,21 @@ VERTICALLY_AND_HORIZONTAL = 3
 # >0:right; <0:left
 def move(direction, distance=1):
     if direction == AHEAD:
-        itt.key_down('w', is_log=False)
+        itt.key_down('w')
         itt.delay(0.1 * distance)
-        itt.key_up('w', is_log=False)
+        itt.key_up('w')
     if direction == LEFT:
-        itt.key_down('a', is_log=False)
+        itt.key_down('a')
         itt.delay(0.1 * distance)
-        itt.key_up('a', is_log=False)
+        itt.key_up('a')
     if direction == RIGHT:
-        itt.key_down('d', is_log=False)
+        itt.key_down('d')
         itt.delay(0.1 * distance)
-        itt.key_up('d', is_log=False)
+        itt.key_up('d')
     if direction == BACK:
-        itt.key_down('s', is_log=False)
+        itt.key_down('s')
         itt.delay(0.1 * distance)
-        itt.key_up('s', is_log=False)
+        itt.key_up('s')
 
 
 def cview(angle=10, mode=HORIZONTAL):  # left<0,right>0

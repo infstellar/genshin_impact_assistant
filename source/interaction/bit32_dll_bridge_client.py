@@ -38,9 +38,12 @@ class TimeoutTimer(Timer):
 
 def start_server(python_path):
     target_pyfile_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "32bit_dll_bridge_server.py")
-    command = f'cd "{os.path.join(python_path, "../")}";&./python.exe "{target_pyfile_path}"'.replace(r"\\", "/").replace("\\", "/").replace('"', '"')
-    print("run this command in an admin powershell\n", command)
-    input("Enter to continue")
+    command = f'cd "{os.path.dirname(python_path)}" && start cmd /k python.exe "{target_pyfile_path}"'.replace(r"\\", "/").replace("\\", "/").replace('"', '"')
+    os.system(f"{command}")
+    print("waiting for connection")
+    time.sleep(5)
+    # print("run this command in an admin powershell\n", command)
+    # input("Enter to continue")
 
 global HOST, PORT, BUFSIZE, ADDR, tcpCliSock
 def connect():
@@ -110,6 +113,28 @@ class DMDLL(DLLClient):
     
     def KeyPress(self,vkcode):
         return self._send_function('KeyPress',(vkcode))
+    
+    def LeftDown(self):
+        return self._send_function('LeftDown')
+    
+    def LeftUp(self):
+        return self._send_function('LeftUp')
+    
+    def LeftClick(self):
+        return self._send_function('LeftClick')
+    
+    def RightClick(self):
+        return self._send_function('RightClick')
+    
+    def MiddleClick(self):
+        return self._send_function('MiddleClick')
+    
+    def MoveR(self,x,y):
+        return self._send_function('MoveR',(x,y))
+    
+    def MoveTo(self,x,y):
+        return self._send_function('MoveTo',(x,y))
+    
     
 if __name__ == "__main__":
     start_server(python_path="D:\\Program Files\\Anaconda\\envs\\GIA3732\\python.exe")
