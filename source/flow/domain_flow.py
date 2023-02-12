@@ -3,7 +3,7 @@ from source.constant import flow_state as ST
 from source.base import timer_module
 from source.funclib import generic_lib, movement
 from source.manager import posi_manager as PosiM, asset
-from source.interaction import interaction_core
+from source.interaction.interaction_core import global_itt
 from source.api import yolox_api
 from source.common.base_threading import BaseThreading
 from source.util import *
@@ -18,7 +18,7 @@ class DomainFlow(BaseThreading):
         self.current_state = ST.INIT_MOVETO_CHALLENGE
         # self.current_state = ST.IN_MOVETO_TREE
 
-        self.itt = interaction_core.InteractionBGD()
+        self.itt = global_itt
         chara_list = combat_loop.get_chara_list()
         self.combat_loop = combat_loop.Combat_Controller(chara_list)
         self.combat_loop.setDaemon(True)
@@ -134,7 +134,6 @@ class DomainFlow(BaseThreading):
         if self.itt.get_text_existence(asset.LEYLINEDISORDER):
             self.itt.move_and_click([PosiM.posi_domain['CLLD'][0], PosiM.posi_domain['CLLD'][1]], delay=1)
             # time.sleep(1)
-            # pyautogui.leftClick()
 
         if self.checkup_stop_func():
             return 0

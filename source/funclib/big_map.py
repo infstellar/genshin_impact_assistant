@@ -1,9 +1,9 @@
 from source.util import *
-from source.interaction import interaction_core
+from source.interaction.interaction_core import global_itt
 from source.manager import scene_manager, img_manager, posi_manager, asset
 from source.funclib import scene_lib
 
-itt = interaction_core.InteractionBGD()
+itt = global_itt
 
 global priority_waypoints, priority_waypoints_list, priority_waypoints_array, idnum
 priority_waypoints, priority_waypoints_list, priority_waypoints_array, idnum = None, None, None, None

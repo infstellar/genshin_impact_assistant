@@ -13,7 +13,7 @@ import ctypes, pickle
 
 time.time()  # 防自动删除
 BBG = 100001
-
+process_name = ["YuanShen.exe", "GenshinImpact.exe"]
 # configurate paths
 try:
     from source.path_lib import *

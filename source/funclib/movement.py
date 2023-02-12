@@ -1,11 +1,9 @@
-import pyautogui
-
-from source.interaction import interaction_core
+from source.interaction.interaction_core import global_itt
 from source.funclib import small_map
 from source.util import *
 from source.funclib import generic_lib, static_lib
 
-itt = interaction_core.InteractionBGD()
+itt = global_itt
 AHEAD = 0
 LEFT = 1
 RIGHT = 2
@@ -19,21 +17,21 @@ VERTICALLY_AND_HORIZONTAL = 3
 # >0:right; <0:left
 def move(direction, distance=1):
     if direction == AHEAD:
-        itt.key_down('w', is_log=False)
+        itt.key_down('w')
         itt.delay(0.1 * distance)
-        itt.key_up('w', is_log=False)
+        itt.key_up('w')
     if direction == LEFT:
-        itt.key_down('a', is_log=False)
+        itt.key_down('a')
         itt.delay(0.1 * distance)
-        itt.key_up('a', is_log=False)
+        itt.key_up('a')
     if direction == RIGHT:
-        itt.key_down('d', is_log=False)
+        itt.key_down('d')
         itt.delay(0.1 * distance)
-        itt.key_up('d', is_log=False)
+        itt.key_up('d')
     if direction == BACK:
-        itt.key_down('s', is_log=False)
+        itt.key_down('s')
         itt.delay(0.1 * distance)
-        itt.key_up('s', is_log=False)
+        itt.key_up('s')
 
 
 def cview(angle=10, mode=HORIZONTAL):  # left<0,right>0
@@ -56,8 +54,7 @@ def move_view_p(x, y):
 
 
 def reset_view():
-    pyautogui.click(button='middle')
-    logger.debug("press middle")
+    itt.middle_click()
     time.sleep(1)
 
 def view_to_angle_domain(angle, stop_func, deltanum=0.65, maxloop=100, corrected_num=CORRECT_DEGREE):

@@ -1,9 +1,7 @@
-import pyautogui
-
 from source.funclib import movement
 from source.manager import img_manager
 from source.common.base_threading import BaseThreading
-from source.interaction import interaction_core
+from source.interaction.interaction_core import global_itt
 from source.base.timer_module import Timer
 from source.util import *
 
@@ -15,7 +13,7 @@ class AimOperator(BaseThreading):
     def __init__(self):
         super().__init__()
         self.setName('Aim_Operator')
-        self.itt = interaction_core.InteractionBGD()
+        self.itt = global_itt
         self.loop_timer = Timer()
         auto_aim_json = load_json("auto_aim.json")
         self.fps = 1 / auto_aim_json["fps"]
@@ -146,7 +144,7 @@ class AimOperator(BaseThreading):
 
     def finding_enemy(self):
         if self.enemy_loops < self.max_number_of_enemy_loops:
-            pyautogui.middleClick() # 重置视角
+            self.itt.middle_click() # 重置视角
             logger.debug(f" finding_enemy ")
         while self.enemy_loops < self.max_number_of_enemy_loops: # 当搜索敌人次数小于最大限制次数时，开始搜索
             if self.checkup_stop_func():

@@ -1,10 +1,12 @@
 from source.util import *
-from source.interaction import interaction_core
-itt = interaction_core.InteractionBGD()
+from source.interaction.interaction_core import global_itt
+itt = global_itt
 from source.common.base_threading import BaseThreading
 from source.funclib import static_lib
 from source.base.timer_module import Timer
-
+from source.path_lib import CONFIGPATH_SETTING
+if load_json("config.json", CONFIGPATH_SETTING)["interaction_mode"] == 'Dm':
+    from source.interaction.interaction_dm import unbind, bind
 
 
 class GenericEvent(BaseThreading):
@@ -14,7 +16,9 @@ class GenericEvent(BaseThreading):
         self.w_down_timer = Timer()
         self.w_down_flag = False
         self.setName("GenericEvent")
-    
+        self.itt_mode = load_json("config.json", CONFIGPATH_SETTING)["interaction_mode"]
+        self.while_sleep = 2
+            
     def run(self) -> None:
         '''if you're using this class, copy this'''
         while 1:
@@ -35,18 +39,31 @@ class GenericEvent(BaseThreading):
                 self.pause_threading_flag = True
                 continue
             '''write your code below'''
-            if static_lib.W_KEYDOWN == True:
-                if self.w_down_flag == False:
-                    self.w_down_flag = True
-                    self.w_down_timer.reset()
-                if self.w_down_timer.get_diff_time() >= 15:
-                    itt.key_down('w')
-                    self.w_down_timer.reset()
-                    logger.debug("static lib keydown: w")
-            else:
-                if self.w_down_flag == True:
-                    self.w_down_flag = False
-                    itt.key_up('w')
+            if self.itt_mode == "Normal":
+                if static_lib.W_KEYDOWN == True:
+                    if self.w_down_flag == False:
+                        self.w_down_flag = True
+                        self.w_down_timer.reset()
+                    if self.w_down_timer.get_diff_time() >= 15:
+                        itt.key_down('w')
+                        self.w_down_timer.reset()
+                        logger.debug("static lib keydown: w")
+                else:
+                    if self.w_down_flag == True:
+                        self.w_down_flag = False
+                        itt.key_up('w')
+            
+            if self.itt_mode == 'Dm':
+                winname = get_active_window_process_name()
+                if winname in process_name:
+                    unbind()
+                    while 1:
+                        if get_active_window_process_name() not in process_name:
+                            logger.info(t2t("恢复操作"))
+                            break
+                        logger.info(t2t("当前窗口焦点为") + str(winname) + t2t("是原神窗口") + str(process_name) + t2t("，操作暂停 ") + str(5 - (time.time()%5)) +t2t(" 秒"))
+                        time.sleep(5 - (time.time()%5))
+                    bind()
 def static_lib_init():
     global W_KEYDOWN, cvAutoTrackerLoop
     logger.debug("import cvAutoTrack")

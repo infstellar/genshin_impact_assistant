@@ -1,6 +1,6 @@
 from source.util import *
 from source.constant import flow_state as ST
-from source.interaction import interaction_core
+from source.interaction.interaction_core import global_itt
 from source.operator import pickup_operator
 from source.flow import teyvat_move_flow
 from source.controller import combat_loop
@@ -93,7 +93,7 @@ class CollectorFlow(BaseThreading):
         collector_lib.generate_col_succ_rate_from_log()
         logger.debug(f"generate collection_id_details succ")
         self.collection_details = load_json("collection_id_details.json", "config\\auto_collector")
-        self.itt = interaction_core.InteractionBGD()
+        self.itt = global_itt
         
         
         

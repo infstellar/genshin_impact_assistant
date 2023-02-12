@@ -16,8 +16,6 @@ threading.Thread(target=server_thread, daemon=False).start()
 
 import source.util
 # test
-from source.interaction import interaction_core
-a = interaction_core.InteractionBGD()
 
 source.util.logger.info(source.util.t2t('正在初始化，请稍后'))
 # source.unit.logger.info('Initializing, please hold on')

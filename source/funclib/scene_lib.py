@@ -1,8 +1,8 @@
-from source.interaction import interaction_core
+from source.interaction.interaction_core import global_itt
 from source.manager import scene_manager, button_manager
 from source.util import *
 
-itt = interaction_core.InteractionBGD()
+itt = global_itt
 def get_current_pagename(retry=0):
     current_page = None
     max_rate = 0
