@@ -2,7 +2,7 @@ from source.util import *
 import inspect
 import math
 import random
-import string
+import threading
 import time
 import cv2
 import numpy as np
@@ -20,12 +20,16 @@ IMG_POINT = 2
 IMG_RECT = 3
 IMG_BOOL = 4
 IMG_BOOLRATE = 5
+ITT_NORMAL = 10
+ITT_DM = 11
+ITT_ADB = 12
 
 winname_default = ["Genshin Impact", "原神"]
 # winname_cgs = "云·原神"
 process_name = ["YuanShen.exe", "GenshinImpact.exe"]
 # process_name_cloud = ["云·原神"]
 
+itt_exec_mode = ITT_DM
 def before_operation(print_log=True):
     def outwrapper(func):
         def wrapper(*args, **kwargs):
@@ -35,14 +39,15 @@ def before_operation(print_log=True):
             # cc=inspect.getframeinfo(inspect.currentframe().f_back.f_back.f_back)
             if print_log:
                 logger.debug(f" operation: {func.__name__} | args: {args[1:]} | {kwargs} | function name: {func_name} & {func_name_2}")
-            winname = get_active_window_process_name()
-            if winname not in process_name:
-                while 1:
-                    if get_active_window_process_name() in process_name:
-                        logger.info(t2t("恢复操作"))
-                        break
-                    logger.info(t2t("当前窗口焦点为") + str(winname) + t2t("不是原神窗口") + str(process_name) + t2t("，操作暂停 ") + str(5 - (time.time()%5)) +t2t(" 秒"))
-                    time.sleep(5 - (time.time()%5))
+            if itt_exec_mode==ITT_NORMAL:
+                winname = get_active_window_process_name()
+                if winname not in process_name:
+                    while 1:
+                        if get_active_window_process_name() in process_name:
+                            logger.info(t2t("恢复操作"))
+                            break
+                        logger.info(t2t("当前窗口焦点为") + str(winname) + t2t("不是原神窗口") + str(process_name) + t2t("，操作暂停 ") + str(5 - (time.time()%5)) +t2t(" 秒"))
+                        time.sleep(5 - (time.time()%5))
             return func(*args, **kwargs)
         return wrapper
     return outwrapper
@@ -59,9 +64,7 @@ DeleteObject = ctypes.windll.gdi32.DeleteObject
 ReleaseDC = ctypes.windll.user32.ReleaseDC
 PostMessageW = ctypes.windll.user32.PostMessageW
 MapVirtualKeyW = ctypes.windll.user32.MapVirtualKeyW
-ITT_NORMAL = 0
-ITT_DM = 1
-ITT_ADB = 2
+
 
 class InteractionBGD:
     """
@@ -78,11 +81,14 @@ class InteractionBGD:
         self.isChromelessWindow = config_json["ChromelessWindow"]
         self.handle = static_lib.get_handle()
         self.itt_exec = None
-        itt_exec_mode = ITT_NORMAL
+        itt_exec_mode = ITT_DM
+        self.operation_lock = threading.Lock()
         if itt_exec_mode == ITT_NORMAL:
             import source.interaction.interaction_normal
             self.itt_exec = source.interaction.interaction_normal.InteractionNormal()
-        
+        elif itt_exec_mode == ITT_DM:
+            import source.interaction.interaction_dm
+            self.itt_exec = source.interaction.interaction_dm.InteractionDm()
         
         # if handle != 0:
         #     self.handle = handle
@@ -574,7 +580,10 @@ class InteractionBGD:
         """左键点击
         
         """
+        self.operation_lock.acquire()
+        print('lock!')
         self.itt_exec.left_click()
+        self.operation_lock.release()
         
         # logger.debug('left click ' + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
 
@@ -583,8 +592,11 @@ class InteractionBGD:
         """左键按下
 
         """
+        self.operation_lock.acquire()
+        print('lock!')
         self.itt_exec.left_down()
-
+        self.operation_lock.release()
+        
         # logger.debug('left down' + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
 
     @before_operation()
@@ -592,8 +604,12 @@ class InteractionBGD:
         """左键抬起
 
         """
+        self.operation_lock.acquire()
+        print('lock!')
         self.itt_exec.left_up()
+        self.operation_lock.release()
 
+        
         # logger.debug('left up ' + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
 
     @before_operation()
@@ -603,8 +619,10 @@ class InteractionBGD:
         Args:
             dt (float, optional): 间隔时间. Defaults to 0.05.
         """
+        self.operation_lock.acquire()
+        print('lock!')
         self.itt_exec.left_double_click(dt=dt)
-        
+        self.operation_lock.release()
         
         # logger.debug('leftDoubleClick ' + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
 
@@ -613,7 +631,11 @@ class InteractionBGD:
         """右键单击
 
         """
+        self.operation_lock.acquire()
+        print('lock!')
         self.itt_exec.right_click()
+        self.operation_lock.release()
+        
         
         # logger.debug('rightClick ' + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
         self.delay(0.05)
@@ -625,7 +647,10 @@ class InteractionBGD:
         Args:
             key (str): 按键代号。查阅vkCode.py
         """
+        self.operation_lock.acquire()
+        print('lock!')
         self.itt_exec.key_down(key)
+        self.operation_lock.release()
         
         # if is_log:
         #     logger.debug(
@@ -638,7 +663,10 @@ class InteractionBGD:
         Args:
             key (str): 按键代号。查阅vkCode.py
         """
+        self.operation_lock.acquire()
+        print('lock!')
         self.itt_exec.key_up(key)
+        self.operation_lock.release()
         
         # if is_log:
         #     logger.debug("keyUp " + key + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
@@ -650,7 +678,10 @@ class InteractionBGD:
         Args:
             key (str): 按键代号。查阅vkCode.py
         """
+        self.operation_lock.acquire()
+        print('lock!')
         self.itt_exec.key_press(key)
+        self.operation_lock.release()
         
         # logger.debug("keyPress " + key + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
 
@@ -663,8 +694,10 @@ class InteractionBGD:
             y (int): 纵坐标
             relative (bool): 是否为相对移动。
         """
+        self.operation_lock.acquire()
+        print('lock!')
         self.itt_exec.move_to(x, y, relative=relative, isChromelessWindow=self.isChromelessWindow)
-        
+        self.operation_lock.release()
 
     # @staticmethod
     def crop_image(self, imsrc, posilist):
@@ -682,6 +715,8 @@ class InteractionBGD:
 
 def itt_test(itt: InteractionBGD):
     pass
+
+global_itt = InteractionBGD()
 
 if __name__ == '__main__':
     ib = InteractionBGD()

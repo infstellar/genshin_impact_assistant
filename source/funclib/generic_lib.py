@@ -1,4 +1,4 @@
-from source.interaction import interaction_core
+from source.interaction.interaction_core import global_itt
 from source.manager import scene_manager, img_manager, posi_manager, asset
 from source.funclib import big_map, static_lib
 from source.util import *
@@ -8,7 +8,7 @@ NORMAL = 0
 NEGATIVE_Y = 1
 NEGATIVE_X = 2
 NEGATIVE_XY = 3
-itt = interaction_core.InteractionBGD()
+itt = global_itt
 
 def f_recognition(mode='button_only'):
     if itt.get_img_existence(asset.F_BUTTON):

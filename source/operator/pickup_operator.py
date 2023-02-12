@@ -1,6 +1,6 @@
 from source.common.base_threading import BaseThreading
 from source.util import *
-from source.interaction import interaction_core
+from source.interaction.interaction_core import global_itt
 from source.api.pdocr_api import ocr
 from source.base import timer_module
 from source.funclib import generic_lib, movement, static_lib
@@ -13,7 +13,7 @@ class PickupOperator(BaseThreading):
     def __init__(self):
         super().__init__()
         self.setName("PickupOperator")
-        self.itt = interaction_core.InteractionBGD()
+        self.itt = global_itt
         self.pickup_blacklist = load_json("auto_pickup.json")["blacklist"]
         self.pickup_blacklist += load_json("auto_pickup_default_blacklist.json")["blacklist"]
         self.pickup_blacklist = list(set(self.pickup_blacklist))

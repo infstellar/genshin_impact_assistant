@@ -37,7 +37,7 @@ class TimeoutTimer(Timer):
             return False
 
 def start_server(python_path):
-    target_pyfile_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "32bit_dll_bridge_server.py")
+    target_pyfile_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "bit32_dll_bridge_server.py")
     command = f'cd "{os.path.dirname(python_path)}" && start cmd /k python.exe "{target_pyfile_path}"'.replace(r"\\", "/").replace("\\", "/").replace('"', '"')
     os.system(f"{command}")
     print("waiting for connection")
@@ -63,7 +63,7 @@ class DLLClient(threading.Thread):
         self._send_list = []
         self.activate_timeout=TimeoutTimer(5)
     
-    def _send_function(self, func_name:str, para:tuple=None):
+    def _send_function(self, func_name:str, para:list=None):
         """_summary_
 
         Args:
@@ -97,22 +97,22 @@ class DMDLL(DLLClient):
         return self._send_function("ver")
     
     def BindWindow(self,hwnd,display,mouse,keypad,mode):
-        return self._send_function('BindWindow',(hwnd, display, mouse, keypad, mode))
+        return self._send_function('BindWindow',[hwnd, display, mouse, keypad, mode])
     
     def EnableBind(self, enable):
-        return self._send_function('EnableBind',(enable))
+        return self._send_function('EnableBind',[enable])
     
     def UnBindWindow(self):
-        print("unbind: ", self._send_function('UnBindWindow'))
+        print("unbind: ", self._send_function(['UnBindWindow']))
 
     def KeyDown(self,vkcode):
-        return self._send_function('KeyDown',(vkcode))
+        return self._send_function('KeyDown',[vkcode])
     
     def KeyUp(self,vkcode):
-        return self._send_function('KeyUp',(vkcode))
+        return self._send_function('KeyUp',[vkcode])
     
     def KeyPress(self,vkcode):
-        return self._send_function('KeyPress',(vkcode))
+        return self._send_function('KeyPress',[vkcode])
     
     def LeftDown(self):
         return self._send_function('LeftDown')
@@ -134,6 +134,9 @@ class DMDLL(DLLClient):
     
     def MoveTo(self,x,y):
         return self._send_function('MoveTo',(x,y))
+    
+    def GetLastError(self):
+        return self._send_function('GetLastError')
     
     
 if __name__ == "__main__":

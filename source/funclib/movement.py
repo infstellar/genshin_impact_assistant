@@ -1,11 +1,11 @@
 import pyautogui
 
-from source.interaction import interaction_core
+from source.interaction.interaction_core import global_itt
 from source.funclib import small_map
 from source.util import *
 from source.funclib import generic_lib, static_lib
 
-itt = interaction_core.InteractionBGD()
+itt = global_itt
 AHEAD = 0
 LEFT = 1
 RIGHT = 2

@@ -1,10 +1,11 @@
 from source.manager import img_manager, posi_manager, asset
-from source.interaction import interaction_core
+from source.interaction.interaction_core import global_itt
 from source.util import *
 from source.common.base_threading import BaseThreading
 import numpy as np
 from source.base import timer_module
 from source.common import character
+from source.interaction.interaction_core import global_itt
 from source.interaction import interaction_core
 
 """
@@ -252,7 +253,7 @@ class CombatStatementDetectionLoop(BaseThreading):
     def __init__(self):
         super().__init__()
         self.setName("CombatStatementDetectionLoop")
-        self.itt = interaction_core.InteractionBGD()
+        self.itt = global_itt
         self.current_state = False
         self.state_counter = 0
         self.while_sleep = 0.1
@@ -312,7 +313,7 @@ CSDL = CombatStatementDetectionLoop()
 CSDL.start()
 
 if __name__ == '__main__':
-    itt = interaction_core.InteractionBGD()
+    itt = global_itt
     while 1:
         time.sleep(0.5)
         print(CSDL.get_combat_state())

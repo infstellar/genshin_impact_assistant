@@ -49,6 +49,8 @@ def exec_rdata(rdata):
         return dmdll.MoveR(int(parameters[0]), int(parameters[1]))
     elif func_name == 'MoveTo':
         return dmdll.MoveTo(int(parameters[0]), int(parameters[1]))
+    elif func_name == 'GetLastError':
+        return dmdll.GetLastError()
 class server(threading.Thread):
     def __init__(self):
         super().__init__()
@@ -67,7 +69,7 @@ class server(threading.Thread):
                 rdata = data.decode('utf-8')
                 sdata = exec_rdata(rdata)
                 
-                tcpCliSock.send(sdata.encode())
+                tcpCliSock.send(str(sdata).encode())
                 # tcpCliSock.send(('[%s] %s' % (ctime(), data)).encode())
             tcpCliSock.close()
         tcpSerSock.close()

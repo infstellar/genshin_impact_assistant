@@ -1,8 +1,9 @@
+from source.interaction.interaction_core import global_itt
 from source.interaction import interaction_core
 from source.manager import asset
 from source.util import *
 
-itt = interaction_core.InteractionBGD()
+itt = global_itt
 dx = 25
 dy = 25
 posi_map = [57 + dy, 15 + dx,278 - dy, 236 - dy ]
