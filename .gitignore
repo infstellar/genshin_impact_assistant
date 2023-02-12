@@ -205,3 +205,4 @@ source/test239.py
 source/test240.py
 out/*
 assets/dm/*
+config/settings/damo.json
