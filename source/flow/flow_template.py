@@ -15,7 +15,7 @@ class FlowTemplate():
         self.upper = upper
         self.flow_id = 0
         self.rfc = FC.INIT
-        self.return_flow_id = self.flow_id
+        self.next_flow_id = self.flow_id
         self.rfc = FC.INIT
         
     def enter_flow(self):
@@ -29,7 +29,7 @@ class FlowTemplate():
             self.rfc = self.state_after()
         elif self.rfc == FC.END:
             self.state_end()
-            return self.return_flow_id
+            return self.next_flow_id
         return self.flow_id
 
     def _next_rfc(self):
@@ -57,7 +57,10 @@ class FlowTemplate():
     def state_end(self):
         self.rfc = FC.OVER
         
-    
+    def _set_nfid(self, fid):
+        self.next_flow_id = fid
+
+
 class FlowController(base_threading.BaseThreading):
     def __init__(self):
         super().__init__()
@@ -67,7 +70,7 @@ class FlowController(base_threading.BaseThreading):
         self.end_flow_id = None
         
     def append_flow(self, flow:FlowTemplate):
-        self.flow_dict[str(flow.rfc)] = flow
+        self.flow_dict[str(flow.flow_id)] = flow
     
     def set_current_flow_id(self, id):
         self.current_flow_id = id
@@ -114,37 +117,3 @@ class FlowController(base_threading.BaseThreading):
             if rcode == self.end_flow_id:
                 logger.info("Flow END")
                 self.pause_threading()
-
-
-class TAAA(FlowTemplate):
-    def __init__(self, upper):
-        super().__init__(upper)
-        self.flow_id = ST.INIT_MOVETO_CHALLENGE
-        self.key_id = FC.INIT
-        self.return_flow_id = self.flow_id
-        
-    def state_init(self):
-        super().state_init()
-        
-        return self.rfc
-    
-    def state_before(self):
-        super().state_before()
-
-        return self.rfc
-    
-    def state_in(self):
-        super().state_in()
-
-        return self.rfc
-    
-    def state_after(self):
-        super().state_after()
-        
-        return self.rfc
-    
-    def state_end(self):
-        super().state_end()
-        
-        self.rfc = FC.OVER
-        return self.rfc
