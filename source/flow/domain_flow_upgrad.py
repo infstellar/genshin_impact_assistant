@@ -10,6 +10,9 @@ from source.interaction.interaction_core import global_itt
 from source.api import yolox_api
 
 class DomainFlowConnector(FlowConnector):
+    """
+    各个类之间的变量中继器。
+    """
     def __init__(self):
         self.checkup_stop_func = None
         self.combat_loop = combat_loop.Combat_Controller()
@@ -33,6 +36,9 @@ class DomainFlowConnector(FlowConnector):
         self.fast_mode = domain_json["fast_mode"]
 
 class MoveToChallenge(FlowTemplate):
+    """
+    移动到开始挑战目标点。
+    """
     def __init__(self, upper:DomainFlowConnector):
         super().__init__(upper)
         self.upper = upper
@@ -41,9 +47,13 @@ class MoveToChallenge(FlowTemplate):
         self._set_nfid(ST.INIT_CHALLENGE)
         
     def state_init(self):
+        """
+        检查并关闭可能的弹窗。
+        """
         logger.info(t2t('正在开始挑战秘境'))
         movement.reset_view()
         if global_itt.get_text_existence(asset.LEYLINEDISORDER):
+            
             self._next_rfc()
         if global_itt.get_img_existence(asset.IN_DOMAIN):
             self._next_rfc()
