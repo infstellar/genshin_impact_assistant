@@ -14,30 +14,36 @@ class FlowTemplate():
     def __init__(self, upper:FlowConnector):
         self.upper = upper
         self.flow_id = 0
-        self.key_id = FC.INIT
+        self.rfc = FC.INIT
         self.return_flow_id = self.flow_id
         self.rfc = FC.INIT
         
     def enter_flow(self):
-        if self.key_id == FC.INIT:
-            self.key_id = self.state_init()
-        elif self.key_id == FC.BEFORE:
-            self.key_id = self.state_before()
-        elif self.key_id == FC.IN:
-            self.key_id = self.state_in()
-        elif self.key_id == FC.AFTER:
-            self.key_id = self.state_after()
-        elif self.key_id == FC.END:
+        if self.rfc == FC.INIT:
+            self.rfc = self.state_init()
+        elif self.rfc == FC.BEFORE:
+            self.rfc = self.state_before()
+        elif self.rfc == FC.IN:
+            self.rfc = self.state_in()
+        elif self.rfc == FC.AFTER:
+            self.rfc = self.state_after()
+        elif self.rfc == FC.END:
             self.state_end()
             return self.return_flow_id
         return self.flow_id
-        
+
+    def _next_rfc(self):
+        if self.rfc != 5:
+            self.rfc += 1
+        else:
+            self.rfc = 5
+
     def state_init(self):
-        self.rfc = FC.INIT
+        self.rfc = FC.BEFORE
         
     
     def state_before(self):
-        self.rfc = FC.BEFORE
+        self.rfc = FC.IN
         
     
     def state_in(self):
@@ -45,11 +51,11 @@ class FlowTemplate():
         
     
     def state_after(self):
-        self.rfc = FC.AFTER
+        self.rfc = FC.END
         
     
     def state_end(self):
-        self.rfc = FC.END
+        self.rfc = FC.OVER
         
     
 class FlowController(base_threading.BaseThreading):
@@ -61,7 +67,7 @@ class FlowController(base_threading.BaseThreading):
         self.end_flow_id = None
         
     def append_flow(self, flow:FlowTemplate):
-        self.flow_dict[str(flow.key_id)] = flow
+        self.flow_dict[str(flow.rfc)] = flow
     
     def set_current_flow_id(self, id):
         self.current_flow_id = id
