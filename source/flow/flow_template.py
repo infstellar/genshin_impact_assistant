@@ -16,24 +16,23 @@ class FlowTemplate():
         self.flow_id = 0
         self.rfc = FC.INIT
         self.next_flow_id = self.flow_id
-        self.rfc = FC.INIT
         
     def enter_flow(self):
         if self.rfc == FC.INIT:
-            self.rfc = self.state_init()
+            self.state_init()
         elif self.rfc == FC.BEFORE:
-            self.rfc = self.state_before()
+            self.state_before()
         elif self.rfc == FC.IN:
-            self.rfc = self.state_in()
+            self.state_in()
         elif self.rfc == FC.AFTER:
-            self.rfc = self.state_after()
+            self.state_after()
         elif self.rfc == FC.END:
             self.state_end()
             return self.next_flow_id
         return self.flow_id
 
     def _next_rfc(self):
-        if self.rfc != 5:
+        if self.rfc < 5:
             self.rfc += 1
         else:
             self.rfc = 5
@@ -68,6 +67,7 @@ class FlowController(base_threading.BaseThreading):
         self.flow_dict = {}
         self.current_flow_id = None
         self.end_flow_id = None
+        self.get_while_sleep = None
         
     def append_flow(self, flow:FlowTemplate):
         self.flow_dict[str(flow.flow_id)] = flow
@@ -89,7 +89,7 @@ class FlowController(base_threading.BaseThreading):
     def run(self) -> None:
         '''if you're using this class, copy this'''
         while 1:
-            time.sleep(self.while_sleep)
+            time.sleep(self.get_while_sleep())
             if self.stop_threading_flag:
                 return 0
 

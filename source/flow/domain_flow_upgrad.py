@@ -15,9 +15,14 @@ class DomainFlowConnector(FlowConnector):
     """
     def __init__(self):
         self.checkup_stop_func = None
-        self.combat_loop = combat_loop.Combat_Controller()
+        chara_list = combat_loop.get_chara_list()
+        self.combat_loop = combat_loop.Combat_Controller(chara_list)
+        self.combat_loop.setDaemon(True)
 
-
+        self.combat_loop.pause_threading()
+        self.combat_loop.start()
+        self.while_sleep = 0.1
+        
         self.lockOnFlag = 0
         self.move_timer = timer_module.Timer()
         self.ahead_timer = timer_module.Timer()
@@ -35,6 +40,9 @@ class DomainFlowConnector(FlowConnector):
         self.resin_mode = domain_json["resin"]
         self.fast_mode = domain_json["fast_mode"]
 
+    def get_while_sleep(self):
+        return self.while_sleep
+    
 class MoveToChallenge(FlowTemplate):
     """
     移动到开始挑战目标点。
@@ -53,12 +61,11 @@ class MoveToChallenge(FlowTemplate):
         logger.info(t2t('正在开始挑战秘境'))
         movement.reset_view()
         if global_itt.get_text_existence(asset.LEYLINEDISORDER):
-            
             self._next_rfc()
         if global_itt.get_img_existence(asset.IN_DOMAIN):
             self._next_rfc()
-
-        self.rfc = FC.INIT
+        
+        self.rfc = 1
     
     def state_before(self):
         if global_itt.get_text_existence(asset.LEYLINEDISORDER):
@@ -79,8 +86,7 @@ class MoveToChallenge(FlowTemplate):
             movement.move(movement.AHEAD, 4)
 
         if generic_lib.f_recognition(global_itt):
-            self.while_sleep = 0.2
-            self.rfc = FC.BEFORE
+            self._next_rfc()
     
     def state_after(self):
         global_itt.key_up('w')
@@ -101,6 +107,9 @@ class Challenge(FlowTemplate):
         self.upper.combat_loop.continue_threading()
         global_itt.key_press('f')
         time.sleep(0.1)
+        
+        self.upper.while_sleep = 2
+        
         self._next_rfc()
     
     def state_in(self):
@@ -110,6 +119,9 @@ class Challenge(FlowTemplate):
             self.rfc = FC.IN
     
     def state_after(self):
+        
+        self.upper.while_sleep = 0.1
+        
         logger.info(t2t('正在停止战斗'))
         self.upper.combat_loop.pause_threading()
         time.sleep(5)
@@ -124,6 +136,7 @@ class FindingTree(FlowTemplate):
         self.flow_id = ST.INIT_FINGING_TREE
         self.key_id = FC.INIT
         self._set_nfid(ST.INIT_MOVETO_TREE)
+        self.move_num = 1
 
     def get_tree_posi(self):
         cap =global_itt.capture(jpgmode=0)
@@ -240,12 +253,20 @@ class DomainFlowController(FlowController):
         super().__init__()
         self.flow_connector = DomainFlowConnector()
         self.flow_connector.checkup_stop_func = self.checkup_stop_func
-
-        self.append_flow(MoveToChallenge())
-        self.append_flow(Challenge())
-        self.append_flow(FindingTree())
-        self.append_flow(MoveToTree())
-        self.append_flow(AttainReaward())
+        
+        self.f1 = MoveToChallenge(self.flow_connector)
+        self.f2 = Challenge(self.flow_connector)
+        self.f3 = FindingTree(self.flow_connector)
+        self.f4 = MoveToTree(self.flow_connector)
+        self.f5 = AttainReaward(self.flow_connector)
+        
+        self.append_flow(self.f1)
+        self.append_flow(self.f2)
+        self.append_flow(self.f3)
+        self.append_flow(self.f4)
+        self.append_flow(self.f5)
+        
+        self.get_while_sleep = self.flow_connector.get_while_sleep
 
 
 
