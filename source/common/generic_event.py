@@ -8,7 +8,8 @@ from source.path_lib import CONFIGPATH_SETTING
 if load_json("config.json", CONFIGPATH_SETTING)["interaction_mode"] == 'Dm':
     from source.interaction.interaction_dm import unbind, bind
 
-
+global W_KEYDOWN, cvAutoTrackerLoop
+cvAutoTrackerLoop = None
 class GenericEvent(BaseThreading):
     
     def __init__(self):
@@ -64,6 +65,8 @@ class GenericEvent(BaseThreading):
                         logger.info(t2t("当前窗口焦点为") + str(winname) + t2t("是原神窗口") + str(process_name) + t2t("，操作暂停 ") + str(5 - (time.time()%5)) +t2t(" 秒"))
                         time.sleep(5 - (time.time()%5))
                     bind()
+
+
 def static_lib_init():
     global W_KEYDOWN, cvAutoTrackerLoop
     logger.debug("import cvAutoTrack")

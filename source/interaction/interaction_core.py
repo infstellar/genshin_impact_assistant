@@ -86,7 +86,6 @@ class InteractionBGD:
         self.isChromelessWindow = config_json["ChromelessWindow"]
         self.handle = static_lib.get_handle()
         self.itt_exec = None
-        itt_exec_mode = ITT_DM
         self.operation_lock = threading.Lock()
         if itt_exec_mode == ITT_NORMAL:
             import source.interaction.interaction_normal
