@@ -1,6 +1,10 @@
 from functools import wraps
 
+import numpy as np
+from PIL import Image
+
 from source.device.alas.timer import Timer
+from source.device.alas.utils import load_image
 from source.device.device.device import Device
 from source.device.method.utils import HierarchyButton
 from source.util import logger
@@ -10,6 +14,7 @@ def func_debug(function):
     """
     log debugs before and after a function
     """
+
     @wraps(function)
     def wrapper(*args, **kwargs):
         logger.debug(f'{function.__name__} enter')
@@ -103,3 +108,23 @@ class AppBase(Device):
             return
 
         self.interval_get(button).clear()
+
+    _image_file = ''
+
+    @property
+    def image_file(self):
+        return self._image_file
+
+    @image_file.setter
+    def image_file(self, value):
+        """
+        For development.
+        Load image from local file system and set it to self.device.image
+        Test an image without taking a screenshot from emulator.
+        """
+        if isinstance(value, Image.Image):
+            value = np.array(value)
+        elif isinstance(value, str):
+            value = load_image(value)
+
+        self.image = value

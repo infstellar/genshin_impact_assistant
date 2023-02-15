@@ -37,7 +37,6 @@ class Screenshot(Adb, DroidCast):
             # 'scrcpy': self.screenshot_scrcpy,
         }
 
-    @timer
     def screenshot(self):
         """
         Returns:
