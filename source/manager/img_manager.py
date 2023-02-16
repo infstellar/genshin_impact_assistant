@@ -43,7 +43,11 @@ class ImgIcon:
         if cap_posi == None:
             cap_posi = [0, 0, 1080, 1920]
         self.name = name
-        self.origin_path = os.path.join(root_path, path)
+        if IS_DEVICE_PC:
+            self.origin_path = os.path.join(root_path, path).replace("$device$", "Windows")
+        else:
+            self.origin_path = os.path.join(root_path, path).replace("$device$", "Windows")
+
         self.is_bbg = is_bbg
         self.alpha = alpha
         self.bbg_posi = bbg_posi

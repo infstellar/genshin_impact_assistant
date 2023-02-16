@@ -36,7 +36,11 @@ class PosiTemplate():
         if posi != None:
             position = posi
         if img_path != None:
-            image = cv2.imread(img_path)
+            if IS_DEVICE_PC:
+                self.origin_path = os.path.join(root_path, img_path).replace("$device$", "Windows")
+            else:
+                self.origin_path = os.path.join(root_path, img_path).replace("$device$", "Windows")
+            image = cv2.imread(self.origin_path)
             position = get_bbox(image, black_offset=18)
         self.posi_list.append(position)
         

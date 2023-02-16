@@ -20,20 +20,13 @@ IMG_POINT = 2
 IMG_RECT = 3
 IMG_BOOL = 4
 IMG_BOOLRATE = 5
-ITT_NORMAL = 10
-ITT_DM = 11
-ITT_ADB = 12
+
 
 winname_default = ["Genshin Impact", "原神"]
 # winname_cgs = "云·原神"
 
 # process_name_cloud = ["云·原神"]
-if load_json("config.json", CONFIGPATH_SETTING)["interaction_mode"] == 'Normal':
-    itt_exec_mode = ITT_NORMAL
-elif load_json("config.json", CONFIGPATH_SETTING)["interaction_mode"] == 'ADB':
-    itt_exec_mode = ITT_ADB
-elif load_json("config.json", CONFIGPATH_SETTING)["interaction_mode"] == 'Dm':
-    itt_exec_mode = ITT_DM
+
 def before_operation(print_log=True):
     def outwrapper(func):
         def wrapper(*args, **kwargs):
@@ -43,7 +36,7 @@ def before_operation(print_log=True):
             # cc=inspect.getframeinfo(inspect.currentframe().f_back.f_back.f_back)
             if print_log:
                 logger.debug(f" operation: {func.__name__} | args: {args[1:]} | {kwargs} | function name: {func_name} & {func_name_2}")
-            if itt_exec_mode == ITT_NORMAL:
+            if GLOBAL_DEVICE == DEVICE_NORMAL:
                 winname = get_active_window_process_name()
                 if winname not in process_name:
                     while 1:
@@ -87,10 +80,10 @@ class InteractionBGD:
         self.handle = static_lib.get_handle()
         self.itt_exec = None
         self.operation_lock = threading.Lock()
-        if itt_exec_mode == ITT_NORMAL:
+        if GLOBAL_DEVICE == DEVICE_NORMAL:
             import source.interaction.interaction_normal
             self.itt_exec = source.interaction.interaction_normal.InteractionNormal()
-        elif itt_exec_mode == ITT_DM:
+        elif GLOBAL_DEVICE == DEVICE_DM:
             import source.interaction.interaction_dm
             self.itt_exec = source.interaction.interaction_dm.InteractionDm()
         
@@ -729,6 +722,13 @@ class InteractionBGD:
         else:
             self.right_click()
 
+    @before_operation()
+    def drag(self, origin_xy:list, targe_xy:list):
+        self.operation_lock.acquire()
+        print('lock!')
+        self.itt_exec.drag(origin_xy, targe_xy, isChromelessWindow=self.isChromelessWindow)
+        self.operation_lock.release()
+    
 def itt_test(itt: InteractionBGD):
     pass
 

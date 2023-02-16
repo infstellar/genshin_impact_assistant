@@ -38,6 +38,9 @@ class InteractionTemplate():
     def move_to(self, x: int, y: int, relative=False, isChromelessWindow=False):
         pass
     
+    def drag(self, origin_xy:list, targe_xy:list):
+        pass
+    
     def get_virtual_keycode(self, key: str):
         """根据按键名获取虚拟按键码
 
