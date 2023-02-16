@@ -145,3 +145,14 @@ def del_cached_property(obj, name):
         del obj.__dict__[name]
     except KeyError:
         pass
+
+
+def has_cached_property(obj, name):
+    """
+    Check if a property is cached.
+
+    Args:
+        obj:
+        name (str):
+    """
+    return name in obj.__dict__
