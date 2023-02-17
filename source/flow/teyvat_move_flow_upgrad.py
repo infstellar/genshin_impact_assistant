@@ -34,7 +34,16 @@ class TeyvatMoveFlowConnector(FlowConnector):
         self.motion_state = IN_MOVE
         self.last_err_code = ERR_NONE
     
-    
+    def reset(self):
+        self.tmc.reset_err_code()
+        self.last_err_code = ERR_NONE
+        self.target_posi = None
+        self.current_state = ST.INIT_TEYVAT_TELEPORT
+        self.target_posi = [0, 0]
+        self.motion_state = IN_MOVE
+
+    def set_target_posi(self, tp:list):
+        self.target_posi = tp
 
 
 
@@ -208,6 +217,7 @@ class TeyvatMoveFlowController(FlowController):
         self.current_flow_id = ST.INIT_TEYVAT_TELEPORT
         
         self.flow_connector = TeyvatMoveFlowConnector()
+        self._add_sub_threading(self.flow_connector.tmc)
         self.get_while_sleep = self.flow_connector.get_while_sleep
 
         self.f1 = TeyvatMove(self.flow_connector)
@@ -215,7 +225,5 @@ class TeyvatMoveFlowController(FlowController):
 
         self.append_flow(self.f1)
         self.append_flow(self.f2)
-        
 
 
-    
