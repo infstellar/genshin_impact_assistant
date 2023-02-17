@@ -11,6 +11,9 @@ import cv2
 import win32gui, win32process, psutil
 import ctypes, pickle
 
+global GLOBAL_LANG, GLOBAL_DEVICE
+GLOBAL_LANG = "$locale$" # $locale$, zh_CN, en_US
+GLOBAL_DEVICE = "Normal" # Normal, Adb, Dm
 time.time()  # 防自动删除
 BBG = 100001
 process_name = ["YuanShen.exe", "GenshinImpact.exe"]
@@ -46,6 +49,20 @@ except:
     logger.error("config文件导入失败，可能由于初次安装。跳过导入。")
     DEBUG_MODE = False
     GLOBAL_LANG = "$locale$"
+
+DEVICE_NORMAL = 'Normal' # In PC, Foreground
+DEVICE_DM = "Dm" # In PC, Background
+DEVICE_ADB = "Adb" # In Android emulator, Background
+
+if load_json("config.json", CONFIGPATH_SETTING)["interaction_mode"] == 'Normal':
+    GLOBAL_DEVICE = DEVICE_NORMAL
+elif load_json("config.json", CONFIGPATH_SETTING)["interaction_mode"] == 'ADB':
+    GLOBAL_DEVICE = DEVICE_ADB
+elif load_json("config.json", CONFIGPATH_SETTING)["interaction_mode"] == 'Dm':
+    GLOBAL_DEVICE = DEVICE_DM
+
+IS_DEVICE_PC = (GLOBAL_DEVICE == DEVICE_DM)or(GLOBAL_DEVICE == DEVICE_NORMAL)
+
 # load config file over
 
 
