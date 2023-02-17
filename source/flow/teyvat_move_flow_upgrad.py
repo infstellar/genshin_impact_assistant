@@ -42,10 +42,9 @@ class TeyvatMoveFlowConnector(FlowConnector):
         self.target_posi = [0, 0]
         self.motion_state = IN_MOVE
 
-    def set_target_posi(self, tp:list):
-        self.target_posi = tp
+    
 
-
+    
 
 class TeyvatTeleport(FlowTemplate):
     def __init__(self, upper:TeyvatMoveFlowConnector):
@@ -226,4 +225,15 @@ class TeyvatMoveFlowController(FlowController):
         self.append_flow(self.f1)
         self.append_flow(self.f2)
 
+    
+    def set_target_posi(self, tp:list):
+        self.flow_connector.target_posi = tp
+        
+    def set_stop_rule(self, r:int):
+        """设置停止条件
+
+        Args:
+            r (int): 0: 距离目的地小于10. 1:识别到F后停止。
+        """
+        self.flow_connector.stop_rule = r
 
