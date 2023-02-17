@@ -21,7 +21,6 @@ class DomainFlowConnector(FlowConnector):
 
         self.combat_loop.pause_threading()
         self.combat_loop.start()
-        self.while_sleep = 0.1
         
         self.lockOnFlag = 0
         self.move_timer = timer_module.Timer()
@@ -39,9 +38,6 @@ class DomainFlowConnector(FlowConnector):
         self.isLiYue = domain_json["isLiYueDomain"]
         self.resin_mode = domain_json["resin"]
         self.fast_mode = domain_json["fast_mode"]
-
-    def get_while_sleep(self):
-        return self.while_sleep
     
 class MoveToChallenge(FlowTemplate):
     """
@@ -228,6 +224,7 @@ class AttainReaward(FlowTemplate):
         super().__init__(upper)
         self.upper = upper
         self.flow_id = ST.INIT_ATTAIN_REAWARD
+        self.next_flow_id = ST.END
         self.key_id = FC.INIT
         self._set_nfid(ST.END_DOMAIN)
 

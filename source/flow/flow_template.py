@@ -8,7 +8,10 @@ from source.constant import flow_state as ST
 
 class FlowConnector():
     def __init__(self):
-        pass
+        self.while_sleep = 0.1
+
+    def get_while_sleep(self):
+        return self.while_sleep
 
 class FlowTemplate():
     def __init__(self, upper:FlowConnector):
@@ -114,6 +117,6 @@ class FlowController(base_threading.BaseThreading):
                     rcode = self.flow_dict[i].enter_flow()
                     self.current_flow_id = rcode
             
-            if rcode == self.end_flow_id:
+            if rcode == ST.END:
                 logger.info("Flow END")
                 self.pause_threading()

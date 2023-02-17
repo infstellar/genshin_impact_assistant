@@ -49,6 +49,12 @@ class BaseThreading(threading.Thread):
     def reset_err_code(self):
         self.last_err_code = ERR_NONE
     
+    def _add_sub_threading(self, threading_obj, start=True):
+        threading_obj.setDaemon(True)
+        threading_obj.add_stop_func(self.checkup_stop_func)
+        threading_obj.pause_threading()
+        threading_obj.start()
+
     def run(self) -> None:
         '''if you're using this class, copy this'''
         while 1:
