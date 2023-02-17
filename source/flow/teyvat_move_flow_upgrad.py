@@ -21,11 +21,11 @@ IN_CLIMB = 3
 
 class TeyvatMoveFlowConnector(FlowConnector):
     def __init__(self):
+        super().__init__()
         self.tmc = teyvat_move_controller.TeyvatMoveController()
         self.target_posi = None
         self.checkup_stop_func = None
         self.stop_rule = 0
-        self.tmc = teyvat_move_controller.TeyvatMoveController()
         self.tmc.set_stop_rule(self.stop_rule)
         self.jump_timer = timer_module.Timer()
         self.current_state = ST.INIT_TEYVAT_TELEPORT
@@ -55,7 +55,6 @@ class TeyvatTeleport(FlowTemplate):
         self.next_flow_id = ST.INIT_TEYVAT_MOVE
 
     def state_init(self):
-        scene_lib.switch_to_page(scene_manager.page_main, self.upper.checkup_stop_func)
         self.upper.tmc.set_target_position(self.upper.target_posi)
         self._next_rfc()
 
@@ -217,11 +216,12 @@ class TeyvatMoveFlowController(FlowController):
         self.current_flow_id = ST.INIT_TEYVAT_TELEPORT
         
         self.flow_connector = TeyvatMoveFlowConnector()
+        self.flow_connector.checkup_stop_func = self.checkup_stop_func
         self._add_sub_threading(self.flow_connector.tmc)
         self.get_while_sleep = self.flow_connector.get_while_sleep
 
-        self.f1 = TeyvatMove(self.flow_connector)
-        self.f2 = TeyvatTeleport(self.flow_connector)
+        self.f1 = TeyvatTeleport(self.flow_connector)
+        self.f2 = TeyvatMove(self.flow_connector)
 
         self.append_flow(self.f1)
         self.append_flow(self.f2)

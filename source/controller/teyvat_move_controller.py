@@ -26,7 +26,7 @@ class TeyvatMoveController(BaseThreading):
         super().__init__()
         self.setName("TeyvatMoveController")
         self.itt = global_itt
-        self.priority_waypoints = load_json("priority_waypoints.json", default_path='awwwmssets')
+        self.priority_waypoints = load_json("priority_waypoints.json", default_path='assets')
         self.priority_waypoints_array = []
         for i in self.priority_waypoints:
             self.priority_waypoints_array.append(i["position"])
@@ -67,7 +67,8 @@ class TeyvatMoveController(BaseThreading):
     def continue_threading(self):
         if self.pause_threading_flag != False:
             self.pause_threading_flag = False
-            generic_event.cvAutoTrackerLoop.history_posi = [generic_event.cvAutoTrackerLoop.history_posi[-1]]
+            if len(generic_event.cvAutoTrackerLoop.history_posi) != 0:
+                generic_event.cvAutoTrackerLoop.history_posi = [generic_event.cvAutoTrackerLoop.history_posi[-1]]
 
     
     def caculate_next_priority_point(self, currentp, targetp):
