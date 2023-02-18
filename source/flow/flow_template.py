@@ -63,11 +63,11 @@ class FlowTemplate():
         self.next_flow_id = fid
 
 class EndFlowTenplate(FlowTemplate):
-    def __init__(self, upper:FlowConnector):
+    def __init__(self, upper:FlowConnector, flow_id:int, err_code_id:int = ERR_PASS):
         self.upper = upper
-        self.flow_id = 0 # flow id <0
+        self.flow_id = flow_id # flow id <0
         self.rfc = FC.INIT
-        self.err_code_id = ERR_PASS
+        self.err_code_id = err_code_id
     
     def enter_flow(self):
         if self.rfc == FC.INIT:
