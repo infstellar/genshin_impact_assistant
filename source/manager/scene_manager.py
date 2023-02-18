@@ -35,6 +35,7 @@ class UIPage():
 page_main = UIPage(check_icon = asset.ui_main_win, page_name ="main", to_mainpage = [""], to_selfpage = [""])
 page_main.add_following_page('bigmap', 'm')
 page_main.add_following_page('esc', 'esc')
+page_domain = UIPage(check_icon = asset.IN_DOMAIN, page_name ="domain")
 page_esc = UIPage(check_icon = asset.ui_esc_menu, page_name ="esc", to_mainpage = ["esc", "main"], to_selfpage = ["main", "esc"])
 page_esc.add_following_page('time', asset.button_time_page)
 page_esc.add_following_page('main', 'esc')
@@ -47,6 +48,7 @@ page_bigmap.add_following_page('main', 'm')
 
 all_page = {
     "main":page_main, 
+    "domain":page_domain,
     "esc":page_esc, 
     "time":page_time,
     "bigmap":page_bigmap
