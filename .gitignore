@@ -178,8 +178,6 @@ installer_config_cn.json
 installer_config.json
 .idea/.gitignore
 /config/settings/auto_domain.json
-.vscode/launch.json
-.vscode/settings.json
 config/settings/auto_collector.json
 source/cvAutoTrack_7.3.3/CVAUTOTRACK.dll
 config/timer/*.txt
