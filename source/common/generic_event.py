@@ -1,6 +1,6 @@
 from source.util import *
-from source.interaction.interaction_core import global_itt
-itt = global_itt
+from source.interaction.interaction_core import itt
+itt = itt
 from source.common.base_threading import BaseThreading
 from source.funclib import static_lib
 from source.base.timer_module import Timer

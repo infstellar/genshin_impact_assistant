@@ -732,7 +732,7 @@ class InteractionBGD:
 def itt_test(itt: InteractionBGD):
     pass
 
-global_itt = InteractionBGD()
+itt = InteractionBGD()
 
 if __name__ == '__main__':
     ib = InteractionBGD()

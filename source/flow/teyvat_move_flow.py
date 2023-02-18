@@ -4,7 +4,7 @@ from source.constant import flow_state as ST
 from source.base import timer_module
 from funclib import big_map, movement, static_lib, combat_lib
 from source.manager import scene_manager, posi_manager, asset
-from source.interaction.interaction_core import global_itt
+from source.interaction.interaction_core import itt
 from source.controller import teyvat_move_controller
 from source.common.base_threading import BaseThreading
 from funclib.err_code_lib import ERR_PASS, ERR_STUCK
@@ -37,7 +37,7 @@ class TeyvatMoveFlow(BaseThreading):
     def __init__(self):
         super().__init__()
         self.setName("TeyvatMoveFlow")
-        self.itt = global_itt
+        self.itt = itt
         self.stop_rule = 0
         self.tmc = teyvat_move_controller.TeyvatMoveController()
         self.tmc.setDaemon(True)

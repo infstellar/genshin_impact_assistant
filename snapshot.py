@@ -3,9 +3,10 @@ import cv2
 import os
 import time, math
 
-from source.interaction.interaction_core import global_itt
+from source.interaction.interaction_core import itt
+from source.util import *
 
-itt = global_itt
+itt = itt
 i = 0
 
 SA_name = 'test'
@@ -150,15 +151,15 @@ def jwa_3(imsrc):
 
 
 # a = Line2Angle(p);
-snap_path = "tools\\snapshot"
-if not os.path.exists(snap_path + "\\png"):
-    os.mkdir("tools\\snapshot\\png")
+# snap_path = "tools\\snapshot"
+# if not os.path.exists(snap_path + "\\png"):
+#     os.mkdir("tools\\snapshot\\png")
 
-if not os.path.exists(snap_path + "\\jpg"):
-    os.mkdir("tools\\snapshot\\jpg")
+# if not os.path.exists(snap_path + "\\jpg"):
+#     os.mkdir("tools\\snapshot\\jpg")
 
-if not os.path.exists(snap_path + "\\jpg_withalpha"):
-    os.mkdir("tools\\snapshot\\jpg_withalpha")
+# if not os.path.exists(snap_path + "\\jpg_withalpha"):
+#     os.mkdir("tools\\snapshot\\jpg_withalpha")
 
 numi = 180
 while 1:
@@ -167,7 +168,7 @@ while 1:
     numi += 1
     cap = itt.capture(jpgmode=0)
     # cap = itt.png2jpg(cap, channel = 'ui', alpha_num = 50)# 22 no Q
-    cv2.imwrite("tools\\snapshot\\jpg\\" + str(time.time()) + ".jpg", cap)
+    cv2.imwrite(root_path + '\\' + "tools\\snapshot\\" + str(time.time()) + ".jpg", cap)
     # qshow(cap)
 
     # cv2.imshow('123', cap)

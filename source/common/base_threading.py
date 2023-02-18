@@ -1,6 +1,7 @@
 import threading
 import time
 from source.funclib.err_code_lib import ERR_NONE
+from source.util import *
 
 class BaseThreading(threading.Thread):
     """
@@ -17,10 +18,12 @@ class BaseThreading(threading.Thread):
 
     def pause_threading(self):
         if self.pause_threading_flag != True:
+            logger.debug("pause threading")
             self.pause_threading_flag = True
 
     def continue_threading(self):
         if self.pause_threading_flag != False:
+            logger.debug("continue threading")
             self.pause_threading_flag = False
 
     def stop_threading(self):

@@ -1,7 +1,7 @@
 import source.api.pdocr_api as pdocr_api
 from source.common.base_threading import BaseThreading
 from source.common.character import Character
-from source.interaction.interaction_core import global_itt
+from source.interaction.interaction_core import itt
 from source.base.timer_module import Timer
 from source.util import *
 import cv2
@@ -27,7 +27,7 @@ class TacticOperator(BaseThreading):
         self.hp_chara_list_position = [[283, 1698], [379, 1698], [475, 1698], [571, 1698]]
         self.chara_num = 4
         self.enter_timer = Timer()
-        self.itt = global_itt
+        self.itt = itt
         self.working_flag = False # out of class
         self.flag_tactic_executing = False # in class
         self.pause_tactic_flag = False

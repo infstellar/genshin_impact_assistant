@@ -2,7 +2,7 @@ from source.util import *
 import source.flow.flow_code as FC
 from source.constant import flow_state as FlowState
 from source.common import base_threading
-from source.funclib import err_code_lib as ErrCode
+from source.funclib.err_code_lib import *
 from source.constant import flow_state as ST
 
 
@@ -66,7 +66,7 @@ class FlowTemplate():
 class FlowController(base_threading.BaseThreading):
     def __init__(self):
         super().__init__()
-        self.last_err_code = ErrCode.ERR_NONE
+        self.last_err_code = ERR_NONE
         self.flow_dict = {}
         self.current_flow_id = None
         self.end_flow_id = None
@@ -119,4 +119,5 @@ class FlowController(base_threading.BaseThreading):
             
             if rcode == ST.END:
                 logger.info("Flow END")
+                self.last_err_code = ERR_PASS
                 self.pause_threading()

@@ -3,7 +3,7 @@ from source.constant import flow_state as ST
 from source.base import timer_module
 from source.funclib import generic_lib, movement
 from source.manager import posi_manager as PosiM, asset
-from source.interaction.interaction_core import global_itt
+from source.interaction.interaction_core import itt
 from source.api import yolox_api
 from source.common.base_threading import BaseThreading
 from source.util import *
@@ -18,7 +18,7 @@ class DomainFlow(BaseThreading):
         self.current_state = ST.INIT_MOVETO_CHALLENGE
         # self.current_state = ST.IN_MOVETO_TREE
 
-        self.itt = global_itt
+        self.itt = itt
         chara_list = combat_loop.get_chara_list()
         self.combat_loop = combat_loop.Combat_Controller(chara_list)
         self.combat_loop.setDaemon(True)

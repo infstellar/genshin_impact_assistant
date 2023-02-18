@@ -8,7 +8,7 @@ def get_cap_posi(path, black_offset):
     return bbg_posi
 
 class Button(ImgIcon):
-    def __init__(self, path, button = None, name="button", black_offset=15, threshold=0.85, win_page = "all", win_text = None, print_log = LOG_NONE):
+    def __init__(self, path, button = None, name="button", black_offset=15, threshold=0.9, win_page = "all", win_text = None, print_log = LOG_NONE):
         super().__init__(name=name, path=path, is_bbg = True, jpgmode = 0, 
                          threshold=threshold, win_page=win_page, win_text=win_text, print_log=print_log, cap_posi='bbg')
         # self.path = path.replace("$lang$", global_lang)

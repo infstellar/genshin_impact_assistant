@@ -1,7 +1,7 @@
 from source.util import *
 from source.common.base_threading import BaseThreading
 from source.common import generic_event
-from source.interaction.interaction_core import global_itt
+from source.interaction.interaction_core import itt
 from source.funclib import generic_lib, movement, static_lib
 from source.manager import img_manager, asset
 import numpy as np
@@ -25,7 +25,7 @@ class TeyvatMoveController(BaseThreading):
     def __init__(self):
         super().__init__()
         self.setName("TeyvatMoveController")
-        self.itt = global_itt
+        self.itt = itt
         self.priority_waypoints = load_json("priority_waypoints.json", default_path='assets')
         self.priority_waypoints_array = []
         for i in self.priority_waypoints:

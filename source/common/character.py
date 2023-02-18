@@ -1,5 +1,5 @@
 from source.manager import posi_manager
-from source.interaction.interaction_core import global_itt
+from source.interaction.interaction_core import itt
 from source.base.timer_module import Timer
 from source.util import *
 
@@ -38,7 +38,7 @@ class Character:
         self.n = n
         self.Epress_time = Epress_time
 
-        self.itt = global_itt
+        self.itt = itt
 
         if E_long_cd_time != 0:
             self.Ecd_time = E_long_cd_time

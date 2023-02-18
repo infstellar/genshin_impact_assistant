@@ -1,10 +1,10 @@
-from source.interaction.interaction_core import global_itt
+from source.interaction.interaction_core import itt
 from source.funclib import small_map
 from source.util import *
 from source.funclib import generic_lib, static_lib
 from source.common import generic_event
 
-itt = global_itt
+itt = itt
 AHEAD = 0
 LEFT = 1
 RIGHT = 2
