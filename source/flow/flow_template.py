@@ -14,11 +14,11 @@ class FlowConnector():
         return self.while_sleep
 
 class FlowTemplate():
-    def __init__(self, upper:FlowConnector):
+    def __init__(self, upper:FlowConnector, flow_id:int, next_flow_id:int):
         self.upper = upper
-        self.flow_id = 0
+        self.flow_id = flow_id
         self.rfc = FC.INIT
-        self.next_flow_id = self.flow_id
+        self.next_flow_id = next_flow_id
         
     def enter_flow(self):
         if self.rfc == FC.INIT:
@@ -141,10 +141,11 @@ class FlowController(base_threading.BaseThreading):
                     rcode = self.flow_dict[i].enter_flow()
                     self.current_flow_id = rcode
             
-            if int(rcode) < 0:
+            if int(self.current_flow_id) < 0:
                 logger.debug("Flow Ready To END")
                 for i in self.flow_dict:
                     if i == str(self.current_flow_id):
                         rcode = self.flow_dict[i].enter_flow()
                         self.last_err_code = rcode
+                logger.debug(f"Flow END, code:{self.last_err_code}")
                 self.pause_threading()

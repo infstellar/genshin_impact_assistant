@@ -8,6 +8,8 @@ from source.manager import img_manager, asset
 import cv2
 from source.common import generic_event
 
+SEARCH_MODE_FINDING = 1
+SEARCH_MODE_PICKUP = 0
 
 class PickupOperator(BaseThreading):
 
@@ -22,7 +24,7 @@ class PickupOperator(BaseThreading):
         self.flicker_timer = timer_module.Timer(diff_start_time=1)
         self.reset_timer = timer_module.Timer()
         self.reset_time = 120
-        self.collecor_loops = 0
+        self.collector_loops = 0
         self.collector_flag = True
         self.max_number_of_collector_loops = 100
         self.pickup_timer = timer_module.Timer()
@@ -33,7 +35,7 @@ class PickupOperator(BaseThreading):
         self.pickup_succ = False
         self.max_distance_from_target = 20
         self.last_err_code = " "
-        self.search_mode = 0
+        self.search_mode = SEARCH_MODE_PICKUP
         self.last_search_times = 2
         
     def continue_threading(self):
@@ -43,10 +45,10 @@ class PickupOperator(BaseThreading):
             self.pickup_succ = False
             # self.pickup_item_list = []
             self.last_search_times = 2
-            self.collecor_loops = 0
+            self.collector_loops = 0
             self.pickup_fail_timeout.reset()
             
-            if self.search_mode == 1:
+            if self.search_mode == SEARCH_MODE_FINDING:
                 if self.night_timer.get_diff_time() >= 600:
                     logger.info(t2t("正在设置时间为夜晚"))
                     self.itt.delay(1)
@@ -98,7 +100,7 @@ class PickupOperator(BaseThreading):
                     break
                 self.itt.delay(1, comment="Waiting for Genshin picking animation")
             
-            if self.search_mode == 1:
+            if self.search_mode == SEARCH_MODE_FINDING:
                 
                 ret = self.auto_pickup()
                 
@@ -126,7 +128,7 @@ class PickupOperator(BaseThreading):
                 
                 '''当成功找到物品且找不到下一个可能物品后自动停止。'''
                 if self.pickup_succ :
-                    if self.collecor_loops > self.max_number_of_collector_loops:
+                    if self.collector_loops > self.max_number_of_collector_loops:
                         self.last_err_code="PICKUP_END_001"
                         logger.info(t2t("已找到物品且无法找到下一个物品，停止拾取"))
                         self.pause_threading()
@@ -136,7 +138,7 @@ class PickupOperator(BaseThreading):
     
     def pickup_recognize(self):
         flag1 = False
-        ret = generic_lib.f_recognition(self.itt)
+        ret = generic_lib.f_recognition()
         if ret:
             time.sleep(0.05)
             ret = self.itt.get_img_position(asset.F_BUTTON)
@@ -153,7 +155,7 @@ class PickupOperator(BaseThreading):
             # img_manager.qshow(cap)
             cap = self.itt.png2jpg(cap, channel='ui', alpha_num=180)
             
-            res = ocr.img_analyse(cap)
+            res = ocr.img_analyze(cap)
             if len(res) != 0:
                 if res[0][1][0] not in self.pickup_blacklist:
                     self.pickup_fail_timeout.reset()
@@ -184,17 +186,17 @@ class PickupOperator(BaseThreading):
         imsrc[350:751, 1079:1300, :] = 0
         a = ((imsrc[:, :, 0] >= 253).astype('uint8') + (imsrc[:, :, 1] >= 253).astype('uint8') + (
                 imsrc[:, :, 2] >= 253).astype('uint8')) >= 3
-        outputimg = a.astype('uint8') * 255
+        output_img = a.astype('uint8') * 255
         # print()
         if show_res:
-            cv2.imshow('find_collector', outputimg)
+            cv2.imshow('find_collector', output_img)
             cv2.waitKey(20)
-        adad = img_manager.get_rect(outputimg, self.itt.capture(jpgmode=0), ret_mode=2)
-        return adad
+        c_s = img_manager.get_rect(output_img, self.itt.capture(jpgmode=0), ret_mode=2)
+        return c_s
 
     def reset_collector_loops(self):
         # print('reset')
-        self.collecor_loops = 0
+        self.collector_loops = 0
         self.flicker_timer.reset()
 
     def cview_toward_target(self):
@@ -215,7 +217,7 @@ class PickupOperator(BaseThreading):
             return 0
         ret_points = self.find_collector()
         points_length = []
-        if len(ret_points) == 0:
+        if len(ret_points) == 0: # type: ignore
             if self.flicker_timer.get_diff_time() < 2:
                 # print('23')
                 if static_lib.W_KEYDOWN:
@@ -238,23 +240,12 @@ class PickupOperator(BaseThreading):
         mx, my = self.itt.get_mouse_point()
         px = (px - mx) / 1.8 + 35
         py = (py - my) / 2 + 40
-        # print(px,py)
-        # if px >= 200:
-        #     px = 200
-        # if px <= -200:
-        #     px = -200
-        # if py >= 200:
-        #     py = 200
-        # if py <= -200:
-        #     py = -200
-        # print(px, py)
         logger.debug(f"auto_pickup: px:{px} py:{py}")
         self.itt.move_to(px, py, relative=True)
         return px
-        # print()
 
     def finding_collector(self):
-        if self.collecor_loops < self.max_number_of_collector_loops:
+        if self.collector_loops < self.max_number_of_collector_loops:
             movement.reset_view()
             logger.debug("finding_collector")
             logger.debug("finding_collector: head down")
@@ -265,16 +256,16 @@ class PickupOperator(BaseThreading):
             self.last_search_times-=1
             self.reset_collector_loops()
             return
-        while self.collecor_loops < self.max_number_of_collector_loops:
+        while self.collector_loops < self.max_number_of_collector_loops:
             if self.checkup_stop_func():
                 return 0
             self.itt.move_to(50, 0, relative=True)
             ret_points = self.find_collector()
-            if len(ret_points) != 0:
+            if len(ret_points) != 0:  # type: ignore
                 self.reset_collector_loops()
                 return 0
 
-            self.collecor_loops += 1
+            self.collector_loops += 1
         time.sleep(1)
 
 

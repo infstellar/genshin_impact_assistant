@@ -11,7 +11,7 @@ from source.common.base_threading import BaseThreading
 from funclib.err_code_lib import ERR_PASS, ERR_STUCK, ERR_NONE
 from source.funclib import scene_lib
 from source.common import generic_event
-from source.flow.flow_template import FlowConnector, FlowController, FlowTemplate
+from source.flow.flow_template import FlowConnector, FlowController, FlowTemplate, EndFlowTenplate
 
 IN_MOVE = 0
 IN_FLY = 1
@@ -31,11 +31,9 @@ class TeyvatMoveFlowConnector(FlowConnector):
         self.target_posi = [0, 0]
         self.reaction_to_enemy = 'RUN'
         self.motion_state = IN_MOVE
-        self.last_err_code = ERR_NONE
     
     def reset(self):
         self.tmc.reset_err_code()
-        self.last_err_code = ERR_NONE
         self.current_state = ST.INIT_TEYVAT_TELEPORT
         self.target_posi = [0, 0]
         self.motion_state = IN_MOVE
@@ -46,10 +44,8 @@ class TeyvatMoveFlowConnector(FlowConnector):
 
 class TeyvatTeleport(FlowTemplate):
     def __init__(self, upper:TeyvatMoveFlowConnector):
-        super().__init__(upper)
+        super().__init__(upper, flow_id=ST.INIT_TEYVAT_TELEPORT, next_flow_id=ST.INIT_TEYVAT_MOVE)
         self.upper = upper
-        self.flow_id = ST.INIT_TEYVAT_TELEPORT
-        self.next_flow_id = ST.INIT_TEYVAT_MOVE
 
     def state_init(self):
         self.upper.tmc.set_target_position(self.upper.target_posi)
@@ -140,10 +136,8 @@ class TeyvatTeleport(FlowTemplate):
     
 class TeyvatMove(FlowTemplate):
     def __init__(self, upper: TeyvatMoveFlowConnector):
-        super().__init__(upper)
+        super().__init__(upper, flow_id=ST.INIT_TEYVAT_MOVE, next_flow_id=ST.IN_TEYVAT_MOVE)
         self.upper = upper
-        self.flow_id = ST.INIT_TEYVAT_MOVE
-        self.next_flow_id = ST.END
 
     def switch_motion_state(self):
         if itt.get_img_existence(asset.motion_climbing):
@@ -203,12 +197,20 @@ class TeyvatMove(FlowTemplate):
 
         if self.upper.tmc.get_last_err_code() == ERR_PASS:
             self.upper.tmc.reset_err_code()
-            self.upper.last_err_code = ERR_PASS
+            self._set_nfid(ST.END_TEYVAT_MOVE_PASS)
             self._next_rfc()
         elif self.upper.tmc.get_last_err_code() == ERR_STUCK:
             self.upper.tmc.reset_err_code()
-            self.upper.last_err_code = ERR_STUCK
+            self._set_nfid(ST.END_TEYVAT_MOVE_STUCK)
             self._next_rfc()
+
+class TeyvatMoveStuck(EndFlowTenplate):
+    def __init__(self, upper: FlowConnector):
+        super().__init__(upper, flow_id=ST.END_TEYVAT_MOVE_STUCK, err_code_id=ERR_STUCK)
+
+class TeyvatMovePass(EndFlowTenplate):
+    def __init__(self, upper: FlowConnector):
+        super().__init__(upper, flow_id=ST.END_TEYVAT_MOVE_PASS, err_code_id=ERR_PASS)
 
 class TeyvatMoveFlowController(FlowController):
     def __init__(self):
@@ -225,7 +227,12 @@ class TeyvatMoveFlowController(FlowController):
 
         self.append_flow(self.f1)
         self.append_flow(self.f2)
+        self.append_flow(TeyvatMoveStuck(self.flow_connector))
+        self.append_flow(TeyvatMovePass(self.flow_connector))
 
+    def reset(self):
+        self.flow_connector.reset()
+    
     def get_working_statement(self):
         return not self.pause_threading_flag
     

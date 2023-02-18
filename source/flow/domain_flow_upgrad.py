@@ -1,10 +1,11 @@
 from source.util import *
-from source.flow.flow_template import FlowController, FlowTemplate, FlowConnector
+from source.flow.flow_template import FlowController, FlowTemplate, FlowConnector, EndFlowTenplate
 import source.flow.flow_code as FC
 from source.controller import combat_loop
 from source.constant import flow_state as ST
 from source.base import timer_module
 from source.funclib import generic_lib, movement
+from source.funclib.err_code_lib import *
 from source.manager import posi_manager as PosiM, asset
 from source.interaction.interaction_core import itt
 from source.api import yolox_api
@@ -45,11 +46,8 @@ class MoveToChallenge(FlowTemplate):
     移动到开始挑战目标点。
     """
     def __init__(self, upper:DomainFlowConnector):
-        super().__init__(upper)
+        super().__init__(upper, flow_id=ST.INIT_MOVETO_CHALLENGE, next_flow_id=ST.INIT_CHALLENGE)
         self.upper = upper
-        self.flow_id = ST.INIT_MOVETO_CHALLENGE
-        self.key_id = FC.INIT
-        self._set_nfid(ST.INIT_CHALLENGE)
         
     def state_init(self):
         """
@@ -93,11 +91,8 @@ class MoveToChallenge(FlowTemplate):
 
 class Challenge(FlowTemplate):
     def __init__(self, upper:DomainFlowConnector):
-        super().__init__(upper)
+        super().__init__(upper, flow_id=ST.INIT_CHALLENGE, next_flow_id=ST.INIT_FINGING_TREE)
         self.upper = upper
-        self.flow_id = ST.INIT_CHALLENGE
-        self.key_id = FC.INIT
-        self._set_nfid(ST.INIT_FINGING_TREE)
         
     def state_init(self):
         logger.info(t2t('正在开始战斗'))
@@ -128,12 +123,9 @@ class Challenge(FlowTemplate):
 
 class FindingTree(FlowTemplate):
     def __init__(self, upper:DomainFlowConnector):
-        super().__init__(upper)
+        super().__init__(upper, flow_id=ST.INIT_FINGING_TREE, next_flow_id=ST.INIT_MOVETO_TREE)
         self.upper = upper
-        self.flow_id = ST.INIT_FINGING_TREE
-        self.key_id = FC.INIT
-        self._set_nfid(ST.INIT_MOVETO_TREE)
-        self.move_num = 1
+        self.move_num = 0
 
     def get_tree_posi(self):
         cap =itt.capture(jpgmode=0)
@@ -196,11 +188,8 @@ class FindingTree(FlowTemplate):
 
 class MoveToTree(FlowTemplate):
     def __init__(self, upper:DomainFlowConnector):
-        super().__init__(upper)
+        super().__init__(upper, flow_id=ST.INIT_MOVETO_TREE, next_flow_id=ST.INIT_ATTAIN_REAWARD)
         self.upper = upper
-        self.flow_id = ST.INIT_MOVETO_TREE
-        self.key_id = FC.INIT
-        self._set_nfid(ST.INIT_ATTAIN_REAWARD)
 
     def state_before(self):
         itt.key_down('w')
@@ -222,12 +211,8 @@ class MoveToTree(FlowTemplate):
 
 class AttainReaward(FlowTemplate):
     def __init__(self, upper:DomainFlowConnector):
-        super().__init__(upper)
+        super().__init__(upper, flow_id=ST.INIT_ATTAIN_REAWARD, next_flow_id=ST.END_DOMAIN)
         self.upper = upper
-        self.flow_id = ST.INIT_ATTAIN_REAWARD
-        self.next_flow_id = ST.END
-        self.key_id = FC.INIT
-        self._set_nfid(ST.END_DOMAIN)
 
     def state_before(self):
         itt.key_press('f')
@@ -244,7 +229,9 @@ class AttainReaward(FlowTemplate):
         if itt.get_text_existence(asset.domain_obtain):
             self._next_rfc()
 
-
+class DomainFlowEnd(EndFlowTenplate):
+    def __init__(self, upper: FlowConnector):
+        super().__init__(upper, flow_id = ST.END_DOMAIN, err_code_id = ERR_PASS)
 
 class DomainFlowController(FlowController):
     def __init__(self):
@@ -258,12 +245,14 @@ class DomainFlowController(FlowController):
         self.f3 = FindingTree(self.flow_connector)
         self.f4 = MoveToTree(self.flow_connector)
         self.f5 = AttainReaward(self.flow_connector)
+        self.fend = DomainFlowEnd(self.flow_connector)
         
         self.append_flow(self.f1)
         self.append_flow(self.f2)
         self.append_flow(self.f3)
         self.append_flow(self.f4)
         self.append_flow(self.f5)
+        self.append_flow(self.fend)
         
         self.get_while_sleep = self.flow_connector.get_while_sleep
 

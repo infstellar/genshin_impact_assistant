@@ -1,6 +1,5 @@
 # from source.util import *
 import cv2
-import os
 import time, math
 
 from source.interaction.interaction_core import itt
@@ -12,11 +11,11 @@ i = 0
 SA_name = 'test'
 
 
-def jpg_with_alpha(png, bgclolr='black', channel='bg', alpha_num=50):
-    if bgclolr == 'black':
-        bgcol = 0
+def jpg_with_alpha(png, bg_color='black', channel='bg', alpha_num=50):
+    if bg_color == 'black':
+        bg_col = 0
     else:
-        bgcol = 255
+        bg_col = 255
 
     jpg = png[:, :, :3]
     if channel == 'bg':
@@ -24,9 +23,9 @@ def jpg_with_alpha(png, bgclolr='black', channel='bg', alpha_num=50):
     else:
         over_item_list = png[:, :, 3] < alpha_num
 
-    jpg[:, :, 0][over_item_list] = bgcol
-    jpg[:, :, 1][over_item_list] = bgcol
-    jpg[:, :, 2][over_item_list] = bgcol
+    jpg[:, :, 0][over_item_list] = bg_col
+    jpg[:, :, 1][over_item_list] = bg_col
+    jpg[:, :, 2][over_item_list] = bg_col
     return jpg
 
 
@@ -161,30 +160,14 @@ def jwa_3(imsrc):
 # if not os.path.exists(snap_path + "\\jpg_withalpha"):
 #     os.mkdir("tools\\snapshot\\jpg_withalpha")
 
-numi = 180
+num_i = 180
 while 1:
     input('wait')
     i += 1
-    numi += 1
+    num_i += 1
     cap = itt.capture(jpgmode=0)
     # cap = itt.png2jpg(cap, channel = 'ui', alpha_num = 50)# 22 no Q
-    cv2.imwrite(root_path + '\\' + "tools\\snapshot\\" + str(time.time()) + ".jpg", cap)
-    # qshow(cap)
-
-    # cv2.imshow('123', cap)
-    # cv2.waitKey(1000)
-
+    cv2.imwrite(root_path + '\\' + "tools\\snapshot\\" + str(time.time()) + ".jpg", cap) # type: ignore
     x = str(time.time())
-    # cv2.imwrite("tools\\snapshot\\png\\"+SA_name+str(numi)+".png",cap)
-
-    # cv2.imwrite("tools\\snapshot\\jpg\\"+str(numi)+".jpg",cap[:,:,:3])
-
-    # cap = itt.capture(posi=small_map.posi_map)
-    # jwa_3(cap)
-    # cv2.imwrite("tools\\snapshot\\jpg\\" + SA_name + str(numi) + ".jpg",
-    #             jpg_with_alpha(cap, channel='ui', bgclolr='black', alpha_num=250))
-
-    # cv2.imwrite("tools\\snapshot\\jpg_withalpha\\"+SA_name+str(numi)+".jpg",jwa_3(cap))
-    # jwa_3(cap)
     time.sleep(0.1)
     print('pic', i)

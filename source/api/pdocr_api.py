@@ -46,7 +46,7 @@ class PaddleocrAPI:
                              cls_model_dir=inference_path+"cls_model\\")  # need to run only once to download and load model into memory
         # self.
 
-    def img_analyse(self, im_src):
+    def img_analyze(self, im_src):
         result = self.ocr.ocr(im_src, cls=False)
         for line in result:
             pass
@@ -117,7 +117,7 @@ class PaddleocrAPI:
                           message='', default_end='\n', cap_posi_leftup = None):
         if cap_posi_leftup == None:
             cap_posi_leftup = [0,0]
-        res = self.img_analyse(im_src)
+        res = self.img_analyze(im_src)
         res_position = self.find_text(res, text, mode=mode)
         # logger.debug('getTextPosition:  ' + message, end=' | ')
         if isprintlog:
@@ -151,7 +151,7 @@ class PaddleocrAPI:
         pdocr_timer_performance.reset()
         is_num = False
         res_num = None
-        res = self.img_analyse(im_src)
+        res = self.img_analyze(im_src)
 
         for result_item in res:
             # noinspection PyBroadException
