@@ -2,7 +2,7 @@ import re
 
 from source.device.alas.exception import RequestHumanTakeover
 from source.device.alas.utils import area_offset
-from source.device.cloud.base import AppBase, func_debug
+from source.device.genshin.base import AppBase, func_debug
 from source.device.method.utils import AreaButton
 from source.util import logger
 
@@ -35,6 +35,10 @@ FLOAT_DELAY = '//*[@resource-id="com.miHoYo.cloudgames.ys:id/tv_delay"]'
 
 
 class CloudGenshin(AppBase):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.config.Emulator_PackageName = 'com.miHoYo.cloudgames.ys'
+
     @func_debug
     def _cloud_start(self):
         """
