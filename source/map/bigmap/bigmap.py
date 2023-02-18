@@ -1,5 +1,5 @@
-from source.bigmap.resource import BigMapResource
-from source.minimap.utils import *
+from source.map.bigmap.resource import BigMapResource
+from source.map.minimap.utils import *
 from source.util import logger
 
 

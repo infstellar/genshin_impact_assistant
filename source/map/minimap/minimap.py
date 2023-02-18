@@ -1,7 +1,7 @@
 import typing as t
 
-from source.minimap.resource import MiniMapResource
-from source.minimap.utils import *
+from source.map.minimap.resource import MiniMapResource
+from source.map.minimap.utils import *
 from source.util import logger
 
 

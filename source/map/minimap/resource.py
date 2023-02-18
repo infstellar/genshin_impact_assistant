@@ -4,7 +4,7 @@ import gimap
 from cached_property import cached_property
 
 from source.device.alas.decorator import has_cached_property, del_cached_property
-from source.minimap.utils import *
+from source.map.minimap.utils import *
 
 
 class MiniMapResource:

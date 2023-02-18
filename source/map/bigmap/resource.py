@@ -1,7 +1,7 @@
 import cv2
 from cached_property import cached_property
 
-from source.minimap.resource import MiniMapResource
+from source.map.minimap.resource import MiniMapResource
 
 
 class BigMapResource(MiniMapResource):
