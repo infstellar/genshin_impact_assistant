@@ -2,8 +2,7 @@ from source.util import *
 from source.flow.flow_template import FlowController, FlowTemplate, FlowConnector, EndFlowTenplate
 import source.flow.flow_code as FC
 from source.controller import combat_loop
-from source.constant import flow_state as ST
-from source.base import timer_module
+from common import flow_state as ST, timer_module
 from source.funclib import generic_lib, movement
 from source.funclib.err_code_lib import *
 from source.manager import posi_manager as PosiM, asset

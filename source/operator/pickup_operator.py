@@ -2,7 +2,7 @@ from source.common.base_threading import BaseThreading
 from source.util import *
 from source.interaction.interaction_core import itt
 from source.api.pdocr_api import ocr
-from source.base import timer_module
+from common import timer_module
 from source.funclib import generic_lib, movement, static_lib
 from source.manager import img_manager, asset
 import cv2

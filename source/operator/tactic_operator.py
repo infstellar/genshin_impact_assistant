@@ -2,7 +2,7 @@ import source.api.pdocr_api as pdocr_api
 from source.common.base_threading import BaseThreading
 from source.common.character import Character
 from source.interaction.interaction_core import itt
-from source.base.timer_module import Timer
+from common.timer_module import Timer
 from source.util import *
 import cv2
 from source.funclib import combat_lib

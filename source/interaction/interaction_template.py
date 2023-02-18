@@ -1,6 +1,5 @@
 import string
-from source.base import vkcode
-from source.util import *
+from common import vkcode
 import ctypes
 VkKeyScanA = ctypes.windll.user32.VkKeyScanA
 

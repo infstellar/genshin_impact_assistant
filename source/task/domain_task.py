@@ -5,7 +5,7 @@ from source.task.task_template import TaskTemplate
 from source.funclib.collector_lib import load_items_position
 from source.interaction.interaction_core import itt
 from source.manager import asset, text_manager
-from source.constant import flow_state as ST
+from common import flow_state as ST
 from source.task import task_id as TI
 from source.funclib.err_code_lib import ERR_NONE, ERR_STUCK, ERR_PASS
 

@@ -1,5 +1,5 @@
 from source.util import *
-from source.base import timer_module
+from common import timer_module
 from source.common.base_threading import BaseThreading
 from assets.AutoTrackDLLAPI.AutoTrackAPI import AutoTracker
 from source.funclib import scene_lib

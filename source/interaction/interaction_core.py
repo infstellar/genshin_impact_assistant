@@ -7,9 +7,7 @@ import time
 import cv2
 import numpy as np
 import win32api
-import win32con
 import win32gui
-from source.base import vkcode
 from ctypes.wintypes import RECT
 from source.funclib import static_lib
 from source.manager import img_manager, text_manager, button_manager

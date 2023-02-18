@@ -1,6 +1,5 @@
 from source.controller import combat_loop
-from source.constant import flow_state as ST
-from source.base import timer_module
+from common import flow_state as ST, timer_module
 from source.funclib import generic_lib, movement
 from source.manager import posi_manager as PosiM, asset
 from source.interaction.interaction_core import itt

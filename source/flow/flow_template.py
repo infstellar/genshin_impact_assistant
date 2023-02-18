@@ -1,9 +1,8 @@
 from source.util import *
 import source.flow.flow_code as FC
-from source.constant import flow_state as FlowState
+from common import flow_state as FlowState, flow_state as ST
 from source.common import base_threading
 from source.funclib.err_code_lib import *
-from source.constant import flow_state as ST
 
 
 class FlowConnector():

@@ -1,9 +1,8 @@
 from source.manager import img_manager, posi_manager, asset
-from source.interaction.interaction_core import itt
 from source.util import *
 from source.common.base_threading import BaseThreading
 import numpy as np
-from source.base import timer_module
+from common import timer_module
 from source.common import character
 from source.interaction.interaction_core import itt
 from source.interaction import interaction_core
