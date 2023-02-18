@@ -36,4 +36,4 @@ pydirectinput
 adbutils==0.11.0
 uiautomator2==2.16.17
 lxml==4.6.3
-gimap==3.4.2
+gimap==3.4.3

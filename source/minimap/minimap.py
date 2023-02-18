@@ -25,14 +25,14 @@ class MiniMap(MiniMapResource):
             float: local_sim
             tuple[float, float]: Location on GIMAP
         """
-        scale *= self.SEARCH_SCALE
+        scale *= self.POSITION_SEARCH_SCALE
         local = cv2.resize(image, None, fx=scale, fy=scale, interpolation=cv2.INTER_NEAREST)
         # Product search area
         search_position = np.array(self.position, dtype=np.int64)
-        search_size = np.array(image_size(local)) * self.SEARCH_RADIUS
+        search_size = np.array(image_size(local)) * self.POSITION_SEARCH_RADIUS
         search_size = (search_size // 2 * 2).astype(np.int64)
         search_area = area_offset((0, 0, *search_size), offset=(-search_size // 2).astype(np.int64))
-        search_area = area_offset(search_area, offset=np.multiply(search_position, self.SEARCH_SCALE))
+        search_area = area_offset(search_area, offset=np.multiply(search_position, self.POSITION_SEARCH_SCALE))
         search_area = np.array(search_area).astype(np.int64)
         search_image = crop(self.GIMAP, search_area)
 
@@ -57,11 +57,19 @@ class MiniMap(MiniMapResource):
         # Location on search_image
         lookup_loca = precise_loca + loca + np.array(image_size(image)) * scale / 2
         # Location on GIMAP
-        global_loca = (lookup_loca + search_area[:2]) / self.SEARCH_SCALE
+        global_loca = (lookup_loca + search_area[:2]) / self.POSITION_SEARCH_SCALE
         # Can't figure out why but the result_of_0.5_lookup_scale + 0.5 ~= result_of_1.0_lookup_scale
-        if self.SEARCH_SCALE == 0.5:
+        if self.POSITION_SEARCH_SCALE == 0.5:
             global_loca += 0.5
         return precise_sim, local_sim, global_loca
+
+    @property
+    def _position_scale_dict(self) -> t.Dict[str, float]:
+        dic = {}
+        dic['wild'] = self.POSITION_SCALE_DICT['wild']
+        if self._position_in_GICityMask(self.position):
+            dic['city'] = self.POSITION_SCALE_DICT['city']
+        return dic
 
     def update_position(self, image):
         """
@@ -76,11 +84,11 @@ class MiniMap(MiniMapResource):
         image = rgb2luma(image)
         image &= self._minimap_mask
 
-        best_sim = 0.
-        best_local_sim = 0.
+        best_sim = -1.
+        best_local_sim = -1.
         best_loca = (0, 0)
         best_scene = 'wild'
-        for scene, scale in self.POSITION_SCALE_DICT.items():
+        for scene, scale in self._position_scale_dict.items():
             similarity, local_sim, location = self._predict_position(image, scale)
             # print(scene, scale, similarity, location)
             if similarity > best_sim:
@@ -121,7 +129,7 @@ class MiniMap(MiniMapResource):
         degree = int((loca[0] + loca[1] * 8) * 5)
 
         def to_map(x):
-            return int((x * self.DIRECTION_RADIUS * 2 + self.DIRECTION_RADIUS) * self.SEARCH_SCALE)
+            return int((x * self.DIRECTION_RADIUS * 2 + self.DIRECTION_RADIUS) * self.POSITION_SEARCH_SCALE)
 
         # Row on ARROW_ROTATION_MAP_ALL
         row = int(degree // 8) + 45
@@ -134,7 +142,7 @@ class MiniMap(MiniMapResource):
         result = cv2.matchTemplate(precise_map, mapping, cv2.TM_CCOEFF_NORMED)
 
         def to_map(x):
-            return int((x * self.DIRECTION_RADIUS * 2) * self.SEARCH_SCALE)
+            return int((x * self.DIRECTION_RADIUS * 2) * self.POSITION_SEARCH_SCALE)
 
         def get_precise_sim(d):
             y, x = divmod(d, 8)
@@ -147,7 +155,7 @@ class MiniMap(MiniMapResource):
         precise_loca = degree // 8 * 8 - 8 + precise_loca[0]
 
         self.direction_similarity = round(precise_sim, 3)
-        self.direction = precise_loca
+        self.direction = precise_loca % 360
 
     def update(self, image):
         self.update_position(image)
@@ -162,18 +170,18 @@ class MiniMap(MiniMapResource):
             f'D:{float2str(self.direction, 3)} ({float2str(self.direction_similarity, 3)})')
 
     @property
-    def is_scene_in_wild(self):
+    def is_scene_in_wild(self) -> bool:
         return self.scene == 'wild'
 
     @property
-    def is_scene_in_city(self):
+    def is_scene_in_city(self) -> bool:
         return self.scene == 'city'
 
-    def is_position_near(self, position, threshold=2):
+    def is_position_near(self, position, threshold=1) -> bool:
         diff = np.linalg.norm(np.subtract(position, self.position))
         return diff <= threshold
 
-    def is_direction_near(self, direction, threshold=10):
+    def is_direction_near(self, direction, threshold=10) -> bool:
         diff = (self.direction - direction) % 360
         return diff <= threshold or diff >= 360 - threshold
 
@@ -182,7 +190,7 @@ if __name__ == '__main__':
     """
     MiniMap 监听测试
     """
-    from source.device.device.device import Device
+    from source.device import Device
 
     device = Device('127.0.0.1:7555')
     device.disable_stuck_detection()

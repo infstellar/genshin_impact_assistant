@@ -2,8 +2,8 @@ import typing as t
 
 import gimap
 from cached_property import cached_property
-from source.device.alas.decorator import has_cached_property, del_cached_property
 
+from source.device.alas.decorator import has_cached_property, del_cached_property
 from source.minimap.utils import *
 
 
@@ -20,9 +20,9 @@ class MiniMapResource:
         'city': 0.5150,
     }
     # Downscale GIMAP and minimap for faster run
-    SEARCH_SCALE = 0.5
+    POSITION_SEARCH_SCALE = 0.5
     # Search the area that is 1.666x minimap, about 100px in wild on GIMAP
-    SEARCH_RADIUS = 1.666
+    POSITION_SEARCH_RADIUS = 1.666
 
     # Radius to search direction arrow, about 15px
     DIRECTION_RADIUS = int(MINIMAP_RADIUS / 6)
@@ -59,7 +59,7 @@ class MiniMapResource:
         # file = r'GIMAP.png'
         # image = load_image(file)
         # image = rgb2luma(image)
-        # image = cv2.resize(image, None, fx=self.SEARCH_SCALE, fy=self.SEARCH_SCALE, interpolation=cv2.INTER_NEAREST)
+        # image = cv2.resize(image, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_NEAREST)
         # Image.fromarray(image).save('GIMAP_luma_05x.png')
 
         # Then open it in PhotoShop, save as "GIMAP_luma_05x_ps.png" to make it smaller.
@@ -127,3 +127,47 @@ class MiniMapResource:
             del_cached_property(self, 'ARROW_ROTATED')
 
         return image
+
+    @cached_property
+    def GICityMask_dict(self):
+        # This is how GIMAP_luma_05x_ps.png was generated
+        # GICityMask.png is in white background and has city area manually drawn in black
+
+        # file = r'GICityMask.png'
+        # image = load_image(file)
+        # image = ~cv2.inRange(image, 0, 235)
+        # image = cv2.resize(image, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_NEAREST)
+        #
+        # scale = self.POSITION_SCALE_DICT['city'] * self.SEARCH_SCALE
+        # local_size = self.MINIMAP_RADIUS * 2 * scale
+        # local_size = int(local_size) + 1
+        # # Pad search area, cause it's no an instant switch between city and wild
+        # local_size += 20
+        #
+        # local_size = int(local_size // 2) * 2 + 1
+        # kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (local_size, local_size))
+        # image = cv2.dilate(image, kernel)
+        # Image.fromarray(image).save('GICityMask_05x.png')
+
+        file = gimap.GICityMask_05x()
+        image = load_image(file)
+
+        # Split image to reduce memory usage
+        out = {}
+        image = cv2.multiply(image, 1 / 255)
+        contours, _ = cv2.findContours(image, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+        for i, contour in enumerate(contours):
+            x, y, w, h = cv2.boundingRect(contour)
+            area = (x, y, x + w, y + h)
+            out[area] = crop(image, area=area)
+        return out
+
+    def _position_in_GICityMask(self, position) -> bool:
+        position = (np.array(position) * self.POSITION_SEARCH_SCALE).astype(np.int64)
+        for area, image in self.GICityMask_dict.items():
+            if point_in_area(position, area, threshold=0):
+                x, y = position - area[:2]
+                info = image[y, x]
+                return info > 0
+
+        return False
