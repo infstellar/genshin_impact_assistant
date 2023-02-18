@@ -62,6 +62,30 @@ class FlowTemplate():
     def _set_nfid(self, fid):
         self.next_flow_id = fid
 
+class EndFlowTenplate(FlowTemplate):
+    def __init__(self, upper:FlowConnector):
+        self.upper = upper
+        self.flow_id = 0 # flow id <0
+        self.rfc = FC.INIT
+        self.err_code_id = ERR_PASS
+    
+    def enter_flow(self):
+        if self.rfc == FC.INIT:
+            self.state_init()
+        elif self.rfc == FC.BEFORE:
+            self.state_before()
+        elif self.rfc == FC.IN:
+            self.state_in()
+        elif self.rfc == FC.AFTER:
+            self.state_after()
+        elif self.rfc == FC.END:
+            self.state_end()
+            return self.err_code_id
+        return self.flow_id
+    
+    def _set_ecid(self, fid):
+        self.err_code_id = fid
+
 
 class FlowController(base_threading.BaseThreading):
     def __init__(self):
@@ -117,7 +141,10 @@ class FlowController(base_threading.BaseThreading):
                     rcode = self.flow_dict[i].enter_flow()
                     self.current_flow_id = rcode
             
-            if rcode == ST.END:
-                logger.info("Flow END")
-                self.last_err_code = ERR_PASS
+            if int(rcode) < 0:
+                logger.debug("Flow Ready To END")
+                for i in self.flow_dict:
+                    if i == str(self.current_flow_id):
+                        rcode = self.flow_dict[i].enter_flow()
+                        self.last_err_code = rcode
                 self.pause_threading()
