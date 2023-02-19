@@ -4,8 +4,8 @@ itt = itt
 from source.common.base_threading import BaseThreading
 from source.funclib import static_lib
 from common.timer_module import Timer
-from source.path_lib import CONFIGPATH_SETTING
-if load_json("config.json", CONFIGPATH_SETTING)["interaction_mode"] == 'Dm':
+from source.path_lib import CONFIG_PATH_SETTING
+if load_json("config.json", CONFIG_PATH_SETTING)["interaction_mode"] == 'Dm':
     from source.interaction.interaction_dm import unbind, bind
 
 global W_KEYDOWN, cvAutoTrackerLoop
@@ -17,7 +17,7 @@ class GenericEvent(BaseThreading):
         self.w_down_timer = Timer()
         self.w_down_flag = False
         self.setName("GenericEvent")
-        self.itt_mode = load_json("config.json", CONFIGPATH_SETTING)["interaction_mode"]
+        self.itt_mode = load_json("config.json", CONFIG_PATH_SETTING)["interaction_mode"]
         self.while_sleep = 2
             
     def run(self) -> None:
@@ -25,7 +25,7 @@ class GenericEvent(BaseThreading):
         while 1:
             time.sleep(self.while_sleep)
             if self.stop_threading_flag:
-                return 0
+                return
 
             if self.pause_threading_flag:
                 if self.working_flag:
@@ -55,14 +55,14 @@ class GenericEvent(BaseThreading):
                         itt.key_up('w')
             
             if self.itt_mode == 'Dm':
-                winname = get_active_window_process_name()
-                if winname in process_name:
+                win_name = get_active_window_process_name()
+                if win_name in process_name:
                     unbind()
                     while 1:
                         if get_active_window_process_name() not in process_name:
                             logger.info(t2t("恢复操作"))
                             break
-                        logger.info(t2t("当前窗口焦点为") + str(winname) + t2t("是原神窗口") + str(process_name) + t2t("，操作暂停 ") + str(5 - (time.time()%5)) +t2t(" 秒"))
+                        logger.info(t2t("当前窗口焦点为") + str(win_name) + t2t("是原神窗口") + str(process_name) + t2t("，操作暂停 ") + str(5 - (time.time()%5)) +t2t(" 秒"))
                         time.sleep(5 - (time.time()%5))
                     bind()
 
@@ -78,8 +78,8 @@ def static_lib_init():
 
 def while_until_no_excessive_error(stop_func):
     logger.info(t2t("等待cvautotrack获取坐标"))
-    cvAutoTrackerLoop.start_sleep_timer.reset()
-    while cvAutoTrackerLoop.is_in_excessive_error():
+    cvAutoTrackerLoop.start_sleep_timer.reset() # type: ignore
+    while cvAutoTrackerLoop.is_in_excessive_error(): # type: ignore
         if stop_func():
             return 0
         time.sleep(1)

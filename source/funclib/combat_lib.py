@@ -45,7 +45,7 @@ def get_param(team_item, para_name, auto_fill_flag, chara_name="", exception_mod
     return r
 
 def get_chara_list(team_name='team.json'):
-    team_name = load_json("auto_combat.json",CONFIGPATH_SETTING)["teamfile"]
+    team_name = load_json("auto_combat.json",CONFIG_PATH_SETTING)["teamfile"]
     dpath = "config\\tactic"
     
     team = load_json(team_name, default_path=dpath)
@@ -56,20 +56,20 @@ def get_chara_list(team_name='team.json'):
         autofill_flag = False
         # autofill_flag = team_item["autofill"]
         cname = get_param(team_item, "cname", autofill_flag, chara_name="")
-        cposition = get_param(team_item, "position", autofill_flag, chara_name=cname)
-        cpriority = get_param(team_item, "priority", autofill_flag, chara_name=cname)
+        c_position = get_param(team_item, "position", autofill_flag, chara_name=cname)
+        c_priority = get_param(team_item, "priority", autofill_flag, chara_name=cname)
         cE_short_cd_time = get_param(team_item, "E_short_cd_time", autofill_flag, chara_name=cname)
         cE_long_cd_time = get_param(team_item, "E_long_cd_time", autofill_flag, chara_name=cname)
         cElast_time = get_param(team_item, "Elast_time", autofill_flag, chara_name=cname)
         cEcd_float_time = get_param(team_item, "Ecd_float_time", autofill_flag, chara_name=cname)
         cn = get_param(team_item, "n", autofill_flag, chara_name=cname)
         try:
-            ctactic_group = team_item["tactic_group"]
+            c_tactic_group = team_item["tactic_group"]
         except:
-            ctactic_group = team_item["tastic_group"]
+            c_tactic_group = team_item["tastic_group"]
             logger.warning(t2t("请将配对文件中的tastic_group更名为tactic_group. 已自动识别。"))
             
-        ctrigger = get_param(team_item, "trigger", autofill_flag, chara_name=cname, value_when_empty="e_ready")
+        c_trigger = get_param(team_item, "trigger", autofill_flag, chara_name=cname, value_when_empty="e_ready")
         cEpress_time = get_param(team_item, "Epress_time", autofill_flag, chara_name=cname, value_when_empty=2)
         cQlast_time = get_param(team_item, "Qlast_time", autofill_flag, chara_name=cname, value_when_empty=5)
         cQcd_time = get_param(team_item, "Qcd_time", autofill_flag, chara_name=cname, value_when_empty=12)
@@ -80,9 +80,9 @@ def get_chara_list(team_name='team.json'):
 
         chara_list.append(
             character.Character(
-                name=cname, position=cposition, n=cn, priority=cpriority,
+                name=cname, position=c_position, n=cn, priority=c_priority,
                 E_short_cd_time=cE_short_cd_time, E_long_cd_time=cE_long_cd_time, Elast_time=cElast_time,
-                Ecd_float_time=cEcd_float_time, tactic_group=ctactic_group, trigger=ctrigger,
+                Ecd_float_time=cEcd_float_time, tactic_group=c_tactic_group, trigger=c_trigger,
                 Epress_time=cEpress_time, Qlast_time=cQlast_time, Qcd_time=cQcd_time
             )
         )

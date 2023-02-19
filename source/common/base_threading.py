@@ -58,12 +58,12 @@ class BaseThreading(threading.Thread):
         threading_obj.pause_threading()
         threading_obj.start()
 
-    def run(self) -> None:
+    def run(self):
         '''if you're using this class, copy this'''
         while 1:
             time.sleep(self.while_sleep)
             if self.stop_threading_flag:
-                return 0
+                return
 
             if self.pause_threading_flag:
                 if self.working_flag:

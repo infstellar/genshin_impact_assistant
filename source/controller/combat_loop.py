@@ -9,7 +9,7 @@ from source.operator.aim_operator import AimOperator
 from source.common.base_threading import BaseThreading
 from source.interaction.interaction_core import itt
 from source.operator.switch_character_operator import SwitchCharacterOperator
-from source.path_lib import CONFIGPATH_SETTING
+from source.path_lib import CONFIG_PATH_SETTING
 
 CHARACTER_DIED = 1
 
@@ -22,59 +22,59 @@ def stop_func_example():  # True:stop;False:continue
 
 
 def get_chara_list(team_name='team.json'):
-    team_name = load_json("auto_combat.json",CONFIGPATH_SETTING)["teamfile"]
-    dpath = "config\\tactic"
+    team_name = load_json("auto_combat.json",CONFIG_PATH_SETTING)["teamfile"]
+    d_path = "config\\tactic"
     
-    team = load_json(team_name, default_path=dpath)
-    characters = load_json("character.json", default_path=dpath)
+    team = load_json(team_name, default_path=d_path)
+    characters = load_json("character.json", default_path=d_path)
     chara_list = []
     for team_name in team:
         team_item = team[team_name]
         if team_item["autofill"]:
-            ccharacter = characters[team_item["name"]]
-            cposition = ccharacter["position"]
-            cE_short_cd_time = ccharacter["E_short_cd_time"]
-            cE_long_cd_time = ccharacter["E_long_cd_time"]
-            cElast_time = ccharacter["Elast_time"]
-            cEcd_float_time = ccharacter["Ecd_float_time"]
+            c_character = characters[team_item["name"]]
+            c_position = c_character["position"]
+            cE_short_cd_time = c_character["E_short_cd_time"]
+            cE_long_cd_time = c_character["E_long_cd_time"]
+            cElast_time = c_character["Elast_time"]
+            cEcd_float_time = c_character["Ecd_float_time"]
             try:
-                ctactic_group = ccharacter["tactic_group"]
+                c_tactic_group = c_character["tactic_group"]
             except:
-                ctactic_group = ccharacter["tastic_group"]
+                c_tactic_group = c_character["tastic_group"]
                 logger.warning(t2t("请将配对文件中的tastic_group更名为tactic_group. 已自动识别。"))
-            cEpress_time = ccharacter["Epress_time"]
-            cQlast_time = ccharacter["Qlast_time"]
-            cQcd_time = ccharacter["Qcd_time"]
+            cEpress_time = c_character["Epress_time"]
+            cQlast_time = c_character["Qlast_time"]
+            cQcd_time = c_character["Qcd_time"]
         else:
-            cposition = team_item["position"]
-            cpriority = team_item["priority"]
+            c_position = team_item["position"]
+            c_priority = team_item["priority"]
             cE_short_cd_time = team_item["E_short_cd_time"]
             cE_long_cd_time = team_item["E_long_cd_time"]
             cElast_time = team_item["Elast_time"]
             cEcd_float_time = team_item["Ecd_float_time"]
             try:
-                ctactic_group = team_item["tactic_group"]
+                c_tactic_group = team_item["tactic_group"]
             except:
-                ctactic_group = team_item["tastic_group"]
+                c_tactic_group = team_item["tastic_group"]
                 logger.warning(t2t("请将配对文件中的tastic_group更名为tactic_group. 已自动识别。"))
-            ctrigger = team_item["trigger"]
+            c_trigger = team_item["trigger"]
             cEpress_time = team_item["Epress_time"]
             cQlast_time = team_item["Qlast_time"]
             cQcd_time = team_item["Qcd_time"]
 
         cn = team_item["n"]
         cname = team_item['name']
-        cpriority = team_item["priority"]
-        ctrigger = team_item["trigger"]
+        c_priority = team_item["priority"]
+        c_trigger = team_item["trigger"]
 
         if cEcd_float_time > 0:
             logger.info(t2t("角色 ") + cname + t2t(" 的Ecd_float_time大于0，请确定该角色不是多段e技能角色。"))
 
         chara_list.append(
             character.Character(
-                name=cname, position=cposition, n=cn, priority=cpriority,
+                name=cname, position=c_position, n=cn, priority=c_priority,
                 E_short_cd_time=cE_short_cd_time, E_long_cd_time=cE_long_cd_time, Elast_time=cElast_time,
-                Ecd_float_time=cEcd_float_time, tactic_group=ctactic_group, trigger=ctrigger,
+                Ecd_float_time=cEcd_float_time, tactic_group=c_tactic_group, trigger=c_trigger,
                 Epress_time=cEpress_time, Qlast_time=cQlast_time, Qcd_time=cQcd_time
             )
         )
@@ -114,7 +114,7 @@ class Combat_Controller(BaseThreading):
             if self.checkup_stop_threading():
                 self.ao.stop_threading()
                 self.sco.stop_threading()
-                return 0
+                return
             
             if self.is_check_died:
                 if self.itt.get_img_existence(asset.character_died):

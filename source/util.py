@@ -54,11 +54,11 @@ DEVICE_NORMAL = 'Normal' # In PC, Foreground
 DEVICE_DM = "Dm" # In PC, Background
 DEVICE_ADB = "Adb" # In Android emulator, Background
 
-if load_json("config.json", CONFIGPATH_SETTING)["interaction_mode"] == 'Normal':
+if load_json("config.json", CONFIG_PATH_SETTING)["interaction_mode"] == 'Normal':
     GLOBAL_DEVICE = DEVICE_NORMAL
-elif load_json("config.json", CONFIGPATH_SETTING)["interaction_mode"] == 'ADB':
+elif load_json("config.json", CONFIG_PATH_SETTING)["interaction_mode"] == 'ADB':
     GLOBAL_DEVICE = DEVICE_ADB
-elif load_json("config.json", CONFIGPATH_SETTING)["interaction_mode"] == 'Dm':
+elif load_json("config.json", CONFIG_PATH_SETTING)["interaction_mode"] == 'Dm':
     GLOBAL_DEVICE = DEVICE_DM
 
 IS_DEVICE_PC = (GLOBAL_DEVICE == DEVICE_DM)or(GLOBAL_DEVICE == DEVICE_NORMAL)

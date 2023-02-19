@@ -2,7 +2,7 @@ import time
 from source.path_lib import *
 
 class Timer:
-    def __init__(self, diff_start_time=0):
+    def __init__(self, diff_start_time:float=0):
         self.start_time = time.time()
         self.start_time = self.start_time - diff_start_time
         self.end_time = time.time()
@@ -31,7 +31,7 @@ class CyclicVelocityDetector(Timer):
     def __init__(self):
         super().__init__()
         
-    def getandset_cyclic_velocity(self):
+    def get_and_set_cyclic_velocity(self):
         dt = self.get_diff_time()
         self.reset()
         return int(1/dt)

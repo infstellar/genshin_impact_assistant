@@ -36,8 +36,6 @@ class AutoTrackerLoop(BaseThreading):
         self.start_sleep_timer = timer_module.Timer(diff_start_time=61)
         self.history_posi = []
         self.history_timer = timer_module.Timer()
-        # logger.debug(f"cvautotrack log: {cvAutoTracker.disable_log()}")
-        # scene_manager.switchto_mainwin(max_time=5)
     
     def load_dll(self):
         self.cvAutoTracker = AutoTracker() # os.path.join(root_path, 'source\\cvAutoTrack_7.2.3\\CVAUTOTRACK.dll')
@@ -64,8 +62,7 @@ class AutoTrackerLoop(BaseThreading):
             
             time.sleep(self.while_sleep)
             if self.stop_threading_flag:
-                return 0
-
+                return
             if self.pause_threading_flag:
                 if self.working_flag:
                     self.working_flag = False

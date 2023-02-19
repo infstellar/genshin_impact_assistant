@@ -86,7 +86,7 @@ def jwa_3(imsrc):
     Alpha = cv2.dilate(Alpha, dilate_element)
     Alpha = Alpha.astype('uint8')
     # return Alpha
-    contours, hierarcy = cv2.findContours(Alpha, 0, 1)
+    contours, _ = cv2.findContours(Alpha, 0, 1)
     # qshow(Alpha)
 
     maxBlack = 0

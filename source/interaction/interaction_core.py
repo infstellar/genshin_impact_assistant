@@ -21,7 +21,6 @@ IMG_BOOLRATE = 5
 
 
 winname_default = ["Genshin Impact", "原神"]
-# winname_cgs = "云·原神"
 
 # process_name_cloud = ["云·原神"]
 
@@ -208,7 +207,7 @@ class InteractionBGD:
                 cv2.rectangle((show_img), pt, right_bottom, (0, 0, 255), 2)  # 绘制匹配到的矩阵
             cv2.imshow("img", show_img)
             cv2.imshow("template", template)
-            cv2.waitKey(0)  # 获取按键的ASCLL码
+            cv2.waitKey(0)  # 获取按键的ASCII码
             cv2.destroyAllWindows()  # 释放所有的窗口
 
         return res_posi
