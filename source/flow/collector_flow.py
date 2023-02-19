@@ -1,16 +1,15 @@
 from source.util import *
-from source.constant import flow_state as ST
-from source.interaction.interaction_core import global_itt
+from common import flow_state as ST, timer_module
+from source.interaction.interaction_core import itt
 from source.operator import pickup_operator
 from source.flow import teyvat_move_flow
 from source.controller import combat_loop
 from source.common.base_threading import BaseThreading
-from source.funclib import collector_lib, generic_lib, static_lib, combat_lib
+from source.funclib import collector_lib, generic_lib, combat_lib
 import numpy as np
 import datetime
-from source.manager import scene_manager, img_manager, button_manager, asset
+from source.manager import scene_manager, asset
 from funclib.err_code_lib import ERR_PASS, ERR_STUCK, ERR_COLLECTOR_FLOW_TIMEOUT
-from source.base import timer_module
 from source.funclib import scene_lib
 from source.common import generic_event
 
@@ -93,7 +92,7 @@ class CollectorFlow(BaseThreading):
         collector_lib.generate_col_succ_rate_from_log()
         logger.debug(f"generate collection_id_details succ")
         self.collection_details = load_json("collection_id_details.json", "config\\auto_collector")
-        self.itt = global_itt
+        self.itt = itt
         
         
         
@@ -191,7 +190,7 @@ class CollectorFlow(BaseThreading):
         self.stop_all()
         self.current_position = generic_event.cvAutoTrackerLoop.get_position()[1:]
         self.tmf.reset_setting()
-        gs_posi = collector_lib.load_items_position(item_name=asset.QTSX.text, ret_mode=1, match_mode=1)
+        gs_posi = collector_lib.load_items_position(marker_title=asset.QTSX.text, ret_mode=1, match_mode=1)
         gs_posi = np.asarray(gs_posi)
         d = euclidean_distance_plist(self.current_position, gs_posi)
         gs_posi = gs_posi[np.argmin(d)]

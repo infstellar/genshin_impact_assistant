@@ -1,7 +1,8 @@
-from source.manager import img_manager, text_manager, button_manager
+from source.manager import img_manager, text_manager, posi_manager
 from source.util import *
 from source.manager.img_manager import LOG_WHEN_TRUE, LOG_ALL, LOG_NONE, LOG_WHEN_FALSE, ImgIcon
 from path_lib import ASSETS_IMG, ASSETS_COMMON_IMG
+from source.manager.button_manager import Button
 
 # import scene_manager
 
@@ -57,14 +58,14 @@ revival = text_manager.TextTemplate(text=
 })
 character_died = img_manager.ImgIcon(name="character_died", path=f"{ASSETS_IMG}\\{GLOBAL_LANG}\\character_died.jpg",
                                      is_bbg=True, cap_posi='bbg', win_text=use_revival_item.text, threshold=0.98, print_log=LOG_WHEN_TRUE)
-button_all_character_died = button_manager.Button(name="all_character_died", path=f"{ASSETS_IMG}\\{GLOBAL_LANG}\\all_character_died.jpg",
+button_all_character_died = Button(name="all_character_died", path=f"{ASSETS_IMG}\\{GLOBAL_LANG}\\all_character_died.jpg",
                                                   threshold=0.988, win_text=revival.text, print_log=LOG_WHEN_TRUE)
-button_esc_page = button_manager.Button(name="button_esc_page", path=f"{ASSETS_COMMON_IMG}\\ui\\emergency_food.jpg", print_log=LOG_WHEN_TRUE)
-button_time_page = button_manager.Button(name="button_time_page",path=f"{ASSETS_COMMON_IMG}\\ui\\switch_to_time_menu.jpg", black_offset = 15, print_log=button_manager.LOG_WHEN_TRUE)
-button_exit = button_manager.Button(path=f"{ASSETS_COMMON_IMG}\\button\\button_exit.jpg", print_log=LOG_WHEN_TRUE)
-button_all_character_died = button_manager.Button( name="all_character_died", path=f"{ASSETS_IMG}\\{GLOBAL_LANG}\\all_character_died.jpg", 
+button_esc_page = Button(name="button_esc_page", path=f"{ASSETS_COMMON_IMG}\\ui\\emergency_food.jpg", print_log=LOG_WHEN_TRUE)
+button_time_page = Button(name="button_time_page",path=f"{ASSETS_COMMON_IMG}\\ui\\switch_to_time_menu.jpg", black_offset = 15, print_log=LOG_WHEN_TRUE)
+button_exit = Button(path=f"{ASSETS_COMMON_IMG}\\button\\button_exit.jpg", print_log=LOG_WHEN_TRUE)
+button_all_character_died = Button( name="all_character_died", path=f"{ASSETS_IMG}\\{GLOBAL_LANG}\\all_character_died.jpg", 
                                    threshold=0.988, win_text=revival.text, print_log=LOG_WHEN_TRUE)
-button_ui_cancel = button_manager.Button(name="button_ui_cancel", path=f"{ASSETS_COMMON_IMG}\\ui\\ui_cancel.jpg",  print_log=LOG_WHEN_TRUE)
+button_ui_cancel = Button(name="button_ui_cancel", path=f"{ASSETS_COMMON_IMG}\\ui\\ui_cancel.jpg",  print_log=LOG_WHEN_TRUE)
 
 COMING_OUT_BY_SPACE = ImgIcon(name="coming_out_by_space", path=f"{ASSETS_COMMON_IMG}\\coming_out_by_space.jpg",
                               is_bbg=True, bbg_posi=[1379,505,  1447,568, ], cap_posi='bbg', threshold=0.8, print_log=LOG_WHEN_TRUE)
@@ -85,6 +86,9 @@ bigmap_TeleportWaypoint = ImgIcon(name="bigmap_TeleportWaypoint",
 bigmap_GodStatue = ImgIcon(name="bigmap_GodStatue",
                                   path=f"{ASSETS_IMG}\\map\\big_map\\points\\GodStatue.jpg",
                                   is_bbg=False)
+bigmap_Domain = ImgIcon(name="bigmap_Domain",
+                                  path=f"{ASSETS_IMG}\\map\\big_map\\points\\Domain.jpg",
+                                  is_bbg=False)
 motion_swimming = ImgIcon(name="motion_swimming", path=f"{ASSETS_COMMON_IMG}\\motion_swimming.jpg",
                           is_bbg=True, bbg_posi=[1808,968,  1872,1016 ], cap_posi='bbg')# 不能删bbg
 motion_climbing = ImgIcon(name="motion_climbing", path=f"{ASSETS_COMMON_IMG}\\motion_climbing.jpg",
@@ -103,6 +107,9 @@ ui_time_menu_core = ImgIcon(name="ui_time_menu_core", path=f"{ASSETS_COMMON_IMG}
                         is_bbg=True, cap_posi='bbg', print_log=LOG_WHEN_TRUE, threshold=0.89)
 bigmap_choose_area = ImgIcon(name="bigmap_choose_area", path=f"{ASSETS_COMMON_IMG}\\ui\\bigmap_choose_area.jpg", is_bbg=True, cap_posi='bbg')
 bigmap_tp = ImgIcon(name="bigmap_tp", path=f"{ASSETS_IMG}\\{GLOBAL_LANG}\\bigmap_tp.jpg", is_bbg=True, cap_posi='bbg')
+start_challenge = Button(name="start_challenge", path=f"{ASSETS_IMG}\\{GLOBAL_LANG}\\start_challenge.jpg", print_log=LOG_WHEN_TRUE, threshold=0.98)
+switch_domain_area = posi_manager.PosiTemplate(img_path=f"{ASSETS_COMMON_IMG}\\area\\switch_challenge_area.jpg")
+solo_challenge = Button(name = "solo_challenge", path=f"{ASSETS_IMG}\\{GLOBAL_LANG}\\solo_challenge.jpg", print_log=LOG_WHEN_TRUE, threshold=0.98)
 
 QTSX = text_manager.TextTemplate(text=
 {

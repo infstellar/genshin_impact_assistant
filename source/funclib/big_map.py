@@ -1,9 +1,9 @@
 from source.util import *
-from source.interaction.interaction_core import global_itt
+from source.interaction.interaction_core import itt
 from source.manager import scene_manager, img_manager, posi_manager, asset
 from source.funclib import scene_lib
 
-itt = global_itt
+itt = itt
 
 global priority_waypoints, priority_waypoints_list, priority_waypoints_array, idnum
 priority_waypoints, priority_waypoints_list, priority_waypoints_array, idnum = None, None, None, None
@@ -135,6 +135,18 @@ def get_gs_points(bigmatMat, stop_func):
         return get_gs_points(bigmatMat, stop_func)
     return np.asarray(ret)
 
+def get_dm_points(bigmatMat, stop_func):
+    """获得domain的坐标
+
+    Args:
+        bigmatMat (Mat): 截图
+
+    Returns:
+        list: 坐标列表
+    """
+    ret = itt.match_multiple_img(bigmatMat, asset.bigmap_Domain.image, threshold=0.98)
+    return np.asarray(ret)
+
 def get_middle_gs_point(stop_func):
     """获得离屏幕中心最近的七天神像的坐标
 
@@ -206,7 +218,7 @@ def teyvat_posi2bigmap_posi(current_teyvat_posi, teyvat_posi_list):
     teyvat_posi_list = teyvat_posi_list + [1920 / 2, 1080 / 2]
     return teyvat_posi_list
 
-def nearest_big_map_tw_posi(current_posi, target_posi, stop_func, include_gs = True):
+def nearest_big_map_tw_posi(current_posi, target_posi, stop_func, include_gs = True, include_dm = False):
     """获得距离目标坐标最近的大地图传送锚点坐标
 
     Args:
@@ -219,6 +231,9 @@ def nearest_big_map_tw_posi(current_posi, target_posi, stop_func, include_gs = T
     twpoints = np.array(get_tw_points(itt.capture(jpgmode=0), stop_func)) # 获得所有传送锚点坐标
     if include_gs:
         twpoints = np.concatenate((twpoints, get_gs_points(itt.capture(jpgmode=0), stop_func)))
+    if include_dm:
+        if len(get_dm_points(itt.capture(jpgmode=0), stop_func)) > 0:
+            twpoints = np.concatenate((twpoints, get_dm_points(itt.capture(jpgmode=0), stop_func)))
     if len(twpoints) == 0:
         return []
     twpoints_teyvat = twpoints.copy() # 拷贝

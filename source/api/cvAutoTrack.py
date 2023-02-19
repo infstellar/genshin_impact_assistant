@@ -1,5 +1,5 @@
 from source.util import *
-from source.base import timer_module
+from common import timer_module
 from source.common.base_threading import BaseThreading
 from assets.AutoTrackDLLAPI.AutoTrackAPI import AutoTracker
 from source.funclib import scene_lib
@@ -54,7 +54,7 @@ class AutoTrackerLoop(BaseThreading):
         self.start_sleep_timer = timer_module.Timer(diff_start_time=61)
         self.loaded_flag = True
 
-    def run(self):
+    def run(self) -> None:
         ct = 0
         time.sleep(0.1)
         while 1:
@@ -142,8 +142,6 @@ class AutoTrackerLoop(BaseThreading):
             time.sleep(3)
         self.start_sleep_timer.reset()
         return self.in_excessive_error
-    
-# logger.info(cvAutoTracker.verison())
 
 # 以下是对被封装的类的简单演示。
 # 使用命令行 `python ./main.py` 直接运行本文件即可。

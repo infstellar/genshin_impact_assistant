@@ -1,8 +1,8 @@
 import source.api.pdocr_api as pdocr_api
 from source.common.base_threading import BaseThreading
 from source.common.character import Character
-from source.interaction.interaction_core import global_itt
-from source.base.timer_module import Timer
+from source.interaction.interaction_core import itt
+from common.timer_module import Timer
 from source.util import *
 import cv2
 from source.funclib import combat_lib
@@ -21,13 +21,14 @@ class TacticOperator(BaseThreading):
     def __init__(self):
         super().__init__()
         self.setName('Tactic_Operator')
-        self.while_sleep = 0.1
+        self.while_sleep = 0.05
         self.hp_chara_list_green = [34, 215, 150, 255]  # BGR
         self.hp_chara_list_red = [102, 102, 255, 255]  # BGR
         self.hp_chara_list_position = [[283, 1698], [379, 1698], [475, 1698], [571, 1698]]
         self.chara_num = 4
         self.enter_timer = Timer()
-        self.itt = global_itt
+        self.pause_timer = Timer()
+        self.itt = itt
         self.working_flag = False # out of class
         self.flag_tactic_executing = False # in class
         self.pause_tactic_flag = False
@@ -51,7 +52,7 @@ class TacticOperator(BaseThreading):
         logger.trace("restart_executor start")
         self.pause_tactic_flag = True
         while self.flag_tactic_executing:
-            time.sleep(0.1)
+            time.sleep(0.05)
             if self.checkup_stop_func():
                 break
         self.pause_tactic_flag = False
@@ -66,9 +67,12 @@ class TacticOperator(BaseThreading):
             if self.pause_threading_flag:
                 if self.working_flag:
                     self.working_flag = False
-                time.sleep(0.3)
+                if self.pause_timer.get_diff_time()>=1:
+                    time.sleep(0.1)
+                if self.pause_timer.get_diff_time()>=20:
+                    time.sleep(1)
                 continue
-            
+            self.pause_timer.reset()
             if self.checkup_stop_func():
                 self.pause_threading_flag = True
                 continue
@@ -92,7 +96,9 @@ class TacticOperator(BaseThreading):
         self.tactic_group = tactic_group
         self.character = character
         self.formered_tactic = self._tactic_group_former()
-        self.enter_timer.reset()
+    
+    def set_enter_timer(self, timer):
+        self.enter_timer = timer
 
     def _tactic_group_former(self):
         tactic = self.tactic_group.split(';')
@@ -144,9 +150,12 @@ class TacticOperator(BaseThreading):
 
     def chara_waiting(self, mode=0):
         self.unconventionality_situation_detection()
-        if (mode == 0) and self.is_e_available() and (self.enter_timer.get_diff_time() <= 1):
-            logger.debug('skip waiting')
-            return 0
+        if (mode == 0) and (self.enter_timer.get_diff_time() <= 1.2):
+            if self.is_e_available():
+                logger.debug('skip waiting')
+                return 0
+            else:
+                logger.debug(f"t: {self.enter_timer.get_diff_time()} but e unavailable")
         while self.get_character_busy() and (not self.checkup_stop_func()):
             if self.checkup_stop_func():
                 logger.debug('chara_waiting stop')
@@ -324,6 +333,10 @@ class TacticOperator(BaseThreading):
         res1 = cv2.bitwise_and(imsrc_q_skill,imsrc_q_skill,mask=mask)
         # res1 = imsrc_q_skill.copy()
         HUE_DELTA = 5
+        
+        # stone HSV=0.12538226299694,0.85490196078431,1
+        # fire 
+        
         fire_lower = np.array([9-HUE_DELTA,100,100])
         fire_upper = np.array([9+HUE_DELTA,255,255])
 

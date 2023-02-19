@@ -11,5 +11,5 @@ if sys.path[1] != source_path:
 
 CONFIGPATH_SETTING = os.path.join(root_path, "config\\settings")
 JSONNAME_CONFIG = "config.json"
-ASSETS_IMG = "assets\\imgs"
-ASSETS_COMMON_IMG = "assets\\imgs\\common"
+ASSETS_IMG = "assets\\imgs\\$device$"
+ASSETS_COMMON_IMG = "assets\\imgs\\$device$\\common"

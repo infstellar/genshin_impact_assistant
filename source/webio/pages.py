@@ -12,7 +12,7 @@ import time
 from source import listening, webio
 from source.webio import manager
 from source.webio.page_manager import Page
-from source.constant import flow_state
+from common import flow_state
 from source.funclib import collector_lib
 
 

@@ -1,6 +1,5 @@
 import string
-from source.base import vkcode
-from source.util import *
+from common import vkcode
 import ctypes
 VkKeyScanA = ctypes.windll.user32.VkKeyScanA
 
@@ -36,6 +35,9 @@ class InteractionTemplate():
         pass
     
     def move_to(self, x: int, y: int, relative=False, isChromelessWindow=False):
+        pass
+    
+    def drag(self, origin_xy:list, targe_xy:list):
         pass
     
     def get_virtual_keycode(self, key: str):

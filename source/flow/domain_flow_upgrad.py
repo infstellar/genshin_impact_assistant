@@ -1,12 +1,12 @@
 from source.util import *
-from source.flow.flow_template import FlowController, FlowTemplate, FlowConnector
+from source.flow.flow_template import FlowController, FlowTemplate, FlowConnector, EndFlowTenplate
 import source.flow.flow_code as FC
 from source.controller import combat_loop
-from source.constant import flow_state as ST
-from source.base import timer_module
+from common import flow_state as ST, timer_module
 from source.funclib import generic_lib, movement
+from source.funclib.err_code_lib import *
 from source.manager import posi_manager as PosiM, asset
-from source.interaction.interaction_core import global_itt
+from source.interaction.interaction_core import itt
 from source.api import yolox_api
 
 class DomainFlowConnector(FlowConnector):
@@ -14,6 +14,7 @@ class DomainFlowConnector(FlowConnector):
     各个类之间的变量中继器。
     """
     def __init__(self):
+        super().__init__()
         self.checkup_stop_func = None
         chara_list = combat_loop.get_chara_list()
         self.combat_loop = combat_loop.Combat_Controller(chara_list)
@@ -21,7 +22,6 @@ class DomainFlowConnector(FlowConnector):
 
         self.combat_loop.pause_threading()
         self.combat_loop.start()
-        self.while_sleep = 0.1
         
         self.lockOnFlag = 0
         self.move_timer = timer_module.Timer()
@@ -39,20 +39,14 @@ class DomainFlowConnector(FlowConnector):
         self.isLiYue = domain_json["isLiYueDomain"]
         self.resin_mode = domain_json["resin"]
         self.fast_mode = domain_json["fast_mode"]
-
-    def get_while_sleep(self):
-        return self.while_sleep
     
 class MoveToChallenge(FlowTemplate):
     """
     移动到开始挑战目标点。
     """
     def __init__(self, upper:DomainFlowConnector):
-        super().__init__(upper)
+        super().__init__(upper, flow_id=ST.INIT_MOVETO_CHALLENGE, next_flow_id=ST.INIT_CHALLENGE)
         self.upper = upper
-        self.flow_id = ST.INIT_MOVETO_CHALLENGE
-        self.key_id = FC.INIT
-        self._set_nfid(ST.INIT_CHALLENGE)
         
     def state_init(self):
         """
@@ -60,23 +54,23 @@ class MoveToChallenge(FlowTemplate):
         """
         logger.info(t2t('正在开始挑战秘境'))
         movement.reset_view()
-        if global_itt.get_text_existence(asset.LEYLINEDISORDER):
+        if itt.get_text_existence(asset.LEYLINEDISORDER):
             self._next_rfc()
-        if global_itt.get_img_existence(asset.IN_DOMAIN):
+        if itt.get_img_existence(asset.IN_DOMAIN):
             self._next_rfc()
         
         self.rfc = 1
     
     def state_before(self):
-        if global_itt.get_text_existence(asset.LEYLINEDISORDER):
-            global_itt.move_and_click([PosiM.posi_domain['CLLD'][0], PosiM.posi_domain['CLLD'][1]], delay=1)
+        if itt.get_text_existence(asset.LEYLINEDISORDER):
+            itt.move_and_click([PosiM.posi_domain['CLLD'][0], PosiM.posi_domain['CLLD'][1]], delay=1)
         time.sleep(0.5)
         movement.reset_view()
         time.sleep(2)
         movement.view_to_angle_domain(-90, self.upper.checkup_stop_func)
         self._next_rfc()
         if self.upper.fast_mode:
-            global_itt.key_down('w')
+            itt.key_down('w')
     
     def state_in(self):
         movement.view_to_angle_domain(-90, self.upper.checkup_stop_func)
@@ -85,27 +79,24 @@ class MoveToChallenge(FlowTemplate):
         else:
             movement.move(movement.AHEAD, 4)
 
-        if generic_lib.f_recognition(global_itt):
+        if generic_lib.f_recognition(itt):
             self._next_rfc()
     
     def state_after(self):
-        global_itt.key_up('w')
+        itt.key_up('w')
         self._next_rfc()
 
 
 
 class Challenge(FlowTemplate):
     def __init__(self, upper:DomainFlowConnector):
-        super().__init__(upper)
+        super().__init__(upper, flow_id=ST.INIT_CHALLENGE, next_flow_id=ST.INIT_FINGING_TREE)
         self.upper = upper
-        self.flow_id = ST.INIT_CHALLENGE
-        self.key_id = FC.INIT
-        self._set_nfid(ST.INIT_FINGING_TREE)
         
     def state_init(self):
         logger.info(t2t('正在开始战斗'))
         self.upper.combat_loop.continue_threading()
-        global_itt.key_press('f')
+        itt.key_press('f')
         time.sleep(0.1)
         
         self.upper.while_sleep = 2
@@ -113,7 +104,7 @@ class Challenge(FlowTemplate):
         self._next_rfc()
     
     def state_in(self):
-        if global_itt.get_text_existence(asset.LEAVINGIN):
+        if itt.get_text_existence(asset.LEAVINGIN):
             self.rfc = FC.AFTER
         else:
             self.rfc = FC.IN
@@ -131,15 +122,12 @@ class Challenge(FlowTemplate):
 
 class FindingTree(FlowTemplate):
     def __init__(self, upper:DomainFlowConnector):
-        super().__init__(upper)
+        super().__init__(upper, flow_id=ST.INIT_FINGING_TREE, next_flow_id=ST.INIT_MOVETO_TREE)
         self.upper = upper
-        self.flow_id = ST.INIT_FINGING_TREE
-        self.key_id = FC.INIT
-        self._set_nfid(ST.INIT_MOVETO_TREE)
-        self.move_num = 1
+        self.move_num = 0
 
     def get_tree_posi(self):
-        cap =global_itt.capture(jpgmode=0)
+        cap =itt.capture(jpgmode=0)
         # cv2.imshow('123',cap)
         # cv2.waitKey(0)
         addition_info, ret2 = yolox_api.yolo_tree.predicte(cap)
@@ -154,7 +142,7 @@ class FindingTree(FlowTemplate):
         movement.view_to_angle_domain(-90, self.upper.checkup_stop_func)
         t_posi = self.get_tree_posi()
         if t_posi:
-            tx, ty = global_itt.get_mouse_point()
+            tx, ty = itt.get_mouse_point()
             dx = int(t_posi[0] - tx)
             logger.debug(dx)
 
@@ -199,76 +187,77 @@ class FindingTree(FlowTemplate):
 
 class MoveToTree(FlowTemplate):
     def __init__(self, upper:DomainFlowConnector):
-        super().__init__(upper)
+        super().__init__(upper, flow_id=ST.INIT_MOVETO_TREE, next_flow_id=ST.INIT_ATTAIN_REAWARD)
         self.upper = upper
-        self.flow_id = ST.INIT_MOVETO_TREE
-        self.key_id = FC.INIT
-        self._set_nfid(ST.INIT_ATTAIN_REAWARD)
 
     def state_before(self):
-        global_itt.key_down('w')
+        itt.key_down('w')
         self._next_rfc()
 
     def state_in(self):
         
         if self.upper.ahead_timer.get_diff_time() >= 5:
-            global_itt.key_press('spacebar')
+            itt.key_press('spacebar')
             self.upper.ahead_timer.reset()
 
         movement.view_to_angle_domain(-90, self.upper.checkup_stop_func)
-        if generic_lib.f_recognition(global_itt):
+        if generic_lib.f_recognition(itt):
             self._next_rfc()
 
     def state_after(self):
-        global_itt.key_up('w')
+        itt.key_up('w')
         self._next_rfc()
 
 class AttainReaward(FlowTemplate):
     def __init__(self, upper:DomainFlowConnector):
-        super().__init__(upper)
+        super().__init__(upper, flow_id=ST.INIT_ATTAIN_REAWARD, next_flow_id=ST.END_DOMAIN)
         self.upper = upper
-        self.flow_id = ST.INIT_ATTAIN_REAWARD
-        self.key_id = FC.INIT
-        self._set_nfid(ST.END_DOMAIN)
 
     def state_before(self):
-        global_itt.key_press('f')
+        itt.key_press('f')
         time.sleep(0.2)
         if not generic_lib.f_recognition():
             self._next_rfc()
 
     def state_in(self):
         if self.upper.resin_mode == '40':
-            global_itt.appear_then_click(asset.USE_20X2RESIN_DOBLE_CHOICES)
+            itt.appear_then_click(asset.USE_20X2RESIN_DOBLE_CHOICES)
         elif self.upper.resin_mode == '20':
-            global_itt.appear_then_click(asset.USE_20RESIN_DOBLE_CHOICES)
+            itt.appear_then_click(asset.USE_20RESIN_DOBLE_CHOICES)
 
-        if global_itt.get_text_existence(asset.domain_obtain):
+        if itt.get_text_existence(asset.domain_obtain):
             self._next_rfc()
 
-
+class DomainFlowEnd(EndFlowTenplate):
+    def __init__(self, upper: FlowConnector):
+        super().__init__(upper, flow_id = ST.END_DOMAIN, err_code_id = ERR_PASS)
 
 class DomainFlowController(FlowController):
     def __init__(self):
         super().__init__()
         self.flow_connector = DomainFlowConnector()
         self.flow_connector.checkup_stop_func = self.checkup_stop_func
+        self.current_flow_id = ST.INIT_MOVETO_CHALLENGE
         
         self.f1 = MoveToChallenge(self.flow_connector)
         self.f2 = Challenge(self.flow_connector)
         self.f3 = FindingTree(self.flow_connector)
         self.f4 = MoveToTree(self.flow_connector)
         self.f5 = AttainReaward(self.flow_connector)
+        self.fend = DomainFlowEnd(self.flow_connector)
         
         self.append_flow(self.f1)
         self.append_flow(self.f2)
         self.append_flow(self.f3)
         self.append_flow(self.f4)
         self.append_flow(self.f5)
+        self.append_flow(self.fend)
         
         self.get_while_sleep = self.flow_connector.get_while_sleep
 
-
+    def reset(self):
+        self.flow_connector.reset()
+        self.current_flow_id = ST.INIT_MOVETO_CHALLENGE
 
 
     

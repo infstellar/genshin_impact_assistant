@@ -1,21 +1,23 @@
 from source.util import *
 import source.flow.flow_code as FC
-from source.constant import flow_state as FlowState
+from common import flow_state as FlowState, flow_state as ST
 from source.common import base_threading
-from source.funclib import err_code_lib as ErrCode
-from source.constant import flow_state as ST
+from source.funclib.err_code_lib import *
 
 
 class FlowConnector():
     def __init__(self):
-        pass
+        self.while_sleep = 0.1
+
+    def get_while_sleep(self):
+        return self.while_sleep
 
 class FlowTemplate():
-    def __init__(self, upper:FlowConnector):
+    def __init__(self, upper:FlowConnector, flow_id:int, next_flow_id:int):
         self.upper = upper
-        self.flow_id = 0
+        self.flow_id = flow_id
         self.rfc = FC.INIT
-        self.next_flow_id = self.flow_id
+        self.next_flow_id = next_flow_id
         
     def enter_flow(self):
         if self.rfc == FC.INIT:
@@ -59,11 +61,35 @@ class FlowTemplate():
     def _set_nfid(self, fid):
         self.next_flow_id = fid
 
+class EndFlowTenplate(FlowTemplate):
+    def __init__(self, upper:FlowConnector, flow_id:int, err_code_id:int = ERR_PASS):
+        self.upper = upper
+        self.flow_id = flow_id # flow id <0
+        self.rfc = FC.INIT
+        self.err_code_id = err_code_id
+    
+    def enter_flow(self):
+        if self.rfc == FC.INIT:
+            self.state_init()
+        elif self.rfc == FC.BEFORE:
+            self.state_before()
+        elif self.rfc == FC.IN:
+            self.state_in()
+        elif self.rfc == FC.AFTER:
+            self.state_after()
+        elif self.rfc == FC.END:
+            self.state_end()
+            return self.err_code_id
+        return self.flow_id
+    
+    def _set_ecid(self, fid):
+        self.err_code_id = fid
+
 
 class FlowController(base_threading.BaseThreading):
     def __init__(self):
         super().__init__()
-        self.last_err_code = ErrCode.ERR_NONE
+        self.last_err_code = ERR_NONE
         self.flow_dict = {}
         self.current_flow_id = None
         self.end_flow_id = None
@@ -114,6 +140,11 @@ class FlowController(base_threading.BaseThreading):
                     rcode = self.flow_dict[i].enter_flow()
                     self.current_flow_id = rcode
             
-            if rcode == self.end_flow_id:
-                logger.info("Flow END")
+            if int(self.current_flow_id) < 0:
+                logger.debug("Flow Ready To END")
+                for i in self.flow_dict:
+                    if i == str(self.current_flow_id):
+                        rcode = self.flow_dict[i].enter_flow()
+                        self.last_err_code = rcode
+                logger.debug(f"Flow END, code:{self.last_err_code}")
                 self.pause_threading()

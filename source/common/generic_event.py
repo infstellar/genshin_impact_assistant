@@ -1,9 +1,9 @@
 from source.util import *
-from source.interaction.interaction_core import global_itt
-itt = global_itt
+from source.interaction.interaction_core import itt
+itt = itt
 from source.common.base_threading import BaseThreading
 from source.funclib import static_lib
-from source.base.timer_module import Timer
+from common.timer_module import Timer
 from source.path_lib import CONFIGPATH_SETTING
 if load_json("config.json", CONFIGPATH_SETTING)["interaction_mode"] == 'Dm':
     from source.interaction.interaction_dm import unbind, bind

@@ -1,11 +1,10 @@
 from source.manager import img_manager, posi_manager, asset
-from source.interaction.interaction_core import global_itt
 from source.util import *
 from source.common.base_threading import BaseThreading
 import numpy as np
-from source.base import timer_module
+from common import timer_module
 from source.common import character
-from source.interaction.interaction_core import global_itt
+from source.interaction.interaction_core import itt
 from source.interaction import interaction_core
 
 """
@@ -132,11 +131,12 @@ def get_character_busy(itt: interaction_core.InteractionBGD, stop_func, print_lo
     # elif t == 4:
     #     logger.debug("function: get_character_busy: t=4： 测试中功能，如果导致换人失败，反复输出 waiting 请上报。")
     #     return True
-    if print_log:
-        logger.debug(f"character busy: t1{t1} t2{t2}")
+    
     if t1 >= 3 and t2 == 3:
         return False
     else:
+        if print_log:
+            logger.debug(f"character busy: t1{t1} t2{t2}")
         return True
 
 def chara_waiting(itt:interaction_core.InteractionBGD, stop_func, mode=0):
@@ -253,7 +253,7 @@ class CombatStatementDetectionLoop(BaseThreading):
     def __init__(self):
         super().__init__()
         self.setName("CombatStatementDetectionLoop")
-        self.itt = global_itt
+        self.itt = itt
         self.current_state = False
         self.state_counter = 0
         self.while_sleep = 0.1
@@ -313,7 +313,7 @@ CSDL = CombatStatementDetectionLoop()
 CSDL.start()
 
 if __name__ == '__main__':
-    itt = global_itt
+    itt = itt
     while 1:
         time.sleep(0.5)
         print(CSDL.get_combat_state())

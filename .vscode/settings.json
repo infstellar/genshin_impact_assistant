@@ -1,0 +1,70 @@
+{
+    "python.testing.pytestArgs": [
+        "source"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true,
+    "terminal.integrated.cwd": "${workspaceFolder}",
+    "python.analysis.exclude": [
+        "assets\\**",
+        "test_py\\**",
+        "translation\\**",
+        "tests\\**",
+        "yolox\\**",
+        "out\\**",
+        "yoloxtools\\**",
+        "exps\\**"
+    ],
+    "python.analysis.diagnosticSeverityOverrides": {
+        "reportImportCycles": "error",
+        "reportCallInDefaultInitializer": "warning",
+        "reportConstantRedefinition": "information",
+        "reportDeprecated": "warning",
+        "reportAssertAlwaysTrue": "warning",
+        "reportDuplicateImport": "warning",
+        "reportFunctionMemberAccess": "warning",
+        "reportGeneralTypeIssues": "information",
+        // 隐式字符串连接
+        "reportImplicitStringConcatenation": "warning",
+        "reportIncompatibleMethodOverride": "information",
+        "reportIncompatibleVariableOverride": "warning",
+        "reportIncompleteStub": "warning",
+        "reportInconsistentConstructor": "warning",
+        // 无效的字符串转义序列
+        "reportInvalidStringEscapeSequence": "warning",
+        // 无效的存根声明
+        "reportInvalidStubStatement": "warning",
+        "reportMissingImports": "warning",
+        "reportUnusedImport": "information"
+    },
+    "cSpell.words": [
+        "adbutils",
+        "bigmap",
+        "chara",
+        "CSMD",
+        "CVAUTOTRACK",
+        "cview",
+        "DLLAPI",
+        "funclib",
+        "imread",
+        "imshow",
+        "imsrc",
+        "istimeout",
+        "jpgmode",
+        "KEYDOWN",
+        "lxml",
+        "posi",
+        "pywebio",
+        "qshow",
+        "QTSX",
+        "spacebar",
+        "succ",
+        "TEYVAT",
+        "TOZERO",
+        "Uiautomator",
+        "uninit",
+        "webio",
+        "withalpha",
+        "YOLOX"
+    ]
+}

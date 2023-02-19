@@ -5,7 +5,11 @@ class TextTemplate():
         if cap_area == None:
             cap_area = [0,0,1920,1080]
         elif isinstance(cap_area, str):
-            cap_area = get_bbox(cv2.imread(os.path.join(root_path, cap_area)))
+            if IS_DEVICE_PC:
+                path = os.path.join(root_path, cap_area).replace("$device$", "Windows")
+            else:
+                path = os.path.join(root_path, cap_area).replace("$device$", "Windows")
+            cap_area = get_bbox(cv2.imread(os.path.join(root_path, path)))
         self.origin_text = text
         self.cap_area = cap_area
         self.text = self.origin_text[GLOBAL_LANG]
