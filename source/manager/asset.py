@@ -1,60 +1,66 @@
-from source.manager import img_manager, text_manager, posi_manager
+from source.manager import img_manager, posi_manager
 from source.util import *
 from source.manager.img_manager import LOG_WHEN_TRUE, LOG_ALL, LOG_NONE, LOG_WHEN_FALSE, ImgIcon
 from path_lib import ASSETS_IMG, ASSETS_COMMON_IMG
 from source.manager.button_manager import Button
+from source.manager.text_manager import TextTemplate
 
 # import scene_manager
 
-LEAVINGIN = text_manager.TextTemplate(text=
+LEAVINGIN = TextTemplate(text=
 {
     'zh_CN': '自动退出',
     "en_US": 'Leaving in'
 }, cap_area = f"{ASSETS_IMG}\\common\\area\\LEAVINGIN.jpg")
-claim_rewards = text_manager.TextTemplate(text=
+claim_rewards = TextTemplate(text=
 {
     'zh_CN': '领取奖励',
     "en_US": "Claim Rewards"
 })
-use_20x2resin = text_manager.TextTemplate(text=
+use_20x2resin = TextTemplate(text=
 {
     'zh_CN': '使用浓缩树脂',
     "en_US": "Use Condensed Resin"
 })
-use_20resin = text_manager.TextTemplate(text=
+use_20resin = TextTemplate(text=
 {
     'zh_CN': '使用原粹树脂',
     "en_US": "Use Original Resin"
 })
-LEYLINEDISORDER = text_manager.TextTemplate(text=
+LEYLINEDISORDER = TextTemplate(text=
 {
     'zh_CN': '地脉异常',
     "en_US": "Ley Line Disorder"
 }, cap_area = f"{ASSETS_IMG}\\common\\area\\LEYLINEDISORDER.jpg")
-conti_challenge = text_manager.TextTemplate(text=
+conti_challenge = TextTemplate(text=
 {
     'zh_CN': '继续挑战',
     "en_US": "Continue Challenge"
 })
-exit_challenge = text_manager.TextTemplate(text=
+exit_challenge = TextTemplate(text=
 {
     'zh_CN': '退出秘境',
     "en_US": "Leave Domain"
 })
-domain_obtain = text_manager.TextTemplate(text=
+domain_obtain = TextTemplate(text=
 {
     'zh_CN': '获得',
     "en_US": "Obtained"
 })
-use_revival_item = text_manager.TextTemplate(text=
+use_revival_item = TextTemplate(text=
 {
     'zh_CN': '使用道具',
     "en_US": "Use revival item"
 })
-revival = text_manager.TextTemplate(text=
+revival = TextTemplate(text=
 {
     'zh_CN': '复苏',
     "en_US": "Revive"
+})
+confirm = TextTemplate(text=
+{
+    'zh_CN': '确认',
+    "en_US": "Confirm"
 })
 character_died = img_manager.ImgIcon(name="character_died", path=f"{ASSETS_IMG}\\{GLOBAL_LANG}\\character_died.jpg",
                                      is_bbg=True, cap_posi='bbg', win_text=use_revival_item.text, threshold=0.98, print_log=LOG_WHEN_TRUE)
@@ -117,12 +123,12 @@ character_q_skills.add_posi(img_path=f"{ASSETS_COMMON_IMG}\\area\\QSkill\\c3.jpg
 character_q_skills.add_posi(img_path=f"{ASSETS_COMMON_IMG}\\area\\QSkill\\c4.jpg")
 
 
-QTSX = text_manager.TextTemplate(text=
+QTSX = TextTemplate(text=
 {
     "zh_CN":"七天神像",
     "en_US":"Statues of The Seven"
 }, cap_area = bigmap_choose_area.cap_posi)
-CSMD = text_manager.TextTemplate(text=
+CSMD = TextTemplate(text=
 {
     "zh_CN":"传送锚点",
     "en_US": "Teleport Waypoint"
