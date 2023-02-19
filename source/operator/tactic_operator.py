@@ -1,4 +1,4 @@
-from source.api.pdocr_complete import ocr
+from source.api.pdocr_light import ocr_light
 from source.common.base_threading import BaseThreading
 from source.common.character import Character
 from source.interaction.interaction_core import itt
@@ -117,19 +117,38 @@ class TacticOperator(BaseThreading):
         if show_res:
             cv2.imshow("_is_e_release", cap)
             cv2.waitKey(10)
-        ret = ocr.is_img_num_plus(cap)
+        ret, t = ocr_light.is_img_num_plus(cap)
 
-        if ret[0]:
+        if ret:
             return True
         else:
             cap = self.itt.capture(posi=posi_manager.posi_chara_e)
             cap = self.itt.png2jpg(cap, channel='ui', alpha_num=100)
-            ret = ocr.is_img_num_plus(cap)
+            ret, t = ocr_light.is_img_num_plus(cap)
 
-            if ret[0]:
+            if ret:
                 return True
             else:
                 return False
+            
+    def _is_longE_release(self, show_res = False):
+        cap = self.itt.capture(posi=posi_manager.posi_chara_e)
+        cap = self.itt.png2jpg(cap, channel='ui', alpha_num=100)
+        if show_res:
+            cv2.imshow("_is_e_release", cap)
+            cv2.waitKey(10)
+        ret, t = ocr_light.is_img_num_plus(cap)
+
+        if ret:
+            if float(t) <= self.character.E_short_cd_time:
+                logger.debug(f"longE failed. Ecd time: {t}; short Ecd time: {self.character.E_long_cd_time}; long Ecd time:{self.character.E_short_cd_time}")
+                time.sleep(float(t))
+                return False
+            else:
+                return True
+        else:
+            return False
+        
 
     def unconventionality_situation_detection(self, autoDispose=True):  # unconventionality situation detection
         # situation 1: coming_out_by_space
@@ -245,7 +264,7 @@ class TacticOperator(BaseThreading):
             return 0
         # self.itt.key_press('w')
         self.itt.delay(0.2)
-        if (not self._is_e_release()) and E_STRICT_MODE:
+        if (not self._is_longE_release()) and E_STRICT_MODE:
             self.do_use_longe(times=times + 1)
         self.character.used_longE()
 

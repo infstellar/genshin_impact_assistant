@@ -20,8 +20,8 @@ def log_format(x, name):
 class Character:
     @logger.catch
     def __init__(self, name=None, position=None, n=None, priority=None,
-                 E_short_cd_time=None, E_long_cd_time=None,
-                 Elast_time=None, Ecd_float_time=None,
+                 E_short_cd_time:float=None, E_long_cd_time:float=None,
+                 Elast_time:float=None, Ecd_float_time:float=None,
                  tactic_group=None, trigger: str = None,
                  Epress_time=None, Qlast_time = 0, Qcd_time = 12):
 
