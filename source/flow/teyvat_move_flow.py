@@ -14,7 +14,6 @@ IN_MOVE = 0
 IN_FLY = 1
 IN_WATER = 2
 IN_CLIMB = 3
-# from source.pdocr_api import ocr
 
 def get_target_relative_angle(x, y, tx, ty):
     x = -x
@@ -178,13 +177,6 @@ class TeyvatMoveFlow(BaseThreading):
                         self.itt.move_and_click([tw_posi[0], tw_posi[1]])
                         temporary_timeout_1.reset()
                     time.sleep(1)
-                    # p1 = pdocr_api.ocr.get_text_position(self.itt.capture(jpgmode=0, posi=img_manager.bigmap_choose_area.cap_posi), "七天神像", cap_posi_leftup=img_manager.bigmap_choose_area.cap_posi[:2])
-                    # if p1 != -1:
-                    #     self.itt.move_and_click([p1[0] + 30, p1[1] + 30], delay=1)
-                    
-                    # p1 = pdocr_api.ocr.get_text_position(self.itt.capture(jpgmode=0, posi=img_manager.bigmap_choose_area.cap_posi), "传送锚点", cap_posi_leftup=img_manager.bigmap_choose_area.cap_posi[:2])
-                    # if p1 != -1:
-                    #     self.itt.move_and_click([p1[0] + 30, p1[1] + 30], delay=1)
 
                 self.itt.move_and_click([posi_manager.tp_button[0], posi_manager.tp_button[1]], delay=1)
                 

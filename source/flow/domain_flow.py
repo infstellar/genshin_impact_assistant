@@ -90,8 +90,6 @@ class DomainFlow(BaseThreading):
             cap = self.itt.png2jpg(cap, channel='ui')
 
         if generic_lib.f_recognition(self.itt):
-            # if pdocr_api.ocr.get_text_position(self.itt.crop_image(cap, PosiM.posi_domain['Start']),
-            #                                    textM.text(textM.start_challenge)) != -1:
             return True
         else:
             return False
@@ -104,8 +102,6 @@ class DomainFlow(BaseThreading):
 
     def _Trigger_GETTING_REAWARD(self, cap):  # Not in using
         if generic_lib.f_recognition(self.itt):
-            # if pdocr_api.ocr.get_text_position(self.itt.crop_image(cap, PosiM.posi_domain['ClaimRewards']),
-            #                                    textM.text(textM.claim_rewards)) != -1:
             return True
         else:
             return False
@@ -185,10 +181,6 @@ class DomainFlow(BaseThreading):
             t = self.fast_move_timer.loop_time()  # max check up speed: 1/10 second
             if t <= 1 / 10:
                 time.sleep(1 / 10 - t)
-
-            # if pdocr_api.ocr.get_text_position(cap, textM.text(textM.claim_rewards)) != -1:
-            #     self.current_state = ST.END_MOVETO_TREE
-            #     return 0
 
         self.current_state = ST.AFTER_MOVETO_TREE
 

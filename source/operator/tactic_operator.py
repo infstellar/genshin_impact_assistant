@@ -1,4 +1,4 @@
-import source.api.pdocr_api as pdocr_api
+from source.api.pdocr_complete import ocr
 from source.common.base_threading import BaseThreading
 from source.common.character import Character
 from source.interaction.interaction_core import itt
@@ -117,14 +117,14 @@ class TacticOperator(BaseThreading):
         if show_res:
             cv2.imshow("_is_e_release", cap)
             cv2.waitKey(10)
-        ret = pdocr_api.ocr.is_img_num_plus(cap)
+        ret = ocr.is_img_num_plus(cap)
 
         if ret[0]:
             return True
         else:
             cap = self.itt.capture(posi=posi_manager.posi_chara_e)
             cap = self.itt.png2jpg(cap, channel='ui', alpha_num=100)
-            ret = pdocr_api.ocr.is_img_num_plus(cap)
+            ret = ocr.is_img_num_plus(cap)
 
             if ret[0]:
                 return True

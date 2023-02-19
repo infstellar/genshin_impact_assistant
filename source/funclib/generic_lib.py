@@ -60,7 +60,7 @@ def points_angle(p1, p2, coordinate=NORMAL):
     return degree
 
 def recover_all(stop_func):
-    from source.api import pdocr_api
+    from source.api.pdocr_complete import ocr
     scene_lib.switch_to_page(scene_manager.page_bigmap, stop_func)
     gsp = big_map.get_middle_gs_point(stop_func)
     if len(gsp)==0:
@@ -69,7 +69,7 @@ def recover_all(stop_func):
         gsp = big_map.get_middle_gs_point(stop_func)
     itt.move_and_click(gsp)
     time.sleep(0.5)
-    p1 = pdocr_api.ocr.get_text_position(itt.capture(jpgmode=0), "七天神像")
+    p1 = ocr.get_text_position(itt.capture(jpgmode=0), "七天神像")
     if p1 != -1:
         itt.move_and_click([p1[0] + 30, p1[1] + 30], delay=1)
 

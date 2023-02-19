@@ -194,8 +194,7 @@ translation/locale/zh_CN/LC_MESSAGES/zh_CN.pot
 changelog_option.js
 CHANGELOG.md
 node_modules/*
-assets/inference/zh_CN/*
-assets/inference/en_US/*
+assets/inference/*
 .vscode/*.sql
 source/git_downloader.py
 cvAutoTrack_Cache.xml
