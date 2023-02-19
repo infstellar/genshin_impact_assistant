@@ -11,25 +11,32 @@ from source.interaction import interaction_core
 战斗相关常用函数库。
 """
 
-global only_arrow_timer, characters
+global only_arrow_timer, characters, load_err_times
 only_arrow_timer = timer_module.Timer()
 characters = load_json("character.json", default_path="config\\tactic")
+load_err_times = 0
 
 def default_stop_func():
     return False
 
 class TacticKeyNotFoundError(RuntimeError):
     def __init__(self, arg):
-        self.args = arg
+        self.args = [arg]
+
+class TacticKeyEmptyError(RuntimeError):
+    def __init__(self, arg):
+        self.args = [arg]
 
 CREATE_WHEN_NOTFOUND = 0
 RAISE_WHEN_NOTFOUND = 1
 
 
 def get_param(team_item, para_name, auto_fill_flag, chara_name="", exception_mode = RAISE_WHEN_NOTFOUND, value_when_empty = None):
+    global load_err_times
     if para_name not in team_item:
         if exception_mode == RAISE_WHEN_NOTFOUND:
             logger.error(f"{t2t('Tactic ERROR: INDEX NOT FOUND')}")
+            logger.error(f"{t2t('parameter name')}: {para_name}; {t2t('character name')}: {chara_name}")
             raise TacticKeyNotFoundError(f"Key: {para_name}")
         elif exception_mode == CREATE_WHEN_NOTFOUND:
             pass
@@ -38,25 +45,51 @@ def get_param(team_item, para_name, auto_fill_flag, chara_name="", exception_mod
             r = team_item[para_name]
         else:
             r = characters[chara_name]
-    if value_when_empty != None:
-        if r == '' or r == None:
+    
+    if r == '' or r == None:
+        if value_when_empty != None:
             r = value_when_empty
+        else:
+            logger.error(f"{t2t('Tactic ERROR: Key Empty')}")
+            logger.error(f"{t2t('parameter name')}: {para_name}; {t2t('character name')}: {chara_name}")
+            load_err_times+=1
+            # raise TacticKeyEmptyError(f"Key: {para_name}")
     logger.debug(f"character: {chara_name} para_name: {para_name} value: {r}")
     return r
 
 def get_chara_list(team_name='team.json'):
+    global load_err_times
+    load_err_times = 0
     team_name = load_json("auto_combat.json",CONFIG_PATH_SETTING)["teamfile"]
     dpath = "config\\tactic"
     
     team = load_json(team_name, default_path=dpath)
+    
+    for team_n in team:
+        team_item = team[team_n]
+        team_item.setdefault("name", None)
+        team_item.setdefault("position", None)
+        team_item.setdefault("priority", None)
+        team_item.setdefault("E_short_cd_time", None)
+        team_item.setdefault("E_long_cd_time", None)
+        team_item.setdefault("Elast_time", None)
+        team_item.setdefault("Ecd_float_time", None)
+        team_item.setdefault("n", None)
+        team_item.setdefault("trigger", None)
+        team_item.setdefault("Epress_time", None)
+        team_item.setdefault("Qlast_time", None)
+        team_item.setdefault("Qcd_time", None)
+        team_item.setdefault("vision", None)
+    save_json(team, team_name, default_path=dpath)
+    
     # characters = load_json("character.json", default_path=dpath)
     chara_list = []
     for team_name in team:
         team_item = team[team_name]
         autofill_flag = False
         # autofill_flag = team_item["autofill"]
-        cname = get_param(team_item, "cname", autofill_flag, chara_name="")
-        c_position = get_param(team_item, "position", autofill_flag, chara_name=cname)
+        cname = get_param(team_item, "name", autofill_flag, chara_name="", )
+        c_position = get_param(team_item, "position", autofill_flag, chara_name=cname, value_when_empty='')
         c_priority = get_param(team_item, "priority", autofill_flag, chara_name=cname)
         cE_short_cd_time = get_param(team_item, "E_short_cd_time", autofill_flag, chara_name=cname)
         cE_long_cd_time = get_param(team_item, "E_long_cd_time", autofill_flag, chara_name=cname)
@@ -70,22 +103,26 @@ def get_chara_list(team_name='team.json'):
             logger.warning(t2t("请将配对文件中的tastic_group更名为tactic_group. 已自动识别。"))
             
         c_trigger = get_param(team_item, "trigger", autofill_flag, chara_name=cname, value_when_empty="e_ready")
-        cEpress_time = get_param(team_item, "Epress_time", autofill_flag, chara_name=cname, value_when_empty=2)
-        cQlast_time = get_param(team_item, "Qlast_time", autofill_flag, chara_name=cname, value_when_empty=5)
-        cQcd_time = get_param(team_item, "Qcd_time", autofill_flag, chara_name=cname, value_when_empty=12)
+        cEpress_time = get_param(team_item, "Epress_time", autofill_flag, chara_name=cname)
+        cQlast_time = get_param(team_item, "Qlast_time", autofill_flag, chara_name=cname)
+        cQcd_time = get_param(team_item, "Qcd_time", autofill_flag, chara_name=cname)
+        c_vision = get_param(team_item, "vision", autofill_flag, chara_name=cname)
         
         
         if cEcd_float_time > 0:
             logger.info(t2t("角色 ") + cname + t2t(" 的Ecd_float_time大于0，请确定该角色不是多段e技能角色。"))
-
+    
         chara_list.append(
             character.Character(
                 name=cname, position=c_position, n=cn, priority=c_priority,
                 E_short_cd_time=cE_short_cd_time, E_long_cd_time=cE_long_cd_time, Elast_time=cElast_time,
                 Ecd_float_time=cEcd_float_time, tactic_group=c_tactic_group, trigger=c_trigger,
-                Epress_time=cEpress_time, Qlast_time=cQlast_time, Qcd_time=cQcd_time
+                Epress_time=cEpress_time, Qlast_time=cQlast_time, Qcd_time=cQcd_time, vision = c_vision
             )
         )
+    if load_err_times>0:
+        raise TacticKeyEmptyError(t2t("Character Key Empty Error"))
+        
     return chara_list
 
 def unconventionality_situation_detection(itt: interaction_core.InteractionBGD,
@@ -314,6 +351,10 @@ CSDL.start()
 
 if __name__ == '__main__':
     itt = itt
+    
+    get_chara_list()
+    print()
+    
     while 1:
         time.sleep(0.5)
         print(CSDL.get_combat_state())

@@ -7,9 +7,19 @@ from source.util import *
 def default_trigger_func():
     return True
 
+Q_SKILL_COLOR={
+    "Geo":[0.1277,0.8392,1], # 岩
+    "Electro":[0.75,0.4549,1], # 雷
+    "Hydro":[0.5467,0.8824,1], # 水
+    "Pyro":[0.0375,0.6275,1], # 火
+    "Cryo":[0.5,0.4549,1], # 冰
+    "Dendro":[0.2341,0.7757,1], # 草
+    "Anemo":[0.447,0.7426,1] # 风
+    
+}
 
 def log_format(x, name):
-    # 格式化输出日志。
+    # 格式化输出日志。#
     variable_name_len = 15
     variable_name = name
     variable_content = str(x)
@@ -23,7 +33,8 @@ class Character:
                  E_short_cd_time:float=0, E_long_cd_time:float=0,
                  Elast_time:float=0, Ecd_float_time:float=0,
                  tactic_group='', trigger: str = '=',
-                 Epress_time:float=0, Qlast_time = 0, Qcd_time = 12):
+                 Epress_time:float=0, Qlast_time = 0, Qcd_time = 12,
+                 vision:str = ''):
 
         self.name = name
         self.position = position
@@ -37,6 +48,7 @@ class Character:
         self.priority = priority
         self.n = n
         self.Epress_time = Epress_time
+        self.vision = vision
 
         self.itt = itt
 

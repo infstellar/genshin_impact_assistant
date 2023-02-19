@@ -71,10 +71,10 @@ COMING_OUT_BY_SPACE = ImgIcon(name="coming_out_by_space", path=f"{ASSETS_COMMON_
                               is_bbg=True, bbg_posi=[1379,505,  1447,568, ], cap_posi='bbg', threshold=0.8, print_log=LOG_WHEN_TRUE)
 IN_DOMAIN = ImgIcon(name="IN_DOMAIN", path=f"{ASSETS_COMMON_IMG}\\IN_DOMAIN.jpg",
                     is_bbg=True, cap_posi='bbg', print_log=LOG_WHEN_TRUE)
-USE_20RESIN_DOBLE_CHOICES = ImgIcon(name="USE_20RESIN_DOBLE_CHOICES",
+USE_20RESIN_DOUBLE_CHOICES = ImgIcon(name="USE_20RESIN_DOBLE_CHOICES",
                                     path=f"{ASSETS_IMG}\\{GLOBAL_LANG}\\USE_20RESIN_DOBLE_CHOICES.jpg",
                                     is_bbg=True, cap_posi='bbg', print_log=LOG_WHEN_TRUE)
-USE_20X2RESIN_DOBLE_CHOICES = ImgIcon(name="USE_20X2RESIN_DOBLE_CHOICES",
+USE_20X2RESIN_DOUBLE_CHOICES = ImgIcon(name="USE_20X2RESIN_DOBLE_CHOICES",
                                       path=f"{ASSETS_IMG}\\{GLOBAL_LANG}\\USE_20X2RESIN_DOBLE_CHOICES.jpg",
                                       is_bbg=True, cap_posi='bbg', print_log=LOG_WHEN_TRUE)
 F_BUTTON = ImgIcon(name="F_BUTTON", path=f"{ASSETS_COMMON_IMG}\\F_BUTTON.jpg",
@@ -110,6 +110,12 @@ bigmap_tp = ImgIcon(name="bigmap_tp", path=f"{ASSETS_IMG}\\{GLOBAL_LANG}\\bigmap
 start_challenge = Button(name="start_challenge", path=f"{ASSETS_IMG}\\{GLOBAL_LANG}\\start_challenge.jpg", print_log=LOG_WHEN_TRUE, threshold=0.98)
 switch_domain_area = posi_manager.PosiTemplate(img_path=f"{ASSETS_COMMON_IMG}\\area\\switch_challenge_area.jpg")
 solo_challenge = Button(name = "solo_challenge", path=f"{ASSETS_IMG}\\{GLOBAL_LANG}\\solo_challenge.jpg", print_log=LOG_WHEN_TRUE, threshold=0.98)
+character_q_skills = posi_manager.PosiTemplate()
+character_q_skills.add_posi(img_path=f"{ASSETS_COMMON_IMG}\\area\\QSkill\\c1.jpg")
+character_q_skills.add_posi(img_path=f"{ASSETS_COMMON_IMG}\\area\\QSkill\\c2.jpg")
+character_q_skills.add_posi(img_path=f"{ASSETS_COMMON_IMG}\\area\\QSkill\\c3.jpg")
+character_q_skills.add_posi(img_path=f"{ASSETS_COMMON_IMG}\\area\\QSkill\\c4.jpg")
+
 
 QTSX = text_manager.TextTemplate(text=
 {

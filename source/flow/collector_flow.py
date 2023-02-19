@@ -75,7 +75,7 @@ class CollectorFlow(BaseThreading):
         self.puo.set_search_mode(1)
         
         
-        chara_list = combat_loop.get_chara_list()
+        chara_list = combat_lib.get_chara_list()
         self.cct = combat_loop.Combat_Controller(chara_list)
         self.cct.is_check_died = True
         self.cct.setDaemon(True)

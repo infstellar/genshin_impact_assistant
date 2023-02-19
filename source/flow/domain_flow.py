@@ -1,6 +1,6 @@
 from source.controller import combat_loop
 from common import flow_state as ST, timer_module
-from source.funclib import generic_lib, movement
+from source.funclib import generic_lib, movement, combat_lib
 from source.manager import posi_manager as PosiM, asset
 from source.interaction.interaction_core import itt
 from source.api import yolox_api
@@ -18,7 +18,7 @@ class DomainFlow(BaseThreading):
         # self.current_state = ST.IN_MOVETO_TREE
 
         self.itt = itt
-        chara_list = combat_loop.get_chara_list()
+        chara_list = combat_lib.get_chara_list()
         self.combat_loop = combat_loop.Combat_Controller(chara_list)
         self.combat_loop.setDaemon(True)
 
@@ -188,9 +188,9 @@ class DomainFlow(BaseThreading):
 
         while 1:
             if self.resin_mode == '40':
-                self.itt.appear_then_click(asset.USE_20X2RESIN_DOBLE_CHOICES)
+                self.itt.appear_then_click(asset.USE_20X2RESIN_DOUBLE_CHOICES)
             elif self.resin_mode == '20':
-                self.itt.appear_then_click(asset.USE_20RESIN_DOBLE_CHOICES)
+                self.itt.appear_then_click(asset.USE_20RESIN_DOUBLE_CHOICES)
 
             if self.itt.get_text_existence(asset.domain_obtain):
                 break

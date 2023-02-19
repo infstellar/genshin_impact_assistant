@@ -1,6 +1,6 @@
 from source.api.pdocr_light import ocr_light
 from source.common.base_threading import BaseThreading
-from source.common.character import Character
+from source.common.character import Character, Q_SKILL_COLOR
 from source.interaction.interaction_core import itt
 from common.timer_module import Timer
 from source.util import *
@@ -332,11 +332,8 @@ class TacticOperator(BaseThreading):
         Returns:
             bool: Whether Q-Skill can be triggered
         """
-        if USING_ALPHA_CHANNEL:
-            cap = self.itt.capture()
-            cap = self.itt.png2jpg(cap, channel='ui', alpha_num=200)  # BEFOREV3D1
-        else:
-            cap = self.itt.capture(jpgmode=0)
+
+        cap = self.itt.capture(jpgmode=0)
         
         imsrc = cap
         imsrc_q_skill = crop(imsrc, posi_manager.posi_complete_chara_q)
@@ -344,7 +341,7 @@ class TacticOperator(BaseThreading):
         hh, ww = imsrc_q_skill.shape[:2]
         xc = hh // 2
         yc = ww // 2
-        radius1 = 55
+        radius1 = 53
         radius2 = 47
         cv2.circle(mask, (xc,yc), radius1, (255,255,255), -1)
         cv2.circle(mask, (xc,yc), radius2, (0,0,0), -1)
@@ -356,28 +353,19 @@ class TacticOperator(BaseThreading):
         # stone HSV=0.12538226299694,0.85490196078431,1
         # fire 
         
-        fire_lower = np.array([9-HUE_DELTA,100,100])
-        fire_upper = np.array([9+HUE_DELTA,255,255])
-
-        rock_lower = np.array([21-HUE_DELTA,100,100])
-        rock_upper = np.array([21+HUE_DELTA,255,255])
-
-        water_lower = np.array([17-HUE_DELTA,100,100])
-        water_upper = np.array([17+HUE_DELTA,255,255])
-
-        wind_lower = np.array([17-HUE_DELTA,100,100])
-        wind_upper = np.array([17+HUE_DELTA,255,255])
-
+        orhsv = Q_SKILL_COLOR[self.character.vision]
+        orhsv = Q_SKILL_COLOR['Hydro']
+        hsv_lower = np.array([int(max(0,orhsv[0]*180-HUE_DELTA)), int(max(orhsv[1]*255-60, 50)), 200])
+        hsv_upper = np.array([int(min(179,orhsv[0]*180+HUE_DELTA)), int(min(orhsv[1]*255+60, 255)), 255])
         hsv = cv2.cvtColor(res1.copy(), cv2.COLOR_BGR2HSV)
-
-        mask2 = cv2.inRange(hsv, fire_lower, fire_upper)
+        mask2 = cv2.inRange(hsv, hsv_lower, hsv_upper)
         res = len(np.where(mask2==255)[0])
         if show_res:
             print(f"num: {res}")
             # res2 = cv2.bitwise_and(hsv,hsv, mask=mask2)
             cv2.imshow("res", mask2)
             cv2.waitKey(100)
-        r = res>=(2520*DETERMINING_WEIGHT)
+        r = res>=(650*DETERMINING_WEIGHT)
         return r
             
         # if is_show:
@@ -509,12 +497,12 @@ class TacticOperator(BaseThreading):
 if __name__ == '__main__':
     # from source.controller import combat_loop
 
-    # to = TacticOperator()
+    to = TacticOperator()
     # itt = global_itt
-    # chara = combat_loop.get_chara_list()[1]
-    # to.set_parameter(chara.tactic_group, chara)
+    chara = combat_lib.get_chara_list()[1]
+    to.set_parameter(chara.tactic_group, chara)
     # # to.setDaemon(True)
-    # while 1:
-    #     print(to._is_e_release(show_res=True))
-    #     time.sleep(0.1)
+    while 1:
+        print(to.is_q_ready(show_res=True))
+        time.sleep(0.1)
     pass

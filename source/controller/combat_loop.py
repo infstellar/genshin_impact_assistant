@@ -21,71 +21,11 @@ def stop_func_example():  # True:stop;False:continue
     return False
 
 
-def get_chara_list(team_name='team.json'):
-    team_name = load_json("auto_combat.json",CONFIG_PATH_SETTING)["teamfile"]
-    d_path = "config\\tactic"
-    
-    team = load_json(team_name, default_path=d_path)
-    characters = load_json("character.json", default_path=d_path)
-    chara_list = []
-    for team_name in team:
-        team_item = team[team_name]
-        if team_item["autofill"]:
-            c_character = characters[team_item["name"]]
-            c_position = c_character["position"]
-            cE_short_cd_time = c_character["E_short_cd_time"]
-            cE_long_cd_time = c_character["E_long_cd_time"]
-            cElast_time = c_character["Elast_time"]
-            cEcd_float_time = c_character["Ecd_float_time"]
-            try:
-                c_tactic_group = c_character["tactic_group"]
-            except:
-                c_tactic_group = c_character["tastic_group"]
-                logger.warning(t2t("请将配对文件中的tastic_group更名为tactic_group. 已自动识别。"))
-            cEpress_time = c_character["Epress_time"]
-            cQlast_time = c_character["Qlast_time"]
-            cQcd_time = c_character["Qcd_time"]
-        else:
-            c_position = team_item["position"]
-            c_priority = team_item["priority"]
-            cE_short_cd_time = team_item["E_short_cd_time"]
-            cE_long_cd_time = team_item["E_long_cd_time"]
-            cElast_time = team_item["Elast_time"]
-            cEcd_float_time = team_item["Ecd_float_time"]
-            try:
-                c_tactic_group = team_item["tactic_group"]
-            except:
-                c_tactic_group = team_item["tastic_group"]
-                logger.warning(t2t("请将配对文件中的tastic_group更名为tactic_group. 已自动识别。"))
-            c_trigger = team_item["trigger"]
-            cEpress_time = team_item["Epress_time"]
-            cQlast_time = team_item["Qlast_time"]
-            cQcd_time = team_item["Qcd_time"]
-
-        cn = team_item["n"]
-        cname = team_item['name']
-        c_priority = team_item["priority"]
-        c_trigger = team_item["trigger"]
-
-        if cEcd_float_time > 0:
-            logger.info(t2t("角色 ") + cname + t2t(" 的Ecd_float_time大于0，请确定该角色不是多段e技能角色。"))
-
-        chara_list.append(
-            character.Character(
-                name=cname, position=c_position, n=cn, priority=c_priority,
-                E_short_cd_time=cE_short_cd_time, E_long_cd_time=cE_long_cd_time, Elast_time=cElast_time,
-                Ecd_float_time=cEcd_float_time, tactic_group=c_tactic_group, trigger=c_trigger,
-                Epress_time=cEpress_time, Qlast_time=cQlast_time, Qcd_time=cQcd_time
-            )
-        )
-    return chara_list
-
-
 class Combat_Controller(BaseThreading):
     def __init__(self, chara_list=None):
         super().__init__()
         if chara_list is None:
-            chara_list = get_chara_list()
+            chara_list = combat_lib.get_chara_list()
         self.setName('Combat_Controller')
 
         self.chara_list = chara_list
