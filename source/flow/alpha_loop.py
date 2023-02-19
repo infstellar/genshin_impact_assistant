@@ -1,5 +1,6 @@
 from source.controller import combat_loop
 from source.common.base_threading import BaseThreading
+from source.funclib import combat_lib
 from source.util import *
 
 

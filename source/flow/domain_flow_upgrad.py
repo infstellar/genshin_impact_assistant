@@ -3,7 +3,7 @@ from source.flow.flow_template import FlowController, FlowTemplate, FlowConnecto
 import source.flow.flow_code as FC
 from source.controller import combat_loop
 from common import flow_state as ST, timer_module
-from source.funclib import generic_lib, movement
+from source.funclib import generic_lib, movement, combat_lib
 from source.funclib.err_code_lib import *
 from source.manager import posi_manager as PosiM, asset
 from source.interaction.interaction_core import itt
