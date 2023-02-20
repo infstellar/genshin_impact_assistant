@@ -121,7 +121,7 @@ character_q_skills.add_posi(img_path=f"{ASSETS_COMMON_IMG}\\area\\QSkill\\c1.jpg
 character_q_skills.add_posi(img_path=f"{ASSETS_COMMON_IMG}\\area\\QSkill\\c2.jpg")
 character_q_skills.add_posi(img_path=f"{ASSETS_COMMON_IMG}\\area\\QSkill\\c3.jpg")
 character_q_skills.add_posi(img_path=f"{ASSETS_COMMON_IMG}\\area\\QSkill\\c4.jpg")
-
+ButtonEgg = Button(path=f"{ASSETS_COMMON_IMG}\\button\\Foods\\ButtonEgg.jpg")
 
 QTSX = TextTemplate(text=
 {
