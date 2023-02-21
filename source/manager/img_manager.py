@@ -64,6 +64,8 @@ class ImgIcon:
         
         if cap_posi == 'bbg':
             self.cap_posi = self.bbg_posi
+        elif cap_posi == 'all':
+            self.cap_posi = [0, 0, 1920, 1080]
         else:
             self.cap_posi = cap_posi
             

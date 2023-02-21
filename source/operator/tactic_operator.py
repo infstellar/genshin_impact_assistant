@@ -167,7 +167,7 @@ class TacticOperator(BaseThreading):
 
         return situation_code
 
-    def chara_waiting(self, mode=0):
+    def chara_waiting(self, mode=0, is_while = True):
         self.unconventionality_situation_detection()
         if (mode == 0) and (self.enter_timer.get_diff_time() <= 1.2):
             if self.is_e_available():
@@ -175,14 +175,17 @@ class TacticOperator(BaseThreading):
                 return 0
             else:
                 logger.debug(f"t: {self.enter_timer.get_diff_time()} but e unavailable")
-        while self.get_character_busy() and (not self.checkup_stop_func()):
-            if self.checkup_stop_func():
-                logger.debug('chara_waiting stop')
-                return 0
-            if self.pause_tactic_flag:
-                return 0
-            logger.debug('waiting  ')
-            self.itt.delay(0.1)
+        if is_while:
+            while self.get_character_busy() and (not self.checkup_stop_func()):
+                if self.checkup_stop_func():
+                    logger.debug('chara_waiting stop')
+                    return 0
+                if self.pause_tactic_flag:
+                    return 0
+                logger.debug('waiting  ')
+                self.itt.delay(0.1)
+        else:
+            return self.get_character_busy()
 
     # def get_current_chara_num(self):
     #     cap = self.itt.capture(jpgmode=2)

@@ -66,23 +66,24 @@ class SwitchCharacterOperator(BaseThreading):
             bool: #zh_CN 若复活成功或不需要复活，返回True，否则返回False. #en_US Returns True if resurrection is successful or not required, otherwise returns False.
             
         """
-        if itt.get_img_existence(asset.character_died):
+        if itt.get_img_existence(asset.character_died, is_log=True):
             succ_flag_1 = False
             for i in range(10):
                 time.sleep(0.15)
                 if self.checkup_stop_func(): # break
                     return True
-                r = itt.appear_then_click(asset.ButtonEgg)
+                r = itt.appear_then_click(asset.ButtonEgg, is_log=True)
                 if r:
                     succ_flag_1 = True 
                     break
             if not succ_flag_1:
+                logger.info("reborn failed")
                 self.reborn_timer.reset()
                 return False # failed
                   
             for i in range(10):
                 time.sleep(0.15)
-                r = itt.appear_then_click(asset.confirm)
+                r = itt.appear_then_click(asset.confirm, is_log=True)
                 if r:
                     self.reborn_timer.reset()
                     self.died_character = [] # clean list
@@ -126,16 +127,18 @@ class SwitchCharacterOperator(BaseThreading):
         for i in range(120):
             if self.checkup_stop_func():
                 return True
-            self.tactic_operator.chara_waiting()
-            combat_lib.unconventionality_situation_detection(self.itt)
-            self.itt.key_press(str(x))
-            time.sleep(0.03)
-            if combat_lib.get_current_chara_num(self.itt, self.checkup_stop_func) == x:
-                switch_succ_num += 1
-            if i >= 10:
+            is_busy = self.tactic_operator.chara_waiting(is_while=False)
+            if not is_busy:
+                combat_lib.unconventionality_situation_detection(self.itt)
+                self.itt.key_press(str(x))
+                time.sleep(0.03)
+                if combat_lib.get_current_chara_num(self.itt, self.checkup_stop_func, max_times = 50) == x:
+                    switch_succ_num += 1
+            if i >= 10 or is_busy == True:
                 r = self._check_and_reborn()
                 if not r: # if r == False
                     self.died_character.append(x)
+                    itt.key_press('esc')
                     return False
             if i > 55:
                 logger.warning('角色切换失败')

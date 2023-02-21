@@ -176,16 +176,20 @@ def get_character_busy(itt: interaction_core.InteractionBGD, stop_func, print_lo
             logger.debug(f"character busy: t1{t1} t2{t2}")
         return True
 
-def chara_waiting(itt:interaction_core.InteractionBGD, stop_func, mode=0):
+def chara_waiting(itt:interaction_core.InteractionBGD, stop_func, mode=0, max_times = 1000):
     unconventionality_situation_detection(itt)
+    i=0
     while get_character_busy(itt, stop_func) and (not stop_func()):
+        i+=1
         if stop_func():
             logger.debug('chara_waiting stop')
             return 0
         logger.debug('waiting')
         itt.delay(0.1)
+        if i>=max_times:
+            break
 
-def get_current_chara_num(itt: interaction_core.InteractionBGD, stop_func = default_stop_func):
+def get_current_chara_num(itt: interaction_core.InteractionBGD, stop_func = default_stop_func, max_times = 1000):
     """获得当前所选角色序号。
 
     Args:
@@ -194,7 +198,7 @@ def get_current_chara_num(itt: interaction_core.InteractionBGD, stop_func = defa
     Returns:
         int: character num.
     """
-    chara_waiting(itt, stop_func)
+    chara_waiting(itt, stop_func, max_times = max_times)
     cap = itt.capture(jpgmode=2)
     for i in range(4):
         p = posi_manager.chara_num_list_point[i]
@@ -205,7 +209,7 @@ def get_current_chara_num(itt: interaction_core.InteractionBGD, stop_func = defa
             return i + 1
         
     logger.warning(t2t("获得当前角色编号失败"))
-    return 1
+    return 0
 
 def combat_statement_detection(itt: interaction_core.InteractionBGD):
     

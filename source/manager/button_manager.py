@@ -2,15 +2,18 @@ from source.manager.img_manager import ImgIcon, LOG_NONE, LOG_WHEN_TRUE
 from source.util import *
 
 
+CLICK_STATIC = 0
+CLICK_DYNAMIC = 1
+
 def get_cap_posi(path, black_offset):
     raw_file = cv2.imread(os.path.join(root_path, path))
     bbg_posi = get_bbox(raw_file, black_offset=black_offset)
     return bbg_posi
 
 class Button(ImgIcon):
-    def __init__(self, path, button = None, name="button", black_offset=15, threshold=0.9, win_page = "all", win_text = None, print_log = LOG_NONE):
-        super().__init__(name=name, path=path, is_bbg = True, jpgmode = 0, 
-                         threshold=threshold, win_page=win_page, win_text=win_text, print_log=print_log, cap_posi='bbg')
+    def __init__(self, path, button = None, name="button", black_offset=15, is_bbg = True , threshold=0.9, win_page = "all", win_text = None, print_log = LOG_NONE, cap_posi='bbg'):
+        super().__init__(name=name, path=path, jpgmode = 0, is_bbg = is_bbg,
+                         threshold=threshold, win_page=win_page, win_text=win_text, print_log=print_log, cap_posi=cap_posi)
         # self.path = path.replace("$lang$", global_lang)
         # self.raw_file = cv2.imread(os.path.join(root_path, self.path))
         # self.raw_name = name
@@ -24,8 +27,8 @@ class Button(ImgIcon):
         # qshow(self.image)
         # image_gray = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
         # ___, self.image_binary = cv2.threshold(image_gray, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
-        
-        self.center_point = [self.bbg_posi[0]+self.image.shape[1]/2, self.bbg_posi[1]+self.image.shape[0]/2]
+        if self.is_bbg:
+            self.center_point = [self.bbg_posi[0]+self.image.shape[1]/2, self.bbg_posi[1]+self.image.shape[0]/2]
     
     
     
