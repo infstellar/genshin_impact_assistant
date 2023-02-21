@@ -83,8 +83,8 @@ class SwitchCharacterOperator(BaseThreading):
                   
             for i in range(10):
                 time.sleep(0.15)
-                r = itt.appear_then_click(asset.confirm, is_log=True)
-                if r:
+                ret_check_and_reborn_2 = itt.appear_then_click(asset.confirm, is_log=True)
+                if ret_check_and_reborn_2:
                     self.reborn_timer.reset()
                     self.died_character = [] # clean list
                     return True # reborn succ
