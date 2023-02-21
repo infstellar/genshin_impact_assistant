@@ -133,7 +133,7 @@ class TeyvatMoveFlow(BaseThreading):
                 
                 '''切换到大世界界面'''
                 scene_lib.switch_to_page(scene_manager.page_main, self.checkup_stop_func)
-                self.tmc.set_target_position(self.target_posi)
+                self.tmc.set_parameter(self.target_posi)
                 self.current_state = ST.BEFORE_TEYVAT_TELEPORT
 
             if self.current_state == ST.BEFORE_TEYVAT_TELEPORT:

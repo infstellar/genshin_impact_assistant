@@ -45,7 +45,7 @@ class TeyvatTeleport(FlowTemplate):
         self.upper = upper
 
     def state_init(self):
-        self.upper.tmc.set_target_position(self.upper.target_posi)
+        self.upper.tmc.set_parameter(self.upper.target_posi)
         self._next_rfc()
 
     def state_before(self):
