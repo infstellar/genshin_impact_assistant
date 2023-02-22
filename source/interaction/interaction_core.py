@@ -719,14 +719,22 @@ class InteractionBGD:
         return imsrc[posilist[0]:posilist[2], posilist[1]:posilist[3]]
 
     @before_operation()
-    def move_and_click(self, position, type='left', delay = 0.5):
+    def move_and_click(self, position, type='left', delay = 0.3):
+        self.operation_lock.acquire()
+        print('lock!')
         
-        self.move_to(position[0], position[1])
+        x = int(position[0])
+        y = int(position[1])
+        
+        self.itt_exec.move_to(int(x), int(y), relative=False, isChromelessWindow=self.isChromelessWindow)
         time.sleep(delay)
+        
         if type == 'left':
-            self.left_click()
+            self.itt_exec.left_click()
         else:
-            self.right_click()
+            self.itt_exec.right_click()
+        
+        self.operation_lock.release()
 
     @before_operation()
     def drag(self, origin_xy:list, targe_xy:list):
