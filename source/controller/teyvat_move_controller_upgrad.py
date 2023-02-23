@@ -26,20 +26,15 @@ class TeyvatMoveController(BaseThreading):
         super().__init__()
         self.setName("TeyvatMoveController")
         self.itt = itt
-        self.priority_waypoints = load_json("priority_waypoints.json", default_path='assets')
-        self.priority_waypoints_array = []
-        for i in self.priority_waypoints:
-            self.priority_waypoints_array.append(i["position"])
-        self.priority_waypoints_array = np.array(self.priority_waypoints_array)
-        self.target_positon = [0,0]
+        self.following_points = []
         self.while_sleep=0.5
         self.stop_rule = 0
+        self.point_index = 0
+        self.posi_offset = 5
     
-    def set_target_position(self, posi):
-        self.target_positon = posi    
-
-    def set_parameter(self, target_positon):
-        self.target_positon = target_positon
+    def set_parameter(self, following_points, posi_offset = 5):
+        self.following_points = following_points
+        
 
     def check_flying(self):
         if self.itt.get_img_existence(asset.motion_flying):
@@ -74,28 +69,12 @@ class TeyvatMoveController(BaseThreading):
                 generic_event.cvAutoTrackerLoop.history_posi = [generic_event.cvAutoTrackerLoop.history_posi[-1]]
 
     
-    def caculate_next_priority_point(self, currentp, targetp):
-        float_distance = 35
-        # 计算当前点到所有优先点的曼哈顿距离
-        md = manhattan_distance_plist(currentp, self.priority_waypoints_array)
-        nearly_pp_arg = np.argsort(md)
-        # 计算当前点到距离最近的50个优先点的欧拉距离
-        nearly_pp = self.priority_waypoints_array[nearly_pp_arg[:50]]
-        ed = euclidean_distance_plist(currentp, nearly_pp)
-        # 将点按欧拉距离升序排序
-        nearly_pp_arg = np.argsort(ed)
-        nearly_pp = nearly_pp[nearly_pp_arg]
-        # 删除距离目标比现在更远的点
-        fd = euclidean_distance_plist(targetp, nearly_pp)
-        c2t_distance = euclidean_distance(currentp, targetp)
-        nearly_pp = np.delete(nearly_pp, (np.where(fd+float_distance >= (c2t_distance) )[0]), axis=0)
-        # 获得最近点
-        if len(nearly_pp) == 0:
-            return targetp
-        closest_pp = nearly_pp[0]
-        '''加一个信息输出'''
-        # print(currentp, closest_pp)
-        return closest_pp
+    def _is_arrive_current_point(self):
+        curr_posi = generic_event.cvAutoTrackerLoop.get_position()[1:]
+        if euclidean_distance(curr_posi, self.current_point) <= self.posi_offset:
+            return True
+        else:
+            return False
     
     
     def run(self) -> None:
@@ -121,13 +100,19 @@ class TeyvatMoveController(BaseThreading):
             '''write your code below'''
             
             self.current_posi = generic_event.cvAutoTrackerLoop.get_position()
-            if not self.current_posi[0]==False:
+            if not self.current_posi[0] == False:
                 self.current_posi=self.current_posi[1:]
             else:
                 logger.debug("position ERROR")
                 continue
-            p1 = self.caculate_next_priority_point(self.current_posi, self.target_positon)
-            # print(p1)
+            
+
+            if self._is_arrive_current_point():
+                if not self.point_index == len(self.following_points):
+                    self.point_index += 1
+
+            p1 = self.following_points[self.point_index]
+
             movement.change_view_to_posi(p1, self.checkup_stop_func)
             if (not static_lib.W_KEYDOWN) and (not self.pause_threading_flag):
                 self.itt.key_down('w')
@@ -141,11 +126,12 @@ class TeyvatMoveController(BaseThreading):
                     self.pause_threading()
             
             if self.stop_rule == 0:
-                if euclidean_distance(self.target_positon, generic_event.cvAutoTrackerLoop.get_position()[1:])<=10:
-                    self.last_err_code = ERR_PASS
-                    self.pause_threading()
-                    logger.info(t2t("已到达目的地附近，本次导航结束。"))
-                    self.itt.key_up('w')
+                if self.current_posi == self.current_posi[1:]:
+                    if self._is_arrive_current_point():
+                        self.last_err_code = ERR_PASS
+                        self.pause_threading()
+                        logger.info(t2t("已到达目的地附近，本次导航结束。"))
+                        self.itt.key_up('w')
             elif self.stop_rule == 1:
                 if generic_lib.f_recognition():
                     self.last_err_code = ERR_PASS
@@ -158,7 +144,7 @@ class TeyvatMoveController(BaseThreading):
 if __name__ == '__main__':
     tmc=TeyvatMoveController()
     p1=[3,3]
-    tmc.set_parameter([1175.70934912 -4894.67981738])
+    tmc.set_target_position([1175.70934912 -4894.67981738])
     tmc.start()
     while 1:
         time.sleep(1)

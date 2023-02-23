@@ -7,9 +7,19 @@ from source.util import *
 def default_trigger_func():
     return True
 
+Q_SKILL_COLOR={
+    "Geo":[0.1277,0.8392,1], # 岩
+    "Electro":[0.75,0.4549,1], # 雷
+    "Hydro":[0.5467,0.8824,1], # 水
+    "Pyro":[0.0375,0.6275,1], # 火
+    "Cryo":[0.5,0.4549,1], # 冰
+    "Dendro":[0.2341,0.7757,1], # 草
+    "Anemo":[0.447,0.7426,1] # 风
+    
+}
 
 def log_format(x, name):
-    # 格式化输出日志。
+    # 格式化输出日志。#
     variable_name_len = 15
     variable_name = name
     variable_content = str(x)
@@ -19,11 +29,12 @@ def log_format(x, name):
 
 class Character:
     @logger.catch
-    def __init__(self, name=None, position=None, n=None, priority=None,
-                 E_short_cd_time=None, E_long_cd_time=None,
-                 Elast_time=None, Ecd_float_time=None,
-                 tactic_group=None, trigger: str = None,
-                 Epress_time=None, Qlast_time = 0, Qcd_time = 12):
+    def __init__(self, name='=', position='', n=0, priority=0,
+                 E_short_cd_time:float=0, E_long_cd_time:float=0,
+                 Elast_time:float=0, Ecd_float_time:float=0,
+                 tactic_group='', trigger: str = '=',
+                 Epress_time:float=0, Qlast_time = 0, Qcd_time = 12,
+                 vision:str = ''):
 
         self.name = name
         self.position = position
@@ -37,6 +48,7 @@ class Character:
         self.priority = priority
         self.n = n
         self.Epress_time = Epress_time
+        self.vision = vision
 
         self.itt = itt
 
@@ -55,7 +67,7 @@ class Character:
         
         # self._init_log()
         self.trigger_list = []
-        self._trigger_analyse()
+        self._trigger_analyses()
 
     def _init_log(self):
         logger.debug('---- character info ----')
@@ -79,7 +91,7 @@ class Character:
 
     def _trigger_q_ready(self):
         cap = self.itt.capture()
-        cap = self.itt.png2jpg(cap, channel='ui', alpha_num=20)  # BEFOREV3D1
+        cap = self.itt.png2jpg(cap, channel='ui', alpha_num=20)  # BEFORE V3D1
         # cap = self.itt.png2jpg(cap, channel='bg', alpha_num = 175)
 
         p = posi_manager.posi_charalist_q_point[self.n - 1]
@@ -92,7 +104,7 @@ class Character:
     def _trigger_idle():
         return True
 
-    def _trigger_analyse(self):
+    def _trigger_analyses(self):
         """
         将str分析为函数，并加入trigger。
         """
@@ -102,12 +114,12 @@ class Character:
         #     self.trigger = self._trigger_q_ready
         # elif self.triggers == 'idle':
         #     self.trigger = self._trigger_idle
-        ctriggers = self.triggers.split(',')
-        if 'e_ready' in ctriggers:
+        c_triggers = self.triggers.split(',')
+        if 'e_ready' in c_triggers:
             self.trigger_list.append(self._trigger_e_ready)
-        elif 'q_ready' in ctriggers:
+        elif 'q_ready' in c_triggers:
              self.trigger_list.append(self._trigger_q_ready)
-        elif 'idle' in ctriggers:
+        elif 'idle' in c_triggers:
              self.trigger_list.append(self._trigger_idle)
 
         self.trigger = self._is_trigger

@@ -1,9 +1,10 @@
-from source.funclib import movement
+from source.funclib import movement, combat_lib
 from source.manager import img_manager
 from source.common.base_threading import BaseThreading
 from source.interaction.interaction_core import itt
 from common.timer_module import Timer
 from source.util import *
+
 
 red_num = 245
 BG_num = 100
@@ -108,6 +109,7 @@ class AimOperator(BaseThreading):
         # time.sleep(0.1)
         if self.checkup_stop_func():
             return 0
+        combat_lib.chara_waiting(itt, stop_func = self.checkup_stop_func)
         ret_points = self.get_enemy_feature() # 获得敌方血条坐标
         if ret_points is None:
             return None

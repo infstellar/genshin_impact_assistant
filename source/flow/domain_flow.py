@@ -1,6 +1,6 @@
 from source.controller import combat_loop
 from common import flow_state as ST, timer_module
-from source.funclib import generic_lib, movement
+from source.funclib import generic_lib, movement, combat_lib
 from source.manager import posi_manager as PosiM, asset
 from source.interaction.interaction_core import itt
 from source.api import yolox_api
@@ -18,7 +18,7 @@ class DomainFlow(BaseThreading):
         # self.current_state = ST.IN_MOVETO_TREE
 
         self.itt = itt
-        chara_list = combat_loop.get_chara_list()
+        chara_list = combat_lib.get_chara_list()
         self.combat_loop = combat_loop.Combat_Controller(chara_list)
         self.combat_loop.setDaemon(True)
 
@@ -90,8 +90,6 @@ class DomainFlow(BaseThreading):
             cap = self.itt.png2jpg(cap, channel='ui')
 
         if generic_lib.f_recognition(self.itt):
-            # if pdocr_api.ocr.get_text_position(self.itt.crop_image(cap, PosiM.posi_domain['Start']),
-            #                                    textM.text(textM.start_challenge)) != -1:
             return True
         else:
             return False
@@ -104,8 +102,6 @@ class DomainFlow(BaseThreading):
 
     def _Trigger_GETTING_REAWARD(self, cap):  # Not in using
         if generic_lib.f_recognition(self.itt):
-            # if pdocr_api.ocr.get_text_position(self.itt.crop_image(cap, PosiM.posi_domain['ClaimRewards']),
-            #                                    textM.text(textM.claim_rewards)) != -1:
             return True
         else:
             return False
@@ -186,19 +182,15 @@ class DomainFlow(BaseThreading):
             if t <= 1 / 10:
                 time.sleep(1 / 10 - t)
 
-            # if pdocr_api.ocr.get_text_position(cap, textM.text(textM.claim_rewards)) != -1:
-            #     self.current_state = ST.END_MOVETO_TREE
-            #     return 0
-
         self.current_state = ST.AFTER_MOVETO_TREE
 
     def Flow_IN_ATTAIN_REAWARD(self):
 
         while 1:
             if self.resin_mode == '40':
-                self.itt.appear_then_click(asset.USE_20X2RESIN_DOBLE_CHOICES)
+                self.itt.appear_then_click(asset.USE_20X2RESIN_DOUBLE_CHOICES)
             elif self.resin_mode == '20':
-                self.itt.appear_then_click(asset.USE_20RESIN_DOBLE_CHOICES)
+                self.itt.appear_then_click(asset.USE_20RESIN_DOUBLE_CHOICES)
 
             if self.itt.get_text_existence(asset.domain_obtain):
                 break

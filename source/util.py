@@ -46,7 +46,7 @@ try:
     DEBUG_MODE = config_json["DEBUG"] if "DEBUG" in config_json else False
     GLOBAL_LANG = config_json["lang"]
 except:
-    logger.error("config文件导入失败，可能由于初次安装。跳过导入。")
+    logger.error("config文件导入失败，可能由于初次安装。跳过导入。 ERROR_IMPORT_CONFIG_001")
     DEBUG_MODE = False
     GLOBAL_LANG = "$locale$"
 
@@ -54,13 +54,16 @@ DEVICE_NORMAL = 'Normal' # In PC, Foreground
 DEVICE_DM = "Dm" # In PC, Background
 DEVICE_ADB = "Adb" # In Android emulator, Background
 
-if load_json("config.json", CONFIGPATH_SETTING)["interaction_mode"] == 'Normal':
+try:
+    if load_json("config.json", CONFIG_PATH_SETTING)["interaction_mode"] == 'Normal':
+        GLOBAL_DEVICE = DEVICE_NORMAL
+    elif load_json("config.json", CONFIG_PATH_SETTING)["interaction_mode"] == 'ADB':
+        GLOBAL_DEVICE = DEVICE_ADB
+    elif load_json("config.json", CONFIG_PATH_SETTING)["interaction_mode"] == 'Dm':
+        GLOBAL_DEVICE = DEVICE_DM
+except:
+    logger.error("config文件导入失败，可能由于初次安装。跳过导入。 ERROR_IMPORT_CONFIG_002")
     GLOBAL_DEVICE = DEVICE_NORMAL
-elif load_json("config.json", CONFIGPATH_SETTING)["interaction_mode"] == 'ADB':
-    GLOBAL_DEVICE = DEVICE_ADB
-elif load_json("config.json", CONFIGPATH_SETTING)["interaction_mode"] == 'Dm':
-    GLOBAL_DEVICE = DEVICE_DM
-
 IS_DEVICE_PC = (GLOBAL_DEVICE == DEVICE_DM)or(GLOBAL_DEVICE == DEVICE_NORMAL)
 
 # load config file over

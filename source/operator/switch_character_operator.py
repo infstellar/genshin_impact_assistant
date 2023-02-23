@@ -5,6 +5,7 @@ from source.common.base_threading import BaseThreading
 from source.interaction.interaction_core import itt
 from common.timer_module import Timer
 from source.util import *
+from source.manager import asset
 
 
 def sort_flag_1(x: character.Character):
@@ -24,13 +25,16 @@ class SwitchCharacterOperator(BaseThreading):
         self.current_num = 1 # combat_lib.get_current_chara_num(self.itt, self.checkup_stop_func)
         self.switch_timer = Timer(diff_start_time=2)
         self.tactic_operator.set_enter_timer(self.switch_timer)
+
+        self.died_character = [] # 存储的是n而非name
+        self.reborn_timer = Timer(diff_start_time=150)
     
     def run(self):
         while 1:
             time.sleep(0.1)
             if self.stop_threading_flag:
                 self.tactic_operator.stop_threading()
-                return 0
+                return
 
             if self.pause_threading_flag:
                 if self.working_flag:
@@ -54,18 +58,59 @@ class SwitchCharacterOperator(BaseThreading):
 
                 else:  # no changable character
                     pass
+    
+    def _check_and_reborn(self) -> bool:
+        """重生角色
 
+        Returns:
+            bool: #zh_CN 若复活成功或不需要复活，返回True，否则返回False. #en_US Returns True if resurrection is successful or not required, otherwise returns False.
+            
+        """
+        if itt.get_img_existence(asset.character_died, is_log=True):
+            succ_flag_1 = False
+            for i in range(10):
+                time.sleep(0.15)
+                if self.checkup_stop_func(): # break
+                    return True
+                r = itt.appear_then_click(asset.ButtonEgg, is_log=True)
+                if r:
+                    succ_flag_1 = True 
+                    break
+            if not succ_flag_1:
+                logger.info("reborn failed")
+                self.reborn_timer.reset()
+                return False # failed
+                  
+            for i in range(10):
+                time.sleep(0.15)
+                ret_check_and_reborn_2 = itt.appear_then_click(asset.confirm, is_log=True)
+                if ret_check_and_reborn_2:
+                    self.reborn_timer.reset()
+                    self.died_character = [] # clean list
+                    return True # reborn succ
+            self.reborn_timer.reset()
+            return False # failed
+        else:
+            return True
+            
+    
     def switch_character(self):
         idle = True
         for chara in self.chara_list:
             logger.debug('check up in: ' + chara.name)
             if self.checkup_stop_func():
                 return 0
+            if chara.n in self.died_character: # died
+                if self.reborn_timer.get_diff_time()<=125: # reborn cd
+                    continue
             if chara.trigger():
                 self.current_num = combat_lib.get_current_chara_num(self.itt, self.checkup_stop_func)
                 logger.debug(f"switch_character: targetnum: {chara.n} current num: {self.current_num}")
                 if chara.n != self.current_num:
-                    self._switch_character(chara.n)
+                    r = self._switch_character(chara.n)
+                if not r: # Failed
+                    continue
+
                 self.tactic_operator.set_parameter(chara.tactic_group, chara)
                 self.tactic_operator.restart_executor()
                 idle = False
@@ -79,23 +124,31 @@ class SwitchCharacterOperator(BaseThreading):
         logger.debug('try switching to ' + str(x))
         switch_succ_num = 0
         switch_target_num = 2
-        for i in range(120):  # 12 sec
+        for i in range(120):
             if self.checkup_stop_func():
-                return 0
-            self.tactic_operator.chara_waiting()
-            combat_lib.unconventionality_situation_detection(self.itt)
-            self.itt.key_press(str(x))
-            time.sleep(0.03)
-            if combat_lib.get_current_chara_num(self.itt, self.checkup_stop_func) == x:
-                switch_succ_num += 1
-            if i == 49:
+                return True
+            is_busy = self.tactic_operator.chara_waiting(is_while=False)
+            if not is_busy:
+                combat_lib.unconventionality_situation_detection(self.itt)
+                self.itt.key_press(str(x))
+                time.sleep(0.03)
+                if combat_lib.get_current_chara_num(self.itt, self.checkup_stop_func, max_times = 50) == x:
+                    switch_succ_num += 1
+            if i >= 10 or is_busy == True:
+                r = self._check_and_reborn()
+                if not r: # if r == False
+                    self.died_character.append(x)
+                    itt.key_press('esc')
+                    return False
+            if i > 55:
                 logger.warning('角色切换失败')
             if switch_succ_num >= switch_target_num:
                 logger.debug(f"switch chara to {x} succ")
-                break
+                return False
         self.current_num = x
         self.switch_timer.reset()
         self.itt.delay(0.05)
+        return True
 
     def pause_threading(self):
         self.pause_threading_flag = True

@@ -24,7 +24,8 @@ class PosiTemplate():
         """
         self.posi_list = []
         self.position = None
-        self.add_posi(posi=posi, img_path=img_path)
+        if (posi != None) or (img_path != None):
+            self.add_posi(posi=posi, img_path=img_path)
     
     def add_posi(self, posi=None, img_path=None):
         """添加坐标

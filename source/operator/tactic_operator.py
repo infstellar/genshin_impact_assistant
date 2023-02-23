@@ -1,6 +1,6 @@
-import source.api.pdocr_api as pdocr_api
+from source.api.pdocr_light import ocr_light
 from source.common.base_threading import BaseThreading
-from source.common.character import Character
+from source.common.character import Character, Q_SKILL_COLOR
 from source.interaction.interaction_core import itt
 from common.timer_module import Timer
 from source.util import *
@@ -10,8 +10,8 @@ from source.manager import posi_manager, asset
 from source.path_lib import *
 
 E_STRICT_MODE = True  # may cause more performance overhead
-DETERMINING_WEIGHT = load_json(JSONNAME_CONFIG, CONFIGPATH_SETTING)["determining_strict_weight"]
-USING_ALPHA_CHANNEL = load_json(JSONNAME_CONFIG, CONFIGPATH_SETTING)["using_alpha_channel"]
+DETERMINING_WEIGHT = load_json(JSONNAME_CONFIG, CONFIG_PATH_SETTING)["determining_strict_weight"]
+USING_ALPHA_CHANNEL = load_json(JSONNAME_CONFIG, CONFIG_PATH_SETTING)["using_alpha_channel"]
 
 def stop_func_example():  # True:stop;False:continue
     return False
@@ -117,19 +117,38 @@ class TacticOperator(BaseThreading):
         if show_res:
             cv2.imshow("_is_e_release", cap)
             cv2.waitKey(10)
-        ret = pdocr_api.ocr.is_img_num_plus(cap)
+        ret, t = ocr_light.is_img_num_plus(cap)
 
-        if ret[0]:
+        if ret:
             return True
         else:
             cap = self.itt.capture(posi=posi_manager.posi_chara_e)
             cap = self.itt.png2jpg(cap, channel='ui', alpha_num=100)
-            ret = pdocr_api.ocr.is_img_num_plus(cap)
+            ret, t = ocr_light.is_img_num_plus(cap)
 
-            if ret[0]:
+            if ret:
                 return True
             else:
                 return False
+            
+    def _is_longE_release(self, show_res = False):
+        cap = self.itt.capture(posi=posi_manager.posi_chara_e)
+        cap = self.itt.png2jpg(cap, channel='ui', alpha_num=100)
+        if show_res:
+            cv2.imshow("_is_e_release", cap)
+            cv2.waitKey(10)
+        ret, t = ocr_light.is_img_num_plus(cap)
+
+        if ret:
+            if float(t) <= self.character.E_short_cd_time:
+                logger.debug(f"longE failed. Ecd time: {t}; short Ecd time: {self.character.E_long_cd_time}; long Ecd time:{self.character.E_short_cd_time}")
+                time.sleep(float(t))
+                return False
+            else:
+                return True
+        else:
+            return False
+        
 
     def unconventionality_situation_detection(self, autoDispose=True):  # unconventionality situation detection
         # situation 1: coming_out_by_space
@@ -148,7 +167,7 @@ class TacticOperator(BaseThreading):
 
         return situation_code
 
-    def chara_waiting(self, mode=0):
+    def chara_waiting(self, mode=0, is_while = True):
         self.unconventionality_situation_detection()
         if (mode == 0) and (self.enter_timer.get_diff_time() <= 1.2):
             if self.is_e_available():
@@ -156,14 +175,17 @@ class TacticOperator(BaseThreading):
                 return 0
             else:
                 logger.debug(f"t: {self.enter_timer.get_diff_time()} but e unavailable")
-        while self.get_character_busy() and (not self.checkup_stop_func()):
-            if self.checkup_stop_func():
-                logger.debug('chara_waiting stop')
-                return 0
-            if self.pause_tactic_flag:
-                return 0
-            logger.debug('waiting  ')
-            self.itt.delay(0.1)
+        if is_while:
+            while self.get_character_busy() and (not self.checkup_stop_func()):
+                if self.checkup_stop_func():
+                    logger.debug('chara_waiting stop')
+                    return 0
+                if self.pause_tactic_flag:
+                    return 0
+                logger.debug('waiting  ')
+                self.itt.delay(0.1)
+        else:
+            return self.get_character_busy()
 
     # def get_current_chara_num(self):
     #     cap = self.itt.capture(jpgmode=2)
@@ -245,7 +267,7 @@ class TacticOperator(BaseThreading):
             return 0
         # self.itt.key_press('w')
         self.itt.delay(0.2)
-        if (not self._is_e_release()) and E_STRICT_MODE:
+        if (not self._is_longE_release()) and E_STRICT_MODE:
             self.do_use_longe(times=times + 1)
         self.character.used_longE()
 
@@ -313,11 +335,8 @@ class TacticOperator(BaseThreading):
         Returns:
             bool: Whether Q-Skill can be triggered
         """
-        if USING_ALPHA_CHANNEL:
-            cap = self.itt.capture()
-            cap = self.itt.png2jpg(cap, channel='ui', alpha_num=200)  # BEFOREV3D1
-        else:
-            cap = self.itt.capture(jpgmode=0)
+
+        cap = self.itt.capture(jpgmode=0)
         
         imsrc = cap
         imsrc_q_skill = crop(imsrc, posi_manager.posi_complete_chara_q)
@@ -325,7 +344,7 @@ class TacticOperator(BaseThreading):
         hh, ww = imsrc_q_skill.shape[:2]
         xc = hh // 2
         yc = ww // 2
-        radius1 = 55
+        radius1 = 53
         radius2 = 47
         cv2.circle(mask, (xc,yc), radius1, (255,255,255), -1)
         cv2.circle(mask, (xc,yc), radius2, (0,0,0), -1)
@@ -337,28 +356,19 @@ class TacticOperator(BaseThreading):
         # stone HSV=0.12538226299694,0.85490196078431,1
         # fire 
         
-        fire_lower = np.array([9-HUE_DELTA,100,100])
-        fire_upper = np.array([9+HUE_DELTA,255,255])
-
-        rock_lower = np.array([21-HUE_DELTA,100,100])
-        rock_upper = np.array([21+HUE_DELTA,255,255])
-
-        water_lower = np.array([17-HUE_DELTA,100,100])
-        water_upper = np.array([17+HUE_DELTA,255,255])
-
-        wind_lower = np.array([17-HUE_DELTA,100,100])
-        wind_upper = np.array([17+HUE_DELTA,255,255])
-
+        orhsv = Q_SKILL_COLOR[self.character.vision]
+        orhsv = Q_SKILL_COLOR['Hydro']
+        hsv_lower = np.array([int(max(0,orhsv[0]*180-HUE_DELTA)), int(max(orhsv[1]*255-60, 50)), 200])
+        hsv_upper = np.array([int(min(179,orhsv[0]*180+HUE_DELTA)), int(min(orhsv[1]*255+60, 255)), 255])
         hsv = cv2.cvtColor(res1.copy(), cv2.COLOR_BGR2HSV)
-
-        mask2 = cv2.inRange(hsv, fire_lower, fire_upper)
+        mask2 = cv2.inRange(hsv, hsv_lower, hsv_upper)
         res = len(np.where(mask2==255)[0])
         if show_res:
             print(f"num: {res}")
             # res2 = cv2.bitwise_and(hsv,hsv, mask=mask2)
             cv2.imshow("res", mask2)
             cv2.waitKey(100)
-        r = res>=(2520*DETERMINING_WEIGHT)
+        r = res>=(650*DETERMINING_WEIGHT)
         return r
             
         # if is_show:
@@ -490,12 +500,12 @@ class TacticOperator(BaseThreading):
 if __name__ == '__main__':
     # from source.controller import combat_loop
 
-    # to = TacticOperator()
+    to = TacticOperator()
     # itt = global_itt
-    # chara = combat_loop.get_chara_list()[1]
-    # to.set_parameter(chara.tactic_group, chara)
+    chara = combat_lib.get_chara_list()[1]
+    to.set_parameter(chara.tactic_group, chara)
     # # to.setDaemon(True)
-    # while 1:
-    #     print(to._is_e_release(show_res=True))
-    #     time.sleep(0.1)
+    while 1:
+        print(to.is_q_ready(show_res=True))
+        time.sleep(0.1)
     pass

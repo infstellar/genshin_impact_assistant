@@ -8,8 +8,9 @@ def default_stop_func():
 
 class UIPage():
     def __init__(self, check_icon: img_manager.ImgIcon, page_name:str = None, to_mainpage = None, to_selfpage = None):
-        self.check_icon = check_icon
         self.page_name = page_name
+        self.check_icon_list = []
+        self.check_icon_list.append(check_icon)
         self.following_page={}
         if to_mainpage == None:
             to_mainpage = [""]
@@ -19,16 +20,26 @@ class UIPage():
         self.to_selfpage = to_selfpage
         
     def is_current_page(self, itt, print_log=False):
-        ret = itt.get_img_existence(self.check_icon, is_log=print_log)
-        return ret
+        for i in self.check_icon_list:
+            ret = itt.get_img_existence(i, is_log=print_log)
+            if ret:
+                return True
+        return False
     
+    def add_check_icon(self, check_icon: img_manager.ImgIcon):
+        self.check_icon_list.append(check_icon)
+
     def get_following_page_name(self):
         retp=[]
         for i in self.following_page:
             retp.append(i["page_name"])
         return retp
     
-    def add_following_page(self,page_name:str, switch_button):
+    def add_following_page(self, page_name:str, switch_button):
+        """
+        page_name: 按下switch_button后可以切换到的页面名
+        switch_button: 按钮/按键。可以为str(键盘)或button对象(鼠标)
+        """
         self.following_page[page_name]=switch_button
         
     

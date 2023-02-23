@@ -8,11 +8,17 @@ pdocr_timer_performance.reset()
 import inspect
 
 try:
-    from paddleocr import PaddleOCR
-    from paddleocr import draw_ocr
+    import paddleocr
 except Exception as error:
     logger.critical(t2t("导入paddleocr时错误; err code: 001"))
     logger.exception(error)
+logger.debug(f"import pdocr time: {pdocr_timer_performance.get_diff_time()}")
+
+# paddleocr.MODEL_URLS["OCR"]["PP-OCRv3"]["rec"]["num_only"] = {
+#                     'url':
+#                     'https://paddleocr.bj.bcebos.com/PP-OCRv3/english/en_PP-OCRv3_rec_infer.tar',
+#                     'dict_path': './ppocr/utils/en_dict.txt'
+                # },
 
 globaldevice = config_json["device_paddle"]
 if globaldevice == 'auto':
@@ -32,18 +38,20 @@ CHANNEL_RED = 2
 RETURN_TEXT = 1
 RETURN_POSITION = 0
 
+default_infer_path = os.path.join(root_path, f'assets\\inference\\{GLOBAL_LANG}\\')
 
 class PaddleocrAPI:
-
-    def __init__(self, lang='ch', device='gpu'):
+    
+    def __init__(self, lang='ch', device='gpu', use_angle_cls=True, show_log=False, inference_path=default_infer_path):
+        
         device = globaldevice
         logger.info(t2t("ocr device: ") + device)
-        inference_path = os.path.join(root_path, f'assets\\inference\\{GLOBAL_LANG}\\')
-        self.ocr = PaddleOCR(use_angle_cls=True, lang=lang, show_log=False,
-                             device=device, 
-                             det_model_dir=inference_path+"det_model\\",
-                             rec_model_dir=inference_path+"rec_model\\",
-                             cls_model_dir=inference_path+"cls_model\\")  # need to run only once to download and load model into memory
+        
+        self.ocr = paddleocr.PaddleOCR(use_angle_cls=use_angle_cls, lang=lang, show_log=show_log,
+                            device=device,
+                            det_model_dir=inference_path+"det_model\\",
+                            rec_model_dir=inference_path+"rec_model\\",
+                            cls_model_dir=inference_path+"cls_model\\")
         # self.
 
     def img_analyze(self, im_src):
@@ -180,9 +188,4 @@ class PaddleocrAPI:
                      inspect.getframeinfo(inspect.currentframe().f_back)[2])
         return ret1, ret2
 
-if GLOBAL_LANG == "zh_CN":
-    lang = 'ch'
-elif GLOBAL_LANG == "en_US":
-    lang = 'en'
-ocr = PaddleocrAPI(lang=lang)
-logger.info('created pdocr. cost ' + str(pdocr_timer_performance.get_diff_time()) + ' second.')
+

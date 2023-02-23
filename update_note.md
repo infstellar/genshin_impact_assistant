@@ -1,4 +1,3 @@
-1. 坐标精确度低
-2. 加一个辅助模式：自动走到目标点，手动采集。
-3. F采集移动优化
-4. GE狂按w优化 pass
+1. 自动寻敌别乱转，加个waiting
+2. move_and_click不要被打断，上锁
+3. appear then click的文字有问题

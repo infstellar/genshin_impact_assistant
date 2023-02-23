@@ -21,7 +21,6 @@ IMG_BOOLRATE = 5
 
 
 winname_default = ["Genshin Impact", "原神"]
-# winname_cgs = "云·原神"
 
 # process_name_cloud = ["云·原神"]
 
@@ -208,7 +207,7 @@ class InteractionBGD:
                 cv2.rectangle((show_img), pt, right_bottom, (0, 0, 255), 2)  # 绘制匹配到的矩阵
             cv2.imshow("img", show_img)
             cv2.imshow("template", template)
-            cv2.waitKey(0)  # 获取按键的ASCLL码
+            cv2.waitKey(0)  # 获取按键的ASCII码
             cv2.destroyAllWindows()  # 释放所有的窗口
 
         return res_posi
@@ -266,8 +265,8 @@ class InteractionBGD:
 
         if matching_rate >= imgicon.threshold:
             if imgicon.win_text != None:
-                from source.api import pdocr_api
-                r = pdocr_api.ocr.get_text_position(cap, imgicon.win_text)
+                from source.api.pdocr_complete import ocr
+                r = ocr.get_text_position(cap, imgicon.win_text)
                 if r==-1:
                     matching_rate = -1
             # if imgicon.win_page != 'all':
@@ -302,8 +301,8 @@ class InteractionBGD:
         
         if matching_rate >= imgicon.threshold:
             if imgicon.win_text != None:
-                from source.api import pdocr_api
-                r = pdocr_api.ocr.get_text_position(cap, imgicon.win_text)
+                from source.api.pdocr_complete import ocr
+                r = ocr.get_text_position(cap, imgicon.win_text)
                 if r==-1:
                     matching_rate = 0
             # if imgicon.win_page != 'all':
@@ -333,9 +332,9 @@ class InteractionBGD:
             return matching_rate
         
     def get_text_existence(self, textobj: text_manager.TextTemplate, is_gray=False, is_log = True, ret_mode = IMG_BOOL, show_res = False):
-        from source.api import pdocr_api
+        from source.api.pdocr_complete import ocr
         cap = self.capture(posi = textobj.cap_area, jpgmode = 0)
-        if pdocr_api.ocr.get_text_position(cap, textobj.text) != -1:
+        if ocr.get_text_position(cap, textobj.text) != -1:
             if is_log:
                 logger.debug(f"get_text_existence: text: {textobj.text} Found")
             return True
@@ -343,7 +342,7 @@ class InteractionBGD:
             logger.debug(f"get_text_existence: text: {textobj.text} Not Found")
             return False
 
-    def appear_then_click(self, inputvar, is_gray=False):
+    def appear_then_click(self, inputvar, is_gray=False, is_log = False):
         """appear then click
 
         Args:
@@ -361,12 +360,15 @@ class InteractionBGD:
             cap = self.capture(posi=imgicon.cap_posi, jpgmode=imgicon.jpgmode)
             # min_rate = img_manager.matching_rate_dict[imgname]
 
-            matching_rate = self.similar_img(imgicon.image, cap, is_gray=is_gray)
+            if inputvar.is_bbg == False:
+                matching_rate, click_posi = self.similar_img(imgicon.image, cap, is_gray=is_gray, ret_mode=IMG_POSI)
+            else:
+                matching_rate = self.similar_img(imgicon.image, cap, is_gray=is_gray)
 
             if matching_rate >= imgicon.threshold:
                 if imgicon.win_text != None:
-                    from source.api import pdocr_api
-                    r = pdocr_api.ocr.get_text_position(cap, imgicon.win_text)
+                    from source.api.pdocr_complete import ocr
+                    r = ocr.get_text_position(cap, imgicon.win_text)
                     if r==-1:
                         matching_rate = 0
                 # if imgicon.win_page != 'all':
@@ -374,7 +376,7 @@ class InteractionBGD:
                 #     if pn != imgicon.win_page:
                 #         matching_rate = 0
             
-            if imgicon.is_print_log(matching_rate >= imgicon.threshold):
+            if imgicon.is_print_log(matching_rate >= imgicon.threshold) or is_log:
                 logger.debug(
                 'imgname: ' + imgicon.name + 'matching_rate: ' + str(
                     matching_rate) + ' |function name: ' + upper_func_name)
@@ -384,7 +386,10 @@ class InteractionBGD:
                 # center_p = [(p[1] + p[3]) / 2, (p[0] + p[2]) / 2]
                 # self.move_to(center_p[0], center_p[1])
                 # self.left_click()
-                self.move_and_click(position=imgicon.click_position())
+                if inputvar.is_bbg == True:
+                    self.move_and_click(position=imgicon.click_position())
+                else:
+                    self.move_and_click(position=click_posi)
                 return True
             else:
                 return False
@@ -400,8 +405,8 @@ class InteractionBGD:
 
             if matching_rate >= imgicon.threshold:
                 if imgicon.win_text != None:
-                    from source.api import pdocr_api
-                    r = pdocr_api.ocr.get_text_position(cap, imgicon.win_text)
+                    from source.api.pdocr_complete import ocr
+                    r = ocr.get_text_position(cap, imgicon.win_text)
                     if r==-1:
                         matching_rate = 0
                 # if imgicon.win_page != 'all':
@@ -409,7 +414,7 @@ class InteractionBGD:
                 #     if pn != imgicon.win_page:
                 #         matching_rate = 0
             
-            if imgicon.is_print_log(matching_rate >= imgicon.threshold):
+            if imgicon.is_print_log(matching_rate >= imgicon.threshold) or is_log:
                 logger.debug('imgname: ' + imgicon.name + 'matching_rate: ' + str(matching_rate) + ' |function name: ' + upper_func_name)
 
             if matching_rate >= imgicon.threshold:
@@ -422,14 +427,17 @@ class InteractionBGD:
                 return False
             
         elif isinstance(inputvar, text_manager.TextTemplate):
-            from source.api import pdocr_api
-            p1 = pdocr_api.ocr.get_text_position(self.capture(jpgmode=0, posi=inputvar.cap_area), inputvar.text, cap_posi_leftup=inputvar.cap_area[:2])
+            from source.api.pdocr_complete import ocr
+            upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
+            p1 = ocr.get_text_position(self.capture(jpgmode=0, posi=inputvar.cap_area), inputvar.text, cap_posi_leftup=inputvar.cap_area[:2])
+            if is_log:
+                logger.debug('text: ' + inputvar.text + 'position: ' + str(p1) + ' |function name: ' + upper_func_name)
             if p1 != -1:
                 self.move_and_click([p1[0] + 5, p1[1] + 5], delay=1)
                 return True
             else:
                 return False
-
+    
     def appear_then_press(self, imgicon: img_manager.ImgIcon, key_name, is_gray=False):
         """appear then press
 
@@ -450,8 +458,8 @@ class InteractionBGD:
 
         if matching_rate >= imgicon.threshold:
             if imgicon.win_text != None:
-                from source.api import pdocr_api
-                r = pdocr_api.ocr.get_text_position(cap, imgicon.win_text)
+                from source.api.pdocr_complete import ocr
+                r = ocr.get_text_position(cap, imgicon.win_text)
                 if r==-1:
                     matching_rate = 0
             # if imgicon.win_page != 'all':
@@ -711,14 +719,22 @@ class InteractionBGD:
         return imsrc[posilist[0]:posilist[2], posilist[1]:posilist[3]]
 
     @before_operation()
-    def move_and_click(self, position, type='left', delay = 0.5):
+    def move_and_click(self, position, type='left', delay = 0.3):
+        self.operation_lock.acquire()
+        print('lock!')
         
-        self.move_to(position[0], position[1])
+        x = int(position[0])
+        y = int(position[1])
+        
+        self.itt_exec.move_to(int(x), int(y), relative=False, isChromelessWindow=self.isChromelessWindow)
         time.sleep(delay)
+        
         if type == 'left':
-            self.left_click()
+            self.itt_exec.left_click()
         else:
-            self.right_click()
+            self.itt_exec.right_click()
+        
+        self.operation_lock.release()
 
     @before_operation()
     def drag(self, origin_xy:list, targe_xy:list):
@@ -736,7 +752,8 @@ if __name__ == '__main__':
     ib = InteractionBGD()
     rootpath = "D:\\Program Data\\vscode\\GIA\\genshin_impact_assistant\\dist\\imgs"
     # ib.similar_img_pixel(cv2.imread(rootpath+"\\yunjin_q.png"),cv2.imread(rootpath+"\\zhongli_q.png"))
-
+    from source.manager import asset
+    itt.appear_then_click(asset.ButtonEgg, is_log=True)
     # print(win32api.GetCursorPos())
     # win32api.mouse_event(win32con.MOUSEEVENTF_MOVE, 150, 150)
     # print(win32api.GetCursorPos())
@@ -754,7 +771,7 @@ if __name__ == '__main__':
     # pydirectinput.
     # a = ib.get_text_existence(asset.LEYLINEDISORDER)
     # print(a)
-    img_manager.qshow(ib.capture())
+    # img_manager.qshow(ib.capture())
     print()
     while 1:
         # time.sleep(1)

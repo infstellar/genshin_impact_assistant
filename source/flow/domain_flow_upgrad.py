@@ -3,7 +3,7 @@ from source.flow.flow_template import FlowController, FlowTemplate, FlowConnecto
 import source.flow.flow_code as FC
 from source.controller import combat_loop
 from common import flow_state as ST, timer_module
-from source.funclib import generic_lib, movement
+from source.funclib import generic_lib, movement, combat_lib
 from source.funclib.err_code_lib import *
 from source.manager import posi_manager as PosiM, asset
 from source.interaction.interaction_core import itt
@@ -16,7 +16,7 @@ class DomainFlowConnector(FlowConnector):
     def __init__(self):
         super().__init__()
         self.checkup_stop_func = None
-        chara_list = combat_loop.get_chara_list()
+        chara_list = combat_lib.get_chara_list()
         self.combat_loop = combat_loop.Combat_Controller(chara_list)
         self.combat_loop.setDaemon(True)
 
@@ -221,9 +221,9 @@ class AttainReaward(FlowTemplate):
 
     def state_in(self):
         if self.upper.resin_mode == '40':
-            itt.appear_then_click(asset.USE_20X2RESIN_DOBLE_CHOICES)
+            itt.appear_then_click(asset.USE_20X2RESIN_DOUBLE_CHOICES)
         elif self.upper.resin_mode == '20':
-            itt.appear_then_click(asset.USE_20RESIN_DOBLE_CHOICES)
+            itt.appear_then_click(asset.USE_20RESIN_DOUBLE_CHOICES)
 
         if itt.get_text_existence(asset.domain_obtain):
             self._next_rfc()

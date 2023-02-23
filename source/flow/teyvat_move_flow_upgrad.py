@@ -45,7 +45,7 @@ class TeyvatTeleport(FlowTemplate):
         self.upper = upper
 
     def state_init(self):
-        self.upper.tmc.set_target_position(self.upper.target_posi)
+        self.upper.tmc.set_parameter(self.upper.target_posi)
         self._next_rfc()
 
     def state_before(self):
@@ -89,13 +89,6 @@ class TeyvatTeleport(FlowTemplate):
                 itt.move_and_click([tw_posi[0], tw_posi[1]])
                 temporary_timeout_1.reset()
             time.sleep(0.5)
-            # p1 = pdocr_api.ocr.get_text_position(global_itt.capture(jpgmode=0, posi=img_manager.bigmap_choose_area.cap_posi), "七天神像", cap_posi_leftup=img_manager.bigmap_choose_area.cap_posi[:2])
-            # if p1 != -1:
-            #     global_itt.move_and_click([p1[0] + 30, p1[1] + 30], delay=1)
-            
-            # p1 = pdocr_api.ocr.get_text_position(global_itt.capture(jpgmode=0, posi=img_manager.bigmap_choose_area.cap_posi), "传送锚点", cap_posi_leftup=img_manager.bigmap_choose_area.cap_posi[:2])
-            # if p1 != -1:
-            #     global_itt.move_and_click([p1[0] + 30, p1[1] + 30], delay=1)
 
         itt.move_and_click([posi_manager.tp_button[0], posi_manager.tp_button[1]], delay=1)
         
