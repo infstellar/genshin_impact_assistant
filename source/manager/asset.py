@@ -57,11 +57,7 @@ revival = TextTemplate(text=
     'zh_CN': '复苏',
     "en_US": "Revive"
 })
-confirm = TextTemplate(text=
-{
-    'zh_CN': '确认',
-    "en_US": "Confirm"
-})
+
 character_died = img_manager.ImgIcon(name="character_died", path=f"{ASSETS_IMG}\\{GLOBAL_LANG}\\character_died.jpg",
                                      is_bbg=True, cap_posi='bbg', win_text=use_revival_item.text, threshold=0.98, print_log=LOG_WHEN_TRUE)
 button_all_character_died = Button(name="all_character_died", path=f"{ASSETS_IMG}\\{GLOBAL_LANG}\\all_character_died.jpg",
@@ -122,6 +118,8 @@ character_q_skills.add_posi(img_path=f"{ASSETS_COMMON_IMG}\\area\\QSkill\\c2.jpg
 character_q_skills.add_posi(img_path=f"{ASSETS_COMMON_IMG}\\area\\QSkill\\c3.jpg")
 character_q_skills.add_posi(img_path=f"{ASSETS_COMMON_IMG}\\area\\QSkill\\c4.jpg")
 ButtonEgg = Button(path=f"{ASSETS_COMMON_IMG}\\button\\Foods\\ButtonEgg.jpg", cap_posi='all', is_bbg = False)
+confirm = Button(path=f"{ASSETS_IMG}\\{GLOBAL_LANG}\\confirm.jpg", cap_posi='all', is_bbg = False)
+Area_revival_foods = posi_manager.PosiTemplate(img_path=f"{ASSETS_COMMON_IMG}\\area\\revival_foods.jpg")
 
 QTSX = TextTemplate(text=
 {

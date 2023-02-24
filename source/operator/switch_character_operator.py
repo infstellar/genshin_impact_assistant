@@ -6,6 +6,7 @@ from source.interaction.interaction_core import itt
 from common.timer_module import Timer
 from source.util import *
 from source.manager import asset
+from source.api.pdocr_complete import ocr
 
 
 def sort_flag_1(x: character.Character):
@@ -54,7 +55,7 @@ class SwitchCharacterOperator(BaseThreading):
                 ret = self.switch_character()
                 if not ret:  # able to change character
                     self.tactic_operator.continue_threading()
-                    time.sleep(0.2)
+                    time.sleep(0.4)
 
                 else:  # no changable character
                     pass
@@ -68,7 +69,10 @@ class SwitchCharacterOperator(BaseThreading):
         """
         if itt.get_img_existence(asset.character_died, is_log=True):
             succ_flag_1 = False
+            print(self.died_character)
             for i in range(10):
+                if ocr.is_img_num_plus(itt.capture(posi=asset.Area_revival_foods.position, jpgmode=0))[0]:
+                    break
                 time.sleep(0.15)
                 if self.checkup_stop_func(): # break
                     return True
@@ -81,14 +85,18 @@ class SwitchCharacterOperator(BaseThreading):
                 self.reborn_timer.reset()
                 return False # failed
                   
-            for i in range(10):
+            for i in range(3):
                 time.sleep(0.15)
                 ret_check_and_reborn_2 = itt.appear_then_click(asset.confirm, is_log=True)
+                print(f"ret_check_and_reborn_2 {ret_check_and_reborn_2}")
                 if ret_check_and_reborn_2:
                     self.reborn_timer.reset()
                     self.died_character = [] # clean list
+                    time.sleep(0.3) # 防止重复检测
                     return True # reborn succ
             self.reborn_timer.reset()
+            itt.key_press('esc')
+            time.sleep(0.3) # 防止重复检测
             return False # failed
         else:
             return True
@@ -117,14 +125,22 @@ class SwitchCharacterOperator(BaseThreading):
                 return idle
         return idle
 
-    def _switch_character(self, x: int):
+    def _switch_character(self, x: int) -> bool:
+        """_summary_
+
+        Args:
+            x (int): _description_
+
+        Returns:
+            bool: True: 切换成功; False: 切换失败
+        """
         self.itt.middle_click()
         t = self.switch_timer.get_diff_time()
         self.tactic_operator.chara_waiting()
         logger.debug('try switching to ' + str(x))
         switch_succ_num = 0
         switch_target_num = 2
-        for i in range(120):
+        for i in range(60):
             if self.checkup_stop_func():
                 return True
             is_busy = self.tactic_operator.chara_waiting(is_while=False)
@@ -139,16 +155,19 @@ class SwitchCharacterOperator(BaseThreading):
                 if not r: # if r == False
                     self.died_character.append(x)
                     itt.key_press('esc')
-                    return False
+                    return True
             if i > 55:
                 logger.warning('角色切换失败')
             if switch_succ_num >= switch_target_num:
                 logger.debug(f"switch chara to {x} succ")
-                return False
-        self.current_num = x
+                self.current_num = x
+                self.switch_timer.reset()
+                self.itt.delay(0.05)
+                return True
+        # self.current_num = x
         self.switch_timer.reset()
         self.itt.delay(0.05)
-        return True
+        return False
 
     def pause_threading(self):
         self.pause_threading_flag = True
