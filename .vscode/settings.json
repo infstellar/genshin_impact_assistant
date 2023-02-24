@@ -25,7 +25,7 @@
         "reportFunctionMemberAccess": "warning",
         "reportGeneralTypeIssues": "information",
         // 隐式字符串连接
-        "reportImplicitStringConcatenation": "warning",
+        "reportImplicitStringConcatenation": "none",
         "reportIncompatibleMethodOverride": "information",
         "reportIncompatibleVariableOverride": "warning",
         "reportIncompleteStub": "warning",

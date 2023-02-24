@@ -88,6 +88,9 @@ END_PICKUP_COLLECTOR = 3204
 
 END_COLLECTOR = 3900
 
+COLLECTION_PATH_RECORD = 4100
+COLLECTION_PATH_END = -4900
+
 def get_statement_code_name(code):
     name_prefixion = ""
     name_text = ""

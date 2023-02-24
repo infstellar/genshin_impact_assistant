@@ -3,6 +3,7 @@ from source.funclib import small_map
 from source.util import *
 from source.funclib import generic_lib, static_lib
 from source.common import generic_event
+from source.manager import asset
 
 itt = itt
 AHEAD = 0
@@ -14,6 +15,10 @@ HORIZONTAL = 1
 VERTICALLY = 2
 VERTICALLY_AND_HORIZONTAL = 3
 
+CLIMBING = "CLIMBING"
+SWIMMING = "SWIMMING"
+WALKING = "WALKING"
+FLYING = "FLYING"
 
 # >0:right; <0:left
 def move(direction, distance=1):
@@ -138,6 +143,18 @@ def reset_const_val():
 
 def f():
     return False
+    
+def get_current_motion_state() -> str:
+    if itt.get_img_existence(asset.motion_climbing):
+        return CLIMBING
+    elif itt.get_img_existence(asset.motion_flying):
+        return FLYING
+    elif itt.get_img_existence(asset.motion_swimming):
+        return SWIMMING
+    else:
+        return WALKING
+
+
 
 # view_to_angle(-90)
 if __name__ == '__main__':
