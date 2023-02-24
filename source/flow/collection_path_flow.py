@@ -51,15 +51,43 @@ class CollectionPathConnector(FlowConnector):
 
         '''
 
+    def set_hotkey(self):
+        keyboard.add_hotkey("w", self._add_key_to_dict, args=('w',))
+        keyboard.add_hotkey("space", self._add_key_to_dict, args=('space',))
+        keyboard.add_hotkey("x", self._add_key_to_dict, args=('x',))
+        keyboard.add_hotkey("shift", self._add_key_to_dict, args=('shift',))
+
+    def unset_hotkey(self):
+        keyboard.remove_hotkey("w")
+        keyboard.remove_hotkey("space")
+        keyboard.remove_hotkey("x")
+        keyboard.remove_hotkey("shift")
+
+    def _add_key_to_dict(self, key:str):
+        curr_posi = generic_event.cvAutoTrackerLoop.get_position()
+        if key == 'w':
+            pass
+        elif key == 'space':
+            pass
+        elif key == 'x':
+            pass
+        elif key == 'shift':
+            pass
+        curr_posi = generic_event.cvAutoTrackerLoop.get_position()
+        self.collection_path_dict["special_keys"].append(
+            {
+                "position":curr_posi,
+                "key name":key,
+                "id":len(self.collection_path_dict["special_keys"])+1
+            }
+        )
+
 
 class CollectionPathRecord(FlowTemplate):
     def __init__(self, upper: CollectionPathConnector):
         super().__init__(upper,flow_id=ST.COLLECTION_PATH_RECORD ,next_flow_id=ST.COLLECTION_PATH_END)
 
-        keyboard.add_hotkey("w", self._add_key_to_dict, args=('w',))
-        keyboard.add_hotkey("space", self._add_key_to_dict, args=('space',))
-        keyboard.add_hotkey("x", self._add_key_to_dict, args=('x',))
-        keyboard.add_hotkey("shift", self._add_key_to_dict, args=('shift',))
+        
 
         self.upper = upper
         
@@ -74,24 +102,7 @@ class CollectionPathRecord(FlowTemplate):
         )
         self.upper.collection_path_dict["all_position"].append(posi)
 
-    def _add_key_to_dict(self, key:str):
-        curr_posi = generic_event.cvAutoTrackerLoop.get_position()
-        if key == 'w':
-            pass
-        elif key == 'space':
-            pass
-        elif key == 'x':
-            pass
-        elif key == 'shift':
-            pass
-        curr_posi = generic_event.cvAutoTrackerLoop.get_position()
-        self.upper.collection_path_dict["special_keys"].append(
-            {
-                "position":curr_posi,
-                "key name":key,
-                "id":len(self.upper.collection_path_dict["special_keys"])+1
-            }
-        )
+    
 
     def state_in(self):
 
