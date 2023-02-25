@@ -3,6 +3,7 @@ from common import flow_state as ST, timer_module
 from source.interaction.interaction_core import itt
 from source.operator import pickup_operator
 from source.flow import teyvat_move_flow
+from source.interaction.minimap_tracker import tracker
 from source.controller import combat_loop
 from source.common.base_threading import BaseThreading
 from source.funclib import collector_lib, generic_lib, combat_lib
@@ -55,7 +56,7 @@ class CollectorFlow(BaseThreading):
         
         self.collector_posi_dict = None
         self.current_state = ST.INIT_MOVETO_COLLECTOR
-        self.current_position = generic_event.cvAutoTrackerLoop.get_position()[1:]
+        self.current_position = tracker.get_position()
         self.last_collection_posi = [9999,9999]
         self.picked_list = []
         self.recover_timeout = timer_module.TimeoutTimer(200)
@@ -188,7 +189,7 @@ class CollectorFlow(BaseThreading):
     
     def recover_all(self):
         self.stop_all()
-        self.current_position = generic_event.cvAutoTrackerLoop.get_position()[1:]
+        self.current_position = tracker.get_position()
         self.tmf.reset_setting()
         gs_posi = collector_lib.load_items_position(marker_title=asset.QTSX.text, ret_mode=1, match_mode=1)
         gs_posi = np.asarray(gs_posi)
@@ -286,8 +287,8 @@ class CollectorFlow(BaseThreading):
                 self.collector_posi_dict = collector_lib.load_items_position(self.collector_name, blacklist_id=self.shielded_id)
                 self.shielded_posi_list = collector_lib.load_items_position(self.collector_name, blacklist_id=self.shielded_id, ret_mode=1, check_mode=1)
                 scene_lib.switch_to_page(scene_manager.page_main, self.checkup_stop_func)
-                generic_event.while_until_no_excessive_error(self.checkup_stop_func)
-                self.current_position = generic_event.cvAutoTrackerLoop.get_position()[1:]
+                tracker.while_until_no_excessive_error(self.checkup_stop_func)
+                self.current_position = tracker.get_position()
                 self.collection_details = load_json("collection_id_details.json", "config\\auto_collector")
                 if True:
                     self.collector_posi_dict.sort(key=self.sort_by_distance_and_succrate)
@@ -317,7 +318,7 @@ class CollectorFlow(BaseThreading):
                     continue
                 logger.info("正在前往：" + self.collector_name)
                 logger.info(f"物品id：{self.collection_id}")
-                while generic_event.cvAutoTrackerLoop.in_excessive_error:
+                while tracker.in_excessive_error:
                     if self.checkup_stop_func():
                         break
                     time.sleep(1)

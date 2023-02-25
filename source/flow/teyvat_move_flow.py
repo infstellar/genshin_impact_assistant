@@ -8,7 +8,7 @@ from source.controller import teyvat_move_controller
 from source.common.base_threading import BaseThreading
 from funclib.err_code_lib import ERR_PASS, ERR_STUCK
 from source.funclib import scene_lib
-from source.common import generic_event
+from source.interaction.minimap_tracker import tracker
 
 IN_MOVE = 0
 IN_FLY = 1
@@ -81,12 +81,10 @@ class TeyvatMoveFlow(BaseThreading):
         self.motion_state = IN_MOVE
     
     def align_position(self, tx, ty):
-        b, x, y = generic_event.cvAutoTrackerLoop.get_position()
-        if b:
-            angle = get_target_relative_angle(x, y, tx, ty)
-            movement.view_to_angle_teyvat(angle, self.checkup_stop_func)
-            # print(x, y, angle)
-        return 0
+        x, y = tracker.get_position()
+        angle = get_target_relative_angle(x, y, tx, ty)
+        movement.view_to_angle_teyvat(angle, self.checkup_stop_func)
+        # print(x, y, angle)
     
     def set_stop_rule(self, mode=0):
         self.stop_rule = mode
@@ -142,7 +140,7 @@ class TeyvatMoveFlow(BaseThreading):
                 self.current_state = ST.IN_TEYVAT_TELEPORT
 
             if self.current_state == ST.IN_TEYVAT_TELEPORT:
-                curr_posi = generic_event.cvAutoTrackerLoop.get_position()[1:]
+                curr_posi = tracker.get_position()
                 scene_lib.switch_to_page(scene_manager.page_bigmap, self.checkup_stop_func)
                 # Obtain the coordinates of the transmission anchor closest to the target coordinates
                 tw_posi = big_map.nearest_big_map_tw_posi(curr_posi, self.target_posi, self.checkup_stop_func, include_gs=True) # 获得距离目标坐标最近的传送锚点坐标 
@@ -184,7 +182,7 @@ class TeyvatMoveFlow(BaseThreading):
                     if self.checkup_stop_func():
                         break
                     time.sleep(1)
-                while generic_event.cvAutoTrackerLoop.in_excessive_error:
+                while tracker.in_excessive_error:
                     if self.checkup_stop_func():
                         break
                     time.sleep(1)
@@ -193,7 +191,7 @@ class TeyvatMoveFlow(BaseThreading):
             if self.current_state == ST.AFTER_TEYVAT_TELEPORT:
                 scene_lib.switch_to_page(scene_manager.page_main, self.checkup_stop_func)
                 time.sleep(2)
-                curr_posi = generic_event.cvAutoTrackerLoop.get_position()[1:]
+                curr_posi = tracker.get_position()
                 scene_lib.switch_to_page(scene_manager.page_bigmap, self.checkup_stop_func)
                 tw_posi = big_map.nearest_teyvat_tw_posi(curr_posi, self.target_posi, self.checkup_stop_func)
                 p1 = euclidean_distance(self.target_posi, tw_posi)
@@ -251,7 +249,7 @@ class TeyvatMoveFlow(BaseThreading):
                 
                     '''可能会加体力条检测'''
                 # if self.stop_rule == 0:    
-                #     if euclidean_distance(generic_event.cvAutoTrackerLoop.get_position()[1:], self.target_posi)<=10:
+                #     if euclidean_distance(tracker.get_position(), self.target_posi)<=10:
                 #         self.current_state = ST.END_TEYVAT_MOVE
                 # elif self.stop_rule == 1:
                 #     if generic_lib.f_recognition():

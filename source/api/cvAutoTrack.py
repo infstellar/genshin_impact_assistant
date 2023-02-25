@@ -52,6 +52,14 @@ class AutoTrackerLoop(BaseThreading):
         self.start_sleep_timer = timer_module.Timer(diff_start_time=61)
         self.loaded_flag = True
 
+    def while_until_no_excessive_error(self, stop_func):
+        logger.info(t2t("等待cvautotrack获取坐标"))
+        self.start_sleep_timer.reset() # type: ignore
+        while self.is_in_excessive_error(): # type: ignore
+            if stop_func():
+                return 0
+            time.sleep(1)
+    
     def run(self) -> None:
         ct = 0
         time.sleep(0.1)
@@ -124,14 +132,14 @@ class AutoTrackerLoop(BaseThreading):
             self.load_dll()
             time.sleep(3)
         self.start_sleep_timer.reset()
-        return self.position
+        return self.position[1:]
 
     def get_rotation(self):
         if not self.loaded_flag:
             self.load_dll()
             time.sleep(3)
         self.start_sleep_timer.reset()
-        return self.rotation
+        return self.rotation[1:]
 
     def is_in_excessive_error(self):
         if not self.loaded_flag:

@@ -6,7 +6,7 @@ from common import timer_module
 from source.funclib import generic_lib, movement, static_lib
 from source.manager import img_manager, asset
 import cv2
-from source.common import generic_event
+from source.interaction.minimap_tracker import tracker
 
 SEARCH_MODE_FINDING = 1
 SEARCH_MODE_PICKUP = 0
@@ -200,11 +200,11 @@ class PickupOperator(BaseThreading):
         self.flicker_timer.reset()
 
     def cview_toward_target(self):
-        cp = generic_event.cvAutoTrackerLoop.get_position()[1:]
+        cp = tracker.get_position()
         if euclidean_distance(cp,self.target_posi)>= self.max_distance_from_target:
             movement.reset_view()
             logger.debug("too far from source.the target")
-            while euclidean_distance(generic_event.cvAutoTrackerLoop.get_position()[1:], self.target_posi) >= 8:
+            while euclidean_distance(tracker.get_position(), self.target_posi) >= 8:
                 if self.checkup_stop_func():
                     return 0
                 movement.change_view_to_posi(self.target_posi, self.checkup_stop_func)

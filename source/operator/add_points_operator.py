@@ -1,5 +1,5 @@
 from source.util import *
-from source.common import generic_event
+from source.interaction.minimap_tracker import tracker
 from source.common.base_threading import BaseThreading
 
 
@@ -9,7 +9,7 @@ class add_point(BaseThreading):
         super().__init__()
 
     def get_points(self):
-        generic_event.cvAutoTrackerLoop.get_position()[:2]
+        tracker.get_position()
         pass
 
 

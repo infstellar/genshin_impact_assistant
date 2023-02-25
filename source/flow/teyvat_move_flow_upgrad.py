@@ -7,7 +7,7 @@ from source.interaction.interaction_core import itt
 from source.controller import teyvat_move_controller
 from funclib.err_code_lib import ERR_PASS, ERR_STUCK
 from source.funclib import scene_lib
-from source.common import generic_event
+from source.interaction.minimap_tracker import tracker
 from source.flow.flow_template import FlowConnector, FlowController, FlowTemplate, EndFlowTenplate
 
 IN_MOVE = 0
@@ -56,7 +56,7 @@ class TeyvatTeleport(FlowTemplate):
         """
         这个代码是垃圾 之后大地图坐标识别模块接入之后要重写
         """
-        curr_posi = generic_event.cvAutoTrackerLoop.get_position()[1:]
+        curr_posi = tracker.get_position()
         scene_lib.switch_to_page(scene_manager.page_bigmap, self.upper.checkup_stop_func)
         # Obtain the coordinates of the transmission anchor closest to the target coordinates
         tw_posi = big_map.nearest_big_map_tw_posi(curr_posi, self.upper.target_posi, self.upper.checkup_stop_func, include_gs=True, include_dm=True) # 获得距离目标坐标最近的传送锚点坐标 
@@ -96,7 +96,7 @@ class TeyvatTeleport(FlowTemplate):
             if self.upper.checkup_stop_func():
                 break
             time.sleep(1)
-        while generic_event.cvAutoTrackerLoop.in_excessive_error:
+        while tracker.in_excessive_error:
             if self.upper.checkup_stop_func():
                 break
             time.sleep(1)
@@ -106,7 +106,7 @@ class TeyvatTeleport(FlowTemplate):
         """也是垃圾"""
         scene_lib.switch_to_page(scene_manager.page_main, self.upper.checkup_stop_func)
         time.sleep(2)
-        curr_posi = generic_event.cvAutoTrackerLoop.get_position()[1:]
+        curr_posi = tracker.get_position()
         scene_lib.switch_to_page(scene_manager.page_bigmap, self.upper.checkup_stop_func)
         tw_posi = big_map.nearest_teyvat_tw_posi(curr_posi, self.upper.target_posi, self.upper.checkup_stop_func)
         p1 = euclidean_distance(self.upper.target_posi, tw_posi)
@@ -178,7 +178,7 @@ class TeyvatMove(FlowTemplate):
 
             '''可能会加体力条检测'''
         # if self.stop_rule == 0:    
-        #     if euclidean_distance(generic_event.cvAutoTrackerLoop.get_position()[1:], self.target_posi)<=10:
+        #     if euclidean_distance(tracker.get_position(), self.target_posi)<=10:
         #         self.current_state = ST.END_TEYVAT_MOVE
         # elif self.stop_rule == 1:
         #     if generic_lib.f_recognition():

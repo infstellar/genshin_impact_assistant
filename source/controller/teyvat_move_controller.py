@@ -1,6 +1,7 @@
 from source.util import *
 from source.common.base_threading import BaseThreading
 from source.common import generic_event
+from source.interaction.minimap_tracker import tracker
 from source.interaction.interaction_core import itt
 from source.funclib import generic_lib, movement, static_lib
 from source.manager import img_manager, asset
@@ -70,8 +71,8 @@ class TeyvatMoveController(BaseThreading):
     def continue_threading(self):
         if self.pause_threading_flag != False:
             self.pause_threading_flag = False
-            if len(generic_event.cvAutoTrackerLoop.history_posi) != 0:
-                generic_event.cvAutoTrackerLoop.history_posi = [generic_event.cvAutoTrackerLoop.history_posi[-1]]
+            if len(tracker.history_posi) != 0:
+                tracker.history_posi = [tracker.history_posi[-1]]
 
     
     def caculate_next_priority_point(self, currentp, targetp):
@@ -120,28 +121,23 @@ class TeyvatMoveController(BaseThreading):
                 
             '''write your code below'''
             
-            self.current_posi = generic_event.cvAutoTrackerLoop.get_position()
-            if not self.current_posi[0]==False:
-                self.current_posi=self.current_posi[1:]
-            else:
-                logger.debug("position ERROR")
-                continue
+            self.current_posi = tracker.get_position()
             p1 = self.caculate_next_priority_point(self.current_posi, self.target_positon)
             # print(p1)
             movement.change_view_to_posi(p1, self.checkup_stop_func)
             if (not static_lib.W_KEYDOWN) and (not self.pause_threading_flag):
                 self.itt.key_down('w')
                 
-            if len(generic_event.cvAutoTrackerLoop.history_posi) >= 29:
-                p1 = generic_event.cvAutoTrackerLoop.history_posi[0][1:]
-                p2 = generic_event.cvAutoTrackerLoop.history_posi[-1][1:]
+            if len(tracker.history_posi) >= 29:
+                p1 = tracker.history_posi[0][1:]
+                p2 = tracker.history_posi[-1][1:]
                 if euclidean_distance(p1,p2)<=30:
                     logger.warning("检测到移动卡住，正在退出")
                     self.last_err_code = ERR_STUCK
                     self.pause_threading()
             
             if self.stop_rule == 0:
-                if euclidean_distance(self.target_positon, generic_event.cvAutoTrackerLoop.get_position()[1:])<=10:
+                if euclidean_distance(self.target_positon, tracker.get_position())<=10:
                     self.last_err_code = ERR_PASS
                     self.pause_threading()
                     logger.info(t2t("已到达目的地附近，本次导航结束。"))

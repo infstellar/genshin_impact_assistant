@@ -1,9 +1,9 @@
 from source.util import *
 from source.common.base_threading import BaseThreading
-from source.common import generic_event
 from source.interaction.interaction_core import itt
 from source.funclib import generic_lib, movement, static_lib
 from source.manager import img_manager, asset
+from source.interaction.minimap_tracker import tracker
 import numpy as np
 from funclib.err_code_lib import ERR_PASS, ERR_STUCK
 '''
@@ -65,12 +65,12 @@ class TeyvatMoveController(BaseThreading):
     def continue_threading(self):
         if self.pause_threading_flag != False:
             self.pause_threading_flag = False
-            if len(generic_event.cvAutoTrackerLoop.history_posi) != 0:
-                generic_event.cvAutoTrackerLoop.history_posi = [generic_event.cvAutoTrackerLoop.history_posi[-1]]
+            if len(tracker.history_posi) != 0:
+                tracker.history_posi = [tracker.history_posi[-1]]
 
     
     def _is_arrive_current_point(self):
-        curr_posi = generic_event.cvAutoTrackerLoop.get_position()[1:]
+        curr_posi = tracker.get_position()
         if euclidean_distance(curr_posi, self.current_point) <= self.posi_offset:
             return True
         else:
@@ -99,12 +99,7 @@ class TeyvatMoveController(BaseThreading):
                 
             '''write your code below'''
             
-            self.current_posi = generic_event.cvAutoTrackerLoop.get_position()
-            if not self.current_posi[0] == False:
-                self.current_posi=self.current_posi[1:]
-            else:
-                logger.debug("position ERROR")
-                continue
+            self.current_posi = tracker.get_position()
             
 
             if self._is_arrive_current_point():
@@ -117,9 +112,9 @@ class TeyvatMoveController(BaseThreading):
             if (not static_lib.W_KEYDOWN) and (not self.pause_threading_flag):
                 self.itt.key_down('w')
                 
-            if len(generic_event.cvAutoTrackerLoop.history_posi) >= 29:
-                p1 = generic_event.cvAutoTrackerLoop.history_posi[0][1:]
-                p2 = generic_event.cvAutoTrackerLoop.history_posi[-1][1:]
+            if len(tracker.history_posi) >= 29:
+                p1 = tracker.history_posi[0][1:]
+                p2 = tracker.history_posi[-1][1:]
                 if euclidean_distance(p1,p2)<=30:
                     logger.warning("检测到移动卡住，正在退出")
                     self.last_err_code = ERR_STUCK

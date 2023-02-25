@@ -8,8 +8,7 @@ from source.path_lib import CONFIG_PATH_SETTING
 if load_json("config.json", CONFIG_PATH_SETTING)["interaction_mode"] == 'Dm':
     from source.interaction.interaction_dm import unbind, bind
 
-global W_KEYDOWN, cvAutoTrackerLoop
-cvAutoTrackerLoop = None
+global W_KEYDOWN
 class GenericEvent(BaseThreading):
     
     def __init__(self):
@@ -65,26 +64,6 @@ class GenericEvent(BaseThreading):
                         logger.info(t2t("当前窗口焦点为") + str(win_name) + t2t("是原神窗口") + str(process_name) + t2t("，操作暂停 ") + str(5 - (time.time()%5)) +t2t(" 秒"))
                         time.sleep(5 - (time.time()%5))
                     bind()
-
-
-def static_lib_init():
-    global W_KEYDOWN, cvAutoTrackerLoop
-    logger.debug("import cvAutoTrack")
-    from source.api import cvAutoTrack
-    cvAutoTrackerLoop = cvAutoTrack.AutoTrackerLoop()
-    cvAutoTrackerLoop.setDaemon(True)
-    cvAutoTrackerLoop.start()
-    time.sleep(1)
-
-def while_until_no_excessive_error(stop_func):
-    logger.info(t2t("等待cvautotrack获取坐标"))
-    cvAutoTrackerLoop.start_sleep_timer.reset() # type: ignore
-    while cvAutoTrackerLoop.is_in_excessive_error(): # type: ignore
-        if stop_func():
-            return 0
-        time.sleep(1)
-
-static_lib_init()
 
 
 logger.debug("start GenericEventThread")

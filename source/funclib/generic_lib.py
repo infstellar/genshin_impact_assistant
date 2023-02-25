@@ -3,7 +3,7 @@ from source.manager import scene_manager, img_manager, posi_manager, asset
 from source.funclib import big_map, static_lib
 from source.util import *
 from source.funclib import scene_lib
-from source.common import generic_event
+from source.interaction.minimap_tracker import tracker
 
 NORMAL = 0
 NEGATIVE_Y = 1
@@ -80,7 +80,7 @@ def recover_all(stop_func):
         if stop_func():
             break
         time.sleep(1)
-    while generic_event.cvAutoTrackerLoop.in_excessive_error:
+    while tracker.in_excessive_error:
         if stop_func():
             break
         time.sleep(1)

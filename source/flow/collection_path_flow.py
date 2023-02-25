@@ -2,7 +2,7 @@ from source.util import *
 import keyboard
 from source.flow.flow_template import FlowController, FlowTemplate, FlowConnector, EndFlowTenplate
 import source.flow.flow_code as FC
-from source.common import generic_event
+from source.interaction.minimap_tracker import tracker
 from source.controller import combat_loop
 from common import flow_state as ST, timer_module
 from source.funclib import generic_lib, movement, combat_lib
@@ -64,7 +64,7 @@ class CollectionPathConnector(FlowConnector):
         keyboard.remove_hotkey("shift")
 
     def _add_key_to_dict(self, key:str):
-        curr_posi = generic_event.cvAutoTrackerLoop.get_position()
+        curr_posi = tracker.get_position()
         if key == 'w':
             pass
         elif key == 'space':
@@ -73,7 +73,7 @@ class CollectionPathConnector(FlowConnector):
             pass
         elif key == 'shift':
             pass
-        curr_posi = generic_event.cvAutoTrackerLoop.get_position()
+        curr_posi = tracker.get_position()
         self.collection_path_dict["special_keys"].append(
             {
                 "position":curr_posi,
@@ -107,7 +107,7 @@ class CollectionPathRecord(FlowTemplate):
     def state_in(self):
 
         all_posi = self.upper.collection_path_dict["all_position"]
-        curr_posi = generic_event.cvAutoTrackerLoop.get_position()
+        curr_posi = tracker.get_position()
         
         min_dist = quick_euclidean_distance_plist(curr_posi, all_posi).min()
 
