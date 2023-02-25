@@ -116,8 +116,8 @@ class SwitchCharacterOperator(BaseThreading):
                 logger.debug(f"switch_character: targetnum: {chara.n} current num: {self.current_num}")
                 if chara.n != self.current_num:
                     r = self._switch_character(chara.n)
-                if not r: # Failed
-                    continue
+                    if not r: # Failed
+                        continue
 
                 self.tactic_operator.set_parameter(chara.tactic_group, chara)
                 self.tactic_operator.restart_executor()
@@ -148,9 +148,9 @@ class SwitchCharacterOperator(BaseThreading):
                 combat_lib.unconventionality_situation_detection(self.itt)
                 self.itt.key_press(str(x))
                 time.sleep(0.03)
-                if combat_lib.get_current_chara_num(self.itt, self.checkup_stop_func, max_times = 50) == x:
+                if combat_lib.get_current_chara_num(self.itt, self.checkup_stop_func, max_times = 5) == x:
                     switch_succ_num += 1
-            if i >= 10 or is_busy == True:
+            if i >= 5 or is_busy == True:
                 r = self._check_and_reborn()
                 if not r: # if r == False
                     self.died_character.append(x)

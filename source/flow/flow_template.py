@@ -8,6 +8,7 @@ from source.funclib.err_code_lib import *
 class FlowConnector():
     def __init__(self):
         self.while_sleep = 0.1
+        self.checkup_stop_func = None
 
     def get_while_sleep(self):
         return self.while_sleep
@@ -87,13 +88,15 @@ class EndFlowTenplate(FlowTemplate):
 
 
 class FlowController(base_threading.BaseThreading):
-    def __init__(self):
+    def __init__(self, flow_connector:FlowConnector):
         super().__init__()
         self.last_err_code = ERR_NONE
         self.flow_dict = {}
         self.current_flow_id = None
         self.end_flow_id = None
-        self.get_while_sleep = None
+        self.flow_connector = flow_connector
+        self.get_while_sleep = flow_connector.get_while_sleep
+        self.flow_connector.checkup_stop_func = self.checkup_stop_func
         
     def append_flow(self, flow:FlowTemplate):
         self.flow_dict[str(flow.flow_id)] = flow

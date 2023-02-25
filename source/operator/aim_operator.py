@@ -61,6 +61,8 @@ class AimOperator(BaseThreading):
                 continue
             
             ret = self.auto_aim() # 自动瞄准
+            if ret is None:
+                return
             if ret == -1:
                 self.enemy_flag = False # 没找到敌人
                 self.finding_enemy() # 寻找敌人
@@ -69,6 +71,7 @@ class AimOperator(BaseThreading):
                     self.reset_enemy_loops()
             elif ret <= 30 and self.auto_distance:
                 self.keep_distance_with_enemy() # 与敌人保持距离
+            
 
     def get_enemy_feature(self, ret_mode=1):
         """获得敌人位置

@@ -204,11 +204,9 @@ class TeyvatMovePass(EndFlowTenplate):
 
 class TeyvatMoveFlowController(FlowController):
     def __init__(self):
-        super().__init__()
+        super().__init__(flow_connector=TeyvatMoveFlowConnector())
         self.current_flow_id = ST.INIT_TEYVAT_TELEPORT
-        
-        self.flow_connector = TeyvatMoveFlowConnector()
-        self.flow_connector.checkup_stop_func = self.checkup_stop_func
+        self.flow_connector = self.flow_connector # type: TeyvatMoveFlowConnector
         self._add_sub_threading(self.flow_connector.tmc)
         self.get_while_sleep = self.flow_connector.get_while_sleep
 

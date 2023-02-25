@@ -139,7 +139,7 @@ class AutoTrackerLoop(BaseThreading):
             self.load_dll()
             time.sleep(3)
         self.start_sleep_timer.reset()
-        return self.rotation[1:]
+        return self.rotation[1]
 
     def is_in_excessive_error(self):
         if not self.loaded_flag:
