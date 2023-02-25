@@ -26,5 +26,9 @@ class TaskTemplate(BaseThreading):
                 continue
             '''write your code below'''
             
+    def end_task(self):
+        self.stop_threading()
+        return
+            
             
             

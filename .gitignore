@@ -207,3 +207,5 @@ config/settings/dm.json
 test1.py
 testt.py
 source/test/test242.py
+config/collection_path/*
+!config/collection_path/.gitkeep

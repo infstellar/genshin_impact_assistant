@@ -162,6 +162,10 @@ class CollectionPathRecord(FlowTemplate):
         
         self.rfc = FC.INIT
 
+class CollectionPathEnd(EndFlowTenplate):
+    def __init__(self, upper: FlowConnector):
+        super().__init__(upper, flow_id=ST.COLLECTION_PATH_END, err_code_id=ERR_PASS)
+
 class CollectionPathController(FlowController):
     def __init__(self):
         super().__init__(CollectionPathConnector())
@@ -170,6 +174,7 @@ class CollectionPathController(FlowController):
         self.current_flow_id = ST.COLLECTION_PATH_RECORD
     
         self.append_flow(CollectionPathRecord(self.flow_connector))   
+        self.append_flow(CollectionPathEnd(self.flow_connector))
     
 if __name__ == '__main__':
     CollectionPathController().start()
