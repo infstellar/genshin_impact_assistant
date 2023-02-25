@@ -32,3 +32,10 @@ pywebio
 pydirectinput
 
 # pycocotools NO PYCOCOTOOLS WHEN AUTOINSTALL!
+
+adbutils==0.11.0
+uiautomator2==2.16.17
+filelock==3.3.0
+lxml==4.6.3
+pydantic
+gimap==3.4.3
