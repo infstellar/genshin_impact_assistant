@@ -4,7 +4,7 @@ import gimap
 from cached_property import cached_property
 
 from source.device.alas.decorator import has_cached_property, del_cached_property
-from source.map.minimap.utils import *
+from source.map.detection.utils import *
 
 
 class MiniMapResource:
@@ -29,11 +29,17 @@ class MiniMapResource:
     # Downscale direction arrows for faster run
     DIRECTION_ROTATATION_MAP_SCALE = 0.5
 
-    def __init__(self):
+    # Downscale GIMAP to run faster
+    BIGMAP_SEARCH_SCALE = 0.25
+    # Magic number that resize a 1280x720 screenshot to GIMAP_luma_05x_ps
+    BIGMAP_POSITION_SCALE = 0.6137
+
+    def __init__(self, device_type: str):
+        self.device_type = device_type
+
         # 'wild' or 'city'
         self.scene = 'wild'
         # Usually to be 0.4~0.5
-        # Warnnings will be logged if similarity <= 0.25
         self.position_similarity = 0.
         # Usually > 0.05
         self.position_similarity_local = 0.
@@ -45,6 +51,13 @@ class MiniMapResource:
         self.direction_similarity = 0.
         # Current character direction with an error of about 0.1 degree
         self.direction: float = 0.
+
+        # Usually to be 0.4~0.5
+        self.bigmap_similarity = 0.
+        # Usually > 0.05
+        self.bigmap_similarity_local = 0.
+        # Current position on GIMAP with an error of about 0.1 pixel
+        self.bigmap: t.Tuple[float, float] = (0, 0)
 
     @cached_property
     def _minimap_mask(self):
@@ -67,6 +80,18 @@ class MiniMapResource:
         # About 100ms to load
         file = gimap.GIMAP_luma_05x_ps()
         image = load_image(file)
+        return image
+
+    @cached_property
+    def GIMAP_bigmap(self):
+        image = self.GIMAP
+        image = cv2.resize(image, None, fx=self.BIGMAP_SEARCH_SCALE, fy=self.BIGMAP_SEARCH_SCALE,
+                           interpolation=cv2.INTER_NEAREST)
+
+        # Pad 600px, cause camera sight in game is larger than GIMAP
+        border = int(600 * self.BIGMAP_SEARCH_SCALE)
+        border = (border, border, border, border)
+        image = cv2.copyMakeBorder(image, *border, borderType=cv2.BORDER_REPLICATE)
         return image
 
     @cached_property

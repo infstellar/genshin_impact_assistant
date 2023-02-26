@@ -1,14 +1,6 @@
-from cached_property import cached_property
-
-from source.map.bigmap.bigmap import BigMap
-from source.map.minimap.minimap import MiniMap
+from source.map.detection.bigmap import BigMap
+from source.map.detection.minimap import MiniMap
 
 
-class Map:
-    @cached_property
-    def bigmap(self):
-        return BigMap()
-
-    @cached_property
-    def minimap(self):
-        return MiniMap()
+class Map(MiniMap, BigMap):
+    pass
