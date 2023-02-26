@@ -59,8 +59,7 @@ class MiniMap(MiniMapResource):
         # Location on GIMAP
         global_loca = (lookup_loca + search_area[:2]) / self.POSITION_SEARCH_SCALE
         # Can't figure out why but the result_of_0.5_lookup_scale + 0.5 ~= result_of_1.0_lookup_scale
-        if self.POSITION_SEARCH_SCALE == 0.5:
-            global_loca += 0.5
+        global_loca += self.POSITION_MOVE
         return precise_sim, local_sim, global_loca
 
     @property
@@ -120,12 +119,11 @@ class MiniMap(MiniMapResource):
             logger.warning('No direction arrow on minimap')
             return
         image = crop(image, area=area)
-        mapping = cv2.resize(image, None,
-                             fx=self.DIRECTION_ROTATATION_MAP_SCALE, fy=self.DIRECTION_ROTATATION_MAP_SCALE,
-                             interpolation=cv2.INTER_NEAREST)
+        scale = self.DIRECTION_ROTATION_SCALE * self.DIRECTION_SEARCH_SCALE
+        mapping = cv2.resize(image, None, fx=scale, fy=scale, interpolation=cv2.INTER_NEAREST)
         result = cv2.matchTemplate(self.ARROW_ROTATION_MAP, mapping, cv2.TM_CCOEFF_NORMED)
         _, sim, _, loca = cv2.minMaxLoc(result)
-        loca = np.array(loca) / self.DIRECTION_ROTATATION_MAP_SCALE // (self.DIRECTION_RADIUS * 2)
+        loca = np.array(loca) / self.DIRECTION_SEARCH_SCALE // (self.DIRECTION_RADIUS * 2)
         degree = int((loca[0] + loca[1] * 8) * 5)
 
         def to_map(x):
@@ -157,7 +155,7 @@ class MiniMap(MiniMapResource):
         self.direction_similarity = round(precise_sim, 3)
         self.direction = precise_loca % 360
 
-    def update(self, image):
+    def update_minimap(self, image):
         self.update_position(image)
         self.update_direction(image)
 
@@ -195,7 +193,7 @@ if __name__ == '__main__':
     device = Device('127.0.0.1:7555')
     device.disable_stuck_detection()
     device.screenshot_interval_set(0.3)
-    minimap = MiniMap()
+    minimap = MiniMap('Emulator')
 
     # 从璃月港传送点出发，初始坐标大概大概50px以内就行
     # 坐标位置是 GIMAP 的图片坐标
@@ -203,4 +201,4 @@ if __name__ == '__main__':
     # 你可以移动人物，GIA会持续监听小地图位置和角色朝向
     while 1:
         device.screenshot()
-        minimap.update(device.image)
+        minimap.update_minimap(device.image)

@@ -14,7 +14,7 @@ class BigMap(MiniMapResource):
         _, sim, _, loca = cv2.minMaxLoc(result)
         # Remove < 0 because GIMAP has pure background
         result[result <= 0] = 0
-        Image.fromarray((result * 255).astype(np.uint8)).save('match_result.png')
+        # Image.fromarray((result * 255).astype(np.uint8)).save('match_result.png')
 
         # Gaussian filter to get local maximum
         local_maximum = cv2.subtract(result, cv2.GaussianBlur(result, (5, 5), 0))
@@ -29,19 +29,21 @@ class BigMap(MiniMapResource):
         precise_sim, precise_loca = cubic_find_maximum(precise, precision=0.05)
         precise_loca -= 5
 
-        global_loca = (loca + precise_loca + center) / self.BIGMAP_SEARCH_SCALE / self.POSITION_SEARCH_SCALE
+        global_loca = (loca + precise_loca + center - self.BIGMAP_BORDER_PAD) \
+                      / self.BIGMAP_SEARCH_SCALE / self.POSITION_SEARCH_SCALE
         self.bigmap_similarity = sim
         self.bigmap_similarity_local = local_sim
         self.bigmap = global_loca
         return sim, global_loca
 
-    def update(self, image):
+    def update_bigmap(self, image):
         """
         Get position on bigmap (where you enter from the M button), costs about 125ms.
 
         The following attributes will be set:
-        - position_similarity
-        - position
+        - bigmap_similarity
+        - bigmap_similarity_local
+        - bigmap
         """
         self._predict_bigmap(image)
 

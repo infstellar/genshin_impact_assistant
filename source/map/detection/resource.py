@@ -23,18 +23,28 @@ class MiniMapResource:
     POSITION_SEARCH_SCALE = 0.5
     # Search the area that is 1.666x minimap, about 100px in wild on GIMAP
     POSITION_SEARCH_RADIUS = 1.666
+    # Can't figure out why but the result_of_0.5_lookup_scale + 0.5 ~= result_of_1.0_lookup_scale
+    POSITION_MOVE = (0.5, 0.5)
 
     # Radius to search direction arrow, about 15px
     DIRECTION_RADIUS = int(MINIMAP_RADIUS / 6)
     # Downscale direction arrows for faster run
-    DIRECTION_ROTATATION_MAP_SCALE = 0.5
+    DIRECTION_SEARCH_SCALE = 0.5
+    # Scale to 1280x720
+    DIRECTION_ROTATION_SCALE = 1.0
 
     # Downscale GIMAP to run faster
     BIGMAP_SEARCH_SCALE = 0.25
     # Magic number that resize a 1280x720 screenshot to GIMAP_luma_05x_ps
     BIGMAP_POSITION_SCALE = 0.6137
+    # Pad 600px, cause camera sight in game is larger than GIMAP
+    BIGMAP_BORDER_PAD = int(600 * BIGMAP_SEARCH_SCALE)
 
     def __init__(self, device_type: str):
+        """
+        Args:
+            device_type: "Windows" or "Emulator"
+        """
         self.device_type = device_type
 
         # 'wild' or 'city'
@@ -58,6 +68,23 @@ class MiniMapResource:
         self.bigmap_similarity_local = 0.
         # Current position on GIMAP with an error of about 0.1 pixel
         self.bigmap: t.Tuple[float, float] = (0, 0)
+
+        if device_type == 'Windows':
+            pass
+        elif device_type == 'Emulator':
+            # Magic numbers for 1920x1080 mobile
+            self.MINIMAP_CENTER = (75 + 135, 22 + 135)
+            self.MINIMAP_RADIUS = 124
+            self.POSITION_SCALE_DICT = {
+                # In wild
+                'wild': 1.5571 / 1.5,
+                # In city
+                'city': 0.5150 / 1.5,
+            }
+            self.DIRECTION_RADIUS = int(self.MINIMAP_RADIUS / 6)
+            self.DIRECTION_ROTATION_SCALE = 1.0 / 1.5
+            self.BIGMAP_POSITION_SCALE = 0.6137 / 1.5
+            self.BIGMAP_BORDER_PAD = int(600 * self.BIGMAP_SEARCH_SCALE)
 
     @cached_property
     def _minimap_mask(self):
@@ -122,7 +149,7 @@ class MiniMapResource:
             # print(degree, y, x, point[0],point[0] + radius, point[1],point[1] + rotated.shape[1])
             image[point[0]:point[0] + rotated.shape[0], point[1]:point[1] + rotated.shape[1]] = rotated
         image = cv2.resize(image, None,
-                           fx=self.DIRECTION_ROTATATION_MAP_SCALE, fy=self.DIRECTION_ROTATATION_MAP_SCALE,
+                           fx=self.DIRECTION_SEARCH_SCALE, fy=self.DIRECTION_SEARCH_SCALE,
                            interpolation=cv2.INTER_NEAREST)
         # Image.fromarray(image).save('rotate_map.png')
 
@@ -143,7 +170,7 @@ class MiniMapResource:
             # print(degree, y, x, point[0],point[0] + radius, point[1],point[1] + rotated.shape[1])
             image[point[0]:point[0] + rotated.shape[0], point[1]:point[1] + rotated.shape[1]] = rotated
         image = cv2.resize(image, None,
-                           fx=self.DIRECTION_ROTATATION_MAP_SCALE, fy=self.DIRECTION_ROTATATION_MAP_SCALE,
+                           fx=self.DIRECTION_SEARCH_SCALE, fy=self.DIRECTION_SEARCH_SCALE,
                            interpolation=cv2.INTER_NEAREST)
         # Image.fromarray(image).save('rotate_map_all.png')
 
