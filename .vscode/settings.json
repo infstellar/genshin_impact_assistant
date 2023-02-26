@@ -85,5 +85,7 @@
         "withalpha",
         "XCYD",
         "YOLOX"
-    ]
+    ],
+    "codecheck.ExcludeDirectory": "",
+    "codecheck.ScanDirectory": "source"
 }

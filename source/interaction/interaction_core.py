@@ -584,7 +584,7 @@ class InteractionBGD:
         
         """
         self.operation_lock.acquire()
-        print('lock!')
+        # print('lock!')
         self.itt_exec.left_click()
         self.operation_lock.release()
         
@@ -596,7 +596,7 @@ class InteractionBGD:
 
         """
         self.operation_lock.acquire()
-        print('lock!')
+        # print('lock!')
         self.itt_exec.left_down()
         self.operation_lock.release()
         
@@ -608,7 +608,7 @@ class InteractionBGD:
 
         """
         self.operation_lock.acquire()
-        print('lock!')
+        # print('lock!')
         self.itt_exec.left_up()
         self.operation_lock.release()
 
@@ -623,7 +623,7 @@ class InteractionBGD:
             dt (float, optional): 间隔时间. Defaults to 0.05.
         """
         self.operation_lock.acquire()
-        print('lock!')
+        # print('lock!')
         self.itt_exec.left_double_click(dt=dt)
         self.operation_lock.release()
         
@@ -635,7 +635,7 @@ class InteractionBGD:
 
         """
         self.operation_lock.acquire()
-        print('lock!')
+        # print('lock!')
         self.itt_exec.right_click()
         self.operation_lock.release()
         
@@ -651,7 +651,7 @@ class InteractionBGD:
             key (str): 按键代号。查阅vkCode.py
         """
         self.operation_lock.acquire()
-        print('lock!')
+        # print('lock!')
         self.itt_exec.middle_click()
         self.operation_lock.release()
     
@@ -663,7 +663,7 @@ class InteractionBGD:
             key (str): 按键代号。查阅vkCode.py
         """
         self.operation_lock.acquire()
-        print('lock!')
+        # print('lock!')
         self.itt_exec.key_down(key)
         self.operation_lock.release()
         
@@ -679,7 +679,7 @@ class InteractionBGD:
             key (str): 按键代号。查阅vkCode.py
         """
         self.operation_lock.acquire()
-        print('lock!')
+        # print('lock!')
         self.itt_exec.key_up(key)
         self.operation_lock.release()
         
@@ -694,7 +694,7 @@ class InteractionBGD:
             key (str): 按键代号。查阅vkCode.py
         """
         self.operation_lock.acquire()
-        print('lock!')
+        # print('lock!')
         self.itt_exec.key_press(key)
         self.operation_lock.release()
         
@@ -710,7 +710,7 @@ class InteractionBGD:
             relative (bool): 是否为相对移动。
         """
         self.operation_lock.acquire()
-        print('lock!')
+        # print('lock!')
         self.itt_exec.move_to(int(x), int(y), relative=relative, isChromelessWindow=self.isChromelessWindow)
         self.operation_lock.release()
 
@@ -721,7 +721,7 @@ class InteractionBGD:
     @before_operation()
     def move_and_click(self, position, type='left', delay = 0.3):
         self.operation_lock.acquire()
-        print('lock!')
+        # print('lock!')
         
         x = int(position[0])
         y = int(position[1])
@@ -739,7 +739,7 @@ class InteractionBGD:
     @before_operation()
     def drag(self, origin_xy:list, targe_xy:list):
         self.operation_lock.acquire()
-        print('lock!')
+        # print('lock!')
         self.itt_exec.drag(origin_xy, targe_xy, isChromelessWindow=self.isChromelessWindow)
         self.operation_lock.release()
     

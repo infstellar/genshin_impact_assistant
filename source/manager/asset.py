@@ -93,11 +93,11 @@ motion_climbing = ImgIcon(path=f"{ASSETS_COMMON_IMG}\\motion_climbing.jpg",
 motion_flying = ImgIcon(path=f"{ASSETS_COMMON_IMG}\\motion_flying.jpg",
                          bbg_posi=[1706,960, 1866, 1022 ], cap_posi='bbg')# 不能删bbg
 ui_main_win = ImgIcon(path=f"{ASSETS_COMMON_IMG}\\ui\\emergency_food.jpg",
-                        print_log=LOG_WHEN_TRUE, threshold=0.96)
+                        print_log=LOG_WHEN_TRUE, threshold=0.98)
 ui_bigmap_win = ImgIcon(path=f"{ASSETS_COMMON_IMG}\\ui\\bigmap.jpg",
                          cap_posi=[1300,36,1750, 59 ], print_log=LOG_WHEN_TRUE, threshold=0.95, offset=10)
 ui_esc_menu = ImgIcon(path=f"{ASSETS_COMMON_IMG}\\ui\\esc_menu.jpg",
-                          jpgmode=0, print_log=LOG_WHEN_TRUE, threshold=0.96)
+                          jpgmode=0, print_log=LOG_WHEN_TRUE, threshold=0.97)
 ui_switch_to_time_menu = ImgIcon(path=f"{ASSETS_COMMON_IMG}\\ui\\switch_to_time_menu.jpg",
                           print_log=LOG_WHEN_TRUE)
 ui_time_menu_core = ImgIcon(path=f"{ASSETS_COMMON_IMG}\\ui\\time_menu_core.jpg",
