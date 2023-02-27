@@ -6,10 +6,7 @@ from source.flow import teyvat_move_flow
 from source.interaction.minimap_tracker import tracker
 from source.controller import combat_loop
 import numpy as np
-from source.manager import scene_manager, asset
 from funclib.err_code_lib import ERR_PASS, ERR_STUCK, ERR_COLLECTOR_FLOW_TIMEOUT
-from source.funclib import scene_lib
-from source.common import generic_event
 from source.util import *
 from source.flow.flow_template import FlowController, FlowTemplate, FlowConnector, EndFlowTenplate
 import source.flow.flow_code as FC
@@ -17,7 +14,7 @@ from source.controller import combat_loop
 from common import flow_state as ST, timer_module
 from source.funclib import generic_lib, movement, combat_lib
 from source.funclib.err_code_lib import *
-from source.manager import posi_manager as PosiM, asset
+from source.manager import asset
 from source.interaction.interaction_core import itt
 
 COLLECTION = 0

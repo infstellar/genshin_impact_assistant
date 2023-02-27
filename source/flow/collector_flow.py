@@ -12,7 +12,6 @@ import datetime
 from source.manager import scene_manager, asset
 from funclib.err_code_lib import ERR_PASS, ERR_STUCK, ERR_COLLECTOR_FLOW_TIMEOUT
 from source.funclib import scene_lib
-from source.common import generic_event
 
 COLLECTION = 0
 ENEMY = 1

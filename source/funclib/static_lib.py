@@ -3,6 +3,7 @@ from source.util import *
 global W_KEYDOWN, cvAutoTrackerLoop
 W_KEYDOWN = False
 cvAutoTrackerLoop = None
+
 if config_json["capture_mode"] == "compatibility":
     d3d_capture = None
 else:
@@ -21,7 +22,7 @@ def get_handle():
         if handle != 0:
             return 331454
 
-
+HANDLE = get_handle()
 
 
 if __name__ == '__main__':
