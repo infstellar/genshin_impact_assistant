@@ -1,6 +1,6 @@
 from source.util import *
 
-global W_KEYDOWN, cvAutoTrackerLoop
+global W_KEYDOWN, cvAutoTrackerLoop, HANDLE
 W_KEYDOWN = False
 cvAutoTrackerLoop = None
 
@@ -20,10 +20,13 @@ def get_handle():
     else:
         handle = ctypes.windll.user32.FindWindowW("Qt5152QWindowIcon", '云·原神')
         if handle != 0:
-            return 331454
+            return handle
 
 HANDLE = get_handle()
 
+def search_handle():
+    global HANDLE
+    HANDLE = get_handle()
 
 if __name__ == '__main__':
     pass

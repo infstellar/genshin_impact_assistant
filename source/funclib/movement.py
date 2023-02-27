@@ -1,7 +1,7 @@
 from source.interaction.interaction_core import itt
 from source.funclib import small_map
 from source.util import *
-from source.funclib import generic_lib, static_lib
+from source.funclib import generic_lib
 from source.interaction.minimap_tracker import tracker
 from source.manager import asset
 

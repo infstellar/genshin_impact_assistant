@@ -1,6 +1,6 @@
 from source.interaction.interaction_core import itt
-from source.manager import scene_manager, img_manager, posi_manager, asset
-from source.funclib import big_map, static_lib
+from source.manager import scene_manager, posi_manager, asset
+from source.funclib import big_map
 from source.util import *
 from source.funclib import scene_lib
 from source.interaction.minimap_tracker import tracker

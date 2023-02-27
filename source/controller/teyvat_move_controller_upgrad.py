@@ -1,10 +1,10 @@
 from source.util import *
 from source.common.base_threading import BaseThreading
 from source.interaction.interaction_core import itt
-from source.funclib import generic_lib, movement, static_lib
-from source.manager import img_manager, asset
+from source.funclib import generic_lib, movement
+from source.common import static_lib
+from source.manager import asset
 from source.interaction.minimap_tracker import tracker
-import numpy as np
 from funclib.err_code_lib import ERR_PASS, ERR_STUCK
 '''
 提瓦特大陆移动辅助控制，包括：

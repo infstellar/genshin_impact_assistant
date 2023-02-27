@@ -8,8 +8,7 @@ import cv2
 import numpy as np
 import win32api
 import win32gui
-from ctypes.wintypes import RECT
-from source.funclib import static_lib
+from source.common import static_lib
 from source.manager import img_manager, text_manager, button_manager
 
 
@@ -99,10 +98,6 @@ class InteractionBGD:
         
         # if self.handle == 0:
         #     logger.error(t2t("未找到句柄，请确认原神窗口是否开启。"))
-
-    def capture_handle(self):
-        # 获取窗口客户区的大小
-        return self.capture_obj.capture()
     
     def capture(self, posi=None, shape='yx', jpgmode=None, check_shape = True):
         """窗口客户区截图
@@ -119,15 +114,14 @@ class InteractionBGD:
             numpy.ndarray: 图片数组
         """
 
-        ret = self.capture_handle()
+        ret = self.capture_obj.capture()
         
         if check_shape:
-        
             if ret.shape != (1080, 1920, 4):
                 logger.error(t2t("截图失败, shape=") + str(ret.shape) + t2t("将在2秒后重试。"))
                 while 1:
                     time.sleep(2)
-                    ret = self.capture_handle()
+                    ret = self.capture_obj.capture()
                     if ret.shape == (1080, 1920, 4):
                         break
                     else:

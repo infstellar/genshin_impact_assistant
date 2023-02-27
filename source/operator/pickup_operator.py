@@ -2,8 +2,8 @@ from source.common.base_threading import BaseThreading
 from source.util import *
 from source.interaction.interaction_core import itt
 from source.api.pdocr_complete import ocr
-from common import timer_module
-from source.funclib import generic_lib, movement, static_lib
+from common import timer_module, static_lib
+from source.funclib import generic_lib, movement
 from source.manager import img_manager, asset
 import cv2
 from source.interaction.minimap_tracker import tracker
