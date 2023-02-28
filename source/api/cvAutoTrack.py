@@ -51,6 +51,7 @@ class AutoTrackerLoop(BaseThreading):
         self.in_excessive_error = False
         self.start_sleep_timer = timer_module.Timer(diff_start_time=61)
         self.loaded_flag = True
+        self.warning_times = 0
 
     def while_until_no_excessive_error(self, stop_func):
         logger.info(t2t("等待cvautotrack获取坐标"))
@@ -98,8 +99,11 @@ class AutoTrackerLoop(BaseThreading):
             
             if not self.position[0]:
                 if scene_lib.get_current_pagename() == 'main':
-                    logger.warning("获取坐标失败")
+                    if self.warning_times >= 2:
+                        logger.warning("获取坐标失败")
+                    self.warning_times += 1
                 else:
+                    self.warning_times = 0 
                     time.sleep(0.5)
                 self.position = (False, 0, 0)
                 self.in_excessive_error = True

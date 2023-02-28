@@ -71,7 +71,7 @@ class WindowsCapture(Capture):
     
 
     def __init__(self):
-        self.handle = static_lib.HANDLE
+        static_lib.HANDLE = static_lib.HANDLE
         super().__init__()
         self.max_fps = 30
     
@@ -80,15 +80,15 @@ class WindowsCapture(Capture):
             return True
         else:
             logger.info(t2t("research handle"))
-            self.handle = static_lib.get_handle()
+            static_lib.search_handle()
             return False
     
     def _get_capture(self):
         r = RECT()
-        self.GetClientRect(self.handle, ctypes.byref(r))
+        self.GetClientRect(static_lib.HANDLE, ctypes.byref(r))
         width, height = r.right, r.bottom
         # 开始截图
-        dc = self.GetDC(self.handle)
+        dc = self.GetDC(static_lib.HANDLE)
         cdc = self.CreateCompatibleDC(dc)
         bitmap = self.CreateCompatibleBitmap(dc, width, height)
         self.SelectObject(cdc, bitmap)
@@ -100,7 +100,7 @@ class WindowsCapture(Capture):
         self.GetBitmapBits(bitmap, total_bytes, byte_array.from_buffer(buffer))
         self.DeleteObject(bitmap)
         self.DeleteObject(cdc)
-        self.ReleaseDC(self.handle, dc)
+        self.ReleaseDC(static_lib.HANDLE, dc)
         # 返回截图数据为numpy.ndarray
         ret = np.frombuffer(buffer, dtype=np.uint8).reshape(height, width, 4)
         return ret
