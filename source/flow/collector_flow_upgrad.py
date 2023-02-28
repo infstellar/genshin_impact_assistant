@@ -43,7 +43,7 @@ class CollectorFlowConnector(FlowConnector):
         self.collection_path_list = []
         self.collection_path_index = 0
         self.collection_name = ""
-        self.to_next_posi_offset = 1.0*5
+        self.to_next_posi_offset = 1.0*5 # For CVAT's low precision
         self.special_keys_posi_offset = 1.5
         self.collector_type = COLLECTION
 

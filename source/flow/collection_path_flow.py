@@ -19,6 +19,10 @@ class CollectionPathConnector(FlowConnector):
         self.checkup_stop_func = None
         self.collection_path_dict = {
             "name":"",
+            "title":"",
+            "author":"",
+            "time":"",
+            "comment":"",
             "start_position":[],
             "end_position":[],
             "all_position":[],

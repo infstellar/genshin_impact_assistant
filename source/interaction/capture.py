@@ -24,18 +24,22 @@ class Capture():
             return False
         
 
-    def capture(self) -> np.ndarray:
-        self._capture()
+    def capture(self, is_next_img = False) -> np.ndarray:
+        """
+        is_next_img: 强制截取下一张图片
+        """
+        self._capture(is_next_img)
         self.capture_cache_lock.acquire()
         cp = self.capture_cache.copy()
         self.capture_cache_lock.release()
         return cp
     
-    def _capture(self) -> None:
-        if self.fps_timer.get_diff_time() >= 1/self.max_fps:
+    def _capture(self, is_next_img) -> None:
+        if (self.fps_timer.get_diff_time() >= 1/self.max_fps) or is_next_img:
             # testt=time.time()
             self.fps_timer.reset()
             self.capture_cache_lock.acquire()
+            self.capture_times+=1
             self.capture_cache = self._get_capture()
             while 1:
                 self.capture_cache = self._get_capture()
