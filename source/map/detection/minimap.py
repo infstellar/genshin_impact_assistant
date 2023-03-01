@@ -184,21 +184,45 @@ class MiniMap(MiniMapResource):
         return diff <= threshold or diff >= 360 - threshold
 
 
-if __name__ == '__main__':
-    """
-    MiniMap 监听测试
-    """
-    from source.device import Device
+# if __name__ == '__main__':
+#     """
+#     MiniMap 模拟器监听测试
+#     """
+#     from source.device import Device
+#
+#     device = Device('127.0.0.1:7555')
+#     device.disable_stuck_detection()
+#     device.screenshot_interval_set(0.3)
+#     minimap = MiniMap('Emulator')
+#
+#     # 从璃月港传送点出发，初始坐标大概大概50px以内就行
+#     # 坐标位置是 GIMAP 的图片坐标
+#     minimap.init_position((4580, 3046))
+#     # 你可以移动人物，GIA会持续监听小地图位置和角色朝向
+#     while 1:
+#         device.screenshot()
+#         minimap.update_minimap(device.image)
 
-    device = Device('127.0.0.1:7555')
-    device.disable_stuck_detection()
-    device.screenshot_interval_set(0.3)
-    minimap = MiniMap('Emulator')
 
-    # 从璃月港传送点出发，初始坐标大概大概50px以内就行
-    # 坐标位置是 GIMAP 的图片坐标
-    minimap.init_position((4580, 3046))
-    # 你可以移动人物，GIA会持续监听小地图位置和角色朝向
-    while 1:
-        device.screenshot()
-        minimap.update_minimap(device.image)
+# if __name__ == '__main__':
+#     """
+#     MiniMap windows窗口监听测试
+#     """
+#     from source.interaction.capture import WindowsCapture
+#     import time
+#
+#     device = WindowsCapture()
+#     minimap = MiniMap('Windows')
+#     # 从风起地传送点出发，初始坐标大概大概50px以内就行
+#     # 坐标位置是 GIMAP 的图片坐标
+#     minimap.init_position((5783, 1042))
+#     # 你可以移动人物，GIA会持续监听小地图位置和角色朝向
+#     while 1:
+#         image = device.capture()
+#         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+#         if image.shape != (1080, 1920, 3):
+#             time.sleep(0.3)
+#             continue
+#
+#         minimap.update_minimap(image)
+#         time.sleep(0.3)

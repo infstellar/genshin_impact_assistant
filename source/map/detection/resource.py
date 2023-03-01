@@ -70,7 +70,21 @@ class MiniMapResource:
         self.bigmap: t.Tuple[float, float] = (0, 0)
 
         if device_type == 'Windows':
-            pass
+            # Magic numbers for 1920x1080 desktop
+            # 80% of Emulator, 1.5 * 80% = 1.2
+            self.MINIMAP_CENTER = (60 + 108, 18 + 108)
+            self.MINIMAP_RADIUS = 99
+            self.POSITION_SCALE_DICT = {
+                # In wild
+                'wild': 1.5571 / 1.2,
+                # In city
+                'city': 0.5150 / 1.2,
+            }
+            self.DIRECTION_RADIUS = int(self.MINIMAP_RADIUS / 6)
+            self.DIRECTION_ROTATION_SCALE = 1.0 / 1.2
+            # Same as Emulator
+            self.BIGMAP_POSITION_SCALE = 0.6137 / 1.5
+            self.BIGMAP_BORDER_PAD = int(600 * self.BIGMAP_SEARCH_SCALE)
         elif device_type == 'Emulator':
             # Magic numbers for 1920x1080 mobile
             self.MINIMAP_CENTER = (75 + 135, 22 + 135)
