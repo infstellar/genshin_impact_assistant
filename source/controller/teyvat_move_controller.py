@@ -1,10 +1,10 @@
 from source.util import *
 from source.common.base_threading import BaseThreading
-from source.common import generic_event
 from source.interaction.minimap_tracker import tracker
 from source.interaction.interaction_core import itt
-from source.funclib import generic_lib, movement, static_lib
-from source.manager import img_manager, asset
+from source.funclib import generic_lib, movement
+from source.common import static_lib
+from source.manager import asset
 import numpy as np
 from funclib.err_code_lib import ERR_PASS, ERR_STUCK
 '''

@@ -1,6 +1,6 @@
 from source.util import *
 import numpy as np
-from source.funclib import big_map, static_lib
+from source.funclib import big_map
 from source.interaction.minimap_tracker import tracker
 import cv2
 

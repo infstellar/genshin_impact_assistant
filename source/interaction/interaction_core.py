@@ -8,9 +8,9 @@ import cv2
 import numpy as np
 import win32api
 import win32gui
-from ctypes.wintypes import RECT
-from source.funclib import static_lib
+from source.common import static_lib
 from source.manager import img_manager, text_manager, button_manager
+
 
 IMG_RATE = 0
 IMG_POSI = 1
@@ -33,6 +33,7 @@ def before_operation(print_log=True):
             # cc=inspect.getframeinfo(inspect.currentframe().f_back.f_back.f_back)
             if print_log:
                 logger.debug(f" operation: {func.__name__} | args: {args[1:]} | {kwargs} | function name: {func_name} & {func_name_2}")
+            
             if GLOBAL_DEVICE == DEVICE_NORMAL:
                 winname = get_active_window_process_name()
                 if winname not in process_name:
@@ -74,8 +75,8 @@ class InteractionBGD:
         self.DEBUG_MODE = False
         self.CONSOLE_ONLY = False
         self.isChromelessWindow = config_json["ChromelessWindow"]
-        self.handle = static_lib.get_handle()
         self.itt_exec = None
+        self.capture_obj = None
         self.operation_lock = threading.Lock()
         if GLOBAL_DEVICE == DEVICE_NORMAL:
             import source.interaction.interaction_normal
@@ -84,47 +85,19 @@ class InteractionBGD:
             import source.interaction.interaction_dm
             self.itt_exec = source.interaction.interaction_dm.InteractionDm()
         
-        # if handle != 0:
-        #     self.handle = handle
-        #     logger.debug(f"handle: {self.handle}")
-        
-        # if self.handle == 0:
-        #     logger.error(t2t("未找到句柄，请确认原神窗口是否开启。"))
+        if IS_DEVICE_PC:
+            from source.interaction.capture import WindowsCapture
+            self.capture_obj = WindowsCapture()
+        else:
+            from source.interaction.capture import EmulatorCapture
+            self.capture_obj = EmulatorCapture()
 
-    def capture_handle(self):
-        # 获取窗口客户区的大小
-        if config_json["capture_mode"] == "fast":
-            handle = self.handle
-            r = RECT()
-            GetClientRect(handle, ctypes.byref(r))
-            width, height = r.right, r.bottom
-            # 开始截图
-            dc = GetDC(handle)
-            cdc = CreateCompatibleDC(dc)
-            bitmap = CreateCompatibleBitmap(dc, width, height)
-            SelectObject(cdc, bitmap)
-            BitBlt(cdc, 0, 0, width, height, dc, 0, 0, SRCCOPY)
-            # 截图是BGRA排列，因此总元素个数需要乘以4
-            total_bytes = width * height * 4
-            buffer = bytearray(total_bytes)
-            byte_array = ctypes.c_ubyte * total_bytes
-            GetBitmapBits(bitmap, total_bytes, byte_array.from_buffer(buffer))
-            DeleteObject(bitmap)
-            DeleteObject(cdc)
-            ReleaseDC(handle, dc)
-            # 返回截图数据为numpy.ndarray
-            ret = np.frombuffer(buffer, dtype=np.uint8).reshape(height, width, 4)
-            # img_manager.qshow(ret)
-            return ret
-        elif config_json["capture_mode"] == "compatibility":
-            wx, wy, w, h = win32gui.GetWindowRect(self.handle)
-            r = static_lib.d3d_capture.screenshot()
-            
-            r = crop(r, area=[wx,wy,wx+w,wy+h])
-            r = cv2.cvtColor(r, cv2.COLOR_RGB2BGR)
-            # img_manager.qshow(r)
-            print()
-            return r
+        # if handle != 0:
+        #     static_lib.HANDLE = handle
+        #     logger.debug(f"handle: {static_lib.HANDLE}")
+        
+        # if static_lib.HANDLE == 0:
+        #     logger.error(t2t("未找到句柄，请确认原神窗口是否开启。"))
     
     def capture(self, posi=None, shape='yx', jpgmode=None, check_shape = True):
         """窗口客户区截图
@@ -141,19 +114,18 @@ class InteractionBGD:
             numpy.ndarray: 图片数组
         """
 
-        ret = self.capture_handle()
+        ret = self.capture_obj.capture()
         
-        if check_shape:
-        
-            if ret.shape != (1080, 1920, 4):
-                logger.error(t2t("截图失败, shape=") + str(ret.shape) + t2t("将在2秒后重试。"))
-                while 1:
-                    time.sleep(2)
-                    ret = self.capture_handle()
-                    if ret.shape == (1080, 1920, 4):
-                        break
-                    else:
-                        logger.error(t2t("截图失败, shape=") + str(ret.shape) + t2t("将在2秒后重试。"))
+        # if check_shape:
+        #     if ret.shape != (1080, 1920, 4):
+        #         logger.error(t2t("截图失败, shape=") + str(ret.shape) + t2t("将在2秒后重试。"))
+        #         while 1:
+        #             time.sleep(2)
+        #             ret = self.capture_obj.capture()
+        #             if ret.shape == (1080, 1920, 4):
+        #                 break
+        #             else:
+        #                 logger.error(t2t("截图失败, shape=") + str(ret.shape) + t2t("将在2秒后重试。"))
 
         # img_manager.qshow(ret)
         if posi is not None:
@@ -572,7 +544,7 @@ class InteractionBGD:
         p = win32api.GetCursorPos()
         # print(p[0],p[1])
         #  GetWindowRect 获得整个窗口的范围矩形，窗口的边框、标题栏、滚动条及菜单等都在这个矩形内 
-        x, y, w, h = win32gui.GetWindowRect(self.handle)
+        x, y, w, h = win32gui.GetWindowRect(static_lib.HANDLE)
         # 鼠标坐标减去指定窗口坐标为鼠标在窗口中的坐标值
         pos_x = p[0] - x
         pos_y = p[1] - y
@@ -584,7 +556,7 @@ class InteractionBGD:
         
         """
         self.operation_lock.acquire()
-        print('lock!')
+        # print('lock!')
         self.itt_exec.left_click()
         self.operation_lock.release()
         
@@ -596,7 +568,7 @@ class InteractionBGD:
 
         """
         self.operation_lock.acquire()
-        print('lock!')
+        # print('lock!')
         self.itt_exec.left_down()
         self.operation_lock.release()
         
@@ -608,7 +580,7 @@ class InteractionBGD:
 
         """
         self.operation_lock.acquire()
-        print('lock!')
+        # print('lock!')
         self.itt_exec.left_up()
         self.operation_lock.release()
 
@@ -623,7 +595,7 @@ class InteractionBGD:
             dt (float, optional): 间隔时间. Defaults to 0.05.
         """
         self.operation_lock.acquire()
-        print('lock!')
+        # print('lock!')
         self.itt_exec.left_double_click(dt=dt)
         self.operation_lock.release()
         
@@ -635,7 +607,7 @@ class InteractionBGD:
 
         """
         self.operation_lock.acquire()
-        print('lock!')
+        # print('lock!')
         self.itt_exec.right_click()
         self.operation_lock.release()
         
@@ -651,7 +623,7 @@ class InteractionBGD:
             key (str): 按键代号。查阅vkCode.py
         """
         self.operation_lock.acquire()
-        print('lock!')
+        # print('lock!')
         self.itt_exec.middle_click()
         self.operation_lock.release()
     
@@ -663,7 +635,7 @@ class InteractionBGD:
             key (str): 按键代号。查阅vkCode.py
         """
         self.operation_lock.acquire()
-        print('lock!')
+        # print('lock!')
         self.itt_exec.key_down(key)
         self.operation_lock.release()
         
@@ -679,7 +651,7 @@ class InteractionBGD:
             key (str): 按键代号。查阅vkCode.py
         """
         self.operation_lock.acquire()
-        print('lock!')
+        # print('lock!')
         self.itt_exec.key_up(key)
         self.operation_lock.release()
         
@@ -694,7 +666,7 @@ class InteractionBGD:
             key (str): 按键代号。查阅vkCode.py
         """
         self.operation_lock.acquire()
-        print('lock!')
+        # print('lock!')
         self.itt_exec.key_press(key)
         self.operation_lock.release()
         
@@ -710,7 +682,7 @@ class InteractionBGD:
             relative (bool): 是否为相对移动。
         """
         self.operation_lock.acquire()
-        print('lock!')
+        # print('lock!')
         self.itt_exec.move_to(int(x), int(y), relative=relative, isChromelessWindow=self.isChromelessWindow)
         self.operation_lock.release()
 
@@ -721,7 +693,7 @@ class InteractionBGD:
     @before_operation()
     def move_and_click(self, position, type='left', delay = 0.3):
         self.operation_lock.acquire()
-        print('lock!')
+        # print('lock!')
         
         x = int(position[0])
         y = int(position[1])
@@ -739,7 +711,7 @@ class InteractionBGD:
     @before_operation()
     def drag(self, origin_xy:list, targe_xy:list):
         self.operation_lock.acquire()
-        print('lock!')
+        # print('lock!')
         self.itt_exec.drag(origin_xy, targe_xy, isChromelessWindow=self.isChromelessWindow)
         self.operation_lock.release()
     

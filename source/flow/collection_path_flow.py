@@ -19,6 +19,10 @@ class CollectionPathConnector(FlowConnector):
         self.checkup_stop_func = None
         self.collection_path_dict = {
             "name":"",
+            "title":"",
+            "author":"",
+            "time":"",
+            "comment":"",
             "start_position":[],
             "end_position":[],
             "all_position":[],
@@ -32,26 +36,30 @@ class CollectionPathConnector(FlowConnector):
         Template:
         [
             {
-            "all_position":[
-                [point x, point y],
-                [point x, point y],
-                [point x, point y],
-                ...
-            ],
-            "position_list":[
-                {
-                    "position":list,
-                    "motion":str, include 'move'(or 'walk'), 'swim', 'climb', 'fly'.
-                    "id":int
-                }, ...
-            ],
-            "special_keys":[
-                {
-                    "position":list,
-                    "key name":str, include 'space', 'left click', 'left shift', 'x'.
-                    "id":int
-                }, ...
-            ]       
+                "name":"",
+                "start_position":[],
+                "end_position":[],
+                "is_activate_pickup":False,
+                "all_position":[
+                    [point x, point y],
+                    [point x, point y],
+                    [point x, point y],
+                    ...
+                ],
+                "position_list":[
+                    {
+                        "position":list,
+                        "motion":str, include 'move'(or 'walk'), 'swim', 'climb', 'fly'.
+                        "id":int
+                    }, ...
+                ],
+                "special_keys":[
+                    {
+                        "position":list,
+                        "key_name":str, include 'space', 'left click', 'left shift', 'x'.
+                        "id":int
+                    }, ...
+                ]       
             }
         ...
         ]
@@ -83,7 +91,7 @@ class CollectionPathConnector(FlowConnector):
         self.collection_path_dict["special_keys"].append(
             {
                 "position":curr_posi,
-                "key name":key,
+                "key_name":key,
                 "id":len(self.collection_path_dict["special_keys"])+1
             }
         )
@@ -124,6 +132,7 @@ class CollectionPathRecord(FlowTemplate):
             "name":"",
             "start_position":[],
             "end_position":[],
+            "is_activate_pickup":False,
             "all_position":[],
             "position_list":[],
             "special_keys":[]

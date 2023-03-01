@@ -1,7 +1,7 @@
 from source.util import *
 import source.flow.flow_code as FC
 from common import flow_state as FlowState, flow_state as ST
-from source.common import base_threading
+from source.common import base_threading, timer_module
 from source.funclib.err_code_lib import *
 
 
@@ -14,13 +14,21 @@ class FlowConnector():
         return self.while_sleep
 
 class FlowTemplate():
-    def __init__(self, upper:FlowConnector, flow_id:int, next_flow_id:int):
+    def __init__(self, upper:FlowConnector, flow_id:int, next_flow_id:int, flow_timeout_time:float = -1):
         self.upper = upper
         self.flow_id = flow_id
         self.rfc = FC.INIT
         self.next_flow_id = next_flow_id
+        self.flow_timeout = timer_module.TimeoutTimer(flow_timeout_time)
         
+    def _before_timeout(self):
+        logger.warning(f"TIMEOUT: {self.flow_id}")
+          
     def enter_flow(self):
+        if self.flow_timeout.istimeout():
+            
+            self._before_timeout()
+            return self.next_flow_id
         if self.rfc == FC.INIT:
             self.state_init()
         elif self.rfc == FC.BEFORE:
@@ -31,7 +39,10 @@ class FlowTemplate():
             self.state_after()
         elif self.rfc == FC.END:
             self.state_end()
+            self.rfc = FC.INIT
             return self.next_flow_id
+
+            
         return self.flow_id
 
     def _next_rfc(self):
@@ -88,12 +99,12 @@ class EndFlowTenplate(FlowTemplate):
 
 
 class FlowController(base_threading.BaseThreading):
-    def __init__(self, flow_connector:FlowConnector):
+    def __init__(self, flow_connector:FlowConnector, current_flow_id):
         super().__init__()
         self.last_err_code = ERR_NONE
         self.flow_dict = {}
-        self.current_flow_id = None
-        self.end_flow_id = None
+        self.current_flow_id = current_flow_id
+        # self.end_flow_id = None
         self.flow_connector = flow_connector
         self.get_while_sleep = flow_connector.get_while_sleep
         self.flow_connector.checkup_stop_func = self.checkup_stop_func

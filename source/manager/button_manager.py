@@ -11,9 +11,9 @@ def get_cap_posi(path, black_offset):
     return bbg_posi
 
 class Button(ImgIcon):
-    def __init__(self, path, button = None, name="button", black_offset=15, is_bbg = True , threshold=0.9, win_page = "all", win_text = None, print_log = LOG_NONE, cap_posi='bbg'):
-        super().__init__(name=name, path=path, jpgmode = 0, is_bbg = is_bbg,
-                         threshold=threshold, win_page=win_page, win_text=win_text, print_log=print_log, cap_posi=cap_posi)
+    def __init__(self, path, name=None, black_offset=15, is_bbg = True , threshold=0.9,offset = 0, win_page = "all", win_text = None, print_log = LOG_NONE, cap_posi=None):
+        super().__init__(path=path, name=name, jpgmode = 0, is_bbg = is_bbg,
+                         threshold=threshold, win_page=win_page, win_text=win_text, print_log=print_log, cap_posi=cap_posi, offset = offset)
         # self.path = path.replace("$lang$", global_lang)
         # self.raw_file = cv2.imread(os.path.join(root_path, self.path))
         # self.raw_name = name

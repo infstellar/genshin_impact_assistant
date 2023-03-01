@@ -208,7 +208,7 @@ class MoveToTree(FlowTemplate):
         itt.key_up('w')
         self._next_rfc()
 
-class AttainReaward(FlowTemplate):
+class AttainReward(FlowTemplate):
     def __init__(self, upper:DomainFlowConnector):
         super().__init__(upper, flow_id=ST.INIT_ATTAIN_REAWARD, next_flow_id=ST.END_DOMAIN)
         self.upper = upper
@@ -239,19 +239,12 @@ class DomainFlowController(FlowController):
         self.flow_connector.checkup_stop_func = self.checkup_stop_func
         self.current_flow_id = ST.INIT_MOVETO_CHALLENGE
         
-        self.f1 = MoveToChallenge(self.flow_connector)
-        self.f2 = Challenge(self.flow_connector)
-        self.f3 = FindingTree(self.flow_connector)
-        self.f4 = MoveToTree(self.flow_connector)
-        self.f5 = AttainReaward(self.flow_connector)
-        self.fend = DomainFlowEnd(self.flow_connector)
-        
-        self.append_flow(self.f1)
-        self.append_flow(self.f2)
-        self.append_flow(self.f3)
-        self.append_flow(self.f4)
-        self.append_flow(self.f5)
-        self.append_flow(self.fend)
+        self.append_flow(MoveToChallenge(self.flow_connector))
+        self.append_flow(Challenge(self.flow_connector))
+        self.append_flow(FindingTree(self.flow_connector))
+        self.append_flow(MoveToTree(self.flow_connector))
+        self.append_flow(AttainReward(self.flow_connector))
+        self.append_flow(DomainFlowEnd(self.flow_connector))
         
         self.get_while_sleep = self.flow_connector.get_while_sleep
 

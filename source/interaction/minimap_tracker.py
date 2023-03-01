@@ -1,8 +1,4 @@
 from source.util import *
-from source.interaction.interaction_core import itt
-from source.common.base_threading import BaseThreading
-from source.funclib import static_lib
-from common.timer_module import Timer
 
 global tracker, cvAutoTrackerLoop
 

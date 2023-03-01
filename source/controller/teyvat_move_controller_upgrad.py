@@ -1,10 +1,10 @@
 from source.util import *
 from source.common.base_threading import BaseThreading
 from source.interaction.interaction_core import itt
-from source.funclib import generic_lib, movement, static_lib
-from source.manager import img_manager, asset
+from source.funclib import generic_lib, movement
+from source.common import static_lib
+from source.manager import asset
 from source.interaction.minimap_tracker import tracker
-import numpy as np
 from funclib.err_code_lib import ERR_PASS, ERR_STUCK
 '''
 提瓦特大陆移动辅助控制，包括：
@@ -65,6 +65,7 @@ class TeyvatMoveController(BaseThreading):
     def continue_threading(self):
         if self.pause_threading_flag != False:
             self.pause_threading_flag = False
+            self._tp_to_closet_teleport()
             if len(tracker.history_posi) != 0:
                 tracker.history_posi = [tracker.history_posi[-1]]
 
@@ -76,13 +77,22 @@ class TeyvatMoveController(BaseThreading):
         else:
             return False
     
-    
+    def _tp_to_closet_teleport(self, mode="Automatic"):
+        """
+        传送后再行走。
+        
+        mode: Automatic: 根据目标坐标距离远近自动决定是否传送。默认为目标坐标距离当前坐标超过50单位即传送。
+              Never: 从不传送。
+              Always: 始终传送。
+        """
+        pass
+
     def run(self) -> None:
         '''if you're using this class, copy this'''
         while 1:
             time.sleep(self.while_sleep)
             if self.stop_threading_flag:
-                return 0
+                return
 
             if self.pause_threading_flag:
                 if self.working_flag:

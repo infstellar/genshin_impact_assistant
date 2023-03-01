@@ -1,0 +1,37 @@
+{
+  "collection_name": {
+    "doc": "物品名",
+    "special_index":"$PREDICT_AND_VERIFY_01$",
+    "annotation":"直接填写物品名"
+  },
+  "collection_type": {
+    "doc": "采集类型",
+    "select_items": [
+      "COLLECTION",
+      "ENEMY"
+    ]
+  },
+  "collection_area":{
+    "doc": "采集地区",
+    "select_items": [
+      "ALL",
+      "MD",
+      "LY",
+      "DQ",
+      "XM"
+    ],
+    "annotation":"如果采集所有区域则选择ALL，否则查看以下对照表：\nMD-蒙德\nLY-璃月\nDQ-稻妻\nXM-须弥"
+  },
+  "collect mode": {
+    "doc":"采集模式",
+    "select_items": [
+      "Auto",
+      "ManualAssi"
+    ],
+    "annotation":"暂时没用"
+  },
+  "minimum_times_mask_col_id":{
+    "doc":"最小采集失败屏蔽次数",
+    "annotation":"没啥用"
+  }
+}

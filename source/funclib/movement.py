@@ -1,7 +1,7 @@
 from source.interaction.interaction_core import itt
 from source.funclib import small_map
 from source.util import *
-from source.funclib import generic_lib, static_lib
+from source.funclib import generic_lib
 from source.interaction.minimap_tracker import tracker
 from source.manager import asset
 
@@ -124,10 +124,10 @@ def change_view_to_posi(pl, stop_func):
             td = tracker.get_rotation()
             degree = generic_lib.points_angle([tx, ty], pl, coordinate=generic_lib.NEGATIVE_Y)
             cvn=td-degree
-            if cvn>=50:
-                cvn=50
-            if cvn<=-50:
-                cvn=-50
+            if cvn>=150:
+                cvn=150
+            if cvn<=-150:
+                cvn=-150
             cview(cvn)
             i+=1
             if stop_func():

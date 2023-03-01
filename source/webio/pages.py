@@ -160,7 +160,7 @@ class MainPage(Page):
 
 
 class ConfigPage(Page):
-    def __init__(self):
+    def __init__(self, config_file_name):
         super().__init__()
 
         # self.main_scope = "SettingPage"
@@ -168,6 +168,7 @@ class ConfigPage(Page):
         self.exit_popup = None
         self.last_file = None
         self.file_name = ''
+        self.config_file_name = config_file_name
 
         self.config_files = []
         self.config_files_name = []
@@ -213,7 +214,6 @@ class ConfigPage(Page):
             "auto_combat.json": t2t("auto_combat.json"),
             "auto_domain.json": t2t("auto_domain.json"),
             "auto_pickup.json": t2t("auto_pickup.json"),
-            "auto_pickup_default_blacklist.json": t2t("auto_pickup_default_blacklist.json"),
             "config.json": t2t("config.json"),
             "keymap.json": t2t("keymap.json"),
             "character.json": t2t("character.json"),
@@ -277,13 +277,13 @@ class ConfigPage(Page):
 
         # with open(os.path.join(root_path, "config", "settings", "config.json"), 'r', encoding='utf8') as f:
         #     lang = json.load(f)["lang"]
-        doc_name = f'{name}.{GLOBAL_LANG}.jsondoc'
+        doc_name = f'config\\json_doc\\{self.config_file_name}.{GLOBAL_LANG}.jsondoc'
 
         if os.path.exists(doc_name):
             with open(doc_name, 'r', encoding='utf8') as f:
                 doc = json.load(f)
-        elif os.path.exists(f'{name}.en_US.jsondoc'):
-            with open(f'{name}.en_US.jsondoc', 'r', encoding='utf8') as f:
+        elif os.path.exists(f'{doc_name}.en_US.jsondoc'):
+            with open(f'{doc_name}.en_US.jsondoc', 'r', encoding='utf8') as f:
                 doc = json.load(f)
         else:
             doc = {}
@@ -458,6 +458,7 @@ class ConfigPage(Page):
             doc_now_data = {}
             doc_items = None
             doc_special = None
+            doc_annotation = None
             if k in doc:
                 # 判断doc的类型
                 if type(doc[k]) == dict:
@@ -469,6 +470,8 @@ class ConfigPage(Page):
                         doc_items = doc[k]['select_items']
                     if 'special_index' in doc[k]:
                         doc_special = doc[k]['special_index']
+                    if "annotation" in doc[k]:
+                        doc_annotation = doc[k]['annotation']
                 if type(doc[k]) == str:
                     doc_now = doc[k]
             # 取显示名称
@@ -476,6 +479,8 @@ class ConfigPage(Page):
 
             k_sha1 = hashlib.sha1(k.encode('utf8')).hexdigest()
             component_name = '{}-{}'.format(add_name, k_sha1)
+            
+            
             if type(v) == str or v is None:
                 self._show_str(doc_items, component_name, display_name, scope_name, v, doc_special)
             elif type(v) == int:
@@ -488,11 +493,13 @@ class ConfigPage(Page):
                 self._show_dict(level, component_name, display_name, scope_name, doc, v, doc_special)
             elif type(v) == list:
                 self._show_list(level, display_name, scope_name, component_name, doc, v, doc_special)
-
+            if doc_annotation != None:
+                    output.put_text(doc_annotation, scope=scope_name)
+                    output.put_text("\n", scope=scope_name).style("font-size: 1px")
 
 class SettingPage(ConfigPage):
     def __init__(self):
-        super().__init__()
+        super().__init__(config_file_name = "config")
 
     def _load(self):
         self.last_file = None
@@ -512,13 +519,15 @@ class SettingPage(ConfigPage):
     def _load_config_files(self):
         for root, dirs, files in os.walk('config\\settings'):
             for f in files:
+                if f[:f.index('.')] in ["auto_combat", "auto_collector", "auto_pickup_default_blacklist"]:
+                    continue
                 if f[f.index('.') + 1:] == "json":
                     self.config_files.append({"label": f, "value": os.path.join(root, f)})
 
 
 class CombatSettingPage(ConfigPage):
     def __init__(self):
-        super().__init__()
+        super().__init__(config_file_name = "auto_combat")
 
     def _load_config_files(self):
         self.config_files = []
@@ -569,7 +578,7 @@ class CombatSettingPage(ConfigPage):
 
 class CollectorSettingPage(ConfigPage):
     def __init__(self):
-        super().__init__()
+        super().__init__(config_file_name = "auto_collector")
         self.collection_names = load_json("ITEM_NAME.json", f"assets\\POI_JSON_API\\{GLOBAL_LANG}")
 
     def _load_config_files(self):

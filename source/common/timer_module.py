@@ -43,9 +43,16 @@ class TimeoutTimer(Timer):
         self.reset()
     
     def set_timeout_limit(self, t):
+        """set timeout time.
+
+        Args:
+            t (_type_): _description_
+        """
         self.timeout_limit = t
         
     def istimeout(self):
+        if self.timeout_limit < 0:
+            return False
         if self.get_diff_time() >= self.timeout_limit:
             return True
         else:

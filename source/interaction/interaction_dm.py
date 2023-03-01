@@ -1,7 +1,7 @@
 import source.interaction.bit32_dll_bridge_client as dbc
 from source.util import *
 from source.interaction.interaction_template import InteractionTemplate
-from source.funclib import static_lib
+from source.common import static_lib
 
 dbc.start_server(python_path="D:\\Program Files\\Anaconda\\envs\\GIA3732\\python.exe")
 dbc.connect()
@@ -18,8 +18,8 @@ def unbind():
 
 def bind():
     dmdll.BindWindow(hwnd=static_lib.get_handle(), display='dx',
-                        mouse="dx.mouse.position.lock.api|dx.mouse.position.lock.message|dx.mouse.state.message|dx.mouse.raw.input|dx.mouse.input.lock.api2|dx.mouse.api|dx.mouse.input.lock.api3",
-                        keypad='dx.keypad.raw.input', mode=101)
+                     mouse="dx.mouse.position.lock.api|dx.mouse.position.lock.message|dx.mouse.state.message|dx.mouse.raw.input|dx.mouse.input.lock.api2|dx.mouse.api|dx.mouse.input.lock.api3",
+                     keypad='dx.keypad.raw.input', mode=101)
     logger.debug(dmdll.GetLastError())
     dmdll.EnableBind(1)
     logger.debug(dmdll.GetLastError())

@@ -52,13 +52,13 @@ except:
 
 DEVICE_NORMAL = 'Normal' # In PC, Foreground
 DEVICE_DM = "Dm" # In PC, Background
-DEVICE_ADB = "Adb" # In Android emulator, Background
+DEVICE_EMULATOR = "Emulator" # In Android emulator, Background
 
 try:
     if load_json("config.json", CONFIG_PATH_SETTING)["interaction_mode"] == 'Normal':
         GLOBAL_DEVICE = DEVICE_NORMAL
     elif load_json("config.json", CONFIG_PATH_SETTING)["interaction_mode"] == 'ADB':
-        GLOBAL_DEVICE = DEVICE_ADB
+        GLOBAL_DEVICE = DEVICE_EMULATOR
     elif load_json("config.json", CONFIG_PATH_SETTING)["interaction_mode"] == 'Dm':
         GLOBAL_DEVICE = DEVICE_DM
 except:
