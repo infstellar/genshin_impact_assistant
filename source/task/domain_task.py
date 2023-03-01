@@ -14,17 +14,17 @@ class DomainTask(TaskTemplate):
     def __init__(self):
         super().__init__()
         self.dfc = DomainFlowController()
-        self.tmc = TeyvatMoveFlowController()
+        self.tmfc = TeyvatMoveFlowController()
         self.flow_mode = TI.DT_MOVE_TO_DOMAIN
         
         self._add_sub_threading(self.dfc)
-        self._add_sub_threading(self.tmc)
+        self._add_sub_threading(self.tmfc)
         
         self.domain_name = "孤云凌霄之处"
         self.domain_type = "VI"
         self.domain_posi = load_items_position(self.domain_name,mode=1, ret_mode=1)[0]
-        self.tmc.set_stop_rule(1)
-        self.tmc.set_target_posi(self.domain_posi)
+        self.tmfc.set_parameter(stop_rule = 1, MODE = "Automatic", target_posi = self.domain_posi)
+        self.tmfc.set_target_posi(self.domain_posi)
         self.last_domain_times = 2
     
     def _enter_domain(self):
@@ -97,12 +97,12 @@ class DomainTask(TaskTemplate):
             '''write your code below'''
 
             if self.flow_mode == TI.DT_MOVE_TO_DOMAIN:
-                self.tmc.continue_threading()
+                self.tmfc.continue_threading()
                 while 1:
                     time.sleep(self.while_sleep)
-                    if self.tmc.get_last_err_code() == ERR_PASS:
+                    if self.tmfc.get_last_err_code() == ERR_PASS:
                         break
-                self.tmc.pause_threading()
+                self.tmfc.pause_threading()
                 
                 self._enter_domain()
                 
