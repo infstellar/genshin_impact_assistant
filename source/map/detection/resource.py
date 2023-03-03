@@ -81,7 +81,7 @@ class MiniMapResource:
             self.BIGMAP_POSITION_SCALE = 0.6137 / 1.5
             self.BIGMAP_BORDER_PAD = int(600 * self.BIGMAP_SEARCH_SCALE)
             # Set bigmap tp arguments
-            self.MAP_POSI2MOVE_POSI_RATE = 0.01 # 待调试
+            self.MAP_POSI2MOVE_POSI_RATE = 0.05 # 待调试
             self.BIGMAP_TP_OFFSET = 10 # 待调试
         else:
             # Magic numbers for 1920x1080 mobile

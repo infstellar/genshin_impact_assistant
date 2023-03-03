@@ -62,6 +62,7 @@ try:
     INTERACTION_MODE = load_json("config.json", CONFIG_PATH_SETTING)["interaction_mode"]
     if INTERACTION_MODE not in [INTERACTION_EMULATOR, INTERACTION_DESKTOP_BACKGROUND, INTERACTION_DESKTOP]:
         logger.warning("UNKNOWN INTEACTION MODE. SET TO \'Desktop\' Default.")
+        INTERACTION_MODE = INTERACTION_DESKTOP
 except:
     logger.error("config文件导入失败，可能由于初次安装。跳过导入。 ERROR_IMPORT_CONFIG_002")
     INTERACTION_MODE = INTERACTION_DESKTOP

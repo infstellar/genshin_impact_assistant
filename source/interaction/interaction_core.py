@@ -673,7 +673,7 @@ class InteractionBGD:
         # logger.debug("keyPress " + key + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
 
     @before_operation(print_log=False)
-    def move_to(self, x: int, y: int, relative=False):
+    def move_to(self, x, y, relative=False):
         """移动鼠标到坐标（x, y)
 
         Args:

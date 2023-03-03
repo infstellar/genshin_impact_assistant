@@ -1,7 +1,7 @@
 from source.map.detection.resource import MiniMapResource
 from source.map.detection.utils import *
 from source.util import logger
-
+import time
 
 class BigMap(MiniMapResource):
     def _predict_bigmap(self, image):
@@ -53,3 +53,10 @@ class BigMap(MiniMapResource):
             f'P:({float2str(self.bigmap[0], 4)}, {float2str(self.bigmap[1], 4)}) '
             f'({float2str(self.bigmap_similarity, 3)}|{float2str(self.bigmap_similarity_local, 3)})'
         )
+
+if __name__ == '__main__':
+    bm = BigMap()
+    from source.interaction.interaction_core import itt
+    while 1:
+        bm.update_bigmap(itt.capture(jpgmode=0))
+        time.sleep(0.1)

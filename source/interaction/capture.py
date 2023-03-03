@@ -11,6 +11,7 @@ class Capture():
         self.max_fps = 180
         self.fps_timer = timer_module.Timer()
         self.capture_cache_lock = threading.Lock()
+        self.capture_times = 0
 
     def _get_capture(self) -> np.ndarray:
         """
@@ -18,6 +19,8 @@ class Capture():
         """
     
     def _check_shape(self, img:np.ndarray):
+        if img is None:
+            return False
         if img.shape == [1080,1920,4] or img.shape == [768,1024,3]:
             return True
         else:
