@@ -26,6 +26,10 @@ class MapConverter:
     REGION_Enkanomiya = 'Enkanomiya'
     REGION_Sumeru = 'Sumeru'
 
+    TP_Statue = 'Statue'
+    TP_Teleporter = 'Teleporter'
+    TP_Domain = 'Domain'
+
     @classmethod
     def convert_REGION_to_LAYER(cls, region: str) -> str:
         if region == cls.REGION_GoldenAppleArchipelago:

@@ -32,7 +32,7 @@ class PointInfoModel(BaseModel):
         keep_untouched = (cached_property,)
 
     @cached_property
-    def first_item(self):
+    def first_item(self) -> t.Optional[PointItemModel]:
         for item in self.itemList:
             if item.iconTag == '传送锚点':
                 return item
@@ -40,20 +40,33 @@ class PointInfoModel(BaseModel):
                 return item
             if item.iconTag == '秘境':
                 return item
-            if '七天神像' in item.iconTag:
+            if '神像' in item.iconTag:
                 return item
         return None
 
     @cached_property
-    def position_tuple(self):
+    def teleporter(self) -> t.Optional[str]:
+        tag = self.first_item.iconTag
+        if tag == '传送锚点':
+            return MapConverter.TP_Teleporter
+        if '神像' in tag:
+            return MapConverter.TP_Statue
+        if tag == '副本':
+            return MapConverter.TP_Domain
+        if tag == '秘境':
+            return MapConverter.TP_Domain
+        return None
+
+    @cached_property
+    def position_tuple(self) -> t.Tuple[float, float]:
         x, y = self.position.split(',')
         x = float(x)
         y = float(y)
-        return (x, y)
+        return x, y
 
     @cached_property
-    def teleport_name(self):
-        if self.first_item.iconTag == '传送锚点':
+    def teleporter_name(self) -> str:
+        if self.first_item.iconTag == '传送锚点' or '神像' in self.first_item.iconTag:
             if self.first_item.itemId == 758:
                 return '三界路飨祭'
             res = re.search(r'【(.*)】', self.content)
@@ -104,6 +117,7 @@ class AreaModel(BaseModel):
 class TeleporterModel(BaseModel):
     id: int
     region: str
+    tp: str
     item_id: int
     name: str
     position: t.Tuple[float, float]
@@ -180,8 +194,9 @@ class PoiJsonApi:
             tp = TeleporterModel(
                 id=row.id,
                 region=region,
+                tp=row.teleporter,
                 item_id=row.first_item.itemId,
-                name=row.teleport_name,
+                name=row.teleporter_name,
                 position=tuple(position),
             )
             yield tp
