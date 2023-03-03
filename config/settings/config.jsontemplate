@@ -11,7 +11,7 @@
   "cloud_genshin": false,
   "capture_mode":"fast",
   "determining_strict_weight":0.9,
-  "interaction_mode": "Normal",
+  "interaction_mode": "Desktop",
   "python32_path": ""
 
 }

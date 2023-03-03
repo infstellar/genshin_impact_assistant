@@ -5,7 +5,7 @@ from source.common.base_threading import BaseThreading
 from source.common import static_lib
 from common.timer_module import Timer
 from source.path_lib import CONFIG_PATH_SETTING
-if load_json("config.json", CONFIG_PATH_SETTING)["interaction_mode"] == 'Dm':
+if load_json("config.json", CONFIG_PATH_SETTING)["interaction_mode"] == INTERACTION_DESKTOP_BACKGROUND:
     from source.interaction.interaction_dm import unbind, bind
 
 global W_KEYDOWN

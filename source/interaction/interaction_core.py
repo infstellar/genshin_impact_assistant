@@ -34,7 +34,7 @@ def before_operation(print_log=True):
             if print_log:
                 logger.debug(f" operation: {func.__name__} | args: {args[1:]} | {kwargs} | function name: {func_name} & {func_name_2}")
             
-            if GLOBAL_DEVICE == DEVICE_NORMAL:
+            if INTERACTION_MODE == INTERACTION_DESKTOP:
                 winname = get_active_window_process_name()
                 if winname not in process_name:
                     while 1:
@@ -78,10 +78,10 @@ class InteractionBGD:
         self.itt_exec = None
         self.capture_obj = None
         self.operation_lock = threading.Lock()
-        if GLOBAL_DEVICE == DEVICE_NORMAL:
+        if INTERACTION_MODE == INTERACTION_DESKTOP:
             import source.interaction.interaction_normal
             self.itt_exec = source.interaction.interaction_normal.InteractionNormal()
-        elif GLOBAL_DEVICE == DEVICE_DM:
+        elif INTERACTION_MODE == INTERACTION_DESKTOP_BACKGROUND:
             import source.interaction.interaction_dm
             self.itt_exec = source.interaction.interaction_dm.InteractionDm()
         

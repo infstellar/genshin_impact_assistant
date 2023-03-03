@@ -5,6 +5,7 @@ from cached_property import cached_property
 
 from source.device.alas.decorator import has_cached_property, del_cached_property
 from source.map.detection.utils import *
+from source.util import IS_DEVICE_PC
 
 
 class MiniMapResource:
@@ -40,13 +41,7 @@ class MiniMapResource:
     # Pad 600px, cause camera sight in game is larger than GIMAP
     BIGMAP_BORDER_PAD = int(600 * BIGMAP_SEARCH_SCALE)
 
-    def __init__(self, device_type: str):
-        """
-        Args:
-            device_type: "Windows" or "Emulator"
-        """
-        self.device_type = device_type
-
+    def __init__(self):
         # 'wild' or 'city'
         self.scene = 'wild'
         # Usually to be 0.4~0.5
@@ -69,7 +64,7 @@ class MiniMapResource:
         # Current position on GIMAP with an error of about 0.1 pixel
         self.bigmap: t.Tuple[float, float] = (0, 0)
 
-        if device_type == 'Windows':
+        if IS_DEVICE_PC:
             # Magic numbers for 1920x1080 desktop
             # 80% of Emulator, 1.5 * 80% = 1.2
             self.MINIMAP_CENTER = (60 + 108, 18 + 108)
@@ -85,7 +80,10 @@ class MiniMapResource:
             # Same as Emulator
             self.BIGMAP_POSITION_SCALE = 0.6137 / 1.5
             self.BIGMAP_BORDER_PAD = int(600 * self.BIGMAP_SEARCH_SCALE)
-        elif device_type == 'Emulator':
+            # Set bigmap tp arguments
+            self.MAP_POSI2MOVE_POSI_RATE = 0.01 # 待调试
+            self.BIGMAP_TP_OFFSET = 10 # 待调试
+        else:
             # Magic numbers for 1920x1080 mobile
             self.MINIMAP_CENTER = (75 + 135, 22 + 135)
             self.MINIMAP_RADIUS = 124
@@ -99,6 +97,9 @@ class MiniMapResource:
             self.DIRECTION_ROTATION_SCALE = 1.0 / 1.5
             self.BIGMAP_POSITION_SCALE = 0.6137 / 1.5
             self.BIGMAP_BORDER_PAD = int(600 * self.BIGMAP_SEARCH_SCALE)
+            # Set bigmap tp arguments
+            self.MAP_POSI2MOVE_POSI_RATE = 0.01 # 待调试
+            self.BIGMAP_TP_OFFSET = 10 # 待调试
 
     @cached_property
     def _minimap_mask(self):

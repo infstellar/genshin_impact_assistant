@@ -13,7 +13,15 @@ import ctypes, pickle
 
 global GLOBAL_LANG, GLOBAL_DEVICE
 GLOBAL_LANG = "$locale$" # $locale$, zh_CN, en_US
-GLOBAL_DEVICE = "Normal" # Normal, Adb, Dm
+DESKTOP_CN = "Desktop_CN"
+DESKTOP_EN = "Desktop_EN"
+MOBILE_CN = "Mobile_CN"
+MOBILE_EN = "Mobile_EN"
+DEVICE = DESKTOP_CN
+INTERACTION_DESKTOP = "Desktop"
+INTERACTION_EMULATOR = "EMULATOR"
+INTERACTION_DESKTOP_BACKGROUND = "DesktopBackground"
+INTERACTION_MODE = INTERACTION_DESKTOP # Normal, Adb, Dm
 time.time()  # 防自动删除
 BBG = 100001
 process_name = ["YuanShen.exe", "GenshinImpact.exe"]
@@ -50,21 +58,14 @@ except:
     DEBUG_MODE = False
     GLOBAL_LANG = "$locale$"
 
-DEVICE_NORMAL = 'Normal' # In PC, Foreground
-DEVICE_DM = "Dm" # In PC, Background
-DEVICE_EMULATOR = "Emulator" # In Android emulator, Background
-
 try:
-    if load_json("config.json", CONFIG_PATH_SETTING)["interaction_mode"] == 'Normal':
-        GLOBAL_DEVICE = DEVICE_NORMAL
-    elif load_json("config.json", CONFIG_PATH_SETTING)["interaction_mode"] == 'ADB':
-        GLOBAL_DEVICE = DEVICE_EMULATOR
-    elif load_json("config.json", CONFIG_PATH_SETTING)["interaction_mode"] == 'Dm':
-        GLOBAL_DEVICE = DEVICE_DM
+    INTERACTION_MODE = load_json("config.json", CONFIG_PATH_SETTING)["interaction_mode"]
+    if INTERACTION_MODE not in [INTERACTION_EMULATOR, INTERACTION_DESKTOP_BACKGROUND, INTERACTION_DESKTOP]:
+        logger.warning("UNKNOWN INTEACTION MODE. SET TO \'Desktop\' Default.")
 except:
     logger.error("config文件导入失败，可能由于初次安装。跳过导入。 ERROR_IMPORT_CONFIG_002")
-    GLOBAL_DEVICE = DEVICE_NORMAL
-IS_DEVICE_PC = (GLOBAL_DEVICE == DEVICE_DM)or(GLOBAL_DEVICE == DEVICE_NORMAL)
+    INTERACTION_MODE = INTERACTION_DESKTOP
+IS_DEVICE_PC = (INTERACTION_MODE == INTERACTION_DESKTOP_BACKGROUND)or(INTERACTION_MODE == INTERACTION_DESKTOP)
 
 # load config file over
 
@@ -219,6 +220,33 @@ def is_int(x):
         return False
     else:
         return True
+
+ANGLE_NORMAL = 0
+ANGLE_NEGATIVE_Y = 1
+ANGLE_NEGATIVE_X = 2
+ANGLE_NEGATIVE_XY = 3
+
+def points_angle(p1, p2, coordinate=ANGLE_NORMAL):
+    # p1: current point
+    # p2: target point
+    x = p1[0]
+    y = p1[1]
+    tx = p2[0]
+    ty = p2[1]
+    if coordinate == ANGLE_NEGATIVE_Y:
+        y = -y
+        ty = -ty
+    k = (ty - y) / (tx - x)
+    degree = math.degrees(math.atan(k))
+    if degree < 0:
+        degree += 180
+    if ty < y:
+        degree += 180
+
+    degree -= 90
+    if degree > 180:
+        degree -= 360
+    return degree
 
 def save_json(x, json_name='config.json', default_path='config', sort_keys=True, auto_create=False):
     if sort_keys:
