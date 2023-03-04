@@ -34,8 +34,9 @@ class Map(MiniMap, BigMap, MapConverter):
         self._upd_smallmap()
         return self.convert_GIMAP_to_cvAutoTrack(self.position)
 
-    def get_bigmap_posi(self):
-        self._upd_bigmap()
+    def get_bigmap_posi(self, is_upd = True):
+        if is_upd:
+            self._upd_bigmap()
         logger.info(f"bigmap posi: {self.convert_GIMAP_to_cvAutoTrack(self.bigmap)}")
         return self.convert_GIMAP_to_cvAutoTrack(self.bigmap)
 
@@ -49,37 +50,48 @@ class Map(MiniMap, BigMap, MapConverter):
         Returns:
             _type_: _description_
         """
+        
+        """需要处理的异常：
+
+        1. 点击到某个东西弹出右侧弹框
+        2. 点击到一坨按键弹出一坨东西
+        """
+        
         if IS_DEVICE_PC:
             itt.move_to(1920/2+float_posi, 1080/2+float_posi) # screen center
         else:
             itt.move_to(1024/2+float_posi, 768/2+float_posi)
-        itt.delay(0.1, comment="waiting genshin")
+        
+        itt.left_down()
         if IS_DEVICE_PC:
             for i in range(5): # 就是要这么多次(
-                itt.left_down()
                 itt.move_to(10,10,relative=True)
+                if i%2==0:
+                    itt.left_down()
             for i in range(5):
-                itt.left_down()
                 itt.move_to(-10,-10,relative=True)
-        # itt.delay(0.2, comment="waiting genshin")
+                if i%2==0:
+                    itt.left_down()
         curr_posi = self.get_bigmap_posi()
-        dx = min( (curr_posi[0] - target_posi[0])*self.MAP_POSI2MOVE_POSI_RATE, 150)
-        dx = max( (curr_posi[0] - target_posi[0])*self.MAP_POSI2MOVE_POSI_RATE, -150)
-        dy = min( (curr_posi[1] - target_posi[1])*self.MAP_POSI2MOVE_POSI_RATE, 150)
-        dy = max( (curr_posi[1] - target_posi[1])*self.MAP_POSI2MOVE_POSI_RATE, -150)
+        dx = min( (curr_posi[0] - target_posi[0])*self.MAP_POSI2MOVE_POSI_RATE, self.BIGMAP_MOVE_MAX)
+        dx = max( (curr_posi[0] - target_posi[0])*self.MAP_POSI2MOVE_POSI_RATE, -self.BIGMAP_MOVE_MAX)
+        dy = min( (curr_posi[1] - target_posi[1])*self.MAP_POSI2MOVE_POSI_RATE, self.BIGMAP_MOVE_MAX)
+        dy = max( (curr_posi[1] - target_posi[1])*self.MAP_POSI2MOVE_POSI_RATE, -self.BIGMAP_MOVE_MAX)
 
-        logger.debug(f"_move_bigmap: {dx} {dy}")
+        logger.info(f"curr: {curr_posi} target: {target_posi}")
+        logger.info(f"_move_bigmap: {dx} {dy}")
 
         itt.move_to(dx, dy, relative=True)
-        itt.delay(0.1, comment="waiting genshin")
+        itt.delay(0.2, comment="waiting genshin")
         itt.left_up()
 
-        if euclidean_distance(self.get_bigmap_posi(), target_posi) <= self.BIGMAP_TP_OFFSET:
+        self.get_bigmap_posi()
+        if euclidean_distance(self.get_bigmap_posi(is_upd=False), target_posi) <= self.BIGMAP_TP_OFFSET:
             return True
         else:
             itt.delay(0.2, comment="wait for a moment")
-            if euclidean_distance(self.get_bigmap_posi(), curr_posi) <= self.BIGMAP_TP_OFFSET:
-                self._move_bigmap(target_posi = target_posi, float_posi = float_posi + 30)
+            if euclidean_distance(self.get_bigmap_posi(is_upd=False), curr_posi) <= self.BIGMAP_TP_OFFSET:
+                self._move_bigmap(target_posi = target_posi, float_posi = float_posi + 45)
             else:
                 self._move_bigmap(target_posi = target_posi)
     
@@ -89,44 +101,58 @@ class Map(MiniMap, BigMap, MapConverter):
         """
         min_dist = 99999
         min_point = [9999,9999]
+        min_type = ""
         for i in DICT_TELEPORTER:
             if DICT_TELEPORTER[i].region in regions:
-                if euclidean_distance(posi, DICT_TELEPORTER[i].position) < min_dist:
-                    min_point = DICT_TELEPORTER[i].position
-        return min_point
+                i_posi = self.convert_GIMAP_to_cvAutoTrack(DICT_TELEPORTER[i].position)
+                i_dist = euclidean_distance(posi, i_posi)
+                if i_dist < min_dist:
+                    min_point = i_posi
+                    min_dist = i_dist
+                    min_type = DICT_TELEPORTER[i].tp
+        return min_point, min_type
 
-    def tp2posi(self, posi:list, tp_mode = 0):
+    def bigmap_tp(self, posi:list, tp_mode = 0):
         """
 
         传送到指定坐标。
         模式: 
         0: 自动选择最近的可传送目标传送
         
+        移动到地图中心才会传送，因为懒不想算地图与坐标比例(
+        
         """
+        scene_lib.switch_to_page(scene_manager.page_bigmap, lambda:False)
         if tp_mode == 0:
-            tp_posi = self._find_closest_teleporter(posi)
+            # tp_posi = posi
+            tp_posi, tp_type = self._find_closest_teleporter(posi)
         self._move_bigmap(tp_posi)
+        if tp_type == "Domain":
+            logger.debug("tp to Domain")
+            # 点一下“仅查看秘境”
         if IS_DEVICE_PC:
             itt.move_and_click([1920/2, 1080/2]) # screen center
         else:
             itt.move_and_click([1024/2, 768/2])
-        check_mode = 1
-        temporary_timeout_1 = timer_module.TimeoutTimer(45)
+        if tp_type == "Domain":
+            logger.debug("tp to Domain")
+            # 点回去“仅查看秘境”
+        tp_timeout_1 = timer_module.TimeoutTimer(45)
         while 1:            
             if itt.appear_then_click(asset.bigmap_tp) : break
-            if check_mode == 1:
-                logger.debug("tp to tw")
+            if tp_type == "Teleporter":
+                logger.debug("tp to Teleporter")
                 itt.appear_then_click(asset.CSMD)
-            else:
-                logger.debug("tp to ss")
+            elif tp_type == "Statue":
+                logger.debug("tp to Statue")
                 itt.appear_then_click(asset.QTSX)
-            if temporary_timeout_1.istimeout():
+            if tp_timeout_1.istimeout():
                 scene_lib.switch_to_page(scene_manager.page_bigmap, lambda:False)
                 if IS_DEVICE_PC:
                     itt.move_and_click([1920/2, 1080/2]) # screen center
                 else:
                     itt.move_and_click([1024/2, 768/2])
-                temporary_timeout_1.reset()
+                tp_timeout_1.reset()
             time.sleep(0.5)
 
         # itt.move_and_click([posi_manager.tp_button[0], posi_manager.tp_button[1]], delay=1)
@@ -136,4 +162,4 @@ class Map(MiniMap, BigMap, MapConverter):
         
 if __name__ == '__main__':
     mappp = Map()
-    mappp.tp2posi([-1000,-1000])
+    mappp.bigmap_tp([0,-1000])
