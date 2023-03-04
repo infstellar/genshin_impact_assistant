@@ -6,12 +6,13 @@ from source.common import static_lib
 
 
 class Capture():
-    def __init__(self):
+    def __init__(self, ignore_shape = False):
         self.capture_cache = np.zeros_like((1080,1920,3), dtype="uint8")
         self.max_fps = 180
         self.fps_timer = timer_module.Timer()
         self.capture_cache_lock = threading.Lock()
         self.capture_times = 0
+        self.ignore_shape = ignore_shape
 
     def _get_capture(self) -> np.ndarray:
         """
@@ -60,6 +61,7 @@ class Capture():
             pass
     
 from ctypes.wintypes import RECT
+import win32print
 
 class WindowsCapture(Capture):
     """
@@ -75,14 +77,27 @@ class WindowsCapture(Capture):
     GetBitmapBits = ctypes.windll.gdi32.GetBitmapBits
     DeleteObject = ctypes.windll.gdi32.DeleteObject
     ReleaseDC = ctypes.windll.user32.ReleaseDC
+    GetDeviceCaps = win32print.GetDeviceCaps
     
 
-    def __init__(self):
+    def __init__(self, ignore_shape=False):
+        """_summary_
+
+        Args:
+            ignore_shape (bool, optional): 忽略截图大小检测. Defaults to False. 如果电脑设置了不同的缩放比例，必须设置该值为True。
+        """
         static_lib.HANDLE = static_lib.HANDLE
-        super().__init__()
+        super().__init__(ignore_shape=ignore_shape)
         self.max_fps = 30
+        
     
     def _check_shape(self, img:np.ndarray):
+        if self.ignore_shape:
+            if self.capture_cache[:,:,:3].max() <= 0:
+                logger.warning(t2t("警告：你启用了设置\'忽略截图大小检测\'，但截图黑屏。"))
+                logger.warning(t2t("截图黑屏，请检查窗口。"))
+                static_lib.search_handle()
+                return False
         if img.shape == (1080,1920,4):
             return True
         else:
@@ -94,6 +109,18 @@ class WindowsCapture(Capture):
         r = RECT()
         self.GetClientRect(static_lib.HANDLE, ctypes.byref(r))
         width, height = r.right, r.bottom
+        # left, top, right, bottom = win32gui.GetWindowRect(static_lib.HANDLE)
+        # 获取桌面缩放比例
+        #desktop_dc = self.GetDC(0)
+        #scale_x = self.GetDeviceCaps(desktop_dc, 88)
+        #scale_y = self.GetDeviceCaps(desktop_dc, 90)
+
+        # 计算实际截屏区域大小
+        # width = (right - left)# * scale_x // 100
+        # height = (bottom - top)# * scale_y // 100
+        if self.ignore_shape:
+            width = 1920
+            height = 1080
         # 开始截图
         dc = self.GetDC(static_lib.HANDLE)
         cdc = self.CreateCompatibleDC(dc)
@@ -120,7 +147,7 @@ class EmulatorCapture(Capture):
         pass
     
 if __name__ == '__main__':
-    wc = WindowsCapture()
+    wc = WindowsCapture(ignore_shape=False)
     while 1:
         cv2.imshow("capture test", wc.capture())
         cv2.waitKey(10)
