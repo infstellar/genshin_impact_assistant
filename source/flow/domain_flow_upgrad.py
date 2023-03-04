@@ -234,10 +234,8 @@ class DomainFlowEnd(EndFlowTenplate):
 
 class DomainFlowController(FlowController):
     def __init__(self):
-        super().__init__()
-        self.flow_connector = DomainFlowConnector()
-        self.flow_connector.checkup_stop_func = self.checkup_stop_func
-        self.current_flow_id = ST.INIT_MOVETO_CHALLENGE
+        super().__init__(flow_connector=DomainFlowConnector(), current_flow_id=ST.INIT_MOVETO_CHALLENGE)
+        self.flow_connector = self.flow_connector #type: DomainFlowConnector
         
         self.append_flow(MoveToChallenge(self.flow_connector))
         self.append_flow(Challenge(self.flow_connector))
@@ -245,8 +243,6 @@ class DomainFlowController(FlowController):
         self.append_flow(MoveToTree(self.flow_connector))
         self.append_flow(AttainReward(self.flow_connector))
         self.append_flow(DomainFlowEnd(self.flow_connector))
-        
-        self.get_while_sleep = self.flow_connector.get_while_sleep
 
     def reset(self):
         self.flow_connector.reset()

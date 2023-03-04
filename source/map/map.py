@@ -55,6 +55,10 @@ class Map(MiniMap, BigMap, MapConverter):
 
         1. 点击到某个东西弹出右侧弹框
         2. 点击到一坨按键弹出一坨东西
+        
+        需要增加的功能：
+        tp加速
+        tp之前先从右下角快速定位
         """
         
         if IS_DEVICE_PC:
@@ -74,9 +78,9 @@ class Map(MiniMap, BigMap, MapConverter):
                     itt.left_down()
         curr_posi = self.get_bigmap_posi()
         dx = min( (curr_posi[0] - target_posi[0])*self.MAP_POSI2MOVE_POSI_RATE, self.BIGMAP_MOVE_MAX)
-        dx = max( (curr_posi[0] - target_posi[0])*self.MAP_POSI2MOVE_POSI_RATE, -self.BIGMAP_MOVE_MAX)
+        dx = max( dx, -self.BIGMAP_MOVE_MAX)
         dy = min( (curr_posi[1] - target_posi[1])*self.MAP_POSI2MOVE_POSI_RATE, self.BIGMAP_MOVE_MAX)
-        dy = max( (curr_posi[1] - target_posi[1])*self.MAP_POSI2MOVE_POSI_RATE, -self.BIGMAP_MOVE_MAX)
+        dy = max( dy, -self.BIGMAP_MOVE_MAX)
 
         logger.info(f"curr: {curr_posi} target: {target_posi}")
         logger.info(f"_move_bigmap: {dx} {dy}")
@@ -86,6 +90,8 @@ class Map(MiniMap, BigMap, MapConverter):
         itt.left_up()
 
         self.get_bigmap_posi()
+        if itt.get_img_existence(asset.confirm):
+            itt.key_press('esc')
         if euclidean_distance(self.get_bigmap_posi(is_upd=False), target_posi) <= self.BIGMAP_TP_OFFSET:
             return True
         else:
@@ -95,15 +101,17 @@ class Map(MiniMap, BigMap, MapConverter):
             else:
                 self._move_bigmap(target_posi = target_posi)
     
-    def _find_closest_teleporter(self, posi:list, regions = REGION_TEYVAT):
+    def _find_closest_teleporter(self, posi:list, regions = REGION_TEYVAT, tp_type:list = None):
         """
         return closest teleporter position
         """
+        if tp_type is None:
+            tp_type = ["Teleporter", "Statue", "Domain"]
         min_dist = 99999
         min_point = [9999,9999]
         min_type = ""
         for i in DICT_TELEPORTER:
-            if DICT_TELEPORTER[i].region in regions:
+            if (DICT_TELEPORTER[i].region in regions) and (DICT_TELEPORTER[i].tp in tp_type):
                 i_posi = self.convert_GIMAP_to_cvAutoTrack(DICT_TELEPORTER[i].position)
                 i_dist = euclidean_distance(posi, i_posi)
                 if i_dist < min_dist:
@@ -112,39 +120,44 @@ class Map(MiniMap, BigMap, MapConverter):
                     min_type = DICT_TELEPORTER[i].tp
         return min_point, min_type
 
-    def bigmap_tp(self, posi:list, tp_mode = 0):
+    def bigmap_tp(self, posi:list, tp_mode = 0, tp_type:list=None):
         """
 
         传送到指定坐标。
         模式: 
         0: 自动选择最近的可传送目标传送
         
-        移动到地图中心才会传送，因为懒不想算地图与坐标比例(
+        移动到地图中心才会传送，因为不知道地图与坐标比例，之后再改
         
         """
+        if tp_type == None:
+            tp_type = ["Teleporter", "Statue", "Domain"]
         scene_lib.switch_to_page(scene_manager.page_bigmap, lambda:False)
         if tp_mode == 0:
             # tp_posi = posi
-            tp_posi, tp_type = self._find_closest_teleporter(posi)
+            tp_posi, tp_type = self._find_closest_teleporter(posi, tp_type = tp_type)
         self._move_bigmap(tp_posi)
         if tp_type == "Domain":
             logger.debug("tp to Domain")
+            itt.appear_then_click(asset.ButtonSwitchDomainModeOn)
+            itt.delay(0.2)
             # 点一下“仅查看秘境”
+        else:
+            itt.appear_then_click(asset.ButtonSwitchDomainModeOff)
         if IS_DEVICE_PC:
             itt.move_and_click([1920/2, 1080/2]) # screen center
         else:
             itt.move_and_click([1024/2, 768/2])
-        if tp_type == "Domain":
-            logger.debug("tp to Domain")
-            # 点回去“仅查看秘境”
         tp_timeout_1 = timer_module.TimeoutTimer(45)
-        while 1:            
+        while 1:
+            if itt.get_img_existence(asset.confirm):
+                itt.key_press('esc')            
             if itt.appear_then_click(asset.bigmap_tp) : break
             if tp_type == "Teleporter":
                 logger.debug("tp to Teleporter")
                 itt.appear_then_click(asset.CSMD)
             elif tp_type == "Statue":
-                logger.debug("tp to Statue")
+                logger.debug("tp to Statue" )
                 itt.appear_then_click(asset.QTSX)
             if tp_timeout_1.istimeout():
                 scene_lib.switch_to_page(scene_manager.page_bigmap, lambda:False)
@@ -159,7 +172,8 @@ class Map(MiniMap, BigMap, MapConverter):
         
         while not (scene_lib.get_current_pagename() == "main"):
             time.sleep(1)
-        
+
+map_obj = Map()
+    
 if __name__ == '__main__':
-    mappp = Map()
-    mappp.bigmap_tp([0,-1000])
+    map_obj.bigmap_tp(map_obj.convert_GIMAP_to_cvAutoTrack([6642.003, 5485.38]), tp_type = ["Domain"])

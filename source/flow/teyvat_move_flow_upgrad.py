@@ -9,12 +9,13 @@ from funclib.err_code_lib import ERR_PASS, ERR_STUCK
 from source.funclib import scene_lib, movement
 from source.interaction.minimap_tracker import tracker
 from source.flow.flow_template import FlowConnector, FlowController, FlowTemplate, EndFlowTenplate
+from source.map.map import map_obj
+
 
 IN_MOVE = 0
 IN_FLY = 1
 IN_WATER = 2
 IN_CLIMB = 3
-
 
 class TeyvatMoveFlowConnector(FlowConnector):
     def __init__(self):
@@ -66,70 +67,8 @@ class TeyvatTeleport(FlowTemplate):
         self._next_rfc()
 
     def state_in(self):
-        """
-        这个代码是垃圾 之后大地图坐标识别模块接入之后要重写
-        """
-        curr_posi = tracker.get_position()
-        scene_lib.switch_to_page(scene_manager.page_bigmap, self.upper.checkup_stop_func)
-        # Obtain the coordinates of the transmission anchor closest to the target coordinates
-        tw_posi = big_map.nearest_big_map_tw_posi(curr_posi, self.upper.target_posi, self.upper.checkup_stop_func, include_gs=True, include_dm=True) # 获得距离目标坐标最近的传送锚点坐标 
-        tw_posi2 = big_map.nearest_big_map_tw_posi(curr_posi, self.upper.target_posi, self.upper.checkup_stop_func, include_gs=False, include_dm=True) # 获得距离目标坐标最近的传送锚点坐标 
-        if list(tw_posi) != list(tw_posi2):
-            check_mode = 0 # Statues of the seven
-        else:
-            check_mode = 1 # Teleport Waypoint
-        if len(tw_posi)==0:
-            logger.info(t2t("获取传送锚点失败，正在重试"))
-            big_map.reset_map_size()
-        itt.move_and_click([tw_posi[0], tw_posi[1]])
-        # global_itt.delay(0.2)
-        # global_itt.left_click()
-        # global_itt.delay(0.6)
-        temporary_timeout_1 = timer_module.TimeoutTimer(25)
-        while 1:
-            if self.upper.checkup_stop_func():
-                break
-            
-            if itt.appear_then_click(asset.bigmap_tp) : break
-            if check_mode == 1:
-                logger.debug("tp to tw")
-                itt.appear_then_click(asset.CSMD)
-            else:
-                logger.debug("tp to ss")
-                itt.appear_then_click(asset.QTSX)
-            if temporary_timeout_1.istimeout():
-                scene_lib.switch_to_page(scene_manager.page_bigmap, self.upper.checkup_stop_func)
-                itt.move_and_click([tw_posi[0], tw_posi[1]])
-                temporary_timeout_1.reset()
-            time.sleep(0.5)
-
-        itt.move_and_click([posi_manager.tp_button[0], posi_manager.tp_button[1]], delay=1)
-        
-        while not itt.get_img_existence(asset.ui_main_win):
-            if self.upper.checkup_stop_func():
-                break
-            time.sleep(1)
-        while tracker.in_excessive_error:
-            if self.upper.checkup_stop_func():
-                break
-            time.sleep(1)
+        map_obj.bigmap_tp(self.upper.target_posi, tp_type = ["Domain"])
         self._next_rfc()
-
-    def state_after(self):
-        """也是垃圾"""
-        scene_lib.switch_to_page(scene_manager.page_main, self.upper.checkup_stop_func)
-        time.sleep(2)
-        curr_posi = tracker.get_position()
-        scene_lib.switch_to_page(scene_manager.page_bigmap, self.upper.checkup_stop_func)
-        tw_posi = big_map.nearest_teyvat_tw_posi(curr_posi, self.upper.target_posi, self.upper.checkup_stop_func)
-        p1 = euclidean_distance(self.upper.target_posi, tw_posi)
-        p2 = euclidean_distance(self.upper.target_posi, curr_posi)
-        if p1 < p2:
-            scene_lib.switch_to_page(scene_manager.page_main, self.upper.checkup_stop_func)
-            itt.delay(1)
-            self.rfc = FC.BEFORE
-        else:
-            self._next_rfc()
 
     def state_end(self):
         scene_lib.switch_to_page(scene_manager.page_main, self.upper.checkup_stop_func)
@@ -303,7 +242,7 @@ class TeyvatMoveFlowController(FlowController):
         self.get_while_sleep = self.flow_connector.get_while_sleep
 
         self.append_flow(TeyvatTeleport(self.flow_connector))
-        if False:
+        if True:
             self.append_flow(TeyvatMove_Automatic(self.flow_connector))
         else:
             self.append_flow(TeyvatMove_FollowPath(self.flow_connector))

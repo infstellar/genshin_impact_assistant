@@ -20,7 +20,7 @@ class DomainTask(TaskTemplate):
         self._add_sub_threading(self.dfc)
         self._add_sub_threading(self.tmfc)
         
-        self.domain_name = "孤云凌霄之处"
+        self.domain_name = "太山府"
         self.domain_type = "VI"
         self.domain_posi = load_items_position(self.domain_name,mode=1, ret_mode=1)[0]
         self.tmfc.set_parameter(stop_rule = 1, MODE = "Automatic", target_posi = self.domain_posi)
@@ -122,3 +122,8 @@ class DomainTask(TaskTemplate):
                     
             
             
+if __name__ == '__main__':
+    dmt = DomainTask()
+    # dmt._end_domain()
+    # dmt.flow_mode = TI.DT_IN_DOMAIN
+    dmt.start()

@@ -115,7 +115,8 @@ character_q_skills.add_posi(img_path=f"{ASSETS_COMMON_IMG}\\area\\QSkill\\c4.jpg
 ButtonEgg = Button(path=f"{ASSETS_COMMON_IMG}\\button\\Foods\\ButtonEgg.jpg", cap_posi='all', is_bbg = False)
 confirm = Button(path=f"{ASSETS_IMG}\\{GLOBAL_LANG}\\confirm.jpg", cap_posi='all', is_bbg = False)
 Area_revival_foods = posi_manager.PosiTemplate(img_path=f"{ASSETS_COMMON_IMG}\\area\\revival_foods.jpg")
-
+ButtonSwitchDomainModeOn = Button(path=f"{ASSETS_IMG}\\map\\big_map\\switch_domain_mode_on.jpg")
+ButtonSwitchDomainModeOff = Button(path=f"{ASSETS_IMG}\\map\\big_map\\switch_domain_mode_off.jpg")
 QTSX = TextTemplate(text=
 {
     "zh_CN":"七天神像",

@@ -24,6 +24,18 @@
             "request": "launch",
             "cwd": "${workspaceFolder}",
             "justMyCode": true
+        },
+        {
+            "name": "Python: SnapShot",
+            "type": "python",
+            "console": "integratedTerminal",
+            "program":"${workspaceFolder}/source/dev_tool/snapshot.py",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}"
+            },
+            "justMyCode": true
         }
         
     ]
