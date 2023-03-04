@@ -6,20 +6,20 @@ from source.funclib import scene_lib
 
 def del_log():
     logger.debug(t2t("cleaning cvautotrack files"))
-    for root, dirs, files in os.walk(os.path.join(root_path)):
+    for root, dirs, files in os.walk(os.path.join(ROOT_PATH)):
         for f in files:
             if f == "autoTrack.log":
-                os.remove(os.path.join(root_path, "autoTrack.log"))
+                os.remove(os.path.join(ROOT_PATH, "autoTrack.log"))
                 logger.debug(t2t("autoTrack.log 1 cleaned"))
-    for root, dirs, files in os.walk(os.path.join(root_path, "source")):
+    for root, dirs, files in os.walk(os.path.join(ROOT_PATH, "source")):
         for f in files:
             if f == "autoTrack.log":
-                os.remove(os.path.join(root_path, "source", "autoTrack.log"))
+                os.remove(os.path.join(ROOT_PATH, "source", "autoTrack.log"))
                 logger.debug(t2t("autoTrack.log 2 cleaned"))
-    for root, dirs, files in os.walk(os.path.join(root_path, "source", "../webio")):
+    for root, dirs, files in os.walk(os.path.join(ROOT_PATH, "source", "../webio")):
         for f in files:
             if f == "autoTrack.log":
-                os.remove(os.path.join(root_path, "source", "../webio", "autoTrack.log"))
+                os.remove(os.path.join(ROOT_PATH, "source", "../webio", "autoTrack.log"))
                 logger.debug(t2t("autoTrack.log 3 cleaned"))
 del_log()
 

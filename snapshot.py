@@ -167,7 +167,7 @@ while 1:
     num_i += 1
     cap = itt.capture(jpgmode=0)
     # cap = itt.png2jpg(cap, channel = 'ui', alpha_num = 50)# 22 no Q
-    cv2.imwrite(root_path + '\\' + "tools\\snapshot\\" + str(time.time()) + ".jpg", cap) # type: ignore
+    cv2.imwrite(ROOT_PATH + '\\' + "tools\\snapshot\\" + str(time.time()) + ".jpg", cap) # type: ignore
     x = str(time.time())
     time.sleep(0.1)
     print('pic', i)

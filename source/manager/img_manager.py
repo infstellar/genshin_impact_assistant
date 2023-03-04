@@ -47,9 +47,9 @@ class ImgIcon:
             cap_posi = [0, 0, 1080, 1920]
         
         if IS_DEVICE_PC:
-            self.origin_path = os.path.join(root_path, path).replace("$device$", "Windows")
+            self.origin_path = os.path.join(ROOT_PATH, path).replace("$device$", "Windows")
         else:
-            self.origin_path = os.path.join(root_path, path).replace("$device$", "Windows")
+            self.origin_path = os.path.join(ROOT_PATH, path).replace("$device$", "Windows")
         self.raw_image = cv2.imread(self.origin_path)
         if is_bbg == None:
             if self.raw_image.shape == (1080,1920,3):

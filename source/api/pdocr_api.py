@@ -38,7 +38,7 @@ CHANNEL_RED = 2
 RETURN_TEXT = 1
 RETURN_POSITION = 0
 
-default_infer_path = os.path.join(root_path, f'assets\\inference\\{GLOBAL_LANG}\\')
+default_infer_path = os.path.join(ROOT_PATH, f'assets\\inference\\{GLOBAL_LANG}\\')
 
 class PaddleocrAPI:
     

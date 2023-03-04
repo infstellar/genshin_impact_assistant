@@ -61,7 +61,7 @@ class TimeoutTimer(Timer):
 class FileTimer(Timer):
     def __init__(self, timer_name:str):
         super().__init__()
-        self.path = os.path.join(root_path, "config\\timer", timer_name+".txt")
+        self.path = os.path.join(ROOT_PATH, "config\\timer", timer_name+".txt")
         if not os.path.exists(self.path):
             with open(self.path, 'w') as f:
                 f.write('0')

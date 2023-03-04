@@ -7,8 +7,8 @@ logger.info(t2t('Creating yolox obj. It may takes a few second.'))
 
 import sys, os
 
-root_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, root_path)
+ROOT_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, ROOT_PATH)
 import argparse
 import datetime
 import time

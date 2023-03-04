@@ -36,12 +36,12 @@ def before_operation(print_log=True):
             
             if INTERACTION_MODE == INTERACTION_DESKTOP:
                 winname = get_active_window_process_name()
-                if winname not in process_name:
+                if winname not in PROCESS_NAME:
                     while 1:
-                        if get_active_window_process_name() in process_name:
+                        if get_active_window_process_name() in PROCESS_NAME:
                             logger.info(t2t("恢复操作"))
                             break
-                        logger.info(t2t("当前窗口焦点为") + str(winname) + t2t("不是原神窗口") + str(process_name) + t2t("，操作暂停 ") + str(5 - (time.time()%5)) +t2t(" 秒"))
+                        logger.info(t2t("当前窗口焦点为") + str(winname) + t2t("不是原神窗口") + str(PROCESS_NAME) + t2t("，操作暂停 ") + str(5 - (time.time()%5)) +t2t(" 秒"))
                         time.sleep(5 - (time.time()%5))
             return func(*args, **kwargs)
         return wrapper

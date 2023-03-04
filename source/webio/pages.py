@@ -373,7 +373,7 @@ class ConfigPage(Page):
             doc_special = doc_special.split('#')
             if doc_special[0] == "$FILE_IN_FOLDER$":
                 
-                json_dict = load_jsons_from_folder(os.path.join(root_path, doc_special[1]), black_file=["character","character_dist",""])
+                json_dict = load_jsons_from_folder(os.path.join(ROOT_PATH, doc_special[1]), black_file=["character","character_dist",""])
                 sl = []
                 for i in json_dict:
                     sl.append({"label": i["label"], "value": i["label"]})
@@ -564,14 +564,14 @@ class CombatSettingPage(ConfigPage):
 
     def onclick_add_teamjson(self):
         n = input.input('team name')
-        shutil.copy(os.path.join(root_path, "config\\tactic\\team.uijsontemplate"),
-                    os.path.join(root_path, "config\\tactic", n + '.json'))
+        shutil.copy(os.path.join(ROOT_PATH, "config\\tactic\\team.uijsontemplate"),
+                    os.path.join(ROOT_PATH, "config\\tactic", n + '.json'))
         self._reload_select()
 
     def onclick_add_teamjson_withcharacters(self):
         n = input.input('team name')
-        shutil.copy(os.path.join(root_path, "config\\tactic\\team_with_characters.uijsontemplate"),
-                    os.path.join(root_path, "config\\tactic", n + '.json'))
+        shutil.copy(os.path.join(ROOT_PATH, "config\\tactic\\team_with_characters.uijsontemplate"),
+                    os.path.join(ROOT_PATH, "config\\tactic", n + '.json'))
         self._reload_select()
         pass
 

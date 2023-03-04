@@ -49,8 +49,8 @@ class CollectorFlow(BaseThreading):
             self.collected_id[self.collector_name] = []
             save_json(self.collected_id, "collected.json", default_path="config\\auto_collector", sort_keys=False)
 
-        if not os.path.exists(os.path.join(root_path, "config\\auto_collector", "collection_log.json")):
-            save_json({}, os.path.join(root_path, "config\\auto_collector", "collection_log.json"))
+        if not os.path.exists(os.path.join(ROOT_PATH, "config\\auto_collector", "collection_log.json")):
+            save_json({}, os.path.join(ROOT_PATH, "config\\auto_collector", "collection_log.json"))
         self.collection_log = load_json("collection_log.json", default_path="config\\auto_collector")
         
         self.collector_posi_dict = None

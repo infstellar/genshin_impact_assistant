@@ -6,10 +6,10 @@ class TextTemplate():
             cap_area = [0,0,1920,1080]
         elif isinstance(cap_area, str):
             if IS_DEVICE_PC:
-                path = os.path.join(root_path, cap_area).replace("$device$", "Windows")
+                path = os.path.join(ROOT_PATH, cap_area).replace("$device$", "Windows")
             else:
-                path = os.path.join(root_path, cap_area).replace("$device$", "Windows")
-            cap_area = get_bbox(cv2.imread(os.path.join(root_path, path)))
+                path = os.path.join(ROOT_PATH, cap_area).replace("$device$", "Windows")
+            cap_area = get_bbox(cv2.imread(os.path.join(ROOT_PATH, path)))
         self.origin_text = text
         self.cap_area = cap_area
         self.text = self.origin_text[GLOBAL_LANG]

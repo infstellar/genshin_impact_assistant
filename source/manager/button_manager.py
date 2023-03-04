@@ -6,7 +6,7 @@ CLICK_STATIC = 0
 CLICK_DYNAMIC = 1
 
 def get_cap_posi(path, black_offset):
-    raw_file = cv2.imread(os.path.join(root_path, path))
+    raw_file = cv2.imread(os.path.join(ROOT_PATH, path))
     bbg_posi = get_bbox(raw_file, black_offset=black_offset)
     return bbg_posi
 

@@ -55,13 +55,13 @@ class GenericEvent(BaseThreading):
             
             if self.itt_mode == 'Dm':
                 win_name = get_active_window_process_name()
-                if win_name in process_name:
+                if win_name in PROCESS_NAME:
                     unbind()
                     while 1:
-                        if get_active_window_process_name() not in process_name:
+                        if get_active_window_process_name() not in PROCESS_NAME:
                             logger.info(t2t("恢复操作"))
                             break
-                        logger.info(t2t("当前窗口焦点为") + str(win_name) + t2t("是原神窗口") + str(process_name) + t2t("，操作暂停 ") + str(5 - (time.time()%5)) +t2t(" 秒"))
+                        logger.info(t2t("当前窗口焦点为") + str(win_name) + t2t("是原神窗口") + str(PROCESS_NAME) + t2t("，操作暂停 ") + str(5 - (time.time()%5)) +t2t(" 秒"))
                         time.sleep(5 - (time.time()%5))
                     bind()
 

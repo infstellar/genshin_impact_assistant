@@ -11,6 +11,7 @@ import cv2
 import win32gui, win32process, psutil
 import ctypes, pickle
 
+time.time()  # 防自动删除
 global GLOBAL_LANG, GLOBAL_DEVICE
 GLOBAL_LANG = "$locale$" # $locale$, zh_CN, en_US
 DESKTOP_CN = "Desktop_CN"
@@ -22,21 +23,24 @@ INTERACTION_DESKTOP = "Desktop"
 INTERACTION_EMULATOR = "EMULATOR"
 INTERACTION_DESKTOP_BACKGROUND = "DesktopBackground"
 INTERACTION_MODE = INTERACTION_DESKTOP # Normal, Adb, Dm
-time.time()  # 防自动删除
 BBG = 100001
-process_name = ["YuanShen.exe", "GenshinImpact.exe"]
-# configurate paths
-try:
-    from source.path_lib import *
-except:
-    root_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    source_path = root_path + '\\source'
-    assets_path = root_path + '\\assets'
-    if sys.path[0] != root_path:
-        sys.path.insert(0, root_path)
-    if sys.path[1] != source_path:
-        sys.path.insert(1, source_path)
-# configurate paths over
+ANGLE_NORMAL = 0
+ANGLE_NEGATIVE_Y = 1
+ANGLE_NEGATIVE_X = 2
+ANGLE_NEGATIVE_XY = 3
+PROCESS_NAME = ["YuanShen.exe", "GenshinImpact.exe"]
+
+
+# configure paths
+ROOT_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+SOURCE_PATH = ROOT_PATH + '\\source'
+ASSETS_PATH = ROOT_PATH + '\\assets'
+if sys.path[0] != ROOT_PATH:
+    sys.path.insert(0, ROOT_PATH)
+if sys.path[1] != SOURCE_PATH:
+    sys.path.insert(1, SOURCE_PATH)
+from source.path_lib import *
+# configure paths over
 
 
 
@@ -45,10 +49,10 @@ def load_json(json_name='config.json', default_path='config\\settings') -> dict:
     # if "$lang$" in default_path:
     #     default_path = default_path.replace("$lang$", GLOBAL_LANG)
     try:
-        return json.load(open(os.path.join(root_path, default_path, json_name), 'r', encoding='utf-8'))
+        return json.load(open(os.path.join(ROOT_PATH, default_path, json_name), 'r', encoding='utf-8'))
     except:
-        json.dump({}, open(os.path.join(root_path, default_path, json_name), 'w', encoding='utf-8'))
-        return json.load(open(os.path.join(root_path, default_path, json_name), 'r', encoding='utf-8'))
+        json.dump({}, open(os.path.join(ROOT_PATH, default_path, json_name), 'w', encoding='utf-8'))
+        return json.load(open(os.path.join(ROOT_PATH, default_path, json_name), 'r', encoding='utf-8'))
 try:
     config_json = load_json("config.json")
     DEBUG_MODE = config_json["DEBUG"] if "DEBUG" in config_json else False
@@ -61,20 +65,19 @@ except:
 try:
     INTERACTION_MODE = load_json("config.json", CONFIG_PATH_SETTING)["interaction_mode"]
     if INTERACTION_MODE not in [INTERACTION_EMULATOR, INTERACTION_DESKTOP_BACKGROUND, INTERACTION_DESKTOP]:
-        logger.warning("UNKNOWN INTEACTION MODE. SET TO \'Desktop\' Default.")
+        logger.warning("UNKNOWN INTERACTION MODE. SET TO \'Desktop\' Default.")
         INTERACTION_MODE = INTERACTION_DESKTOP
 except:
     logger.error("config文件导入失败，可能由于初次安装。跳过导入。 ERROR_IMPORT_CONFIG_002")
     INTERACTION_MODE = INTERACTION_DESKTOP
 IS_DEVICE_PC = (INTERACTION_MODE == INTERACTION_DESKTOP_BACKGROUND)or(INTERACTION_MODE == INTERACTION_DESKTOP)
-
 # load config file over
 
 
 
-# configurate loguru
+# configure loguru
 logger.remove(handler_id=None)
-logger.add(os.path.join(root_path, os.path.join(root_path, 'Logs', "{time:YYYY-MM-DD}.log")), level="TRACE", backtrace=True, retention='15 days')
+logger.add(os.path.join(ROOT_PATH, os.path.join(ROOT_PATH, 'Logs', "{time:YYYY-MM-DD}.log")), level="TRACE", backtrace=True, retention='15 days')
 if DEBUG_MODE:
     logger.add(sys.stdout, level="TRACE", backtrace=True)
 else:
@@ -128,7 +131,7 @@ def get_local_lang():
 if GLOBAL_LANG == "$locale$":
     GLOBAL_LANG = get_local_lang()
     logger.info(f"language set as: {GLOBAL_LANG}")
-l10n = gettext.translation(GLOBAL_LANG, localedir=os.path.join(root_path, "translation/locale"), languages=[GLOBAL_LANG])
+l10n = gettext.translation(GLOBAL_LANG, localedir=os.path.join(ROOT_PATH, "translation/locale"), languages=[GLOBAL_LANG])
 l10n.install()
 t2t = l10n.gettext
 # load translation module over
@@ -136,16 +139,15 @@ t2t = l10n.gettext
 
 
 # verify path
-if not os.path.exists(root_path):
-    logger.error(t2t("目录不存在：") + root_path + t2t(" 请检查"))
-if not os.path.exists(source_path):
-    logger.error(t2t("目录不存在：") + source_path + t2t(" 请检查"))
+if not os.path.exists(ROOT_PATH):
+    logger.error(t2t("目录不存在：") + ROOT_PATH + t2t(" 请检查"))
+if not os.path.exists(SOURCE_PATH):
+    logger.error(t2t("目录不存在：") + SOURCE_PATH + t2t(" 请检查"))
 # verify path over
 
 
 
 # verify administration
-
 def is_admin():
     try:
         return ctypes.windll.shell32.IsUserAnAdmin()
@@ -156,7 +158,7 @@ if not is_admin():
 # verify administration over
 
 
-
+# functions
 def list_text2list(text: str) -> list:
     if text is not None:  # 判断是否为空
         try:  # 尝试转换
@@ -222,10 +224,7 @@ def is_int(x):
     else:
         return True
 
-ANGLE_NORMAL = 0
-ANGLE_NEGATIVE_Y = 1
-ANGLE_NEGATIVE_X = 2
-ANGLE_NEGATIVE_XY = 3
+
 
 def points_angle(p1, p2, coordinate=ANGLE_NORMAL):
     # p1: current point
@@ -437,10 +436,8 @@ def load_jsons_from_folder(path, black_file:list=None):
                     json_list.append({"label": f, "json": j})
     return json_list
 
-
-
 # Update for a program used before version v0.5.0.424
-if os.path.exists(os.path.join(root_path, "config\\tastic")):
+if os.path.exists(os.path.join(ROOT_PATH, "config\\tastic")):
     logger.info("检测到tastic文件夹。")
     logger.info("版本v0.5.0.424后，tastic文件夹修正为tactic文件夹。")
     time.sleep(1)
@@ -450,17 +447,17 @@ if os.path.exists(os.path.join(root_path, "config\\tastic")):
     time.sleep(1)
     logger.warning("该操作将在15秒后开始。")
     time.sleep(15)
-    for root, dirs, files in os.walk(os.path.join(root_path, "config\\tastic")):
+    for root, dirs, files in os.walk(os.path.join(ROOT_PATH, "config\\tastic")):
         for f in files:
             if f[f.index(".")+1:] == "json":
-                shutil.copy(os.path.join(root_path, "config\\tastic", f), os.path.join(root_path, "config\\tactic", f))
+                shutil.copy(os.path.join(ROOT_PATH, "config\\tastic", f), os.path.join(ROOT_PATH, "config\\tactic", f))
     logger.warning("准备删除tastic文件夹。")
     time.sleep(1)
     logger.warning("该操作可能有风险，您可以将config/tastic文件夹中的文件备份后再继续。")
     time.sleep(1)
     logger.warning("该操作将在15秒后开始。")
     time.sleep(15)
-    shutil.rmtree(os.path.join(root_path, "config\\tastic"))
+    shutil.rmtree(os.path.join(ROOT_PATH, "config\\tastic"))
     logger.info("操作完成。您可以手动删除残留的config/tactic/tastic.json文件。")
     time.sleep(1)
     # os.rename(os.path.join(root_path, "config\\tactic"), os.path.join(root_path, "config\\tactic"))
