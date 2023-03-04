@@ -23,6 +23,8 @@
    python genshin_assistant.py
    ```
 
+~~（推荐使用VsCode，这样你的运行和调试就会有几个快捷运行方式，肥肠好用！还有变量着色哦(doge)）~~
+
 ## 更新
 
 - 使用setup.py更新:

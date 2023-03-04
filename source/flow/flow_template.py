@@ -72,6 +72,9 @@ class FlowTemplate():
         
     def _set_nfid(self, fid):
         self.next_flow_id = fid
+        
+    def _set_rfc(self, rfc):
+        self.rfc = rfc
 
 class EndFlowTenplate(FlowTemplate):
     def __init__(self, upper:FlowConnector, flow_id:int, err_code_id:int = ERR_PASS):
@@ -115,8 +118,8 @@ class FlowController(base_threading.BaseThreading):
     def set_current_flow_id(self, id):
         self.current_flow_id = id
         
-    def set_end_flow_id(self, id):
-        self.end_flow_id = id
+    # def set_end_flow_id(self, id):
+    #     self.end_flow_id = id
     
     def _err_code_exec(self) -> bool:
         """_summary_

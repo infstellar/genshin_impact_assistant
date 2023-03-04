@@ -98,6 +98,20 @@ To没用过github的小伙伴: 描述文档中的蓝色文字是链接,可以打
 
 更多其他配置项，参见GUI内的设置介绍。
 
+## 错误报告
+
+如果在使用中遇到问题，可以提交issue或在Q群中反馈。
+
+反馈错误前，请务必确认您已经阅读文档和[FAQ](doc/FAQ.md)中的已知问题与解决方案。
+
+反馈错误时，请一并提交 Logs 文件夹中的日志文件。
+
+## 常见问题 FAQ
+
+如果在使用时遇到问题，可以先看看FAQ：
+
+[FAQ](doc/FAQ.md)
+
 ### GUI使用方法
 
 #### main窗口
@@ -120,20 +134,6 @@ To没用过github的小伙伴: 描述文档中的蓝色文字是链接,可以打
 
 - 点击对应按钮进入，按照提示操作
 
-## 错误报告
-
-如果在使用中遇到问题，可以提交issue或在Q群中反馈。
-
-反馈错误前，请务必确认您已经阅读文档和[FAQ](doc/FAQ.md)中的已知问题与解决方案。
-
-反馈错误时，请一并提交 Logs 文件夹中的日志文件。
-
-## 常见问题 FAQ
-
-如果在使用时遇到问题，可以先看看FAQ：
-
-[FAQ](doc/FAQ.md)
-
 ## 性能需求
 
 - 此程序至少需要`2.5G内存`与`6G存储空间`.
@@ -143,14 +143,14 @@ To没用过github的小伙伴: 描述文档中的蓝色文字是链接,可以打
 ### 开源库
 
 #### 特别感谢
-
+- [Alas Lme带码进组(doge)](https://github.com/LmeSzinc/AzurLaneAutoScript)
+- 
 - [原神-基于图像算法的坐标定位 GenshinImpact AutoTrack DLL](https://github.com/GengGode/cvAutoTrack)
 
 原地址：https://github.com/GengGode/GenshinImpact_AutoTrack_DLL
 
 - [空荧酒馆原神地图 kongying-tavern/yuan-shen-map](https://github.com/kongying-tavern/yuan-shen-map)
 
-- [Alas 参考了自动安装和代码实现](https://github.com/LmeSzinc/AzurLaneAutoScript)
 
 #### 开源库调用
 
