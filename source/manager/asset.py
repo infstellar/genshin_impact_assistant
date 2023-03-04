@@ -117,6 +117,10 @@ confirm = Button(path=f"{ASSETS_IMG}\\{GLOBAL_LANG}\\confirm.jpg", cap_posi='all
 Area_revival_foods = posi_manager.PosiTemplate(img_path=f"{ASSETS_COMMON_IMG}\\area\\revival_foods.jpg")
 ButtonSwitchDomainModeOn = Button(path=f"{ASSETS_IMG}\\map\\big_map\\switch_domain_mode_on.jpg")
 ButtonSwitchDomainModeOff = Button(path=f"{ASSETS_IMG}\\map\\big_map\\switch_domain_mode_off.jpg")
+AreaSwitchMapArea = posi_manager.PosiTemplate(img_path=f"{ASSETS_COMMON_IMG}\\area\\SwitchMapArea.jpg")
+ButtonSwitchMapArea = Button(f"{ASSETS_COMMON_IMG}\\button\\SwitchMapAreaButton.jpg")
+UIBigMapScaling = ImgIcon(f"{ASSETS_COMMON_IMG}\\ui\\BigMapScaling.jpg", threshold=0.99, print_log = LOG_ALL, offset=0)
+ButtonCloseMarkTableInTP = Button(f"{ASSETS_COMMON_IMG}\\button\\CloseMarkTableInTP.jpg")
 QTSX = TextTemplate(text=
 {
     "zh_CN":"七天神像",
@@ -127,6 +131,21 @@ CSMD = TextTemplate(text=
     "zh_CN":"传送锚点",
     "en_US": "Teleport Waypoint"
 }, cap_area = bigmap_choose_area.cap_posi)
+MapAreaMD = TextTemplate(text={
+    "zh_CN":"蒙德"
+}, cap_area = AreaSwitchMapArea.position)
+MapAreaLY = TextTemplate(text={
+    "zh_CN":"璃月"
+}, cap_area = AreaSwitchMapArea.position)
+MapAreaDQ = TextTemplate(text={
+    "zh_CN":"稻妻"
+}, cap_area = AreaSwitchMapArea.position)
+MapAreaXM = TextTemplate(text={
+    "zh_CN":"须弥"
+}, cap_area = AreaSwitchMapArea.position)
+MapAreaCYJY = TextTemplate(text={
+    "zh_CN":"层岩巨渊"
+}, cap_area = AreaSwitchMapArea.position)
 
 if __name__ == '__main__':
     pass

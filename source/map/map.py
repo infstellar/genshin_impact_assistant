@@ -56,9 +56,6 @@ class Map(MiniMap, BigMap, MapConverter):
         1. 点击到某个东西弹出右侧弹框
         2. 点击到一坨按键弹出一坨东西
         
-        需要增加的功能：
-        tp加速
-        tp之前先从右下角快速定位
         """
         screen_center_x = 1920/2
         screen_center_y = 1080/2
@@ -108,9 +105,9 @@ class Map(MiniMap, BigMap, MapConverter):
             
         if euclidean_distance(self.get_bigmap_posi(is_upd=False), target_posi) <= self.BIGMAP_TP_OFFSET:
             if IS_DEVICE_PC:
-                return list([1920/2+float_posi, 1080/2+float_posi]) # screen center
+                return list([1920/2, 1080/2]) # screen center
             else:
-                return list([1024/2+float_posi, 768/2+float_posi])
+                return list([1024/2, 768/2])
         else:
             itt.delay(0.2, comment="wait for a moment")
             if euclidean_distance(self.get_bigmap_posi(is_upd=False), curr_posi) <= self.BIGMAP_TP_OFFSET:
@@ -125,17 +122,15 @@ class Map(MiniMap, BigMap, MapConverter):
         if tp_type is None:
             tp_type = ["Teleporter", "Statue", "Domain"]
         min_dist = 99999
-        min_point = [9999,9999]
-        min_type = ""
+        min_teleporter = None
         for i in DICT_TELEPORTER:
             if (DICT_TELEPORTER[i].region in regions) and (DICT_TELEPORTER[i].tp in tp_type):
                 i_posi = self.convert_GIMAP_to_cvAutoTrack(DICT_TELEPORTER[i].position)
                 i_dist = euclidean_distance(posi, i_posi)
                 if i_dist < min_dist:
-                    min_point = i_posi
+                    min_teleporter = DICT_TELEPORTER[i]
                     min_dist = i_dist
-                    min_type = DICT_TELEPORTER[i].tp
-        return min_point, min_type
+        return min_teleporter
 
     def bigmap_tp(self, posi:list, tp_mode = 0, tp_type:list=None):
         """
@@ -144,16 +139,41 @@ class Map(MiniMap, BigMap, MapConverter):
         模式: 
         0: 自动选择最近的可传送目标传送
         
-        移动到地图中心才会传送，因为不知道地图与坐标比例，之后再改
-        
         """
         if tp_type == None:
             tp_type = ["Teleporter", "Statue", "Domain"]
         scene_lib.switch_to_page(scene_manager.page_bigmap, lambda:False)
         if tp_mode == 0:
             # tp_posi = posi
-            tp_posi, tp_type = self._find_closest_teleporter(posi, tp_type = tp_type)
+            target_teleporter = self._find_closest_teleporter(posi, tp_type = tp_type)
+        tp_posi = target_teleporter.position
+        tp_type = target_teleporter.tp
+        tp_region = target_teleporter.region
+        
+        
+        if not itt.get_img_existence(asset.UIBigMapScaling):
+            itt.appear_then_click(asset.ButtonSwitchMapArea)
+            itt.appear_then_click(asset.MapAreaCYJY)
+            itt.delay(1)
+        
+        itt.appear_then_click(asset.ButtonSwitchMapArea)
+        itt.delay(1)
+        
+        if tp_region == "Mondstadt":
+            itt.appear_then_click(asset.MapAreaMD)
+        elif tp_region == "Liyue":
+            itt.appear_then_click(asset.MapAreaLY)
+        elif tp_region == "Inazuma":
+            itt.appear_then_click(asset.MapAreaDQ)
+        elif tp_region == "Sumeru":
+            itt.appear_then_click(asset.MapAreaXM)
+        itt.delay(0.5)
+        
+        itt.appear_then_click(asset.ButtonCloseMarkTableInTP)
+        itt.delay(0.5)
+        
         click_posi = self._move_bigmap(tp_posi)
+        
         if tp_type == "Domain":
             logger.debug("tp to Domain")
             itt.appear_then_click(asset.ButtonSwitchDomainModeOn)

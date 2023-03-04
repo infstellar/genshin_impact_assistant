@@ -43,8 +43,7 @@ class ImgIcon:
             self.name = path.split('\\')[-1].split('.')[0]
         else:
             self.name = name
-        if cap_posi == None:
-            cap_posi = [0, 0, 1080, 1920]
+        
         
         if IS_DEVICE_PC:
             self.origin_path = os.path.join(ROOT_PATH, path).replace("$device$", "Windows")
@@ -70,6 +69,9 @@ class ImgIcon:
             self.cap_posi = [0, 0, 1920, 1080]
         else:
             self.cap_posi = cap_posi    
+        
+        if self.cap_posi == None:
+            self.cap_posi = [0, 0, 1080, 1920]
         
         self.jpgmode = jpgmode
         self.threshold = threshold
