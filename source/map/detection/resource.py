@@ -84,6 +84,7 @@ class MiniMapResource:
             self.MAP_POSI2MOVE_POSI_RATE = 0.2 # 移动距离与力度的比例
             self.BIGMAP_TP_OFFSET = 100 # 距离目标小于该误差则停止
             self.BIGMAP_MOVE_MAX = 100 # 最大移动力度
+            self.TP_RANGE = 350 # 在该像素范围内可tp
         else:
             # Magic numbers for 1920x1080 mobile
             self.MINIMAP_CENTER = (75 + 135, 22 + 135)
@@ -101,7 +102,8 @@ class MiniMapResource:
             # Set bigmap tp arguments
             self.MAP_POSI2MOVE_POSI_RATE = 0.01 # 待调试
             self.BIGMAP_TP_OFFSET = 10 # 待调试
-            self.BIGMAP_MOVE_MAX = 100
+            self.BIGMAP_MOVE_MAX = 100 # 待调试
+            self.TP_RANGE = 350 # 在该像素范围内可tp
 
     @cached_property
     def _minimap_mask(self):

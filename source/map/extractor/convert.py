@@ -1,6 +1,7 @@
 import numpy as np
 
 from source.device.alas.utils import point_in_area
+from source.util import IS_DEVICE_PC
 
 
 class MapConverter:
@@ -115,4 +116,38 @@ class MapConverter:
             points = (points - (-3561.4, -34614.4)) / 5.114
             return points
 
+        return points
+    
+    @classmethod
+    def convert_InGenshinMapPX_to_GIMAP(cls, points, layer=LAYER_Teyvat) -> np.ndarray:
+        points = np.array(points)
+        if IS_DEVICE_PC:
+            points = points*0.81
+    
+        return points
+    
+    @classmethod
+    def convert_GIMAP_to_InGenshinMapPX(cls, points, layer=LAYER_Teyvat) -> np.ndarray:
+        points = np.array(points)
+        if IS_DEVICE_PC:
+            points = points/0.81
+    
+        return points
+    
+    @classmethod
+    def convert_InGenshinMapPX_to_cvAutoTrack(cls, points, layer=LAYER_Teyvat) -> np.ndarray:
+        points = np.array(points)
+        
+        points = cls.convert_InGenshinMapPX_to_GIMAP(points, layer=layer)
+        points = cls.convert_GIMAP_to_cvAutoTrack(points)
+        
+        return points
+    
+    @classmethod
+    def convert_cvAutoTrack_to_InGenshinMapPX(cls, points, layer=LAYER_Teyvat) -> np.ndarray:
+        points = np.array(points)
+        
+        points = cls.convert_cvAutoTrack_to_GIMAP(points, layer=layer)
+        points = cls.convert_GIMAP_to_InGenshinMapPX(points, layer=layer)
+    
         return points

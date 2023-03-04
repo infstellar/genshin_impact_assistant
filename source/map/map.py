@@ -40,7 +40,7 @@ class Map(MiniMap, BigMap, MapConverter):
         logger.info(f"bigmap posi: {self.convert_GIMAP_to_cvAutoTrack(self.bigmap)}")
         return self.convert_GIMAP_to_cvAutoTrack(self.bigmap)
 
-    def _move_bigmap(self, target_posi, float_posi = 0):
+    def _move_bigmap(self, target_posi, float_posi = 0) -> list:
         """move bigmap center to target position
 
         Args:
@@ -60,7 +60,8 @@ class Map(MiniMap, BigMap, MapConverter):
         tp加速
         tp之前先从右下角快速定位
         """
-        
+        screen_center_x = 1920/2
+        screen_center_y = 1080/2
         if IS_DEVICE_PC:
             itt.move_to(1920/2+float_posi, 1080/2+float_posi) # screen center
         else:
@@ -89,17 +90,33 @@ class Map(MiniMap, BigMap, MapConverter):
         itt.delay(0.2, comment="waiting genshin")
         itt.left_up()
 
-        self.get_bigmap_posi()
-        if itt.get_img_existence(asset.confirm):
-            itt.key_press('esc')
+        
+        # if itt.get_img_existence(asset.confirm):
+            # itt.key_press('esc')
+        
+        after_move_posi = self.get_bigmap_posi()
+
+        if euclidean_distance(self.convert_cvAutoTrack_to_InGenshinMapPX(after_move_posi), 
+                              self.convert_cvAutoTrack_to_InGenshinMapPX(target_posi)) <= self.TP_RANGE:
+            return list(
+                (self.convert_cvAutoTrack_to_InGenshinMapPX(target_posi))
+                - 
+                (self.convert_cvAutoTrack_to_InGenshinMapPX(after_move_posi))
+                +
+                np.array([screen_center_x, screen_center_y])
+                )
+            
         if euclidean_distance(self.get_bigmap_posi(is_upd=False), target_posi) <= self.BIGMAP_TP_OFFSET:
-            return True
+            if IS_DEVICE_PC:
+                return list([1920/2+float_posi, 1080/2+float_posi]) # screen center
+            else:
+                return list([1024/2+float_posi, 768/2+float_posi])
         else:
             itt.delay(0.2, comment="wait for a moment")
             if euclidean_distance(self.get_bigmap_posi(is_upd=False), curr_posi) <= self.BIGMAP_TP_OFFSET:
-                self._move_bigmap(target_posi = target_posi, float_posi = float_posi + 45)
+                return self._move_bigmap(target_posi = target_posi, float_posi = float_posi + 45)
             else:
-                self._move_bigmap(target_posi = target_posi)
+                return self._move_bigmap(target_posi = target_posi)
     
     def _find_closest_teleporter(self, posi:list, regions = REGION_TEYVAT, tp_type:list = None):
         """
@@ -136,7 +153,7 @@ class Map(MiniMap, BigMap, MapConverter):
         if tp_mode == 0:
             # tp_posi = posi
             tp_posi, tp_type = self._find_closest_teleporter(posi, tp_type = tp_type)
-        self._move_bigmap(tp_posi)
+        click_posi = self._move_bigmap(tp_posi)
         if tp_type == "Domain":
             logger.debug("tp to Domain")
             itt.appear_then_click(asset.ButtonSwitchDomainModeOn)
@@ -145,13 +162,14 @@ class Map(MiniMap, BigMap, MapConverter):
         else:
             itt.appear_then_click(asset.ButtonSwitchDomainModeOff)
         if IS_DEVICE_PC:
-            itt.move_and_click([1920/2, 1080/2]) # screen center
+            itt.move_and_click(click_posi) # screen center
         else:
-            itt.move_and_click([1024/2, 768/2])
+            itt.move_and_click(click_posi)
+        # itt.delay(0.5, comment="waiting genshin animation")
         tp_timeout_1 = timer_module.TimeoutTimer(45)
         while 1:
-            if itt.get_img_existence(asset.confirm):
-                itt.key_press('esc')            
+            # if itt.get_img_existence(asset.confirm):
+            #     itt.key_press('esc')            
             if itt.appear_then_click(asset.bigmap_tp) : break
             if tp_type == "Teleporter":
                 logger.debug("tp to Teleporter")
@@ -176,4 +194,4 @@ class Map(MiniMap, BigMap, MapConverter):
 map_obj = Map()
     
 if __name__ == '__main__':
-    map_obj.bigmap_tp(map_obj.convert_GIMAP_to_cvAutoTrack([6642.003, 5485.38]), tp_type = ["Domain"])
+    map_obj.bigmap_tp(map_obj.convert_GIMAP_to_cvAutoTrack([6642.003, 5485.38]), tp_type = ["Domain"]) # tp to *染之庭
