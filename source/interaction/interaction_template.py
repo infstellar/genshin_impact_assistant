@@ -53,4 +53,6 @@ class InteractionTemplate():
             # https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-vkkeyscana
             return VkKeyScanA(ord(key)) & 0xff
         else:
+            if key == "space":
+                key = 'spacebar'
             return vkcode.VK_CODE[key]

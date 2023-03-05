@@ -66,6 +66,12 @@ def reset_view():
         itt.middle_click()
         time.sleep(1)
 
+def angle_to_movex(cangle, tangle):
+    dangle = cangle - tangle
+    if abs(dangle)>180:
+        dangle = -(360-dangle)
+    return dangle
+
 def view_to_angle_domain(angle, stop_func, deltanum=0.65, maxloop=100, corrected_num=CORRECT_DEGREE):
     if IS_DEVICE_PC:
         cap = itt.capture(posi=small_map.posi_map)
@@ -108,31 +114,37 @@ def view_to_angle_teyvat(angle, stop_func, deltanum=1, maxloop=30, corrected_num
         if i > 1:
             logger.debug('last degree: ' + str(degree))
 
+def calculate_posi_cvn(pl):
+    tx, ty = tracker.get_position()
+    td = tracker.get_rotation()
+    degree = generic_lib.points_angle([tx, ty], pl, coordinate=generic_lib.NEGATIVE_Y)
+    ddegree = angle_to_movex(td, degree)
+    if abs(ddegree)<1:
+        return 0
+    cvn = maxmin( (ddegree/abs(ddegree)) * abs(ddegree)**1.5/3, 150, -150)
+    return cvn
+    
 def change_view_to_posi(pl, stop_func):
     if IS_DEVICE_PC:
         td=0
         degree=100
         i = 0
         
-        if abs(td-degree)>10:
+        if abs(calculate_posi_cvn(pl))>10:
             logger.debug(f"change_view_to_posi: pl: {pl}")
         
-        while abs(td-degree)>10:
+        while 1:
             '''加一个场景检测'''
             time.sleep(0.05)
-            tx, ty = tracker.get_position()
-            td = tracker.get_rotation()
-            degree = generic_lib.points_angle([tx, ty], pl, coordinate=generic_lib.NEGATIVE_Y)
-            cvn=td-degree
-            if cvn>=50:
-                cvn=50
-            if cvn<=-50:
-                cvn=-50
+            cvn = calculate_posi_cvn(pl)
+            print(cvn)
             cview(cvn)
             i+=1
             if stop_func():
                 break
             if i>=80:
+                break
+            if abs(cvn)<=10:
                 break
 
 def reset_const_val():
@@ -156,4 +168,5 @@ def get_current_motion_state() -> str:
 # view_to_angle(-90)
 if __name__ == '__main__':
     # cview(-90, VERTICALLY)
-    view_to_angle_domain(-90,f)
+    while 1:
+        print(tracker.get_rotation())

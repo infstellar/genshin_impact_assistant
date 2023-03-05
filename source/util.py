@@ -345,6 +345,11 @@ def get_active_window_process_name():
     except:
         pass
 
+def maxmin(x,nmax,nmin):
+    x = min(x, nmax)
+    x = max(x, nmin)
+    return x
+
 def crop(image, area):
     """
     Crop image like pillow, when using opencv / numpy.

@@ -3,7 +3,7 @@ from common import timer_module
 from source.flow import flow_state as ST
 from source.interaction.interaction_core import itt
 from source.operator import pickup_operator
-from source.flow import teyvat_move_flow
+from source.flow import teyvat_move_flow_upgrad
 from source.interaction.minimap_tracker import tracker
 from source.controller import combat_loop
 import numpy as np
@@ -12,7 +12,7 @@ from source.util import *
 from source.flow.flow_template import FlowController, FlowTemplate, FlowConnector, EndFlowTemplate
 import source.flow.flow_code as FC
 from source.controller import combat_loop
-from common import flow_state as ST, timer_module
+from source.common import timer_module
 from source.funclib import generic_lib, movement, combat_lib
 from source.funclib.err_code_lib import *
 from source.manager import asset
@@ -44,11 +44,12 @@ class CollectorFlowConnector(FlowConnector):
         self.collection_path_list = []
         self.collection_path_index = 0
         self.collection_name = ""
-        self.to_next_posi_offset = 1.0*5 # For CVAT's low precision
-        self.special_keys_posi_offset = 1.5
+        self.to_next_posi_offset = 1.0*5
+        self.special_keys_posi_offset = 3
         self.collector_type = COLLECTION
 
-        self.tmf = teyvat_move_flow.TeyvatMoveFlow()
+        self.tmf = teyvat_move_flow_upgrad.TeyvatMoveFlowController()
+        self.tmf.set_parameter(stop_rule=0)
         self.puo = pickup_operator.PickupOperator()
         chara_list = combat_lib.get_chara_list()
         self.cct = combat_loop.Combat_Controller(chara_list)
@@ -122,7 +123,8 @@ class MoveToCollection_FollowPath(FlowTemplate):
     def state_before(self):
         self.curr_path = self.upper.collection_path_list[self.upper.collection_path_index]["position_list"]
         self.curr_path_index = 0
-        itt.key_down('w')
+        # itt.key_down('w')
+        tracker.reinit_smallmap()
         self._next_rfc()
     
     def state_in(self):
@@ -136,7 +138,10 @@ class MoveToCollection_FollowPath(FlowTemplate):
                 logger.info("path end")
                 self._next_rfc()
         self._do_special_key(curr_posi)
-        movement.change_view_to_posi(target_posi, stop_func = self.upper.checkup_stop_func)
+        if abs(movement.calculate_posi_cvn(target_posi)) >= 5:
+            itt.key_up('w')
+            movement.change_view_to_posi(target_posi, stop_func = self.upper.checkup_stop_func)
+            itt.key_down('w')
         
             
     def state_after(self):
@@ -192,6 +197,10 @@ class PickUpCollection(FlowTemplate):
 class EndCollector(EndFlowTemplate):
     def __init__(self, upper: CollectorFlowConnector):
         super().__init__(upper, flow_id=ST.END_COLLECTOR, err_code_id=ERR_PASS)
+        
+    def state_init(self):
+        itt.key_up('w')
+        return super().state_init()
 
     
     
@@ -206,6 +215,7 @@ class CollectorFlowController(FlowController):
         
         self.append_flow(MoveToCollection_FollowPath(self.flow_connector))
         self.append_flow(PickUpCollection(self.flow_connector))
+        self.append_flow(EndCollector(self.flow_connector))
         
     def set_parameter(self, collection_path_list = None, collection_name = None, to_next_posi_offset = None, special_keys_posi_offset = None):
         if collection_path_list != None:
@@ -222,7 +232,7 @@ class CollectorFlowController(FlowController):
 if __name__ == '__main__':
     
     cfc = CollectorFlowController()
-    cfc.set_parameter(collection_path_list=load_json("1677407787.4955494", "config\\collection_path"))
+    cfc.set_parameter(collection_path_list=load_json("1678014849.9312954", "config\\collection_path"))
     cfc.start()
     
     while 1:

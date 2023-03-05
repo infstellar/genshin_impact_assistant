@@ -9,7 +9,7 @@ from source.funclib import scene_lib, movement
 from source.interaction.minimap_tracker import tracker
 from source.flow.flow_template import FlowConnector, FlowController, FlowTemplate, EndFlowTemplate
 from source.flow import flow_state as ST
-from source.map.map import map_obj
+from source.map.map import genshin_map
 
 
 IN_MOVE = 0
@@ -20,10 +20,8 @@ IN_CLIMB = 3
 class TeyvatMoveFlowConnector(FlowConnector):
     def __init__(self):
         super().__init__()
-        self.tmc = teyvat_move_controller.TeyvatMoveController()
         self.checkup_stop_func = None
         self.stop_rule = 0
-        self.tmc.set_stop_rule(self.stop_rule)
         self.jump_timer = timer_module.Timer()
         self.current_state = ST.INIT_TEYVAT_TELEPORT
         self.target_posi = [0, 0]
@@ -43,7 +41,6 @@ class TeyvatMoveFlowConnector(FlowConnector):
         self.priority_waypoints_array = np.array(self.priority_waypoints_array)
     
     def reset(self):
-        self.tmc.reset_err_code()
         self.current_state = ST.INIT_TEYVAT_TELEPORT
         self.target_posi = [0, 0]
         self.motion_state = IN_MOVE
@@ -58,16 +55,12 @@ class TeyvatTeleport(FlowTemplate):
         super().__init__(upper, flow_id=ST.INIT_TEYVAT_TELEPORT, next_flow_id=ST.INIT_TEYVAT_MOVE)
         self.upper = upper
 
-    def state_init(self):
-        self.upper.tmc.set_parameter(self.upper.target_posi)
-        self._next_rfc()
-
     def state_before(self):
         scene_lib.switch_to_page(scene_manager.page_main, self.upper.checkup_stop_func)
         self._next_rfc()
 
     def state_in(self):
-        map_obj.bigmap_tp(self.upper.target_posi, tp_type = ["Domain"])
+        genshin_map.bigmap_tp(self.upper.target_posi, tp_type = ["Domain"])
         self._next_rfc()
 
     def state_end(self):
@@ -116,10 +109,6 @@ class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon):
         '''加一个信息输出'''
         # print(currentp, closest_pp)
         return closest_pp
-
-    def state_init(self):
-        self.upper.tmc.continue_threading()
-        return super().state_init()
 
     def state_in(self):
         self.switch_motion_state()
@@ -238,7 +227,6 @@ class TeyvatMoveFlowController(FlowController):
     def __init__(self):
         super().__init__(flow_connector = TeyvatMoveFlowConnector(), current_flow_id = ST.INIT_TEYVAT_TELEPORT)
         self.flow_connector = self.flow_connector # type: TeyvatMoveFlowConnector
-        self._add_sub_threading(self.flow_connector.tmc)
         self.get_while_sleep = self.flow_connector.get_while_sleep
 
         self.append_flow(TeyvatTeleport(self.flow_connector))

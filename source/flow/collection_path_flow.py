@@ -1,14 +1,15 @@
 from source.util import *
 import keyboard
 from source.flow.flow_template import FlowController, FlowTemplate, FlowConnector, EndFlowTemplate
-import source.flow.flow_code as FC
+import source.flow.flow_code as FC, source.flow.flow_state as ST
 from source.interaction.minimap_tracker import tracker
 from source.controller import combat_loop
-from common import flow_state as ST, timer_module
+from source.common import timer_module
 from source.funclib import generic_lib, movement, combat_lib
 from source.funclib.err_code_lib import *
 from source.manager import posi_manager as PosiM, asset
 from source.interaction.interaction_core import itt
+from pynput.keyboard import Listener, KeyCode, Key
 
 class CollectionPathConnector(FlowConnector):
     def __init__(self):
@@ -31,6 +32,7 @@ class CollectionPathConnector(FlowConnector):
         }
 
         self.min_distance = 1
+        self.listener = self.listener = Listener(on_press=self._add_key_to_dict)
         self.set_hotkey()
         '''
         Template:
@@ -66,31 +68,31 @@ class CollectionPathConnector(FlowConnector):
         '''
 
     def set_hotkey(self):
-        keyboard.add_hotkey("f", self._add_key_to_dict, args=('f',))
-        keyboard.add_hotkey("space", self._add_key_to_dict, args=('space',))
-        keyboard.add_hotkey("x", self._add_key_to_dict, args=('x',))
-        keyboard.add_hotkey("shift", self._add_key_to_dict, args=('shift',))
+        self.listener.start()
+        # keyboard.add_hotkey("f", self._add_key_to_dict, args=('f',))
+        # keyboard.add_hotkey("space", self._add_key_to_dict, args=('space',))
+        # keyboard.add_hotkey("x", self._add_key_to_dict, args=('x',))
+        # keyboard.add_hotkey("shift", self._add_key_to_dict, args=('shift',))
 
     def unset_hotkey(self):
-        keyboard.remove_hotkey("f")
-        keyboard.remove_hotkey("space")
-        keyboard.remove_hotkey("x")
-        keyboard.remove_hotkey("shift")
+        self.listener.stop()
+        pass
 
-    def _add_key_to_dict(self, key:str):
-        curr_posi = tracker.get_position()
-        if key == 'f':
-            pass
-        elif key == 'space':
-            pass
-        elif key == 'x':
-            pass
-        elif key == 'shift':
-            pass
+    def _add_key_to_dict(self, key):
+        if key == KeyCode.from_char('f'):
+            key = 'f'
+        elif key == Key.space:
+            key = 'space'
+        elif key == KeyCode.from_char('x'):
+            key = 'x'
+        elif key == Key.shift:
+            key = 'shift'
+        else:
+            return
         curr_posi = tracker.get_position()
         self.collection_path_dict["special_keys"].append(
             {
-                "position":curr_posi,
+                "position":list(curr_posi),
                 "key_name":key,
                 "id":len(self.collection_path_dict["special_keys"])+1
             }
@@ -125,6 +127,7 @@ class CollectionPathRecord(FlowTemplate):
 
     def state_init(self):
         pass
+        # self._next_rfc()
     
     def state_before(self):
         
@@ -138,7 +141,7 @@ class CollectionPathRecord(FlowTemplate):
             "special_keys":[]
         }
         self.enter_flag = False
-        
+        tracker.reinit_smallmap()
         self._next_rfc()
 
     def _start_stop_recording(self):
@@ -148,6 +151,7 @@ class CollectionPathRecord(FlowTemplate):
         if self.rfc == FC.IN:
             self.rfc = FC.AFTER
             logger.info(t2t("stop recording"))
+            
     
     def state_in(self):
         
@@ -159,7 +163,7 @@ class CollectionPathRecord(FlowTemplate):
             min_dist = 99999
 
         if min_dist >= self.upper.min_distance:
-            self._add_posi_to_dict(curr_posi)
+            self._add_posi_to_dict(list(curr_posi))
 
         if not self.enter_flag:
             logger.info(t2t("start recording"))
@@ -170,6 +174,7 @@ class CollectionPathRecord(FlowTemplate):
         self.upper.total_collection_list.append(self.upper.collection_path_dict)
         
         self.rfc = FC.INIT
+        
 
 class CollectionPathEnd(EndFlowTemplate):
     def __init__(self, upper: FlowConnector):
@@ -177,10 +182,9 @@ class CollectionPathEnd(EndFlowTemplate):
 
 class CollectionPathController(FlowController):
     def __init__(self):
-        super().__init__(CollectionPathConnector())
+        super().__init__(CollectionPathConnector(), current_flow_id =  ST.COLLECTION_PATH_RECORD)
         self.flow_connector = self.flow_connector # type: CollectionPathConnector
         self.flow_connector.checkup_stop_func = self.checkup_stop_func
-        self.current_flow_id = ST.COLLECTION_PATH_RECORD
     
         self.append_flow(CollectionPathRecord(self.flow_connector))   
         self.append_flow(CollectionPathEnd(self.flow_connector))

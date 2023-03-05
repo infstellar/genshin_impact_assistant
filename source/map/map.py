@@ -5,7 +5,7 @@ from source.util import *
 from source.funclib import scene_lib
 from source.interaction.interaction_core import itt
 from source.map.data.teleporter import DICT_TELEPORTER
-from source.manager import asset, posi_manager, scene_manager
+from source.manager import asset, scene_manager
 from source.common import timer_module
 REGION_TEYVAT = [
     "Inazuma",
@@ -13,6 +13,9 @@ REGION_TEYVAT = [
     "Mondstadt",
     "Sumeru"
 ]
+COORDINATE_TIANLI = "TianLi"
+COORDINATE_GIMAP = "GIMAP"
+COORDINATE_KONGYING = "KongYing"
 class Map(MiniMap, BigMap, MapConverter):
     
     def __init__(self):
@@ -21,7 +24,17 @@ class Map(MiniMap, BigMap, MapConverter):
         MapConverter.__init__(self)
         self._upd_smallmap()
         self._upd_bigmap()
-
+        
+        self.smallmap_upd_timer = timer_module.Timer(2)
+        
+        if IS_DEVICE_PC:
+            logger.debug("import cvAutoTrack")
+            from source.api import cvAutoTrack
+            self.cvAutoTrackerLoop = cvAutoTrack.AutoTrackerLoop()
+            self.cvAutoTrackerLoop.setDaemon(True)
+            self.cvAutoTrackerLoop.start()
+            time.sleep(1)
+    
     def _upd_smallmap(self):
         if scene_lib.get_current_pagename() == "main":
             self.update_position(itt.capture(jpgmode=0))
@@ -30,15 +43,40 @@ class Map(MiniMap, BigMap, MapConverter):
         if scene_lib.get_current_pagename() == "bigmap":
             self.update_bigmap(itt.capture(jpgmode=0))
 
-    def get_smallmap_posi(self):
-        self._upd_smallmap()
+    def get_position(self):
+        if self.smallmap_upd_timer.get_diff_time() >= self.MINIMAP_UPDATE_LIMIT:
+            self._upd_smallmap()
+            self.smallmap_upd_timer.reset()
         return self.convert_GIMAP_to_cvAutoTrack(self.position)
+    
+    def reinit_smallmap(self):
+        if scene_lib.get_current_pagename() == "main":
+            scene_lib.switch_to_page(scene_manager.page_bigmap, stop_func=timer_module.TimeoutTimer(50).istimeout)
+            self.init_position(tuple(map(int, list( self.get_bigmap_posi(return_position_format = COORDINATE_GIMAP) ))))
+            scene_lib.switch_to_page(scene_manager.page_main, stop_func=timer_module.TimeoutTimer(50).istimeout)
+    
+    def while_until_no_excessive_error(self):
+        self.reinit_smallmap()
+    
+    def get_rotation(self):
+        return self.cvAutoTrackerLoop.get_rotation()
 
-    def get_bigmap_posi(self, is_upd = True):
+    def get_bigmap_posi(self, is_upd = True, return_position_format:str = COORDINATE_TIANLI) -> np.ndarray:
+        if not itt.get_img_existence(asset.UIBigMapScaling):
+            while not itt.appear_then_click(asset.ButtonSwitchMapArea): itt.delay(0.2)
+            while not itt.appear_then_click(asset.MapAreaCYJY): itt.delay(0.2)
+            while not itt.appear_then_click(asset.ButtonSwitchMapArea): itt.delay(0.2)
+            while not itt.appear_then_click(asset.MapAreaLY): itt.delay(0.2)
+            scene_lib.switch_to_page(scene_manager.page_main, stop_func=timer_module.TimeoutTimer(50).istimeout)
+            scene_lib.switch_to_page(scene_manager.page_bigmap, stop_func=timer_module.TimeoutTimer(50).istimeout)
         if is_upd:
             self._upd_bigmap()
         logger.info(f"bigmap posi: {self.convert_GIMAP_to_cvAutoTrack(self.bigmap)}")
-        return self.convert_GIMAP_to_cvAutoTrack(self.bigmap)
+        if return_position_format == COORDINATE_TIANLI:
+            return self.convert_GIMAP_to_cvAutoTrack(self.bigmap)
+        elif return_position_format == COORDINATE_GIMAP:
+            return np.array(self.bigmap)
+        return np.array(self.bigmap) 
 
     def _move_bigmap(self, target_posi, float_posi = 0) -> list:
         """move bigmap center to target position
@@ -57,12 +95,14 @@ class Map(MiniMap, BigMap, MapConverter):
         2. 点击到一坨按键弹出一坨东西
         
         """
-        screen_center_x = 1920/2
-        screen_center_y = 1080/2
         if IS_DEVICE_PC:
-            itt.move_to(1920/2+float_posi, 1080/2+float_posi) # screen center
+            screen_center_x = 1920/2
+            screen_center_y = 1080/2
         else:
-            itt.move_to(1024/2+float_posi, 768/2+float_posi)
+            screen_center_x = 1024/2
+            screen_center_y = 768/2
+
+        itt.move_to(screen_center_x+float_posi, screen_center_y+float_posi) # screen center
         
         itt.left_down()
         if IS_DEVICE_PC:
@@ -97,9 +137,9 @@ class Map(MiniMap, BigMap, MapConverter):
                               self.convert_cvAutoTrack_to_InGenshinMapPX(target_posi)) <= self.TP_RANGE:
             return list(
                 (self.convert_cvAutoTrack_to_InGenshinMapPX(target_posi))
-                - 
+                -  # type: ignore
                 (self.convert_cvAutoTrack_to_InGenshinMapPX(after_move_posi))
-                +
+                + 
                 np.array([screen_center_x, screen_center_y])
                 )
             
@@ -147,7 +187,6 @@ class Map(MiniMap, BigMap, MapConverter):
             tp_type = ["Teleporter", "Statue", "Domain"]
         scene_lib.switch_to_page(scene_manager.page_bigmap, lambda:False)
         if tp_mode == 0:
-            # tp_posi = posi
             target_teleporter = self._find_closest_teleporter(posi, tp_type = tp_type)
         tp_posi = self.convert_GIMAP_to_cvAutoTrack(target_teleporter.position)
         tp_type = target_teleporter.tp
@@ -188,11 +227,9 @@ class Map(MiniMap, BigMap, MapConverter):
             itt.move_and_click(click_posi) # screen center
         else:
             itt.move_and_click(click_posi)
-        # itt.delay(0.5, comment="waiting genshin animation")
+
         tp_timeout_1 = timer_module.TimeoutTimer(45)
         while 1:
-            # if itt.get_img_existence(asset.confirm):
-            #     itt.key_press('esc')            
             if itt.appear_then_click(asset.bigmap_tp) : break
             if tp_type == "Teleporter":
                 logger.debug("tp to Teleporter")
@@ -212,9 +249,11 @@ class Map(MiniMap, BigMap, MapConverter):
         # itt.move_and_click([posi_manager.tp_button[0], posi_manager.tp_button[1]], delay=1)
         
         while not (scene_lib.get_current_pagename() == "main"):
-            time.sleep(1)
+            time.sleep(0.2)
+            
+        self.reinit_smallmap()
 
-map_obj = Map()
+genshin_map = Map()
     
 if __name__ == '__main__':
-    map_obj.bigmap_tp(map_obj.convert_GIMAP_to_cvAutoTrack([6642.003, 5485.38]), tp_type = ["Domain"]) # tp to *染之庭
+    genshin_map.bigmap_tp(genshin_map.convert_GIMAP_to_cvAutoTrack([6642.003, 5485.38]), tp_type = ["Domain"]) # tp to *染之庭

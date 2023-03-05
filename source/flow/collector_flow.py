@@ -286,7 +286,7 @@ class CollectorFlow(BaseThreading):
                 self.collector_posi_dict = collector_lib.load_items_position(self.collector_name, blacklist_id=self.shielded_id)
                 self.shielded_posi_list = collector_lib.load_items_position(self.collector_name, blacklist_id=self.shielded_id, ret_mode=1, check_mode=1)
                 scene_lib.switch_to_page(scene_manager.page_main, self.checkup_stop_func)
-                tracker.while_until_no_excessive_error(self.checkup_stop_func)
+                tracker.while_until_no_excessive_error()
                 self.current_position = tracker.get_position()
                 self.collection_details = load_json("collection_id_details.json", "config\\auto_collector")
                 if True:
