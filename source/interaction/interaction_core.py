@@ -511,15 +511,18 @@ class InteractionBGD:
         return math.sqrt(ret / min(len(x_col), len(target_col)))
 
     # @staticmethod
-    def delay(self, x:float, randtime=False, isprint=True, comment=''):
+    def delay(self, x, randtime=False, isprint=True, comment=''):
         """延迟一段时间，单位为秒
 
         Args:
-            x (int): 延迟时间
+            x : 延迟时间/key words
             randtime (bool, optional): 是否启用加入随机秒. Defaults to True.
             isprint (bool, optional): 是否打印日志. Defaults to True.
             comment (str, optional): 日志注释. Defaults to ''.
         """
+        if x  == "animation":
+            time.sleep(0.2)
+            return
         upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
         a = random.randint(-10, 10)
         if randtime:

@@ -26,10 +26,22 @@
             "justMyCode": true
         },
         {
-            "name": "Python: SnapShot",
+            "name": "Python: Snapshot",
             "type": "python",
             "console": "integratedTerminal",
             "program":"${workspaceFolder}/source/dev_tool/snapshot.py",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}"
+            },
+            "justMyCode": true
+        },
+        {
+            "name": "Python: Domain Task",
+            "type": "python",
+            "console": "integratedTerminal",
+            "program":"${workspaceFolder}/source/task/domain_task.py",
             "request": "launch",
             "cwd": "${workspaceFolder}",
             "env": {

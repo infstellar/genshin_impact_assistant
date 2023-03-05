@@ -117,7 +117,10 @@ class Map(MiniMap, BigMap, MapConverter):
     
     def _find_closest_teleporter(self, posi:list, regions = REGION_TEYVAT, tp_type:list = None):
         """
-        return closest teleporter position
+        return closest teleporter position: 
+        
+        input: TianLi format position;
+        return: GIMAP format position.
         """
         if tp_type is None:
             tp_type = ["Teleporter", "Statue", "Domain"]
@@ -146,27 +149,27 @@ class Map(MiniMap, BigMap, MapConverter):
         if tp_mode == 0:
             # tp_posi = posi
             target_teleporter = self._find_closest_teleporter(posi, tp_type = tp_type)
-        tp_posi = target_teleporter.position
+        tp_posi = self.convert_GIMAP_to_cvAutoTrack(target_teleporter.position)
         tp_type = target_teleporter.tp
         tp_region = target_teleporter.region
         
         
         if not itt.get_img_existence(asset.UIBigMapScaling):
-            itt.appear_then_click(asset.ButtonSwitchMapArea)
-            itt.appear_then_click(asset.MapAreaCYJY)
+            while not itt.appear_then_click(asset.ButtonSwitchMapArea): itt.delay(0.2)
+            while not itt.appear_then_click(asset.MapAreaCYJY): itt.delay(0.2)
             itt.delay(1)
         
-        itt.appear_then_click(asset.ButtonSwitchMapArea)
-        itt.delay(1)
+        while not itt.appear_then_click(asset.ButtonSwitchMapArea):
+            itt.delay(0.2)
         
         if tp_region == "Mondstadt":
-            itt.appear_then_click(asset.MapAreaMD)
+            while not itt.appear_then_click(asset.MapAreaMD): itt.delay(0.2)
         elif tp_region == "Liyue":
-            itt.appear_then_click(asset.MapAreaLY)
+            while not itt.appear_then_click(asset.MapAreaLY): itt.delay(0.2)
         elif tp_region == "Inazuma":
-            itt.appear_then_click(asset.MapAreaDQ)
+            while not itt.appear_then_click(asset.MapAreaDQ): itt.delay(0.2)
         elif tp_region == "Sumeru":
-            itt.appear_then_click(asset.MapAreaXM)
+            while not itt.appear_then_click(asset.MapAreaXM): itt.delay(0.2)
         itt.delay(0.5)
         
         itt.appear_then_click(asset.ButtonCloseMarkTableInTP)

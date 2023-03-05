@@ -151,3 +151,21 @@ class MapConverter:
         points = cls.convert_GIMAP_to_InGenshinMapPX(points, layer=layer)
     
         return points
+
+    @classmethod
+    def convert_cvAutoTrack_to_kongying(cls, points, layer=LAYER_Teyvat) -> np.ndarray:
+        points = np.array(points)
+        
+        if layer == cls.LAYER_Teyvat:
+            points = points / 1.5
+    
+        return points
+    
+    @classmethod
+    def convert_kongying_to_cvAutoTrack(cls, points, layer=LAYER_Teyvat) -> np.ndarray:
+        points = np.array(points)
+        
+        if layer == cls.LAYER_Teyvat:
+            points = points * 1.5
+    
+        return points

@@ -1,13 +1,14 @@
 from source.util import *
-from source.flow.flow_template import FlowController, FlowTemplate, FlowConnector, EndFlowTenplate
+from source.flow.flow_template import FlowController, FlowTemplate, FlowConnector, EndFlowTemplate
 import source.flow.flow_code as FC
 from source.controller import combat_loop
-from common import flow_state as ST, timer_module
+from common import timer_module
 from source.funclib import generic_lib, movement, combat_lib
 from source.funclib.err_code_lib import *
 from source.manager import posi_manager as PosiM, asset
 from source.interaction.interaction_core import itt
 from source.api import yolox_api
+from source.flow import flow_state as ST
 
 class DomainFlowConnector(FlowConnector):
     """
@@ -62,8 +63,11 @@ class MoveToChallenge(FlowTemplate):
         self.rfc = 1
     
     def state_before(self):
-        if itt.get_text_existence(asset.LEYLINEDISORDER):
-            itt.move_and_click([PosiM.posi_domain['CLLD'][0], PosiM.posi_domain['CLLD'][1]], delay=1)
+        while 1:
+            if itt.get_img_existence(asset.IN_DOMAIN):
+                break
+            if itt.get_text_existence(asset.LEYLINEDISORDER):
+                itt.move_and_click([PosiM.posi_domain['CLLD'][0], PosiM.posi_domain['CLLD'][1]], delay=1)
         time.sleep(0.5)
         movement.reset_view()
         time.sleep(2)
@@ -228,7 +232,7 @@ class AttainReward(FlowTemplate):
         if itt.get_text_existence(asset.domain_obtain):
             self._next_rfc()
 
-class DomainFlowEnd(EndFlowTenplate):
+class DomainFlowEnd(EndFlowTemplate):
     def __init__(self, upper: FlowConnector):
         super().__init__(upper, flow_id = ST.END_DOMAIN, err_code_id = ERR_PASS)
 
@@ -247,6 +251,7 @@ class DomainFlowController(FlowController):
     def reset(self):
         self.flow_connector.reset()
         self.current_flow_id = ST.INIT_MOVETO_CHALLENGE
+        self.reset_err_code()
 
 
     

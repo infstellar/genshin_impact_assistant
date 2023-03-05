@@ -1,6 +1,6 @@
 from source.util import *
 import keyboard
-from source.flow.flow_template import FlowController, FlowTemplate, FlowConnector, EndFlowTenplate
+from source.flow.flow_template import FlowController, FlowTemplate, FlowConnector, EndFlowTemplate
 import source.flow.flow_code as FC
 from source.interaction.minimap_tracker import tracker
 from source.controller import combat_loop
@@ -171,7 +171,7 @@ class CollectionPathRecord(FlowTemplate):
         
         self.rfc = FC.INIT
 
-class CollectionPathEnd(EndFlowTenplate):
+class CollectionPathEnd(EndFlowTemplate):
     def __init__(self, upper: FlowConnector):
         super().__init__(upper, flow_id=ST.COLLECTION_PATH_END, err_code_id=ERR_PASS)
 

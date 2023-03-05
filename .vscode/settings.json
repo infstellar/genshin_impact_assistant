@@ -51,6 +51,7 @@
         "dtype",
         "Elast",
         "Epress",
+        "fromarray",
         "funclib",
         "Genshin",
         "imgicon",

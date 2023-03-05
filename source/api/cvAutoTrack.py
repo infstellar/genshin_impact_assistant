@@ -36,6 +36,7 @@ class AutoTrackerLoop(BaseThreading):
         self.start_sleep_timer = timer_module.Timer(diff_start_time=61)
         self.history_posi = []
         self.history_timer = timer_module.Timer()
+        self.load_dll()
     
     def load_dll(self):
         self.cvAutoTracker = AutoTracker() # os.path.join(root_path, 'source\\cvAutoTrack_7.2.3\\CVAUTOTRACK.dll')

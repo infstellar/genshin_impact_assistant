@@ -146,7 +146,7 @@ def get_item_id(item_name:str, area_id:list, match_mode = 0) -> list:
         logger.critical("不止一个id"+item_name)
         return ret_id[0]
 
-
+from source.map.extractor.convert import MapConverter
 
 def load_items_position(marker_title:str, mode=0, area_id=None, blacklist_id=None, ret_mode = 0, check_mode = 0, match_mode = 0):
     if area_id == None:

@@ -10,6 +10,7 @@ from loguru import logger
 import cv2
 import win32gui, win32process, psutil
 import ctypes, pickle
+from PIL import Image, ImageDraw, ImageFont
 
 time.time()  # 防自动删除
 global GLOBAL_LANG, GLOBAL_DEVICE
@@ -425,6 +426,97 @@ def image_size(image):
     """
     shape = image.shape
     return shape[1], shape[0]
+
+def convert_text_to_img(text=""):
+    # 加载一个中文字体文件
+    font = ImageFont.truetype("simhei.ttf", 32)
+
+    # 获取一段中文文字的宽度和高度
+    width, height = font.getsize(text)
+
+    # 创建一个白色背景的图片，大小刚好能容纳文字
+    img = Image.new("RGB", (width, height), "white")
+
+    # 创建一个绘图对象
+    draw = ImageDraw.Draw(img)
+
+    # 在图片上绘制文字，位置为左上角
+    draw.text((0, 0), text, font=font, fill="black")
+
+    # 将图片转换回OpenCV格式
+    img = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
+    
+    return img
+
+def replace_text_format(text:str):
+    text = text.replace("：",":")
+    text = text.replace("！","!")
+    text = text.replace("？","?")
+    text = text.replace("，",",")
+    text = text.replace("。",".")
+    text = text.replace("“","\"")
+    text = text.replace("”","\"")
+    text = text.replace("‘","\'")
+    text = text.replace("’","\'")
+    return text
+
+def compare_texts(text1, text2, is_show_res = False, ignore_warning = False):
+    # 读取两个短文本的图片
+    
+    if not ignore_warning:
+        if len(text1) != len(text2):
+            logger.warning(f"compare_texts警告：不相同的文字长度:{text1}, {text2}")
+    
+    font = ImageFont.truetype("simhei.ttf", 16)
+    width1, height1 = font.getsize(text1)
+    width2, height2 = font.getsize(text2)
+    width = max(width1, width2)
+    height = max(height1, height2)
+    img1 = Image.new("RGB", (width, height), "white")
+    img2 = Image.new("RGB", (width, height), "white")
+    draw1 = ImageDraw.Draw(img1)
+    draw1.text((0, 0), text1, font=font, fill="black")
+    draw2 = ImageDraw.Draw(img2)
+    draw2.text((0, 0), text2, font=font, fill="black")
+    img1 = cv2.cvtColor(np.array(img1), cv2.COLOR_RGB2BGR)
+    img2 = cv2.cvtColor(np.array(img2), cv2.COLOR_RGB2BGR)
+        
+    
+    # 将图片转换为灰度图
+    gray1 = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY)
+    gray2 = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
+
+    # 计算两个灰度图之间的绝对差异
+    diff = cv2.absdiff(gray1, gray2)
+
+    # 设置一个阈值，将差异大于阈值的像素标记为白色，小于阈值的像素标记为黑色
+    thresh = 50
+    mask = diff > thresh
+
+    # 将掩码转换为uint8类型，并乘以255，得到二值化后的差异图像
+    mask = mask.astype(np.uint8) * 255
+
+    matching_rate = 1 - len(np.where(mask==255)[0])/len(np.where(mask!=256)[0])
+    logger.debug(f"texts matching rate:{matching_rate} text1 {text1} text2 {text2}")
+    if len(text1) != len(text2):
+        matching_rate = max( matching_rate - 0.06*abs(len(text1) - len(text2)), 0)
+        logger.debug(f"fixed matching rate:{matching_rate}")
+    if is_show_res:
+        # 在原始图片上绘制红色边框，表示差异区域
+        contours, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        for cnt in contours:
+            x,y,w,h = cv2.boundingRect(cnt)
+            cv2.rectangle(img1,(x,y),(x+w,y+h),(0,0,255),3)
+            cv2.rectangle(img2,(x,y),(x+w,y+h),(0,0,255),3)
+
+        # 显示结果图片
+        cv2.imshow("Image 1", img1)
+        cv2.imshow("Image 2", img2)
+        cv2.imshow("Difference", mask)
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
+        
+    return matching_rate
 
 def load_jsons_from_folder(path, black_file:list=None):
     json_list = []

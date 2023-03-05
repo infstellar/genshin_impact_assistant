@@ -1,14 +1,14 @@
 from source.util import *
-from source.common import flow_state as ST, timer_module, static_lib
-import source.flow.flow_code as FC
-from source.funclib import big_map, generic_lib
-from source.manager import scene_manager, posi_manager, asset
+from source.common import timer_module, static_lib
+from source.funclib import generic_lib
+from source.manager import scene_manager, asset
 from source.interaction.interaction_core import itt
 from source.controller import teyvat_move_controller
 from funclib.err_code_lib import ERR_PASS, ERR_STUCK
 from source.funclib import scene_lib, movement
 from source.interaction.minimap_tracker import tracker
-from source.flow.flow_template import FlowConnector, FlowController, FlowTemplate, EndFlowTenplate
+from source.flow.flow_template import FlowConnector, FlowController, FlowTemplate, EndFlowTemplate
+from source.flow import flow_state as ST
 from source.map.map import map_obj
 
 
@@ -226,11 +226,11 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
             logger.info("all path end")
         self._next_rfc()
 
-class TeyvatMoveStuck(EndFlowTenplate):
+class TeyvatMoveStuck(EndFlowTemplate):
     def __init__(self, upper: FlowConnector):
         super().__init__(upper, flow_id=ST.END_TEYVAT_MOVE_STUCK, err_code_id=ERR_STUCK)
 
-class TeyvatMovePass(EndFlowTenplate):
+class TeyvatMovePass(EndFlowTemplate):
     def __init__(self, upper: FlowConnector):
         super().__init__(upper, flow_id=ST.END_TEYVAT_MOVE_PASS, err_code_id=ERR_PASS)
 
@@ -260,11 +260,11 @@ class TeyvatMoveFlowController(FlowController):
         self.flow_connector.target_posi = tp
 
     def set_parameter(self,
-                      stop_rule:int = None,
-                      target_posi:list = None,
-                      MODE:str = None,
-                      to_next_posi_offset:float = None,
-                      special_keys_posi_offset:float = None
+                      stop_rule:int = None, # type: ignore
+                      target_posi:list = None, # type: ignore
+                      MODE:str = None, # type: ignore
+                      to_next_posi_offset:float = None, # type: ignore
+                      special_keys_posi_offset:float = None # type: ignore
                       ):
         if stop_rule != None:
             self.flow_connector.stop_rule = stop_rule
@@ -277,3 +277,7 @@ class TeyvatMoveFlowController(FlowController):
         if special_keys_posi_offset != None:
             self.flow_connector.special_keys_posi_offset = special_keys_posi_offset
         
+        
+if __name__ == '__main__':
+    tmfc = TeyvatMoveFlowController()
+    

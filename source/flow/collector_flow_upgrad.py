@@ -1,5 +1,6 @@
 from source.util import *
-from common import flow_state as ST, timer_module
+from common import timer_module
+from source.flow import flow_state as ST
 from source.interaction.interaction_core import itt
 from source.operator import pickup_operator
 from source.flow import teyvat_move_flow
@@ -8,7 +9,7 @@ from source.controller import combat_loop
 import numpy as np
 from funclib.err_code_lib import ERR_PASS, ERR_STUCK, ERR_COLLECTOR_FLOW_TIMEOUT
 from source.util import *
-from source.flow.flow_template import FlowController, FlowTemplate, FlowConnector, EndFlowTenplate
+from source.flow.flow_template import FlowController, FlowTemplate, FlowConnector, EndFlowTemplate
 import source.flow.flow_code as FC
 from source.controller import combat_loop
 from common import flow_state as ST, timer_module
@@ -188,7 +189,7 @@ class PickUpCollection(FlowTemplate):
         
         
 
-class EndCollector(EndFlowTenplate):
+class EndCollector(EndFlowTemplate):
     def __init__(self, upper: CollectorFlowConnector):
         super().__init__(upper, flow_id=ST.END_COLLECTOR, err_code_id=ERR_PASS)
 

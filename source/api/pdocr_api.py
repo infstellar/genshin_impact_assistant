@@ -77,9 +77,22 @@ class PaddleocrAPI:
     #     im_show.save('result.jpg')
 
     @staticmethod
-    def find_text(result, text, mode=APPROXIMATE_MATCHING):
+    def find_text(result, text, mode=APPROXIMATE_MATCHING, text_process=lambda x:x):
         if result == [[]]:
             return None
+        
+        if True:
+            max_rate = 0
+            max_result = None
+            for i in range(len(result)):
+                curr_rate = compare_texts(text, text_process(result[i][1][0]))
+                if curr_rate > max_rate:
+                    max_result = result[i]
+                    max_rate = curr_rate
+            if max_rate >= 0.9:
+                logger.debug(f"text: {max_result[1][0]}")
+                return max_result
+        
         if mode == APPROXIMATE_MATCHING:
             for i in range(len(result)):
                 if text in result[i][1][0]:
@@ -122,11 +135,11 @@ class PaddleocrAPI:
         return None
 
     def get_text_position(self, im_src, text, mode=APPROXIMATE_MATCHING, returnMode=RETURN_POSITION, isprintlog=False,
-                          message='', default_end='\n', cap_posi_leftup = None):
+                          message='', default_end='\n', cap_posi_leftup = None, text_process=lambda x:x):
         if cap_posi_leftup == None:
             cap_posi_leftup = [0,0]
         res = self.img_analyze(im_src)
-        res_position = self.find_text(res, text, mode=mode)
+        res_position = self.find_text(res, text, mode=mode, text_process = text_process)
         # logger.debug('getTextPosition:  ' + message, end=' | ')
         if isprintlog:
             logger.debug('res: ' + '|function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
@@ -137,6 +150,7 @@ class PaddleocrAPI:
         # cv2.waitKey(0)
         if res_position is not None:
             # print('res_position',res_position)
+            
             if mode == REPEATLY_MATCHING and returnMode == RETURN_POSITION:
                 result = []
                 for i in res_position:
