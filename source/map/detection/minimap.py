@@ -122,7 +122,7 @@ class MiniMap(MiniMapResource):
         image = crop(image, area=area)
         scale = self.DIRECTION_ROTATION_SCALE * self.DIRECTION_SEARCH_SCALE
         mapping = cv2.resize(image, None, fx=scale, fy=scale, interpolation=cv2.INTER_NEAREST)
-        result = cv2.matchTemplate(self.ARROW_ROTATION_MAP, mapping, cv2.TM_CCOEFF_NORMED)
+        result = cv2.matchTemplate(self.ArrowRotateMap, mapping, cv2.TM_CCOEFF_NORMED)
         _, sim, _, loca = cv2.minMaxLoc(result)
         loca = np.array(loca) / self.DIRECTION_SEARCH_SCALE // (self.DIRECTION_RADIUS * 2)
         degree = int((loca[0] + loca[1] * 8) * 5)
@@ -130,14 +130,14 @@ class MiniMap(MiniMapResource):
         def to_map(x):
             return int((x * self.DIRECTION_RADIUS * 2 + self.DIRECTION_RADIUS) * self.POSITION_SEARCH_SCALE)
 
-        # Row on ARROW_ROTATION_MAP_ALL
+        # Row on ArrowRotateMapAll
         row = int(degree // 8) + 45
         # Calculate +-1 rows to get result with a precision of 1
         row = (row - 1, row + 2)
-        # Convert to ARROW_ROTATION_MAP_ALL and to be 5px larger
+        # Convert to ArrowRotateMapAll and to be 5px larger
         row = (to_map(row[0]) - 5, to_map(row[1]) + 5)
 
-        precise_map = self.ARROW_ROTATION_MAP_ALL[row[0]:row[1], :]
+        precise_map = self.ArrowRotateMapAll[row[0]:row[1], :]
         result = cv2.matchTemplate(precise_map, mapping, cv2.TM_CCOEFF_NORMED)
 
         def to_map(x):

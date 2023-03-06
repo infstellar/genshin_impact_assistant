@@ -57,8 +57,8 @@ def cubic_find_maximum(image, precision=0.05):
     Using CUBIC resize algorithm to fit a curved surface, find the maximum value and location.
 
     Args:
-        image:
-        precision:
+        image (np.ndarray):
+        precision (int, float):
 
     Returns:
         float: Maximum value on curved surface
@@ -68,3 +68,40 @@ def cubic_find_maximum(image, precision=0.05):
     _, sim, _, loca = cv2.minMaxLoc(image)
     loca = np.array(loca, dtype=np.float64) * precision
     return sim, loca
+
+
+def image_center_pad(image, size, value=(0, 0, 0)):
+    """
+    Create a new image with given `size`, placing given `image` in the middle.
+
+    Args:
+        image (np.ndarray):
+        size: (width, height)
+        value: Color of the background.
+
+    Returns:
+        np.ndarray:
+    """
+    diff = np.array(size) - image_size(image)
+    left, top = int(diff[0] / 2), int(diff[1] / 2)
+    right, bottom = diff[0] - left, diff[1] - top
+    image = cv2.copyMakeBorder(image, top, bottom, left, right, borderType=cv2.BORDER_CONSTANT, value=value)
+    return image
+
+
+def image_center_crop(image, size):
+    """
+    Center crop the given image.
+
+    Args:
+        image (np.ndarray):
+        size: Output image shape, (width, height)
+
+    Returns:
+        np.ndarray:
+    """
+    diff = image_size(image) - np.array(size)
+    left, top = int(diff[0] / 2), int(diff[1] / 2)
+    right, bottom = diff[0] - left, diff[1] - top
+    image = image[top:-bottom, left:-right]
+    return image
