@@ -422,7 +422,7 @@ def main(exp, args):
 class Yolox_Api:
     def __init__(self, vis_folder=None,
                  save_result=False,
-                 ckpt="yoloxtools/model/tree_exp2/best_ckpt.pth"
+                 ckpt="assets/YoloxModels/best_ckpt.pth"
                  ):
 
         self.args = make_parser_2(save_result=save_result,
