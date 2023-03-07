@@ -4,3 +4,6 @@
 [submodule "assets/AutoTrackDLLAPI"]
 	path = assets/AutoTrackDLLAPI
 	url = https://github.com/GenshinImpactAssistant/GIA_AutoTrackDLL_API.git
+[submodule "assets/YoloxModels"]
+	path = assets/YoloxModels
+	url = https://github.com/GenshinImpactAssistant/YoloxModels
