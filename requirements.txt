@@ -39,4 +39,4 @@ filelock==3.3.0
 lxml==4.6.3
 pydantic
 gimap==3.4.4
-pyymal
+pyyaml
