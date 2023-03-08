@@ -1,5 +1,5 @@
 from source.util import *
-from source.flow.collection_path_flow import CollectionPathController
+from source.flow.path_recorder_flow import PathRecorderController
 from source.task.task_template import TaskTemplate
 from source.interaction.interaction_core import itt
 from source.manager import asset, text_manager
@@ -11,7 +11,7 @@ from source.path_lib import *
 class CollectionPathTask(TaskTemplate):
     def __init__(self):
         super().__init__()
-        self.cpc = CollectionPathController()
+        self.cpc = PathRecorderController()
         self._add_sub_threading(self.cpc)
         
         self.cpc.continue_threading()

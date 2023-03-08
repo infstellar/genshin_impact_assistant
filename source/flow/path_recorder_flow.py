@@ -11,7 +11,7 @@ from source.manager import posi_manager as PosiM, asset
 from source.interaction.interaction_core import itt
 from pynput.keyboard import Listener, KeyCode, Key
 
-class CollectionPathConnector(FlowConnector):
+class PathRecorderConnector(FlowConnector):
     def __init__(self):
         super().__init__()
 
@@ -41,7 +41,6 @@ class CollectionPathConnector(FlowConnector):
                 "name":"",
                 "start_position":[],
                 "end_position":[],
-                "is_activate_pickup":False,
                 "all_position":[
                     [point x, point y],
                     [point x, point y],
@@ -102,9 +101,9 @@ class CollectionPathConnector(FlowConnector):
                     )
 
 
-class CollectionPathRecord(FlowTemplate):
-    def __init__(self, upper: CollectionPathConnector):
-        super().__init__(upper,flow_id=ST.COLLECTION_PATH_RECORD ,next_flow_id=ST.COLLECTION_PATH_END)
+class PathRecorderCore(FlowTemplate):
+    def __init__(self, upper: PathRecorderConnector):
+        super().__init__(upper,flow_id=ST.PATH_RECORDER ,next_flow_id=ST.PATH_RECORDER_END)
 
         keyboard.add_hotkey('\\', self._start_stop_recording)
 
@@ -135,7 +134,6 @@ class CollectionPathRecord(FlowTemplate):
             "name":"",
             "start_position":[],
             "end_position":[],
-            "is_activate_pickup":False,
             "all_position":[],
             "position_list":[],
             "special_keys":[]
@@ -176,20 +174,20 @@ class CollectionPathRecord(FlowTemplate):
         self.rfc = FC.INIT
         
 
-class CollectionPathEnd(EndFlowTemplate):
+class PathRecorderEnd(EndFlowTemplate):
     def __init__(self, upper: FlowConnector):
-        super().__init__(upper, flow_id=ST.COLLECTION_PATH_END, err_code_id=ERR_PASS)
+        super().__init__(upper, flow_id=ST.PATH_RECORDER_END, err_code_id=ERR_PASS)
 
-class CollectionPathController(FlowController):
+class PathRecorderController(FlowController):
     def __init__(self):
-        super().__init__(CollectionPathConnector(), current_flow_id =  ST.COLLECTION_PATH_RECORD)
-        self.flow_connector = self.flow_connector # type: CollectionPathConnector
+        super().__init__(PathRecorderConnector(), current_flow_id =  ST.PATH_RECORDER)
+        self.flow_connector = self.flow_connector # type: PathRecorderConnector
         self.flow_connector.checkup_stop_func = self.checkup_stop_func
     
-        self.append_flow(CollectionPathRecord(self.flow_connector))   
-        self.append_flow(CollectionPathEnd(self.flow_connector))
+        self.append_flow(PathRecorderCore(self.flow_connector))   
+        self.append_flow(PathRecorderEnd(self.flow_connector))
     
 if __name__ == '__main__':
-    CollectionPathController().start()
+    PathRecorderController().start()
     while 1:
         time.sleep(1)

@@ -80,6 +80,7 @@
         "pagename",
         "posi",
         "pyfile",
+        "pynput",
         "pywebio",
         "Qlast",
         "qshow",
