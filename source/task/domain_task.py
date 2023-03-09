@@ -16,17 +16,19 @@ class DomainTask(TaskTemplate):
         super().__init__()
         self.dfc = DomainFlowController()
         self.tmfc = TeyvatMoveFlowController()
-        self.flow_mode = TI.DT_MOVE_TO_DOMAIN
+        self.flow_mode = TI.DT_INIT
         
         self._add_sub_threading(self.dfc)
         self._add_sub_threading(self.tmfc)
         
-        self.domain_name = "山脊守望"
-        self.domain_type_name = "不移II"
+        self.domain_name = load_json("auto_domain.json",f"{CONFIG_PATH_SETTING}")["domain_name"]
+        self.domain_stage_name = load_json("auto_domain.json",f"{CONFIG_PATH_SETTING}")["domain_stage_name"]
         self.domain_posi = load_items_position(self.domain_name,mode=1, ret_mode=1)[0]
         self.tmfc.set_parameter(stop_rule = 1, MODE = "Automatic", target_posi = self.domain_posi)
         self.tmfc.set_target_posi(self.domain_posi)
         self.last_domain_times = 3
+
+        logger.info(f"domain_name: {self.domain_name} domain_stage_name {self.domain_stage_name}")
     
     def _domain_text_process(self, text:str):
         text = text.replace('：', ':')
@@ -44,7 +46,7 @@ class DomainTask(TaskTemplate):
         while not itt.get_img_existence(asset.solo_challenge): itt.delay("animation")
         from source.api.pdocr_complete import ocr
         cap_area = asset.switch_domain_area.position
-        p1 = ocr.get_text_position(itt.capture(jpgmode=0, posi=cap_area), self.domain_type_name, cap_posi_leftup=cap_area[:2], text_process = self._domain_text_process)
+        p1 = ocr.get_text_position(itt.capture(jpgmode=0, posi=cap_area), self.domain_stage_name, cap_posi_leftup=cap_area[:2], text_process = self._domain_text_process)
         if p1 != -1:
             itt.move_and_click([p1[0] + 5, p1[1] + 5], delay=1)
         
@@ -89,51 +91,42 @@ class DomainTask(TaskTemplate):
             # exit all threads
             self.stop_threading()
             time.sleep(10)
-            
-    def run(self) -> None:
-        '''if you're using this class, copy this'''
-        while 1:
-            time.sleep(self.while_sleep)
-            if self.stop_threading_flag:
-                return
 
-            if self.pause_threading_flag:
-                if self.working_flag:
-                    self.working_flag = False
-                time.sleep(1)
-                continue
+    def _check_state(self):
+        if itt.get_img_existence(asset.IN_DOMAIN) or itt.get_img_existence(asset.LEYLINEDISORDER):
+            self.flow_mode = TI.DT_IN_DOMAIN
+        elif itt.get_img_existence(asset.ui_main_win):
+            self.flow_mode = TI.DT_MOVE_TO_DOMAIN
 
-            if not self.working_flag:
-                self.working_flag = True
-                
-            if self.checkup_stop_func():
-                self.pause_threading_flag = True
-                continue
-            '''write your code below'''
 
-            if self.flow_mode == TI.DT_MOVE_TO_DOMAIN:
-                self.tmfc.continue_threading()
-                while 1:
-                    time.sleep(self.while_sleep)
-                    if self.tmfc.get_last_err_code() == ERR_PASS:
-                        break
-                self.tmfc.pause_threading()
-                
-                self._enter_domain()
-                
-                self.flow_mode = TI.DT_IN_DOMAIN
+    def loop(self):
+        if self.flow_mode == TI.DT_INIT:
+            self._check_state()
+
+        if self.flow_mode == TI.DT_MOVE_TO_DOMAIN:
+            self.tmfc.continue_threading()
+            while 1:
+                time.sleep(self.while_sleep)
+                if self.tmfc.get_last_err_code() == ERR_PASS:
+                    break
+            self.tmfc.pause_threading()
             
+            self._enter_domain()
             
+            self.flow_mode = TI.DT_IN_DOMAIN
             
+        if self.flow_mode == TI.DT_IN_DOMAIN:
+            self.dfc.continue_threading()
+            while 1:
+                time.sleep(self.while_sleep)
+                if self.dfc.get_last_err_code() == ERR_PASS:
+                    break
             
-            if self.flow_mode == TI.DT_IN_DOMAIN:
-                self.dfc.continue_threading()
-                while 1:
-                    time.sleep(self.while_sleep)
-                    if self.dfc.get_last_err_code() == ERR_PASS:
-                        break
-                
-                self._end_domain()
+            self._end_domain()
+
+   
+
+            
                     
             
             

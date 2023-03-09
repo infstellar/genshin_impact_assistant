@@ -2,5 +2,7 @@
   "domain_times": 1,
   "resin": "20",
   "isLiYueDomain": false,
-  "fast_mode": true
+  "fast_mode": true,
+  "domain_name": "山脊守望",
+  "domain_stage_name":"不移II"
 }

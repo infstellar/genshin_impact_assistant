@@ -4,7 +4,10 @@ from source.common.base_threading import BaseThreading
 class TaskTemplate(BaseThreading):
     def __init__(self):
         super().__init__()
-        
+    
+    def loop(self):
+        pass
+
     def run(self) -> None:
         '''if you're using this class, copy this'''
         while 1:
@@ -26,6 +29,8 @@ class TaskTemplate(BaseThreading):
                 continue
             '''write your code below'''
             
+            self.loop()
+
     def end_task(self):
         self.stop_threading()
         return

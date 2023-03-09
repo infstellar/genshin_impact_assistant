@@ -1,7 +1,13 @@
 import asyncio
 import threading
 from pywebio import platform
+
+import source.config
+print(source.config.template_translator())
+print(source.config.template_translator_tactic())
+
 from source.webio import webio
+
 
 
 def server_thread():
