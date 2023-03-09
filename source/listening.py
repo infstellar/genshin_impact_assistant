@@ -4,12 +4,13 @@ except:
     from source.util import *
 import time
 import keyboard
-
+from source.task import task_manager
 
 combat_flag = False
 domain_flag = False
 collector_flag = False
 startstop_flag = False
+TASK_MANAGER = task_manager.TaskManager()
 
 t1 = None
 t2 = None
@@ -137,7 +138,7 @@ if keymap_json["autoDomain"] != "":
     keyboard.add_hotkey(keymap_json["autoDomain"], switch_domain_loop)
 if keymap_json["startstop"] != "":
     keyboard.add_hotkey(keymap_json["startstop"], startstop)
-
+keyboard.add_hotkey(load_json("keymap.json", f"{CONFIG_PATH_SETTING}")["task"], TASK_MANAGER.start_stop_tasklist)
 
 @logger.catch
 def listening():

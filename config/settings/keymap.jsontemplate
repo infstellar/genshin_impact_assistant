@@ -2,5 +2,6 @@
   "autoCombat": "",
   "autoDomain": "",
   "autoPickup": "",
-  "startstop": "["
+  "startstop": "[",
+  "task":"]"
 }

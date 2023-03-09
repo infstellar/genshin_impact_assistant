@@ -16,6 +16,7 @@ from common import flow_state
 from source.funclib import collector_lib
 
 
+
 # from source.webio.log_handler import webio_poster
 
 
@@ -28,9 +29,13 @@ class MainPage(Page):
 
     # todo:多语言支持
 
+    def _get_task_list(self):
+        return pin.pin["task_list"]
+
     def _on_load(self):  # 加载事件
         super()._on_load()
         self._load()  # 加载主页
+        listening.TASK_MANAGER.get_task_list = self._get_task_list
         t = threading.Thread(target=self._event_thread, daemon=False)  # 创建事件线程
         session.register_thread(t)  # 注册线程
         t.start()  # 启动线程
@@ -79,9 +84,6 @@ class MainPage(Page):
                     output.put_text(flow_state.get_statement_code_name(0), scope="StateArea")
 
             time.sleep(0.1)
-
-    
-        
     
     def _load(self):
         # 标题
@@ -110,6 +112,15 @@ class MainPage(Page):
                     ])]),
                 # Button_StartStop
                 output.put_row([output.put_text(t2t('启动/停止')), output.put_scope('Button_StartStop')]),
+                
+                output.put_markdown('## '+t2t("Task List")),
+
+                pin.put_checkbox(name="task_list", options=[
+                    {
+                        "label":t2t("Domain Task"),
+                        "value":"DomainTask"
+                    }
+                ]),
 
                 output.put_markdown(t2t('## Statement')),
 

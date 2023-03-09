@@ -269,7 +269,7 @@ def savefileP(filename, item):
         pickle.dump(item, fp)
 
 
-def reflash_config():
+def refresh_config():
     global config_json
     config_json = load_json("config.json")
 
