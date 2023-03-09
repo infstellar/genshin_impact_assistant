@@ -138,7 +138,7 @@ class MiniMapResourceGenerate(MiniMapConst):
         image = cv2.resize(image, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_NEAREST)
 
         scale = self.POSITION_SCALE_DICT['city'] * self.POSITION_SEARCH_SCALE
-        local_size = self.MINIMAP_RADIUS * 2 * scale
+        local_size = self.MINIMAP_POSITION_RADIUS * 2 * scale
         local_size = int(local_size) + 1
         # Pad search area, cause it's no an instant switch between city and wild
         local_size += 20

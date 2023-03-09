@@ -12,6 +12,7 @@ class MapConverter:
     GIMAP: Raw map image file in cvAutoTrack, named `GIMAP.png`
     kongying: https://v3.yuanshen.site/
     """
+    LAYER_Domain = 'Domain'
     LAYER_Teyvat = 'Teyvat'
     LAYER_Enkanomiya = 'Enkanomiya'
     LAYER_TheChasm = 'TheChasm'

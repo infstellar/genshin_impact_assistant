@@ -1,7 +1,10 @@
 import typing as t
 
+from cached_property import cached_property
+
 from source.map.detection.resource import MiniMapResource
 from source.map.detection.utils import *
+from source.map.extractor.convert import MapConverter
 from source.util import logger
 
 
@@ -80,7 +83,7 @@ class MiniMap(MiniMapResource):
         - position
         - position_scene
         """
-        image = self._get_minimap(image, self.MINIMAP_RADIUS)
+        image = self._get_minimap(image, self.MINIMAP_POSITION_RADIUS)
         image = rgb2luma(image)
         image &= self._minimap_mask
 
@@ -101,6 +104,7 @@ class MiniMap(MiniMapResource):
         self.position_similarity_local = round(best_local_sim, 3)
         self.position = tuple(np.round(best_loca, 1))
         self.scene = best_scene
+        return self.position
 
     def update_direction(self, image):
         """
@@ -155,18 +159,179 @@ class MiniMap(MiniMapResource):
 
         self.direction_similarity = round(precise_sim, 3)
         self.direction = precise_loca % 360
+        return self.direction
 
-    def update_minimap(self, image):
+    def _get_minimap_subtract(self, image, update_position=True):
+        """
+        Subtract the corresponding background from the current minimap
+        to obtain the white translucent area of camera rotation
+
+        Args:
+            image:
+            update_position (bool): False to reuse position result
+
+        Returns:
+            np.ndarray
+        """
+        if update_position:
+            self.update_position(image)
+
+        # Get current minimap
+        scale = self._position_scale_dict[self.scene] * self.POSITION_SEARCH_SCALE
+        minimap = self._get_minimap(image, radius=self.MINIMAP_RADIUS)
+        minimap = rgb2luma(minimap)
+
+        radius = self.MINIMAP_RADIUS * scale
+        area = area_offset((-radius, -radius, radius, radius),
+                           offset=np.array(self.position) * self.POSITION_SEARCH_SCALE)
+        # Search 15% larger
+        area = area_pad(area, pad=-int(radius * 0.15))
+        area = np.array(area).astype(int)
+
+        # Crop GIMAP around current position and resize to current minimap
+        image = crop(self.GIMAP, area)
+        image = cv2.resize(image, None, fx=1 / scale, fy=1 / scale, interpolation=cv2.INTER_LINEAR)
+        # Search best match
+        result = cv2.matchTemplate(image, minimap, cv2.TM_CCOEFF_NORMED)
+        sim, loca = cubic_find_maximum(result, precision=0.05)
+        # Re-crop the GIMAP that best match current map
+        area = (0, 0, self.MINIMAP_RADIUS * 2, self.MINIMAP_RADIUS * 2)
+        src = area2corner(area_offset(area, loca)).astype(np.float32)
+        dst = area2corner(area).astype(np.float32)
+        homo = cv2.getPerspectiveTransform(src, dst)
+        image = cv2.warpPerspective(image, homo, area[2:], flags=cv2.INTER_LINEAR)
+
+        # current - background
+        minimap = minimap.astype(float)
+        image = image.astype(float)
+        image = (255 - image) / (255 - minimap + 0.1) * 128
+        image = cv2.min(cv2.max(image, 0), 255)
+        image = image.astype(np.uint8)
+        return image
+
+    def _predict_rotation(self, image):
+        d = self.MINIMAP_RADIUS * 2
+        # Upscale image and apply Gaussian filter for smother results
+        scale = 2
+        image = cv2.GaussianBlur(image, (3, 3), 0)
+        # Expand circle into rectangle
+        remap = cv2.remap(image, *self.RotationRemapData, cv2.INTER_LINEAR)[d * 1 // 10:d * 5 // 10].astype(np.float32)
+        remap = cv2.resize(remap, None, fx=scale, fy=scale, interpolation=cv2.INTER_LINEAR)
+        # Find derivative
+        gradx = cv2.Scharr(remap, cv2.CV_32F, 1, 0)
+        # plt.imshow(gradx)
+        # plt.show()
+
+        # Magic parameters for scipy.find_peaks
+        para = {
+            # 'height': (50, 800),
+            'height': 50,
+            # 'prominence': (0, 400),
+            # 'width': (0, d * scale / 20),
+            # 'distance': d * scale / 18,
+            'wlen': d * scale,
+        }
+        # plt.plot(gradx[d * 3 // 10])
+        # plt.show()
+
+        # `l` for the left of sight area, derivative is positive
+        # `r` for the right of sight area, derivative is negative
+        l = np.bincount(signal.find_peaks(gradx.ravel(), **para)[0] % (d * scale), minlength=d * scale)
+        r = np.bincount(signal.find_peaks(-gradx.ravel(), **para)[0] % (d * scale), minlength=d * scale)
+        l, r = np.maximum(l - r, 0), np.maximum(r - l, 0)
+        # plt.plot(l)
+        # plt.plot(np.roll(r, -d * scale // 4))
+        # plt.show()
+
+        conv0 = []
+        kernel = 2 * scale
+        for offset in range(-kernel + 1, kernel):
+            result = l * convolve(np.roll(r, -d * scale // 4 + offset), kernel=3 * scale)
+            minus = l * convolve(np.roll(r, offset), kernel=10 * scale) // 5
+            # if offset == 0:
+            #     plt.plot(result)
+            #     plt.plot(-minus)
+            #     plt.show()
+            result -= minus
+            result = convolve(result, kernel=3 * scale)
+            conv0 += [result]
+        # plt.figure(figsize=(20, 16))
+        # for row in conv0:
+        #     plt.plot(row)
+        # plt.show()
+
+        conv0 = np.array(conv0)
+        conv0[conv0 < 1] = 1
+        maximum = np.max(conv0, axis=0)
+        if peak_confidence(maximum) > 0.3:
+            # Good match
+            result = maximum
+        else:
+            # Convolve again to reduce noice
+            average = np.mean(conv0, axis=0)
+            minimum = np.min(conv0, axis=0)
+            result = convolve(maximum * average * minimum, 2 * scale)
+        # plt.plot(maximum)
+        # plt.plot(result)
+        # plt.show()
+
+        # Convert match point to degree
+        self.degree = np.argmax(result) / (d * scale) * 2 * np.pi + np.pi / 4
+        degree = np.argmax(result) / (d * scale) * 360 + 135
+        degree = int(degree % 360)
+        self.rotation = degree
+
+        # Calculate confidence
+        self.rotation_confidence = round(peak_confidence(result), 3)
+        return degree
+
+    def update_rotation(self, image, layer=MapConverter.LAYER_Teyvat, update_position=True):
+        # minimap = self._get_minimap(image, radius=self.MINIMAP_RADIUS)
+        # minimap = rgb2luma(minimap)
+        if layer == MapConverter.LAYER_Domain:
+            minimap = self._get_minimap(image, radius=self.MINIMAP_RADIUS)
+            minimap = rgb2luma(minimap)
+        else:
+            minimap = self._get_minimap_subtract(image, update_position=update_position)
+
+        self.rotation = self._predict_rotation(minimap)
+
+        # Uncomment this to debug
+        # self.show_rotation(minimap, self.degree)
+
+        return self.rotation
+
+    @cached_property
+    def _named_window(self):
+        return cv2.namedWindow('result')
+
+    def show_rotation(self, img, ang):
+        _ = self._named_window
+        if ang is not None:
+            img = cv2.line(img, (img.shape[0] // 2, img.shape[0] // 2),
+                           (int(img.shape[0] // 2 + 1000 * np.cos(ang)), int(img.shape[0] // 2 + 1000 * np.sin(ang))),
+                           (255, 255, 0), 2)
+        cv2.imshow('result', img)
+        cv2.waitKey(1)
+
+    def update_minimap(self, image, layer=MapConverter.LAYER_Teyvat):
+        """
+        Args:
+            image:
+            layer: MapConverter.LAYER_Domain or MapConverter.LAYER_Teyvat
+        """
         self.update_position(image)
         self.update_direction(image)
+        self.update_rotation(image, layer=layer, update_position=False)
 
-        # MiniMap P:(4451.5, 3113.0) (0.184|0.050), S:wild, D:259.5 (0.949)
+        # MiniMap P:(4451.5, 3113.0) (0.184|0.050), S:wild, D:259.5 (0.949), R:
         logger.info(
             f'MiniMap '
             f'P:({float2str(self.position[0], 4)}, {float2str(self.position[1], 4)}) '
             f'({float2str(self.position_similarity, 3)}|{float2str(self.position_similarity_local, 3)}), '
             f'S:{self.scene}, '
-            f'D:{float2str(self.direction, 3)} ({float2str(self.direction_similarity, 3)})')
+            f'D:{float2str(self.direction, 3)} ({float2str(self.direction_similarity, 3)}), '
+            f'R:{self.rotation} ({float2str(self.rotation_confidence)})')
 
     @property
     def is_scene_in_wild(self) -> bool:
@@ -211,12 +376,11 @@ class MiniMap(MiniMapResource):
 #     """
 #     from source.interaction.capture import WindowsCapture
 #     import time
-#
-#     device = WindowsCapture()
-#     minimap = MiniMap('Windows')
-#     # 从风起地传送点出发，初始坐标大概大概50px以内就行
+#     device = WindowsCapture(ignore_shape=True)
+#     minimap = MiniMap(MiniMap.DETECT_Desktop_1080p)
+#     # 从璃月港传送点出发，初始坐标大概大概50px以内就行
 #     # 坐标位置是 GIMAP 的图片坐标
-#     minimap.init_position((5783, 1042))
+#     minimap.init_position((4580, 3046))
 #     # 你可以移动人物，GIA会持续监听小地图位置和角色朝向
 #     while 1:
 #         image = device.capture()
@@ -225,5 +389,5 @@ class MiniMap(MiniMapResource):
 #             time.sleep(0.3)
 #             continue
 #
-#         minimap.update_minimap(image)
+#         minimap.update_minimap(image, layer=MapConverter.LAYER_Domain)
 #         time.sleep(0.3)

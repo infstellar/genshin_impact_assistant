@@ -10,8 +10,9 @@ class MiniMapConst:
     DETECT_Mobile_720p = 'Mobile_720p'
 
     # Hard-coded coordinates under 1280x720
-    MINIMAP_CENTER = (50 + 90, 15 + 90)
-    MINIMAP_RADIUS = 83
+    MINIMAP_CENTER = (50 + 90, 14 + 90)
+    MINIMAP_RADIUS = 90
+    MINIMAP_POSITION_RADIUS = 83
 
     # Magic number that resize a 1280x720 minimap to GIMAP
     POSITION_SCALE_DICT = {
@@ -28,7 +29,7 @@ class MiniMapConst:
     POSITION_MOVE = (0.5, 0.5)
 
     # Radius to search direction arrow, about 15px
-    DIRECTION_RADIUS = int(MINIMAP_RADIUS / 6)
+    DIRECTION_RADIUS = int(MINIMAP_POSITION_RADIUS / 6)
     # Downscale direction arrows for faster run
     DIRECTION_SEARCH_SCALE = 0.5
     # Scale to 1280x720
@@ -58,6 +59,11 @@ class MiniMapConst:
         # Current character direction with an error of about 0.1 degree
         self.direction: float = 0.
 
+        # The bigger the better
+        self.rotation_confidence = 0.
+        # Current cameta rotation with an error of about 1 degree
+        self.rotation: int = 0
+
         # Usually to be 0.4~0.5
         self.bigmap_similarity = 0.
         # Usually > 0.05
@@ -68,15 +74,16 @@ class MiniMapConst:
         if device_type == MiniMapConst.DETECT_Desktop_1080p:
             # Magic numbers for 1920x1080 desktop
             # 80% of Emulator, 1.5 * 80% = 1.2
-            self.MINIMAP_CENTER = (60 + 108, 18 + 108)
-            self.MINIMAP_RADIUS = 99
+            self.MINIMAP_CENTER = (60 + 108, 17 + 108)
+            self.MINIMAP_RADIUS = 108
+            self.MINIMAP_POSITION_RADIUS = 99
             self.POSITION_SCALE_DICT = {
                 # In wild
                 'wild': 1.5571 / 1.2,
                 # In city
                 'city': 0.5150 / 1.2,
             }
-            self.DIRECTION_RADIUS = int(self.MINIMAP_RADIUS / 6)
+            self.DIRECTION_RADIUS = int(self.MINIMAP_POSITION_RADIUS / 6)
             self.DIRECTION_ROTATION_SCALE = 1.0 / 1.2
             # Same as Emulator
             self.BIGMAP_POSITION_SCALE = 0.6137 / 1.5
@@ -88,15 +95,16 @@ class MiniMapConst:
 
         elif device_type == MiniMapConst.DETECT_Mobile_1080p:
             # Magic numbers for 1920x1080 mobile
-            self.MINIMAP_CENTER = (75 + 135, 22 + 135)
-            self.MINIMAP_RADIUS = 124
+            self.MINIMAP_CENTER = (75 + 135, 21 + 135)
+            self.MINIMAP_RADIUS = 135
+            self.MINIMAP_POSITION_RADIUS = 124
             self.POSITION_SCALE_DICT = {
                 # In wild
                 'wild': 1.5571 / 1.5,
                 # In city
                 'city': 0.5150 / 1.5,
             }
-            self.DIRECTION_RADIUS = int(self.MINIMAP_RADIUS / 6)
+            self.DIRECTION_RADIUS = int(self.MINIMAP_POSITION_RADIUS / 6)
             self.DIRECTION_ROTATION_SCALE = 1.0 / 1.5
             self.BIGMAP_POSITION_SCALE = 0.6137 / 1.5
             self.BIGMAP_POSITION_SCALE_ENKANOMIYA = 0.6137 * 0.7641 / 1.5
