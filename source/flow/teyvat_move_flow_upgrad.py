@@ -33,6 +33,7 @@ class TeyvatMoveFlowConnector(FlowConnector):
         self.motion_state = IN_MOVE
         self.jump_timer = timer_module.Timer()
         self.current_state = ST.INIT_TEYVAT_TELEPORT
+        
         self.priority_waypoints = load_json("priority_waypoints.json", default_path='assets')
         self.priority_waypoints_array = []
         for i in self.priority_waypoints:
@@ -40,14 +41,19 @@ class TeyvatMoveFlowConnector(FlowConnector):
         self.priority_waypoints_array = np.array(self.priority_waypoints_array)
     
     def reset(self):
-        self.current_state = ST.INIT_TEYVAT_TELEPORT
+        self.stop_rule = 0
         self.target_posi = [0, 0]
+        self.reaction_to_enemy = 'RUN'
+        self.MODE = "PATH"
+        self.path_list = []
+        self.to_next_posi_offset = 1.0*3 # For precision
+        self.special_keys_posi_offset = 1.5
+        
+        self.path_index = 0
         self.motion_state = IN_MOVE
+        self.jump_timer = timer_module.Timer()
+        self.current_state = ST.INIT_TEYVAT_TELEPORT
 
-
-    
-
-    
 
 class TeyvatTeleport(FlowTemplate):
     def __init__(self, upper:TeyvatMoveFlowConnector):
@@ -59,7 +65,7 @@ class TeyvatTeleport(FlowTemplate):
         self._next_rfc()
 
     def state_in(self):
-        genshin_map.bigmap_tp(self.upper.target_posi, tp_type = ["Domain"])
+        genshin_map.bigmap_tp(self.upper.target_posi)
         self._next_rfc()
 
     def state_end(self):
@@ -119,13 +125,13 @@ class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon):
         if (not static_lib.W_KEYDOWN):
             itt.key_down('w')
             
-        if len(tracker.history_posi) >= 29:
-            p1 = tracker.history_posi[0][1:]
-            p2 = tracker.history_posi[-1][1:]
-            if euclidean_distance(p1,p2)<=30:
-                logger.warning("检测到移动卡住，正在退出")
-                self._set_nfid(ST.END_TEYVAT_MOVE_STUCK)
-                self._next_rfc()
+        # if len(tracker.history_posi) >= 29:
+        #     p1 = tracker.history_posi[0][1:]
+        #     p2 = tracker.history_posi[-1][1:]
+        #     if euclidean_distance(p1,p2)<=30:
+        #         logger.warning("检测到移动卡住，正在退出")
+        #         self._set_nfid(ST.END_TEYVAT_MOVE_STUCK)
+        #         self._next_rfc()
         
         if self.upper.stop_rule == 0:
             if euclidean_distance(self.upper.target_posi, tracker.get_position())<=10:
@@ -235,21 +241,26 @@ class TeyvatMovePass(EndFlowTemplate):
         super().__init__(upper, flow_id=ST.END_TEYVAT_MOVE_PASS, err_code_id=ERR_PASS)
 
 class TeyvatMoveFlowController(FlowController):
-    def __init__(self, mode='AUTO'):
+    def __init__(self):
         super().__init__(flow_connector = TeyvatMoveFlowConnector(), current_flow_id = ST.INIT_TEYVAT_TELEPORT)
         self.flow_connector = self.flow_connector # type: TeyvatMoveFlowConnector
         self.get_while_sleep = self.flow_connector.get_while_sleep
 
+    def start_flow(self):
+        self.flow_dict = {}
         self.append_flow(TeyvatTeleport(self.flow_connector))
-        if mode == "AUTO":
+        if self.flow_connector.MODE == "AUTO":
             self.append_flow(TeyvatMove_Automatic(self.flow_connector))
         else:
             self.append_flow(TeyvatMove_FollowPath(self.flow_connector))
         
         self.append_flow(TeyvatMoveStuck(self.flow_connector))
         self.append_flow(TeyvatMovePass(self.flow_connector))
-
+        
+        self.continue_threading()
+    
     def reset(self):
+        self.current_flow_id = ST.INIT_TEYVAT_TELEPORT
         self.flow_connector.reset()
     
     def get_working_statement(self):
@@ -257,18 +268,23 @@ class TeyvatMoveFlowController(FlowController):
     
     def set_target_posi(self, tp:list):
         self.flow_connector.target_posi = tp
-
-    def set_parameter(self,
-                      MODE:str = None, # type: ignore
-                      stop_rule:int = None, # type: ignore
-                      target_posi:list = None, # type: ignore
-                      path_list:list = None, # type: ignore
-                      to_next_posi_offset:float = None, # type: ignore
-                      special_keys_posi_offset:float = None, # type: ignore
-                      reaction_to_enemy:str = None # type: ignore
-                      
-                      ):
-        pass
+    
+    def set_parameter(self,MODE:str = None,stop_rule:int = None,target_posi:list = None,path_list:list = None,to_next_posi_offset:float = None,special_keys_posi_offset:float = None,reaction_to_enemy:str = None):
+        if MODE != None:
+            self.flow_connector.MODE = MODE
+        if stop_rule != None:
+            self.flow_connector.stop_rule = stop_rule
+        if target_posi != None:
+            self.flow_connector.target_posi = target_posi
+        if path_list != None:
+            self.flow_connector.path_list = path_list
+        if to_next_posi_offset != None:
+            self.flow_connector.to_next_posi_offset = to_next_posi_offset
+        if special_keys_posi_offset != None:
+            self.flow_connector.special_keys_posi_offset = special_keys_posi_offset
+        if reaction_to_enemy != None:
+            self.flow_connector.reaction_to_enemy = reaction_to_enemy
+        
         
         
 if __name__ == '__main__':

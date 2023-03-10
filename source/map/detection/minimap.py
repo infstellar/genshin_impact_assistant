@@ -1,3 +1,4 @@
+import math
 import typing as t
 
 from source.map.detection.resource import MiniMapResource
@@ -154,8 +155,82 @@ class MiniMap(MiniMapResource):
         precise_loca = degree // 8 * 8 - 8 + precise_loca[0]
 
         self.direction_similarity = round(precise_sim, 3)
-        self.direction = precise_loca % 360
+        direction = precise_loca % 360
+        print(direction)
+        # convert
+        if direction>180:
+            direction = 360-direction
+        else:
+            direction = -direction
 
+        self.direction = direction
+        
+    def update_direction_alpha(self, image):
+        alpha = image[:, :, 3:]
+        alpha = 255.0 - alpha
+        alpha = alpha * 2
+        _, alpha = cv2.threshold(alpha, 503, 0, cv2.THRESH_TOZERO_INV)
+        _, alpha = cv2.threshold(alpha, 50, 0, cv2.THRESH_TOZERO)
+        _, alpha = cv2.threshold(alpha, 50, 255, cv2.THRESH_BINARY)
+        # qshow(alpha)
+        cv2.circle(alpha,
+                (int(alpha.shape[0] / 2), int(alpha.shape[1] / 2)),
+                int((min(int(alpha.shape[0] / 2), int(alpha.shape[1] / 2)) * 1.15)),  # 1.21
+                (0, 0, 0), int((min(int(alpha.shape[0] / 2), int(alpha.shape[1] / 2)) * 0.6)))  # 0.42
+        # qshow(alpha)
+        cv2.circle(alpha,
+                (int(alpha.shape[0] / 2), int(alpha.shape[1] / 2)),
+                int((min(int(alpha.shape[0] / 2), int(alpha.shape[1] / 2)) * 0.6)), (0, 0, 0), -1)
+        # qshow(alpha)
+        dilate_element = cv2.getStructuringElement(cv2.MORPH_RECT, (4, 4))
+        alpha = cv2.dilate(alpha, dilate_element)
+        erode_element = cv2.getStructuringElement(cv2.MORPH_RECT, (4, 4))
+        alpha = cv2.erode(alpha, erode_element)
+        erode_element = cv2.getStructuringElement(cv2.MORPH_RECT, (4, 4))
+        alpha = cv2.erode(alpha, erode_element)
+        dilate_element = cv2.getStructuringElement(cv2.MORPH_RECT, (4, 4))
+        alpha = cv2.dilate(alpha, dilate_element)
+        alpha = alpha.astype('uint8')
+        contours, hierarcy = cv2.findContours(alpha, 0, 1)
+        # qshow(alpha)
+        maxBlack = 0
+        maxId = 0
+        boundRect = []
+        for i in range(len(contours)):
+            boundRect.append([])
+            if len(contours[i]) > maxBlack:
+                maxBlack = len(contours[i])
+                maxId = i
+            boundRect[i] = cv2.boundingRect(cv2.Mat(contours[i]))
+        if len(boundRect) == 0:
+            logger.warning('找不到小地图')
+            return -1
+        x, y, w, h = boundRect[maxId]
+        p = [x + w / 2, y + h / 2]
+        origin_point = [int(alpha.shape[0] / 2) + 1, int(alpha.shape[1] / 2) + 1]
+        point = [p[0] - origin_point[0], -p[1] + origin_point[1]]
+        if point[0] == 0:
+            point[0] += 0.1
+        if point[1] == 0:
+            point[1] += 0.1
+        degree = math.degrees(math.atan((point[1]) / (point[0])))
+        if point[0] > 0 and point[1] > 0:
+            degree = degree
+        elif point[0] < 0 < point[1]:
+            degree += 180
+        elif point[0] < 0 and point[1] < 0:
+            degree += 180
+        elif point[0] > 0 > point[1]:
+            degree += 360
+        degree -= 90
+        if degree > 180:
+            degree -= 360
+        # cv2.imshow('123', cv2.drawMarker(alpha, position=(int(p[0]), int(p[1])), color=(255, 0, 255), markerSize=1,
+        #                                  markerType=cv2.MARKER_CROSS, thickness=5))
+        # cv2.waitKey(100)
+        # print(degree)
+        return degree
+    
     def update_minimap(self, image):
         self.update_position(image)
         self.update_direction(image)

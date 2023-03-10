@@ -37,15 +37,15 @@ class Map(MiniMap, BigMap, MapConverter):
 
         self.smallmap_upd_timer = timer_module.Timer(2)
 
-    @cached_property
-    def cvAutoTrackerLoop(self):
-        logger.debug("import cvAutoTrack")
-        from source.api import cvAutoTrack
-        loop = cvAutoTrack.AutoTrackerLoop()
-        loop.setDaemon(True)
-        loop.start()
-        time.sleep(1)
-        return loop
+    # @cached_property
+    # def cvAutoTrackerLoop(self):
+    #     logger.debug("import cvAutoTrack")
+    #     from source.api import cvAutoTrack
+    #     loop = cvAutoTrack.AutoTrackerLoop()
+    #     loop.setDaemon(True)
+    #     loop.start()
+    #     time.sleep(1)
+    #     return loop
 
     def _upd_smallmap(self):
         if scene_lib.get_current_pagename() == "main":
@@ -71,7 +71,9 @@ class Map(MiniMap, BigMap, MapConverter):
         self.reinit_smallmap()
 
     def get_rotation(self):
-        return self.cvAutoTrackerLoop.get_rotation()
+        self.update_direction(itt.capture(jpgmode=0))
+        # print(self.direction)
+        return self.direction
 
     def get_bigmap_posi(self, is_upd=True, return_position_format: str = COORDINATE_TIANLI) -> np.ndarray:
         if not itt.get_img_existence(asset.UIBigMapScaling):
@@ -267,5 +269,9 @@ class Map(MiniMap, BigMap, MapConverter):
 genshin_map = Map()
 
 if __name__ == '__main__':
-    genshin_map.bigmap_tp(genshin_map.convert_GIMAP_to_cvAutoTrack([6642.003, 5485.38]),
-                          tp_type=["Domain"])  # tp to *染之庭
+    # genshin_map.bigmap_tp(genshin_map.convert_GIMAP_to_cvAutoTrack([6642.003, 5485.38]),
+    #                       tp_type=["Domain"])  # tp to *染之庭
+    while 1:
+        time.sleep(0.05)
+        print(genshin_map.get_rotation())
+    

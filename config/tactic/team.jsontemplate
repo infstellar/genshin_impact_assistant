@@ -13,7 +13,8 @@
     "trigger": "e_ready",
     "Qlast_time": 10,
     "Qcd_time": 12,
-    "autofill": false
+    "autofill": false,
+    "vision":"Pyro"
   },
   "second": {
     "name": "zhongli",
@@ -29,7 +30,8 @@
     "trigger": "e_ready",
     "Qlast_time": 0,
     "Qcd_time": 12,
-    "autofill": false
+    "autofill": false,
+    "vision":"Geo"
   },
   "third": {
     "name": "bennett",
@@ -45,7 +47,8 @@
     "trigger": "e_ready",
     "Qlast_time": 0,
     "Qcd_time": 12,
-    "autofill": false
+    "autofill": false,
+    "vision":"Pyro"
   },
   "forth": {
     "name": "yunjin",
@@ -61,6 +64,7 @@
     "trigger": "e_ready",
     "Qlast_time": 0,
     "Qcd_time": 12,
-    "autofill": false
+    "autofill": false,
+    "vision":"Geo"
   }
 }

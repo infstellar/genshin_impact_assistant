@@ -109,6 +109,9 @@ class FlowController(base_threading.BaseThreading):
         self.flow_connector = flow_connector
         self.get_while_sleep = flow_connector.get_while_sleep
         self.flow_connector.checkup_stop_func = self.checkup_stop_func
+    
+    def start_flow(self):
+        self.continue_threading()
         
     def append_flow(self, flow:FlowTemplate):
         self.flow_dict[str(flow.flow_id)] = flow
@@ -135,7 +138,7 @@ class FlowController(base_threading.BaseThreading):
         while 1:
             time.sleep(self.get_while_sleep())
             if self.stop_threading_flag:
-                return 0
+                return
 
             if self.pause_threading_flag:
                 if self.working_flag:

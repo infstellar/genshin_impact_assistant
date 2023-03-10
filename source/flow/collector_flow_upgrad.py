@@ -129,7 +129,7 @@ class CollectorFlowController(FlowController):
         self.flow_connector=CollectorFlowConnector()
         super().__init__(self.flow_connector, current_flow_id=ST.INIT_MOVETO_COLLECTOR)
         
-        self._add_sub_threading(self.flow_connector.tmf)
+        # self._add_sub_threading(self.flow_connector.tmf)
         self._add_sub_threading(self.flow_connector.puo)
         self._add_sub_threading(self.flow_connector.cct)
         
