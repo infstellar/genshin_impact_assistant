@@ -284,6 +284,12 @@ class MiniMap(MiniMapResource):
 
         # Calculate confidence
         self.rotation_confidence = round(peak_confidence(result), 3)
+        
+        # Convert
+        if degree >180:
+            degree = 360-degree
+        else:
+            degree = -degree
         return degree
 
     def update_rotation(self, image, layer=MapConverter.LAYER_Teyvat, update_position=True):

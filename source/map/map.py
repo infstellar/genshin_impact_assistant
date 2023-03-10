@@ -71,9 +71,9 @@ class Map(MiniMap, BigMap, MapConverter):
         self.reinit_smallmap()
 
     def get_rotation(self):
-        self.update_direction(itt.capture(jpgmode=0))
+        self.update_rotation(itt.capture(jpgmode=0))
         # print(self.direction)
-        return self.direction
+        return self.rotation
 
     def get_bigmap_posi(self, is_upd=True, return_position_format: str = COORDINATE_TIANLI) -> np.ndarray:
         if not itt.get_img_existence(asset.UIBigMapScaling):

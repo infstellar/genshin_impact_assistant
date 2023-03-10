@@ -38,7 +38,7 @@ class MissionExecutor(BaseThreading):
             if self.CFCF.get_working_statement() == False:
                 break
             
-    def loop(self):
+    def exec_mission(self):
         pass
     
     def run(self):
@@ -61,7 +61,8 @@ class MissionExecutor(BaseThreading):
                 self.pause_threading_flag = True
                 continue
             '''write your code below'''
-            self.loop()
+            self.exec_mission()
+            self.pause_threading()
     
 
 
