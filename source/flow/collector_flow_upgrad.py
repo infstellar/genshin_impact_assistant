@@ -53,7 +53,17 @@ class CollectorFlowConnector(FlowConnector):
         self.puo = pickup_operator.PickupOperator()
         chara_list = combat_lib.get_chara_list()
         self.cct = combat_loop.Combat_Controller(chara_list)
-        
+    
+    def reset(self):
+        self.MODE = "PATH"
+        self.collection_path_list = []
+        self.collection_path_index = 0
+        self.collection_name = ""
+        self.to_next_posi_offset = 1.0*5
+        self.special_keys_posi_offset = 3
+        self.collector_type = COLLECTION
+        self.tmf.reset()
+   
 
     def stop_combat(self):
         self.cct.pause_threading()
@@ -226,6 +236,11 @@ class CollectorFlowController(FlowController):
             self.flow_connector.to_next_posi_offset = to_next_posi_offset
         if special_keys_posi_offset != None:
             self.flow_connector.special_keys_posi_offset = special_keys_posi_offset
+
+    def reset(self):
+        self.current_flow_id = ST.INIT_MOVETO_COLLECTOR
+        return super().reset()
+    
 
 
 

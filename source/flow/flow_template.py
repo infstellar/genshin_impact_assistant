@@ -12,6 +12,9 @@ class FlowConnector():
 
     def get_while_sleep(self):
         return self.while_sleep
+    
+    def reset(self):
+        pass
 
 class FlowTemplate():
     def __init__(self, upper:FlowConnector, flow_id:str, next_flow_id:str, flow_timeout_time:float = -1):
@@ -112,6 +115,9 @@ class FlowController(base_threading.BaseThreading):
     
     def set_current_flow_id(self, id):
         self.current_flow_id = id
+
+    def reset(self):
+        self.flow_connector.reset()
         
     # def set_end_flow_id(self, id):
     #     self.end_flow_id = id
