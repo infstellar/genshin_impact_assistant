@@ -314,22 +314,35 @@ class MiniMap(MiniMapResource):
         cv2.imshow('result', img)
         cv2.waitKey(1)
 
-    def update_minimap(self, image, layer=MapConverter.LAYER_Teyvat):
+    def update_minimap(self, image):
         """
         Args:
             image:
-            layer: MapConverter.LAYER_Domain or MapConverter.LAYER_Teyvat
         """
         self.update_position(image)
         self.update_direction(image)
-        self.update_rotation(image, layer=layer, update_position=False)
+        self.update_rotation(image, layer=MapConverter.LAYER_Teyvat, update_position=False)
 
-        # MiniMap P:(4451.5, 3113.0) (0.184|0.050), S:wild, D:259.5 (0.949), R:
+        # MiniMap P:(4451.5, 3113.0) (0.184|0.050), S:wild, D:259.5 (0.949), R:180 (0.498)
         logger.info(
             f'MiniMap '
             f'P:({float2str(self.position[0], 4)}, {float2str(self.position[1], 4)}) '
             f'({float2str(self.position_similarity, 3)}|{float2str(self.position_similarity_local, 3)}), '
             f'S:{self.scene}, '
+            f'D:{float2str(self.direction, 3)} ({float2str(self.direction_similarity, 3)}), '
+            f'R:{self.rotation} ({float2str(self.rotation_confidence)})')
+
+    def update_minimap_domain(self, image):
+        """
+        Args:
+            image:
+        """
+        self.update_direction(image)
+        self.update_rotation(image, layer=MapConverter.LAYER_Domain, update_position=False)
+
+        # MiniMapDomain D:259.5 (0.949), R:180 (0.498)
+        logger.info(
+            f'MiniMapDomain '
             f'D:{float2str(self.direction, 3)} ({float2str(self.direction_similarity, 3)}), '
             f'R:{self.rotation} ({float2str(self.rotation_confidence)})')
 
@@ -349,6 +362,9 @@ class MiniMap(MiniMapResource):
         diff = (self.direction - direction) % 360
         return diff <= threshold or diff >= 360 - threshold
 
+    def is_rotation_near(self, rotation, threshold=10) -> bool:
+        diff = (self.rotation - rotation) % 360
+        return diff <= threshold or diff >= 360 - threshold
 
 # if __name__ == '__main__':
 #     """
@@ -359,7 +375,7 @@ class MiniMap(MiniMapResource):
 #     device = Device('127.0.0.1:7555')
 #     device.disable_stuck_detection()
 #     device.screenshot_interval_set(0.3)
-#     minimap = MiniMap('Emulator')
+#     minimap = MiniMap(MiniMap.DETECT_Mobile_720p)
 #
 #     # 从璃月港传送点出发，初始坐标大概大概50px以内就行
 #     # 坐标位置是 GIMAP 的图片坐标
@@ -389,5 +405,5 @@ class MiniMap(MiniMapResource):
 #             time.sleep(0.3)
 #             continue
 #
-#         minimap.update_minimap(image, layer=MapConverter.LAYER_Domain)
+#         minimap.update_minimap(image)
 #         time.sleep(0.3)
