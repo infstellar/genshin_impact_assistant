@@ -8,7 +8,7 @@ from source.map.detection.utils import *
 class MiniMapResource(MiniMapConst):
     @cached_property
     def _minimap_mask(self):
-        mask = create_circular_mask(h=self.MINIMAP_RADIUS * 2, w=self.MINIMAP_RADIUS * 2)
+        mask = create_circular_mask(h=self.MINIMAP_POSITION_RADIUS * 2, w=self.MINIMAP_POSITION_RADIUS * 2)
         mask = (mask * 255).astype(np.uint8)
         return mask
 
@@ -67,3 +67,14 @@ class MiniMapResource(MiniMapConst):
         file = gimap.get_file('GIReachableMask_0125x_pad125.png')
         image = load_image(file)
         return image
+
+    @cached_property
+    def RotationRemapData(self):
+        d = self.MINIMAP_RADIUS * 2
+        mx = np.zeros((d, d), dtype=np.float32)
+        my = np.zeros((d, d), dtype=np.float32)
+        for i in range(d):
+            for j in range(d):
+                mx[i, j] = d / 2 + i / 2 * np.cos(2 * np.pi * j / d)
+                my[i, j] = d / 2 + i / 2 * np.sin(2 * np.pi * j / d)
+        return mx, my

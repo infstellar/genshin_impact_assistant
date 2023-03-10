@@ -1,3 +1,5 @@
+from scipy import signal
+
 from source.device.alas.utils import *
 
 
@@ -105,3 +107,58 @@ def image_center_crop(image, size):
     right, bottom = diff[0] - left, diff[1] - top
     image = image[top:-bottom, left:-right]
     return image
+
+
+def area2corner(area):
+    """
+    Args:
+        area: (x1, y1, x2, y2)
+
+    Returns:
+        np.ndarray: [upper-left, upper-right, bottom-left, bottom-right]
+    """
+    return np.array([[area[0], area[1]], [area[2], area[1]], [area[0], area[3]], [area[2], area[3]]])
+
+
+def convolve(arr, kernel=3):
+    """
+    Args:
+        arr (np.ndarray): Shape (N,)
+        kernel (int):
+
+    Returns:
+        np.ndarray:
+    """
+    return sum(np.roll(arr, i) * (kernel - abs(i)) // kernel for i in range(-kernel + 1, kernel))
+
+
+def peak_confidence(arr, **kwargs):
+    """
+    Evaluate the prominence of the highest peak
+
+    Args:
+        arr (np.ndarray): Shape (N,)
+        **kwargs: Additional kwargs for signal.find_peaks
+
+    Returns:
+        float: 0-1
+    """
+    para = {
+        'height': 0,
+        'prominence': 10,
+    }
+    para.update(kwargs)
+    length = len(arr)
+    peaks, properties = signal.find_peaks(np.concatenate((arr, arr, arr)), **para)
+    peaks = [h for p, h in zip(peaks, properties['peak_heights']) if length <= p < length * 2]
+    peaks = sorted(peaks, reverse=True)
+
+    count = len(peaks)
+    if count > 1:
+        highest, second = peaks[0], peaks[1]
+    elif count == 1:
+        highest, second = 1, 0
+    else:
+        highest, second = 1, 0
+    confidence = (highest - second) / highest
+    return confidence
