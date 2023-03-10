@@ -32,7 +32,7 @@ def before_operation(print_log=True):
             # bb=inspect.getframeinfo(inspect.currentframe().f_back.f_back)
             # cc=inspect.getframeinfo(inspect.currentframe().f_back.f_back.f_back)
             if print_log:
-                logger.debug(f" operation: {func.__name__} | args: {args[1:]} | {kwargs} | function name: {func_name} & {func_name_2}")
+                logger.trace(f" operation: {func.__name__} | args: {args[1:]} | {kwargs} | function name: {func_name} & {func_name_2}")
             
             if INTERACTION_MODE == INTERACTION_DESKTOP:
                 winname = get_active_window_process_name()

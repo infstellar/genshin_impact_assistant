@@ -22,6 +22,9 @@ COLLECTION = 0
 ENEMY = 1
 MINERAL = 2
 
+MODE_PATH = "PATH"
+MODE_AUTO = "AUTO"
+
 ALL_CHARACTER_DIED = 1
 
 SUCC_RATE_WEIGHTING = 6
@@ -39,132 +42,39 @@ MoveToCollection_FollowPath -> EndCollector (if no more path exist)
 class CollectorFlowConnector(FlowConnector):
     def __init__(self):
         super().__init__()
-        # self.MODE = "NAME"
         self.MODE = "PATH"
-        self.collection_path_list = []
-        self.collection_path_index = 0
         self.collection_name = ""
-        self.to_next_posi_offset = 1.0*5
-        self.special_keys_posi_offset = 3
         self.collector_type = COLLECTION
+        self.is_combat = False
+        self.is_activate_pickup = False
+        self.pickup_points = []
 
-        self.tmf = teyvat_move_flow_upgrad.TeyvatMoveFlowController()
-        self.tmf.set_parameter(stop_rule=0)
         self.puo = pickup_operator.PickupOperator()
         chara_list = combat_lib.get_chara_list()
         self.cct = combat_loop.Combat_Controller(chara_list)
+
+        
     
     def reset(self):
         self.MODE = "PATH"
-        self.collection_path_list = []
-        self.collection_path_index = 0
         self.collection_name = ""
-        self.to_next_posi_offset = 1.0*5
-        self.special_keys_posi_offset = 3
         self.collector_type = COLLECTION
-        self.tmf.reset()
    
 
     def stop_combat(self):
         self.cct.pause_threading()
     def start_combat(self):
         self.stop_pickup()
-        self.stop_walk()
         self.cct.continue_threading()
     def stop_pickup(self):
         self.puo.pause_threading()
     def start_pickup(self):
         self.stop_combat()
-        self.stop_walk()
         self.puo.continue_threading()
-    def stop_walk(self):
-        self.tmf.pause_threading()
-    def start_walk(self):
-        self.stop_combat()
-        self.stop_pickup()
-        self.tmf.continue_threading()
     def stop_all(self):
         self.stop_pickup()
         self.stop_combat()
-        self.stop_walk()
         time.sleep(2)
-    
-
-class MoveToCollection_Automatic(FlowTemplate):
-    def __init__(self, upper: CollectorFlowConnector):
-        super().__init__(upper, flow_id=ST.INIT_MOVETO_COLLECTOR, next_flow_id=ST.INIT_PICKUP_COLLECTOR)
-        
-    def state_init(self):
-        
-        pass
-
-class TeleportToStartingPoint(FlowTemplate):
-    pass
-
-class MoveToCollection_FollowPath(FlowTemplate):
-    def __init__(self, upper: CollectorFlowConnector):
-        super().__init__(upper, flow_id=ST.INIT_MOVETO_COLLECTOR, next_flow_id=ST.INIT_PICKUP_COLLECTOR)
-        self.upper = upper
-        self.curr_path_index = 0
-        self.special_key_points = None
-        
-        self.curr_path = []
-        self.curr_path_index = 0
-        
-    def _exec_special_key_points(self):
-        ret_list = []
-        for i in self.upper.collection_path_list[self.upper.collection_path_index]["special_keys"]:
-            ret_list.append(i["position"])
-        self.special_key_points = ret_list
-    
-    def _do_special_key(self, curr_posi):
-        """执行special key
-
-        Args:
-            curr_posi (_type_): _description_
-        """
-        if self.special_key_points == None:
-            self._exec_special_key_points()
-        if quick_euclidean_distance_plist(curr_posi, self.special_key_points).min() <= self.upper.special_keys_posi_offset:
-            for i in self.upper.collection_path_list[self.upper.collection_path_index]["special_keys"]:
-                if euclidean_distance(i["position"], curr_posi) <= self.upper.special_keys_posi_offset:
-                    itt.key_press(i["key_name"])
-    
-    def state_before(self):
-        self.curr_path = self.upper.collection_path_list[self.upper.collection_path_index]["position_list"]
-        self.curr_path_index = 0
-        # itt.key_down('w')
-        tracker.reinit_smallmap()
-        self._next_rfc()
-    
-    def state_in(self):
-        target_posi = self.curr_path[self.curr_path_index]["position"]
-        curr_posi = tracker.get_position()
-        if euclidean_distance(target_posi, curr_posi) <= self.upper.to_next_posi_offset:
-            if len(self.curr_path) - 1 > self.curr_path_index:
-                self.curr_path_index += 1
-                logger.debug(f"index {self.curr_path_index} posi {self.curr_path[self.curr_path_index]}")
-            else:
-                logger.info("path end")
-                self._next_rfc()
-        self._do_special_key(curr_posi)
-        if abs(movement.calculate_posi_cvn(target_posi)) >= 5:
-            itt.key_up('w')
-            movement.change_view_to_posi(target_posi, stop_func = self.upper.checkup_stop_func)
-            itt.key_down('w')
-        
-            
-    def state_after(self):
-        if self.upper.collection_path_list[self.upper.collection_path_index]["is_activate_pickup"] == False:
-            self.next_flow_id = self.flow_id
-        else:
-            pass
-        if len(self.upper.collection_path_list)-1 > self.upper.collection_path_index:
-            self.upper.collection_path_index += 1
-        else:
-            logger.info("all path end")
-            self.next_flow_id = ST.END_COLLECTOR
-        self._next_rfc()
         
 class PickUpCollection(FlowTemplate):
     def __init__(self, upper: CollectorFlowConnector):
@@ -223,19 +133,21 @@ class CollectorFlowController(FlowController):
         self._add_sub_threading(self.flow_connector.puo)
         self._add_sub_threading(self.flow_connector.cct)
         
-        self.append_flow(MoveToCollection_FollowPath(self.flow_connector))
+        # self.append_flow(MoveToCollection_FollowPath(self.flow_connector))
         self.append_flow(PickUpCollection(self.flow_connector))
         self.append_flow(EndCollector(self.flow_connector))
         
-    def set_parameter(self, collection_path_list = None, collection_name = None, to_next_posi_offset = None, special_keys_posi_offset = None):
-        if collection_path_list != None:
-            self.flow_connector.collection_path_list = collection_path_list
-        if collection_name != None:
-            self.flow_connector.collection_name = collection_name
-        if to_next_posi_offset != None:
-            self.flow_connector.to_next_posi_offset = to_next_posi_offset
-        if special_keys_posi_offset != None:
-            self.flow_connector.special_keys_posi_offset = special_keys_posi_offset
+    def set_parameter(  
+            self,
+            MODE = None,
+            collection_name =  None,
+            collector_type =  None,
+            is_combat =  None,
+            is_activate_pickup =  None,
+            pickup_points = None
+            ):
+        pass
+        
 
     def reset(self):
         self.current_flow_id = ST.INIT_MOVETO_COLLECTOR

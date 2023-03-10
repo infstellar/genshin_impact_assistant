@@ -24,8 +24,7 @@ class PathRecorderConnector(FlowConnector):
             "start_position":[],
             "end_position":[],
             "all_position":[],
-            "position_list":[],
-            "special_keys":[]
+            "position_list":[]
         }
 
         self.min_distance = 1
@@ -49,15 +48,9 @@ class PathRecorderConnector(FlowConnector):
                         "position":list,
                         "motion":str, include 'move'(or 'walk'), 'swim', 'climb', 'fly'.
                         "id":int
+                        "special_key":str
                     }, ...
-                ],
-                "special_keys":[
-                    {
-                        "position":list,
-                        "key_name":str, include 'space', 'left click', 'left shift', 'x'.
-                        "id":int
-                    }, ...
-                ]       
+                ]
             }
         ...
         ]
@@ -86,13 +79,15 @@ class PathRecorderConnector(FlowConnector):
         else:
             return
         curr_posi = tracker.get_position()
-        self.collection_path_dict["special_keys"].append(
+        self.collection_path_dict["position_list"].append(
             {
-                "position":list(curr_posi),
-                "key_name":key,
-                "id":len(self.collection_path_dict["special_keys"])+1
+                "position":curr_posi,
+                "motion":None,
+                "id":len(self.collection_path_dict["position_list"])+1,
+                "special_key":key
             }
         )
+        self.collection_path_dict["all_position"].append(curr_posi)
         logger.info(t2t("special key added:")+
                     str(key)
                     )
@@ -113,7 +108,8 @@ class PathRecorderCore(FlowTemplate):
             {
                 "position":posi,
                 "motion":curr_motion,
-                "id":len(self.upper.collection_path_dict["position_list"])+1
+                "id":len(self.upper.collection_path_dict["position_list"])+1,
+                "special_key":None
             }
         )
         self.upper.collection_path_dict["all_position"].append(posi)
@@ -133,7 +129,6 @@ class PathRecorderCore(FlowTemplate):
             "end_position":[],
             "all_position":[],
             "position_list":[],
-            "special_keys":[]
         }
         self.enter_flag = False
         tracker.reinit_smallmap()

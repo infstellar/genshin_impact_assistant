@@ -15,17 +15,17 @@ class DomainTask(TaskTemplate):
     def __init__(self):
         super().__init__()
         self.dfc = DomainFlowController()
-        self.tmfc = TeyvatMoveFlowController()
+        self.TMFCF = TeyvatMoveFlowController(mode="AUTO")
         self.flow_mode = TI.DT_INIT
         
         self._add_sub_threading(self.dfc)
-        self._add_sub_threading(self.tmfc)
+        self._add_sub_threading(self.TMFCF)
         
         self.domain_name = load_json("auto_domain.json",f"{CONFIG_PATH_SETTING}")["domain_name"]
         self.domain_stage_name = load_json("auto_domain.json",f"{CONFIG_PATH_SETTING}")["domain_stage_name"]
         self.domain_posi = load_items_position(self.domain_name,mode=1, ret_mode=1)[0]
-        self.tmfc.set_parameter(stop_rule = 1, MODE = "Automatic", target_posi = self.domain_posi)
-        self.tmfc.set_target_posi(self.domain_posi)
+        self.TMFCF.set_parameter(stop_rule = 1, MODE = "Automatic", target_posi = self.domain_posi)
+        self.TMFCF.set_target_posi(self.domain_posi)
         self.last_domain_times = 3
 
         logger.info(f"domain_name: {self.domain_name} domain_stage_name {self.domain_stage_name}")
@@ -104,12 +104,12 @@ class DomainTask(TaskTemplate):
             self._check_state()
 
         if self.flow_mode == TI.DT_MOVE_TO_DOMAIN:
-            self.tmfc.continue_threading()
+            self.TMFCF.continue_threading()
             while 1:
                 time.sleep(self.while_sleep)
-                if self.tmfc.get_last_err_code() == ERR_PASS:
+                if self.TMFCF.get_last_err_code() == ERR_PASS:
                     break
-            self.tmfc.pause_threading()
+            self.TMFCF.pause_threading()
             
             self._enter_domain()
             

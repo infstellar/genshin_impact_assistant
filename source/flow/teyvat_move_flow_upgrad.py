@@ -22,18 +22,17 @@ class TeyvatMoveFlowConnector(FlowConnector):
         super().__init__()
         self.checkup_stop_func = None
         self.stop_rule = 0
-        self.jump_timer = timer_module.Timer()
-        self.current_state = ST.INIT_TEYVAT_TELEPORT
         self.target_posi = [0, 0]
         self.reaction_to_enemy = 'RUN'
-        self.motion_state = IN_MOVE
-
         self.MODE = "PATH"
         self.path_list = []
-        self.path_index = 0
-        self.to_next_posi_offset = 1.0*5 # For CVAT's low precision
+        self.to_next_posi_offset = 1.0*3 # For precision
         self.special_keys_posi_offset = 1.5
 
+        self.path_index = 0
+        self.motion_state = IN_MOVE
+        self.jump_timer = timer_module.Timer()
+        self.current_state = ST.INIT_TEYVAT_TELEPORT
         self.priority_waypoints = load_json("priority_waypoints.json", default_path='assets')
         self.priority_waypoints_array = []
         for i in self.priority_waypoints:
@@ -165,29 +164,35 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
         self.curr_path = []
         self.curr_path_index = 0
         
-    def _exec_special_key_points(self):
-        ret_list = []
-        for i in self.upper.path_list[self.upper.path_index]["special_keys"]:
-            ret_list.append(i["position"])
-        self.special_key_points = ret_list
+    # def _exec_special_key_points(self):
+    #     ret_list = []
+    #     for i in self.upper.path_list[self.upper.path_index]["special_keys"]:
+    #         ret_list.append(i["position"])
+    #     self.special_key_points = ret_list
     
-    def _do_special_key(self, curr_posi):
-        """执行special key
+    # def _do_special_key(self, curr_posi):
+    #     """执行special key
 
-        Args:
-            curr_posi (_type_): _description_
-        """
-        if self.special_key_points == None:
-            self._exec_special_key_points()
-        if quick_euclidean_distance_plist(curr_posi, self.special_key_points).min() <= self.upper.special_keys_posi_offset:
-            for i in self.upper.path_list[self.upper.path_index]["special_keys"]:
-                if euclidean_distance(i["position"], curr_posi) <= self.upper.special_keys_posi_offset:
-                    itt.key_press(i["key_name"])
+    #     Args:
+    #         curr_posi (_type_): _description_
+    #     """
+    #     if self.special_key_points == None:
+    #         self._exec_special_key_points()
+    #     if quick_euclidean_distance_plist(curr_posi, self.special_key_points).min() <= self.upper.special_keys_posi_offset:
+    #         for i in self.upper.path_list[self.upper.path_index]["special_keys"]:
+    #             if euclidean_distance(i["position"], curr_posi) <= self.upper.special_keys_posi_offset:
+    #                 itt.key_press(i["key_name"])
     
+    def _exec_special_key(self, special_key):
+        # key_name = special_key
+        itt.key_press(special_key)
+        logger.debug(f"key {special_key} exec.")
+
     def state_before(self):
         self.curr_path = self.upper.path_list[self.upper.path_index]["position_list"]
         self.curr_path_index = 0
-        itt.key_down('w')
+        # itt.key_down('w')
+        tracker.reinit_smallmap()
         self._next_rfc()
     
     def state_in(self):
@@ -197,11 +202,16 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
             if len(self.curr_path) - 1 > self.curr_path_index:
                 self.curr_path_index += 1
                 logger.debug(f"index {self.curr_path_index} posi {self.curr_path[self.curr_path_index]}")
+                special_key = self.curr_path[self.curr_path_index]["special_key"]
+                if special_key != None:
+                    self._exec_special_key(special_key)
             else:
                 logger.info("path end")
                 self._next_rfc()
-        self._do_special_key(curr_posi)
-        movement.change_view_to_posi(target_posi, stop_func = self.upper.checkup_stop_func)
+        if abs(movement.calculate_posi_cvn(target_posi)) >= 5:
+            itt.key_up('w')
+            movement.change_view_to_posi(target_posi, stop_func = self.upper.checkup_stop_func)
+            itt.key_down('w')
         
             
     def state_after(self):
@@ -213,6 +223,7 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
             self.upper.path_index += 1
         else:
             logger.info("all path end")
+            self._set_nfid(ST.END_TEYVAT_MOVE_PASS)
         self._next_rfc()
 
 class TeyvatMoveStuck(EndFlowTemplate):
@@ -224,13 +235,13 @@ class TeyvatMovePass(EndFlowTemplate):
         super().__init__(upper, flow_id=ST.END_TEYVAT_MOVE_PASS, err_code_id=ERR_PASS)
 
 class TeyvatMoveFlowController(FlowController):
-    def __init__(self):
+    def __init__(self, mode='AUTO'):
         super().__init__(flow_connector = TeyvatMoveFlowConnector(), current_flow_id = ST.INIT_TEYVAT_TELEPORT)
         self.flow_connector = self.flow_connector # type: TeyvatMoveFlowConnector
         self.get_while_sleep = self.flow_connector.get_while_sleep
 
         self.append_flow(TeyvatTeleport(self.flow_connector))
-        if True:
+        if mode == "AUTO":
             self.append_flow(TeyvatMove_Automatic(self.flow_connector))
         else:
             self.append_flow(TeyvatMove_FollowPath(self.flow_connector))
@@ -248,22 +259,16 @@ class TeyvatMoveFlowController(FlowController):
         self.flow_connector.target_posi = tp
 
     def set_parameter(self,
+                      MODE:str = None, # type: ignore
                       stop_rule:int = None, # type: ignore
                       target_posi:list = None, # type: ignore
-                      MODE:str = None, # type: ignore
+                      path_list:list = None, # type: ignore
                       to_next_posi_offset:float = None, # type: ignore
-                      special_keys_posi_offset:float = None # type: ignore
+                      special_keys_posi_offset:float = None, # type: ignore
+                      reaction_to_enemy:str = None # type: ignore
+                      
                       ):
-        if stop_rule != None:
-            self.flow_connector.stop_rule = stop_rule
-        if target_posi != None:
-            self.flow_connector.target_posi = target_posi
-        if MODE != None:
-            self.flow_connector.MODE = MODE
-        if to_next_posi_offset != None:
-            self.flow_connector.to_next_posi_offset = to_next_posi_offset
-        if special_keys_posi_offset != None:
-            self.flow_connector.special_keys_posi_offset = special_keys_posi_offset
+        pass
         
         
 if __name__ == '__main__':
