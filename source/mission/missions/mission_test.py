@@ -6,7 +6,7 @@ class MissionTest(MissionExecutor):
         self.setName("MissionTest")
     
     def exec_mission(self):
-        # self.move_straight([-200,200])
+        self.move_along("167850240927")
         self.collect(MODE="AUTO",pickup_points=[[71, -2205],[65,-2230]])
         
 if __name__ == '__main__':

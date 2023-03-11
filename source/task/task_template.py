@@ -1,9 +1,27 @@
 from source.util import *
 from source.common.base_threading import BaseThreading
+from source.flow.flow_template import FlowController
 
 class TaskTemplate(BaseThreading):
     def __init__(self):
         super().__init__()
+        self.flow_list = []
+        
+    def _add_sub_flow(self, flow:FlowController):
+        self._add_sub_threading(flow)
+        self.flow_list.append(flow)
+    
+    def get_flow_statement(self):
+        statement = []
+        for i in self.flow_list:
+            statement.append(
+                {
+                    "name":i.flow_name,
+                    "statement":i.current_flow_id,
+                    "rfc":i.flow_dict[i.current_flow_id].rfc
+                }
+            )
+        return statement
     
     def loop(self):
         pass

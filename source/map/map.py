@@ -33,7 +33,7 @@ class Map(MiniMap, BigMap, MapConverter):
         self.BIGMAP_TP_OFFSET = 100  # 距离目标小于该误差则停止
         self.BIGMAP_MOVE_MAX = 100  # 最大移动力度
         self.TP_RANGE = 350  # 在该像素范围内可tp
-        self.MINIMAP_UPDATE_LIMIT = 0.3  # minimap更新最短时间
+        self.MINIMAP_UPDATE_LIMIT = 0.1  # minimap更新最短时间
 
         self.smallmap_upd_timer = timer_module.Timer(2)
         self.small_map_init_flag = False

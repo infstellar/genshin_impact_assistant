@@ -11,6 +11,9 @@ class MissionExecutor(BaseThreading):
         self.TMCF = teyvat_move_flow_upgrad.TeyvatMoveFlowController()
         self._add_sub_threading(self.TMCF)
 
+    def get_path_file(self, path_file_name:str):
+        return load_json(path_file_name+".json","assets\\TeyvatMovePath")
+    
     def move(self, MODE:str = None,stop_rule:int = None,target_posi:list = None,path_list:list = None,to_next_posi_offset:float = None,special_keys_posi_offset:float = None,reaction_to_enemy:str = None):
         self.TMCF.reset()
         self.TMCF.set_parameter(MODE=MODE,stop_rule=stop_rule,target_posi=target_posi,path_dict=path_list,to_next_posi_offset=to_next_posi_offset,special_keys_posi_offset=special_keys_posi_offset,reaction_to_enemy=reaction_to_enemy)
@@ -24,7 +27,7 @@ class MissionExecutor(BaseThreading):
         self.move(MODE="AUTO", target_posi=position)
         
     def move_along(self, path):
-        self.move(MODE="PATH", path_list=path)
+        self.move(MODE="PATH", path_list=self.get_path_file(path))
             
     def combat(self):
         pass

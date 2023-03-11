@@ -84,12 +84,8 @@ class MoveToChallenge(FlowTemplate):
             movement.move(movement.AHEAD, 4)
 
         if generic_lib.f_recognition(itt):
+            itt.key_up('w')
             self._next_rfc()
-    
-    def state_after(self):
-        itt.key_up('w')
-        self._next_rfc()
-
 
 
 class Challenge(FlowTemplate):
@@ -238,7 +234,9 @@ class DomainFlowEnd(EndFlowTemplate):
 
 class DomainFlowController(FlowController):
     def __init__(self):
-        super().__init__(flow_connector=DomainFlowConnector(), current_flow_id=ST.INIT_MOVETO_CHALLENGE)
+        super().__init__(flow_connector=DomainFlowConnector(),
+                         current_flow_id=ST.INIT_MOVETO_CHALLENGE,
+                         flow_name="DomainFlow")
         self.flow_connector = self.flow_connector #type: DomainFlowConnector
         
         self.append_flow(MoveToChallenge(self.flow_connector))

@@ -9,19 +9,30 @@ DOMAIN_TASK = "DomainTask"
     
 class TaskManager(BaseThreading):
     def __init__(self) -> None:
-        super().__init__()
+        super().__init__(thread_name="TaskManager")
         self.reg_task_flag = False
-        self.curr_task = None # type: TaskTemplate
+        self.curr_task = TaskTemplate()
         self.task_list = []
-        self.get_task_list = lambda:["TestTask"]
+        self.get_task_list = lambda:[]
         self.start_tasklist_flag = False
     
     def append_task(self, task_name):
         self.task_list.append(task_name)
 
+    def set_tasklist(self, tasks):
+        self.task_list = tasks
+
     def clear_task_list(self):
         self.task_list = []
 
+    def get_task_statement(self):
+        if not self.start_tasklist_flag:
+            return t2t("No Task Running")
+        elif self.start_tasklist_flag and not self.reg_task_flag:
+            return t2t("Loading")
+        else:
+            return self.curr_task.get_flow_statement()
+    
     def remove_task(self, task_name) -> bool:
         for i in range(len(self.task_list)):
             if self.task_list[i] == task_name:
@@ -75,24 +86,25 @@ class TaskManager(BaseThreading):
             if self.checkup_stop_func():
                 self.pause_threading_flag = True
                 continue
-        '''write your code below'''
+            '''write your code below'''
 
-        if self.start_tasklist_flag:
-            if len(self.task_list)>0:
-                for i in self.task_list:
-                    if self.checkup_stop_func():
-                        break
-                    if self.start_tasklist_flag == False:
-                        break
-                    self.start_stop_task(i)
-                    while 1:
-                        if self.curr_task.stop_threading_flag:
-                            break
+            if self.start_tasklist_flag:
+                # self.task_list = self.get_task_list()
+                if len(self.task_list)>0:
+                    for i in self.task_list:
                         if self.checkup_stop_func():
                             break
                         if self.start_tasklist_flag == False:
                             break
-                        time.sleep(1)
+                        self.start_stop_task(i)
+                        while 1:
+                            if self.curr_task.stop_threading_flag:
+                                break
+                            if self.checkup_stop_func():
+                                break
+                            if self.start_tasklist_flag == False:
+                                break
+                            time.sleep(1)
 
 if __name__ == '__main__':
     tm = TaskManager()

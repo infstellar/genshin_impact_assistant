@@ -14,17 +14,18 @@ from source.common import timer_module
 class DomainTask(TaskTemplate):
     def __init__(self):
         super().__init__()
+        self.setName("DomainTask")
         self.dfc = DomainFlowController()
-        self.TMFCF = TeyvatMoveFlowController(mode="AUTO")
+        self.TMFCF = TeyvatMoveFlowController()
         self.flow_mode = TI.DT_INIT
         
-        self._add_sub_threading(self.dfc)
-        self._add_sub_threading(self.TMFCF)
+        self._add_sub_flow(self.dfc)
+        self._add_sub_flow(self.TMFCF)
         
         self.domain_name = load_json("auto_domain.json",f"{CONFIG_PATH_SETTING}")["domain_name"]
         self.domain_stage_name = load_json("auto_domain.json",f"{CONFIG_PATH_SETTING}")["domain_stage_name"]
         self.domain_posi = load_items_position(self.domain_name,mode=1, ret_mode=1)[0]
-        self.TMFCF.set_parameter(stop_rule = 1, MODE = "Automatic", target_posi = self.domain_posi)
+        self.TMFCF.set_parameter(stop_rule = 1, MODE = "AUTO", target_posi = self.domain_posi, is_tp=True, tp_type=["Domain"])
         self.TMFCF.set_target_posi(self.domain_posi)
         self.last_domain_times = 3
 
@@ -93,7 +94,7 @@ class DomainTask(TaskTemplate):
             time.sleep(10)
 
     def _check_state(self):
-        if itt.get_img_existence(asset.IN_DOMAIN) or itt.get_img_existence(asset.LEYLINEDISORDER):
+        if itt.get_img_existence(asset.IN_DOMAIN) or itt.get_text_existence(asset.LEYLINEDISORDER):
             self.flow_mode = TI.DT_IN_DOMAIN
         elif itt.get_img_existence(asset.ui_main_win):
             self.flow_mode = TI.DT_MOVE_TO_DOMAIN
@@ -102,12 +103,13 @@ class DomainTask(TaskTemplate):
     def loop(self):
         if self.flow_mode == TI.DT_INIT:
             self._check_state()
+            self.flow_mode = TI.DT_MOVE_TO_DOMAIN
 
         if self.flow_mode == TI.DT_MOVE_TO_DOMAIN:
-            self.TMFCF.continue_threading()
+            self.TMFCF.start_flow()
             while 1:
                 time.sleep(self.while_sleep)
-                if self.TMFCF.get_last_err_code() == ERR_PASS:
+                if self.TMFCF.pause_threading_flag:
                     break
             self.TMFCF.pause_threading()
             
@@ -116,10 +118,11 @@ class DomainTask(TaskTemplate):
             self.flow_mode = TI.DT_IN_DOMAIN
             
         if self.flow_mode == TI.DT_IN_DOMAIN:
-            self.dfc.continue_threading()
+            self.dfc.start_flow()
+            # time.sleep(1)
             while 1:
                 time.sleep(self.while_sleep)
-                if self.dfc.get_last_err_code() == ERR_PASS:
+                if self.dfc.pause_threading_flag:
                     break
             
             self._end_domain()

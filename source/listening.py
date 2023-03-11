@@ -11,6 +11,9 @@ domain_flag = False
 collector_flag = False
 startstop_flag = False
 TASK_MANAGER = task_manager.TaskManager()
+TASK_MANAGER.setDaemon(True)
+TASK_MANAGER.start()
+
 
 t1 = None
 t2 = None

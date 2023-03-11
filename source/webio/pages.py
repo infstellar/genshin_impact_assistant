@@ -29,13 +29,9 @@ class MainPage(Page):
 
     # todo:多语言支持
 
-    def _get_task_list(self):
-        return pin.pin["task_list"]
-
     def _on_load(self):  # 加载事件
         super()._on_load()
         self._load()  # 加载主页
-        listening.TASK_MANAGER.get_task_list = self._get_task_list
         t = threading.Thread(target=self._event_thread, daemon=False)  # 创建事件线程
         session.register_thread(t)  # 注册线程
         t.start()  # 启动线程
@@ -69,19 +65,14 @@ class MainPage(Page):
             self.log_list.clear()
             self.log_list_lock.release()
 
-            if flow_state.current_statement != self.ui_statement:
-                self.ui_statement = flow_state.current_statement
+            if listening.TASK_MANAGER.get_task_statement() != self.ui_statement:
+                self.ui_statement = listening.TASK_MANAGER.get_task_statement()
                 output.clear(scope="StateArea")
-                f = False
-                for i in self.ui_statement:
-                    t = self.ui_statement[i]
-                    if t == 0:
-                        continue
-                    else:
-                        output.put_text(flow_state.get_statement_code_name(self.ui_statement[i]), scope="StateArea")
-                        f = True
-                if not f:
-                    output.put_text(flow_state.get_statement_code_name(0), scope="StateArea")
+                if isinstance(self.ui_statement, list):
+                    for i in self.ui_statement:
+                        output.put_text(f'{i["name"]}: {i["statement"]}: {i["rfc"]}', scope="StateArea")
+                elif isinstance(self.ui_statement, str):
+                    output.put_text(f'{self.ui_statement}', scope="StateArea")
 
             time.sleep(0.1)
     
@@ -150,8 +141,10 @@ class MainPage(Page):
 
     def on_click_startstop(self):
         output.clear('Button_StartStop')
-        listening.startstop()
-        output.put_button(label=str(listening.startstop_flag), onclick=self.on_click_startstop,
+        listening.TASK_MANAGER.set_tasklist(pin.pin["task_list"])
+        listening.TASK_MANAGER.start_stop_tasklist()
+        time.sleep(0.2)
+        output.put_button(label=str(listening.TASK_MANAGER.start_tasklist_flag), onclick=self.on_click_startstop,
                           scope='Button_StartStop')
 
     def on_click_ip_address(self):

@@ -30,6 +30,7 @@ class TeyvatMoveFlowConnector(FlowConnector):
         self.to_next_posi_offset = 1.0*6 # For precision
         self.special_keys_posi_offset = 1.5
         self.is_tp = False
+        self.tp_type = None
 
         self.path_index = 0
         self.motion_state = IN_MOVE
@@ -51,6 +52,7 @@ class TeyvatMoveFlowConnector(FlowConnector):
         self.to_next_posi_offset = 1.0*3 # For precision
         self.special_keys_posi_offset = 1.5
         self.is_tp = False
+        self.tp_type = None
         
         self.path_index = 0
         self.motion_state = IN_MOVE
@@ -74,7 +76,7 @@ class TeyvatTeleport(FlowTemplate):
         self._next_rfc()
 
     def state_in(self):
-        genshin_map.bigmap_tp(self.upper.target_posi)
+        genshin_map.bigmap_tp(self.upper.target_posi, tp_type=self.upper.tp_type)
         self._next_rfc()
 
     def state_end(self):
@@ -257,9 +259,12 @@ class TeyvatMovePass(EndFlowTemplate):
 
 class TeyvatMoveFlowController(FlowController):
     def __init__(self):
-        super().__init__(flow_connector = TeyvatMoveFlowConnector(), current_flow_id = ST.INIT_TEYVAT_TELEPORT)
+        super().__init__(flow_connector = TeyvatMoveFlowConnector(),
+                         current_flow_id = ST.INIT_TEYVAT_TELEPORT, 
+                         flow_name = "TeyvatMoveFlow")
         self.flow_connector = self.flow_connector # type: TeyvatMoveFlowConnector
         self.get_while_sleep = self.flow_connector.get_while_sleep
+        self.append_flow(TeyvatTeleport(self.flow_connector))
 
     def start_flow(self):
         self.flow_dict = {}
@@ -292,7 +297,8 @@ class TeyvatMoveFlowController(FlowController):
                       is_tp:bool = None,
                       to_next_posi_offset:float = None,
                       special_keys_posi_offset:float = None,
-                      reaction_to_enemy:str = None):
+                      reaction_to_enemy:str = None,
+                      tp_type:list = None):
         if MODE != None:
             self.flow_connector.MODE = MODE
         if stop_rule != None:
@@ -309,6 +315,8 @@ class TeyvatMoveFlowController(FlowController):
             self.flow_connector.reaction_to_enemy = reaction_to_enemy
         if is_tp != None:
             self.flow_connector.is_tp = is_tp
+        if tp_type != None:
+            self.flow_connector.tp_type = tp_type
         
         
         
