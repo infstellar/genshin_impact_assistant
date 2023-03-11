@@ -9,6 +9,7 @@ from source.funclib import scene_lib, movement
 from source.interaction.minimap_tracker import tracker
 from source.flow.flow_template import FlowConnector, FlowController, FlowTemplate, EndFlowTemplate
 from source.flow import flow_state as ST
+from source.flow import flow_code as FC
 from source.map.map import genshin_map
 
 
@@ -25,9 +26,10 @@ class TeyvatMoveFlowConnector(FlowConnector):
         self.target_posi = [0, 0]
         self.reaction_to_enemy = 'RUN'
         self.MODE = "PATH"
-        self.path_list = []
+        self.path_dict = {}
         self.to_next_posi_offset = 1.0*3 # For precision
         self.special_keys_posi_offset = 1.5
+        self.is_tp = False
 
         self.path_index = 0
         self.motion_state = IN_MOVE
@@ -45,9 +47,10 @@ class TeyvatMoveFlowConnector(FlowConnector):
         self.target_posi = [0, 0]
         self.reaction_to_enemy = 'RUN'
         self.MODE = "PATH"
-        self.path_list = []
+        self.path_dict = {}
         self.to_next_posi_offset = 1.0*3 # For precision
         self.special_keys_posi_offset = 1.5
+        self.is_tp = False
         
         self.path_index = 0
         self.motion_state = IN_MOVE
@@ -60,6 +63,12 @@ class TeyvatTeleport(FlowTemplate):
         super().__init__(upper, flow_id=ST.INIT_TEYVAT_TELEPORT, next_flow_id=ST.INIT_TEYVAT_MOVE)
         self.upper = upper
 
+    def state_init(self):
+        if not self.upper.is_tp:
+            self._set_rfc(FC.END)
+        else:
+            self._next_rfc()
+    
     def state_before(self):
         scene_lib.switch_to_page(scene_manager.page_main, self.upper.checkup_stop_func)
         self._next_rfc()
@@ -172,7 +181,7 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
         
     # def _exec_special_key_points(self):
     #     ret_list = []
-    #     for i in self.upper.path_list[self.upper.path_index]["special_keys"]:
+    #     for i in self.upper.path_list["special_keys"]:
     #         ret_list.append(i["position"])
     #     self.special_key_points = ret_list
     
@@ -185,7 +194,7 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
     #     if self.special_key_points == None:
     #         self._exec_special_key_points()
     #     if quick_euclidean_distance_plist(curr_posi, self.special_key_points).min() <= self.upper.special_keys_posi_offset:
-    #         for i in self.upper.path_list[self.upper.path_index]["special_keys"]:
+    #         for i in self.upper.path_list["special_keys"]:
     #             if euclidean_distance(i["position"], curr_posi) <= self.upper.special_keys_posi_offset:
     #                 itt.key_press(i["key_name"])
     
@@ -195,7 +204,7 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
         logger.debug(f"key {special_key} exec.")
 
     def state_before(self):
-        self.curr_path = self.upper.path_list[self.upper.path_index]["position_list"]
+        self.curr_path = self.upper.path_dict["position_list"]
         self.curr_path_index = 0
         # itt.key_down('w')
         tracker.reinit_smallmap()
@@ -221,16 +230,14 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
         
             
     def state_after(self):
-        if self.upper.path_list[self.upper.path_index]["is_activate_pickup"] == False:
-            self.next_flow_id = self.flow_id
-        else:
-            pass
-        if len(self.upper.path_list)-1 > self.upper.path_index:
-            self.upper.path_index += 1
-        else:
-            logger.info("all path end")
-            self._set_nfid(ST.END_TEYVAT_MOVE_PASS)
+        self.next_flow_id = self.flow_id
+        logger.info("path end")
+        self._set_nfid(ST.END_TEYVAT_MOVE_PASS)
         self._next_rfc()
+        
+    def state_end(self):
+        itt.key_up('w')
+        return super().state_end()
 
 class TeyvatMoveStuck(EndFlowTemplate):
     def __init__(self, upper: FlowConnector):
@@ -272,9 +279,9 @@ class TeyvatMoveFlowController(FlowController):
     def set_parameter(self,
                       MODE:str = None,
                       target_posi:list = None,
-                      path_list:list = None,
+                      path_dict:dict = None,
                       stop_rule:int = None,
-                      
+                      is_tp:bool = None,
                       to_next_posi_offset:float = None,
                       special_keys_posi_offset:float = None,
                       reaction_to_enemy:str = None):
@@ -284,17 +291,24 @@ class TeyvatMoveFlowController(FlowController):
             self.flow_connector.stop_rule = stop_rule
         if target_posi != None:
             self.flow_connector.target_posi = target_posi
-        if path_list != None:
-            self.flow_connector.path_list = path_list
+        if path_dict != None:
+            self.flow_connector.path_dict = path_dict
         if to_next_posi_offset != None:
             self.flow_connector.to_next_posi_offset = to_next_posi_offset
         if special_keys_posi_offset != None:
             self.flow_connector.special_keys_posi_offset = special_keys_posi_offset
         if reaction_to_enemy != None:
             self.flow_connector.reaction_to_enemy = reaction_to_enemy
+        if is_tp != None:
+            self.flow_connector.is_tp = is_tp
         
         
         
 if __name__ == '__main__':
-    tmfc = TeyvatMoveFlowController()
+    TMFC = TeyvatMoveFlowController()
+    TMFC.set_parameter(MODE="PATH",path_dict=load_json("167850240927.json","assets\\TeyvatMovePath"))
+    TMFC.start()
+    TMFC.start_flow()
+    while 1:
+        time.sleep(1)
     

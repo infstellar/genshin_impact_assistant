@@ -40,7 +40,7 @@ class CollectionPathTask(TaskTemplate):
             
     def end_task(self):
         self.cpc.pause_threading()
-        save_json(self.cpc.flow_connector.total_collection_list, self.json_name, f"{CONFIG_PATH}\\collection_path")
+        # save_json(self.cpc.flow_connector.total_collection_list, self.json_name, f"{CONFIG_PATH}\\collection_path")
         super().end_task()
         
 if __name__ == '__main__':

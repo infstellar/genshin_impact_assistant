@@ -17,7 +17,7 @@ class PathRecorderConnector(FlowConnector):
         super().__init__()
 
 
-        self.total_collection_list = []
+        # self.total_collection_list = []
         self.checkup_stop_func = None
         self.collection_path_dict = {
             "time":"",
@@ -32,28 +32,26 @@ class PathRecorderConnector(FlowConnector):
         self.set_hotkey()
         '''
         Template:
-        [
-            {
-                "name":"",
-                "start_position":[],
-                "end_position":[],
-                "all_position":[
-                    [point x, point y],
-                    [point x, point y],
-                    [point x, point y],
-                    ...
-                ],
-                "position_list":[
-                    {
-                        "position":list,
-                        "motion":str, include 'move'(or 'walk'), 'swim', 'climb', 'fly'.
-                        "id":int
-                        "special_key":str
-                    }, ...
-                ]
-            }
-        ...
-        ]
+        {
+            "name":"",
+            "start_position":[],
+            "end_position":[],
+            "all_position":[
+                [point x, point y],
+                [point x, point y],
+                [point x, point y],
+                ...
+            ],
+            "position_list":[
+                {
+                    "position":list,
+                    "motion":str, include 'move'(or 'walk'), 'swim', 'climb', 'fly'.
+                    "id":int
+                    "special_key":str
+                }, ...
+            ]
+        }
+
         '''
 
     def set_hotkey(self):
@@ -161,8 +159,9 @@ class PathRecorderCore(FlowTemplate):
         return super().state_in()
 
     def state_after(self):
-        self.upper.total_collection_list.append(self.upper.collection_path_dict)
-
+        # self.upper.total_collection_list.append(self.upper.collection_path_dict)
+        save_json(self.upper.collection_path_dict,json_name=str(round(time.time(),2)).replace('.','')+".json",default_path=f"assets\\TeyvatMovePath")
+        
         self.rfc = FC.INIT
 
 

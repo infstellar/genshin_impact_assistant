@@ -7,3 +7,6 @@
 [submodule "assets/YoloxModels"]
 	path = assets/YoloxModels
 	url = https://github.com/GenshinImpactAssistant/YoloxModels
+[submodule "assets/TeyvatMovePath"]
+	path = assets/TeyvatMovePath
+	url = https://github.com/GenshinImpactAssistant/GIATeyvatMovePath.git

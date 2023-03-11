@@ -13,7 +13,7 @@ class MissionExecutor(BaseThreading):
 
     def move(self, MODE:str = None,stop_rule:int = None,target_posi:list = None,path_list:list = None,to_next_posi_offset:float = None,special_keys_posi_offset:float = None,reaction_to_enemy:str = None):
         self.TMCF.reset()
-        self.TMCF.set_parameter(MODE=MODE,stop_rule=stop_rule,target_posi=target_posi,path_list=path_list,to_next_posi_offset=to_next_posi_offset,special_keys_posi_offset=special_keys_posi_offset,reaction_to_enemy=reaction_to_enemy)
+        self.TMCF.set_parameter(MODE=MODE,stop_rule=stop_rule,target_posi=target_posi,path_dict=path_list,to_next_posi_offset=to_next_posi_offset,special_keys_posi_offset=special_keys_posi_offset,reaction_to_enemy=reaction_to_enemy)
         self.TMCF.start_flow()
         while 1:
             time.sleep(0.2)

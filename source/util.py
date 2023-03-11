@@ -250,6 +250,8 @@ def points_angle(p1, p2, coordinate=ANGLE_NORMAL):
     return degree
 
 def save_json(x, json_name='config.json', default_path='config', sort_keys=True, auto_create=False):
+    if not os.path.exists(default_path):
+        logger.error(f"CANNOT FIND PATH: {default_path}")
     if sort_keys:
         json.dump(x, open(os.path.join(default_path, json_name), 'w', encoding='utf-8'), sort_keys=True, indent=2,
               ensure_ascii=False)
