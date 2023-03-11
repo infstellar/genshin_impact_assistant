@@ -4,8 +4,9 @@ from source.flow.teyvat_move_flow_upgrad import TeyvatMoveFlowController
 from source.task.task_template import TaskTemplate
 from source.funclib.collector_lib import load_items_position
 from source.funclib.generic_lib import f_recognition
+from source.funclib import scene_lib
 from source.interaction.interaction_core import itt
-from source.manager import asset, text_manager
+from source.manager import asset, scene_manager
 from source.task import task_id as TI
 from source.funclib.err_code_lib import ERR_NONE, ERR_STUCK, ERR_PASS
 from source.common import timer_module
@@ -27,9 +28,9 @@ class DomainTask(TaskTemplate):
         self.domain_posi = load_items_position(self.domain_name,mode=1, ret_mode=1)[0]
         self.TMFCF.set_parameter(stop_rule = 1, MODE = "AUTO", target_posi = self.domain_posi, is_tp=True, tp_type=["Domain"])
         self.TMFCF.set_target_posi(self.domain_posi)
-        self.last_domain_times = 3
+        self.last_domain_times = int(load_json("auto_domain.json",f"{CONFIG_PATH_SETTING}")["domain_times"])
 
-        logger.info(f"domain_name: {self.domain_name} domain_stage_name {self.domain_stage_name}")
+        logger.info(f"domain_name: {self.domain_name} domain_stage_name {self.domain_stage_name} domain times {self.last_domain_times}")
     
     def _domain_text_process(self, text:str):
         text = text.replace('：', ':')
@@ -95,13 +96,14 @@ class DomainTask(TaskTemplate):
             time.sleep(10)
 
     def _check_state(self):
+        
         if itt.get_img_existence(asset.IN_DOMAIN) or itt.get_text_existence(asset.LEYLINEDISORDER):
             self.flow_mode = TI.DT_IN_DOMAIN
         elif itt.get_img_existence(asset.ui_main_win):
             self.flow_mode = TI.DT_MOVE_TO_DOMAIN
         else:
             logger.info(t2t("Unknown UI page"))
-
+            scene_lib.switch_to_page(scene_manager.page_main, self.checkup_stop_func)
 
     def exec_task(self):
         if self.flow_mode == TI.DT_INIT:

@@ -49,10 +49,10 @@ class TaskManager(BaseThreading):
     def start_stop_task(self, task_name):
         if not self.reg_task_flag:
             
-            if self.curr_task.stop_threading_flag:
-                logger.info(t2t("End Task"))
-                self.curr_task.end_task()
-                self.reg_task_flag = not self.reg_task_flag
+            # if self.curr_task.stop_threading_flag:
+            #     logger.info(t2t("End Task"))
+            #     self.curr_task.end_task()
+            #     self.reg_task_flag = not self.reg_task_flag
             
             if task_name == COLLECTION_PATH_TASK:
                 from source.task.collection_path_task import CollectionPathTask
@@ -112,11 +112,13 @@ class TaskManager(BaseThreading):
                                 break
                             if self.start_tasklist_flag == False:
                                 break
+                            if self.curr_task.pause_threading_flag or self.curr_task.stop_threading_flag:
+                                break
                             time.sleep(1)
                         logger.info(f"task {i} end.")
                     logger.info(f"all task end.")
                     self.stop_tasklist()
-                    self.pause_threading()
+                    # self.pause_threading()
 
 if __name__ == '__main__':
     tm = TaskManager()

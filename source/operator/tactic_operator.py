@@ -182,7 +182,7 @@ class TacticOperator(BaseThreading):
                     return 0
                 if self.pause_tactic_flag:
                     return 0
-                logger.debug('waiting  ')
+                # logger.debug('waiting  ')
                 self.itt.delay(0.1)
         else:
             return self.get_character_busy()

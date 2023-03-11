@@ -212,7 +212,7 @@ def is_json_equal(j1: str, j2: str) -> bool:
 
 def add_logger_to_GUI(cb_func):
     if DEBUG_MODE:
-        logger.add(cb_func, level="TRACE", backtrace=True, colorize=True)
+        logger.add(cb_func, level="DEBUG", backtrace=True, colorize=True)
     else:
         logger.add(cb_func, level="INFO", backtrace=True, colorize=True)
 
@@ -473,7 +473,7 @@ def compare_texts(text1, text2, is_show_res = False, ignore_warning = False):
     
     if not ignore_warning:
         if len(text1) != len(text2):
-            logger.warning(f"compare_texts警告：不相同的文字长度:{text1}, {text2}")
+            logger.trace(f"compare_texts警告：不相同的文字长度:{text1}, {text2}")
     
     font = ImageFont.truetype("simhei.ttf", 16)
     width1, height1 = font.getsize(text1)
@@ -505,10 +505,10 @@ def compare_texts(text1, text2, is_show_res = False, ignore_warning = False):
     mask = mask.astype(np.uint8) * 255
 
     matching_rate = 1 - len(np.where(mask==255)[0])/len(np.where(mask!=256)[0])
-    logger.debug(f"texts matching rate:{matching_rate} text1 {text1} text2 {text2}")
+    logger.trace(f"texts matching rate:{matching_rate} text1 {text1} text2 {text2}")
     if len(text1) != len(text2):
         matching_rate = max( matching_rate - 0.06*abs(len(text1) - len(text2)), 0)
-        logger.debug(f"fixed matching rate:{matching_rate}")
+        logger.trace(f"fixed matching rate:{matching_rate}")
     if is_show_res:
         # 在原始图片上绘制红色边框，表示差异区域
         contours, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)

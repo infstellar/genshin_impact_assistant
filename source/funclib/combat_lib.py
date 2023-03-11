@@ -54,7 +54,7 @@ def get_param(team_item, para_name, auto_fill_flag, chara_name="", exception_mod
             logger.error(f"{t2t('parameter name')}: {para_name}; {t2t('character name')}: {chara_name}")
             load_err_times+=1
             # raise TacticKeyEmptyError(f"Key: {para_name}")
-    logger.debug(f"character: {chara_name} para_name: {para_name} value: {r}")
+    logger.trace(f"character: {chara_name} para_name: {para_name} value: {r}")
     return r
 
 def get_chara_list(team_name='team.json'):
@@ -173,7 +173,7 @@ def get_character_busy(itt: interaction_core.InteractionBGD, stop_func, print_lo
         return False
     else:
         if print_log:
-            logger.debug(f"character busy: t1{t1} t2{t2}")
+            logger.debug(f"waiting: character busy: t1{t1} t2{t2}")
         return True
 
 def chara_waiting(itt:interaction_core.InteractionBGD, stop_func, mode=0, max_times = 1000):
@@ -184,7 +184,7 @@ def chara_waiting(itt:interaction_core.InteractionBGD, stop_func, mode=0, max_ti
         if stop_func():
             logger.debug('chara_waiting stop')
             return 0
-        logger.debug('waiting')
+        # logger.debug('waiting')
         itt.delay(0.1)
         if i>=max_times:
             break

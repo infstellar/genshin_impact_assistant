@@ -25,6 +25,7 @@ class MainPage(Page):
     def __init__(self):
         super().__init__()
         self.log_list = []
+        self.log_history = []
         self.log_list_lock = threading.Lock()
         self.ui_statement = -1
         self.refresh_flow_info_timer = timer_module.Timer()
@@ -64,6 +65,7 @@ class MainPage(Page):
                     output.put_text("", scope='LogArea')
                 else:
                     output.put_text(text, scope='LogArea', inline=True).style(f'color: {color}; font_size: 20px')
+            
             self.log_list.clear()
             self.log_list_lock.release()
 
@@ -95,19 +97,6 @@ class MainPage(Page):
 
         output.put_row([  # 横列
             output.put_column([  # 左竖列
-                output.put_markdown(t2t('## Options')),  # 左竖列标题
-
-                output.put_row([  # FlowMode
-                    output.put_text(t2t('FlowMode')),
-                    pin.put_select(('FlowMode'), [
-                        {'label': t2t('Idle'), 'value': listening.FLOW_IDLE},
-                        {'label': t2t('AutoCombat'), 'value': listening.FLOW_COMBAT},
-                        {'label': t2t('AutoDomain'), 'value': listening.FLOW_DOMAIN},
-                        {'label': t2t('AutoCollector'), 'value': listening.FLOW_COLLECTOR}
-                    ])]),
-                # Button_StartStop
-                output.put_row([output.put_text(t2t('启动/停止')), output.put_scope('Button_StartStop')]),
-                
                 output.put_markdown('## '+t2t("Task List")),
 
                 pin.put_checkbox(name="task_list", options=[
@@ -117,14 +106,27 @@ class MainPage(Page):
                     }
                 ]),
 
+                output.put_row([output.put_text(t2t('启动/停止')), None, output.put_scope('Button_StartStop')],size='40% 10px 60%'),
+                
                 output.put_markdown(t2t('## Statement')),
 
-                output.put_row([output.put_text(t2t('当前状态')), output.put_scope('StateArea')])
+                output.put_row([output.put_text(t2t('当前状态')), None, output.put_scope('StateArea')],size='40% 10px 60%'),
 
+                output.put_markdown(t2t('## Options')),  # 左竖列标题
+
+                output.put_row([  # FlowMode
+                    output.put_text(t2t('FlowMode')),
+                    pin.put_select(('FlowMode'), [
+                        {'label': t2t('Idle'), 'value': listening.FLOW_IDLE},
+                        # {'label': t2t('AutoCombat'), 'value': listening.FLOW_COMBAT},
+                        # {'label': t2t('AutoDomain'), 'value': listening.FLOW_DOMAIN},
+                        {'label': t2t('AutoCollector'), 'value': listening.FLOW_COLLECTOR}
+                    ])])
+                
             ]), None,
             output.put_scope('Log')
 
-        ], scope=self.main_scope, size='30% 10px 70%')
+        ], scope=self.main_scope, size='40% 10px 60%')
 
         # PickUpButton
         output.put_button(label=str(listening.FEAT_PICKUP), onclick=self.on_click_pickup, scope='Button_PickUp')

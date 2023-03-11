@@ -4,7 +4,8 @@ import subprocess
 import pywebio
 import source.webio.log_handler
 status = True
-
+global first_run
+first_run = False
 def get_branch_commit_id():
     res = subprocess.Popen('git rev-parse --short HEAD', shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                            stderr=subprocess.PIPE)
@@ -18,6 +19,7 @@ def get_branch_commit_id():
     branch = res.stdout.read().decode('utf8').replace('\n', '')
     return branch,commit_id
 def main():
+    global first_run
     pywebio.session.set_env(output_max_width='80%', title="GIA WebUI v0.5.0")
     session.run_js(f'document.querySelector("body > footer").innerHTML+="| GIA: {"-".join(get_branch_commit_id())}"')
     webio.manager.reg_page('MainPage', MainPage())
@@ -25,7 +27,9 @@ def main():
     webio.manager.reg_page('CombatSettingPage', CombatSettingPage())
     webio.manager.reg_page("CollectorSettingPage", CollectorSettingPage())
     webio.manager.load_page('MainPage')
-    add_logger_to_GUI(source.webio.log_handler.webio_poster)
+    if not first_run:
+        add_logger_to_GUI(source.webio.log_handler.webio_poster)
+        first_run = True
     logger.info(t2t("webio启动完成"))
 
 

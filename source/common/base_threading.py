@@ -15,6 +15,7 @@ class BaseThreading(threading.Thread):
         self.while_sleep = 0.2
         self.last_err_code = ERR_NONE
         self.stop_func_list = []
+        self.sub_threading_list = []
         if thread_name != None:
             self.setName(thread_name)
 
@@ -30,6 +31,8 @@ class BaseThreading(threading.Thread):
 
     def stop_threading(self):
         self.stop_threading_flag = True
+        for i in self.sub_threading_list:
+            i.stop_threading()
 
     def checkup_stop_threading(self):
         if self.stop_threading_flag:
@@ -59,6 +62,7 @@ class BaseThreading(threading.Thread):
         threading_obj.add_stop_func(self.checkup_stop_func)
         threading_obj.pause_threading()
         threading_obj.start()
+        self.sub_threading_list.append(threading_obj)
 
     def run(self):
         '''if you're using this class, copy this'''
