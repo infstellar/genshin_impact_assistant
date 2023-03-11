@@ -147,6 +147,19 @@ def change_view_to_posi(pl, stop_func):
             if abs(cvn)<=10:
                 break
 
+def move_to_position(posi, offset=5, stop_func=lambda:False, delay=0.1):
+    itt.key_down('w')
+    while 1:
+        time.sleep(delay)
+        curr_posi = tracker.get_position()
+        if abs(euclidean_distance(curr_posi, posi))<=offset:
+            break
+  
+        # print(abs(euclidean_distance(curr_posi, posi)))
+        change_view_to_posi(posi,stop_func)
+    itt.key_up('w')
+    
+
 def reset_const_val():
     pass
 
@@ -168,5 +181,4 @@ def get_current_motion_state() -> str:
 # view_to_angle(-90)
 if __name__ == '__main__':
     # cview(-90, VERTICALLY)
-    while 1:
-        print(tracker.get_rotation())
+    move_to_position([71, -2205])

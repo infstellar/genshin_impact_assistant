@@ -5,7 +5,7 @@ from source.common.base_threading import BaseThreading
 
 class MissionExecutor(BaseThreading):
     def __init__(self):
-        super().__init__()
+        super().__init__(thread_name=__name__)
         self.CFCF = collector_flow_upgrad.CollectorFlowController()
         self._add_sub_threading(self.CFCF)
         self.TMCF = teyvat_move_flow_upgrad.TeyvatMoveFlowController()
@@ -19,6 +19,12 @@ class MissionExecutor(BaseThreading):
             time.sleep(0.2)
             if self.TMCF.get_working_statement() == False:
                 break
+    
+    def move_straight(self, position):
+        self.move(MODE="AUTO", target_posi=position)
+        
+    def move_along(self, path):
+        self.move(MODE="PATH", path_list=path)
             
     def combat(self):
         pass
@@ -31,8 +37,9 @@ class MissionExecutor(BaseThreading):
                 pickup_points = None
                 ):
         self.CFCF.reset()
-        self.CFCF.set_parameter(**locals())
+        self.CFCF.set_parameter(MODE=MODE,collection_name=collection_name,collector_type=collector_type,is_combat=is_combat,is_activate_pickup=is_activate_pickup,pickup_points=pickup_points)
         self.CFCF.start_flow()
+        time.sleep(1)
         while 1:
             time.sleep(0.2)
             if self.CFCF.get_working_statement() == False:

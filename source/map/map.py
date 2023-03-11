@@ -36,6 +36,7 @@ class Map(MiniMap, BigMap, MapConverter):
         self.MINIMAP_UPDATE_LIMIT = 0.3  # minimap更新最短时间
 
         self.smallmap_upd_timer = timer_module.Timer(2)
+        self.small_map_init_flag = False
 
     # @cached_property
     # def cvAutoTrackerLoop(self):
@@ -49,6 +50,9 @@ class Map(MiniMap, BigMap, MapConverter):
 
     def _upd_smallmap(self):
         if scene_lib.get_current_pagename() == "main":
+            if not self.small_map_init_flag:
+                self.reinit_smallmap()
+                self.small_map_init_flag = True
             self.update_position(itt.capture(jpgmode=0))
 
     def _upd_bigmap(self):
@@ -75,14 +79,21 @@ class Map(MiniMap, BigMap, MapConverter):
         # print(self.direction)
         return self.rotation
 
-    def get_bigmap_posi(self, is_upd=True, return_position_format: str = COORDINATE_TIANLI) -> np.ndarray:
+    def check_bigmap_scaling(self):
         if not itt.get_img_existence(asset.UIBigMapScaling):
+            origin_page = scene_lib.get_current_pagename()
             while not itt.appear_then_click(asset.ButtonSwitchMapArea): itt.delay(0.2)
             while not itt.appear_then_click(asset.MapAreaCYJY): itt.delay(0.2)
             while not itt.appear_then_click(asset.ButtonSwitchMapArea): itt.delay(0.2)
             while not itt.appear_then_click(asset.MapAreaLY): itt.delay(0.2)
-            scene_lib.switch_to_page(scene_manager.page_main, stop_func=timer_module.TimeoutTimer(50).istimeout)
-            scene_lib.switch_to_page(scene_manager.page_bigmap, stop_func=timer_module.TimeoutTimer(50).istimeout)
+            if origin_page == 'main':
+                scene_lib.switch_to_page(scene_manager.page_main, stop_func=timer_module.TimeoutTimer(50).istimeout)
+            elif origin_page == 'bigmap':
+                scene_lib.switch_to_page(scene_manager.page_main, stop_func=timer_module.TimeoutTimer(50).istimeout)
+                scene_lib.switch_to_page(scene_manager.page_bigmap, stop_func=timer_module.TimeoutTimer(50).istimeout)
+    
+    def get_bigmap_posi(self, is_upd=True, return_position_format: str = COORDINATE_TIANLI) -> np.ndarray:
+        self.check_bigmap_scaling()
         if is_upd:
             self._upd_bigmap()
         logger.info(f"bigmap posi: {self.convert_GIMAP_to_cvAutoTrack(self.bigmap)}")
@@ -205,10 +216,7 @@ class Map(MiniMap, BigMap, MapConverter):
         tp_type = target_teleporter.tp
         tp_region = target_teleporter.region
 
-        if not itt.get_img_existence(asset.UIBigMapScaling):
-            while not itt.appear_then_click(asset.ButtonSwitchMapArea): itt.delay(0.2)
-            while not itt.appear_then_click(asset.MapAreaCYJY): itt.delay(0.2)
-            itt.delay(1)
+        self.check_bigmap_scaling()
 
         while not itt.appear_then_click(asset.ButtonSwitchMapArea):
             itt.delay(0.2)

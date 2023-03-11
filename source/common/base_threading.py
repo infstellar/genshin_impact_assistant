@@ -7,7 +7,7 @@ class BaseThreading(threading.Thread):
     """
     基本线程类，实现了暂停线程、继续线程、终止线程。其他具体参考基本线程规范。
     """
-    def __init__(self):
+    def __init__(self, thread_name = None):
         super().__init__()
         self.pause_threading_flag = False
         self.stop_threading_flag = False
@@ -15,15 +15,17 @@ class BaseThreading(threading.Thread):
         self.while_sleep = 0.2
         self.last_err_code = ERR_NONE
         self.stop_func_list = []
+        if thread_name != None:
+            self.setName(thread_name)
 
     def pause_threading(self):
         if self.pause_threading_flag != True:
-            logger.debug("pause threading")
+            logger.debug(f"{self.name} pause threading")
             self.pause_threading_flag = True
 
     def continue_threading(self):
         if self.pause_threading_flag != False:
-            logger.debug("continue threading")
+            logger.debug(f"{self.name} continue threading")
             self.pause_threading_flag = False
 
     def stop_threading(self):

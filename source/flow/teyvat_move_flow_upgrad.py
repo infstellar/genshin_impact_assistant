@@ -269,7 +269,15 @@ class TeyvatMoveFlowController(FlowController):
     def set_target_posi(self, tp:list):
         self.flow_connector.target_posi = tp
     
-    def set_parameter(self,MODE:str = None,stop_rule:int = None,target_posi:list = None,path_list:list = None,to_next_posi_offset:float = None,special_keys_posi_offset:float = None,reaction_to_enemy:str = None):
+    def set_parameter(self,
+                      MODE:str = None,
+                      target_posi:list = None,
+                      path_list:list = None,
+                      stop_rule:int = None,
+                      
+                      to_next_posi_offset:float = None,
+                      special_keys_posi_offset:float = None,
+                      reaction_to_enemy:str = None):
         if MODE != None:
             self.flow_connector.MODE = MODE
         if stop_rule != None:

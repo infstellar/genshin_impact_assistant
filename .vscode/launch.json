@@ -60,6 +60,18 @@
                 "PYTHONPATH": "${workspaceFolder}"
             },
             "justMyCode": true
+        },
+        {
+            "name": "Python: Get Position",
+            "type": "python",
+            "console": "integratedTerminal",
+            "program":"${workspaceFolder}/source/dev_tool/get_position.py",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}"
+            },
+            "justMyCode": true
         }
         
     ]

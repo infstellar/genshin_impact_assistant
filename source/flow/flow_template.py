@@ -17,19 +17,20 @@ class FlowConnector():
         pass
 
 class FlowTemplate():
-    def __init__(self, upper:FlowConnector, flow_id:str, next_flow_id:str, flow_timeout_time:float = -1):
+    def __init__(self, upper:FlowConnector, flow_id:str, next_flow_id:str, flow_timeout_time:float = -1, flow_name=None):
         self.upper = upper
         self.flow_id = flow_id
         self.rfc = FC.INIT
         self.next_flow_id = next_flow_id
         self.flow_timeout = timer_module.TimeoutTimer(flow_timeout_time)
+        if flow_name is None:
+            self.flow_name = flow_id
         
     def _before_timeout(self):
         logger.warning(f"TIMEOUT: {self.flow_id}")
           
     def enter_flow(self):
         if self.flow_timeout.istimeout():
-            
             self._before_timeout()
             return self.next_flow_id
         if self.rfc == FC.INIT:
@@ -54,6 +55,7 @@ class FlowTemplate():
             self.rfc += 1
         else:
             self.rfc = 5
+        logger.debug(f"{self.flow_name} switch rfc to {self.rfc}")
 
     def state_init(self):
         self.rfc = FC.BEFORE
@@ -76,9 +78,11 @@ class FlowTemplate():
         
     def _set_nfid(self, fid):
         self.next_flow_id = fid
+        logger.debug(f"{self.flow_name} set next flow id to {self.next_flow_id}")
         
     def _set_rfc(self, rfc):
         self.rfc = rfc
+        logger.debug(f"{self.flow_name} set rfc to {self.rfc}")
 
 class EndFlowTemplate(FlowTemplate):
     def __init__(self, upper:FlowConnector, flow_id:str, err_code_id:int = ERR_PASS):
@@ -100,8 +104,12 @@ class EndFlowTemplate(FlowTemplate):
 
 
 class FlowController(base_threading.BaseThreading):
-    def __init__(self, flow_connector:FlowConnector, current_flow_id):
-        super().__init__()
+    def __init__(self, flow_connector:FlowConnector, current_flow_id, flow_name=None):
+        super().__init__(thread_name = flow_name)
+        if flow_name != None:
+            self.flow_name = flow_name
+        else:
+            self.flow_name=""
         self.last_err_code = ERR_NONE
         self.flow_dict = {}
         self.current_flow_id = current_flow_id
@@ -109,6 +117,7 @@ class FlowController(base_threading.BaseThreading):
         self.flow_connector = flow_connector
         self.get_while_sleep = flow_connector.get_while_sleep
         self.flow_connector.checkup_stop_func = self.checkup_stop_func
+        
     
     def start_flow(self):
         self.continue_threading()

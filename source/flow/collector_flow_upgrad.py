@@ -45,9 +45,11 @@ class CollectorFlowConnector(FlowConnector):
         self.MODE = "PATH"
         self.collection_name = ""
         self.collector_type = COLLECTION
-        self.is_combat = False
+        self.is_combat = True
         self.is_activate_pickup = False
         self.pickup_points = []
+        
+        self.pickup_points_index = 0
 
         self.puo = pickup_operator.PickupOperator()
         chara_list = combat_lib.get_chara_list()
@@ -59,6 +61,11 @@ class CollectorFlowConnector(FlowConnector):
         self.MODE = "PATH"
         self.collection_name = ""
         self.collector_type = COLLECTION
+        self.is_combat = True
+        self.is_activate_pickup = False
+        self.pickup_points = []
+        
+        self.pickup_points_index = 0
    
 
     def stop_combat(self):
@@ -75,7 +82,27 @@ class CollectorFlowConnector(FlowConnector):
         self.stop_pickup()
         self.stop_combat()
         time.sleep(2)
+    
+class CollectionCombat(FlowTemplate):
+    def __init__(self, upper: CollectorFlowConnector):
+        super().__init__(upper, flow_id=ST.COLLECTION_COMBAT, next_flow_id=ST.COLLECTION_PICKUP, flow_timeout_time=300)
+        self.upper=upper
         
+    def state_init(self):
+        return super().state_init()
+    
+    def state_before(self):
+        if combat_lib.CSDL.get_combat_state():
+            self.upper.start_combat()
+            self._next_rfc()
+        else:
+            self._set_rfc(FC.END)
+            
+    def state_in(self):
+        if combat_lib.CSDL.get_combat_state() == False:
+            self.upper.stop_combat()
+            self._next_rfc()
+
 class PickUpCollection(FlowTemplate):
     def __init__(self, upper: CollectorFlowConnector):
         self.upper = upper
@@ -87,22 +114,25 @@ class PickUpCollection(FlowTemplate):
             timeout_time = 300
         elif self.upper.collector_type == MINERAL:
             pass
-        super().__init__(upper, flow_id=ST.INIT_PICKUP_COLLECTOR, next_flow_id=ST.INIT_MOVETO_COLLECTOR, flow_timeout_time=timeout_time)
+        super().__init__(upper, flow_id=ST.COLLECTION_PICKUP, next_flow_id=ST.END_COLLECTOR, flow_timeout_time=timeout_time)
     
     def state_before(self):
-        if combat_lib.CSDL.get_combat_state() == False:
+        if len(self.upper.pickup_points) > self.upper.pickup_points_index:
+            movement.move_to_position(self.upper.pickup_points[self.upper.pickup_points_index])
+            r = self.upper.puo.pickup_recognize()
+            self.upper.pickup_points_index += 1
+            logger.debug(f"pickup point:{self.upper.pickup_points[self.upper.pickup_points_index]}, {r}")
+        else:
             self.upper.start_pickup()
             self.upper.puo.reset_err_code()
             self.flow_timeout.reset() # IMPORTANT
             self.while_sleep = 0.2
             self._next_rfc()
-        else:
-            self.upper.start_combat()
-            self.while_sleep = 0.5
     
     def state_in(self):
         if self.upper.puo.pause_threading_flag:
             self._next_rfc()
+        
         if self.IN_PICKUP_COLLECTOR_timeout.istimeout():
             logger.info(f"IN_PICKUP_COLLECTOR timeout: {self.IN_PICKUP_COLLECTOR_timeout.timeout_limit}")
             logger.info(f"collect in xxx failed.")
@@ -110,7 +140,8 @@ class PickUpCollection(FlowTemplate):
             self.upper.stop_pickup()
         if combat_lib.CSDL.get_combat_state():
             self.upper.stop_pickup()
-            self.rfc = FC.BEFORE
+            self._set_nfid(ST.COLLECTION_COMBAT)
+            self._set_rfc(FC.END)
         
         
 
@@ -127,13 +158,14 @@ class EndCollector(EndFlowTemplate):
 class CollectorFlowController(FlowController):
     def __init__(self):
         self.flow_connector=CollectorFlowConnector()
-        super().__init__(self.flow_connector, current_flow_id=ST.INIT_MOVETO_COLLECTOR)
+        super().__init__(self.flow_connector, current_flow_id=ST.COLLECTION_COMBAT, flow_name="CollectorFlowController")
         
         # self._add_sub_threading(self.flow_connector.tmf)
         self._add_sub_threading(self.flow_connector.puo)
         self._add_sub_threading(self.flow_connector.cct)
         
         # self.append_flow(MoveToCollection_FollowPath(self.flow_connector))
+        self.append_flow(CollectionCombat(self.flow_connector))
         self.append_flow(PickUpCollection(self.flow_connector))
         self.append_flow(EndCollector(self.flow_connector))
         
@@ -146,11 +178,22 @@ class CollectorFlowController(FlowController):
             is_activate_pickup =  None,
             pickup_points = None
             ):
-        pass
+        if MODE != None:
+            self.flow_connector.MODE = MODE
+        if collection_name != None:
+            self.flow_connector.collection_name = collection_name
+        if collector_type != None:
+            self.flow_connector.collector_type = collector_type
+        if is_combat != None:
+            self.flow_connector.is_combat = is_combat
+        if is_activate_pickup != None:
+            self.flow_connector.is_activate_pickup = is_activate_pickup
+        if pickup_points != None:
+            self.flow_connector.pickup_points = pickup_points
         
 
     def reset(self):
-        self.current_flow_id = ST.INIT_MOVETO_COLLECTOR
+        self.current_flow_id = ST.COLLECTION_COMBAT
         return super().reset()
     
 
