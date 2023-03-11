@@ -42,7 +42,10 @@ def points_angle(p1, p2, coordinate=NORMAL):
         ty = -ty
     # x=-x
     # tx=-tx
+    
     k = (ty - y) / (tx - x)
+    if math.isnan(k):
+        k = 0
     degree = math.degrees(math.atan(k))
     if degree < 0:
         degree += 180

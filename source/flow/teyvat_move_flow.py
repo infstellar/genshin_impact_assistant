@@ -83,7 +83,7 @@ class TeyvatMoveFlow(BaseThreading):
     def align_position(self, tx, ty):
         x, y = tracker.get_position()
         angle = get_target_relative_angle(x, y, tx, ty)
-        movement.view_to_angle_teyvat(angle, self.checkup_stop_func)
+        movement.change_view_to_angle(angle, self.checkup_stop_func)
         # print(x, y, angle)
     
     def set_stop_rule(self, mode=0):

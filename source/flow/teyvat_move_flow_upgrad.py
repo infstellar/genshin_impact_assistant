@@ -27,7 +27,7 @@ class TeyvatMoveFlowConnector(FlowConnector):
         self.reaction_to_enemy = 'RUN'
         self.MODE = "PATH"
         self.path_dict = {}
-        self.to_next_posi_offset = 1.0*3 # For precision
+        self.to_next_posi_offset = 1.0*6 # For precision
         self.special_keys_posi_offset = 1.5
         self.is_tp = False
 
@@ -212,8 +212,13 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
     
     def state_in(self):
         target_posi = self.curr_path[self.curr_path_index]["position"]
+        special_key = self.curr_path[self.curr_path_index]["special_key"]
         curr_posi = tracker.get_position()
-        if euclidean_distance(target_posi, curr_posi) <= self.upper.to_next_posi_offset:
+        if special_key is None:
+            offset = self.upper.to_next_posi_offset
+        else:
+            offset = self.upper.special_keys_posi_offset
+        if euclidean_distance(target_posi, curr_posi) <= offset:
             if len(self.curr_path) - 1 > self.curr_path_index:
                 self.curr_path_index += 1
                 logger.debug(f"index {self.curr_path_index} posi {self.curr_path[self.curr_path_index]}")
@@ -223,10 +228,13 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
             else:
                 logger.info("path end")
                 self._next_rfc()
-        if abs(movement.calculate_posi_cvn(target_posi)) >= 5:
+        print(euclidean_distance(target_posi, curr_posi))
+        if abs(movement.calculate_delta_angle(tracker.get_rotation(),movement.calculate_posi2degree(target_posi))) >= 10:
             itt.key_up('w')
             movement.change_view_to_posi(target_posi, stop_func = self.upper.checkup_stop_func)
             itt.key_down('w')
+        else:
+            movement.change_view_to_posi(target_posi, stop_func = self.upper.checkup_stop_func)
         
             
     def state_after(self):

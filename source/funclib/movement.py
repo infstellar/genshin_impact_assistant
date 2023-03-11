@@ -40,18 +40,21 @@ def move(direction, distance=1):
             itt.delay(0.1 * distance)
             itt.key_up('s')
 
+def angle2movex(angle):
+    cvn = maxmin(angle*10,200,-200) # 10: magic num, test from test246.py
+    return cvn
 
-def cview(angle=10, mode=HORIZONTAL):  # left<0,right>0
+def cview(angle=10, mode=HORIZONTAL, rate=0.9):  # left<0,right>0
     # logger.debug(f"cview: angle: {angle} mode: {mode}")
     if IS_DEVICE_PC:
-        angle = (2 * angle)
-        if abs(angle) < 1:
-            if angle < 0:
-                angle = -1
+        cvn = angle2movex(angle)*rate
+        if abs(cvn) < 1:
+            if cvn < 0:
+                cvn = -1
             else:
-                angle = 1
+                cvn = 1
         if mode == HORIZONTAL:
-            itt.move_to(int(angle), 0, relative=True)
+            itt.move_to(int(cvn), 0, relative=True)
         else:
             itt.move_to(0, int(angle), relative=True)
 
@@ -60,17 +63,38 @@ def move_view_p(x, y):
     # x,y=point
     itt.move_to(x, y)
 
-
 def reset_view():
     if IS_DEVICE_PC:
         itt.middle_click()
         time.sleep(1)
 
-def angle_to_movex(cangle, tangle):
+def calculate_delta_angle(cangle,tangle):
     dangle = cangle - tangle
-    if abs(dangle)>180:
+    if dangle>180:
         dangle = -(360-dangle)
+    elif dangle<-180:
+        dangle = (360+dangle)
     return dangle
+
+def change_view_to_angle(tangle, stop_func=lambda:False, maxloop=20, deltanum=5):
+    i = 0
+    while 1:
+        cangle = tracker.get_rotation()
+        dangle = calculate_delta_angle(cangle,tangle)
+        if abs(dangle) < deltanum:
+            break
+        rate = min((0.4/30)*abs(dangle)+0.4,0.8)
+        
+        # print(cangle, dangle, rate)
+        cview(dangle, rate=rate)
+        time.sleep(0.05)
+        if i > maxloop:
+            break
+        if stop_func():
+            break
+        i += 1
+        if i > 1:
+            logger.trace(f"cangle {cangle} dangle {dangle} rate {rate}")
 
 def view_to_angle_domain(angle, stop_func, deltanum=0.65, maxloop=100, corrected_num=CORRECT_DEGREE):
     if IS_DEVICE_PC:
@@ -93,59 +117,42 @@ def view_to_angle_domain(angle, stop_func, deltanum=0.65, maxloop=100, corrected
             logger.debug('last degree: ' + str(degree))
 
 
-def view_to_angle_teyvat(angle, stop_func, deltanum=1, maxloop=30, corrected_num=CORRECT_DEGREE):
-    if IS_DEVICE_PC:
-        '''加一个场景检测'''
-        i = 0
+# def view_to_angle_teyvat(angle, stop_func, deltanum=1, maxloop=30, corrected_num=CORRECT_DEGREE):
+#     if IS_DEVICE_PC:
+#         '''加一个场景检测'''
+#         i = 0
         
-        if not abs(degree - (angle - corrected_num)) < deltanum:
-            logger.debug(f"view_to_angle_teyvat: angle: {angle} deltanum: {deltanum} maxloop: {maxloop}")
-        while 1:
-            degree = tracker.get_rotation()
-            cview((degree - (angle - corrected_num)) / 2)
-            time.sleep(0.05)
-            if i > maxloop:
-                break
-            if abs(degree - (angle - corrected_num)) < deltanum:
-                break
-            if stop_func():
-                break
-            i += 1
-        if i > 1:
-            logger.debug('last degree: ' + str(degree))
+#         if not abs(degree - (angle - corrected_num)) < deltanum:
+#             logger.debug(f"view_to_angle_teyvat: angle: {angle} deltanum: {deltanum} maxloop: {maxloop}")
+#         while 1:
+#             degree = tracker.get_rotation()
+#             change_view_to_angle(degree)
+#             time.sleep(0.05)
+#             if i > maxloop:
+#                 break
+#             if abs(degree - (angle - corrected_num)) < deltanum:
+#                 break
+#             if stop_func():
+#                 break
+#             i += 1
+#         if i > 1:
+#             logger.debug('last degree: ' + str(degree))
 
-def calculate_posi_cvn(pl):
+def calculate_posi2degree(pl):
     tx, ty = tracker.get_position()
-    td = tracker.get_rotation()
     degree = generic_lib.points_angle([tx, ty], pl, coordinate=generic_lib.NEGATIVE_Y)
-    ddegree = angle_to_movex(td, degree)
-    if abs(ddegree)<1:
+    if abs(degree)<1:
         return 0
-    cvn = maxmin( (ddegree/abs(ddegree)) * abs(ddegree)**1.5/3, 150, -150)
-    return cvn
+    if math.isnan(degree):
+        print({"NAN"})
+        degree = 0
+    return degree
     
 def change_view_to_posi(pl, stop_func):
     if IS_DEVICE_PC:
-        td=0
-        degree=100
-        i = 0
-        
-        if abs(calculate_posi_cvn(pl))>10:
-            logger.debug(f"change_view_to_posi: pl: {pl}")
-        
-        while 1:
-            '''加一个场景检测'''
-            time.sleep(0.05)
-            cvn = calculate_posi_cvn(pl)
-            print(cvn)
-            cview(cvn)
-            i+=1
-            if stop_func():
-                break
-            if i>=80:
-                break
-            if abs(cvn)<=10:
-                break
+        logger.debug(f"change_view_to_posi: pl: {pl}")
+        degree = calculate_posi2degree(pl)
+        change_view_to_angle(degree)
 
 def move_to_position(posi, offset=5, stop_func=lambda:False, delay=0.1):
     itt.key_down('w')

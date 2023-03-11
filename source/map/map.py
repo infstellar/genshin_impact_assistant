@@ -70,6 +70,7 @@ class Map(MiniMap, BigMap, MapConverter):
             scene_lib.switch_to_page(scene_manager.page_bigmap, stop_func=timer_module.TimeoutTimer(50).istimeout)
             self.init_position(tuple(map(int, list(self.get_bigmap_posi(return_position_format=COORDINATE_GIMAP)))))
             scene_lib.switch_to_page(scene_manager.page_main, stop_func=timer_module.TimeoutTimer(50).istimeout)
+            self.small_map_init_flag=True
 
     def while_until_no_excessive_error(self):
         self.reinit_smallmap()
