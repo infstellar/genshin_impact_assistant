@@ -536,22 +536,22 @@ class InteractionBGD:
                 logger.debug('delay: ' + str(x) + ' |function name: ' + upper_func_name + ' |comment: ' + comment)
             time.sleep(x)
 
-    @before_operation(print_log = False)
-    def get_mouse_point(self):
-        """获得当前鼠标在窗口内的位置
-
-        Returns:
-            (x,y): 坐标
-        """
+    # @before_operation(print_log = False)
+    # def DONTUSEget_mouse_pointDONTUSE(self):
+    #     """获得当前鼠标在窗口内的位置 不要用！
         
-        p = win32api.GetCursorPos()
-        # print(p[0],p[1])
-        #  GetWindowRect 获得整个窗口的范围矩形，窗口的边框、标题栏、滚动条及菜单等都在这个矩形内 
-        x, y, w, h = win32gui.GetWindowRect(static_lib.HANDLE)
-        # 鼠标坐标减去指定窗口坐标为鼠标在窗口中的坐标值
-        pos_x = p[0] - x
-        pos_y = p[1] - y
-        return pos_x, pos_y
+    #     Returns:
+    #         (x,y): 坐标
+    #     """
+        
+    #     p = win32api.GetCursorPos()
+    #     # print(p[0],p[1])
+    #     #  GetWindowRect 获得整个窗口的范围矩形，窗口的边框、标题栏、滚动条及菜单等都在这个矩形内 
+    #     x, y, w, h = win32gui.GetWindowRect(static_lib.HANDLE)
+    #     # 鼠标坐标减去指定窗口坐标为鼠标在窗口中的坐标值
+    #     pos_x = p[0] - x
+    #     pos_y = p[1] - y
+    #     return pos_x, pos_y
 
     @before_operation()
     def left_click(self):

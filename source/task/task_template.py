@@ -23,7 +23,7 @@ class TaskTemplate(BaseThreading):
             )
         return statement
     
-    def loop(self):
+    def exec_task(self):
         pass
 
     def run(self) -> None:
@@ -31,7 +31,7 @@ class TaskTemplate(BaseThreading):
         while 1:
             time.sleep(self.while_sleep)
             if self.stop_threading_flag:
-                return 0
+                return
 
             if self.pause_threading_flag:
                 if self.working_flag:
@@ -47,7 +47,8 @@ class TaskTemplate(BaseThreading):
                 continue
             '''write your code below'''
             
-            self.loop()
+            self.exec_task()
+            
 
     def end_task(self):
         self.stop_threading()

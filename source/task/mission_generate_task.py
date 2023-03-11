@@ -118,7 +118,7 @@ class MissionGenerateTask(TaskTemplate):
         curr_posi = genshin_map.get_position()
         self.CFCF_content[""].append()
 
-    def loop(self):
+    def exec_task(self):
         pass
     
 

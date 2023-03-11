@@ -125,12 +125,12 @@ class AimOperator(BaseThreading):
                 self.enemy_flag = True
 
         for point in ret_points:
-            mx, my = self.itt.get_mouse_point()
+            mx, my = SCREEN_CENTER_X,SCREEN_CENTER_Y
             points_length.append((point[0] - mx) ** 2 + (point[1] - my) ** 2)
 
         closest_point = ret_points[points_length.index(min(points_length))] # 获得距离鼠标坐标最近的一个坐标
         px, py = closest_point
-        mx, my = self.itt.get_mouse_point()
+        mx, my = SCREEN_CENTER_X,SCREEN_CENTER_Y
         px = (px - mx) / (2.4*self.corr_rate)
         py = (py - my) / (2*self.corr_rate) + 35 # 获得鼠标坐标偏移量
         # print(px,py)

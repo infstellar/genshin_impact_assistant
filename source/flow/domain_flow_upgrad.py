@@ -83,7 +83,7 @@ class MoveToChallenge(FlowTemplate):
         else:
             movement.move(movement.AHEAD, 4)
 
-        if generic_lib.f_recognition(itt):
+        if generic_lib.f_recognition():
             itt.key_up('w')
             self._next_rfc()
 
@@ -142,8 +142,7 @@ class FindingTree(FlowTemplate):
         movement.view_to_angle_domain(-90, self.upper.checkup_stop_func)
         t_posi = self.get_tree_posi()
         if t_posi:
-            tx, ty = itt.get_mouse_point()
-            dx = int(t_posi[0] - tx)
+            dx = int(t_posi[0] - SCREEN_CENTER_X)
             logger.debug(dx)
 
             if dx >= 0:

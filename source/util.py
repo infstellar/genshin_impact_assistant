@@ -30,7 +30,8 @@ ANGLE_NEGATIVE_Y = 1
 ANGLE_NEGATIVE_X = 2
 ANGLE_NEGATIVE_XY = 3
 PROCESS_NAME = ["YuanShen.exe", "GenshinImpact.exe"]
-
+SCREEN_CENTER_X = 1920/2
+SCREEN_CENTER_Y = 1080/2
 
 # configure paths
 ROOT_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

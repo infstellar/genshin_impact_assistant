@@ -25,6 +25,9 @@ class TaskManager(BaseThreading):
     def clear_task_list(self):
         self.task_list = []
 
+    def stop_tasklist(self):
+        self.start_tasklist_flag = False
+    
     def get_task_statement(self):
         if not self.start_tasklist_flag:
             return t2t("No Task Running")
@@ -45,6 +48,12 @@ class TaskManager(BaseThreading):
 
     def start_stop_task(self, task_name):
         if not self.reg_task_flag:
+            
+            if self.curr_task.stop_threading_flag:
+                logger.info(t2t("End Task"))
+                self.curr_task.end_task()
+                self.reg_task_flag = not self.reg_task_flag
+            
             if task_name == COLLECTION_PATH_TASK:
                 from source.task.collection_path_task import CollectionPathTask
                 self.curr_task = CollectionPathTask()
@@ -58,7 +67,6 @@ class TaskManager(BaseThreading):
                 self.curr_task.start()
                 self.reg_task_flag = True
                 logger.info(t2t("Task DomainTask Start."))
-
             elif task_name == 'CollectorTask':
                 pass
         else:
@@ -98,13 +106,17 @@ class TaskManager(BaseThreading):
                             break
                         self.start_stop_task(i)
                         while 1:
-                            if self.curr_task.stop_threading_flag:
+                            if not self.reg_task_flag:
                                 break
                             if self.checkup_stop_func():
                                 break
                             if self.start_tasklist_flag == False:
                                 break
                             time.sleep(1)
+                        logger.info(f"task {i} end.")
+                    logger.info(f"all task end.")
+                    self.stop_tasklist()
+                    self.pause_threading()
 
 if __name__ == '__main__':
     tm = TaskManager()

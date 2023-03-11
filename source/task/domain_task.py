@@ -90,6 +90,7 @@ class DomainTask(TaskTemplate):
                 if r:
                     break
             # exit all threads
+            self.pause_threading()
             self.stop_threading()
             time.sleep(10)
 
@@ -98,12 +99,14 @@ class DomainTask(TaskTemplate):
             self.flow_mode = TI.DT_IN_DOMAIN
         elif itt.get_img_existence(asset.ui_main_win):
             self.flow_mode = TI.DT_MOVE_TO_DOMAIN
+        else:
+            logger.info(t2t("Unknown UI page"))
 
 
-    def loop(self):
+    def exec_task(self):
         if self.flow_mode == TI.DT_INIT:
             self._check_state()
-            self.flow_mode = TI.DT_MOVE_TO_DOMAIN
+            # self.flow_mode = TI.DT_MOVE_TO_DOMAIN
 
         if self.flow_mode == TI.DT_MOVE_TO_DOMAIN:
             self.TMFCF.start_flow()

@@ -376,8 +376,7 @@ class DomainFlow(BaseThreading):
         movement.view_to_angle_domain(-90, self.checkup_stop_func)
         t_posi = self.get_tree_posi()
         if t_posi:
-            tx, ty = self.itt.get_mouse_point()
-            dx = int(t_posi[0] - tx)
+            dx = int(t_posi[0] - SCREEN_CENTER_X)
             logger.debug(dx)
 
             if dx >= 0:

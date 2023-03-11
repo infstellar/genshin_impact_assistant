@@ -14,6 +14,7 @@ from source.webio import manager
 from source.webio.page_manager import Page
 from common import flow_state
 from source.funclib import collector_lib
+from source.common import timer_module
 
 
 
@@ -26,6 +27,7 @@ class MainPage(Page):
         self.log_list = []
         self.log_list_lock = threading.Lock()
         self.ui_statement = -1
+        self.refresh_flow_info_timer = timer_module.Timer()
 
     # todo:多语言支持
 
@@ -65,14 +67,16 @@ class MainPage(Page):
             self.log_list.clear()
             self.log_list_lock.release()
 
-            if listening.TASK_MANAGER.get_task_statement() != self.ui_statement:
-                self.ui_statement = listening.TASK_MANAGER.get_task_statement()
-                output.clear(scope="StateArea")
-                if isinstance(self.ui_statement, list):
-                    for i in self.ui_statement:
-                        output.put_text(f'{i["name"]}: {i["statement"]}: {i["rfc"]}', scope="StateArea")
-                elif isinstance(self.ui_statement, str):
-                    output.put_text(f'{self.ui_statement}', scope="StateArea")
+            if self.refresh_flow_info_timer.get_diff_time() >= 0.2:
+                self.refresh_flow_info_timer.reset()
+                if listening.TASK_MANAGER.get_task_statement() != self.ui_statement:
+                    self.ui_statement = listening.TASK_MANAGER.get_task_statement()
+                    output.clear(scope="StateArea")
+                    if isinstance(self.ui_statement, list):
+                        for i in self.ui_statement:
+                            output.put_text(f'{i["name"]}: {i["statement"]}: {i["rfc"]}', scope="StateArea")
+                    elif isinstance(self.ui_statement, str):
+                        output.put_text(f'{self.ui_statement}', scope="StateArea")
 
             time.sleep(0.1)
     

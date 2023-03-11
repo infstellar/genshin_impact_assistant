@@ -232,12 +232,12 @@ class PickupOperator(BaseThreading):
                 self.itt.key_down('w')
 
         for point in ret_points:
-            mx, my = self.itt.get_mouse_point()
+            mx, my = SCREEN_CENTER_X,SCREEN_CENTER_Y
             points_length.append((point[0] - mx) ** 2 + (point[1] - my) ** 2)
 
         closest_point = ret_points[points_length.index(min(points_length))]
         px, py = closest_point
-        mx, my = self.itt.get_mouse_point()
+        mx, my = SCREEN_CENTER_X,SCREEN_CENTER_Y
         px = (px - mx) / 1.8 + 35
         py = (py - my) / 2 + 40
         logger.debug(f"auto_pickup: px:{px} py:{py}")

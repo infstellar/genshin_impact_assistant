@@ -1,6 +1,6 @@
+import keyboard
 from source.util import *
 from source.interaction.interaction_core import itt
-itt = itt
 from source.common.base_threading import BaseThreading
 from source.common import static_lib
 from common.timer_module import Timer
@@ -16,7 +16,6 @@ class GenericEvent(BaseThreading):
         self.w_down_timer = Timer()
         self.w_down_flag = False
         self.setName("GenericEvent")
-        self.itt_mode = load_json("config.json", CONFIG_PATH_SETTING)["interaction_mode"]
         self.while_sleep = 2
             
     def run(self) -> None:
@@ -39,7 +38,7 @@ class GenericEvent(BaseThreading):
                 self.pause_threading_flag = True
                 continue
             '''write your code below'''
-            if self.itt_mode == "Normal":
+            if INTERACTION_MODE == INTERACTION_DESKTOP_BACKGROUND or INTERACTION_DESKTOP:
                 if static_lib.W_KEYDOWN == True:
                     if self.w_down_flag == False:
                         self.w_down_flag = True
@@ -53,7 +52,7 @@ class GenericEvent(BaseThreading):
                         self.w_down_flag = False
                         itt.key_up('w')
             
-            if self.itt_mode == 'Dm':
+            if INTERACTION_MODE == INTERACTION_DESKTOP_BACKGROUND:
                 win_name = get_active_window_process_name()
                 if win_name in PROCESS_NAME:
                     unbind()
@@ -65,7 +64,9 @@ class GenericEvent(BaseThreading):
                         time.sleep(5 - (time.time()%5))
                     bind()
 
-
+if INTERACTION_MODE == INTERACTION_DESKTOP_BACKGROUND:
+    keyboard.add_hotkey("ctrl+alt+9", unbind)
+    keyboard.add_hotkey("ctrl+alt+shift+9", bind)
 logger.debug("start GenericEventThread")
 generic_event = GenericEvent()
 generic_event.setDaemon(True)
