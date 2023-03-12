@@ -60,7 +60,7 @@ class TacticOperator(BaseThreading):
     
     def run(self):
         while 1:
-            time.sleep(self.while_sleep)
+            # time.sleep(self.while_sleep)
             if self.stop_threading_flag:
                 return 0
 
@@ -357,7 +357,7 @@ class TacticOperator(BaseThreading):
         # fire 
         
         orhsv = Q_SKILL_COLOR[self.character.vision]
-        orhsv = Q_SKILL_COLOR['Hydro']
+        # orhsv = Q_SKILL_COLOR['Hydro']
         hsv_lower = np.array([int(max(0,orhsv[0]*180-HUE_DELTA)), int(max(orhsv[1]*255-60, 50)), 200])
         hsv_upper = np.array([int(min(179,orhsv[0]*180+HUE_DELTA)), int(min(orhsv[1]*255+60, 255)), 255])
         hsv = cv2.cvtColor(res1.copy(), cv2.COLOR_BGR2HSV)

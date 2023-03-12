@@ -46,6 +46,7 @@ class DomainTask(TaskTemplate):
             if not f_recognition():
                 break
         while not itt.get_img_existence(asset.solo_challenge): itt.delay("animation")
+        itt.delay(1,comment="genshin animation")
         from source.api.pdocr_complete import ocr
         cap_area = asset.switch_domain_area.position
         p1 = ocr.get_text_position(itt.capture(jpgmode=0, posi=cap_area), self.domain_stage_name, cap_posi_leftup=cap_area[:2], text_process = self._domain_text_process)

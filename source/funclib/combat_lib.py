@@ -173,7 +173,7 @@ def get_character_busy(itt: interaction_core.InteractionBGD, stop_func, print_lo
         return False
     else:
         if print_log:
-            logger.debug(f"waiting: character busy: t1{t1} t2{t2}")
+            logger.trace(f"waiting: character busy: t1{t1} t2{t2}")
         return True
 
 def chara_waiting(itt:interaction_core.InteractionBGD, stop_func, mode=0, max_times = 1000):
