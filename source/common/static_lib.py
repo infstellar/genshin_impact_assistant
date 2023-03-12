@@ -1,8 +1,7 @@
 from source.util import *
 
-global W_KEYDOWN, cvAutoTrackerLoop, HANDLE
+global W_KEYDOWN, HANDLE
 W_KEYDOWN = False
-cvAutoTrackerLoop = None
 
 if config_json["capture_mode"] == "compatibility":
     d3d_capture = None

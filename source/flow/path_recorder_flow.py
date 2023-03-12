@@ -170,7 +170,7 @@ class PathRecorderCore(FlowTemplate):
         if min_dist >= self.upper.min_distance:
             self._add_posi_to_dict(list(curr_posi))
 
-        if abs(movement.calculate_delta_angle(curr_direction, self.upper.last_direction)) >= 3:
+        if abs(movement.calculate_delta_angle(curr_direction, self.upper.last_direction)) >= 3.5:
             self._add_break_position(curr_posi)
             self.upper.last_direction = curr_direction
         

@@ -98,7 +98,7 @@ class PickupOperator(BaseThreading):
                 ret = self.pickup_recognize()
                 if not ret:
                     break
-                self.itt.delay(1, comment="Waiting for Genshin picking animation")
+                self.itt.delay(0.5, comment="Waiting for Genshin picking animation")
             
             if self.search_mode == SEARCH_MODE_FINDING:
                 

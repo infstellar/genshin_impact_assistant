@@ -98,6 +98,7 @@ class MainPage(Page):
         output.put_row([  # 横列
             output.put_column([  # 左竖列
                 output.put_markdown('## '+t2t("Task List")),
+                output.put_markdown(t2t("Can only be activated from the button")),
 
                 pin.put_checkbox(name="task_list", options=[
                     {
@@ -110,7 +111,7 @@ class MainPage(Page):
                 
                 output.put_markdown(t2t('## Statement')),
 
-                output.put_row([output.put_text(t2t('当前状态')), None, output.put_scope('StateArea')],size='40% 10px 60%'),
+                output.put_row([output.put_text(t2t('任务状态')), None, output.put_scope('StateArea')],size='40% 10px 60%'),
 
                 output.put_markdown(t2t('## Mission')),  # 左竖列标题
 
@@ -120,7 +121,7 @@ class MainPage(Page):
                                ),
                 
                 output.put_markdown(t2t('## Function')),  # 左竖列标题
-
+                output.put_markdown(t2t("Can only be activated from the hotkey \'[\'")),
                 output.put_row([  # FlowMode
                     output.put_text(t2t('FlowMode')),
                     pin.put_select(('FlowMode'), [

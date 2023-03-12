@@ -2,6 +2,7 @@ from source.util import *
 from source.flow import collector_flow_upgrad, teyvat_move_flow_upgrad
 from source.controller import combat_loop
 from source.common.base_threading import BaseThreading
+from source.operator.pickup_operator import PickupOperator
 
 class MissionExecutor(BaseThreading):
     def __init__(self):
@@ -10,6 +11,8 @@ class MissionExecutor(BaseThreading):
         self._add_sub_threading(self.CFCF)
         self.TMCF = teyvat_move_flow_upgrad.TeyvatMoveFlowController()
         self._add_sub_threading(self.TMCF)
+        self.PUO = PickupOperator()
+        self._add_sub_threading(self.PUO)
 
     def get_path_file(self, path_file_name:str):
         return load_json(path_file_name+".json","assets\\TeyvatMovePath")
@@ -47,6 +50,12 @@ class MissionExecutor(BaseThreading):
             time.sleep(0.2)
             if self.CFCF.get_working_statement() == False:
                 break
+    
+    def start_pickup(self):
+        self.PUO.continue_threading()
+    
+    def stop_pickup(self):
+        self.PUO.pause_threading()
             
     def exec_mission(self):
         pass

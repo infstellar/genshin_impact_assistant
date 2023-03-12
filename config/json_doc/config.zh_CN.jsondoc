@@ -91,5 +91,12 @@
   "auto_move": "自动移视角",
   "fps": "识别频率 默认值：20",
   "max_number_of_enemy_loops": "最大索敌次数 推荐值：130~160；默认值：150",
-  "reset_time": "索敌失败后冷却时间"
+  "reset_time": "索敌失败后冷却时间",
+  "domain_stage_name":{
+    "doc":"秘境关卡名",
+    "annotation":"必须包含等级，等级必须为大写字母I。"
+  },
+  "domain_name":{
+    "doc":"秘境名"
+  }
 }

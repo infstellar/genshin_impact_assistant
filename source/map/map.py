@@ -38,16 +38,6 @@ class Map(MiniMap, BigMap, MapConverter):
         self.smallmap_upd_timer = timer_module.Timer(2)
         self.small_map_init_flag = False
 
-    # @cached_property
-    # def cvAutoTrackerLoop(self):
-    #     logger.debug("import cvAutoTrack")
-    #     from source.api import cvAutoTrack
-    #     loop = cvAutoTrack.AutoTrackerLoop()
-    #     loop.setDaemon(True)
-    #     loop.start()
-    #     time.sleep(1)
-    #     return loop
-
     def _upd_smallmap(self):
         if itt.get_img_existence(asset.ui_main_win, is_log=False):
             if not self.small_map_init_flag:
@@ -287,5 +277,5 @@ if __name__ == '__main__':
     #                       tp_type=["Domain"])  # tp to *染之庭
     while 1:
         time.sleep(0.05)
-        print(genshin_map.get_rotation())
+        print(genshin_map.get_direction())
     
