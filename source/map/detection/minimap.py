@@ -179,7 +179,7 @@ class MiniMap(MiniMapResource):
             self.update_position(image)
 
         # Get current minimap
-        scale = self._position_scale_dict[self.scene] * self.POSITION_SEARCH_SCALE
+        scale = self.POSITION_SCALE_DICT[self.scene] * self.POSITION_SEARCH_SCALE
         minimap = self._get_minimap(image, radius=self.MINIMAP_RADIUS)
         minimap = rgb2luma(minimap)
 
