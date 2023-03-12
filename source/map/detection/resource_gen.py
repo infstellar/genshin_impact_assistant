@@ -129,8 +129,8 @@ class MiniMapResourceGenerate(MiniMapConst):
         return image
 
     @cached_property
-    def GICityMask_05x(self):
-        # This is how GIMAP_luma_05x_ps.png was generated
+    def GICityOuter_05x(self):
+        # This is how GICityOuter_05x.png was generated
         # GICityMask.png is in white background and has city area manually drawn in black
 
         image = self.GICityMask
@@ -147,7 +147,26 @@ class MiniMapResourceGenerate(MiniMapConst):
         kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (local_size, local_size))
         image = cv2.dilate(image, kernel)
 
-        self.save_image(image, 'GICityMask_05x.png')
+        self.save_image(image, 'GICityOuter_05x.png')
+        return image
+
+    @cached_property
+    def GICityInner_05x(self):
+        # This is how GICityInner_05x.png was generated
+        # GICityMask.png is in white background and has city area manually drawn in black
+
+        image = self.GICityMask
+        image = ~cv2.inRange(image, 0, 235)
+        image = cv2.resize(image, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_NEAREST)
+
+        # Inner pad 10
+        local_size = 10
+
+        local_size = int(local_size) * 2 + 1
+        kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (local_size, local_size))
+        image = cv2.erode(image, kernel)
+
+        self.save_image(image, 'GICityInner_05x.png')
         return image
 
     @cached_property
@@ -170,7 +189,8 @@ class MiniMapResourceGenerate(MiniMapConst):
         _ = self.GIReachableMask_0125x_pad125
         _ = self.ArrowRotateMap
         _ = self.ArrowRotateMapAll
-        _ = self.GICityMask_05x
+        _ = self.GICityOuter_05x
+        _ = self.GICityInner_05x
 
 
 if __name__ == '__main__':

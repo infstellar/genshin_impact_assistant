@@ -68,9 +68,20 @@ class MiniMap(MiniMapResource):
 
     @property
     def _position_scale_dict(self) -> t.Dict[str, float]:
+        """
+        Map:
+        outer border     inner border
+             v                v
+        wild |   transition   | city
+             |      area      |
+
+        Scene to predict:
+        wild |   wild + city  | city
+        """
         dic = {}
-        dic['wild'] = self.POSITION_SCALE_DICT['wild']
-        if self._position_in_GICityMask(self.position):
+        if not self._position_in_GICityInner(self.position):
+            dic['wild'] = self.POSITION_SCALE_DICT['wild']
+        if self._position_in_GICityOuter(self.position):
             dic['city'] = self.POSITION_SCALE_DICT['city']
         return dic
 
@@ -118,7 +129,7 @@ class MiniMap(MiniMapResource):
 
         image = color_similarity_2d(image, color=(0, 229, 255))
         try:
-            area = area_pad(get_bbox(image, threshold=168), pad=-1)
+            area = area_pad(get_bbox(image, threshold=128), pad=-1)
         except IndexError:
             # IndexError: index 0 is out of bounds for axis 0 with size 0
             logger.warning('No direction arrow on minimap')
@@ -138,7 +149,7 @@ class MiniMap(MiniMapResource):
         # Row on ArrowRotateMapAll
         row = int(degree // 8) + 45
         # Calculate +-1 rows to get result with a precision of 1
-        row = (row - 1, row + 2)
+        row = (row - 2, row + 3)
         # Convert to ArrowRotateMapAll and to be 5px larger
         row = (to_map(row[0]) - 5, to_map(row[1]) + 5)
 
@@ -286,16 +297,20 @@ class MiniMap(MiniMapResource):
         self.degree = np.argmax(result) / (d * scale) * 2 * np.pi + np.pi / 4
         degree = np.argmax(result) / (d * scale) * 360 + 135
         degree = int(degree % 360)
+        self.rotation = degree
+
+        # Calculate confidence
+        self.rotation_confidence = round(peak_confidence(result), 3)
+
         # Convert
-        if degree >180:
-            degree = 360-degree
+        if degree > 180:
+            degree = 360 - degree
         else:
             degree = -degree
         self.rotation = degree
 
         # Calculate confidence
         self.rotation_confidence = round(peak_confidence(result), 3)
-        
         return degree
 
     def update_rotation(self, image, layer=MapConverter.LAYER_Teyvat, update_position=True):

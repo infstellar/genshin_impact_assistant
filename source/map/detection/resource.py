@@ -38,8 +38,8 @@ class MiniMapResource(MiniMapConst):
         return image
 
     @cached_property
-    def GICityMask_dict(self):
-        file = gimap.get_file('GICityMask_05x.png')
+    def GICityOuter_dict(self):
+        file = gimap.get_file('GICityOuter_05x.png')
         image = load_image(file)
 
         # Split image to reduce memory usage
@@ -52,9 +52,34 @@ class MiniMapResource(MiniMapConst):
             out[area] = crop(image, area=area)
         return out
 
-    def _position_in_GICityMask(self, position) -> bool:
+    def _position_in_GICityOuter(self, position) -> bool:
         position = (np.array(position) * self.POSITION_SEARCH_SCALE).astype(np.int64)
-        for area, image in self.GICityMask_dict.items():
+        for area, image in self.GICityOuter_dict.items():
+            if point_in_area(position, area, threshold=0):
+                x, y = position - area[:2]
+                info = image[y, x]
+                return info > 0
+
+        return False
+
+    @cached_property
+    def GICityInner_dict(self):
+        file = gimap.get_file('GICityInner_05x.png')
+        image = load_image(file)
+
+        # Split image to reduce memory usage
+        out = {}
+        image = cv2.multiply(image, 1 / 255)
+        contours, _ = cv2.findContours(image, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+        for i, contour in enumerate(contours):
+            x, y, w, h = cv2.boundingRect(contour)
+            area = (x, y, x + w, y + h)
+            out[area] = crop(image, area=area)
+        return out
+
+    def _position_in_GICityInner(self, position) -> bool:
+        position = (np.array(position) * self.POSITION_SEARCH_SCALE).astype(np.int64)
+        for area, image in self.GICityInner_dict.items():
             if point_in_area(position, area, threshold=0):
                 x, y = position - area[:2]
                 info = image[y, x]
