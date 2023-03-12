@@ -1,4 +1,3 @@
-import math
 import typing as t
 
 from cached_property import cached_property
@@ -119,7 +118,7 @@ class MiniMap(MiniMapResource):
 
         image = color_similarity_2d(image, color=(0, 229, 255))
         try:
-            area = area_pad(get_bbox(image, threshold=15), pad=-1)
+            area = area_pad(get_bbox(image, threshold=168), pad=-1)
         except IndexError:
             # IndexError: index 0 is out of bounds for axis 0 with size 0
             logger.warning('No direction arrow on minimap')
@@ -128,6 +127,7 @@ class MiniMap(MiniMapResource):
         scale = self.DIRECTION_ROTATION_SCALE * self.DIRECTION_SEARCH_SCALE
         mapping = cv2.resize(image, None, fx=scale, fy=scale, interpolation=cv2.INTER_NEAREST)
         result = cv2.matchTemplate(self.ArrowRotateMap, mapping, cv2.TM_CCOEFF_NORMED)
+        result = cv2.subtract(result, cv2.GaussianBlur(result, (5, 5), 0))
         _, sim, _, loca = cv2.minMaxLoc(result)
         loca = np.array(loca) / self.DIRECTION_SEARCH_SCALE // (self.DIRECTION_RADIUS * 2)
         degree = int((loca[0] + loca[1] * 8) * 5)
@@ -144,6 +144,7 @@ class MiniMap(MiniMapResource):
 
         precise_map = self.ArrowRotateMapAll[row[0]:row[1], :]
         result = cv2.matchTemplate(precise_map, mapping, cv2.TM_CCOEFF_NORMED)
+        result = cv2.subtract(result, cv2.GaussianBlur(result, (5, 5), 0))
 
         def to_map(x):
             return int((x * self.DIRECTION_RADIUS * 2) * self.POSITION_SEARCH_SCALE)
@@ -377,13 +378,11 @@ class MiniMap(MiniMapResource):
 #     """
 #     MiniMap 模拟器监听测试
 #     """
-#     from source.device import Device
-#
-#     device = Device('127.0.0.1:7555')
+#     from source.device.genshin.genshin import Genshin
+#     device = Genshin('127.0.0.1:7555')
 #     device.disable_stuck_detection()
 #     device.screenshot_interval_set(0.3)
 #     minimap = MiniMap(MiniMap.DETECT_Mobile_720p)
-#
 #     # 从璃月港传送点出发，初始坐标大概大概50px以内就行
 #     # 坐标位置是 GIMAP 的图片坐标
 #     minimap.init_position((4580, 3046))
