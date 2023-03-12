@@ -49,7 +49,7 @@ class Map(MiniMap, BigMap, MapConverter):
     #     return loop
 
     def _upd_smallmap(self):
-        if scene_lib.get_current_pagename() == "main":
+        if itt.get_img_existence(asset.ui_main_win, is_log=False):
             if not self.small_map_init_flag:
                 self.reinit_smallmap()
                 self.small_map_init_flag = True
@@ -60,9 +60,9 @@ class Map(MiniMap, BigMap, MapConverter):
             self.update_bigmap(itt.capture(jpgmode=0))
 
     def get_position(self):
-        if self.smallmap_upd_timer.get_diff_time() >= self.MINIMAP_UPDATE_LIMIT:
-            self._upd_smallmap()
-            self.smallmap_upd_timer.reset()
+        # if self.smallmap_upd_timer.get_diff_time() >= self.MINIMAP_UPDATE_LIMIT:
+        self._upd_smallmap()
+        #     self.smallmap_upd_timer.reset()
         return self.convert_GIMAP_to_cvAutoTrack(self.position)
 
     def reinit_smallmap(self):
@@ -75,6 +75,11 @@ class Map(MiniMap, BigMap, MapConverter):
     def while_until_no_excessive_error(self):
         self.reinit_smallmap()
 
+    def get_direction(self):
+        self.update_direction(itt.capture(jpgmode=0))
+        # print(self.direction)
+        return self.direction
+    
     def get_rotation(self):
         self.update_rotation(itt.capture(jpgmode=0))
         # print(self.direction)

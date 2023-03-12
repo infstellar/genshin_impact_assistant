@@ -254,7 +254,7 @@ class InteractionBGD:
         else:
             return False
 
-    def get_img_existence(self, imgicon: img_manager.ImgIcon, is_gray=False, is_log=False, ret_mode = IMG_BOOL, show_res = False):
+    def get_img_existence(self, imgicon: img_manager.ImgIcon, is_gray=False, is_log=True, ret_mode = IMG_BOOL, show_res = False):
         """检测图片是否存在
 
         Args:
@@ -286,7 +286,7 @@ class InteractionBGD:
             cv2.imshow(imgicon.name, cap)
             cv2.waitKey(100)
 
-        if imgicon.is_print_log(matching_rate >= imgicon.threshold) or is_log:
+        if imgicon.is_print_log(matching_rate >= imgicon.threshold) and is_log:
             logger.debug(
                 'imgname: ' + imgicon.name + 'matching_rate: ' + str(
                     matching_rate) + ' |function name: ' + upper_func_name)

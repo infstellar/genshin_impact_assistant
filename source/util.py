@@ -279,12 +279,12 @@ def refresh_config():
 def euclidean_distance(p1, p2):
     return math.sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2)
 
-def euclidean_distance_plist(p1, p2) -> np.ndarray:
+def euclidean_distance_plist(p1, plist) -> np.ndarray:
     if not isinstance(p1, np.ndarray):
         p1 = np.array(p1)
-    if not isinstance(p2, np.ndarray):
-        p2 = np.array(p2)
-    return np.sqrt((p1[0] - p2[:,0]) ** 2 + (p1[1] - p2[:,1]) ** 2)
+    if not isinstance(plist, np.ndarray):
+        plist = np.array(plist)
+    return np.sqrt((p1[0] - plist[:,0]) ** 2 + (p1[1] - plist[:,1]) ** 2)
 
 def manhattan_distance(p1, p2):
     return abs(p1[0]-p2[0]) + abs(p1[1]-p2[1])

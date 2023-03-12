@@ -161,6 +161,11 @@ class MiniMap(MiniMapResource):
 
         self.direction_similarity = round(precise_sim, 3)
         self.direction = precise_loca % 360
+        # Convert
+        if self.direction >180:
+            self.direction = 360-self.direction
+        else:
+            self.direction = -self.direction
         return self.direction
 
     def _get_minimap_subtract(self, image, update_position=True):
@@ -281,16 +286,16 @@ class MiniMap(MiniMapResource):
         self.degree = np.argmax(result) / (d * scale) * 2 * np.pi + np.pi / 4
         degree = np.argmax(result) / (d * scale) * 360 + 135
         degree = int(degree % 360)
-        self.rotation = degree
-
-        # Calculate confidence
-        self.rotation_confidence = round(peak_confidence(result), 3)
-        
         # Convert
         if degree >180:
             degree = 360-degree
         else:
             degree = -degree
+        self.rotation = degree
+
+        # Calculate confidence
+        self.rotation_confidence = round(peak_confidence(result), 3)
+        
         return degree
 
     def update_rotation(self, image, layer=MapConverter.LAYER_Teyvat, update_position=True):

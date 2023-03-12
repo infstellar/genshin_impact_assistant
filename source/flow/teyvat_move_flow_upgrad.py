@@ -27,13 +27,13 @@ class TeyvatMoveFlowConnector(FlowConnector):
         self.reaction_to_enemy = 'RUN'
         self.MODE = "PATH"
         self.path_dict = {}
-        self.to_next_posi_offset = 1.0*4 # For precision
-        self.skip_move_rotation_offset = 6
-        self.special_keys_posi_offset = 1.5
+        self.to_next_posi_offset = 6 # For precision
+        self.skip_move_rotation_offset = self.to_next_posi_offset/2
+        self.special_keys_posi_offset = 3
         self.is_tp = False
         self.tp_type = None
+        self.ignore_space = True
 
-        self.path_index = 0
         self.motion_state = IN_MOVE
         self.jump_timer = timer_module.Timer()
         self.current_state = ST.INIT_TEYVAT_TELEPORT
@@ -50,12 +50,13 @@ class TeyvatMoveFlowConnector(FlowConnector):
         self.reaction_to_enemy = 'RUN'
         self.MODE = "PATH"
         self.path_dict = {}
-        self.to_next_posi_offset = 1.0*3 # For precision
-        self.special_keys_posi_offset = 1.5
+        self.to_next_posi_offset = 6 # For precision
+        self.skip_move_rotation_offset = self.to_next_posi_offset/2
+        self.special_keys_posi_offset = 3
         self.is_tp = False
         self.tp_type = None
+        self.ignore_space = True
         
-        self.path_index = 0
         self.motion_state = IN_MOVE
         self.jump_timer = timer_module.Timer()
         self.current_state = ST.INIT_TEYVAT_TELEPORT
@@ -87,6 +88,7 @@ class TeyvatTeleport(FlowTemplate):
 class TeyvatMoveCommon():
     def __init__(self):
         self.motion_state = IN_MOVE
+        self.jump_timer = timer_module.Timer()
 
     def switch_motion_state(self):
         if itt.get_img_existence(asset.motion_climbing):
@@ -97,6 +99,9 @@ class TeyvatMoveCommon():
             self.motion_state = IN_WATER
         else:
             self.motion_state = IN_MOVE
+            if self.jump_timer.get_diff_time()>=2:
+                self.jump_timer.reset()
+                itt.key_press('space')
     
 class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon):
     def __init__(self, upper: TeyvatMoveFlowConnector):
@@ -177,77 +182,115 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
 
         self.upper = upper
         self.curr_path_index = 0
+        self.last_ten_index = 0
         self.special_key_points = None
         
         self.curr_path = []
-        self.curr_path_index = 0
-        
-    # def _exec_special_key_points(self):
-    #     ret_list = []
-    #     for i in self.upper.path_list["special_keys"]:
-    #         ret_list.append(i["position"])
-    #     self.special_key_points = ret_list
-    
-    # def _do_special_key(self, curr_posi):
-    #     """执行special key
+        self.curr_break_point_index = 0
+        self.last_ten_posi = []
+        self.last_ten_delta = []
 
-    #     Args:
-    #         curr_posi (_type_): _description_
-    #     """
-    #     if self.special_key_points == None:
-    #         self._exec_special_key_points()
-    #     if quick_euclidean_distance_plist(curr_posi, self.special_key_points).min() <= self.upper.special_keys_posi_offset:
-    #         for i in self.upper.path_list["special_keys"]:
-    #             if euclidean_distance(i["position"], curr_posi) <= self.upper.special_keys_posi_offset:
-    #                 itt.key_press(i["key_name"])
     
-    def CalculateTheDistanceBetweenTheAngleExtensionLineAndTheTarget(self):
+    def CalculateTheDistanceBetweenTheAngleExtensionLineAndTheTarget(self, curr,target):
         θ = tracker.get_rotation()
-        
+        if θ<0:
+            θ+=360
+        θ-=90
+        if θ<=0:
+            θ+=360
+        print(θ)
+        target2=list(np.array(target)-np.array(curr))
+        X,Y=target2[0],target2[1]
+        K=math.tan(θ)
+        A=K
+        B=-1
+        D = abs(A*X+B*Y)/math.sqrt(K**2+1)
+        print(D, euclidean_distance(curr,target))
+        return D
     
     def _exec_special_key(self, special_key):
         # key_name = special_key
         itt.key_press(special_key)
-        logger.debug(f"key {special_key} exec.")
+        logger.info(f"key {special_key} exec.")
 
+    def _refresh_curr_posi_index(self, curr_posi):
+        posi_list = []
+        for i in self.upper.path_dict["position_list"][
+            self.curr_path_index:min(self.curr_path_index+10, len(self.upper.path_dict["position_list"])-1)
+        ]:
+            posi_list.append(i["position"])
+        self.curr_path_index += np.argmin(euclidean_distance_plist(curr_posi, posi_list))
+        
     def state_before(self):
         self.curr_path = self.upper.path_dict["position_list"]
+        self.curr_breaks = self.upper.path_dict["break_position"]
         self.curr_path_index = 0
+        self.curr_break_point_index = 0
         # itt.key_down('w')
         tracker.reinit_smallmap()
+        self.upper.while_sleep = 0.05
         self._next_rfc()
     
     def state_in(self):
-        target_posi = self.curr_path[self.curr_path_index]["position"]
+        self.switch_motion_state()
+        target_posi = self.curr_breaks[self.curr_break_point_index]
         special_key = self.curr_path[self.curr_path_index]["special_key"]
         curr_posi = tracker.get_position()
-        if special_key is None:
-            offset = self.upper.to_next_posi_offset
+        self._refresh_curr_posi_index(list(curr_posi))
+        if (special_key is None) or (self.upper.ignore_space and special_key == "space"):
+            offset = 5
         else:
-            offset = self.upper.special_keys_posi_offset
+            offset = 3
+        if self.curr_path[self.curr_path_index]["motion"]=="FLYING":
+            offset = 5
         if euclidean_distance(target_posi, curr_posi) <= offset:
-            if len(self.curr_path) - 1 > self.curr_path_index:
-                self.curr_path_index += 1
-                logger.debug(f"index {self.curr_path_index} posi {self.curr_path[self.curr_path_index]}")
-                special_key = self.curr_path[self.curr_path_index]["special_key"]
-                if special_key != None:
-                    self._exec_special_key(special_key)
+            if len(self.curr_breaks) - 1 > self.curr_break_point_index:
+                self.curr_break_point_index += 1
+                logger.debug(f"index {self.curr_break_point_index} posi {self.curr_breaks[self.curr_break_point_index]}")
             else:
                 logger.info("path end")
                 self._next_rfc()
+        if special_key != None:
+            self._exec_special_key(special_key)
+            
+                
+        
+        if self.motion_state == IN_FLY and self.curr_path[self.curr_path_index]["motion"]=="WALKING":
+            logger.info("landing")
+            itt.left_click()
+            while 1:
+                if self.upper.checkup_stop_func():
+                    break
+                self.switch_motion_state()
+                time.sleep(0.1)
+                if self.motion_state != IN_FLY:
+                    break
+        # if self.motion_state == IN_MOVE and self.curr_path[self.curr_path_index]["motion"]=="FLYING":
+        #     logger.info("fly")
+        #     while 1:
+        #         itt.key_press('space')
+        #         if self.upper.checkup_stop_func():
+        #             break
+        #         self.switch_motion_state()
+        #         if self.motion_state == IN_FLY:
+        #             break
         print(euclidean_distance(target_posi, curr_posi))
-        if abs(movement.calculate_delta_angle(tracker.get_rotation(),movement.calculate_posi2degree(target_posi))) >= 10:
+        # delta_distance = self.CalculateTheDistanceBetweenTheAngleExtensionLineAndTheTarget(curr_posi,target_posi)
+        delta_degree = abs(movement.calculate_delta_angle(tracker.get_rotation(),movement.calculate_posi2degree(target_posi)))
+        if  delta_degree >= 20:
             itt.key_up('w')
             movement.change_view_to_posi(target_posi, stop_func = self.upper.checkup_stop_func)
             itt.key_down('w')
         else:
-            movement.change_view_to_posi(target_posi, stop_func = self.upper.checkup_stop_func)
+            movement.change_view_to_posi(target_posi, stop_func = self.upper.checkup_stop_func, max_loop=3)
         
             
     def state_after(self):
         self.next_flow_id = self.flow_id
+        # movement.move_to_position(posi=self.upper.path_dict["end_position"], offset=1,delay=0.01)
         logger.info("path end")
         self._set_nfid(ST.END_TEYVAT_MOVE_PASS)
+        self.upper.while_sleep = 0.2
         self._next_rfc()
         
     def state_end(self):
@@ -330,7 +373,7 @@ class TeyvatMoveFlowController(FlowController):
         
 if __name__ == '__main__':
     TMFC = TeyvatMoveFlowController()
-    TMFC.set_parameter(MODE="PATH",path_dict=load_json("167850240927.json","assets\\TeyvatMovePath"))
+    TMFC.set_parameter(MODE="PATH",path_dict=load_json("test3167861000336.json","assets\\TeyvatMovePath"), is_tp=True)
     TMFC.start()
     TMFC.start_flow()
     while 1:

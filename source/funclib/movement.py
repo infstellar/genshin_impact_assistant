@@ -76,14 +76,14 @@ def calculate_delta_angle(cangle,tangle):
         dangle = (360+dangle)
     return dangle
 
-def change_view_to_angle(tangle, stop_func=lambda:False, maxloop=20, deltanum=5):
+def change_view_to_angle(tangle, stop_func=lambda:False, maxloop=25, deltanum=5):
     i = 0
     while 1:
         cangle = tracker.get_rotation()
         dangle = calculate_delta_angle(cangle,tangle)
         if abs(dangle) < deltanum:
             break
-        rate = min((0.4/30)*abs(dangle)+0.4,0.8)
+        rate = min((0.4/20)*abs(dangle)+0.6,1)
         
         # print(cangle, dangle, rate)
         cview(dangle, rate=rate)
@@ -148,11 +148,11 @@ def calculate_posi2degree(pl):
         degree = 0
     return degree
     
-def change_view_to_posi(pl, stop_func):
+def change_view_to_posi(pl, stop_func, max_loop=25):
     if IS_DEVICE_PC:
         logger.debug(f"change_view_to_posi: pl: {pl}")
         degree = calculate_posi2degree(pl)
-        change_view_to_angle(degree)
+        change_view_to_angle(degree,maxloop=max_loop)
 
 def move_to_position(posi, offset=5, stop_func=lambda:False, delay=0.1):
     itt.key_down('w')
