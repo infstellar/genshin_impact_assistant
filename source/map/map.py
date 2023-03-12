@@ -66,7 +66,8 @@ class Map(MiniMap, BigMap, MapConverter):
         self.reinit_smallmap()
 
     def get_direction(self):
-        self.update_direction(itt.capture(jpgmode=0))
+        imsrc = cv2.cvtColor(itt.capture(jpgmode=0),cv2.COLOR_BGR2RGB)
+        self.update_direction(imsrc)
         # print(self.direction)
         return self.direction
     

@@ -149,7 +149,7 @@ class PathRecorderCore(FlowTemplate):
         if len(self.upper.collection_path_dict["break_position"])==0:
             self.upper.collection_path_dict["break_position"].append(list(posi))
             logger.info(f"break position added {posi}")
-        elif (abs(euclidean_distance(posi,self.upper.collection_path_dict["break_position"][-1])) >= 2):
+        elif (abs(euclidean_distance(posi,self.upper.collection_path_dict["break_position"][-1])) >= 5):
             self.upper.collection_path_dict["break_position"].append(list(posi))
             logger.info(f"break position added {posi}")
         else:

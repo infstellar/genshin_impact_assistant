@@ -373,7 +373,7 @@ class TeyvatMoveFlowController(FlowController):
         
 if __name__ == '__main__':
     TMFC = TeyvatMoveFlowController()
-    TMFC.set_parameter(MODE="PATH",path_dict=load_json("test3167861000336.json","assets\\TeyvatMovePath"), is_tp=True)
+    TMFC.set_parameter(MODE="PATH",path_dict=load_json("Crystalfly167861751483.json","assets\\TeyvatMovePath"), is_tp=True)
     TMFC.start()
     TMFC.start_flow()
     while 1:
