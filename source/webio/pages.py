@@ -112,7 +112,14 @@ class MainPage(Page):
 
                 output.put_row([output.put_text(t2t('当前状态')), None, output.put_scope('StateArea')],size='40% 10px 60%'),
 
-                output.put_markdown(t2t('## Options')),  # 左竖列标题
+                output.put_markdown(t2t('## Mission')),  # 左竖列标题
+
+                output.put_row([  
+                    output.put_text(t2t('Mission'))
+                    ]
+                               ),
+                
+                output.put_markdown(t2t('## Function')),  # 左竖列标题
 
                 output.put_row([  # FlowMode
                     output.put_text(t2t('FlowMode')),

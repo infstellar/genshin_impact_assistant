@@ -1,6 +1,6 @@
 from source.mission.mission_template import MissionExecutor
 
-class MissionTest(MissionExecutor):
+class MissionTest2(MissionExecutor):
     def __init__(self):
         super().__init__()
         self.setName("MissionTest")
@@ -10,6 +10,6 @@ class MissionTest(MissionExecutor):
         self.collect(MODE="AUTO",pickup_points=[[71, -2205],[65,-2230]])
         
 if __name__ == '__main__':
-    mission = MissionTest()
+    mission = MissionTest2()
     mission.start()
     mission.continue_threading()

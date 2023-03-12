@@ -62,6 +62,7 @@ class DLLClient(threading.Thread):
         super().__init__()
         self._send_list = []
         self.activate_timeout=TimeoutTimer(5)
+        self.setName("DLLClient")
     
     def _send_function(self, func_name:str, para:list=None):
         """_summary_

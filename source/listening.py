@@ -5,6 +5,7 @@ except:
 import time
 import keyboard
 from source.task import task_manager
+from source.mission import mission_manager
 
 combat_flag = False
 domain_flag = False
@@ -13,7 +14,9 @@ startstop_flag = False
 TASK_MANAGER = task_manager.TaskManager()
 TASK_MANAGER.setDaemon(True)
 TASK_MANAGER.start()
-
+MISSION_MANAGER = mission_manager.MissionManager()
+MISSION_MANAGER.setDaemon(True)
+MISSION_MANAGER.start()
 
 t1 = None
 t2 = None

@@ -63,9 +63,12 @@ class BaseThreading(threading.Thread):
         threading_obj.pause_threading()
         threading_obj.start()
         self.sub_threading_list.append(threading_obj)
+        logger.debug(f"sub threading {threading_obj.name} has been add.")
 
+    def loop(self):
+        pass
+    
     def run(self):
-        '''if you're using this class, copy this'''
         while 1:
             time.sleep(self.while_sleep)
             if self.stop_threading_flag:
@@ -83,4 +86,5 @@ class BaseThreading(threading.Thread):
             if self.checkup_stop_func():
                 self.pause_threading_flag = True
                 continue
-        '''write your code below'''
+
+            self.loop()

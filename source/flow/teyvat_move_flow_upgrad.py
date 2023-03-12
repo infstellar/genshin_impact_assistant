@@ -27,7 +27,8 @@ class TeyvatMoveFlowConnector(FlowConnector):
         self.reaction_to_enemy = 'RUN'
         self.MODE = "PATH"
         self.path_dict = {}
-        self.to_next_posi_offset = 1.0*6 # For precision
+        self.to_next_posi_offset = 1.0*4 # For precision
+        self.skip_move_rotation_offset = 6
         self.special_keys_posi_offset = 1.5
         self.is_tp = False
         self.tp_type = None
@@ -200,6 +201,10 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
     #             if euclidean_distance(i["position"], curr_posi) <= self.upper.special_keys_posi_offset:
     #                 itt.key_press(i["key_name"])
     
+    def CalculateTheDistanceBetweenTheAngleExtensionLineAndTheTarget(self):
+        θ = tracker.get_rotation()
+        
+    
     def _exec_special_key(self, special_key):
         # key_name = special_key
         itt.key_press(special_key)
@@ -276,6 +281,9 @@ class TeyvatMoveFlowController(FlowController):
         
         self.append_flow(TeyvatMoveStuck(self.flow_connector))
         self.append_flow(TeyvatMovePass(self.flow_connector))
+        
+        if self.flow_connector.is_tp and self.flow_connector.target_posi == [0,0] and self.flow_connector.MODE == "PATH":
+            self.flow_connector.target_posi = self.flow_connector.path_dict["start_position"]
         
         self.continue_threading()
     

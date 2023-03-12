@@ -21,9 +21,9 @@ class PathRecorderConnector(FlowConnector):
         self.checkup_stop_func = None
         self.collection_path_dict = {
             "time":"",
+            "name":"",
             "start_position":[],
             "end_position":[],
-            "all_position":[],
             "position_list":[]
         }
 
@@ -36,12 +36,6 @@ class PathRecorderConnector(FlowConnector):
             "name":"",
             "start_position":[],
             "end_position":[],
-            "all_position":[
-                [point x, point y],
-                [point x, point y],
-                [point x, point y],
-                ...
-            ],
             "position_list":[
                 {
                     "position":list,
@@ -79,13 +73,13 @@ class PathRecorderConnector(FlowConnector):
         curr_posi = tracker.get_position()
         self.collection_path_dict["position_list"].append(
             {
-                "position":curr_posi,
+                "position":list(curr_posi),
                 "motion":None,
                 "id":len(self.collection_path_dict["position_list"])+1,
                 "special_key":key
             }
         )
-        self.collection_path_dict["all_position"].append(curr_posi)
+        # self.collection_path_dict["all_position"].append(curr_posi)
         logger.info(t2t("special key added:")+
                     str(key)
                     )
@@ -99,6 +93,7 @@ class PathRecorderCore(FlowTemplate):
 
         self.upper = upper
         self.enter_flag = False
+        # self.all_position = []
 
     def _add_posi_to_dict(self, posi:list):
         curr_motion = movement.get_current_motion_state()
@@ -110,11 +105,17 @@ class PathRecorderCore(FlowTemplate):
                 "special_key":None
             }
         )
-        self.upper.collection_path_dict["all_position"].append(posi)
+        # self.upper.collection_path_dict["all_position"].append(posi)
         logger.info(t2t("position added:")+
                     f"{posi} {curr_motion}"
                     )
 
+    def get_all_position(self, posi_dict):
+        all_posi = []
+        for i in posi_dict["position_list"]:
+            all_posi.append(i["position"])
+        return all_posi
+    
     def state_init(self):
         pass
         # self._next_rfc()
@@ -123,9 +124,9 @@ class PathRecorderCore(FlowTemplate):
 
         self.upper.collection_path_dict = {
             "name":"",
+            "time":"",
             "start_position":[],
             "end_position":[],
-            "all_position":[],
             "position_list":[],
         }
         self.enter_flag = False
@@ -138,12 +139,12 @@ class PathRecorderCore(FlowTemplate):
             logger.info(t2t("ready to start recording"))
         if self.rfc == FC.IN:
             self.rfc = FC.AFTER
-            logger.info(t2t("stop recording"))
+            logger.info(t2t("ready to stop recording"))
 
 
     def state_in(self):
 
-        all_posi = self.upper.collection_path_dict["all_position"]
+        all_posi = self.get_all_position(self.upper.collection_path_dict)
         curr_posi = tracker.get_position()
         if len(all_posi)>0:
             min_dist = quick_euclidean_distance_plist(curr_posi, all_posi).min()
@@ -156,12 +157,15 @@ class PathRecorderCore(FlowTemplate):
         if not self.enter_flag:
             logger.info(t2t("start recording"))
             self.enter_flag = True
+            self.upper.collection_path_dict["start_position"]=list(tracker.get_position())
         return super().state_in()
 
     def state_after(self):
         # self.upper.total_collection_list.append(self.upper.collection_path_dict)
-        save_json(self.upper.collection_path_dict,json_name=str(round(time.time(),2)).replace('.','')+".json",default_path=f"assets\\TeyvatMovePath")
-        
+        self.upper.collection_path_dict["end_position"]=list(tracker.get_position())
+        jsonname = str(round(time.time(),2)).replace('.','')+".json"
+        save_json(self.upper.collection_path_dict,json_name=jsonname,default_path=f"assets\\TeyvatMovePath")
+        logger.info(f"recording save as {jsonname}")
         self.rfc = FC.INIT
 
 
@@ -177,11 +181,13 @@ class PathRecorderController(FlowController):
 
         self.append_flow(PathRecorderCore(self.flow_connector))   
         self.append_flow(PathRecorderEnd(self.flow_connector))
-
+\
     def reset(self):
         pass
 
 if __name__ == '__main__':
     PathRecorderController().start()
+    logger.info(f"Load over.")
+    logger.info(f"ready to start.")
     while 1:
         time.sleep(1)

@@ -14,20 +14,20 @@ class MissionExecutor(BaseThreading):
     def get_path_file(self, path_file_name:str):
         return load_json(path_file_name+".json","assets\\TeyvatMovePath")
     
-    def move(self, MODE:str = None,stop_rule:int = None,target_posi:list = None,path_list:list = None,to_next_posi_offset:float = None,special_keys_posi_offset:float = None,reaction_to_enemy:str = None):
+    def move(self, MODE:str = None,stop_rule:int = None,target_posi:list = None,path_list:list = None,to_next_posi_offset:float = None,special_keys_posi_offset:float = None,reaction_to_enemy:str = None,is_tp:bool=None):
         self.TMCF.reset()
-        self.TMCF.set_parameter(MODE=MODE,stop_rule=stop_rule,target_posi=target_posi,path_dict=path_list,to_next_posi_offset=to_next_posi_offset,special_keys_posi_offset=special_keys_posi_offset,reaction_to_enemy=reaction_to_enemy)
+        self.TMCF.set_parameter(MODE=MODE,stop_rule=stop_rule,target_posi=target_posi,path_dict=path_list,to_next_posi_offset=to_next_posi_offset,special_keys_posi_offset=special_keys_posi_offset,reaction_to_enemy=reaction_to_enemy,is_tp=is_tp)
         self.TMCF.start_flow()
         while 1:
             time.sleep(0.2)
             if self.TMCF.get_working_statement() == False:
                 break
     
-    def move_straight(self, position):
-        self.move(MODE="AUTO", target_posi=position)
+    def move_straight(self, position, is_tp = False):
+        self.move(MODE="AUTO", target_posi=position, is_tp = is_tp)
         
-    def move_along(self, path):
-        self.move(MODE="PATH", path_list=self.get_path_file(path))
+    def move_along(self, path, is_tp = False):
+        self.move(MODE="PATH", path_list=self.get_path_file(path), is_tp = is_tp)
             
     def combat(self):
         pass
