@@ -7,7 +7,7 @@ class MissionCrystalfly(MissionExecutor):
     
     def exec_mission(self):
         self.start_pickup()
-        self.move_along("Crystalfly16786174406", is_tp=True)
+        # self.move_along("Crystalfly16786174406", is_tp=True)
         self.move_along("Crystalfly167861751483", is_tp=True)
         self.move_along("Crystalfly167861762261", is_tp=True)
         self.stop_pickup()

@@ -639,6 +639,8 @@ class InteractionBGD:
         """
         self.operation_lock.acquire()
         # print('lock!')
+        if key == 'w':
+            static_lib.W_KEYDOWN = True
         self.itt_exec.key_down(key)
         self.operation_lock.release()
         
@@ -655,6 +657,8 @@ class InteractionBGD:
         """
         self.operation_lock.acquire()
         # print('lock!')
+        if key == 'w':
+            static_lib.W_KEYDOWN = False
         self.itt_exec.key_up(key)
         self.operation_lock.release()
         

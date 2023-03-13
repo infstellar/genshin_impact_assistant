@@ -88,7 +88,8 @@ class TeyvatTeleport(FlowTemplate):
 class TeyvatMoveCommon():
     def __init__(self):
         self.motion_state = IN_MOVE
-        self.jump_timer = timer_module.Timer()
+        self.jump_timer1 = timer_module.Timer()
+        self.jump_timer2 = timer_module.Timer()
 
     def switch_motion_state(self):
         if itt.get_img_existence(asset.motion_climbing):
@@ -105,11 +106,13 @@ class TeyvatMoveCommon():
             jump_dt = 2
         else:
             jump_dt = 99999
-        if self.jump_timer.get_diff_time() >= jump_dt:
-            self.jump_timer.reset()
+        if self.jump_timer1.get_diff_time() >= jump_dt:
+            self.jump_timer1.reset()
+            self.jump_timer2.reset()
             itt.key_press('spacebar')
-            # time.sleep(0.3)
-            itt.key_press('spacebar') # fly
+        if self.jump_timer2.get_diff_time() >= 0.3 and self.jump_timer2.get_diff_time()<=2: # double jump
+            itt.key_press('spacebar')
+            self.jump_timer2.start_time -= 2
     
 class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon):
     def __init__(self, upper: TeyvatMoveFlowConnector):
@@ -238,20 +241,24 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
         curr_posi = tracker.get_position()
         # 刷新当前position index
         self._refresh_curr_posi_index(list(curr_posi))
-        if (special_key is None) or (self.upper.ignore_space and special_key == "space"): # 设定offset
-            offset = 5
+        if self.upper.ignore_space and special_key == "space": # ignore space
+            special_key = None
+        if special_key is None: # 设定offset
+            offset = 5 # NO SK
         else:
-            offset = 3
+            offset = 3 # SK
         if self.curr_path[self.curr_path_index]["motion"]=="FLYING":
-            offset = 5
+            offset = 8
         if self.curr_break_point_index < len(self.curr_breaks)-1: # 如果两个BP距离小于offset就会瞬移，排除一下。
             dist = euclidean_distance(self.curr_breaks[self.curr_break_point_index], self.curr_breaks[self.curr_break_point_index+1])
-            logger.info(f"BPs too close: dist: {dist}")
-            if dist >= 1.5 and dist <=offset:
+            if dist >= 1 and dist <=offset:
+                logger.info(f"BPs too close: dist: {dist}")
                 offset = dist/2
-            elif dist < 1.5:
+                logger.info(f"offset: {offset}")
+            elif dist < 1:
+                logger.info(f"BPs too close: dist: {dist}")
                 offset = 1.
-            logger.info(f"offset: {offset}")
+                logger.info(f"offset: {offset}")
         if euclidean_distance(target_posi, curr_posi) <= offset: # 检测是否要切换到下一个BP
             if len(self.curr_breaks) - 1 > self.curr_break_point_index:
                 self.curr_break_point_index += 1
@@ -382,7 +389,7 @@ class TeyvatMoveFlowController(FlowController):
         
 if __name__ == '__main__':
     TMFC = TeyvatMoveFlowController()
-    TMFC.set_parameter(MODE="PATH",path_dict=load_json("Crystalfly167861751483.json","assets\\TeyvatMovePath"), is_tp=True)
+    TMFC.set_parameter(MODE="PATH",path_dict=load_json("Crystalfly16786174406.json","assets\\TeyvatMovePath"), is_tp=False)
     TMFC.start()
     TMFC.start_flow()
     while 1:
