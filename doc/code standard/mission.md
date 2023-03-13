@@ -63,7 +63,7 @@ path：填写TMP格式文件。仅需填写文件名，不用后缀。
                 pickup_points = None
                 )
 
-MODE：忘了。
+MODE：没什么用。
 
 collection_name: 采集物名称。可留空。
 
@@ -121,3 +121,6 @@ if __name__ == '__main__':
 
 运行该文件即可。
 
+## 添加你的Mission
+
+运行mission/index_generator.py。
