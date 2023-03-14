@@ -6,13 +6,12 @@ from source.common import static_lib
 
 
 class Capture():
-    def __init__(self, ignore_shape = False):
+    def __init__(self):
         self.capture_cache = np.zeros_like((1080,1920,3), dtype="uint8")
         self.max_fps = 180
         self.fps_timer = timer_module.Timer(diff_start_time=1)
         self.capture_cache_lock = threading.Lock()
         self.capture_times = 0
-        self.ignore_shape = ignore_shape
 
     def _get_capture(self) -> np.ndarray:
         """
@@ -61,7 +60,7 @@ class Capture():
             pass
     
 from ctypes.wintypes import RECT
-import win32print
+import win32print, win32api
 
 class WindowsCapture(Capture):
     """
@@ -80,30 +79,31 @@ class WindowsCapture(Capture):
     GetDeviceCaps = win32print.GetDeviceCaps
     
 
-    def __init__(self, ignore_shape=False):
-        """_summary_
-
-        Args:
-            ignore_shape (bool, optional): 忽略截图大小检测. Defaults to False. 如果电脑设置了不同的缩放比例，必须设置该值为True。
-        """
+    def __init__(self):
         static_lib.HANDLE = static_lib.HANDLE
-        super().__init__(ignore_shape=ignore_shape)
+        super().__init__()
         self.max_fps = 30
+        self.scale_factor = self._get_screen_scale_factor()
         
-    
     def _check_shape(self, img:np.ndarray):
-        if self.ignore_shape:
-            if self.capture_cache[:,:,:3].max() <= 0:
-                logger.warning(t2t("警告：你启用了设置\'忽略截图大小检测\'，但截图黑屏。"))
-                logger.warning(t2t("截图黑屏，请检查窗口。"))
-                static_lib.search_handle()
-                return False
         if img.shape == (1080,1920,4):
             return True
         else:
             logger.info(t2t("research handle"))
             static_lib.search_handle()
             return False
+    
+    def _get_screen_scale_factor(self):
+        monitor = win32api.EnumDisplayMonitors()[0][0]
+
+        # Get a pointer to a DEVICE_SCALE_FACTOR value
+        scale_factor = ctypes.c_int()
+
+        # Call the GetScaleFactorForMonitor function with the monitor handle and scale factor pointer
+        ctypes.windll.shcore.GetScaleFactorForMonitor(ctypes.c_int(monitor), ctypes.byref(scale_factor))
+
+        # Print the scale factor value
+        return float(scale_factor.value/100)
     
     def _get_capture(self):
         r = RECT()
@@ -116,11 +116,9 @@ class WindowsCapture(Capture):
         #scale_y = self.GetDeviceCaps(desktop_dc, 90)
 
         # 计算实际截屏区域大小
-        # width = (right - left)# * scale_x // 100
-        # height = (bottom - top)# * scale_y // 100
-        if self.ignore_shape:
-            width = 1920
-            height = 1080
+        width = int(int(width)*self.scale_factor)
+        height = int(int(height)*self.scale_factor)
+        
         # 开始截图
         dc = self.GetDC(static_lib.HANDLE)
         cdc = self.CreateCompatibleDC(dc)
@@ -147,7 +145,7 @@ class EmulatorCapture(Capture):
         pass
     
 if __name__ == '__main__':
-    wc = WindowsCapture(ignore_shape=False)
+    wc = WindowsCapture()
     while 1:
         cv2.imshow("capture test", wc.capture())
         cv2.waitKey(10)
