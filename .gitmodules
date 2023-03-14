@@ -7,3 +7,6 @@
 [submodule "assets/TeyvatMovePath"]
 	path = assets/TeyvatMovePath
 	url = https://github.com/GenshinImpactAssistant/GIATeyvatMovePath.git
+[submodule "assets/PPOCRModels"]
+	path = assets/PPOCRModels
+	url = https://github.com/GenshinImpactAssistant/PPOCRModels
