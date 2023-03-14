@@ -39,9 +39,10 @@ class AimOperator(BaseThreading):
     
     def run(self):
         while 1:
-            t = self.loop_timer.loop_time() # 设置最大检查时间
-            if t <= self.fps:
-                time.sleep(self.fps - t)
+            time.sleep(0.1)
+            # t = self.loop_timer.loop_time() # 设置最大检查时间
+            # if t <= self.fps:
+            #     time.sleep(self.fps - t)
             # logger.trace(f"cost time: {t} | {self.fps}")
                 
             if self.stop_threading_flag:

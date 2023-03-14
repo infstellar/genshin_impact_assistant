@@ -41,7 +41,7 @@ def move(direction, distance=1):
             itt.key_up('s')
 
 def angle2movex(angle):
-    cvn = maxmin(angle*10,400,-400) # 10: magic num, test from test246.py
+    cvn = maxmin(angle*10,500,-500) # 10: magic num, test from test246.py
     return cvn
 
 def cview(angle=10, mode=HORIZONTAL, rate=0.9):  # left<0,right>0

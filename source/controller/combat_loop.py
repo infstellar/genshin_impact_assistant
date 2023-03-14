@@ -41,6 +41,7 @@ class Combat_Controller(BaseThreading):
         self.ao = AimOperator()
         self.ao.pause_threading()
         self.ao.add_stop_func(self.checkup_stop_func)
+        self.ao.add_stop_func(self._get_sco_switch)
         self.ao.setDaemon(True)
         self.ao.start()
 
@@ -48,6 +49,9 @@ class Combat_Controller(BaseThreading):
         
         # self.super_stop_func=super_stop_func
 
+    def _get_sco_switch(self):
+        return self.sco.switching_flag
+    
     def run(self) -> None:
         while 1:
             time.sleep(0.2)
@@ -55,6 +59,8 @@ class Combat_Controller(BaseThreading):
                 self.ao.stop_threading()
                 self.sco.stop_threading()
                 return
+            
+            
             
             if self.is_check_died:
                 if self.itt.get_img_existence(asset.character_died):
@@ -71,25 +77,15 @@ class Combat_Controller(BaseThreading):
                 if self.checkup_stop_func():
                     break
 
-                if not self.sco.get_working_statement():
-                    self.sco.continue_threading()
-                    time.sleep(1)
-                else:
-                    time.sleep(0.2)
-
-                if not self.ao.get_working_statement():
-                    self.ao.continue_threading()
-                else:
-                    pass
-
-            else:
-                if self.sco.get_working_statement():
-                    self.sco.pause_threading()
-                    time.sleep(1)
-
-                if self.ao.get_working_statement():
+                self.sco.continue_threading()
+                if self.sco.switching_flag:
                     self.ao.pause_threading()
-                    time.sleep(1)
+                else:
+                    self.ao.continue_threading()
+                
+            else:
+                self.sco.pause_threading()
+                self.ao.pause_threading()
                 
                 continue
                 
