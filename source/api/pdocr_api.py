@@ -1,5 +1,6 @@
 from source.util import *
 
+
 logger.info(t2t('Creating ocr object.'))
 from common.timer_module import Timer
 
@@ -8,7 +9,7 @@ pdocr_timer_performance.reset()
 import inspect
 
 try:
-    import paddleocr
+    import fastdeploy
 except Exception as error:
     logger.critical(t2t("导入paddleocr时错误; err code: 001"))
     logger.exception(error)
@@ -21,11 +22,11 @@ logger.debug(f"import pdocr time: {pdocr_timer_performance.get_diff_time()}")
                 # },
 
 globaldevice = config_json["device_paddle"]
-if globaldevice == 'auto':
-    import paddle
+# if globaldevice == 'auto':
+#     import paddle
 
-    paddle.fluid.install_check.run_check()
-    globaldevice = 'cpu'
+#     paddle.fluid.install_check.run_check()
+#     globaldevice = 'cpu'
 APPROXIMATE_MATCHING = 0
 ACCURATE_MATCHING = 1
 TWICE_AND_MATCHING = 3
@@ -38,24 +39,33 @@ CHANNEL_RED = 2
 RETURN_TEXT = 1
 RETURN_POSITION = 0
 
-default_infer_path = os.path.join(ROOT_PATH, f'assets\\inference\\{GLOBAL_LANG}\\')
+default_infer_path = os.path.join(ROOT_PATH, f'assets\\PPOCRModels\\ppocr_onnx_zh')
 
 class PaddleocrAPI:
     
-    def __init__(self, lang='ch', device='gpu', use_angle_cls=True, show_log=False, inference_path=default_infer_path):
+    def __init__(self, device='gpu',inference_path=default_infer_path):
         
         device = globaldevice
         logger.info(t2t("ocr device: ") + device)
+        det_option = fastdeploy.RuntimeOption()
+        rec_option = fastdeploy.RuntimeOption()
+        det_option.use_ort_backend()
+        rec_option.use_ort_backend()
+        det_model = fastdeploy.vision.ocr.DBDetector(model_file=inference_path+"\\ch_PP-OCRv3_det_infer\\inference.pdmodel", params_file=inference_path+"\\ch_PP-OCRv3_det_infer\\inference.pdiparams",runtime_option=det_option)
+        rec_model = fastdeploy.vision.ocr.Recognizer(model_file=inference_path+"\\ch_PP-OCRv3_rec_infer\\inference.pdmodel", params_file=inference_path+"\\ch_PP-OCRv3_rec_infer\\inference.pdiparams",label_path=inference_path+"\\rec\\keys.txt",runtime_option=rec_option)
+        # cls_model = fastdeploy.vision.ocr.DBDetector(model_file=inference_path+"\\ch_ppocr_mobile_v2.0_cls_infer_3\\inference.pdmodel", params_file=inference_path+"\\ch_ppocr_mobile_v2.0_cls_infer_3\\inference.pdiparams")
         
-        self.ocr = paddleocr.PaddleOCR(use_angle_cls=use_angle_cls, lang=lang, show_log=show_log,
-                            device=device,
-                            det_model_dir=inference_path+"det_model\\",
-                            rec_model_dir=inference_path+"rec_model\\",
-                            cls_model_dir=inference_path+"cls_model\\")
+        # det_model = fastdeploy.vision.ocr.DBDetector(model_file=inference_path+"\\det\\inference.onnx", model_format=fastdeploy.ModelFormat.ONNX)
+        # rec_model = fastdeploy.vision.ocr.Recognizer(model_file=inference_path+"\\rec\\inference.onnx",label_path=inference_path+"\\rec\\keys.txt", model_format=fastdeploy.ModelFormat.ONNX)
+        # cls_model = fastdeploy.vision.ocr.DBDetector()
+        
+        self.ocr = fastdeploy.vision.ocr.PPOCRv3(det_model,None,rec_model)
+                            # cls_model_dir=inference_path+"cls_model\\")
+        # self.ocr.use_ort_backend()
         # self.
 
     def img_analyze(self, im_src):
-        result = self.ocr.ocr(im_src, cls=False)
+        result = self.ocr.predict(im_src)
         for line in result:
             pass
             # print(line)
@@ -203,3 +213,5 @@ class PaddleocrAPI:
         return ret1, ret2
 
 
+if __name__ == '__main__':
+    ocr = PaddleocrAPI()

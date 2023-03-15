@@ -41,3 +41,5 @@ pydantic
 gimap==3.4.5
 pyyaml
 pynput
+
+fastdeploy-python

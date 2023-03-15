@@ -13,11 +13,11 @@ collector_flag = False
 startstop_flag = False
 TASK_MANAGER = task_manager.TaskManager()
 TASK_MANAGER.setDaemon(True)
-TASK_MANAGER.pause_threading()
+# TASK_MANAGER.pause_threading()
 TASK_MANAGER.start()
 MISSION_MANAGER = mission_manager.MissionManager()
 MISSION_MANAGER.setDaemon(True)
-MISSION_MANAGER.pause_threading()
+# MISSION_MANAGER.pause_threading()
 MISSION_MANAGER.start()
 
 t1 = None
