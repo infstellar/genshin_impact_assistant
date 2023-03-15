@@ -9,9 +9,10 @@ from source.common.base_threading import BaseThreading
 from source.funclib import collector_lib, generic_lib, combat_lib
 import numpy as np
 import datetime
-from source.manager import scene_manager, asset
+from source.manager import asset
 from funclib.err_code_lib import ERR_PASS, ERR_STUCK, ERR_COLLECTOR_FLOW_TIMEOUT
-from source.funclib import scene_lib
+from source.ui.ui import ui_control
+import source.ui.page as UIPage
 
 COLLECTION = 0
 ENEMY = 1
@@ -285,7 +286,7 @@ class CollectorFlow(BaseThreading):
                 
                 self.collector_posi_dict = collector_lib.load_items_position(self.collector_name, blacklist_id=self.shielded_id)
                 self.shielded_posi_list = collector_lib.load_items_position(self.collector_name, blacklist_id=self.shielded_id, ret_mode=1, check_mode=1)
-                scene_lib.switch_to_page(scene_manager.page_main, self.checkup_stop_func)
+                ui_control.ui_goto(UIPage.page_main)
                 tracker.while_until_no_excessive_error()
                 self.current_position = tracker.get_position()
                 self.collection_details = load_json("collection_id_details.json", "config\\auto_collector")

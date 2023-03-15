@@ -2,7 +2,8 @@ from source.interaction.interaction_core import itt
 from source.manager import scene_manager, posi_manager, asset
 from source.funclib import big_map
 from source.util import *
-from source.funclib import scene_lib
+from source.ui.ui import ui_control
+import source.ui.page as UIPage
 from source.interaction.minimap_tracker import tracker
 
 NORMAL = 0
@@ -64,7 +65,7 @@ def points_angle(p1, p2, coordinate=NORMAL):
 
 def recover_all(stop_func):
     from source.api.pdocr_complete import ocr
-    scene_lib.switch_to_page(scene_manager.page_bigmap, stop_func)
+    ui_control.ui_goto(UIPage.page_bigmap)
     gsp = big_map.get_middle_gs_point(stop_func)
     if len(gsp)==0:
         logger.info(t2t("获取传送锚点失败，正在重试"))
@@ -90,8 +91,8 @@ def recover_all(stop_func):
     
     
 
-def set_genshin_time(x=18, stop_func = scene_manager.default_stop_func): # 调整时间至夜晚
-    scene_lib.switch_to_page(scene_manager.page_time, stop_func)
+def set_genshin_time(x=18, stop_func = lambda:False): # 调整时间至夜晚
+    ui_control.ui_goto(UIPage.page_time)
     time.sleep(0.8)
     itt.move_to(asset.ui_time_menu_core.cap_center_position_xy[0],
                 asset.ui_time_menu_core.cap_center_position_xy[1])
@@ -117,7 +118,7 @@ def set_genshin_time(x=18, stop_func = scene_manager.default_stop_func): # 调�
             break
         time.sleep(1)
     time.sleep(2)
-    scene_lib.switch_to_page(scene_manager.page_main, stop_func)
+    ui_control.ui_goto(UIPage.page_main)
 
 def f():
     return False

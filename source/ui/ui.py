@@ -121,7 +121,8 @@ class UI():
         for page in self.ui_pages:
             page.parent = None
 
+ui_control = UI()
 
 if __name__ == '__main__':
     ui = UI()
-    ui.ui_goto(page_esc)
+    ui.ui_goto(page_time)

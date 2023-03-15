@@ -7,8 +7,11 @@ from source.interaction.interaction_core import itt
 from source.controller import teyvat_move_controller
 from source.common.base_threading import BaseThreading
 from funclib.err_code_lib import ERR_PASS, ERR_STUCK
-from source.funclib import scene_lib
+from source.ui.ui import ui_control
+import source.ui.page as UIPage
 from source.interaction.minimap_tracker import tracker
+from source.ui.ui import ui_control
+import source.ui.page as UIPage
 
 IN_MOVE = 0
 IN_FLY = 1
@@ -56,9 +59,9 @@ class TeyvatMoveFlow(BaseThreading):
         '''设置缩放'''
         reset_map_size_timer = timer_module.FileTimer("reset_map_size_timer")
         if reset_map_size_timer.get_diff_time()>=120:
-            scene_lib.switch_to_page(scene_manager.page_bigmap, self.checkup_stop_func)
+            ui_control.ui_goto(UIPage.page_bigmap)
             big_map.reset_map_size()
-            scene_lib.switch_to_page(scene_manager.page_main, self.checkup_stop_func)
+            ui_control.ui_goto(UIPage.page_main)
             reset_map_size_timer.reset()
         # self.is_combat = False
 
@@ -130,18 +133,18 @@ class TeyvatMoveFlow(BaseThreading):
             if self.current_state == ST.INIT_TEYVAT_TELEPORT:
                 
                 '''切换到大世界界面'''
-                scene_lib.switch_to_page(scene_manager.page_main, self.checkup_stop_func)
+                ui_control.ui_goto(UIPage.page_main)
                 self.tmc.set_parameter(self.target_posi)
                 self.current_state = ST.BEFORE_TEYVAT_TELEPORT
 
             if self.current_state == ST.BEFORE_TEYVAT_TELEPORT:
                 '''切换到大世界界面'''
-                scene_lib.switch_to_page(scene_manager.page_main, self.checkup_stop_func)
+                ui_control.ui_goto(UIPage.page_main)
                 self.current_state = ST.IN_TEYVAT_TELEPORT
 
             if self.current_state == ST.IN_TEYVAT_TELEPORT:
                 curr_posi = tracker.get_position()
-                scene_lib.switch_to_page(scene_manager.page_bigmap, self.checkup_stop_func)
+                ui_control.ui_goto(UIPage.page_bigmap)
                 # Obtain the coordinates of the transmission anchor closest to the target coordinates
                 tw_posi = big_map.nearest_big_map_tw_posi(curr_posi, self.target_posi, self.checkup_stop_func, include_gs=True) # 获得距离目标坐标最近的传送锚点坐标 
                 tw_posi2 = big_map.nearest_big_map_tw_posi(curr_posi, self.target_posi, self.checkup_stop_func, include_gs=False) # 获得距离目标坐标最近的传送锚点坐标 
@@ -171,7 +174,7 @@ class TeyvatMoveFlow(BaseThreading):
                         logger.debug("tp to ss")
                         self.itt.appear_then_click(asset.QTSX)
                     if temporary_timeout_1.istimeout():
-                        scene_lib.switch_to_page(scene_manager.page_bigmap, self.checkup_stop_func)
+                        ui_control.ui_goto(UIPage.page_bigmap)
                         self.itt.move_and_click([tw_posi[0], tw_posi[1]])
                         temporary_timeout_1.reset()
                     time.sleep(1)
@@ -189,22 +192,22 @@ class TeyvatMoveFlow(BaseThreading):
                 self.current_state = ST.AFTER_TEYVAT_TELEPORT
 
             if self.current_state == ST.AFTER_TEYVAT_TELEPORT:
-                scene_lib.switch_to_page(scene_manager.page_main, self.checkup_stop_func)
+                ui_control.ui_goto(UIPage.page_main)
                 time.sleep(2)
                 curr_posi = tracker.get_position()
-                scene_lib.switch_to_page(scene_manager.page_bigmap, self.checkup_stop_func)
+                ui_control.ui_goto(UIPage.page_bigmap)
                 tw_posi = big_map.nearest_teyvat_tw_posi(curr_posi, self.target_posi, self.checkup_stop_func)
                 p1 = euclidean_distance(self.target_posi, tw_posi)
                 p2 = euclidean_distance(self.target_posi, curr_posi)
                 if p1 < p2:
-                    scene_lib.switch_to_page(scene_manager.page_main, self.checkup_stop_func)
+                    ui_control.ui_goto(UIPage.page_main)
                     self.itt.delay(1)
                     self.current_state = ST.BEFORE_TEYVAT_TELEPORT
                 else:
                     self.current_state = ST.AFTER_TEYVAT_TELEPORT
 
             if self.current_state == ST.AFTER_TEYVAT_TELEPORT:
-                scene_lib.switch_to_page(scene_manager.page_main, self.checkup_stop_func)
+                ui_control.ui_goto(UIPage.page_main)
                 self.current_state = ST.END_TEYVAT_TELEPORT
             if self.current_state == ST.END_TEYVAT_TELEPORT:
                 self.current_state = ST.INIT_TEYVAT_MOVE

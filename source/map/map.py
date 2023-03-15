@@ -1,7 +1,8 @@
 from cached_property import cached_property
 
 from source.common import timer_module
-from source.funclib import scene_lib
+from source.ui.ui import ui_control
+import source.ui.page as UIPage
 from source.interaction.interaction_core import itt
 from source.manager import asset, scene_manager
 from source.map.data.teleporter import DICT_TELEPORTER
@@ -46,7 +47,7 @@ class Map(MiniMap, BigMap, MapConverter):
             self.update_position(itt.capture(jpgmode=0))
 
     def _upd_bigmap(self):
-        if scene_lib.get_current_pagename() == "bigmap":
+        if ui_control.verify_page(UIPage.page_bigmap):
             self.update_bigmap(itt.capture(jpgmode=0))
 
     def get_position(self):
@@ -56,10 +57,10 @@ class Map(MiniMap, BigMap, MapConverter):
         return self.convert_GIMAP_to_cvAutoTrack(self.position)
 
     def reinit_smallmap(self):
-        if scene_lib.get_current_pagename() == "main":
-            scene_lib.switch_to_page(scene_manager.page_bigmap, stop_func=timer_module.TimeoutTimer(50).istimeout)
+        if ui_control.verify_page(UIPage.page_main):
+            ui_control.ui_goto(UIPage.page_bigmap)
             self.init_position(tuple(map(int, list(self.get_bigmap_posi(return_position_format=COORDINATE_GIMAP)))))
-            scene_lib.switch_to_page(scene_manager.page_main, stop_func=timer_module.TimeoutTimer(50).istimeout)
+            ui_control.ui_goto(UIPage.page_main)
             self.small_map_init_flag=True
 
     def while_until_no_excessive_error(self):
@@ -78,16 +79,16 @@ class Map(MiniMap, BigMap, MapConverter):
 
     def check_bigmap_scaling(self):
         if not itt.get_img_existence(asset.UIBigMapScaling):
-            origin_page = scene_lib.get_current_pagename()
+            origin_page = ui_control.get_page()
             while not itt.appear_then_click(asset.ButtonSwitchMapArea): itt.delay(0.2)
             while not itt.appear_then_click(asset.MapAreaCYJY): itt.delay(0.2)
             while not itt.appear_then_click(asset.ButtonSwitchMapArea): itt.delay(0.2)
             while not itt.appear_then_click(asset.MapAreaLY): itt.delay(0.2)
-            if origin_page == 'main':
-                scene_lib.switch_to_page(scene_manager.page_main, stop_func=timer_module.TimeoutTimer(50).istimeout)
-            elif origin_page == 'bigmap':
-                scene_lib.switch_to_page(scene_manager.page_main, stop_func=timer_module.TimeoutTimer(50).istimeout)
-                scene_lib.switch_to_page(scene_manager.page_bigmap, stop_func=timer_module.TimeoutTimer(50).istimeout)
+            if origin_page == UIPage.page_main:
+                ui_control.ui_goto(UIPage.page_main)
+            elif origin_page == UIPage.page_bigmap:
+                ui_control.ui_goto(UIPage.page_main)
+                ui_control.ui_goto(UIPage.page_bigmap)
     
     def get_bigmap_posi(self, is_upd=True, return_position_format: str = COORDINATE_TIANLI) -> np.ndarray:
         self.check_bigmap_scaling()
@@ -206,7 +207,7 @@ class Map(MiniMap, BigMap, MapConverter):
         """
         if tp_type == None:
             tp_type = ["Teleporter", "Statue", "Domain"]
-        scene_lib.switch_to_page(scene_manager.page_bigmap, lambda: False)
+        ui_control.ui_goto(scene_manager.page_bigmap, lambda: False)
         if tp_mode == 0:
             target_teleporter = self._find_closest_teleporter(posi, tp_type=tp_type)
         tp_posi = self.convert_GIMAP_to_cvAutoTrack(target_teleporter.position)
@@ -255,7 +256,7 @@ class Map(MiniMap, BigMap, MapConverter):
                 logger.debug("tp to Statue")
                 itt.appear_then_click(asset.QTSX)
             if tp_timeout_1.istimeout():
-                scene_lib.switch_to_page(scene_manager.page_bigmap, lambda: False)
+                ui_control.ui_goto(scene_manager.page_bigmap, lambda: False)
                 if IS_DEVICE_PC:
                     itt.move_and_click([1920 / 2, 1080 / 2])  # screen center
                 else:
@@ -265,7 +266,7 @@ class Map(MiniMap, BigMap, MapConverter):
 
         # itt.move_and_click([posi_manager.tp_button[0], posi_manager.tp_button[1]], delay=1)
 
-        while not (scene_lib.get_current_pagename() == "main"):
+        while not (ui_control.get_page() == UIPage.page_main):
             time.sleep(0.2)
 
         self.reinit_smallmap()

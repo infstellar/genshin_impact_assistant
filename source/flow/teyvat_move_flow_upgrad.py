@@ -1,16 +1,19 @@
 from source.util import *
 from source.common import timer_module, static_lib
-from source.funclib import generic_lib
+from source.funclib import generic_lib, movement
 from source.manager import scene_manager, asset
 from source.interaction.interaction_core import itt
 from source.controller import teyvat_move_controller
 from funclib.err_code_lib import ERR_PASS, ERR_STUCK
-from source.funclib import scene_lib, movement
+from source.ui.ui import ui_control
+import source.ui.page as UIPage
 from source.interaction.minimap_tracker import tracker
 from source.flow.flow_template import FlowConnector, FlowController, FlowTemplate, EndFlowTemplate
 from source.flow import flow_state as ST
 from source.flow import flow_code as FC
 from source.map.map import genshin_map
+from source.ui.ui import ui_control
+import source.ui.page as UIPage
 
 
 IN_MOVE = 0
@@ -74,7 +77,7 @@ class TeyvatTeleport(FlowTemplate):
             self._next_rfc()
     
     def state_before(self):
-        scene_lib.switch_to_page(scene_manager.page_main, self.upper.checkup_stop_func)
+        ui_control.ui_goto(UIPage.page_main)
         self._next_rfc()
 
     def state_in(self):
@@ -82,7 +85,7 @@ class TeyvatTeleport(FlowTemplate):
         self._next_rfc()
 
     def state_end(self):
-        scene_lib.switch_to_page(scene_manager.page_main, self.upper.checkup_stop_func)
+        ui_control.ui_goto(UIPage.page_main)
         return super().state_end()
 
 class TeyvatMoveCommon():

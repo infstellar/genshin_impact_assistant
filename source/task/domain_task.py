@@ -4,7 +4,8 @@ from source.flow.teyvat_move_flow_upgrad import TeyvatMoveFlowController
 from source.task.task_template import TaskTemplate
 from source.funclib.collector_lib import load_items_position
 from source.funclib.generic_lib import f_recognition
-from source.funclib import scene_lib
+from source.ui.ui import ui_control
+import source.ui.page as UIPage
 from source.interaction.interaction_core import itt
 from source.manager import asset, scene_manager
 from source.task import task_id as TI
@@ -104,7 +105,7 @@ class DomainTask(TaskTemplate):
             self.flow_mode = TI.DT_MOVE_TO_DOMAIN
         else:
             logger.info(t2t("Unknown UI page"))
-            scene_lib.switch_to_page(scene_manager.page_main, self.checkup_stop_func)
+            ui_control.ui_goto(UIPage.page_main)
 
     def exec_task(self):
         if self.flow_mode == TI.DT_INIT:

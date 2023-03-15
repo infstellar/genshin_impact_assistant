@@ -1,7 +1,8 @@
 from source.util import *
 from source.interaction.interaction_core import itt
 from source.manager import scene_manager, img_manager, posi_manager, asset
-from source.funclib import scene_lib
+from source.ui.ui import ui_control
+import source.ui.page as UIPage
 
 itt = itt
 
@@ -111,7 +112,7 @@ def get_tw_points(bigmatMat, stop_func):
         logger.warning("获取传送锚点坐标失败，正在重试")
         time.sleep(5)
         bigmatMat = itt.capture(jpgmode=0)
-        scene_lib.switch_to_page(scene_manager.page_bigmap, stop_func=stop_func)
+        ui_control.ui_goto(UIPage.page_bigmap)
         # scene_manager.switchto_bigmapwin(scene_manager.default_stop_func)
         return get_tw_points(bigmatMat, stop_func)
     return ret
@@ -130,7 +131,7 @@ def get_gs_points(bigmatMat, stop_func):
         logger.warning("获取七天神像坐标失败，正在重试")
         time.sleep(5)
         bigmatMat = itt.capture(jpgmode=0)
-        scene_lib.switch_to_page(scene_manager.page_bigmap, stop_func=stop_func)
+        ui_control.ui_goto(UIPage.page_bigmap)
         # scene_manager.switchto_bigmapwin(scene_manager.default_stop_func)
         return get_gs_points(bigmatMat, stop_func)
     return np.asarray(ret)
@@ -177,8 +178,8 @@ def get_closest_teleport_waypoint(object_img: img_manager.ImgIcon):
 def reset_map_size():
     """重置地图大小为标准值
     """
-    while scene_lib.get_current_pagename() != "bigmap":
-        scene_lib.switch_to_page(scene_manager.page_bigmap, stop_func = scene_manager.default_stop_func)
+    while not ui_control.verify_page(UIPage.page_bigmap):
+        ui_control.ui_goto(UIPage.page_bigmap)
         time.sleep(2)
         
     
