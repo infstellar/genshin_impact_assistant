@@ -13,7 +13,7 @@ try:
 except Exception as error:
     logger.critical(t2t("导入paddleocr时错误; err code: 001"))
     logger.exception(error)
-logger.debug(f"import pdocr time: {pdocr_timer_performance.get_diff_time()}")
+logger.info(f"import pdocr time: {round(pdocr_timer_performance.get_diff_time(),2)}")
 
 # paddleocr.MODEL_URLS["OCR"]["PP-OCRv3"]["rec"]["num_only"] = {
 #                     'url':
@@ -21,51 +21,174 @@ logger.debug(f"import pdocr time: {pdocr_timer_performance.get_diff_time()}")
 #                     'dict_path': './ppocr/utils/en_dict.txt'
                 # },
 
-globaldevice = config_json["device_paddle"]
+# globaldevice = config_json["device_paddle"]
 # if globaldevice == 'auto':
 #     import paddle
 
 #     paddle.fluid.install_check.run_check()
 #     globaldevice = 'cpu'
-APPROXIMATE_MATCHING = 0
+CONTAIN_MATCHING = 0
 ACCURATE_MATCHING = 1
 TWICE_AND_MATCHING = 3
 TWICE_OR_MATCHING = 5
 TWICE_FRONTANDBACK_MATCHING = 4
 TWICE_FRONTANDBACK_SEQUENTIAL_MATCHING = 6
 REPEATLY_MATCHING = 7
+SHAPE_MATCHING = 8
 
 CHANNEL_RED = 2
 RETURN_TEXT = 1
 RETURN_POSITION = 0
+RETURN_POINT = 3
 
-default_infer_path = os.path.join(ROOT_PATH, f'assets\\PPOCRModels\\ppocr_onnx_zh')
+
+
+class PaddleOcrFastDeploy():
+    def __init__(self, inference_path:str=None, lang=GLOBAL_LANG) -> None:
+        if inference_path is None:
+            inference_path = os.path.join(ROOT_PATH, f'assets\\PPOCRModels\\{lang}')
+        logger.info(f"Creating PaddleOCRFastDeploy object: {inference_path}")
+        pt=time.time()
+        det_file_path = os.path.join(inference_path, "pddet\\inference.pdmodel")
+        det_para_path = os.path.join(inference_path, "pddet\\inference.pdiparams")
+        rec_file_path = os.path.join(inference_path, "pdrec\\inference.pdmodel")
+        rec_para_path = os.path.join(inference_path, "pdrec\\inference.pdiparams")
+        rec_keys_path = os.path.join(inference_path, "rec\\keys.txt")
+        self.det_model = fastdeploy.vision.ocr.DBDetector(model_file=det_file_path, params_file=det_para_path)
+        self.rec_model = fastdeploy.vision.ocr.Recognizer(model_file=rec_file_path, params_file=rec_para_path,label_path=rec_keys_path)
+        logger.info(f"created DBDetector and Recognizer. cost {round(time.time()-pt,2)}")
+        pt2=time.time()
+        self.model = fastdeploy.vision.ocr.PPOCRv3(self.det_model,None,self.rec_model)
+        logger.info(f"created PPOCRv3. cost {round(time.time()-pt2,2)}")
+    
+    def analyze(self, img:np.ndarray):
+        if False:
+            cv2.imshow("123",img)
+            cv2.waitKey(0)
+        res = self.model.predict(img)
+        return res
+
+    def find_text(self,res,text,mode=CONTAIN_MATCHING,text_process=lambda x:x):
+        ret_indexes = []
+
+        if mode == SHAPE_MATCHING:
+            max_rate = 0
+            max_result = None
+            for i in range(len(res.text)):
+                curr_rate = compare_texts(text, text_process(res.text[i]))
+                if curr_rate > max_rate:
+                    max_result = i
+                    max_rate = curr_rate
+            logger.debug(f"text: {res.text[max_result]}")
+            return [max_result]
+
+        for i in range(len(res.text)):
+            res_text = text_process(res.text[i])
+            if mode == CONTAIN_MATCHING:
+                if text in res_text:
+                    ret_indexes.append(i)
+        
+        return ret_indexes
+
+    def get_text_position(self,
+                           img:np.ndarray,
+                           text:str,
+                           mode=CONTAIN_MATCHING,
+                           position_mode = RETURN_POINT,
+                           cap_posi_leftup=None,
+                           text_process=lambda x:x)->list:
+        ret_position = []
+        if cap_posi_leftup == None:
+            cap_posi_leftup = [0,0]
+        res = self.analyze(img)
+        indexes = self.find_text(res,text,mode=mode,text_process=text_process)
+        for i in indexes:
+            # left up - right down 
+            # docs from https://github.com/PaddlePaddle/FastDeploy/blob/develop/docs/api/vision_results/ocr_result_CN.md
+            # boxes: 成员变量，表示单张图片检测出来的所有目标框坐标，
+            # boxes.size()表示单张图内检测出的框的个数，每个框以8个int数值依次表示框的4个坐标点，
+            # 顺序为左下 01，右下 23，右上 45，左上 67
+            if position_mode == RETURN_POSITION:
+                ret_position.append(
+                                    [cap_posi_leftup[0]+res.boxes[i][6], cap_posi_leftup[1]+res.boxes[i][7],
+                                    cap_posi_leftup[0]+res.boxes[i][2], cap_posi_leftup[1]+res.boxes[i][3]]
+                                    )
+            elif position_mode == RETURN_POINT:
+                ret_position.append(
+                                    [(cap_posi_leftup[0]+res.boxes[i][6]+cap_posi_leftup[0]+res.boxes[i][2])/2,
+                                    (cap_posi_leftup[1]+res.boxes[i][7]+cap_posi_leftup[1]+res.boxes[i][3])/2
+                                    ]
+                                    )
+
+
+        if len(ret_position)==0:
+            return -1
+        elif len(ret_position)==1:
+            return list(ret_position[0])
+        elif len(ret_position)>1:
+            return list(ret_position)
+            
+    
+    def is_img_num(self, im_src):
+        pdocr_timer_performance.reset()
+        is_num = False
+        res_num = None
+        res = self.analyze(im_src)
+
+        for num in res.text:
+            if is_number(num):
+                res_num = float(num)
+                is_num = True
+            else:
+                res_num = None
+                is_num = False
+        t = pdocr_timer_performance.get_diff_time()
+
+        return is_num, res_num, t
+
+    def is_img_num_plus(self, im_src):
+        ret1, ret2, t = self.is_img_num(im_src)
+        if ret1 is not None:
+            ret1, ret2, t = self.is_img_num(im_src)
+        logger.debug(str(ret1) + ' ' + str(ret2) + ' ' + str(t) + ' |function name: ' +
+                     inspect.getframeinfo(inspect.currentframe().f_back)[2])
+        return ret1, ret2
+
+if __name__ == '__main__':
+    ocr = PaddleOcrFastDeploy()
+    imsrc = cv2.imread("D:\\test.png")
+    r = ocr.get_text_position(imsrc, "VsCode")
+    print(r)# boxes, rec_scores, text
+
+
+
+
+
+default_infer_path = os.path.join(ROOT_PATH, f'assets\\PPOCRModels\\zh_CN')
 
 class PaddleocrAPI:
     
     def __init__(self, device='gpu',inference_path=default_infer_path):
         
-        device = globaldevice
+        device = 'cpu'
         logger.info(t2t("ocr device: ") + device)
-        det_option = fastdeploy.RuntimeOption()
-        rec_option = fastdeploy.RuntimeOption()
-        det_option.use_ort_backend()
-        rec_option.use_ort_backend()
-        det_model = fastdeploy.vision.ocr.DBDetector(model_file=inference_path+"\\ch_PP-OCRv3_det_infer\\inference.pdmodel", params_file=inference_path+"\\ch_PP-OCRv3_det_infer\\inference.pdiparams",runtime_option=det_option)
-        rec_model = fastdeploy.vision.ocr.Recognizer(model_file=inference_path+"\\ch_PP-OCRv3_rec_infer\\inference.pdmodel", params_file=inference_path+"\\ch_PP-OCRv3_rec_infer\\inference.pdiparams",label_path=inference_path+"\\rec\\keys.txt",runtime_option=rec_option)
+        det_model = fastdeploy.vision.ocr.DBDetector(model_file=inference_path+"\\pddet\\inference.pdmodel", params_file=inference_path+"\\pddet\\inference.pdiparams")
+        rec_model = fastdeploy.vision.ocr.Recognizer(model_file=inference_path+"\\pdrec\\inference.pdmodel", params_file=inference_path+"\\pdrec\\inference.pdiparams",label_path=inference_path+"\\rec\\keys.txt")
         # cls_model = fastdeploy.vision.ocr.DBDetector(model_file=inference_path+"\\ch_ppocr_mobile_v2.0_cls_infer_3\\inference.pdmodel", params_file=inference_path+"\\ch_ppocr_mobile_v2.0_cls_infer_3\\inference.pdiparams")
         
         # det_model = fastdeploy.vision.ocr.DBDetector(model_file=inference_path+"\\det\\inference.onnx", model_format=fastdeploy.ModelFormat.ONNX)
         # rec_model = fastdeploy.vision.ocr.Recognizer(model_file=inference_path+"\\rec\\inference.onnx",label_path=inference_path+"\\rec\\keys.txt", model_format=fastdeploy.ModelFormat.ONNX)
         # cls_model = fastdeploy.vision.ocr.DBDetector()
         
-        self.ocr = fastdeploy.vision.ocr.PPOCRv3(det_model,None,rec_model)
+        self.pdocr = fastdeploy.vision.ocr.PPOCRv3(det_model,None,rec_model)
                             # cls_model_dir=inference_path+"cls_model\\")
         # self.ocr.use_ort_backend()
         # self.
 
     def img_analyze(self, im_src):
-        result = self.ocr.predict(im_src)
+        if True:
+            pass
+        result = self.pdocr.predict(im_src)
         for line in result:
             pass
             # print(line)
@@ -87,7 +210,7 @@ class PaddleocrAPI:
     #     im_show.save('result.jpg')
 
     @staticmethod
-    def find_text(result, text, mode=APPROXIMATE_MATCHING, text_process=lambda x:x):
+    def find_text(result, text, mode=CONTAIN_MATCHING, text_process=lambda x:x):
         if result == [[]]:
             return None
         
@@ -103,7 +226,7 @@ class PaddleocrAPI:
                 logger.debug(f"text: {max_result[1][0]}")
                 return max_result
         
-        if mode == APPROXIMATE_MATCHING:
+        if mode == CONTAIN_MATCHING:
             for i in range(len(result)):
                 if text in result[i][1][0]:
                     return result[i]
@@ -144,7 +267,7 @@ class PaddleocrAPI:
                 return result
         return None
 
-    def get_text_position(self, im_src, text, mode=APPROXIMATE_MATCHING, returnMode=RETURN_POSITION, isprintlog=False,
+    def get_text_position(self, im_src, text, mode=CONTAIN_MATCHING, returnMode=RETURN_POSITION, isprintlog=False,
                           message='', default_end='\n', cap_posi_leftup = None, text_process=lambda x:x):
         if cap_posi_leftup == None:
             cap_posi_leftup = [0,0]
@@ -179,6 +302,7 @@ class PaddleocrAPI:
                          inspect.getframeinfo(inspect.currentframe().f_back)[2])
             return -1
 
+
     def is_img_num(self, im_src):
         pdocr_timer_performance.reset()
         is_num = False
@@ -211,7 +335,3 @@ class PaddleocrAPI:
         logger.debug(str(ret1) + ' ' + str(ret2) + ' ' + str(t) + ' |function name: ' +
                      inspect.getframeinfo(inspect.currentframe().f_back)[2])
         return ret1, ret2
-
-
-if __name__ == '__main__':
-    ocr = PaddleocrAPI()

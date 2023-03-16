@@ -318,7 +318,7 @@ class InteractionBGD:
         """appear then click
 
         Args:
-            imgicon (img_manager.ImgIcon): imgicon对象
+            inputvar (img_manager.ImgIcon/text_manager.TextTemplate/button_manager.Button)
             is_gray (bool, optional): 是否启用灰度匹配. Defaults to False.
 
         Returns:

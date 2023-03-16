@@ -1,8 +1,9 @@
-from source.api.pdocr_api import *
-pdocr_timer_performance.reset()
+from source.api.pdocr_api import PaddleOcrFastDeploy
+from source.util import *
+pt = time.time()
 if GLOBAL_LANG == "zh_CN":
     lang = 'ch'
 elif GLOBAL_LANG == "en_US":
     lang = 'en'
-ocr = PaddleocrAPI()
-logger.info('created pdocr. cost ' + str(pdocr_timer_performance.get_diff_time()) + ' second.')
+ocr = PaddleOcrFastDeploy()
+logger.info(f'created pdocr. cost {round(time.time()-pt,2)} second.')
