@@ -3,6 +3,7 @@
     // 悬停以查看现有属性的描述。
     // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
     "configurations": [
+
         
         {
             "name": "Python: Current File",
@@ -14,7 +15,8 @@
             "env": {
                 "PYTHONPATH": "${workspaceFolder}"
             },
-            "justMyCode": true
+            "justMyCode": true,
+            "purpose": ["debug-in-terminal"]
         },
         {
             "name": "Python: GIA Main",

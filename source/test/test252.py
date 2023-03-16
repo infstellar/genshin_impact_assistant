@@ -13,7 +13,8 @@ rec_model = fastdeploy.vision.ocr.Recognizer(model_file=inference_path+"\\pdrec\
 
 ocr = fastdeploy.vision.ocr.PPOCRv3(det_model,None,rec_model)
 ocr2 = fastdeploy.vision.ocr.PPOCRv3(det_model,None,rec_model)
-imsrc = cv2.imread("D:\\test.png")
-
+imsrc = cv2.imread("D:\\test.jpg")
+cv2.imshow('123',imsrc)
+cv2.waitKey(0)
 print(ocr.predict(imsrc))
 print(ocr2.predict(imsrc))

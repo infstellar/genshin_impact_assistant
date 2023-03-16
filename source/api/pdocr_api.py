@@ -65,6 +65,7 @@ class PaddleOcrFastDeploy():
         if False:
             cv2.imshow("123",img)
             cv2.waitKey(0)
+        img = cv2.cvtColor(img,cv2.COLOR_RGB2BGR)
         res = self.model.predict(img)
         return res
 
@@ -156,7 +157,10 @@ class PaddleOcrFastDeploy():
 
 if __name__ == '__main__':
     ocr = PaddleOcrFastDeploy()
-    imsrc = cv2.imread("D:\\test.png")
+    imsrc = cv2.imread("D:\\test2.jpg")
+    r = ocr.get_text_position(imsrc, "VsCode")
+    print(r)# boxes, rec_scores, text
+    imsrc = cv2.imread("D:\\test.jpg")
     r = ocr.get_text_position(imsrc, "VsCode")
     print(r)# boxes, rec_scores, text
 

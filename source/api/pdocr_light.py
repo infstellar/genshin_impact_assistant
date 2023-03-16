@@ -1,7 +1,7 @@
 from source.api.pdocr_api import PaddleOcrFastDeploy
 from source.util import *
 pt = time.time()
-ocr = PaddleOcrFastDeploy(lang='en_US')
+ocr_light = PaddleOcrFastDeploy(lang='en_US')
 logger.info(f'created pdocr. cost {round(time.time()-pt,2)} second.')
 # from source.api.pdocr_api import *
 # pdocr_timer_performance.reset()
