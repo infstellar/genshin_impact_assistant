@@ -1,8 +1,8 @@
 from source.util import *
-from source.common.base_threading import BaseThreading
+from source.common.base_threading import AdvanceThreading
 from source.flow.flow_template import FlowController
 
-class TaskTemplate(BaseThreading):
+class TaskTemplate(AdvanceThreading):
     def __init__(self):
         super().__init__()
         self.flow_list = []

@@ -17,7 +17,7 @@ TASK_MANAGER.setDaemon(True)
 TASK_MANAGER.start()
 MISSION_MANAGER = mission_manager.MissionManager()
 MISSION_MANAGER.setDaemon(True)
-# MISSION_MANAGER.pause_threading()
+MISSION_MANAGER.pause_threading()
 MISSION_MANAGER.start()
 
 t1 = None

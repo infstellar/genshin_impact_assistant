@@ -50,6 +50,7 @@
         "bigmap",
         "chara",
         "charalist",
+        "Crystalfly",
         "CSDL",
         "CSMD",
         "CVAUTOTRACK",
@@ -107,5 +108,6 @@
         "YOLOX"
     ],
     "codecheck.ExcludeDirectory": "",
-    "codecheck.ScanDirectory": "source"
+    "codecheck.ScanDirectory": "source",
+    "window.zoomLevel": 1
 }

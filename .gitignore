@@ -210,3 +210,4 @@ source/test/test242.py
 config/collection_path/*
 !config/collection_path/.gitkeep
 source/test/test251.py
+config/mission_group/*.json

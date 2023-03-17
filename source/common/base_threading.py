@@ -5,7 +5,7 @@ from source.util import *
 
 class BaseThreading(threading.Thread):
     """
-    基本线程类，实现了暂停线程、继续线程、终止线程。其他具体参考基本线程规范。
+    基本线程类。
     """
     def __init__(self, thread_name = None):
         super().__init__()
@@ -34,6 +34,8 @@ class BaseThreading(threading.Thread):
         for i in self.sub_threading_list:
             i.stop_threading()
 
+    
+
     def checkup_stop_threading(self):
         if self.stop_threading_flag:
             return True
@@ -61,7 +63,8 @@ class BaseThreading(threading.Thread):
         threading_obj.setDaemon(True)
         threading_obj.add_stop_func(self.checkup_stop_func)
         threading_obj.pause_threading()
-        threading_obj.start()
+        if start:
+            threading_obj.start()
         self.sub_threading_list.append(threading_obj)
         logger.debug(f"sub threading {threading_obj.name} has been add.")
 
@@ -88,3 +91,18 @@ class BaseThreading(threading.Thread):
                 continue
 
             self.loop()
+
+class AdvanceThreading(BaseThreading):
+    def __init__(self, thread_name=None):
+        super().__init__(thread_name)
+    
+    def blocking_startup(self, threading_obj:BaseThreading):
+        if threading_obj.is_alive():
+            threading_obj.stop_threading()
+        threading_obj.continue_threading()
+        while 1:
+            time.sleep(self.while_sleep)
+            threading_obj.loop()
+            if threading_obj.pause_threading_flag:
+                break
+        return threading_obj.get_last_err_code()
