@@ -23,23 +23,17 @@ class UI():
         pass
     
     def get_page(self):
-        def gp(self):
-            ret_page = None
-            for page in self.ui_pages:
-                if page.is_current_page(itt, print_log = True):
-                    if ret_page is None:
-                        ret_page = page
-                    else:
-                        logger.warning(f"检测到多个Page")
-            return ret_page
-        ret_page = gp(self)
+        ret_page = None
+        for page in self.ui_pages:
+            if page.is_current_page(itt, print_log = True):
+                if ret_page is None:
+                    ret_page = page
+                else:
+                    logger.warning(f"检测到多个Page")
         if ret_page is None:
             logger.warning(f"未知Page, 重新检测")
             self.ui_additional()
-            ret_page = gp(self)
-            if ret_page is None:
-                logger.error(f"未知Page。")
-                raise PageNotFoundError
+            ret_page = self.get_page()  
         return ret_page
 
     def verify_page(self, page:UIPage) -> bool:

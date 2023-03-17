@@ -49,8 +49,12 @@ class DomainTask(TaskTemplate):
         while not itt.get_img_existence(asset.solo_challenge): itt.delay("animation")
         itt.delay(1,comment="genshin animation")
         from source.api.pdocr_complete import ocr
+        from source.api.pdocr_api import SHAPE_MATCHING
         cap_area = asset.switch_domain_area.position
-        p1 = ocr.get_text_position(itt.capture(jpgmode=0, posi=cap_area), self.domain_stage_name, cap_posi_leftup=cap_area[:2], text_process = self._domain_text_process)
+        p1 = ocr.get_text_position(itt.capture(jpgmode=0, posi=cap_area), self.domain_stage_name,
+                                   cap_posi_leftup=cap_area[:2],
+                                   text_process = self._domain_text_process,
+                                   mode=SHAPE_MATCHING)
         if p1 != -1:
             itt.move_and_click([p1[0] + 5, p1[1] + 5], delay=1)
         

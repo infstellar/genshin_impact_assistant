@@ -207,7 +207,7 @@ class Map(MiniMap, BigMap, MapConverter):
         """
         if tp_type == None:
             tp_type = ["Teleporter", "Statue", "Domain"]
-        ui_control.ui_goto(scene_manager.page_bigmap, lambda: False)
+        ui_control.ui_goto(UIPage.page_bigmap)
         if tp_mode == 0:
             target_teleporter = self._find_closest_teleporter(posi, tp_type=tp_type)
         tp_posi = self.convert_GIMAP_to_cvAutoTrack(target_teleporter.position)
@@ -256,7 +256,7 @@ class Map(MiniMap, BigMap, MapConverter):
                 logger.debug("tp to Statue")
                 itt.appear_then_click(asset.QTSX)
             if tp_timeout_1.istimeout():
-                ui_control.ui_goto(scene_manager.page_bigmap, lambda: False)
+                ui_control.ui_goto(UIPage.page_bigmap)
                 if IS_DEVICE_PC:
                     itt.move_and_click([1920 / 2, 1080 / 2])  # screen center
                 else:
