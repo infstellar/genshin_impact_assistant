@@ -33,6 +33,7 @@ class UI():
         if ret_page is None:
             logger.warning(f"未知Page, 重新检测")
             self.ui_additional()
+            time.sleep(1)
             ret_page = self.get_page()  
         return ret_page
 

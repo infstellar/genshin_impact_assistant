@@ -239,41 +239,46 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
     def state_in(self):
         # 设置基本参数
         self.switch_motion_state()
-        target_posi = self.curr_breaks[self.curr_break_point_index]
-        special_key = self.curr_path[self.curr_path_index]["special_key"]
-        curr_posi = tracker.get_position()
-        # 刷新当前position index
-        self._refresh_curr_posi_index(list(curr_posi))
-        if self.upper.ignore_space and special_key == "space": # ignore space
-            special_key = None
-        if special_key is None: # 设定offset
-            offset = 5 # NO SK
-        else:
-            offset = 3 # SK
-        if self.curr_path[self.curr_path_index]["motion"]=="FLYING":
-            offset = 8
-        if self.curr_break_point_index < len(self.curr_breaks)-1: # 如果两个BP距离小于offset就会瞬移，排除一下。
-            dist = euclidean_distance(self.curr_breaks[self.curr_break_point_index], self.curr_breaks[self.curr_break_point_index+1])
-            if dist >= 1 and dist <=offset:
-                logger.info(f"BPs too close: dist: {dist}")
-                offset = dist/2
-                logger.info(f"offset: {offset}")
-            elif dist < 1:
-                logger.info(f"BPs too close: dist: {dist}")
-                offset = 1.
-                logger.info(f"offset: {offset}")
-        if euclidean_distance(target_posi, curr_posi) <= offset: # 检测是否要切换到下一个BP
-            if len(self.curr_breaks) - 1 > self.curr_break_point_index:
-                self.curr_break_point_index += 1
-                logger.debug(f"index {self.curr_break_point_index} posi {self.curr_breaks[self.curr_break_point_index]}")
+        while 1:
+            target_posi = self.curr_breaks[self.curr_break_point_index]
+            special_key = self.curr_path[self.curr_path_index]["special_key"]
+            curr_posi = tracker.get_position()
+            # 刷新当前position index
+            self._refresh_curr_posi_index(list(curr_posi))
+            if self.upper.ignore_space and special_key == "space": # ignore space
+                special_key = None
+            if special_key is None: # 设定offset
+                offset = 5 # NO SK
             else:
-                logger.info("path end")
-                self._next_rfc()
-        if special_key != None: # 检测是否执行SK
-            self._exec_special_key(special_key)
+                offset = 3 # SK
+            if self.curr_path[self.curr_path_index]["motion"]=="FLYING":
+                offset = 8
+            if self.curr_break_point_index < len(self.curr_breaks)-1: # 如果两个BP距离小于offset就会瞬移，排除一下。
+                dist = euclidean_distance(self.curr_breaks[self.curr_break_point_index], self.curr_breaks[self.curr_break_point_index+1])
+                if dist >= 1 and dist <=offset:
+                    logger.info(f"BPs too close: dist: {dist}")
+                    offset = dist/2
+                    logger.info(f"offset: {offset}")
+                elif dist < 1:
+                    logger.info(f"BPs too close: dist: {dist}")
+                    offset = 1.
+                    logger.info(f"offset: {offset}")
+            if special_key != None: # 检测是否执行SK
+                self._exec_special_key(special_key)
+            if euclidean_distance(target_posi, curr_posi) <= offset: # 检测是否要切换到下一个BP
+                if len(self.curr_breaks) - 1 > self.curr_break_point_index:
+                    self.curr_break_point_index += 1
+                    logger.debug(f"index {self.curr_break_point_index} posi {self.curr_breaks[self.curr_break_point_index]}")
+                else:
+                    logger.info("path end")
+                    self._next_rfc()
+                    break
+            else:
+                break
+            
             
                 
-        
+        # curr_posi = tracker.get_position()
         if self.motion_state == IN_FLY and self.curr_path[self.curr_path_index]["motion"]=="WALKING":
             logger.info("landing")
             itt.left_click()
@@ -293,6 +298,7 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
         #         self.switch_motion_state()
         #         if self.motion_state == IN_FLY:
         #             break
+       
         print(euclidean_distance(target_posi, curr_posi))
         # delta_distance = self.CalculateTheDistanceBetweenTheAngleExtensionLineAndTheTarget(curr_posi,target_posi)
         delta_degree = abs(movement.calculate_delta_angle(tracker.get_rotation(),movement.calculate_posi2degree(target_posi)))

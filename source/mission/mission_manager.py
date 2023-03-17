@@ -27,6 +27,7 @@ class MissionManager(AdvanceThreading):
             logger.info(f"Mission {mission.name} Start.")
             self.blocking_startup(mission)
             logger.info(f"Mission {mission.name} End.")
+            mission.stop_threading()
         logger.info(f"All Mission End.")
         self.pause_threading()
         
@@ -34,7 +35,7 @@ if __name__ == '__main__':
     mm = MissionManager()
     # mm.add_mission()
     mm.start()
-    mm.start_missions(["MissionTest"])
+    mm.start_missions(["MissionCrystalfly","MissionCrystalfly"])
     while 1:
         time.sleep(1)
     pass

@@ -129,6 +129,9 @@ class PaddleOcrFastDeploy():
         elif len(ret_position)>1:
             return list(ret_position)
             
+    def get_all_texts(self, img):
+        res = self.analyze(img)
+        return res.text
     
     def is_img_num(self, im_src):
         pdocr_timer_performance.reset()

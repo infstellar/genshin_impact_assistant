@@ -155,9 +155,9 @@ class PickupOperator(BaseThreading):
             # img_manager.qshow(cap)
             cap = self.itt.png2jpg(cap, channel='ui', alpha_num=180)
             
-            res = ocr.img_analyze(cap)
+            res = ocr.get_all_texts(cap)
             if len(res) != 0:
-                if res[0][1][0] not in self.pickup_blacklist:
+                if res[0] not in self.pickup_blacklist:
                     self.pickup_fail_timeout.reset()
                     self.last_search_times = 2
                     self.itt.key_press('f')
@@ -167,6 +167,8 @@ class PickupOperator(BaseThreading):
                     if str(res[0][1][0]) in self.target_name:
                         logger.info(t2t("已找到：") + self.target_name)
                         self.pickup_succ = True
+                    if flag1:
+                        self.itt.key_down('w')
                     return True
         if flag1:
             self.itt.key_down('w')
