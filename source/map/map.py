@@ -279,6 +279,8 @@ class Map(MiniMap, BigMap, MapConverter):
             time.sleep(0.2)
 
         self.reinit_smallmap()
+        
+        return tp_posi
 
 
 genshin_map = Map()

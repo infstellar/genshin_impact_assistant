@@ -157,11 +157,15 @@ class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon):
         # print(currentp, closest_pp)
         return closest_pp
 
+    def state_before(self):
+        tracker.reinit_smallmap()
+        self._next_rfc()
+    
     def state_in(self):
         self.switch_motion_state()
         
         self.current_posi = tracker.get_position()
-        p1 = self._calculate_next_priority_point(self.current_posi, self.upper.target_posi)
+        p1 = self.upper.target_posi
         # print(p1)
         movement.change_view_to_posi(p1, self.upper.checkup_stop_func)
         if (not static_lib.W_KEYDOWN):
@@ -217,6 +221,8 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
         self.last_ten_delta = []
         
         self.ready_to_end = False
+        self.end_times = 0
+        self.init_start = False
 
     
     def CalculateTheDistanceBetweenTheAngleExtensionLineAndTheTarget(self, curr,target):
@@ -253,14 +259,15 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
         self.curr_path = self.upper.path_dict["position_list"]
         self.curr_breaks = self.upper.path_dict["break_position"]
         self.ready_to_end = False
+        self.init_start = False
         self.curr_path_index = 0
         self.curr_break_point_index = 0
+        self.end_times = 0
         # itt.key_down('w')
         if self.upper.is_reinit:
             tracker.reinit_smallmap()
-        self.upper.while_sleep = 0.05
+        self.upper.while_sleep = 0
         self._next_rfc()
-        itt.key_down('w')
     
     def state_in(self):
         # 如果循环太慢而走的太快就会回头 可能通过量化移动时间和距离解决
@@ -309,7 +316,7 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
             if self.curr_path[self.curr_path_index]["motion"]=="FLYING":
                 offset = 8
             if self.ready_to_end:
-                offset = 1
+                offset = min(3,max(1,(self.end_times)/10+0.8))
             # 如果两个BP距离小于offset就会瞬移，排除一下。
             if self.curr_break_point_index < len(self.curr_breaks)-1: 
                 dist = euclidean_distance(self.curr_breaks[self.curr_break_point_index], self.curr_breaks[self.curr_break_point_index+1])
@@ -340,7 +347,9 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
                     return
             else:
                 break
-                
+        if self.ready_to_end:
+            self.end_times += 1
+            logger.debug(f"ready to end: {self.end_times} {offset}")        
         logger.debug(f"next break position distance: {euclidean_distance(target_posi, curr_posi)}")
         # delta_distance = self.CalculateTheDistanceBetweenTheAngleExtensionLineAndTheTarget(curr_posi,target_posi)
         delta_degree = abs(movement.calculate_delta_angle(tracker.get_rotation(),movement.calculate_posi2degree(target_posi)))
@@ -352,10 +361,12 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
             else:
                 movement.move(movement.AHEAD,1.5)
         else:
-            movement.change_view_to_posi(target_posi, stop_func = self.upper.checkup_stop_func, max_loop=3)
+            movement.change_view_to_posi(target_posi, stop_func = self.upper.checkup_stop_func, max_loop=4, offset=2, print_log = False)
             if self.ready_to_end:
                 movement.move(movement.AHEAD,1.5)
-        
+        if self.init_start == False:
+            itt.key_down('w')
+            self.init_start = True
             
     def state_after(self):
         self.next_flow_id = self.flow_id
