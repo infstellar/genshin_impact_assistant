@@ -68,6 +68,8 @@ class PathRecorderConnector(FlowConnector):
             key = 'x'
         elif key == Key.shift:
             key = 'shift'
+        elif key == KeyCode.from_char('e'):
+            key = 'e'
         else:
             return
         curr_posi = tracker.get_position()

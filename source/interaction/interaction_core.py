@@ -362,6 +362,7 @@ class InteractionBGD:
                     self.move_and_click(position=imgicon.click_position())
                 else:
                     self.move_and_click(position=click_posi)
+                logger.debug(f"appear then click: True: {imgicon.name} func: {upper_func_name}")
                 return True
             else:
                 return False
@@ -394,6 +395,7 @@ class InteractionBGD:
                 center_p = [(p[0] + p[2]) / 2, (p[1] + p[3]) / 2]
                 self.move_and_click([center_p[0], center_p[1]])
                 # self.left_click()     
+                logger.debug(f"appear then click: True: {imgicon.name} func: {upper_func_name}")
                 return True
             else:
                 return False
@@ -406,6 +408,7 @@ class InteractionBGD:
                 logger.debug('text: ' + inputvar.text + 'position: ' + str(p1) + ' |function name: ' + upper_func_name)
             if p1 != -1:
                 self.move_and_click([p1[0] + 5, p1[1] + 5], delay=1)
+                logger.debug(f"appear then click: True: {inputvar.text} func: {upper_func_name}")
                 return True
             else:
                 return False

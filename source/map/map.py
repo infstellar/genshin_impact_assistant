@@ -241,26 +241,26 @@ class Map(MiniMap, BigMap, MapConverter):
             # 点一下“仅查看秘境”
         else:
             itt.appear_then_click(asset.ButtonSwitchDomainModeOff)
-        if IS_DEVICE_PC:
-            itt.move_and_click(click_posi)  # screen center
-        else:
-            itt.move_and_click(click_posi)
 
-        tp_timeout_1 = timer_module.TimeoutTimer(45)
+        
+
+        tp_timeout_1 = timer_module.TimeoutTimer(15)
+        tp_timeout_1.reset()
+        tp_timeout_2 = timer_module.TimeoutTimer(5)
+        tp_timeout_2.reset()
         while 1:
             if itt.appear_then_click(asset.bigmap_tp): break
             if tp_type == "Teleporter":
                 logger.debug("tp to Teleporter")
-                itt.appear_then_click(asset.CSMD)
+                r = itt.appear_then_click(asset.CSMD)
             elif tp_type == "Statue":
                 logger.debug("tp to Statue")
-                itt.appear_then_click(asset.QTSX)
+                r = itt.appear_then_click(asset.QTSX)
+            if (not r) and tp_timeout_2.istimeout():
+                itt.move_and_click(click_posi)
             if tp_timeout_1.istimeout():
                 ui_control.ui_goto(UIPage.page_bigmap)
-                if IS_DEVICE_PC:
-                    itt.move_and_click([1920 / 2, 1080 / 2])  # screen center
-                else:
-                    itt.move_and_click([1024 / 2, 768 / 2])
+                itt.move_and_click(click_posi)
                 tp_timeout_1.reset()
             time.sleep(0.5)
 

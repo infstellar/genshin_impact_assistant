@@ -2,7 +2,7 @@
 from source.manager.asset import *
 from source.common.timer_module import Timer, AdvanceTimer
 from source.ui.page import *
-
+from threading import Lock
 
 from source.interaction.interaction_core import itt
 
@@ -10,6 +10,10 @@ class PageNotFoundError(Exception):
     pass
 
 class UI():
+    
+    def __init__(self) -> None:
+        self.switch_ui_lock = Lock()
+    
     ui_pages=[page_bigmap,
               page_domain,
               page_main,
@@ -46,6 +50,7 @@ class UI():
             destination (Page):
             confirm_wait:
         """
+        self.switch_ui_lock.acquire()
         # Reset connection
         for page in self.ui_pages:
             page.parent = None
@@ -115,7 +120,8 @@ class UI():
         # Reset connection
         for page in self.ui_pages:
             page.parent = None
-
+        self.switch_ui_lock.release()
+        
 ui_control = UI()
 
 if __name__ == '__main__':

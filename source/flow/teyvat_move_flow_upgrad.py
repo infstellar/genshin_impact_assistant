@@ -93,6 +93,7 @@ class TeyvatMoveCommon():
         self.motion_state = IN_MOVE
         self.jump_timer1 = timer_module.Timer()
         self.jump_timer2 = timer_module.Timer()
+        self.jump_timer3 = timer_module.Timer()
 
     def switch_motion_state(self):
         if itt.get_img_existence(asset.motion_climbing):
@@ -116,6 +117,13 @@ class TeyvatMoveCommon():
         if self.jump_timer2.get_diff_time() >= 0.3 and self.jump_timer2.get_diff_time()<=2: # double jump
             itt.key_press('spacebar')
             self.jump_timer2.start_time -= 2
+    
+    def try_fly(self):
+        if self.motion_state == IN_MOVE:
+            if self.jump_timer3.get_diff_time() >= 0.3:
+                itt.key_press('spacebar')
+                self.jump_timer3.reset()
+    
     
 class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon):
     def __init__(self, upper: TeyvatMoveFlowConnector):
@@ -181,6 +189,16 @@ class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon):
         
 
 class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
+    """_summary_
+
+    Args:
+        FlowTemplate (_type_): _description_
+        TeyvatMoveCommon (_type_): _description_
+        
+    SK: Special key. 特殊按键，包括f，space等，但是一般没啥用。
+    BP: break point. 程序行走使用的点。
+    CP: current point. 执行SK，切换Motion使用的点。
+    """
     def __init__(self, upper: TeyvatMoveFlowConnector):
         FlowTemplate.__init__(self, upper, flow_id=ST.INIT_TEYVAT_MOVE, next_flow_id=ST.END_TEYVAT_MOVE_PASS)
         TeyvatMoveCommon.__init__(self)
@@ -235,51 +253,19 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
         tracker.reinit_smallmap()
         self.upper.while_sleep = 0.05
         self._next_rfc()
+        itt.key_down('w')
     
     def state_in(self):
         # 设置基本参数
         self.switch_motion_state()
-        while 1:
-            target_posi = self.curr_breaks[self.curr_break_point_index]
-            special_key = self.curr_path[self.curr_path_index]["special_key"]
-            curr_posi = tracker.get_position()
-            # 刷新当前position index
-            self._refresh_curr_posi_index(list(curr_posi))
-            if self.upper.ignore_space and special_key == "space": # ignore space
-                special_key = None
-            if special_key is None: # 设定offset
-                offset = 5 # NO SK
-            else:
-                offset = 3 # SK
-            if self.curr_path[self.curr_path_index]["motion"]=="FLYING":
-                offset = 8
-            if self.curr_break_point_index < len(self.curr_breaks)-1: # 如果两个BP距离小于offset就会瞬移，排除一下。
-                dist = euclidean_distance(self.curr_breaks[self.curr_break_point_index], self.curr_breaks[self.curr_break_point_index+1])
-                if dist >= 1 and dist <=offset:
-                    logger.info(f"BPs too close: dist: {dist}")
-                    offset = dist/2
-                    logger.info(f"offset: {offset}")
-                elif dist < 1:
-                    logger.info(f"BPs too close: dist: {dist}")
-                    offset = 1.
-                    logger.info(f"offset: {offset}")
-            if special_key != None: # 检测是否执行SK
-                self._exec_special_key(special_key)
-            if euclidean_distance(target_posi, curr_posi) <= offset: # 检测是否要切换到下一个BP
-                if len(self.curr_breaks) - 1 > self.curr_break_point_index:
-                    self.curr_break_point_index += 1
-                    logger.debug(f"index {self.curr_break_point_index} posi {self.curr_breaks[self.curr_break_point_index]}")
-                else:
-                    logger.info("path end")
-                    self._next_rfc()
-                    break
-            else:
-                break
-            
-            
-                
-        # curr_posi = tracker.get_position()
-        if self.motion_state == IN_FLY and self.curr_path[self.curr_path_index]["motion"]=="WALKING":
+        fly_flag = False
+        check_fly = self.curr_path[self.curr_path_index:min(self.curr_path_index+5, len(self.curr_path)-1)] # 起飞
+        for i in check_fly:
+            if i["motion"]=="FLYING":
+                self.try_fly()
+                fly_flag = True
+        
+        if self.motion_state == IN_FLY and self.curr_path[self.curr_path_index]["motion"]=="WALKING" and (not fly_flag): # 降落
             logger.info("landing")
             itt.left_click()
             while 1:
@@ -289,17 +275,49 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
                 time.sleep(0.1)
                 if self.motion_state != IN_FLY:
                     break
-        # if self.motion_state == IN_MOVE and self.curr_path[self.curr_path_index]["motion"]=="FLYING":
-        #     logger.info("fly")
-        #     while 1:
-        #         itt.key_press('space')
-        #         if self.upper.checkup_stop_func():
-        #             break
-        #         self.switch_motion_state()
-        #         if self.motion_state == IN_FLY:
-        #             break
+        
+        # 更新BP和CP
+        while 1: 
+            target_posi = self.curr_breaks[self.curr_break_point_index]
+            curr_posi = tracker.get_position()
+            # 刷新当前position index
+            self._refresh_curr_posi_index(list(curr_posi))
+            special_key = self.curr_path[self.curr_path_index]["special_key"]
+            if self.upper.ignore_space and special_key == "space": # ignore space
+                special_key = None
+            if special_key is None: # 设定offset
+                offset = 5 # NO SK
+            else:
+                offset = 3 # SK
+            if self.curr_path[self.curr_path_index]["motion"]=="FLYING":
+                offset = 8
+            # 如果两个BP距离小于offset就会瞬移，排除一下。
+            if self.curr_break_point_index < len(self.curr_breaks)-1: 
+                dist = euclidean_distance(self.curr_breaks[self.curr_break_point_index], self.curr_breaks[self.curr_break_point_index+1])
+                if dist >= 1 and dist <=offset:
+                    logger.trace(f"BPs too close: dist: {dist}")
+                    offset = dist/2
+                    logger.trace(f"offset: {offset}")
+                elif dist < 1:
+                    logger.trace(f"BPs too close: dist: {dist}")
+                    offset = 1.
+                    logger.trace(f"offset: {offset}")
+            # 执行SK
+            if special_key != None: 
+                self._exec_special_key(special_key)
+            # 检测是否要切换到下一个BP
+            if euclidean_distance(target_posi, curr_posi) <= offset: 
+                if len(self.curr_breaks) - 1 > self.curr_break_point_index:
+                    self.curr_break_point_index += 1
+                    logger.debug(f"index {self.curr_break_point_index} posi {self.curr_breaks[self.curr_break_point_index]}")
+                else:
+                    logger.info("path end")
+                    self._next_rfc()
+                    break
+            else:
+                break
        
-        print(euclidean_distance(target_posi, curr_posi))
+        logger.debug(f"next break position distance: {euclidean_distance(target_posi, curr_posi)}")
         # delta_distance = self.CalculateTheDistanceBetweenTheAngleExtensionLineAndTheTarget(curr_posi,target_posi)
         delta_degree = abs(movement.calculate_delta_angle(tracker.get_rotation(),movement.calculate_posi2degree(target_posi)))
         if  delta_degree >= 20:
@@ -398,7 +416,7 @@ class TeyvatMoveFlowController(FlowController):
         
 if __name__ == '__main__':
     TMFC = TeyvatMoveFlowController()
-    TMFC.set_parameter(MODE="PATH",path_dict=load_json("Crystalfly16786174406.json","assets\\TeyvatMovePath"), is_tp=False)
+    TMFC.set_parameter(MODE="PATH",path_dict=load_json("te167910590161.json","assets\\TeyvatMovePath"), is_tp=True)
     TMFC.start()
     TMFC.start_flow()
     while 1:

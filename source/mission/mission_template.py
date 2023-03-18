@@ -6,13 +6,14 @@ from source.operator.pickup_operator import PickupOperator
 
 class MissionExecutor(BaseThreading):
     def __init__(self):
-        super().__init__(thread_name=__name__)
+        super().__init__()
         self.CFCF = collector_flow_upgrad.CollectorFlowController()
-        self._add_sub_threading(self.CFCF)
+        self._add_sub_threading(self.CFCF,start=False)
         self.TMCF = teyvat_move_flow_upgrad.TeyvatMoveFlowController()
-        self._add_sub_threading(self.TMCF)
+        self._add_sub_threading(self.TMCF,start=False)
         self.PUO = PickupOperator()
-        self._add_sub_threading(self.PUO)
+        self._add_sub_threading(self.PUO,start=False)
+        self.setName(__name__)
 
     def get_path_file(self, path_file_name:str):
         return load_json(path_file_name+".json","assets\\TeyvatMovePath")
@@ -60,7 +61,13 @@ class MissionExecutor(BaseThreading):
     def exec_mission(self):
         pass
     
+    def start_thread(self):
+        self.PUO.start()
+        self.CFCF.start()
+        self.TMCF.start()
+    
     def loop(self):
+        self.start_thread()
         self.exec_mission()
         self.pause_threading()
     
