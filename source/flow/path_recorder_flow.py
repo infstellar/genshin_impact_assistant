@@ -31,7 +31,7 @@ class PathRecorderConnector(FlowConnector):
         self.min_distance = 1
         self.listener = self.listener = Listener(on_press=self._add_key_to_dict)
         self.set_hotkey()
-        self.path_name = input("input your path name")
+        self.path_name = ""
         self.last_direction = 999
         '''
         Template:
@@ -214,7 +214,10 @@ class PathRecorderController(FlowController):
         pass
 
 if __name__ == '__main__':
-    PathRecorderController().start()
+    pn = input("input your path name")
+    prc = PathRecorderController()
+    prc.flow_connector.path_name = pn
+    prc.start()
     logger.info(f"Load over.")
     logger.info(f"ready to start.")
     while 1:

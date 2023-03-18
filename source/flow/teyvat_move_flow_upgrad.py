@@ -36,6 +36,7 @@ class TeyvatMoveFlowConnector(FlowConnector):
         self.is_tp = False
         self.tp_type = None
         self.ignore_space = True
+        self.is_reinit = True
 
         self.motion_state = IN_MOVE
         self.jump_timer = timer_module.Timer()
@@ -59,6 +60,7 @@ class TeyvatMoveFlowConnector(FlowConnector):
         self.is_tp = False
         self.tp_type = None
         self.ignore_space = True
+        self.is_reinit = True
         
         self.motion_state = IN_MOVE
         self.jump_timer = timer_module.Timer()
@@ -95,7 +97,7 @@ class TeyvatMoveCommon():
         self.jump_timer2 = timer_module.Timer()
         self.jump_timer3 = timer_module.Timer()
 
-    def switch_motion_state(self):
+    def switch_motion_state(self, jump=True):
         if itt.get_img_existence(asset.motion_climbing):
             self.motion_state = IN_CLIMB
         elif itt.get_img_existence(asset.motion_flying):
@@ -110,13 +112,14 @@ class TeyvatMoveCommon():
             jump_dt = 2
         else:
             jump_dt = 99999
-        if self.jump_timer1.get_diff_time() >= jump_dt:
-            self.jump_timer1.reset()
-            self.jump_timer2.reset()
-            itt.key_press('spacebar')
-        if self.jump_timer2.get_diff_time() >= 0.3 and self.jump_timer2.get_diff_time()<=2: # double jump
-            itt.key_press('spacebar')
-            self.jump_timer2.start_time -= 2
+        if jump:
+            if self.jump_timer1.get_diff_time() >= jump_dt:
+                self.jump_timer1.reset()
+                self.jump_timer2.reset()
+                itt.key_press('spacebar')
+            if self.jump_timer2.get_diff_time() >= 0.3 and self.jump_timer2.get_diff_time()<=2: # double jump
+                itt.key_press('spacebar')
+                self.jump_timer2.start_time -= 2
     
     def try_fly(self):
         if self.motion_state == IN_MOVE:
@@ -212,6 +215,8 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
         self.curr_break_point_index = 0
         self.last_ten_posi = []
         self.last_ten_delta = []
+        
+        self.ready_to_end = False
 
     
     def CalculateTheDistanceBetweenTheAngleExtensionLineAndTheTarget(self, curr,target):
@@ -247,23 +252,35 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
     def state_before(self):
         self.curr_path = self.upper.path_dict["position_list"]
         self.curr_breaks = self.upper.path_dict["break_position"]
+        self.ready_to_end = False
         self.curr_path_index = 0
         self.curr_break_point_index = 0
         # itt.key_down('w')
-        tracker.reinit_smallmap()
+        if self.upper.is_reinit:
+            tracker.reinit_smallmap()
         self.upper.while_sleep = 0.05
         self._next_rfc()
         itt.key_down('w')
     
     def state_in(self):
-        # 设置基本参数
-        self.switch_motion_state()
+        # 如果循环太慢而走的太快就会回头 可能通过量化移动时间和距离解决
+        
+        # 动作识别
+        is_jump = False
+        check_jump = self.curr_path[self.curr_path_index:min(self.curr_path_index+5, len(self.curr_path)-1)] # 起跳
+        for i in check_jump:
+            if i["special_key"]=="space":
+                is_jump = True
+        
+        self.switch_motion_state(jump=((not self.ready_to_end) and is_jump))
         fly_flag = False
         check_fly = self.curr_path[self.curr_path_index:min(self.curr_path_index+5, len(self.curr_path)-1)] # 起飞
         for i in check_fly:
             if i["motion"]=="FLYING":
                 self.try_fly()
                 fly_flag = True
+        
+        
         
         if self.motion_state == IN_FLY and self.curr_path[self.curr_path_index]["motion"]=="WALKING" and (not fly_flag): # 降落
             logger.info("landing")
@@ -291,6 +308,8 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
                 offset = 3 # SK
             if self.curr_path[self.curr_path_index]["motion"]=="FLYING":
                 offset = 8
+            if self.ready_to_end:
+                offset = 1
             # 如果两个BP距离小于offset就会瞬移，排除一下。
             if self.curr_break_point_index < len(self.curr_breaks)-1: 
                 dist = euclidean_distance(self.curr_breaks[self.curr_break_point_index], self.curr_breaks[self.curr_break_point_index+1])
@@ -310,22 +329,32 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
                 if len(self.curr_breaks) - 1 > self.curr_break_point_index:
                     self.curr_break_point_index += 1
                     logger.debug(f"index {self.curr_break_point_index} posi {self.curr_breaks[self.curr_break_point_index]}")
+                elif not self.ready_to_end:
+                    logger.info("path ready to end")
+                    self.ready_to_end = True
+                    break
                 else:
                     logger.info("path end")
                     self._next_rfc()
-                    break
+                    itt.key_up('w')
+                    return
             else:
                 break
-       
+                
         logger.debug(f"next break position distance: {euclidean_distance(target_posi, curr_posi)}")
         # delta_distance = self.CalculateTheDistanceBetweenTheAngleExtensionLineAndTheTarget(curr_posi,target_posi)
         delta_degree = abs(movement.calculate_delta_angle(tracker.get_rotation(),movement.calculate_posi2degree(target_posi)))
-        if  delta_degree >= 20:
+        if delta_degree >= 20:
             itt.key_up('w')
             movement.change_view_to_posi(target_posi, stop_func = self.upper.checkup_stop_func)
-            itt.key_down('w')
+            if not self.ready_to_end:
+                itt.key_down('w')
+            else:
+                movement.move(movement.AHEAD,1.5)
         else:
             movement.change_view_to_posi(target_posi, stop_func = self.upper.checkup_stop_func, max_loop=3)
+            if self.ready_to_end:
+                movement.move(movement.AHEAD,1.5)
         
             
     def state_after(self):
@@ -392,7 +421,8 @@ class TeyvatMoveFlowController(FlowController):
                       to_next_posi_offset:float = None,
                       special_keys_posi_offset:float = None,
                       reaction_to_enemy:str = None,
-                      tp_type:list = None):
+                      tp_type:list = None,
+                      is_reinit:bool = None):
         if MODE != None:
             self.flow_connector.MODE = MODE
         if stop_rule != None:
@@ -411,6 +441,8 @@ class TeyvatMoveFlowController(FlowController):
             self.flow_connector.is_tp = is_tp
         if tp_type != None:
             self.flow_connector.tp_type = tp_type
+        if is_reinit != None:
+            self.flow_connector.is_reinit = is_reinit
         
         
         

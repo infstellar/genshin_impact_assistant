@@ -157,19 +157,22 @@ class PickupOperator(BaseThreading):
             
             res = ocr.get_all_texts(cap)
             if len(res) != 0:
-                if res[0] not in self.pickup_blacklist:
-                    self.pickup_fail_timeout.reset()
-                    self.last_search_times = 2
-                    self.itt.key_press('f')
-                    # self.itt.delay(0)
-                    self.pickup_item_list.append(res[0][1][0])
-                    logger.info(t2t('pickup: ') + str(res[0][1][0]))
-                    if str(res[0][1][0]) in self.target_name:
-                        logger.info(t2t("已找到：") + self.target_name)
-                        self.pickup_succ = True
-                    if flag1:
-                        self.itt.key_down('w')
-                    return True
+                for text in res:
+                    if text == '':
+                        continue
+                    if text not in self.pickup_blacklist:
+                        self.pickup_fail_timeout.reset()
+                        self.last_search_times = 2
+                        self.itt.key_press('f')
+                        # self.itt.delay(0)
+                        self.pickup_item_list.append(text)
+                        logger.info(t2t('pickup: ') + str(text))
+                        if str(text) in self.target_name:
+                            logger.info(t2t("已找到：") + self.target_name)
+                            self.pickup_succ = True
+                        if flag1:
+                            self.itt.key_down('w')
+                        return True
         if flag1:
             self.itt.key_down('w')
         return False

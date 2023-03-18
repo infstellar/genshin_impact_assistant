@@ -234,7 +234,7 @@ class Map(MiniMap, BigMap, MapConverter):
 
         click_posi = self._move_bigmap(tp_posi)
 
-        if tp_type == "Domain":
+        if tp_type == "Domain": # 部分domain有特殊名字
             logger.debug("tp to Domain")
             itt.appear_then_click(asset.ButtonSwitchDomainModeOn)
             itt.delay(0.2)
@@ -248,16 +248,25 @@ class Map(MiniMap, BigMap, MapConverter):
         tp_timeout_1.reset()
         tp_timeout_2 = timer_module.TimeoutTimer(5)
         tp_timeout_2.reset()
+        
+        if not (itt.get_text_existence(asset.CSMD) or itt.get_text_existence(asset.QTSX) or itt.get_img_existence(asset.bigmap_tp)):
+            itt.move_and_click(click_posi)
+        
         while 1:
             if itt.appear_then_click(asset.bigmap_tp): break
+            
             if tp_type == "Teleporter":
                 logger.debug("tp to Teleporter")
                 r = itt.appear_then_click(asset.CSMD)
             elif tp_type == "Statue":
                 logger.debug("tp to Statue")
                 r = itt.appear_then_click(asset.QTSX)
+            else:
+                # itt.appear_then_click(asset.ButtonSwitchDomainModeOn)
+                r = False
             if (not r) and tp_timeout_2.istimeout():
                 itt.move_and_click(click_posi)
+                tp_timeout_2.reset()
             if tp_timeout_1.istimeout():
                 ui_control.ui_goto(UIPage.page_bigmap)
                 itt.move_and_click(click_posi)
