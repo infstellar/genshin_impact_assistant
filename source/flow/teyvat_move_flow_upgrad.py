@@ -37,6 +37,7 @@ class TeyvatMoveFlowConnector(FlowConnector):
         self.tp_type = None
         self.ignore_space = True
         self.is_reinit = True
+        self.is_precise_arrival = True
 
         self.motion_state = IN_MOVE
         self.jump_timer = timer_module.Timer()
@@ -61,6 +62,7 @@ class TeyvatMoveFlowConnector(FlowConnector):
         self.tp_type = None
         self.ignore_space = True
         self.is_reinit = True
+        self.is_precise_arrival = True
         
         self.motion_state = IN_MOVE
         self.jump_timer = timer_module.Timer()
@@ -159,6 +161,7 @@ class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon):
 
     def state_before(self):
         tracker.reinit_smallmap()
+        itt.key_down('w')
         self._next_rfc()
     
     def state_in(self):
@@ -316,7 +319,7 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
             if self.curr_path[self.curr_path_index]["motion"]=="FLYING":
                 offset = 8
             if self.ready_to_end:
-                offset = min(3,max(1,(self.end_times)/10+0.8))
+                offset = min(3,max(1,(self.end_times)/10))
             # 如果两个BP距离小于offset就会瞬移，排除一下。
             if self.curr_break_point_index < len(self.curr_breaks)-1: 
                 dist = euclidean_distance(self.curr_breaks[self.curr_break_point_index], self.curr_breaks[self.curr_break_point_index+1])
@@ -337,9 +340,15 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
                     self.curr_break_point_index += 1
                     logger.debug(f"index {self.curr_break_point_index} posi {self.curr_breaks[self.curr_break_point_index]}")
                 elif not self.ready_to_end:
-                    logger.info("path ready to end")
-                    self.ready_to_end = True
-                    break
+                    if self.upper.is_precise_arrival:
+                        logger.info("path ready to end")
+                        self.ready_to_end = True
+                        break
+                    else:
+                        logger.info("path end")
+                        self._next_rfc()
+                        itt.key_up('w')
+                        return
                 else:
                     logger.info("path end")
                     self._next_rfc()
@@ -349,7 +358,11 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
                 break
         if self.ready_to_end:
             self.end_times += 1
-            logger.debug(f"ready to end: {self.end_times} {offset}")        
+            logger.debug(f"ready to end: {self.end_times} {offset}")
+        if self.end_times >= 80:        
+            logger.warning(f"TMF PATH FAIL: CANNOT APPROACH TO END POSITION")
+            self._set_nfid(ST.END_TEYVAT_MOVE_STUCK)
+            self._set_rfc(FC.END)
         logger.debug(f"next break position distance: {euclidean_distance(target_posi, curr_posi)}")
         # delta_distance = self.CalculateTheDistanceBetweenTheAngleExtensionLineAndTheTarget(curr_posi,target_posi)
         delta_degree = abs(movement.calculate_delta_angle(tracker.get_rotation(),movement.calculate_posi2degree(target_posi)))
@@ -423,6 +436,11 @@ class TeyvatMoveFlowController(FlowController):
     def set_target_posi(self, tp:list):
         self.flow_connector.target_posi = tp
     
+    def pause_threading(self):
+        if self.pause_threading_flag == False:
+            itt.key_up('w')
+        return super().pause_threading()
+    
     def set_parameter(self,
                       MODE:str = None,
                       target_posi:list = None,
@@ -433,7 +451,8 @@ class TeyvatMoveFlowController(FlowController):
                       special_keys_posi_offset:float = None,
                       reaction_to_enemy:str = None,
                       tp_type:list = None,
-                      is_reinit:bool = None):
+                      is_reinit:bool = None,
+                      is_precise_arrival:bool = None):
         if MODE != None:
             self.flow_connector.MODE = MODE
         if stop_rule != None:
@@ -454,6 +473,8 @@ class TeyvatMoveFlowController(FlowController):
             self.flow_connector.tp_type = tp_type
         if is_reinit != None:
             self.flow_connector.is_reinit = is_reinit
+        if is_precise_arrival != None:
+            self.flow_connector.is_precise_arrival = is_precise_arrival
         
         
         

@@ -219,7 +219,7 @@ class TeyvatMoveFlow(BaseThreading):
                 self.switch_motion_state()
                 
                 if self.motion_state == IN_MOVE:
-                    if combat_lib.combat_statement_detection(self.itt):
+                    if combat_lib.CSDL.get_combat_state():
                         '''进入战斗模式'''
                         if self.reaction_to_enemy == 'RUN':
                             '''越级执行护盾命令 还没想好怎么写'''

@@ -85,7 +85,7 @@ class FlowTemplate():
         logger.debug(f"{self.flow_name} set rfc to {self.rfc}")
 
 class EndFlowTemplate(FlowTemplate):
-    def __init__(self, upper:FlowConnector, flow_id:str, err_code_id:int = ERR_PASS):
+    def __init__(self, upper:FlowConnector, flow_id:str, err_code_id = ERR_PASS):
         self.upper = upper
         self.flow_id = flow_id # flow id <0
         self.rfc = FC.INIT

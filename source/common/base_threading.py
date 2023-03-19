@@ -56,6 +56,11 @@ class BaseThreading(threading.Thread):
     def get_last_err_code(self):
         return self.last_err_code
     
+    def get_and_reset_err_code(self):
+        erc = self.last_err_code
+        self.reset_err_code()
+        return erc
+    
     def reset_err_code(self):
         self.last_err_code = ERR_NONE
     

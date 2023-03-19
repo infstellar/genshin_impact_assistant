@@ -526,6 +526,20 @@ def compare_texts(text1, text2, is_show_res = False, ignore_warning = False):
         
     return matching_rate
 
+def extract_white_letters(image, threshold=128):
+    """Set letter color to black, set background color to white.
+    This function will discourage color pixels (Non-gray pixels)
+    Args:
+        image: Shape (height, width, channel)
+        threshold (int):
+    Returns:
+        np.ndarray: Shape (height, width)
+    """
+    r, g, b = cv2.split(cv2.subtract((255, 255, 255, 0), image))
+    minimum = cv2.min(cv2.min(r, g), b)
+    maximum = cv2.max(cv2.max(r, g), b)
+    return cv2.multiply(cv2.add(maximum, cv2.subtract(maximum, minimum)), 255.0 / threshold)
+
 def load_jsons_from_folder(path, black_file:list=None):
     json_list = []
     for root, dirs, files in os.walk(path):

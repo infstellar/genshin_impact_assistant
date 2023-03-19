@@ -5,8 +5,10 @@ from source.operator.pickup_operator import PickupOperator
 from source.interaction.minimap_tracker import tracker
 from source.funclib import combat_lib
 from source.interaction.interaction_core import itt
+from source.funclib.err_code_lib import ERR_PASS
+from source.common.timer_module import AdvanceTimer
 
-ERR_PASS = "PASS"
+
 ERR_FAIL = "FAIL"
     
     
@@ -17,12 +19,13 @@ class MissionExecutor(BaseThreading):
         self.CFCF = collector_flow_upgrad.CollectorFlowController()
         self._add_sub_threading(self.CFCF,start=False)
         self.TMCF = teyvat_move_flow_upgrad.TeyvatMoveFlowController()
-        self._add_sub_threading(self.TMCF,start=True)
+        self._add_sub_threading(self.TMCF,start=False)
         self.PUO = PickupOperator()
         self._add_sub_threading(self.PUO,start=False)
         self.setName(__name__)
         self.last_move_along_position = [99999,99999]
 
+        self._detect_exception_timer = AdvanceTimer(limit=2)
         self.exception_flag = False
         self.exception_list = {
             "FoundEnemy":False,                     
@@ -31,16 +34,20 @@ class MissionExecutor(BaseThreading):
 
     def _detect_exception(self):
         if self.exception_list["FoundEnemy"]:
-            if combat_lib.CSDL.get_combat_state():
+            if combat_lib.CSDL.is_low_health:
                 self.exception_flag = True
+                logger.warning(f"Detected Enemy Attack, Mission Break")
         if self.exception_list["CharaDied"]:
             pass
         
     def _is_exception(self):
+        if self._detect_exception_timer.reached_and_reset():
+            self._detect_exception()
         return self.exception_flag    
     
     def _handle_exception(self):
         if self.exception_flag:
+            logger.info(f"Handling exception: recover")
             # 跑到七天神像去回血
             tracker.reinit_smallmap()
             curr_posi = list(tracker.get_position())
@@ -54,6 +61,7 @@ class MissionExecutor(BaseThreading):
                     break
             itt.delay(5,comment="Waiting for revival")
             self.exception_flag = False
+            logger.info(f"End of handling exception")
             return ERR_FAIL
         else:
             return ERR_PASS
@@ -61,9 +69,9 @@ class MissionExecutor(BaseThreading):
     def get_path_file(self, path_file_name:str):
         return load_json(path_file_name+".json","assets\\TeyvatMovePath")
     
-    def move(self, MODE:str = None,stop_rule:int = None,target_posi:list = None,path_dict:dict = None,to_next_posi_offset:float = None,special_keys_posi_offset:float = None,reaction_to_enemy:str = None,is_tp:bool=None,is_reinit:bool=None):
+    def move(self, MODE:str = None,stop_rule:int = None,target_posi:list = None,path_dict:dict = None,to_next_posi_offset:float = None,special_keys_posi_offset:float = None,reaction_to_enemy:str = None,is_tp:bool=None,is_reinit:bool=None, is_precise_arrival:bool=None):
         self.TMCF.reset()
-        self.TMCF.set_parameter(MODE=MODE,stop_rule=stop_rule,target_posi=target_posi,path_dict=path_dict,to_next_posi_offset=to_next_posi_offset,special_keys_posi_offset=special_keys_posi_offset,reaction_to_enemy=reaction_to_enemy,is_tp=is_tp,is_reinit=is_reinit)
+        self.TMCF.set_parameter(MODE=MODE,stop_rule=stop_rule,target_posi=target_posi,path_dict=path_dict,to_next_posi_offset=to_next_posi_offset,special_keys_posi_offset=special_keys_posi_offset,reaction_to_enemy=reaction_to_enemy,is_tp=is_tp,is_reinit=is_reinit,is_precise_arrival=is_precise_arrival)
         self.TMCF.start_flow()
         while 1:
             time.sleep(0.2)
@@ -72,6 +80,8 @@ class MissionExecutor(BaseThreading):
             if self._is_exception():
                 self.TMCF.pause_threading()
                 break
+        if self.TMCF.get_and_reset_err_code() != ERR_PASS:
+            self.exception_flag = True
         return self._handle_exception()
         
     def move_straight(self, position, is_tp = False):
@@ -116,6 +126,8 @@ class MissionExecutor(BaseThreading):
             if self._is_exception():
                 self.CFCF.pause_threading()
                 break
+        if self.CFCF.get_and_reset_err_code() != ERR_PASS:
+            self.exception_flag = True
         return self._handle_exception()
     
     def start_pickup(self):

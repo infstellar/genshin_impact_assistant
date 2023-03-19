@@ -36,9 +36,9 @@ DICT_TELEPORTER = {
     24136: TeleporterModel(id=24136, region='GoldenAppleArchipelago', tp='Teleporter', item_id=1098, name='破破岛', position=(-85.5, -2642.935)),
     24137: TeleporterModel(id=24137, region='GoldenAppleArchipelago', tp='Teleporter', item_id=1098, name='破破岛', position=(-91.7, -2873.3)),
     24138: TeleporterModel(id=24138, region='GoldenAppleArchipelago', tp='Teleporter', item_id=1098, name='破破岛', position=(86.5, -3504.718)),
-    13408: TeleporterModel(id=13408, region='Inazuma', tp='Statue', item_id=336, name='离岛', position=(7842.925, 4429.069)),
+    # 13408: TeleporterModel(id=13408, region='Inazuma', tp='Statue', item_id=336, name='离岛', position=(7842.925, 4429.069)), # minimap tracker error
     13406: TeleporterModel(id=13406, region='Inazuma', tp='Statue', item_id=336, name='绯木村', position=(6524.095, 5425.882)),
-    13407: TeleporterModel(id=13407, region='Inazuma', tp='Statue', item_id=336, name='踏鞴砂', position=(7324.447, 5295.089)),
+    # 13407: TeleporterModel(id=13407, region='Inazuma', tp='Statue', item_id=336, name='踏鞴砂', position=(7324.447, 5295.089)), # minimap tracker error
     10313: TeleporterModel(id=10313, region='Inazuma', tp='Teleporter', item_id=337, name='九条镇屋', position=(7479.511, 5123.537)),
     10892: TeleporterModel(id=10892, region='Inazuma', tp='Teleporter', item_id=337, name='八酝岛', position=(6508.256, 5259.634)),
     10894: TeleporterModel(id=10894, region='Inazuma', tp='Teleporter', item_id=337, name='八酝岛', position=(6664.885, 5763.838)),

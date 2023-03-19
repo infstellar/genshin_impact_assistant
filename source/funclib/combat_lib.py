@@ -6,6 +6,7 @@ from common import timer_module
 from source.common import character
 from source.interaction.interaction_core import itt
 from source.interaction import interaction_core
+from source.api.pdocr_light import ocr_light
 
 """
 战斗相关常用函数库。
@@ -211,7 +212,9 @@ def get_current_chara_num(itt: interaction_core.InteractionBGD, stop_func = defa
     logger.warning(t2t("获得当前角色编号失败"))
     return 0
 
-def combat_statement_detection(itt: interaction_core.InteractionBGD):
+def combat_statement_detection():
+    # return: ret[0]: blood bar; ret[1]: enemy arrow
+    ret = [False,False]
     
     im_src = itt.capture()
     orsrc = im_src.copy()
@@ -235,7 +238,7 @@ def combat_statement_detection(itt: interaction_core.InteractionBGD):
     # print('flag_is_blood_bar_exist ',flag_is_blood_bar_exist)
     if flag_is_blood_bar_exist:
         only_arrow_timer.reset()
-        return True
+        ret[0]=True
     
     '''-----------------------------'''
     
@@ -283,12 +286,41 @@ def combat_statement_detection(itt: interaction_core.InteractionBGD):
         
     red_arrow_num = len(np.where(im_src[:, :, 2]>=254)[-1])
     if red_arrow_num > 180:
-        return True
+        ret[1]=True
     # print('flag_is_arrow_exist', flag_is_arrow_exist)
 
     
 
-    return False
+    return ret
+
+def get_chara_blood():
+    img = itt.capture(jpgmode=0,posi=asset.BloodBar.position)
+    img = extract_white_letters(img, threshold=251)
+    t = ocr_light.get_all_texts(img)
+    t2 = ','.join(str(i) for i in t).replace(',','')
+    cb=""
+    tb=""
+    for i in t2:
+        if is_number(i):
+            cb+=i
+        else:
+            break
+    for i in range(len(t2)):
+        if is_number(t2[-(i+1)]):
+            tb += t2[-(i+1)]
+        else:
+            break
+    tb=tb[::-1]
+    if cb=="" or tb=="":
+        return None
+    return int(cb),int(tb)
+
+def get_chara_blood_percentage():
+    r = get_chara_blood()
+    if r != None:
+        return r[0]/r[1]
+    else:
+        return None
 
 class CombatStatementDetectionLoop(BaseThreading):
     def __init__(self):
@@ -297,56 +329,44 @@ class CombatStatementDetectionLoop(BaseThreading):
         self.itt = itt
         self.current_state = False
         self.state_counter = 0
-        self.while_sleep = 0.1
+        self.while_sleep = 0.4
+        self.is_low_health = False
     
     def get_combat_state(self):
         return self.current_state
     
-    def run(self):
-        '''if you're using this class, copy this'''
-        while 1:
-            time.sleep(self.while_sleep)
-            if self.stop_threading_flag:
-                return 0
-
-            if self.pause_threading_flag:
-                if self.working_flag:
-                    self.working_flag = False
-                time.sleep(1)
-                continue
-
-            if not self.working_flag:
-                self.working_flag = True
-                
-            if self.checkup_stop_func():
-                self.pause_threading_flag = True
-                continue
-                
-            '''write your code below'''
-            if only_arrow_timer.get_diff_time()>=30:
-                if self.current_state == True:
-                    logger.debug("only arrow but blood bar is not exist over 30s, ready to exit combat mode.")
-                state = combat_statement_detection(self.itt)
-                state = False
-            else:
-                state = combat_statement_detection(self.itt)
-            if state != self.current_state:
-                
-                if self.current_state == True: # 切换到无敌人慢一点, 8s
-                    self.state_counter += 1
-                    self.while_sleep = 0.8
-                elif self.current_state == False: # 快速切换到遇敌
-                    self.while_sleep = 0.02
-                    self.state_counter += 1
-            else:
-                self.state_counter = 0
-                self.while_sleep = 0.2
-            if self.state_counter >= 10:
-                logger.debug('combat_statement_detection change state')
-                # if self.current_state == False:
-                #     only_arrow_timer.reset()
-                self.state_counter = 0
-                self.current_state = state
+    def loop(self):
+        r = get_chara_blood_percentage()
+        if r != None:
+            self.is_low_health = r <= 0.6
+ 
+        if only_arrow_timer.get_diff_time()>=30:
+            if self.current_state == True:
+                logger.debug("only arrow but blood bar is not exist over 30s, ready to exit combat mode.")
+            r = combat_statement_detection()
+            state = r[0] or r[1]
+            state = False
+        else:
+            r = combat_statement_detection()
+            state = r[0] or r[1]
+        if state != self.current_state:
+            
+            if self.current_state == True: # 切换到无敌人慢一点, 4s
+                self.state_counter += 1
+                self.while_sleep = 0.4
+            elif self.current_state == False: # 快速切换到遇敌
+                self.while_sleep = 0.02
+                self.state_counter += 1
+        else:
+            self.state_counter = 0
+            self.while_sleep = 0.4
+        if self.state_counter >= 10:
+            logger.debug('combat_statement_detection change state')
+            # if self.current_state == False:
+            #     only_arrow_timer.reset()
+            self.state_counter = 0
+            self.current_state = state
+    
             
                 
 
@@ -354,13 +374,11 @@ CSDL = CombatStatementDetectionLoop()
 CSDL.start()
 
 if __name__ == '__main__':
-    itt = itt
-    
-    get_chara_list()
-    print()
+    # get_chara_list()
+    # print()
     
     while 1:
         time.sleep(0.5)
-        print(CSDL.get_combat_state())
+        print(CSDL.is_low_health)
         # print(get_character_busy(itt, default_stop_func))
         # time.sleep(0.2)
