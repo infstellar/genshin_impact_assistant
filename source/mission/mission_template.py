@@ -3,14 +3,15 @@ from source.flow import collector_flow_upgrad, teyvat_move_flow_upgrad
 from source.common.base_threading import BaseThreading
 from source.operator.pickup_operator import PickupOperator
 from source.interaction.minimap_tracker import tracker
-from source.funclib import combat_lib
+from source.funclib import combat_lib, generic_lib
 from source.interaction.interaction_core import itt
 from source.funclib.err_code_lib import ERR_PASS
 from source.common.timer_module import AdvanceTimer
 
 
 ERR_FAIL = "FAIL"
-    
+class CharacterNotFound(Exception):
+    pass
     
 
 class MissionExecutor(BaseThreading):
@@ -144,7 +145,16 @@ class MissionExecutor(BaseThreading):
 
     def _reg_exception_chara_died(self, state=True):
         self.exception_list["CharaDied"] = state
-            
+    
+    def switch_character_to(self, n:str):
+        r = generic_lib.get_characters_name()
+        curr_n = combat_lib.get_current_chara_num(itt)
+        if n in r:
+            if curr_n != r.index(n)+1:
+                itt.key_press(str(r.index(n)+1))
+        else:
+            raise CharacterNotFound(f"Character {n} Not Found")
+        
     def start_thread(self):
         self.PUO.start()
         self.CFCF.start()
@@ -152,7 +162,10 @@ class MissionExecutor(BaseThreading):
     
     def loop(self):
         self.start_thread()
-        self.exec_mission()
+        try:
+            self.exec_mission()
+        except Exception as e:
+            logger.error(f"ERROR in execute mission: {self.name} {e}")
         self.pause_threading()
     
 if __name__ == '__main__':

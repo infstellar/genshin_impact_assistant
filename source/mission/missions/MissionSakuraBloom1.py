@@ -1,6 +1,8 @@
 from source.mission.mission_template import MissionExecutor, ERR_PASS, ERR_FAIL
 from source.interaction.interaction_core import itt
 
+
+
 class MissionSakuraBloom1(MissionExecutor):
     """13 SakuraBloom
 
@@ -39,6 +41,7 @@ class MissionSakuraBloom1(MissionExecutor):
             "SakuraBloom167911068928",]
         
     def exec_mission(self):
+        self.switch_character_to("Lisa")
         # 每一个list是连续的。如果其中有一次执行寄了，就必须退出所有list。
         self._reg_exception_chara_died()
         self._reg_exception_found_enemy()
@@ -50,7 +53,7 @@ class MissionSakuraBloom1(MissionExecutor):
             itt.delay(2)
             self.pickup_once()     
             itt.delay(0.5)
-            
+        self.switch_character_to("Lisa")    
         for i in self.sakura2:
             r = self.move_along(i)
             if r == ERR_FAIL:
@@ -59,7 +62,7 @@ class MissionSakuraBloom1(MissionExecutor):
             itt.delay(2)
             self.pickup_once()     
             itt.delay(0.5)
-            
+        self.switch_character_to("Lisa")    
         for i in self.sakura3:
             r = self.move_along(i)
             if r == ERR_FAIL:

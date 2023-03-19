@@ -122,6 +122,10 @@ ButtonSwitchMapArea = Button(f"{ASSETS_COMMON_IMG}\\button\\SwitchMapAreaButton.
 UIBigMapScaling = ImgIcon(f"{ASSETS_COMMON_IMG}\\ui\\BigMapScaling.jpg", threshold=0.99, print_log = LOG_ALL, offset=0)
 ButtonCloseMarkTableInTP = Button(f"{ASSETS_COMMON_IMG}\\button\\CloseMarkTableInTP.jpg")
 BloodBar = posi_manager.PosiTemplate(img_path = f"{ASSETS_COMMON_IMG}\\area\\BloodBar.jpg")
+CharacterName1 = posi_manager.PosiTemplate(img_path = f"{ASSETS_COMMON_IMG}\\area\\CharacterName1.jpg")
+CharacterName2 = posi_manager.PosiTemplate(img_path = f"{ASSETS_COMMON_IMG}\\area\\CharacterName2.jpg")
+CharacterName3 = posi_manager.PosiTemplate(img_path = f"{ASSETS_COMMON_IMG}\\area\\CharacterName3.jpg")
+CharacterName4 = posi_manager.PosiTemplate(img_path = f"{ASSETS_COMMON_IMG}\\area\\CharacterName4.jpg")
 QTSX = TextTemplate(text=
 {
     "zh_CN":"七天神像",

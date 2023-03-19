@@ -43,3 +43,4 @@ pyyaml
 pynput
 
 fastdeploy-python
+json5

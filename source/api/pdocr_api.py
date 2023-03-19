@@ -129,8 +129,10 @@ class PaddleOcrFastDeploy():
         elif len(ret_position)>1:
             return list(ret_position)
             
-    def get_all_texts(self, img):
+    def get_all_texts(self, img, mode=0):
         res = self.analyze(img)
+        if mode==1:
+            return ','.join(str(i) for i in res.text).replace(',','')
         return res.text
     
     def is_img_num(self, im_src):

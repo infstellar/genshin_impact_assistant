@@ -10,3 +10,6 @@
 [submodule "assets/PPOCRModels"]
 	path = assets/PPOCRModels
 	url = https://github.com/GenshinImpactAssistant/PPOCRModels
+[submodule "assets/LangData"]
+	path = assets/LangData
+	url = https://github.com/GenshinImpactAssistant/GIALangData
