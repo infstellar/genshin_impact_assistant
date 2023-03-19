@@ -6,6 +6,9 @@ Portions of this document may be machine translated.
 ```
 Portions of this document were manually proofread.
 ```
+```
+Portions of this document may out of date.
+```
 
 <strong> The program's support for English is not yet complete. If you want to use it at this stage, please switch Genshin Impact to Simplified Chinese. Full support will be completed in January 2023 ~ February 2023.  </strong>
 
@@ -163,6 +166,8 @@ Original address: https://github.com/GengGode/GenshinImpact_AutoTrack_DLL
 
 - [Kongying Tavern Yuanshen Map kongying-tavern/yuan-shen-map](https://github.com/kongying-tavern/yuan-shen-map)
 
+- [原神英語・中国語辞典 Genshin Dictionary xicri/genshin-dictionary](https://github.com/xicri/genshin-dictionary)
+
 #### Open source library call
 
 - [opencv](https://github.com/opencv/opencv)
@@ -185,7 +190,7 @@ Any problem</strong> has nothing to do with this software.
 > Don't use it, don't use it --unknown
 ## advertise
 
-Qq group: [901372518] (https://jq.qq.com/?_wv=1027&k=YLTrqlzX)
+QQ group: [901372518] (https://jq.qq.com/?_wv=1027&k=YLTrqlzX)
 
 Developer exchange group: [680029885](https://jq.qq.com/?_wv=1027&k=CGuTvCXU)
 (Make sure you already know how to use git and github)

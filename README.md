@@ -151,6 +151,8 @@ To没用过github的小伙伴: 描述文档中的蓝色文字是链接,可以打
 
 - [空荧酒馆原神地图 kongying-tavern/yuan-shen-map](https://github.com/kongying-tavern/yuan-shen-map)
 
+- [原神英語・中国語辞典 xicri/genshin-dictionary](https://github.com/xicri/genshin-dictionary)
+
 
 #### 开源库调用
 
