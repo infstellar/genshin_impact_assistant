@@ -61,8 +61,7 @@ class DomainTask(TaskTemplate):
         ctimer = timer_module.TimeoutTimer(5)
         while 1:
             time.sleep(0.2)
-            
-            
+
             itt.appear_then_click(asset.solo_challenge)
             
             itt.appear_then_click(asset.start_challenge)
@@ -135,11 +134,6 @@ class DomainTask(TaskTemplate):
                     break
             
             self._end_domain()
-
-   
-
-            
-                    
             
             
 if __name__ == '__main__':

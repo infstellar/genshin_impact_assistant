@@ -19,23 +19,14 @@ class TaskTemplate():
     def task_end(self):
         self.is_task_running = False
 
-    def stop_task(self):
+    def forced_termination_task(self):
         raise TaskEndException
 
     def _add_sub_threading(self,x:threading.Thread):
         self.thread_list.append(x)
     
     def get_statement(self):
-        # statement = []
-        # for i in self.thread_list:
-        #     statement.append(
-        #         {
-        #             "name":i.flow_name,
-        #             "statement":i.current_flow_id,
-        #             "rfc":i.flow_dict[i.current_flow_id].rfc
-        #         }
-        #     )
-        return "statement"
+        return "Statement Not Register Yet"
     
     def exec_task(self):
         pass

@@ -53,13 +53,7 @@ class TaskManager(BaseThreading):
             #     logger.info(t2t("End Task"))
             #     self.curr_task.end_task()
             #     self.reg_task_flag = not self.reg_task_flag
-            
-            if task_name == COLLECTION_PATH_TASK:
-                from source.task.collection_path_task import CollectionPathTask
-                self.curr_task = CollectionPathTask()
-                logger.info(t2t("Task CollectionPathTask Start."))
-
-            elif task_name == DOMAIN_TASK:
+            if task_name == DOMAIN_TASK:
                 from source.task.domain_task import DomainTask
                 self.curr_task = DomainTask()
                 logger.info(t2t("Task DomainTask Start."))
@@ -67,9 +61,15 @@ class TaskManager(BaseThreading):
                 pass
             self.reg_task_flag = True
             self.curr_task.task_running()
+            
+            # register sub-threading
+            for i in self.curr_task.thread_list:
+                self._add_sub_threading(i)
         else:
             logger.info(t2t("End Task"))
-            self.curr_task.end_task()
+            if self.curr_task.is_task_running:
+                self.curr_task.forced_termination_task()
+            self.sub_threading_list = []
             self.reg_task_flag = not self.reg_task_flag
 
 
@@ -92,8 +92,10 @@ class TaskManager(BaseThreading):
                             break
                         if not self.curr_task.is_task_running:
                             break
-                        time.sleep(1)
+                        self.curr_task.exec_task()
+                        time.sleep(0.2)
                     logger.info(f"task {i} end.")
+                    self.start_stop_task(i)
                 logger.info(f"all task end.")
                 self.stop_tasklist()
                 # self.pause_threading()
