@@ -34,7 +34,7 @@ class TaskManager(BaseThreading):
         elif self.start_tasklist_flag and not self.reg_task_flag:
             return t2t("Loading")
         else:
-            return self.curr_task.get_flow_statement()
+            return self.curr_task.get_statement()
     
     def remove_task(self, task_name) -> bool:
         for i in range(len(self.task_list)):
@@ -57,68 +57,46 @@ class TaskManager(BaseThreading):
             if task_name == COLLECTION_PATH_TASK:
                 from source.task.collection_path_task import CollectionPathTask
                 self.curr_task = CollectionPathTask()
-                self.curr_task.start()
-                self.reg_task_flag = True
                 logger.info(t2t("Task CollectionPathTask Start."))
 
             elif task_name == DOMAIN_TASK:
                 from source.task.domain_task import DomainTask
                 self.curr_task = DomainTask()
-                self.curr_task.start()
-                self.reg_task_flag = True
                 logger.info(t2t("Task DomainTask Start."))
             elif task_name == 'CollectorTask':
                 pass
+            self.reg_task_flag = True
+            self.curr_task.task_running()
         else:
             logger.info(t2t("End Task"))
             self.curr_task.end_task()
             self.reg_task_flag = not self.reg_task_flag
 
 
-    def run(self):
-        '''if you're using this class, copy this'''
-        while 1:
-            time.sleep(self.while_sleep)
-            if self.stop_threading_flag:
-                return
-
-            if self.pause_threading_flag:
-                if self.working_flag:
-                    self.working_flag = False
-                time.sleep(1)
-                continue
-
-            if not self.working_flag:
-                self.working_flag = True
-                
-            if self.checkup_stop_func():
-                self.pause_threading_flag = True
-                continue
-            '''write your code below'''
-
-            if self.start_tasklist_flag:
-                # self.task_list = self.get_task_list()
-                if len(self.task_list)>0:
-                    for i in self.task_list:
+    def loop(self):
+        if self.start_tasklist_flag:
+            # self.task_list = self.get_task_list()
+            if len(self.task_list) > 0:
+                for i in self.task_list:
+                    if self.checkup_stop_func():
+                        break
+                    if self.start_tasklist_flag == False:
+                        break
+                    self.start_stop_task(i)
+                    while 1:
+                        if not self.reg_task_flag:
+                            break
                         if self.checkup_stop_func():
                             break
                         if self.start_tasklist_flag == False:
                             break
-                        self.start_stop_task(i)
-                        while 1:
-                            if not self.reg_task_flag:
-                                break
-                            if self.checkup_stop_func():
-                                break
-                            if self.start_tasklist_flag == False:
-                                break
-                            if self.curr_task.pause_threading_flag or self.curr_task.stop_threading_flag:
-                                break
-                            time.sleep(1)
-                        logger.info(f"task {i} end.")
-                    logger.info(f"all task end.")
-                    self.stop_tasklist()
-                    # self.pause_threading()
+                        if not self.curr_task.is_task_running:
+                            break
+                        time.sleep(1)
+                    logger.info(f"task {i} end.")
+                logger.info(f"all task end.")
+                self.stop_tasklist()
+                # self.pause_threading()
 
 if __name__ == '__main__':
     tm = TaskManager()

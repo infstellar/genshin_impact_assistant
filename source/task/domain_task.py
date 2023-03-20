@@ -16,13 +16,12 @@ from source.common import timer_module
 class DomainTask(TaskTemplate):
     def __init__(self):
         super().__init__()
-        self.setName("DomainTask")
         self.dfc = DomainFlowController()
         self.TMFCF = TeyvatMoveFlowController()
         self.flow_mode = TI.DT_INIT
         
-        self._add_sub_flow(self.dfc)
-        self._add_sub_flow(self.TMFCF)
+        self._add_sub_threading(self.dfc)
+        self._add_sub_threading(self.TMFCF)
         
         self.domain_name = load_json("auto_domain.json",f"{CONFIG_PATH_SETTING}")["domain_name"]
         self.domain_stage_name = load_json("auto_domain.json",f"{CONFIG_PATH_SETTING}")["domain_stage_name"]
@@ -97,8 +96,7 @@ class DomainTask(TaskTemplate):
                 if r:
                     break
             # exit all threads
-            self.pause_threading()
-            self.stop_threading()
+            self.task_end()
             time.sleep(10)
 
     def _check_state(self):
@@ -119,7 +117,7 @@ class DomainTask(TaskTemplate):
         if self.flow_mode == TI.DT_MOVE_TO_DOMAIN:
             self.TMFCF.start_flow()
             while 1:
-                time.sleep(self.while_sleep)
+                time.sleep(0.2)
                 if self.TMFCF.pause_threading_flag:
                     break
             self.TMFCF.pause_threading()
@@ -132,7 +130,7 @@ class DomainTask(TaskTemplate):
             self.dfc.start_flow()
             # time.sleep(1)
             while 1:
-                time.sleep(self.while_sleep)
+                time.sleep(0.2)
                 if self.dfc.pause_threading_flag:
                     break
             
@@ -148,4 +146,6 @@ if __name__ == '__main__':
     dmt = DomainTask()
     # dmt._enter_domain()
     # dmt.flow_mode = TI.DT_IN_DOMAIN
-    dmt.start()
+    while 1:
+        time.sleep(0.2)
+        dmt.exec_task()
