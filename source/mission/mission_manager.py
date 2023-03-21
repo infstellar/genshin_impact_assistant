@@ -11,24 +11,24 @@ class MissionManager(AdvanceThreading):
     def set_mission_list(self,mission_list:list):
         self.missions_list = mission_list
 
-    def add_mission(self, mission_name:str):
+    def exec_mission(self, mission_name):
         mission = get_mission_object(mission_name)
-        self.missions_list.append(mission)
         self._add_sub_threading(mission, start=False)
+        self.blocking_startup(mission)
+        mission.stop_threading()
     
     def start_missions(self):
-        self.sub_threading_list = []
-        mission_group = self.missions_list
-        for i in mission_group:
-            self.add_mission(i)
+        # self.sub_threading_list = []
+        # mission_group = missions_list
+        # for i in mission_group:
+        #     self.exec_mission(i)
         self.continue_threading()
     
     def loop(self):
-        for mission in self.missions_list:
-            logger.info(f"Mission {mission.name} Start.")
-            self.blocking_startup(mission)
-            logger.info(f"Mission {mission.name} End.")
-            mission.stop_threading()
+        for mission_name in self.missions_list:
+            logger.info(f"Mission {mission_name} Start.")
+            self.exec_mission(mission_name)
+            logger.info(f"Mission {mission_name} End.")
         logger.info(f"All Mission End.")
         self.pause_threading()
         

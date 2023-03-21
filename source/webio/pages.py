@@ -160,9 +160,7 @@ class MainPage(Page):
         r = [i["label"] for i in jsons]
         return r
 
-    def _analyze_mission_group(self, mission_group_name):
-        r = load_json(mission_group_name, f"{CONFIG_PATH}\\mission_groups")
-        return r
+    
 
     def on_click_pickup(self):
         output.clear('Button_PickUp')
@@ -171,7 +169,7 @@ class MainPage(Page):
     
     def on_click_startstop(self):
         output.clear('Button_StartStop')
-        listening.MISSION_MANAGER.set_mission_list(list(pin.pin["MissionSelect"]))
+        # listening.MISSION_MANAGER.set_mission_list(list(pin.pin["MissionSelect"]))
         listening.TASK_MANAGER.set_tasklist(pin.pin["task_list"])
         listening.TASK_MANAGER.start_stop_tasklist()
         time.sleep(0.2)
