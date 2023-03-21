@@ -74,11 +74,11 @@ class MainPage(Page):
                 if listening.TASK_MANAGER.get_task_statement() != self.ui_statement:
                     self.ui_statement = listening.TASK_MANAGER.get_task_statement()
                     output.clear(scope="StateArea")
-                    if isinstance(self.ui_statement, list):
-                        for i in self.ui_statement:
-                            output.put_text(f'{i["name"]}: {i["statement"]}: {i["rfc"]}', scope="StateArea")
-                    elif isinstance(self.ui_statement, str):
-                        output.put_text(f'{self.ui_statement}', scope="StateArea")
+                    # if isinstance(self.ui_statement, list):
+                    #     for i in self.ui_statement:
+                    #         output.put_text(f'{i["name"]}: {i["statement"]}: {i["rfc"]}', scope="StateArea")
+                    # elif isinstance(self.ui_statement, str):
+                    output.put_text(f'{self.ui_statement}', scope="StateArea")
 
             time.sleep(0.1)
     
