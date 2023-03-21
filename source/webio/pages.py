@@ -104,10 +104,14 @@ class MainPage(Page):
                     {
                         "label":t2t("Domain Task"),
                         "value":"DomainTask"
+                    },
+                    {
+                        "label":t2t("Mission"),
+                        "value":"MissionTask"
                     }
                 ]),
 
-                output.put_row([output.put_text(t2t('启动/停止')), None, output.put_scope('Button_StartStop')],size='40% 10px 60%'),
+                output.put_row([output.put_text(t2t('启动/停止Task')), None, output.put_scope('Button_StartStop')],size='40% 10px 60%'),
                 
                 output.put_markdown(t2t('## Statement')),
 
@@ -115,8 +119,11 @@ class MainPage(Page):
 
                 output.put_markdown(t2t('## Mission')),  # 左竖列标题
 
+                #Mission select
                 output.put_row([  
-                    output.put_text(t2t('Mission'))
+                    output.put_text(t2t('Mission Group')),
+                    pin.put_select("MissionSelect",self._get_mission_groups_config()
+                    )
                     ]
                                ),
                 
@@ -148,13 +155,23 @@ class MainPage(Page):
         '''self.main_pin_change_thread = threading.Thread(target=self._main_pin_change_thread, daemon=False)
         self.main_pin_change_thread.start()'''
 
+    def _get_mission_groups_config(self):
+        jsons = load_json_from_folder(f"{CONFIG_PATH}\\mission_groups")
+        r = [i["label"] for i in jsons]
+        return r
+
+    def _analyze_mission_group(self, mission_group_name):
+        r = load_json(mission_group_name, f"{CONFIG_PATH}\\mission_groups")
+        return r
+
     def on_click_pickup(self):
         output.clear('Button_PickUp')
         listening.FEAT_PICKUP = not listening.FEAT_PICKUP
         output.put_button(label=str(listening.FEAT_PICKUP), onclick=self.on_click_pickup, scope='Button_PickUp')
-
+    
     def on_click_startstop(self):
         output.clear('Button_StartStop')
+        listening.MISSION_MANAGER.set_mission_list(list(pin.pin["MissionSelect"]))
         listening.TASK_MANAGER.set_tasklist(pin.pin["task_list"])
         listening.TASK_MANAGER.start_stop_tasklist()
         time.sleep(0.2)
@@ -391,7 +408,7 @@ class ConfigPage(Page):
             doc_special = doc_special.split('#')
             if doc_special[0] == "$FILE_IN_FOLDER$":
                 
-                json_dict = load_jsons_from_folder(os.path.join(ROOT_PATH, doc_special[1]), black_file=["character","character_dist",""])
+                json_dict = load_json_from_folder(os.path.join(ROOT_PATH, doc_special[1]), black_file=["character","character_dist",""])
                 sl = []
                 for i in json_dict:
                     sl.append({"label": i["label"], "value": i["label"]})

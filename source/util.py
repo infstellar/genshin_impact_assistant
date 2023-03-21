@@ -540,8 +540,10 @@ def extract_white_letters(image, threshold=128):
     maximum = cv2.max(cv2.max(r, g), b)
     return cv2.multiply(cv2.add(maximum, cv2.subtract(maximum, minimum)), 255.0 / threshold)
 
-def load_jsons_from_folder(path, black_file:list=None):
+def load_json_from_folder(path, black_file:list=None):
     json_list = []
+    if black_file is None:
+        black_file = []
     for root, dirs, files in os.walk(path):
         for f in files:
             if f[f.index('.') + 1:] == "json":

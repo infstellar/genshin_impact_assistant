@@ -20,6 +20,7 @@ class TaskTemplate():
         self.is_task_running = False
 
     def forced_termination_task(self):
+        self.task_end()
         raise TaskEndException
 
     def _add_sub_threading(self,x:threading.Thread):

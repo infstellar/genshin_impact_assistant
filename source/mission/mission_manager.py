@@ -7,15 +7,18 @@ class MissionManager(AdvanceThreading):
     def __init__(self):
         super().__init__()
         self.missions_list = []
-        
+    
+    def set_mission_list(self,mission_list:list):
+        self.missions_list = mission_list
+
     def add_mission(self, mission_name:str):
         mission = get_mission_object(mission_name)
         self.missions_list.append(mission)
         self._add_sub_threading(mission, start=False)
     
-    def start_missions(self,mission_group):
+    def start_missions(self):
         self.sub_threading_list = []
-        self.missions_list = []
+        mission_group = self.missions_list
         for i in mission_group:
             self.add_mission(i)
         self.continue_threading()
