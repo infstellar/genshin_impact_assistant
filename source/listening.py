@@ -8,7 +8,6 @@ from source.task import task_manager
 from source.mission import mission_manager
 
 combat_flag = False
-domain_flag = False
 collector_flag = False
 startstop_flag = False
 TASK_MANAGER = task_manager.TaskManager()
@@ -21,14 +20,12 @@ MISSION_MANAGER.pause_threading()
 MISSION_MANAGER.start()
 
 t1 = None
-t2 = None
 t3 = None
 # @logger.catch
 
 
 FLOW_IDLE = 0
 FLOW_COMBAT = 1  # 自动战斗
-FLOW_DOMAIN = 2  # 自动秘境
 FLOW_COLLECTOR = 3  # 自动采集
 FEAT_PICKUP = False  # 拾取辅助
 
@@ -65,9 +62,6 @@ def import_current_module():
             elif current_flow == FLOW_COMBAT:
                 # logger.info("正在导入 FLOW_COMBAT 模块，可能需要一些时间。")
                 from source.flow import alpha_loop
-            elif current_flow == FLOW_DOMAIN:
-                # logger.info("正在导入 FLOW_DOMAIN 模块，可能需要一些时间。")
-                from source.flow import domain_flow
             elif current_flow == FLOW_COLLECTOR:
                 # logger.info("正在导入 FLOW_COLLECTOR 模块，可能需要一些时间。")
                 from source.flow import collector_flow
@@ -88,20 +82,6 @@ def switch_combat_loop():
         t1.setDaemon(True)
         t1.start()
     combat_flag = not combat_flag
-
-
-def switch_domain_loop():
-    global t2, domain_flag
-    if domain_flag:
-        logger.info(t2t('正在停止自动秘境'))
-        t2.stop_threading()
-    else:
-        from source.flow import domain_flow
-        logger.info(t2t('启动自动秘境'))
-        t2 = domain_flow.DomainFlow()
-        t2.setDaemon(True)
-        t2.start()
-    domain_flag = not domain_flag
 
 def switch_collector_loop():
     global t3, collector_flag
@@ -133,17 +113,12 @@ def startstop():
     elif current_flow == FLOW_COMBAT:
         startstop_flag = not startstop_flag
         switch_combat_loop()
-    elif current_flow == FLOW_DOMAIN:
-        startstop_flag = not startstop_flag
-        switch_domain_loop()
     elif current_flow == FLOW_COLLECTOR:
         startstop_flag = not startstop_flag
         switch_collector_loop()
 
 if keymap_json["autoCombat"] != "":
     keyboard.add_hotkey(keymap_json["autoCombat"], switch_combat_loop)
-if keymap_json["autoDomain"] != "":
-    keyboard.add_hotkey(keymap_json["autoDomain"], switch_domain_loop)
 if keymap_json["startstop"] != "":
     keyboard.add_hotkey(keymap_json["startstop"], startstop)
 keyboard.add_hotkey(load_json("keymap.json", f"{CONFIG_PATH_SETTING}")["task"], TASK_MANAGER.start_stop_tasklist)

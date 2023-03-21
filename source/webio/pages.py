@@ -126,7 +126,7 @@ class MainPage(Page):
                     output.put_text(t2t('FlowMode')),
                     pin.put_select(('FlowMode'), [
                         {'label': t2t('Idle'), 'value': listening.FLOW_IDLE},
-                        # {'label': t2t('AutoCombat'), 'value': listening.FLOW_COMBAT},
+                        {'label': t2t('AutoCombat'), 'value': listening.FLOW_COMBAT},
                         # {'label': t2t('AutoDomain'), 'value': listening.FLOW_DOMAIN},
                         {'label': t2t('AutoCollector'), 'value': listening.FLOW_COLLECTOR}
                     ])])

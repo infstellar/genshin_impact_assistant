@@ -20,8 +20,6 @@ class MissionManager(AdvanceThreading):
             self.add_mission(i)
         self.continue_threading()
     
-
-
     def loop(self):
         for mission in self.missions_list:
             logger.info(f"Mission {mission.name} Start.")

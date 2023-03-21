@@ -45,8 +45,8 @@ To没用过github的小伙伴: 描述文档中的蓝色文字是链接,可以打
 
 1. 在config中设置挑战秘境的次数与其他设置,详见[config设置](./doc/config.md).
 2. 手动选择队伍,配置队伍,进入秘境.
-3. 进入秘境后,在GUI中将FlowMode切换到AutoDomain，等待模块导入
-4. 按下`[`键启动/停止功能。可在`keymap.json`中更改。
+3. 进入秘境后,在GUI TaskList中选中DomainTask，点击启动任务
+4. 等待导入完成后切换到原神
 
 - 注意阅读[domain_assi.md](./doc/domain_assi.md)中的注意事项.
 
@@ -58,7 +58,7 @@ To没用过github的小伙伴: 描述文档中的蓝色文字是链接,可以打
 
 <strong>注:测试中功能</strong>
 
-- 在GUI中将FlowMode切换到AutoCollector，等待模块导入
+- 在GUI中将FlowMode切换到自动采集，等待模块导入
 
 - 按下`[`键启动/停止功能。可在`keymap.json`中更改。
 
@@ -118,7 +118,9 @@ To没用过github的小伙伴: 描述文档中的蓝色文字是链接,可以打
 
 - 点击main按钮进入
 
-- FlowMode：选择当前启用的功能
+- Task List：选择要执行的任务，只能从GUI里启动
+
+- FlowMode：选择当前启用的功能，只能按快捷键启动
 
 - Log：输出日志
 
@@ -143,7 +145,7 @@ To没用过github的小伙伴: 描述文档中的蓝色文字是链接,可以打
 ### 开源库
 
 #### 特别感谢
-- [Alas Lme带码进组(doge)](https://github.com/LmeSzinc/AzurLaneAutoScript)
+- [Alas](https://github.com/LmeSzinc/AzurLaneAutoScript)
 - 
 - [原神-基于图像算法的坐标定位 GenshinImpact AutoTrack DLL](https://github.com/GengGode/cvAutoTrack)
 
