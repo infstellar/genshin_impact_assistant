@@ -29,6 +29,7 @@ class MainPage(Page):
         self.log_list_lock = threading.Lock()
         self.ui_statement = -1
         self.refresh_flow_info_timer = timer_module.Timer()
+        self.ui_mission_select = ""
 
     # todo:多语言支持
 
@@ -59,6 +60,11 @@ class MainPage(Page):
                     f'color: black; font_size: 20px')
                 self.log_list_lock.release()
                 listening.call_you_import_module()
+            if pin.pin["MissionSelect"] != self.ui_mission_select:
+                self.ui_mission_select = pin.pin["MissionSelect"]
+                output.clear_scope("SCOPEMissionIntroduction")
+                output.put_text(self._get_mission_groups_dict()["introduction"][GLOBAL_LANG],scope="SCOPEMissionIntroduction")
+            
             self.log_list_lock.acquire()
             for text, color in self.log_list:
                 if text == "$$end$$":
@@ -122,10 +128,11 @@ class MainPage(Page):
                 #Mission select
                 output.put_row([  
                     output.put_text(t2t('Mission Group')),
-                    pin.put_select("MissionSelect",self._get_mission_groups_config()
-                    )
-                    ]
-                               ),
+                    output.put_column([
+                        pin.put_select("MissionSelect",self._get_mission_groups_config()),
+                        output.put_scope("SCOPEMissionIntroduction")
+                        ])
+                ]),
                 
                 output.put_markdown(t2t('## Function')),  # 左竖列标题
                 output.put_markdown(t2t("Can only be activated from the hotkey \'[\'")),
@@ -160,8 +167,9 @@ class MainPage(Page):
         r = [i["label"] for i in jsons]
         return r
 
+    def _get_mission_groups_dict(self):
+        return load_json(str(pin.pin["MissionSelect"]),default_path=f"{CONFIG_PATH}\\mission_groups")
     
-
     def on_click_pickup(self):
         output.clear('Button_PickUp')
         listening.FEAT_PICKUP = not listening.FEAT_PICKUP

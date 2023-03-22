@@ -204,11 +204,20 @@ out/*
 assets/dm/*
 config/settings/damo.json
 config/settings/dm.json
-test1.py
-testt.py
-source/test/test242.py
+
+
 config/collection_path/*
 !config/collection_path/.gitkeep
+
+# Mission groups
+config/mission_groups/*.json
+!config/mission_groups/AutoCollectorMission.json
+!config/mission_groups/SakuraBloomMissionGroup.json
+!config/mission_groups/Default.json
+
+# test file
+source/test/test242.py
 source/test/test251.py
-config/mission_group/*.json
 source/test/test600.py
+test1.py
+testt.py

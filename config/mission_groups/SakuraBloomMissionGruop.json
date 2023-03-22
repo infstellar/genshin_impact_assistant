@@ -1,5 +1,8 @@
 {
-  "introduction": "",
+  "introduction": {
+    "en_US": " automatic collect sakura bloom",
+    "zh_CN": "自动采集绯樱绣球"
+  },
   "missions": [
     "MissionSakuraBloom1"
   ]

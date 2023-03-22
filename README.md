@@ -31,7 +31,7 @@ To没用过github的小伙伴: 描述文档中的蓝色文字是链接,可以打
 
 补档 <https://www.youtube.com/watch?v=ZieBDx6Go4A> v0.2.0的演示视频，可能部分过期
 
-## 功能及其启动方式
+## 功能介绍
 
 ### 1. [自动战斗辅助](./doc/combat_assi.md)
 
@@ -56,11 +56,9 @@ To没用过github的小伙伴: 描述文档中的蓝色文字是链接,可以打
 
 演示视频：<https://www.bilibili.com/video/BV163411Q7fD>
 
-<strong>注:测试中功能</strong>
+- 在GUI中将Mission Group切换到AutoCollectorMission.json
 
-- 在GUI中将FlowMode切换到自动采集，等待模块导入
-
-- 按下`[`键启动/停止功能。可在`keymap.json`中更改。
+- 选中Task List -> Mission，启动Task
 
 - 注意阅读[collector_assi.md](./doc/collector_assi.md)中的注意事项.
 
@@ -98,21 +96,7 @@ To没用过github的小伙伴: 描述文档中的蓝色文字是链接,可以打
 
 更多其他配置项，参见GUI内的设置介绍。
 
-## 错误报告
-
-如果在使用中遇到问题，可以提交issue或在Q群中反馈。
-
-反馈错误前，请务必确认您已经阅读文档和[FAQ](doc/FAQ.md)中的已知问题与解决方案。
-
-反馈错误时，请一并提交 Logs 文件夹中的日志文件。
-
-## 常见问题 FAQ
-
-如果在使用时遇到问题，可以先看看FAQ：
-
-[FAQ](doc/FAQ.md)
-
-### GUI使用方法
+### GUI使用
 
 #### main窗口
 
@@ -121,6 +105,8 @@ To没用过github的小伙伴: 描述文档中的蓝色文字是链接,可以打
 - Task List：选择要执行的任务，只能从GUI里启动
 
 - FlowMode：选择当前启用的功能，只能按快捷键启动
+
+- Mission: 选择要启动的任务组，然后在Task List选中Mission，启动Task List
 
 - Log：输出日志
 
@@ -135,6 +121,22 @@ To没用过github的小伙伴: 描述文档中的蓝色文字是链接,可以打
 ### 自动战斗，自动采集设置窗口
 
 - 点击对应按钮进入，按照提示操作
+
+## 错误报告
+
+如果在使用中遇到问题，可以提交issue或在Q群中反馈。
+
+反馈错误前，请务必确认您已经阅读文档和[FAQ](doc/FAQ.md)中的已知问题与解决方案。
+
+反馈错误时，请一并提交 Logs 文件夹中的日志文件。
+
+## 常见问题 FAQ
+
+如果在使用时遇到问题，可以先看看FAQ：
+
+[FAQ](doc/FAQ.md)
+
+
 
 ## 性能需求
 
