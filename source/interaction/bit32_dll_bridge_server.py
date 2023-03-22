@@ -1,6 +1,7 @@
 from socket import *
 from time import ctime
-import dmlib, threading, json, os
+import threading, json, os
+import dmlib as dmlib
 HOST = '127.0.0.1'
 PORT = 21568
 BUFSIZE = 1024

@@ -313,7 +313,7 @@ def get_chara_blood():
     tb=tb[::-1]
     if cb=="" or tb=="":
         return None
-    if int(tb) == 0:
+    if int(tb) <= 100:
         return None
     return int(cb),int(tb)
 
@@ -340,7 +340,8 @@ class CombatStatementDetectionLoop(BaseThreading):
     def loop(self):
         r = get_chara_blood_percentage()
         if r != None:
-            self.is_low_health = r <= 0.6
+            r = get_chara_blood_percentage()
+            self.is_low_health = (r <= 0.6)
  
         if only_arrow_timer.get_diff_time()>=30:
             if self.current_state == True:

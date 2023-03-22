@@ -5,7 +5,7 @@
   "corr_degree": 0.95,
   "device_paddle": "cpu",
   "device_torch": "auto",
-  "version": "v0.3.0",
+  "version": "v0.6.1",
   "check_import": false,
   "lang":"$locale$",
   "cloud_genshin": false,
@@ -13,6 +13,5 @@
   "determining_strict_weight":0.9,
   "interaction_mode": "Desktop",
   "python32_path": "",
-  "mission_group":"default_group.json"
-
+  "mission_group":"AutoCollectorMission.json"
 }

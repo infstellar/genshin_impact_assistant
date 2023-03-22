@@ -3,7 +3,7 @@ from source.util import *
 from source.interaction.interaction_template import InteractionTemplate
 from source.common import static_lib
 
-dbc.start_server(python_path="D:\\Program Files\\Anaconda\\envs\\GIA3732\\python.exe")
+dbc.start_server(python_path=load_json()["python32_path"])
 dbc.connect()
 
 dmdll = dbc.DMDLL()
