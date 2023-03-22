@@ -47,7 +47,7 @@ class TaskManager(BaseThreading):
     def start_stop_tasklist(self):
         self.start_tasklist_flag = not self.start_tasklist_flag
         if self.curr_task.is_task_running:
-            self.curr_task.forced_termination_task()
+            self.curr_task.terminate_task()
 
     def start_stop_task(self, task_name):
         if not self.reg_task_flag:
@@ -75,7 +75,7 @@ class TaskManager(BaseThreading):
         else:
             logger.info(t2t("End Task"))
             if self.curr_task.is_task_running:
-                self.curr_task.forced_termination_task()
+                self.curr_task.terminate_task()
             self.sub_threading_list = []
             self.reg_task_flag = not self.reg_task_flag
 

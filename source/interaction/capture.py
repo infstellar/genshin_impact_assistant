@@ -80,7 +80,6 @@ class WindowsCapture(Capture):
     
 
     def __init__(self):
-        static_lib.HANDLE = static_lib.HANDLE
         super().__init__()
         self.max_fps = 30
         self.scale_factor = self._get_screen_scale_factor()

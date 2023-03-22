@@ -135,6 +135,9 @@ class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon):
         FlowTemplate.__init__(self, upper, flow_id=ST.INIT_TEYVAT_MOVE, next_flow_id=ST.END_TEYVAT_MOVE_PASS)
         TeyvatMoveCommon.__init__(self)
         self.upper = upper
+        self.auto_move_timeout = timer_module.AdvanceTimer(limit=300)
+        self.history_position = []
+        self.history_position_timer = timer_module.AdvanceTimer(limit=1)
 
     def _calculate_next_priority_point(self, currentp, targetp):
         float_distance = 35
@@ -162,6 +165,9 @@ class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon):
     def state_before(self):
         tracker.reinit_smallmap()
         itt.key_down('w')
+        self.auto_move_timeout.reset()
+        self.history_position_timer.reset()
+        self.history_position = []
         self._next_rfc()
     
     def state_in(self):
@@ -169,6 +175,13 @@ class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon):
         
         self.current_posi = tracker.get_position()
         p1 = self.upper.target_posi
+        if self.history_position_timer.reached_and_reset():
+            self.history_position.append(self.current_posi)
+        if len(self.history_position) >= 30:
+            if euclidean_distance(self.history_position[0], self.history_position[-1])<=10:
+                logger.warning(f"MOVE STUCK")
+                self._set_nfid(ST.END_TEYVAT_MOVE_STUCK)
+                self._set_rfc(FC.END)
         # print(p1)
         movement.change_view_to_posi(p1, self.upper.checkup_stop_func)
         if (not static_lib.W_KEYDOWN):

@@ -313,6 +313,8 @@ def get_chara_blood():
     tb=tb[::-1]
     if cb=="" or tb=="":
         return None
+    if int(tb) == 0:
+        return None
     return int(cb),int(tb)
 
 def get_chara_blood_percentage():

@@ -1,7 +1,6 @@
 {
   "introduction": "",
   "missions": [
-    "MissionTest",
-    "MissionCrystalfly"
+    "MissionAutoCollector"
   ]
 }

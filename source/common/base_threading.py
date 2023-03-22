@@ -3,6 +3,10 @@ import time
 from source.funclib.err_code_lib import ERR_NONE
 from source.util import *
 
+class ThreadingStopException(Exception):
+    pass
+
+
 class BaseThreading(threading.Thread):
     """
     基本线程类。
@@ -33,9 +37,7 @@ class BaseThreading(threading.Thread):
         self.stop_threading_flag = True
         for i in self.sub_threading_list:
             i.stop_threading()
-
     
-
     def checkup_stop_threading(self):
         if self.stop_threading_flag:
             return True

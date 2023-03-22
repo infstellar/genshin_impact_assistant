@@ -19,6 +19,7 @@ class MissionExecutor(BaseThreading):
         super().__init__()
         self.CFCF = collector_flow_upgrad.CollectorFlowController()
         self._add_sub_threading(self.CFCF,start=False)
+        self.picked_list = []
         self.TMCF = teyvat_move_flow_upgrad.TeyvatMoveFlowController()
         self._add_sub_threading(self.TMCF,start=False)
         self.PUO = PickupOperator()
@@ -33,6 +34,9 @@ class MissionExecutor(BaseThreading):
             "CharaDied":False
             }
 
+    def refresh_picked_list(self):
+        self.picked_list = []
+    
     def _detect_exception(self):
         if self.exception_list["FoundEnemy"]:
             if combat_lib.CSDL.is_low_health:
@@ -76,7 +80,7 @@ class MissionExecutor(BaseThreading):
         self.TMCF.start_flow()
         while 1:
             time.sleep(0.2)
-            if self.TMCF.get_working_statement() == False:
+            if self.TMCF.pause_threading_flag:
                 break
             if self._is_exception():
                 self.TMCF.pause_threading()
@@ -122,13 +126,16 @@ class MissionExecutor(BaseThreading):
         time.sleep(1)
         while 1:
             time.sleep(0.2)
-            if self.CFCF.get_working_statement() == False:
+            if self.CFCF.pause_threading_flag == True:
                 break
             if self._is_exception():
                 self.CFCF.pause_threading()
                 break
         if self.CFCF.get_and_reset_err_code() != ERR_PASS:
             self.exception_flag = True
+        else:
+            self.picked_list.append(self.CFCF.flow_connector.puo.pickup_item_list.copy())
+            self.CFCF.flow_connector.puo.reset_pickup_item_list()
         return self._handle_exception()
     
     def start_pickup(self):

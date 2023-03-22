@@ -66,6 +66,7 @@ class CollectorFlowConnector(FlowConnector):
         self.pickup_points = []
         
         self.pickup_points_index = 0
+        self.puo.set_search_mode(0)
    
 
     def stop_combat(self):
@@ -117,17 +118,23 @@ class PickUpCollection(FlowTemplate):
         super().__init__(upper, flow_id=ST.COLLECTION_PICKUP, next_flow_id=ST.END_COLLECTOR, flow_timeout_time=timeout_time)
     
     def state_before(self):
+        
         if len(self.upper.pickup_points) > self.upper.pickup_points_index:
             movement.move_to_position(self.upper.pickup_points[self.upper.pickup_points_index])
             r = self.upper.puo.pickup_recognize()
             self.upper.pickup_points_index += 1
             logger.debug(f"pickup point:{self.upper.pickup_points[self.upper.pickup_points_index]}, {r}")
         else:
-            self.upper.start_pickup()
-            self.upper.puo.reset_err_code()
-            self.flow_timeout.reset() # IMPORTANT
-            self.while_sleep = 0.2
-            self._next_rfc()
+            if self.upper.is_activate_pickup:
+                self.upper.puo.set_search_mode(1)
+                self.upper.start_pickup()
+                self.upper.puo.reset_err_code()
+                self.flow_timeout.reset() # IMPORTANT
+                self.IN_PICKUP_COLLECTOR_timeout.reset()
+                self.while_sleep = 0.2
+                self._next_rfc()
+            else:
+                self._set_rfc(FC.END)
     
     def state_in(self):
         if self.upper.puo.pause_threading_flag:
@@ -137,6 +144,7 @@ class PickUpCollection(FlowTemplate):
             logger.info(f"IN_PICKUP_COLLECTOR timeout: {self.IN_PICKUP_COLLECTOR_timeout.timeout_limit}")
             logger.info(f"collect in xxx failed.")
             self._next_rfc()
+            self._set_nfid(ST.END_COLLECTOR)
             self.upper.stop_pickup()
         if combat_lib.CSDL.get_combat_state():
             self.upper.stop_pickup()
@@ -202,7 +210,7 @@ class CollectorFlowController(FlowController):
 if __name__ == '__main__':
     
     cfc = CollectorFlowController()
-    cfc.set_parameter(collection_path_list=load_json("1678014849.9312954", "config\\collection_path"))
+    cfc.set_parameter(is_activate_pickup=True) # collection_path_list=load_json("1678014849.9312954", "config\\collection_path")
     cfc.start()
     
     while 1:

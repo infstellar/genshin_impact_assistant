@@ -172,6 +172,9 @@ class MainPage(Page):
         # listening.MISSION_MANAGER.set_mission_list(list(pin.pin["MissionSelect"]))
         listening.TASK_MANAGER.set_tasklist(pin.pin["task_list"])
         listening.TASK_MANAGER.start_stop_tasklist()
+        cj = load_json()
+        cj["mission_group"] = pin.pin["MissionSelect"]
+        save_json(cj)
         time.sleep(0.2)
         output.put_button(label=str(listening.TASK_MANAGER.start_tasklist_flag), onclick=self.on_click_startstop,
                           scope='Button_StartStop')

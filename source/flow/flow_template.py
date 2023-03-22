@@ -34,6 +34,7 @@ class FlowTemplate():
             self._before_timeout()
             return self.next_flow_id
         if self.rfc == FC.INIT:
+            self.flow_timeout.reset()
             self.state_init()
         elif self.rfc == FC.BEFORE:
             self.state_before()
