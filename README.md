@@ -136,8 +136,6 @@ To没用过github的小伙伴: 描述文档中的蓝色文字是链接,可以打
 
 [FAQ](doc/FAQ.md)
 
-
-
 ## 性能需求
 
 - 此程序至少需要`2.5G内存`与`6G存储空间`.
@@ -148,7 +146,7 @@ To没用过github的小伙伴: 描述文档中的蓝色文字是链接,可以打
 
 #### 特别感谢
 - [Alas](https://github.com/LmeSzinc/AzurLaneAutoScript)
-- 
+
 - [原神-基于图像算法的坐标定位 GenshinImpact AutoTrack DLL](https://github.com/GengGode/cvAutoTrack)
 
 原地址：https://github.com/GengGode/GenshinImpact_AutoTrack_DLL
@@ -156,7 +154,6 @@ To没用过github的小伙伴: 描述文档中的蓝色文字是链接,可以打
 - [空荧酒馆原神地图 kongying-tavern/yuan-shen-map](https://github.com/kongying-tavern/yuan-shen-map)
 
 - [原神英語・中国語辞典 xicri/genshin-dictionary](https://github.com/xicri/genshin-dictionary)
-
 
 #### 开源库调用
 
