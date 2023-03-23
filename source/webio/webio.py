@@ -20,7 +20,7 @@ def get_branch_commit_id():
     return branch,commit_id
 def main():
     global first_run
-    pywebio.session.set_env(output_max_width='80%', title=f"GIA v0.6.1 {get_branch_commit_id()[1]}")
+    pywebio.session.set_env(output_max_width='80%', title=f"GIA {GIA_VERSION} {get_branch_commit_id()[1]}")
     session.run_js(f'document.querySelector("body > footer").innerHTML+="| GIA: {"-".join(get_branch_commit_id())}"')
     webio.manager.reg_page('MainPage', MainPage())
     webio.manager.reg_page('SettingPage', SettingPage())
