@@ -7,6 +7,8 @@ from source.common import character
 from source.interaction.interaction_core import itt
 from source.interaction import interaction_core
 from source.api.pdocr_light import ocr_light
+from source.ui.ui import ui_control
+from source.ui import page as UIPage
 
 """
 战斗相关常用函数库。
@@ -324,6 +326,13 @@ def get_chara_blood_percentage():
     else:
         return None
 
+def is_character_healthy():
+    if ui_control.verify_page(UIPage.page_main):
+        img = itt.capture(jpgmode=0)
+        col = img[847,1011]
+        target_col = [150,215,35]
+        return color_similar(col,target_col,threshold=20)
+
 class CombatStatementDetectionLoop(BaseThreading):
     def __init__(self):
         super().__init__()
@@ -338,10 +347,7 @@ class CombatStatementDetectionLoop(BaseThreading):
         return self.current_state
     
     def loop(self):
-        r = get_chara_blood_percentage()
-        if r != None:
-            r = get_chara_blood_percentage()
-            self.is_low_health = (r <= 0.6)
+        self.is_low_health = is_character_healthy()
  
         if only_arrow_timer.get_diff_time()>=30:
             if self.current_state == True:

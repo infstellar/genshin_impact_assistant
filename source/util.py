@@ -553,6 +553,64 @@ def load_json_from_folder(path, black_file:list=None):
                     json_list.append({"label": f, "json": j})
     return json_list
 
+def color_similarity(color1, color2):
+    """
+    Args:
+        color1 (tuple): (r, g, b)
+        color2 (tuple): (r, g, b)
+    Returns:
+        int:
+    """
+    diff = np.array(color1).astype(int) - np.array(color2).astype(int)
+    diff = np.max(np.maximum(diff, 0)) - np.min(np.minimum(diff, 0))
+    return diff
+
+
+def color_similar(color1, color2, threshold=10):
+    """Consider two colors are similar, if tolerance lesser or equal threshold.
+    Tolerance = Max(Positive(difference_rgb)) + Max(- Negative(difference_rgb))
+    The same as the tolerance in Photoshop.
+    Args:
+        color1 (tuple): (r, g, b)
+        color2 (tuple): (r, g, b)
+        threshold (int): Default to 10.
+    Returns:
+        bool: True if two colors are similar.
+    """
+    # print(color1, color2)
+    diff = np.array(color1).astype(int) - np.array(color2).astype(int)
+    diff = np.max(np.maximum(diff, 0)) - np.min(np.minimum(diff, 0))
+    return diff <= threshold
+
+
+def color_similar_1d(image, color, threshold=10):
+    """
+    Args:
+        image (np.ndarray): 1D array.
+        color: (r, g, b)
+        threshold(int): Default to 10.
+    Returns:
+        np.ndarray: bool
+    """
+    diff = image.astype(int) - color
+    diff = np.max(np.maximum(diff, 0), axis=1) - np.min(np.minimum(diff, 0), axis=1)
+    return diff <= threshold
+
+
+def color_similarity_2d(image, color):
+    """
+    Args:
+        image: 2D array.
+        color: (r, g, b)
+    Returns:
+        np.ndarray: uint8
+    """
+    r, g, b = cv2.split(cv2.subtract(image, (*color, 0)))
+    positive = cv2.max(cv2.max(r, g), b)
+    r, g, b = cv2.split(cv2.subtract((*color, 0), image))
+    negative = cv2.max(cv2.max(r, g), b)
+    return cv2.subtract(255, cv2.add(positive, negative))
+
 # Update for a program used before version v0.5.0.424
 if os.path.exists(os.path.join(ROOT_PATH, "config\\tastic")):
     logger.info("检测到tastic文件夹。")

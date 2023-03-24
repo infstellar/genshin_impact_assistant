@@ -5,6 +5,7 @@ import numpy as np
 from source.common import static_lib
 
 
+
 class Capture():
     def __init__(self):
         self.capture_cache = np.zeros_like((1080,1920,3), dtype="uint8")
@@ -12,6 +13,7 @@ class Capture():
         self.fps_timer = timer_module.Timer(diff_start_time=1)
         self.capture_cache_lock = threading.Lock()
         self.capture_times = 0
+        self.cap_per_sec = timer_module.CyclicCounter(limit=3)
 
     def _get_capture(self) -> np.ndarray:
         """
@@ -31,6 +33,10 @@ class Capture():
         """
         is_next_img: 强制截取下一张图片
         """
+        if DEBUG_MODE:
+            r = self.cap_per_sec
+            if r:
+                logger.debug(f"capps: {r/3}")
         self._capture(is_next_img)
         self.capture_cache_lock.acquire()
         cp = self.capture_cache.copy()

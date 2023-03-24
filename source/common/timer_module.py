@@ -124,6 +124,19 @@ class CyclicVelocityDetector(Timer):
         self.reset()
         return int(1/dt)
 
+class CyclicCounter(AdvanceTimer):
+    def __init__(self, limit, count=0):
+        super().__init__(limit, count)
+        self.times = 0
+
+    def count(self):
+        if self.reached_and_reset():
+            c = self.times
+            self.times = 1
+            return c
+        else:
+            self.times += 1
+            return False
 class TimeoutTimer(Timer):
     def __init__(self, timeout_limit):
         super().__init__()
