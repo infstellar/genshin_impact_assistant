@@ -11,10 +11,9 @@ import struct
 import time
 import ctypes
 
-try:
-    from win32com.client import Dispatch
-except:
-    pass
+
+from win32com.client import Dispatch
+
 
 
 class DM:
@@ -32,9 +31,9 @@ class DM:
             dll_path: dm.dll路径。必须是全路径
         """
 
-        # if struct.calcsize("P") * 8 == 64:
-        #     print("dm.dll不支持64位Python")
-        #     return None
+        if struct.calcsize("P") * 8 == 64:
+            print("dm.dll不支持64位Python")
+            # return None
         # else:
         self.dll_prefix = "dm.dll"
 
@@ -94,7 +93,8 @@ class DM:
         try:
             self.dm = Dispatch('dm.dmsoft')
             return 1
-        except:
+        except Exception as e:
+            print(e)
             print(
                 "调用失败：" + time.strftime('%Y-%m-%d-%H:%M:%S', time.localtime(time.time())) + self.dll_path + "：调用失败")
             return 0

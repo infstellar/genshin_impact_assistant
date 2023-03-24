@@ -1,5 +1,16 @@
 from socket import *
 import threading, time, os
+
+"""
+如何配置DM后台操作
+1. anaconda powershell:(administrator)
+2. set CONDA_FORCE_32BIT=1
+3. conda create -n XXXX python==3.7.6
+4. y
+5. conda activate XXXX;pip install pywin32
+6. 把地址放到config里
+7. 在config/setting新建dm.json,输入[XXXX,XXXX](两个注册代码)
+"""
 class Timer:
     def __init__(self, diff_start_time=0):
         self.start_time = time.time()

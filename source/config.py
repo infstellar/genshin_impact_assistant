@@ -25,10 +25,10 @@ def template_translator():
         for f in files:
             if f[f.index('.')+1:] == "jsontemplate":
                 template_files.append({"label": f, "value": os.path.join(root, f)})
-    for root, dirs, files in os.walk(os.path.join(ROOT_PATH, 'config', 'mission_groups')):
-        for f in files:
-            if f[f.index('.')+1:] == "jsontemplate":
-                template_files.append({"label": f, "value": os.path.join(root, f)})
+    # for root, dirs, files in os.walk(os.path.join(ROOT_PATH, 'config', 'mission_groups')):
+    #     for f in files:
+    #         if f[f.index('.')+1:] == "jsontemplate":
+    #             template_files.append({"label": f, "value": os.path.join(root, f)})
 
     for template_file in template_files:
         config_file_path = os.path.join( os.path.dirname(template_file["value"]), template_file["label"].replace(".jsontemplate", ".json"))
