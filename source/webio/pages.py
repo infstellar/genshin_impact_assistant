@@ -12,7 +12,6 @@ import time
 from source import listening, webio
 from source.webio import manager
 from source.webio.page_manager import Page
-from common import flow_state
 from source.funclib import collector_lib
 from source.common import timer_module
 
@@ -142,7 +141,7 @@ class MainPage(Page):
                         {'label': t2t('Idle'), 'value': listening.FLOW_IDLE},
                         {'label': t2t('AutoCombat'), 'value': listening.FLOW_COMBAT},
                         # {'label': t2t('AutoDomain'), 'value': listening.FLOW_DOMAIN},
-                        {'label': t2t('AutoCollector'), 'value': listening.FLOW_COLLECTOR}
+                        # {'label': t2t('AutoCollector'), 'value': listening.FLOW_COLLECTOR}
                     ])])
                 
             ]), None,
