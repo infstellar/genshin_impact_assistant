@@ -3,11 +3,17 @@ from source.funclib import combat_lib
 from source.operator import tactic_operator
 from source.common.base_threading import BaseThreading
 from source.interaction.interaction_core import itt
-from common.timer_module import Timer
+from common.timer_module import Timer, AdvanceTimer
 from source.util import *
 from source.manager import asset
+from source.operator.aim_operator import AimOperator
 from source.api.pdocr_complete import ocr
 
+
+SHIELD = 'Shield'
+CORE = 'Core'
+SUB_CORE = 'SubCore'
+ASSIST = "Assist"
 
 def sort_flag_1(x: character.Character):
     return x.priority
@@ -21,15 +27,17 @@ class SwitchCharacterOperator(BaseThreading):
         self.itt = itt
 
         self.tactic_operator = tactic_operator.TacticOperator()
+        self.aim_operator = AimOperator()
         self._add_sub_threading(self.tactic_operator)
+        self._add_sub_threading(self.aim_operator)
         self.chara_list.sort(key=sort_flag_1, reverse=False)
         self.current_num = 1 # combat_lib.get_current_chara_num(self.itt, self.checkup_stop_func)
         self.switch_timer = Timer(diff_start_time=2)
         self.tactic_operator.set_enter_timer(self.switch_timer)
-        self.switching_flag = False
 
         self.died_character = [] # 存储的是n而非name
         self.reborn_timer = Timer(diff_start_time=150)
+        self.position_check_timer = AdvanceTimer(0.5)
     
     def run(self):
         while 1:
@@ -42,7 +50,6 @@ class SwitchCharacterOperator(BaseThreading):
                 if self.working_flag:
                     self.working_flag = False
                 time.sleep(1)
-
                 continue
 
             if not self.working_flag:  # tactic operator no working
@@ -52,13 +59,12 @@ class SwitchCharacterOperator(BaseThreading):
                 continue
             if self.tactic_operator.get_working_statement():  # tactic operator working
                 time.sleep(0.1)
+                if self.position_check_timer.reached_and_reset():
+                    self.switch_character(switch_type="POSITION")
             else:
-                ret = self.switch_character()
-                if not ret:  # able to change character
-                    self.tactic_operator.continue_threading()
-                    time.sleep(0.4)
-                else:  # no changable character
-                    pass
+                self.switch_character(switch_type="TRIGGER")
+                time.sleep(0.5)
+
     
     def _check_and_reborn(self) -> bool:
         """重生角色
@@ -102,8 +108,15 @@ class SwitchCharacterOperator(BaseThreading):
             return True
             
     
-    def switch_character(self):
-        idle = True
+    def switch_character(self, switch_type="TRIGGER"):
+        """_summary_
+
+        Args:
+            switch_type (str, optional): _description_. Defaults to "TRIGGER". "TRIGGER" "POSITION
+
+        Returns:
+            _type_: _description_
+        """
         for chara in self.chara_list:
             logger.debug('check up in: ' + chara.name)
             if self.checkup_stop_func():
@@ -111,23 +124,20 @@ class SwitchCharacterOperator(BaseThreading):
             if chara.n in self.died_character: # died
                 if self.reborn_timer.get_diff_time()<=125: # reborn cd
                     continue
-            if chara.trigger():
-                self.current_num = combat_lib.get_current_chara_num(self.itt, self.checkup_stop_func)
-                logger.debug(f"switch_character: targetnum: {chara.n} current num: {self.current_num}")
-                if chara.n != self.current_num:
-                    self.tactic_operator.pause_threading()
-                    self.switching_flag = True
-                    r = self._switch_character(chara.n)
-                    self.switching_flag = False
-                    if not r: # Failed
-                        continue
-                
-                self.tactic_operator.continue_threading()                
-                self.tactic_operator.set_parameter(chara.tactic_group, chara)
-                self.tactic_operator.restart_executor()
-                idle = False
-                return idle
-        return idle
+            if (switch_type == "TRIGGER" and chara.trigger()) or (switch_type == "POSITION" and chara.is_position_ready()):
+                if chara.trigger():
+                    self.current_num = combat_lib.get_current_chara_num(self.itt, self.checkup_stop_func)
+                    logger.debug(f"switch_character: {switch_type}: targetnum: {chara.n} current num: {self.current_num}")
+                    if chara.n != self.current_num:
+                        self.tactic_operator.pause_threading()
+                        r = self._switch_character(chara.n)
+                        if not r: # Failed
+                            continue
+                        self.tactic_operator.set_parameter(chara.tactic_group, chara)
+                        self.tactic_operator.restart_executor()
+                        self.tactic_operator.continue_threading()
+                        return True
+       
 
     def _switch_character(self, x: int) -> bool:
         """_summary_
@@ -147,9 +157,13 @@ class SwitchCharacterOperator(BaseThreading):
         for i in range(60):
             if self.checkup_stop_func():
                 return True
-            is_busy = self.tactic_operator.chara_waiting(is_while=False)
+            if i > 3:
+                is_busy = combat_lib.is_character_busy(self.checkup_stop_func)
+            else:
+                is_busy = False
             if not is_busy:
-                combat_lib.unconventionality_situation_detection(self.itt)
+                if i > 3:
+                    combat_lib.unconventionality_situation_detection(self.itt)
                 self.itt.key_press(str(x))
                 if combat_lib.get_current_chara_num(self.itt, self.checkup_stop_func, max_times = 5) == x:
                     switch_succ_num += 1
@@ -176,12 +190,14 @@ class SwitchCharacterOperator(BaseThreading):
         if self.pause_threading_flag != True:
             self.pause_threading_flag = True
             self.tactic_operator.pause_threading()
+            self.aim_operator.pause_threading()
 
     def continue_threading(self):
         if self.pause_threading_flag != False:
             self.pause_threading_flag = False
             self.tactic_operator.set_parameter(None, None)
             self.tactic_operator.continue_threading()
+            # self.aim_operator.continue_threading()
             self.current_num = combat_lib.get_current_chara_num(self.itt, self.checkup_stop_func)
 
 

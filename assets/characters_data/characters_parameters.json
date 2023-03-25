@@ -1,0 +1,12 @@
+{
+    "albedo":{
+        "E_long_cd_time": 0,
+        "E_short_cd_time": 0,
+        "Elast_time": 0,
+        "Epress_time": 0,
+        "Qcd_time": 0,
+        "Qlast_time": 0,
+        "vision": "Geo"
+    }
+    
+}

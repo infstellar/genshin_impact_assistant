@@ -2,7 +2,6 @@
   "bennett": {
     "E_long_cd_time": 10,
     "E_short_cd_time": 3,
-    "Ecd_float_time": 0,
     "Elast_time": 0,
     "Epress_time": 2.5,
     "Qlast_time": 0,
@@ -13,7 +12,6 @@
   "ningguang": {
     "E_long_cd_time": 10,
     "E_short_cd_time": 5,
-    "Ecd_float_time": 0,
     "Elast_time": 0,
     "Epress_time": 3,
     "Qlast_time": 0,
@@ -24,7 +22,6 @@
   "yoimiya": {
     "E_long_cd_time": 0,
     "E_short_cd_time": 18,
-    "Ecd_float_time": 0,
     "Elast_time": 10,
     "Epress_time": 0,
     "Qlast_time": 10,
@@ -35,7 +32,6 @@
   "yunjin": {
     "E_long_cd_time": 10,
     "E_short_cd_time": 5,
-    "Ecd_float_time": 0,
     "Elast_time": 0,
     "Epress_time": 3,
     "Qlast_time": 0,
@@ -46,7 +42,6 @@
   "zhongli": {
     "E_long_cd_time": 12,
     "E_short_cd_time": 4,
-    "Ecd_float_time": 1.5,
     "Elast_time": 18,
     "Epress_time": 2,
     "Qlast_time": 0,

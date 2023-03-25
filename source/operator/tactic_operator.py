@@ -39,6 +39,7 @@ class TacticOperator(BaseThreading):
     def pause_threading(self):
         if self.pause_threading_flag != True:
             self.pause_threading_flag = True
+            self.working_flag = False
             self.tactic_group = None
             self.formered_tactic = None
     
@@ -63,7 +64,7 @@ class TacticOperator(BaseThreading):
             time.sleep(0.02)
             # time.sleep(self.while_sleep)
             if self.stop_threading_flag:
-                return 0
+                return
 
             if self.pause_threading_flag:
                 if self.working_flag:
@@ -85,9 +86,11 @@ class TacticOperator(BaseThreading):
                 self.working_flag = False
                 continue
             if not self.pause_tactic_flag:
+                logger.debug(f"exec tactic start")
                 self.execute_tactic(self.formered_tactic)
                 self.flag_tactic_executing = False
                 self.working_flag = False
+                logger.debug(f"exec tactic end")
 
     def set_parameter(self, tactic_group: str, character: Character):
         if tactic_group is None:
@@ -201,7 +204,7 @@ class TacticOperator(BaseThreading):
     #             return i + 1
 
     def get_character_busy(self):
-        return combat_lib.get_character_busy(self.itt, self.checkup_stop_func)
+        return combat_lib.is_character_busy(self.checkup_stop_func)
         # cap = self.itt.capture()
         # cap = self.itt.png2jpg(cap, channel='ui')
         # t = 0
@@ -233,10 +236,6 @@ class TacticOperator(BaseThreading):
         if times >= 2:
             return -1
 
-        if self.character.Ecd_float_time > 0:
-            if self._is_e_release():
-                self.itt.delay(self.character.get_Ecd_time() + 0.1)
-
         self.chara_waiting()
         logger.debug('do_use_e')
         self.itt.key_press('e')
@@ -252,9 +251,6 @@ class TacticOperator(BaseThreading):
             return 0
         if times >= 2:
             return -1
-
-        if self.character.Ecd_float_time > 0:
-            self.itt.delay(self.character.get_Ecd_time() + 0.1)
 
         self.chara_waiting()
         logger.debug('do_use_longe')

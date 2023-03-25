@@ -14,10 +14,6 @@
         "doc":"短元素战技cd时间",
         "annotation":"短Ecd时间，不能为0"
     },
-    "Ecd_float_time":{
-        "doc":"在E技能冷却还有x秒前即切换至该角色",
-        "annotation":"可以为0，建议设置的值比预计值偏小一点"
-    },
     "Elast_time":{
         "doc":"元素战技持续时间",
         "annotation":"E技能持续时间，没有则为0"

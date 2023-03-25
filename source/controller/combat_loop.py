@@ -5,7 +5,6 @@ from source.util import *
 from source.common import character
 from source.funclib import combat_lib
 from source.manager import asset
-from source.operator.aim_operator import AimOperator
 from source.common.base_threading import BaseThreading
 from source.interaction.interaction_core import itt
 from source.operator.switch_character_operator import SwitchCharacterOperator
@@ -38,25 +37,14 @@ class Combat_Controller(BaseThreading):
         self.sco.setDaemon(True)
         self.sco.start()
 
-        self.ao = AimOperator()
-        self.ao.pause_threading()
-        self.ao.add_stop_func(self.checkup_stop_func)
-        self.ao.add_stop_func(self._get_sco_switch)
-        self.ao.setDaemon(True)
-        self.ao.start()
-
         self.is_check_died = False
         
         # self.super_stop_func=super_stop_func
-
-    def _get_sco_switch(self):
-        return self.sco.switching_flag
     
     def run(self) -> None:
         while 1:
             time.sleep(0.2)
             if self.checkup_stop_threading():
-                self.ao.stop_threading()
                 self.sco.stop_threading()
                 return
             
@@ -78,14 +66,9 @@ class Combat_Controller(BaseThreading):
                     break
 
                 self.sco.continue_threading()
-                if self.sco.switching_flag:
-                    self.ao.pause_threading()
-                else:
-                    self.ao.continue_threading()
                 
             else:
                 self.sco.pause_threading()
-                self.ao.pause_threading()
                 
                 continue
                 
@@ -112,13 +95,12 @@ class Combat_Controller(BaseThreading):
             # self.current_num = 1
             self.pause_threading_flag = False
             self.sco.continue_threading()
-            self.ao.continue_threading()
 
     def pause_threading(self):
         if self.pause_threading_flag != True:
             self.pause_threading_flag = True
             self.sco.pause_threading()
-            self.ao.pause_threading()
+
 
     def checkup_trapped(self):
         pass

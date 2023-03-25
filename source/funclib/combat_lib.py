@@ -78,7 +78,6 @@ def get_chara_list(team_name='team.json'):
         team_item.setdefault("E_short_cd_time", None)
         team_item.setdefault("E_long_cd_time", None)
         team_item.setdefault("Elast_time", None)
-        team_item.setdefault("Ecd_float_time", None)
         team_item.setdefault("n", None)
         team_item.setdefault("trigger", None)
         team_item.setdefault("Epress_time", None)
@@ -99,7 +98,6 @@ def get_chara_list(team_name='team.json'):
         cE_short_cd_time = get_param(team_item, "E_short_cd_time", autofill_flag, chara_name=cname)
         cE_long_cd_time = get_param(team_item, "E_long_cd_time", autofill_flag, chara_name=cname)
         cElast_time = get_param(team_item, "Elast_time", autofill_flag, chara_name=cname)
-        cEcd_float_time = get_param(team_item, "Ecd_float_time", autofill_flag, chara_name=cname)
         cn = get_param(team_item, "n", autofill_flag, chara_name=cname)
         try:
             c_tactic_group = team_item["tactic_group"]
@@ -112,16 +110,12 @@ def get_chara_list(team_name='team.json'):
         cQlast_time = get_param(team_item, "Qlast_time", autofill_flag, chara_name=cname)
         cQcd_time = get_param(team_item, "Qcd_time", autofill_flag, chara_name=cname)
         c_vision = get_param(team_item, "vision", autofill_flag, chara_name=cname)
-        
-        
-        if cEcd_float_time > 0:
-            logger.info(t2t("角色 ") + cname + t2t(" 的Ecd_float_time大于0，请确定该角色不是多段e技能角色。"))
     
         chara_list.append(
             character.Character(
                 name=cname, position=c_position, n=cn, priority=c_priority,
                 E_short_cd_time=cE_short_cd_time, E_long_cd_time=cE_long_cd_time, Elast_time=cElast_time,
-                Ecd_float_time=cEcd_float_time, tactic_group=c_tactic_group, trigger=c_trigger,
+                tactic_group=c_tactic_group, trigger=c_trigger,
                 Epress_time=cEpress_time, Qlast_time=cQlast_time, Qcd_time=cQcd_time, vision = c_vision
             )
         )
@@ -153,7 +147,7 @@ def unconventionality_situation_detection(itt: interaction_core.InteractionBGD,
 
     return situation_code
 
-def get_character_busy(itt: interaction_core.InteractionBGD, stop_func, print_log = True):
+def is_character_busy(stop_func, print_log = True):
     cap = itt.capture(jpgmode=2)
     # cap = itt.png2jpg(cap, channel='ui')
     t1 = 0
@@ -184,7 +178,7 @@ def get_character_busy(itt: interaction_core.InteractionBGD, stop_func, print_lo
 def chara_waiting(itt:interaction_core.InteractionBGD, stop_func, mode=0, max_times = 1000):
     unconventionality_situation_detection(itt)
     i=0
-    while get_character_busy(itt, stop_func) and (not stop_func()):
+    while is_character_busy(stop_func) and (not stop_func()):
         i+=1
         if stop_func():
             logger.debug('chara_waiting stop')

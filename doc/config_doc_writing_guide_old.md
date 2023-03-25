@@ -51,7 +51,6 @@
   "bennett": {
     "E_long_cd_time": 10,
     "E_short_cd_time": 3,
-    "Ecd_float_time": 0,
     "Elast_time": 0
   }
 }
@@ -66,7 +65,6 @@
     "data": {
       "E_long_cd_time": "元素战技长CD",
       "E_short_cd_time": "元素战技短CD",
-      "Ecd_float_time": "元素战技浮点时长",
       "Elast_time": "上次施展元素战技的时长"
     }
   }

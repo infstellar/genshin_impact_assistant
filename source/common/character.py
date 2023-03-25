@@ -24,14 +24,14 @@ def log_format(x, name):
     variable_name = name
     variable_content = str(x)
     var_name = variable_name + (variable_name_len - len(variable_name)) * ' ' + '|' # 垃圾实现，以后改 XCYD
-    logger.debug(var_name + variable_content)
+    logger.trace(var_name + variable_content)
 
 
 class Character:
     @logger.catch
     def __init__(self, name='=', position='', n=0, priority=0,
                  E_short_cd_time:float=0, E_long_cd_time:float=0,
-                 Elast_time:float=0, Ecd_float_time:float=0,
+                 Elast_time:float=0,
                  tactic_group='', trigger: str = '=',
                  Epress_time:float=0, Qlast_time = 0, Qcd_time = 12,
                  vision:str = ''):
@@ -43,7 +43,6 @@ class Character:
         self.Elast_time = Elast_time
         self.Qlast_time = Qlast_time
         self.Qcd_time = Qcd_time
-        self.Ecd_float_time = Ecd_float_time
         self.tactic_group = tactic_group
         self.priority = priority
         self.n = n
@@ -77,7 +76,6 @@ class Character:
         log_format(self.E_long_cd_time, 'E_long_cd_time')
         log_format(self.Elast_time, 'Elast_time')
         log_format(self.Qlast_time, 'Qlast_time')
-        log_format(self.Ecd_float_time, 'Ecd_float_time')
         log_format(self.tactic_group, 'tactic_group')
         log_format(self.priority, 'priority')
         log_format(self.n, 'n')
@@ -118,9 +116,9 @@ class Character:
         if 'e_ready' in c_triggers:
             self.trigger_list.append(self._trigger_e_ready)
         elif 'q_ready' in c_triggers:
-             self.trigger_list.append(self._trigger_q_ready)
+            self.trigger_list.append(self._trigger_q_ready)
         elif 'idle' in c_triggers:
-             self.trigger_list.append(self._trigger_idle)
+            self.trigger_list.append(self._trigger_idle)
 
         self.trigger = self._is_trigger
         
@@ -172,7 +170,7 @@ class Character:
         Returns:
             bool: 
         """
-        if self.get_Ecd_time() <= self.Ecd_float_time:
+        if self.get_Ecd_time() <= 0:
             return True
         else:
             return False
@@ -221,6 +219,11 @@ class Character:
         else:
             return False
 
+    def is_position_ready(self):
+        if self.position == "Shield":
+            if self.is_E_ready():
+                return True
+        return False
 
 if __name__ == '__main__':
     chara = Character('4', 'none', 4, 0, 1, 2, 2, 1, 'none', 'q_ready')

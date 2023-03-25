@@ -91,7 +91,6 @@
 | `E_short_cd_time` | 短Ecd时间，不能为0              |
 | `Epress_time`     | 长按E的时间，没有则为0             |
 | `E_long_cd_time`  | 长Ecd时间，没有则为0             |
-| `Ecd_float_time`  | 在E技能冷却还有x秒前即切换至该角色，可以为0  |
 | `Qcd_time`| Q技能冷却时间|
 | `n`               | 角色在队伍中的位置（1~4），不可重复，不可为0 |
 

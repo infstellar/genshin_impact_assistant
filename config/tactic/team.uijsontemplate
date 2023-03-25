@@ -7,13 +7,13 @@
       "Elast_time": 0,
       "E_short_cd_time": 0,
       "E_long_cd_time": 0,
-      "Ecd_float_time": 0,
       "Epress_time": 0,
       "tactic_group": "",
       "trigger": "",
       "Qlast_time": 0,
       "Qcd_time": 0,
-      "autofill": false
+      "autofill": false,
+      "vision":""
     },
     "second": {
       "name": "name2",
@@ -23,13 +23,13 @@
       "E_short_cd_time": 0,
       "E_long_cd_time": 0,
       "Elast_time": 0,
-      "Ecd_float_time": 0,
       "Epress_time": 0,
       "tactic_group": "",
       "trigger": "",
       "Qlast_time": 0,
       "Qcd_time": 0,
-      "autofill": false
+      "autofill": false,
+      "vision":""
     },
     "third": {
       "name": "name3",
@@ -39,13 +39,13 @@
       "E_short_cd_time": 0,
       "E_long_cd_time": 0,
       "Elast_time": 0,
-      "Ecd_float_time": 0,
       "Epress_time": 0,
       "tactic_group": "",
       "trigger": "",
       "Qlast_time": 0,
       "Qcd_time": 0,
-      "autofill": false
+      "autofill": false,
+      "vision":""
     },
     "forth": {
       "name": "name4",
@@ -55,12 +55,12 @@
       "E_short_cd_time": 0,
       "E_long_cd_time": 0,
       "Elast_time": 0,
-      "Ecd_float_time": 0,
       "Epress_time": 0,
       "tactic_group": "",
       "trigger": "",
       "Qlast_time": 0,
       "Qcd_time": 0,
-      "autofill": false
+      "autofill": false,
+      "vision":""
     }
   }
