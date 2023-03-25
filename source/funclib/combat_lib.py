@@ -329,10 +329,66 @@ def get_chara_blood_percentage():
 def is_character_healthy():
     if ui_control.verify_page(UIPage.page_main):
         img = itt.capture(jpgmode=0)
-        col = img[847,1011]
-        target_col = [150,215,35]
+        if IS_DEVICE_PC:
+            col = img[1011,847]
+        target_col = [35,215,150]
         return color_similar(col,target_col,threshold=20)
+from source.api.pdocr_complete import ocr
+from source.common.lang_data import translate_character
+def get_characters_name():
+    img = itt.capture(jpgmode=0)
+    ret_list = []
+    for i in [asset.CharacterName1,asset.CharacterName2,asset.CharacterName3,asset.CharacterName4]:
+        img2=img.copy()
+        t = ocr.get_all_texts(crop(img2,i.position), mode=1)
+        ret_list.append(translate_character(t, language=GLOBAL_LANG))
+    return ret_list
 
+def get_team_chara_names_in_party_setup():
+    ui_control.ensure_page(UIPage.page_configure_team)
+    text_list = []
+    for i in [asset.PartySetupCharaName1,asset.PartySetupCharaName2,asset.PartySetupCharaName3,asset.PartySetupCharaName4]:
+        img = itt.capture(jpgmode=0, posi=i.position)
+        img2 = extract_white_letters(img)
+        text = ocr.get_all_texts(img2)
+        text_list.append(text[0])
+    return text_list
+
+def set_party_setup(names):
+    ui_control.ensure_page(UIPage.page_configure_team)
+    itt.delay("animation")
+    def is_accord():
+        curr_chara_list =  get_team_chara_names_in_party_setup()
+        for i in range(4):
+            if isinstance(names, list):
+                if names[i] is None:
+                    continue
+                if translate_character(curr_chara_list[i]) != translate_character(names[i]):
+                    return False
+            elif isinstance(names, str):
+                if translate_character(curr_chara_list[i]) in translate_character(names):
+                    return True
+        if isinstance(names, list):
+            return True
+        else:
+            return False
+    def switch_select():
+        for i in range(5):
+            if is_accord(): return True
+            itt.appear_then_click(asset.SwitchTeamLeft)
+            itt.delay("animation")
+        return False
+    if switch_select():
+        itt.appear_then_click(asset.GoToFight)
+        itt.delay("animation")
+        ui_control.ui_goto(UIPage.page_main)
+        return True
+    else:
+        logger.error(f"CANNOT Set Party To: {names}")
+        return False
+    
+    
+    
 class CombatStatementDetectionLoop(BaseThreading):
     def __init__(self):
         super().__init__()
@@ -385,9 +441,9 @@ CSDL.start()
 if __name__ == '__main__':
     # get_chara_list()
     # print()
-    
+    set_party_setup("Lisa")
     while 1:
         time.sleep(0.5)
-        print(CSDL.is_low_health)
+        print(get_team_chara_names_in_party_setup())
         # print(get_character_busy(itt, default_stop_func))
         # time.sleep(0.2)

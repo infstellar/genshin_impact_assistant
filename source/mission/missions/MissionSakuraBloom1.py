@@ -44,7 +44,7 @@ class MissionSakuraBloom1(MissionExecutor):
         self.switch_character_to("Lisa")
         # 每一个list是连续的。如果其中有一次执行寄了，就必须退出所有list。
         self._reg_exception_chara_died()
-        self._reg_exception_found_enemy()
+        self._reg_exception_low_hp()
         for i in self.sakura1:
             r = self.move_along(i)
             if r == ERR_FAIL:

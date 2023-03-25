@@ -18,7 +18,8 @@ class UI():
               page_domain,
               page_main,
               page_esc,
-              page_time]
+              page_time,
+              page_configure_team]
 
     def ui_additional(self):
         """
@@ -121,6 +122,11 @@ class UI():
         for page in self.ui_pages:
             page.parent = None
         self.switch_ui_lock.release()
+        itt.delay(0.5, comment="ui goto is waiting genshin animation")
+    
+    def ensure_page(self, page:UIPage):
+        if not self.verify_page(page):
+            self.ui_goto(page)
         
 ui_control = UI()
 

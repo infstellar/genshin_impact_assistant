@@ -128,7 +128,13 @@ CharacterName4 = posi_manager.PosiTemplate(img_path = f"{ASSETS_COMMON_IMG}\\are
 TeamCharactersName = posi_manager.PosiTemplate()
 ConfigureTeam = Button()
 GoToFight = Button()
-
+SwitchTeamLeft = Button(threshold=0)
+SwitchTeamRight = Button(threshold=0)
+UIConfigureTeam = ImgIcon()
+PartySetupCharaName1=posi_manager.PosiTemplate()
+PartySetupCharaName2=posi_manager.PosiTemplate()
+PartySetupCharaName3=posi_manager.PosiTemplate()
+PartySetupCharaName4=posi_manager.PosiTemplate()
 
 QTSX = TextTemplate(text=
 {

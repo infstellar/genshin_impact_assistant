@@ -31,7 +31,8 @@ class MissionExecutor(BaseThreading):
         self.exception_flag = False
         self.exception_list = {
             "FoundEnemy":False,                     
-            "CharaDied":False
+            "CharaDied":False,
+            "LowHP":False
             }
 
     def refresh_picked_list(self):
@@ -42,6 +43,10 @@ class MissionExecutor(BaseThreading):
             if combat_lib.CSDL.is_low_health:
                 self.exception_flag = True
                 logger.warning(f"Detected Enemy Attack, Mission Break")
+        if self.exception_list["LowHP"]:
+            if combat_lib.CSDL.is_low_health:
+                self.exception_flag = True
+                logger.warning(f"HP Low, Mission Break")
         if self.exception_list["CharaDied"]:
             pass
         
@@ -152,15 +157,22 @@ class MissionExecutor(BaseThreading):
 
     def _reg_exception_chara_died(self, state=True):
         self.exception_list["CharaDied"] = state
+        
+    def _reg_exception_low_hp(self, state=True):
+        self.exception_list["LowHP"] = state
     
-    def switch_character_to(self, n:str):
-        r = generic_lib.get_characters_name()
+    def switch_character_to(self, name:str):
+        r = combat_lib.get_characters_name()
         curr_n = combat_lib.get_current_chara_num(itt)
-        if n in r:
-            if curr_n != r.index(n)+1:
-                itt.key_press(str(r.index(n)+1))
+        if name in r:
+            if curr_n != r.index(name)+1:
+                itt.key_press(str(r.index(name)+1))
         else:
-            raise CharacterNotFound(f"Character {n} Not Found")
+            logger.warning(f"{name} does not exist in current party.")
+            r = combat_lib.set_party_setup(name)
+            if not r:
+                raise CharacterNotFound(f"Character {name} Not Found")
+            
         
     def start_thread(self):
         self.PUO.start()

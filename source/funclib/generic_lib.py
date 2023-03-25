@@ -5,8 +5,7 @@ from source.util import *
 from source.ui.ui import ui_control
 import source.ui.page as UIPage
 from source.interaction.minimap_tracker import tracker
-from source.api.pdocr_complete import ocr
-from source.common.lang_data import translate_character
+
 
 NORMAL = 0
 NEGATIVE_Y = 1
@@ -122,24 +121,18 @@ def set_genshin_time(x=18, stop_func = lambda:False): # 调整时间至夜晚
     time.sleep(2)
     ui_control.ui_goto(UIPage.page_main)
 
-def get_characters_name():
-    img = itt.capture(jpgmode=0)
-    ret_list = []
-    for i in [asset.CharacterName1,asset.CharacterName2,asset.CharacterName3,asset.CharacterName4]:
-        img2=img.copy()
-        t = ocr.get_all_texts(crop(img2,i.position), mode=1)
-        ret_list.append(translate_character(t, language=GLOBAL_LANG))
-    return ret_list
+
 
 def f():
     return False
 
 if __name__ == '__main__':
+    pass
     # recover_all(f)
     # p1 = [0,0]
     # p2 = np.array([[1,1],[2,2]])
     # euclidean_distance_plist(p1,p2)
-    print(get_characters_name())
+    # print(get_characters_name())
     # set_genshin_time()
     # # print(points_angle([0, 0], [10, 10], NEGATIVE_Y))
     # # print(points_angle([10, 10], [0, 0], NEGATIVE_Y))
