@@ -118,7 +118,7 @@ ButtonSwitchDomainModeOn = Button(path=f"{ASSETS_IMG}\\map\\big_map\\switch_doma
 ButtonSwitchDomainModeOff = Button(path=f"{ASSETS_IMG}\\map\\big_map\\switch_domain_mode_off.jpg",threshold=0.97)
 SwitchMapArea = posi_manager.PosiTemplate(img_path=f"{ASSETS_COMMON_IMG}\\area\\SwitchMapArea.jpg")
 SwitchMapAreaButton = Button(f"{ASSETS_COMMON_IMG}\\button\\SwitchMapAreaButton.jpg")
-BigMapScaling = ImgIcon(f"{ASSETS_COMMON_IMG}\\ui\\BigMapScaling.jpg", threshold=0.99, print_log = LOG_ALL, offset=0)
+BigMapScaling = ImgIcon(f"{ASSETS_COMMON_IMG}\\ui\\BigMapScaling.jpg", threshold=0.98, print_log = LOG_ALL, offset=0)
 CloseMarkTableInTP = Button(f"{ASSETS_COMMON_IMG}\\button\\CloseMarkTableInTP.jpg")
 BloodBar = posi_manager.PosiTemplate(img_path = f"{ASSETS_COMMON_IMG}\\area\\BloodBar.jpg")
 CharacterName1 = posi_manager.PosiTemplate(img_path = f"{ASSETS_COMMON_IMG}\\area\\CharacterName1.jpg")

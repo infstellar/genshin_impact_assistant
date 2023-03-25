@@ -9,6 +9,8 @@ from source.interaction import interaction_core
 from source.api.pdocr_light import ocr_light
 from source.ui.ui import ui_control
 from source.ui import page as UIPage
+from source.api.pdocr_complete import ocr
+from source.common.lang_data import translate_character
 
 """
 战斗相关常用函数库。
@@ -333,8 +335,7 @@ def is_character_healthy():
             col = img[1011,847]
         target_col = [35,215,150]
         return color_similar(col,target_col,threshold=20)
-from source.api.pdocr_complete import ocr
-from source.common.lang_data import translate_character
+
 def get_characters_name():
     img = itt.capture(jpgmode=0)
     ret_list = []
@@ -403,7 +404,9 @@ class CombatStatementDetectionLoop(BaseThreading):
         return self.current_state
     
     def loop(self):
-        self.is_low_health = is_character_healthy()
+        r = is_character_healthy()
+        if r != None:
+            self.is_low_health = not r
  
         if only_arrow_timer.get_diff_time()>=30:
             if self.current_state == True:
