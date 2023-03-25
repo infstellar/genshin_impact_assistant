@@ -94,9 +94,10 @@
   "reset_time": "索敌失败后冷却时间",
   "domain_stage_name":{
     "doc":"秘境关卡名",
-    "annotation":"必须包含等级，等级必须为大写字母I。"
+    "annotation":"必须包含等级，等级必须为大写字母I。如果从秘境内启动则无需填写。当前版本可能有识别错误问题。"
   },
   "domain_name":{
-    "doc":"秘境名"
+    "doc":"秘境名",
+    "annotation":"如果从秘境内启动则无需填写。"
   }
 }
