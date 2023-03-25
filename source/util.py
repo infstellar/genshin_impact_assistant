@@ -126,13 +126,14 @@ def get_local_lang():
     import locale
     lang = locale.getdefaultlocale()[0]
     logger.debug(f"locale: {locale.getdefaultlocale()}")
-    if lang in ["zh_CN", "zh_SG", "zh_MO", "zh_HK"]:
+    if lang in ["zh_CN", "zh_SG", "zh_MO", "zh_HK", "zh_TW"]:
         return "zh_CN"
     else:
         return "en_US"
 
 if GLOBAL_LANG == "$locale$":
     GLOBAL_LANG = get_local_lang()
+    GLOBAL_LANG = "zh_CN"
     logger.info(f"language set as: {GLOBAL_LANG}")
 l10n = gettext.translation(GLOBAL_LANG, localedir=os.path.join(ROOT_PATH, "translation/locale"), languages=[GLOBAL_LANG])
 l10n.install()
