@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-from source.util import *
+from source.manager.util import *
 
 # COMING_OUT_BY_SPACE = 
 # IN_DOMAIN = "IN_DOMAIN"
@@ -21,7 +21,7 @@ def qshow(img1):
     cv2.imshow('123', img1)
     cv2.waitKey(0)
 class ImgIcon:
-    def __init__(self, path, name=None, is_bbg=None, alpha=None, bbg_posi=None, cap_posi = None,
+    def __init__(self, path=None, name=None, is_bbg=None, alpha=None, bbg_posi=None, cap_posi = None,
                  jpgmode=2, threshold=0.91, win_page = 'all', win_text = None, offset = 0, print_log = LOG_NONE):
         """创建一个img对象，用于图片识别等。
 
@@ -39,8 +39,14 @@ class ImgIcon:
             offset (int, optional): 截图范围偏移. Defaults to 0.
             print_log (int, optional): 打印日志模式. Defaults to LOG_NONE.
         """
+        if path is None:
+            (filename, line_number, function_name, text) = traceback.extract_stack()[-2]
+            img_name = text[:text.find('=')].strip()
+            path = search_path(img_name)
+        
         if name is None:
-            self.name = path.split('\\')[-1].split('.')[0]
+            (filename, line_number, function_name, text) = traceback.extract_stack()[-2]
+            self.name = text[:text.find('=')].strip()
         else:
             self.name = name
         

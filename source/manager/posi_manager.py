@@ -1,5 +1,5 @@
 import cv2
-from source.util import *
+from source.manager.util import *
 ly = 96
 dx = 0
 dy = 0
@@ -24,8 +24,12 @@ class PosiTemplate():
         """
         self.posi_list = []
         self.position = None
-        if (posi != None) or (img_path != None):
-            self.add_posi(posi=posi, img_path=img_path)
+
+        if posi is None and img_path is None:
+            (filename, line_number, function_name, text) = traceback.extract_stack()[-2]
+            img_name = text[:text.find('=')].strip()
+            img_path = search_path(img_name)
+        self.add_posi(posi=posi, img_path=img_path)
     
     def add_posi(self, posi=None, img_path=None):
         """添加坐标
@@ -36,7 +40,7 @@ class PosiTemplate():
         """
         if posi != None:
             position = posi
-        if img_path != None:
+        else:
             if IS_DEVICE_PC:
                 self.origin_path = os.path.join(ROOT_PATH, img_path).replace("$device$", "Windows")
             else:

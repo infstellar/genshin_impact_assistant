@@ -34,7 +34,7 @@ class Capture():
         is_next_img: 强制截取下一张图片
         """
         if DEBUG_MODE:
-            r = self.cap_per_sec
+            r = self.cap_per_sec.count_times()
             if r:
                 logger.debug(f"capps: {r/3}")
         self._capture(is_next_img)

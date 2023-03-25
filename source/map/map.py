@@ -78,11 +78,11 @@ class Map(MiniMap, BigMap, MapConverter):
         return self.rotation
 
     def check_bigmap_scaling(self):
-        if not itt.get_img_existence(asset.UIBigMapScaling):
+        if not itt.get_img_existence(asset.BigMapScaling):
             origin_page = ui_control.get_page()
-            while not itt.appear_then_click(asset.ButtonSwitchMapArea): itt.delay(0.2)
+            while not itt.appear_then_click(asset.SwitchMapAreaButton): itt.delay(0.2)
             while not itt.appear_then_click(asset.MapAreaCYJY): itt.delay(0.2)
-            while not itt.appear_then_click(asset.ButtonSwitchMapArea): itt.delay(0.2)
+            while not itt.appear_then_click(asset.SwitchMapAreaButton): itt.delay(0.2)
             while not itt.appear_then_click(asset.MapAreaLY): itt.delay(0.2)
             if origin_page == UIPage.page_main:
                 ui_control.ui_goto(UIPage.page_main)
@@ -216,7 +216,7 @@ class Map(MiniMap, BigMap, MapConverter):
 
         self.check_bigmap_scaling()
 
-        while not itt.appear_then_click(asset.ButtonSwitchMapArea):
+        while not itt.appear_then_click(asset.SwitchMapAreaButton):
             itt.delay(0.2)
 
         if tp_region == "Mondstadt":
@@ -229,7 +229,7 @@ class Map(MiniMap, BigMap, MapConverter):
             while not itt.appear_then_click(asset.MapAreaXM): itt.delay(0.2)
         itt.delay(0.5)
 
-        itt.appear_then_click(asset.ButtonCloseMarkTableInTP)
+        itt.appear_then_click(asset.CloseMarkTableInTP)
         itt.delay(0.5)
 
         click_posi = self._move_bigmap(tp_posi)

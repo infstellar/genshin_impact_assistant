@@ -107,8 +107,7 @@ bigmap_tp = ImgIcon(path=f"{ASSETS_IMG}\\{GLOBAL_LANG}\\bigmap_tp.jpg",  cap_pos
 start_challenge = Button(path=f"{ASSETS_IMG}\\{GLOBAL_LANG}\\start_challenge.jpg", print_log=LOG_WHEN_TRUE, threshold=0.98)
 switch_domain_area = posi_manager.PosiTemplate(img_path=f"{ASSETS_COMMON_IMG}\\area\\switch_challenge_area.jpg")
 solo_challenge = Button(path=f"{ASSETS_IMG}\\{GLOBAL_LANG}\\solo_challenge.jpg", print_log=LOG_WHEN_TRUE, threshold=0.98)
-character_q_skills = posi_manager.PosiTemplate()
-character_q_skills.add_posi(img_path=f"{ASSETS_COMMON_IMG}\\area\\QSkill\\c1.jpg")
+character_q_skills = posi_manager.PosiTemplate(img_path=f"{ASSETS_COMMON_IMG}\\area\\QSkill\\c1.jpg")
 character_q_skills.add_posi(img_path=f"{ASSETS_COMMON_IMG}\\area\\QSkill\\c2.jpg")
 character_q_skills.add_posi(img_path=f"{ASSETS_COMMON_IMG}\\area\\QSkill\\c3.jpg")
 character_q_skills.add_posi(img_path=f"{ASSETS_COMMON_IMG}\\area\\QSkill\\c4.jpg")
@@ -117,15 +116,20 @@ confirm = Button(path=f"{ASSETS_IMG}\\{GLOBAL_LANG}\\confirm.jpg", cap_posi='all
 Area_revival_foods = posi_manager.PosiTemplate(img_path=f"{ASSETS_COMMON_IMG}\\area\\revival_foods.jpg")
 ButtonSwitchDomainModeOn = Button(path=f"{ASSETS_IMG}\\map\\big_map\\switch_domain_mode_on.jpg",threshold=0.97)
 ButtonSwitchDomainModeOff = Button(path=f"{ASSETS_IMG}\\map\\big_map\\switch_domain_mode_off.jpg",threshold=0.97)
-AreaSwitchMapArea = posi_manager.PosiTemplate(img_path=f"{ASSETS_COMMON_IMG}\\area\\SwitchMapArea.jpg")
-ButtonSwitchMapArea = Button(f"{ASSETS_COMMON_IMG}\\button\\SwitchMapAreaButton.jpg")
-UIBigMapScaling = ImgIcon(f"{ASSETS_COMMON_IMG}\\ui\\BigMapScaling.jpg", threshold=0.99, print_log = LOG_ALL, offset=0)
-ButtonCloseMarkTableInTP = Button(f"{ASSETS_COMMON_IMG}\\button\\CloseMarkTableInTP.jpg")
+SwitchMapArea = posi_manager.PosiTemplate(img_path=f"{ASSETS_COMMON_IMG}\\area\\SwitchMapArea.jpg")
+SwitchMapAreaButton = Button(f"{ASSETS_COMMON_IMG}\\button\\SwitchMapAreaButton.jpg")
+BigMapScaling = ImgIcon(f"{ASSETS_COMMON_IMG}\\ui\\BigMapScaling.jpg", threshold=0.99, print_log = LOG_ALL, offset=0)
+CloseMarkTableInTP = Button(f"{ASSETS_COMMON_IMG}\\button\\CloseMarkTableInTP.jpg")
 BloodBar = posi_manager.PosiTemplate(img_path = f"{ASSETS_COMMON_IMG}\\area\\BloodBar.jpg")
 CharacterName1 = posi_manager.PosiTemplate(img_path = f"{ASSETS_COMMON_IMG}\\area\\CharacterName1.jpg")
 CharacterName2 = posi_manager.PosiTemplate(img_path = f"{ASSETS_COMMON_IMG}\\area\\CharacterName2.jpg")
 CharacterName3 = posi_manager.PosiTemplate(img_path = f"{ASSETS_COMMON_IMG}\\area\\CharacterName3.jpg")
 CharacterName4 = posi_manager.PosiTemplate(img_path = f"{ASSETS_COMMON_IMG}\\area\\CharacterName4.jpg")
+TeamCharactersName = posi_manager.PosiTemplate()
+ConfigureTeam = Button()
+GoToFight = Button()
+
+
 QTSX = TextTemplate(text=
 {
     "zh_CN":"七天神像",
@@ -138,19 +142,19 @@ CSMD = TextTemplate(text=
 }, cap_area = bigmap_choose_area.cap_posi)
 MapAreaMD = TextTemplate(text={
     "zh_CN":"蒙德"
-}, cap_area = AreaSwitchMapArea.position)
+}, cap_area = SwitchMapArea.position)
 MapAreaLY = TextTemplate(text={
     "zh_CN":"璃月"
-}, cap_area = AreaSwitchMapArea.position)
+}, cap_area = SwitchMapArea.position)
 MapAreaDQ = TextTemplate(text={
     "zh_CN":"稻妻"
-}, cap_area = AreaSwitchMapArea.position)
+}, cap_area = SwitchMapArea.position)
 MapAreaXM = TextTemplate(text={
     "zh_CN":"须弥"
-}, cap_area = AreaSwitchMapArea.position)
+}, cap_area = SwitchMapArea.position)
 MapAreaCYJY = TextTemplate(text={
     "zh_CN":"层岩巨渊"
-}, cap_area = AreaSwitchMapArea.position)
+}, cap_area = SwitchMapArea.position)
 
 if __name__ == '__main__':
-    pass
+    ConfigureTeam.show_image()

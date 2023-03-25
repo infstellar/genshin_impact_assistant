@@ -129,7 +129,7 @@ class CyclicCounter(AdvanceTimer):
         super().__init__(limit, count)
         self.times = 0
 
-    def count(self):
+    def count_times(self):
         if self.reached_and_reset():
             c = self.times
             self.times = 1
