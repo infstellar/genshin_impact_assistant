@@ -153,14 +153,7 @@ class MissionAutoCollector(MissionExecutor):
                 self._set_collected_id()
                 continue
             self._add_logs("SUCCESS")
-            
-            if len(self.collector_posi_dict)-1 == self.collector_i:
-                logger.info("exit")
-                logger.info("switch Flow to: END_COLLECTOR")
-            else:
-                self.collector_i += 1
-                self.last_collection_posi = self.collection_posi
-                logger.info("switch Flow to: BEFORE_MOVETO_COLLECTOR")
+
             if not self._add_collection_i():
                 break
         # self.start_pickup()

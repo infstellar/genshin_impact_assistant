@@ -88,6 +88,7 @@ class CollectionCombat(FlowTemplate):
     def __init__(self, upper: CollectorFlowConnector):
         super().__init__(upper, flow_id=ST.COLLECTION_COMBAT, next_flow_id=ST.COLLECTION_PICKUP, flow_timeout_time=300)
         self.upper=upper
+        self.waiting_enemy_timer = timer_module.AdvanceTimer(10)
         
     def state_init(self):
         return super().state_init()
@@ -96,11 +97,11 @@ class CollectionCombat(FlowTemplate):
         if combat_lib.CSDL.get_combat_state():
             self.upper.start_combat()
             self._next_rfc()
-        else:
+        elif self.waiting_enemy_timer.reached():
             self._set_rfc(FC.END)
             
     def state_in(self):
-        if combat_lib.CSDL.get_combat_state() == False:
+        if combat_lib.CSDL.get_combat_state() == False and self.waiting_enemy_timer.reached():
             self.upper.stop_combat()
             self._next_rfc()
 
