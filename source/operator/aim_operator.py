@@ -4,6 +4,8 @@ from source.common.base_threading import BaseThreading
 from source.interaction.interaction_core import itt
 from common.timer_module import Timer
 from source.util import *
+from source.ui.ui import ui_control
+from source.ui import page as UIPage
 
 
 red_num = 245
@@ -21,6 +23,7 @@ class AimOperator(BaseThreading):
         self.fps = 5
         self.max_number_of_enemy_loops = auto_aim_json["max_number_of_enemy_loops"]
         self.auto_distance = auto_aim_json["auto_distance"]
+        self.auto_distance = False
         self.auto_move = auto_aim_json["auto_move"]
         self.enemy_loops = 0
         self.enemy_flag = True
@@ -46,7 +49,7 @@ class AimOperator(BaseThreading):
             # logger.trace(f"cost time: {t} | {self.fps}")
                 
             if self.stop_threading_flag:
-                return 0
+                return
 
             if self.pause_threading_flag:
                 if self.working_flag:
@@ -87,6 +90,8 @@ class AimOperator(BaseThreading):
             return None
         cap = self.itt.capture()
         imsrc = self.itt.png2jpg(cap, channel='ui', alpha_num=254)
+        # cv2.imshow("1231",imsrc)
+        # cv2.waitKey(1)
         orsrc = cap.copy()
         cv2.cvtColor(orsrc, cv2.COLOR_BGR2RGB)
 
@@ -113,40 +118,35 @@ class AimOperator(BaseThreading):
         # time.sleep(0.1)
         if self.checkup_stop_func():
             return 0
-        combat_lib.chara_waiting(itt, stop_func = self.checkup_stop_func)
-        ret_points = self.get_enemy_feature() # 获得敌方血条坐标
-        if ret_points is None:
-            return None
-        points_length = []
-        if len(ret_points) == 0:
-            return -1
-        else:
-            if not self.enemy_flag:
-                self.reset_enemy_loops() # 如果有敌人，重置搜索敌人次数
-                self.enemy_flag = True
+        # combat_lib.chara_waiting(itt, stop_func = self.checkup_stop_func)
+        if ui_control.verify_page(UIPage.page_main):
+            ret_points = self.get_enemy_feature() # 获得敌方血条坐标
+            if ret_points is None:
+                return None
+            points_length = []
+            if len(ret_points) == 0:
+                return -1
+            else:
+                if not self.enemy_flag:
+                    self.reset_enemy_loops() # 如果有敌人，重置搜索敌人次数
+                    self.enemy_flag = True
 
-        for point in ret_points:
+            for point in ret_points:
+                mx, my = SCREEN_CENTER_X,SCREEN_CENTER_Y
+                points_length.append((point[0] - mx) ** 2 + (point[1] - my) ** 2)
+
+            closest_point = ret_points[points_length.index(min(points_length))] # 获得距离鼠标坐标最近的一个坐标
+            px, py = closest_point
             mx, my = SCREEN_CENTER_X,SCREEN_CENTER_Y
-            points_length.append((point[0] - mx) ** 2 + (point[1] - my) ** 2)
-
-        closest_point = ret_points[points_length.index(min(points_length))] # 获得距离鼠标坐标最近的一个坐标
-        px, py = closest_point
-        mx, my = SCREEN_CENTER_X,SCREEN_CENTER_Y
-        px = (px - mx) / (2.4*self.corr_rate)
-        py = (py - my) / (2*self.corr_rate) + 35 # 获得鼠标坐标偏移量
-        # print(px,py)
-        if px >= 100:
-            px = 100
-        if px <= -100:
-            px = -100
-        if py >= 100:
-            py = 100
-        if py <= -100:
-            py = -100
-        self.itt.move_to(px, py, relative=True)
-        # logger.debug(f"auto_aim: x {px} y {py}")
-        return px
-        # print()
+            px = (px - mx) / (2.4*self.corr_rate)
+            py = (py - my) / (2*self.corr_rate) + 35 # 获得鼠标坐标偏移量
+            # print(px,py)
+            px=maxmin(px,200,-200)
+            py=maxmin(py,200,-200)
+            self.itt.move_to(px, py, relative=True)
+            # logger.debug(f"auto_aim: x {px} y {py}")
+            return px
+            # print()
 
     def finding_enemy(self):
         if self.enemy_loops < self.max_number_of_enemy_loops:
@@ -155,7 +155,7 @@ class AimOperator(BaseThreading):
         while self.enemy_loops < self.max_number_of_enemy_loops: # 当搜索敌人次数小于最大限制次数时，开始搜索
             if self.checkup_stop_func():
                 return 0
-            self.itt.move_to(50, 0, relative=True)
+            self.itt.move_to(150, 0, relative=True)
             ret_points = self.get_enemy_feature()
             if ret_points is None:
                 return None

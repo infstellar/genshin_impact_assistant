@@ -14,6 +14,7 @@ from source.webio import manager
 from source.webio.page_manager import Page
 from source.funclib import collector_lib
 from source.common import timer_module
+from source.webio.update_notice import upd_message
 
 
 
@@ -161,6 +162,10 @@ class MainPage(Page):
         '''self.main_pin_change_thread = threading.Thread(target=self._main_pin_change_thread, daemon=False)
         self.main_pin_change_thread.start()'''
 
+        m = upd_message()
+        if m!="":
+            output.popup(t2t('更新提示'), m)
+        
     def _get_mission_groups_config(self):
         jsons = load_json_from_folder(f"{CONFIG_PATH}\\mission_groups")
         r = [i["label"] for i in jsons]
@@ -596,8 +601,9 @@ class CombatSettingPage(ConfigPage):
         output.put_row([
             output.put_button(t2t("Add team"), onclick=self.onclick_add_teamjson, scope=self.main_scope),
             None,
-            output.put_button(t2t("Add team with characters"), onclick=self.onclick_add_teamjson_withcharacters,
-                              scope=self.main_scope)],
+            # output.put_button(t2t("Add team with characters"), onclick=self.onclick_add_teamjson_withcharacters,
+            #                   scope=self.main_scope)
+            None],
             scope=self.main_scope, size="10% 10px 20%")
 
         # 配置页

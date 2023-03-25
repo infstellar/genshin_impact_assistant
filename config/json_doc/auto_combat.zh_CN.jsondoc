@@ -38,7 +38,9 @@
         "annotation":"角色在队伍中的位置（1~4），不可重复，不可为0"
     },
     "position":{
-        "doc":"角色定位"
+        "doc":"角色定位",
+        "annotation":"填写\"Shield\"时，GIA认为该角色为护盾角色，在护盾就绪时强制忽略其他策略组切换至该角色",
+        "select_items":["Normal","Shield"]
     },
     "priority":{
         "doc":"优先级",
@@ -58,6 +60,7 @@
     },
     "vision":{
         "doc":"角色元素类型。",
-        "annotation":"填写以下类型：岩 `Geo`; 雷 `Electro`; 水 `Hydro`; 火 `Pyro`; 冰 `Cryo`; 草 `Dendro`; 风 `Anemo`"
+        "annotation":"填写以下类型：岩 `Geo`; 雷 `Electro`; 水 `Hydro`; 火 `Pyro`; 冰 `Cryo`; 草 `Dendro`; 风 `Anemo`",
+        "select_items":["Geo","Electro","Hydro","Pyro","Cryo","Dendro","Anemo"]
     }
 }

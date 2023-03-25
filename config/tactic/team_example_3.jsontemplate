@@ -1,7 +1,7 @@
 {
   "frist": {
     "name": "kamisato_ayato",
-    "position": "",
+    "position": "Normal",
     "priority": 2,
     "n": 1,
     "Elast_time": 5,
@@ -16,7 +16,7 @@
   },
   "second": {
     "name": "zhongli",
-    "position": "",
+    "position": "Shield",
     "priority": 1,
     "n": 2,
     "E_short_cd_time": 4,
@@ -31,7 +31,7 @@
   },
   "third": {
     "name": "bennett",
-    "position": "",
+    "position": "Normal",
     "priority": 3,
     "n": 3,
     "E_short_cd_time": 3,
@@ -46,7 +46,7 @@
   },
   "forth": {
     "name": "nahida",
-    "position": "",
+    "position": "Normal",
     "priority": 3,
     "n": 4,
     "E_short_cd_time": 5,

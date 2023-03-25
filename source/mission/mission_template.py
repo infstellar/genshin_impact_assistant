@@ -185,6 +185,7 @@ class MissionExecutor(BaseThreading):
             self.exec_mission()
         except Exception as e:
             logger.error(f"ERROR in execute mission: {self.name} {e}")
+            logger.exception(e)
         self.pause_threading()
     
 if __name__ == '__main__':
