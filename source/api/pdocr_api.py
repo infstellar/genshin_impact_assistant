@@ -88,6 +88,9 @@ class PaddleOcrFastDeploy():
             if mode == CONTAIN_MATCHING:
                 if text in res_text:
                     ret_indexes.append(i)
+            elif mode == ACCURATE_MATCHING:
+                if text == res_text:
+                    ret_indexes.append(i)
         
         return ret_indexes
 
@@ -97,10 +100,13 @@ class PaddleOcrFastDeploy():
                            mode=CONTAIN_MATCHING,
                            position_mode = RETURN_POINT,
                            cap_posi_leftup=None,
-                           text_process=lambda x:x)->list:
+                           text_process=lambda x:x,
+                           extract_white_threshold=None)->list:
         ret_position = []
         if cap_posi_leftup == None:
             cap_posi_leftup = [0,0]
+        if extract_white_threshold!=None:
+            img = extract_white_letters(img, threshold = extract_white_threshold)
         res = self.analyze(img)
         indexes = self.find_text(res,text,mode=mode,text_process=text_process)
         for i in indexes:

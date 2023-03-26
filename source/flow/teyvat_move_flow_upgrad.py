@@ -326,11 +326,11 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
             if self.upper.ignore_space and special_key == "space": # ignore space
                 special_key = None
             if special_key is None: # 设定offset
-                offset = 5 # NO SK
+                offset = 6 # NO SK
             else:
-                offset = 3 # SK
+                offset = 6 # SK
             if self.curr_path[self.curr_path_index]["motion"]=="FLYING":
-                offset = 8
+                offset = 9
             if self.ready_to_end:
                 offset = min(3,max(1,(self.end_times)/10))
             # 如果两个BP距离小于offset就会瞬移，排除一下。

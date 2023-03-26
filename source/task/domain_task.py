@@ -48,14 +48,18 @@ class DomainTask(TaskTemplate):
         while not itt.get_img_existence(asset.solo_challenge): itt.delay("animation")
         itt.delay(1,comment="genshin animation")
         from source.api.pdocr_complete import ocr
-        from source.api.pdocr_api import SHAPE_MATCHING
+        from source.api.pdocr_api import SHAPE_MATCHING, ACCURATE_MATCHING
         cap_area = asset.switch_domain_area.position
+        itt.delay(1,comment="genshin animation")
         p1 = ocr.get_text_position(itt.capture(jpgmode=0, posi=cap_area), self.domain_stage_name,
                                    cap_posi_leftup=cap_area[:2],
                                    text_process = self._domain_text_process,
-                                   mode=SHAPE_MATCHING)
+                                   mode=ACCURATE_MATCHING,
+                                   extract_white_threshold=254)
         if p1 != -1:
             itt.move_and_click([p1[0] + 5, p1[1] + 5], delay=1)
+        else:
+            logger.warning(t2t("找不到秘境名称，放弃选择。"))
         
         # itt.delay(1, comment="too fast TAT")
         ctimer = timer_module.TimeoutTimer(5)
@@ -138,7 +142,7 @@ class DomainTask(TaskTemplate):
             
 if __name__ == '__main__':
     dmt = DomainTask()
-    # dmt._enter_domain()
+    dmt._enter_domain()
     # dmt.flow_mode = TI.DT_IN_DOMAIN
     while 1:
         time.sleep(0.2)

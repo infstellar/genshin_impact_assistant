@@ -7,9 +7,9 @@ from source.common import character
 from source.interaction.interaction_core import itt
 from source.interaction import interaction_core
 from source.api.pdocr_light import ocr_light
+from source.api.pdocr_complete import ocr
 from source.ui.ui import ui_control
 from source.ui import page as UIPage
-from source.api.pdocr_complete import ocr
 from source.common.lang_data import translate_character
 
 """
@@ -284,29 +284,34 @@ def get_enemy_arrow_direction():
         angle = points_angle([SCREEN_CENTER_X,SCREEN_CENTER_Y],ret_contours[0][0],coordinate=ANGLE_NEGATIVE_Y)
     return int(angle)
 
+def get_enemy_blood_bar_img(img):
+    red_num = 255
+    bg_num = 90
+    im_src = img
+    im_src = itt.png2jpg(im_src, channel='ui', alpha_num=254)
+    im_src[990:1080, :, :] = 0
+    im_src[:, :, 2][im_src[:, :, 2] != red_num] = 0
+    im_src[:, :, 2][im_src[:, :, 0] != bg_num] = 0
+    im_src[:, :, 2][im_src[:, :, 1] != bg_num] = 0
+    # _, imsrc2 = cv2.threshold(imsrc[:, :, 2], 1, 255, cv2.THRESH_BINARY)
+    blood_bar_img = im_src[:, :, 2]
+    if False:
+        # cv2.imshow("mask",mask)
+        cv2.imshow("21312231", im_src)
+        cv2.imshow("2131231", blood_bar_img)
+        cv2.waitKey(10)
+    return blood_bar_img
+    
 def combat_statement_detection():
     # return: ret[0]: blood bar; ret[1]: enemy arrow
     ret = [False,False]
     
     im_src = itt.capture()
     orsrc = im_src.copy()
+    blood_bar_img = get_enemy_blood_bar_img(orsrc)
     
-    red_num = 245
-    bg_num = 100
-
-    im_src = orsrc.copy()
-    im_src = itt.png2jpg(im_src, channel='ui', alpha_num=254)
-
-    im_src[990:1080, :, :] = 0
-    im_src[0:150, :, :] = 0
-    im_src[:, 1650:1920, :] = 0
+    flag_is_blood_bar_exist = blood_bar_img.max() > 0
     
-    im_src[:, :, 2][im_src[:, :, 2] < red_num] = 0
-    im_src[:, :, 2][im_src[:, :, 0] > bg_num] = 0
-    im_src[:, :, 2][im_src[:, :, 1] > bg_num] = 0
-    # _, imsrc2 = cv2.threshold(imsrc[:, :, 2], 1, 255, cv2.THRESH_BINARY)
-    
-    flag_is_blood_bar_exist = im_src[:, :, 2].max() > 0
     # print('flag_is_blood_bar_exist ',flag_is_blood_bar_exist)
     if flag_is_blood_bar_exist:
         only_arrow_timer.reset()

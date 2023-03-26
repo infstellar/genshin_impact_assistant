@@ -237,20 +237,9 @@ class AimOperator(BaseThreading):
             _type_: _description_
         """
         cap = self.itt.capture()
-        imsrc = self.itt.png2jpg(cap, channel='ui', alpha_num=254)
-        # cv2.imshow("1231",imsrc)
-        # cv2.waitKey(1)
         orsrc = cap.copy()
-        cv2.cvtColor(orsrc, cv2.COLOR_BGR2RGB)
-
-        imsrc[950:1080, :, :] = 0
-        imsrc[0:150, :, :] = 0
-        imsrc[:, 1600:1920, :] = 0
-
-        imsrc[:, :, 2][imsrc[:, :, 2] < red_num] = 0
-        imsrc[:, :, 2][imsrc[:, :, 0] > BG_num] = 0
-        imsrc[:, :, 2][imsrc[:, :, 1] > BG_num] = 0
-        _, imsrc2 = cv2.threshold(imsrc[:, :, 2], 1, 255, cv2.THRESH_BINARY)
+        imsrc = combat_lib.get_enemy_blood_bar_img(cap)
+        _, imsrc2 = cv2.threshold(imsrc, 1, 255, cv2.THRESH_BINARY)
         # cv2.imshow('123',retimg)
         # cv2.waitKey(100)
         if ret_mode == 1: # 返回点坐标
