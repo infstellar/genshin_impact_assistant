@@ -43,7 +43,7 @@ class BaseThreading(threading.Thread):
             return True
 
     def get_working_statement(self):
-        return self.working_flag
+        return not self.pause_threading_flag
 
     def checkup_stop_func(self):
         if self.pause_threading_flag or self.stop_threading_flag:
@@ -51,6 +51,7 @@ class BaseThreading(threading.Thread):
         for i in self.stop_func_list:
             if i():
                 return True
+        return False
 
     def add_stop_func(self, x):
         self.stop_func_list.append(x)
@@ -113,3 +114,36 @@ class AdvanceThreading(BaseThreading):
             if threading_obj.pause_threading_flag:
                 break
         return threading_obj.get_last_err_code()
+    
+class ThreadBlockingRequest():
+    def __init__(self) -> None:
+        self.blocking_request_flag = False
+        self.reply_request_flag = False
+    
+    def send_request(self):
+        logger.debug(f"ThreadBlockingRequest sent request.")
+        self.blocking_request_flag = True
+        
+    def reply_request(self):
+        if self.reply_request_flag != True:
+            logger.debug(f"ThreadBlockingRequest reply request.")
+            self.reply_request_flag = True
+
+    def waiting_until_reply(self, stop_func = lambda:False, timeout=10):
+        t = time.time()
+        while 1:
+            time.sleep(0.1)
+            if stop_func():
+                return False
+            if time.time()-t>=10:
+                return False
+            if self.reply_request_flag:
+                return True
+    
+    def is_blocking(self):
+        return self.blocking_request_flag
+    
+    def recovery_request(self):
+        logger.debug(f"ThreadBlockingRequest recovery request.")
+        self.blocking_request_flag = False
+        self.reply_request_flag = False

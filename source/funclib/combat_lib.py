@@ -125,25 +125,36 @@ def get_chara_list(team_name='team.json'):
     return chara_list
 
 def unconventionality_situation_detection(itt: interaction_core.InteractionBGD,
-                                           autoDispose=True):
+                                           autoDispose=True, detect_type='abc', stop_func=lambda:False):
     # unconventionality situlation detection
     # situlation 1: coming_out_by_space
 
     situation_code = -1
-
-    while itt.get_img_existence(asset.COMING_OUT_BY_SPACE):
-        situation_code = 1
-        itt.key_press('spacebar')
-        logger.debug('Unconventionality Situation: COMING_OUT_BY_SPACE')
-        time.sleep(0.1)
-    while itt.get_img_existence(asset.motion_swimming):
-        situation_code = 2
-        itt.key_down('w')
-        logger.debug('Unconventionality Situation: SWIMMING')
-        if autoDispose:
-            time.sleep(5)
-        itt.key_up('w')
-        time.sleep(0.1)
+    if 'a' in detect_type:
+        while itt.get_img_existence(asset.COMING_OUT_BY_SPACE):
+            if stop_func:break
+            situation_code = 1
+            itt.key_press('spacebar')
+            logger.debug('Unconventionality Situation: COMING_OUT_BY_SPACE')
+            time.sleep(0.1)
+    if 'b' in detect_type:
+        while itt.get_img_existence(asset.motion_swimming):
+            if stop_func:break
+            situation_code = 2
+            itt.key_down('w')
+            logger.debug('Unconventionality Situation: SWIMMING')
+            if autoDispose:
+                time.sleep(5)
+            itt.key_up('w')
+            time.sleep(0.1)
+    if 'c' in detect_type:
+        while itt.get_img_existence(asset.motion_climbing):
+            if stop_func:break
+            situation_code = 3
+            logger.debug('Unconventionality Situation: CLIMBING')
+            if autoDispose:
+                itt.key_press('x')
+            time.sleep(0.1)
 
     return situation_code
 
@@ -210,35 +221,68 @@ def get_current_chara_num(itt: interaction_core.InteractionBGD, stop_func = defa
     logger.warning(t2t("获得当前角色编号失败"))
     return 0
 
-def get_enemy_arrow_direction():
+
+    
+def get_arrow_img(img):
+    img = itt.png2jpg(img, channel='ui', alpha_num=150)
     red_num = 250
     blue_num = 90
     green_num = 90
-    float_num = 10
-    im_src = itt.capture()
-    im_src = itt.png2jpg(im_src, channel='ui', alpha_num=150)
-    im_src[950:1080, :, :] = 0
-    im_src[0:50, :, :] = 0
-    im_src[:, 1650:1920, :] = 0
-    # img_manager.qshow(imsrc)
+    float_num = 30
+ 
+    def extract_red(img):   
+        img_hsv = cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
+        # 区间1
+        lower_red = np.array([0, 43, 46])
+        upper_red = np.array([10, 255, 255])
+        mask0 = cv2.inRange(img_hsv,lower_red,upper_red)
+        # 区间2
+        lower_red = np.array([170, 43, 46])
+        upper_red = np.array([180, 255, 255])
+        mask1 = cv2.inRange(img_hsv,lower_red,upper_red)
+        # 拼接两个区间
+        mask = mask0 + mask1
+        return mask# cv2.bitwise_and(img,img,mask=mask)
+    mask = np.zeros_like(img[:,:,0])
+    cv2.ellipse(mask, (960, 540-17), (510+20+10, 430+20), 0, 0, 360, 255, -1)
+    cv2.ellipse(mask, (960, 540-17), (510-40+10, 430-40), 0, 0, 360, 0, -1)
 
-    '''可以用圆形遮挡优化'''
-    mask = np.zeros_like(im_src[:,:,0])
-    hh, ww = im_src.shape[:2]
-    xc = hh // 2
-    yc = ww // 2
-    radius1 = 275
-    radius2 = 300
-    cv2.circle(mask, (xc,yc), radius1, (255,255,255), -1)
-    cv2.circle(mask, (xc,yc), radius2, (0,0,0), -1)
-    # mask = cv2.subtract(mask2, mask1)
-    res1 = cv2.bitwise_and(im_src,im_src,mask=mask)
-    rgb_lower = np.array([250+float_num,90+float_num,90+float_num])
-    rgb_upper = np.array([250-float_num,90-float_num,90-float_num])
-    mask2 = cv2.inRange(res1, rgb_lower, rgb_upper)
-    imres = cv2.bitwise_and(mask2, im_src)
-    img_manager.qshow(imres)
     
+    # cv2.ellipse(mask, (960, 540), (510+30-1, 430+30-1), 0, 0, 360, 0, -1)
+    
+    # cv2.ellipse(mask, (960, 540), (510-50+1, 430-50+1), 0, 0, 360, 255, -1)
+    
+    
+    # Apply mask to image
+    im_src = cv2.bitwise_and(img, img, mask=mask)
+    arrow_img = extract_red(im_src)
+
+    # cv2.ellipse(arrow_img, (960, 540-17), (510+21+10, 430+21), 0, 0, 360, [255,255,255], 1)
+    # cv2.ellipse(arrow_img, (960, 540-17), (510-40+10-1, 430-40-1), 0, 0, 360, [255,255,255], 1)
+    
+    # arrow_img = np.zeros_like(im_src[:,:,0])
+    # arrow_img[:,:]=255
+    # arrow_img[im_src[:, :, 2] < red_num] = 0
+    # arrow_img[im_src[:, :, 0] > blue_num + float_num] = 0
+    # arrow_img[im_src[:, :, 0] < blue_num - float_num] = 0
+    # arrow_img[im_src[:, :, 1] > green_num + float_num] = 0
+    # arrow_img[im_src[:, :, 1] < green_num - float_num] = 0
+
+    if False:
+        # cv2.imshow("mask",mask)
+        cv2.imshow("2131231", arrow_img)
+        cv2.waitKey(10)
+    
+    return arrow_img
+
+def get_enemy_arrow_direction():
+    orsrc = itt.capture()
+    arrow_img = get_arrow_img(orsrc.copy())
+    ret_contours = img_manager.get_rect(arrow_img, orsrc, ret_mode=3)
+    # ret_range = img_manager.get_rect(imsrc2, orsrc, ret_mode=0)
+    if len(ret_contours)!=0:
+        angle = points_angle([SCREEN_CENTER_X,SCREEN_CENTER_Y],ret_contours[0][0],coordinate=ANGLE_NEGATIVE_Y)
+    return int(angle)
 
 def combat_statement_detection():
     # return: ret[0]: blood bar; ret[1]: enemy arrow
@@ -270,52 +314,33 @@ def combat_statement_detection():
     
     '''-----------------------------'''
     
-    red_num = 250
-    blue_num = 90
-    green_num = 90
-    float_num = 30
-    im_src = orsrc.copy()
-    im_src = itt.png2jpg(im_src, channel='ui', alpha_num=150)
+    
+    # im_src3 = orsrc.copy()
     # img_manager.qshow(imsrc)
 
     '''可以用圆形遮挡优化'''
 
-    im_src[950:1080, :, :] = 0
-    im_src[0:50, :, :] = 0
-    im_src[:, 1650:1920, :] = 0
-    # img_manager.qshow(imsrc)
-    im_src[:, :, 2][im_src[:, :, 2] < red_num] = 0
-    im_src[:, :, 2][im_src[:, :, 0] > blue_num + float_num] = 0
-    im_src[:, :, 2][im_src[:, :, 0] < blue_num - float_num] = 0
-    im_src[:, :, 2][im_src[:, :, 1] > green_num + float_num] = 0
-    im_src[:, :, 2][im_src[:, :, 1] < green_num - float_num] = 0
-    
-    # img_manager.qshow(imsrc[:, :, 2])
-    imsrc2 = im_src.copy()
-    _, imsrc2 = cv2.threshold(imsrc2[:, :, 2], 1, 255, cv2.THRESH_BINARY)
+    arrow_img = get_arrow_img(orsrc.copy())
+    # _, imsrc2 = cv2.threshold(imsrc2[:, :, 2], 1, 255, cv2.THRESH_BINARY)
     # img_manager.qshow(imsrc2)
-    ret_contours = img_manager.get_rect(imsrc2, orsrc, ret_mode=3)
-    ret_range = img_manager.get_rect(imsrc2, orsrc, ret_mode=0)
     
-    
-    
-    if False:
-        if len(ret_contours) != 0:
-            angle = cv2.minAreaRect(ret_contours)[2]
-            print(angle)
-            img = im_src.copy()[:, :, 2]
-            img = img[ret_range[0]:ret_range[2],ret_range[1]:ret_range[3]]
-            h, w = img.shape
-            center = (w//2, h//2)
-            M = cv2.getRotationMatrix2D(center, angle, 1.0)
-            rotated = cv2.warpAffine(img, M, (w, h), flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE)    
-            cv2.imshow('123', rotated)
-            cv2.waitKey(50)
+    # if True:
+    #     if len(ret_contours) != 0:
+    #         angle = cv2.minAreaRect(ret_contours)[2]
+    #         print(angle)
+    #         img = im_src.copy()[:, :, 2]
+    #         img = img[ret_range[0]:ret_range[2],ret_range[1]:ret_range[3]]
+    #         h, w = img.shape
+    #         center = (w//2, h//2)
+    #         M = cv2.getRotationMatrix2D(center, angle, 1.0)
+    #         rotated = cv2.warpAffine(img, M, (w, h), flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE)    
+    #         cv2.imshow('123', rotated)
+    #         cv2.waitKey(50)
         
-    red_arrow_num = len(np.where(im_src[:, :, 2]>=254)[-1])
+    red_arrow_num = len(np.where(arrow_img>=254)[-1])
+    # print(red_arrow_num)
     if red_arrow_num > 180:
         ret[1]=True
-    # print('flag_is_arrow_exist', flag_is_arrow_exist)
 
     
 
@@ -470,7 +495,7 @@ if __name__ == '__main__':
     # print()
     # set_party_setup("Lisa")
     while 1:
-        time.sleep(0.5)
-        get_enemy_arrow_direction()
+        time.sleep(0.1)
+        combat_statement_detection()
         # print(get_character_busy(itt, default_stop_func))
         # time.sleep(0.2)

@@ -76,10 +76,10 @@ def calculate_delta_angle(cangle,tangle):
         dangle = (360+dangle)
     return dangle
 
-def change_view_to_angle(tangle, stop_func=lambda:False, maxloop=25, offset=5, print_log=True):
+def change_view_to_angle(tangle, stop_func=lambda:False, maxloop=25, offset=5, print_log=True, angle_function=tracker.get_rotation):
     i = 0
     while 1:
-        cangle = tracker.get_rotation()
+        cangle = angle_function()
         dangle = calculate_delta_angle(cangle,tangle)
         if abs(dangle) < offset:
             break

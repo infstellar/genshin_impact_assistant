@@ -2,7 +2,7 @@ from source.api.pdocr_light import ocr_light
 from source.common.base_threading import BaseThreading
 from source.common.character import Character, Q_SKILL_COLOR
 from source.interaction.interaction_core import itt
-from common.timer_module import Timer
+from common.timer_module import Timer, AdvanceTimer
 from source.util import *
 import cv2
 from source.funclib import combat_lib
@@ -29,17 +29,16 @@ class TacticOperator(BaseThreading):
         self.enter_timer = Timer()
         self.pause_timer = Timer()
         self.itt = itt
-        self.working_flag = False # out of class
         self.flag_tactic_executing = False # in class
         self.pause_tactic_flag = False
         self.formered_tactic = None
         self.tactic_group = None
         self.character = None
+        self.tactic_exec_timer = AdvanceTimer(0.4)
 
     def pause_threading(self):
         if self.pause_threading_flag != True:
             self.pause_threading_flag = True
-            self.working_flag = False
             self.tactic_group = None
             self.formered_tactic = None
     
@@ -61,17 +60,18 @@ class TacticOperator(BaseThreading):
     
     def run(self):
         while 1:
-            time.sleep(0.02)
             # time.sleep(self.while_sleep)
             if self.stop_threading_flag:
                 return
 
             if self.pause_threading_flag:
-                if self.working_flag:
-                    self.working_flag = False
                 if self.pause_timer.get_diff_time()>=1:
+                    time.sleep(0.02)
+                elif self.pause_timer.get_diff_time()>=3:
                     time.sleep(0.1)
-                if self.pause_timer.get_diff_time()>=20:
+                elif self.pause_timer.get_diff_time()>=10:
+                    time.sleep(0.25)
+                else:
                     time.sleep(1)
                 continue
             self.pause_timer.reset()
@@ -81,16 +81,14 @@ class TacticOperator(BaseThreading):
             
             # print('5')
 
-            self.working_flag = True
-            if self.formered_tactic is None:
-                self.working_flag = False
-                continue
-            if not self.pause_tactic_flag:
+            if (self.formered_tactic is None or len(self.formered_tactic) == 0):
+                self.pause_threading()
+            if not self.pause_threading_flag:
                 logger.debug(f"exec tactic start")
                 self.execute_tactic(self.formered_tactic)
                 self.flag_tactic_executing = False
-                self.working_flag = False
                 logger.debug(f"exec tactic end")
+                self.pause_threading()
 
     def set_parameter(self, tactic_group: str, character: Character):
         if tactic_group is None:
@@ -156,7 +154,9 @@ class TacticOperator(BaseThreading):
 
     def unconventionality_situation_detection(self, autoDispose=True):  # unconventionality situation detection
         # situation 1: coming_out_by_space
-
+        sf = lambda: self.checkup_stop_func() and self.pause_tactic_flag
+        return combat_lib.unconventionality_situation_detection(itt,detect_type='ac', stop_func=sf)
+        
         situation_code = -1
 
         while self.itt.get_img_existence(asset.COMING_OUT_BY_SPACE):

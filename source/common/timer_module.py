@@ -119,7 +119,7 @@ class CyclicVelocityDetector(Timer):
     def __init__(self):
         super().__init__()
         
-    def get_and_set_cyclic_velocity(self):
+    def get_cyclic_velocity(self):
         dt = self.get_diff_time()
         self.reset()
         return int(1/dt)

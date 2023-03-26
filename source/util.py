@@ -135,7 +135,7 @@ if GLOBAL_LANG == "$locale$":
     GLOBAL_LANG = get_local_lang()
     GLOBAL_LANG = "zh_CN"
     logger.info(f"language set as: {GLOBAL_LANG}")
-l10n = gettext.translation(GLOBAL_LANG, localedir=os.path.join(ROOT_PATH, "translation/locale"), languages=[GLOBAL_LANG])
+l10n = gettext.translation(GLOBAL_LANG, localedir=os.path.join(ROOT_PATH, r"translation/locale"), languages=[GLOBAL_LANG])
 l10n.install()
 t2t = l10n.gettext
 # load translation module over
@@ -261,18 +261,6 @@ def save_json(x, json_name='config.json', default_path='config\\settings', sort_
     else:
         json.dump(x, open(os.path.join(default_path, json_name), 'w', encoding='utf-8'),
               ensure_ascii=False)
-
-
-def loadfileP(filename):
-    with open('wordlist//' + filename + '.wl', 'rb') as fp:
-        list1 = pickle.load(fp)
-    return list1
-
-
-def savefileP(filename, item):
-    with open('wordlist//' + filename + '.wl', 'w+b') as fp:
-        pickle.dump(item, fp)
-
 
 def refresh_config():
     global config_json
@@ -611,6 +599,23 @@ def color_similarity_2d(image, color):
     r, g, b = cv2.split(cv2.subtract((*color, 0), image))
     negative = cv2.max(cv2.max(r, g), b)
     return cv2.subtract(255, cv2.add(positive, negative))
+
+def circle_mask(img,inner_r, outer_r):
+    # 指定内半径和外半径
+    inner_radius = inner_r
+    outer_radius = outer_r
+
+    # 创建一个黑色的图像作为遮罩
+    mask = np.zeros_like(img)
+
+    # 在遮罩上绘制圆环
+    cv2.circle(mask, (img.shape[1]//2, img.shape[0]//2), outer_radius, (255, 255, 255), -1)
+    cv2.circle(mask, (img.shape[1]//2, img.shape[0]//2), inner_radius, (0, 0, 0), -1)
+
+    # 将遮罩应用于原图
+    masked_img = cv2.bitwise_and(img, mask)
+    
+    return masked_img
 
 # Update for a program used before version v0.5.0.424
 if os.path.exists(os.path.join(ROOT_PATH, "config\\tastic")):

@@ -57,6 +57,11 @@ class SwitchCharacterOperator(BaseThreading):
             if self.checkup_stop_func():
                 self.pause_threading_flag = True
                 continue
+            if self.aim_operator.sco_blocking_request.is_blocking():
+                self.aim_operator.sco_blocking_request.reply_request()
+                self.switch_character(switch_type="POSITION")
+                time.sleep(0.5)
+                continue
             if self.tactic_operator.get_working_statement():  # tactic operator working
                 time.sleep(0.1)
                 if self.position_check_timer.reached_and_reset():
@@ -129,6 +134,7 @@ class SwitchCharacterOperator(BaseThreading):
                     self.current_num = combat_lib.get_current_chara_num(self.itt, self.checkup_stop_func)
                     logger.debug(f"switch_character: {switch_type}: targetnum: {chara.n} current num: {self.current_num}")
                     if chara.n != self.current_num:
+                        self.aim_operator.pause_threading()
                         self.tactic_operator.pause_threading()
                         r = self._switch_character(chara.n)
                         if not r: # Failed
@@ -136,6 +142,7 @@ class SwitchCharacterOperator(BaseThreading):
                         self.tactic_operator.set_parameter(chara.tactic_group, chara)
                         self.tactic_operator.restart_executor()
                         self.tactic_operator.continue_threading()
+                        self.aim_operator.continue_threading()
                         return True
        
 
@@ -197,7 +204,7 @@ class SwitchCharacterOperator(BaseThreading):
             self.pause_threading_flag = False
             self.tactic_operator.set_parameter(None, None)
             self.tactic_operator.continue_threading()
-            # self.aim_operator.continue_threading()
+            self.aim_operator.continue_threading()
             self.current_num = combat_lib.get_current_chara_num(self.itt, self.checkup_stop_func)
 
 
