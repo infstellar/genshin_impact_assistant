@@ -155,7 +155,7 @@ class SwitchCharacterOperator(BaseThreading):
         Returns:
             bool: True: 切换成功; False: 切换失败
         """
-        self.itt.middle_click()
+        # self.itt.middle_click()
         t = self.switch_timer.get_diff_time()
         self.tactic_operator.chara_waiting()
         logger.debug('try switching to ' + str(x))

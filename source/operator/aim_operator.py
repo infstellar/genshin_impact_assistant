@@ -134,7 +134,7 @@ class AimOperator(BaseThreading):
     
     def _circle_find_enemy(self):
         if self.circle_search_timer.reached_and_reset():
-            self.itt.middle_click() # 重置视角
+            movement.reset_view() # 重置视角
             logger.debug(f" finding_enemy ")
         else:
             logger.debug(f"circle_search_timer does not reached, skip")
@@ -287,7 +287,7 @@ class AimOperator(BaseThreading):
 
     def finding_enemy(self):
         if self.enemy_loops < self.max_number_of_enemy_loops:
-            self.itt.middle_click() # 重置视角
+            movement.reset_view() # 重置视角
             logger.debug(f" finding_enemy ")
         while self.enemy_loops < self.max_number_of_enemy_loops: # 当搜索敌人次数小于最大限制次数时，开始搜索
             if self.checkup_stop_func():
