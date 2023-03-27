@@ -93,7 +93,9 @@ def get_chara_list(team_name='team.json'):
         autofill_flag = False
         # autofill_flag = team_item["autofill"]
         cname = get_param(team_item, "name", autofill_flag, chara_name="")
-        cname = translate_character_auto(cname)
+        c = translate_character_auto(cname)
+        if c != None:
+            cname = c
         c_position = get_param(team_item, "position", autofill_flag, chara_name=cname, value_when_empty='')
         c_priority = get_param(team_item, "priority", autofill_flag, chara_name=cname)
         cE_short_cd_time = get_param(team_item, "E_short_cd_time", autofill_flag, chara_name=cname)
@@ -187,8 +189,9 @@ def is_character_busy(stop_func, print_log = True):
             logger.trace(f"waiting: character busy: t1{t1} t2{t2}")
         return True
 
-def chara_waiting(itt:interaction_core.InteractionBGD, stop_func, mode=0, max_times = 1000):
-    unconventionality_situation_detection(itt)
+def chara_waiting(itt:interaction_core.InteractionBGD, stop_func, mode=0, max_times = 1000, is_usd=True):
+    if is_usd:
+        unconventionality_situation_detection(itt)
     i=0
     while is_character_busy(stop_func) and (not stop_func()):
         i+=1

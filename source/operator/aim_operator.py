@@ -97,8 +97,12 @@ class AimOperator(BaseThreading):
                                 logger.debug(f"AimOperator: No enemy exist.")
                                 self.enemy_flag = False
                 else:
-                    pass
-                    
+                    if self._is_enemy_too_far():
+                        self.sco_blocking_request.send_request()
+                        if True: # set to False when debug this module
+                            self.sco_blocking_request.waiting_until_reply(stop_func=self.checkup_stop_func, timeout=60)
+                        self._keep_distance_with_enemy()
+                        self.sco_blocking_request.recovery_request() # 解除申请
             
             # ret = self.auto_aim() # 自动瞄准
             # if ret is None:
@@ -146,6 +150,7 @@ class AimOperator(BaseThreading):
         for i in range(15):
             if self.checkup_stop_func():
                 return
+            combat_lib.chara_waiting()
             # self.itt.move_to(150, 0, relative=True)
             movement.cview(15)
             ret_points = self.get_enemy_feature()
@@ -319,6 +324,12 @@ class AimOperator(BaseThreading):
         self.enemy_loops = 0
         self.enemy_flag = True
 
+    def _is_enemy_too_far(self):
+        px = self.get_enemy_feature(ret_mode=2)
+        if px is None:
+            return False
+        return px < 6
+    
     def _keep_distance_with_enemy(self):  # 期望敌方血条像素高度为7px # 与敌人保持距离
         target_px = 7
         if self.enemy_flag:
@@ -326,7 +337,18 @@ class AimOperator(BaseThreading):
             if px is None:
                 return False
             if px < target_px:
-                movement.move(movement.AHEAD, distance=target_px - px) # 
+                itt.key_down('w')
+                while 1:
+                    if self.checkup_stop_func(): 
+                        itt.key_up('w')
+                        return False
+                    px = self.get_enemy_feature(ret_mode=2)
+                    if px is None: 
+                        itt.key_up('w')
+                        return False
+                    if px >= target_px: 
+                        itt.key_up('w')
+                        return True
             else:
                 return True
 
@@ -343,9 +365,10 @@ class AimOperator(BaseThreading):
 if __name__ == '__main__':
     # movement.change_view_to_angle(0, angle_function=combat_lib.get_enemy_arrow_direction)
     ao = AimOperator()
-    # ao._moving_find_enemy()
-    ao.start()
+    ao._keep_distance_with_enemy()
+    # ao.start()
     # ao.get_enemy_feature(ret_mode=2)
     while 1:
         # ao.keep_distance_with_enemy()
-        time.sleep(0.1)
+        time.sleep(1)
+        ao._keep_distance_with_enemy()
