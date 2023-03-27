@@ -79,10 +79,13 @@ class AimOperator(BaseThreading):
                     self.enemy_flag = True
             else:
                 r = self._lock_on_enemy()
+                # if self.checkup_stop_func():continue
                 if not r:
                     r = self._circle_find_enemy()
+                    # if self.checkup_stop_func():continue
                     if r:
                         self.enemy_flag = True
+                        self.circle_search_timer.reset()
                     else:
                         self.sco_blocking_request.send_request() # 向SCO申请暂停Tactic执行
                         if True: # set to False when debug this module
@@ -140,10 +143,11 @@ class AimOperator(BaseThreading):
             logger.debug(f"circle_search_timer does not reached, skip")
             return False
         # while self.enemy_loops < self.max_number_of_enemy_loops: # 当搜索敌人次数小于最大限制次数时，开始搜索
-        for i in range(50):
+        for i in range(15):
             if self.checkup_stop_func():
                 return
-            self.itt.move_to(150, 0, relative=True)
+            # self.itt.move_to(150, 0, relative=True)
+            movement.cview(15)
             ret_points = self.get_enemy_feature()
             if ret_points is None:
                 continue
@@ -159,6 +163,7 @@ class AimOperator(BaseThreading):
         t = AdvanceTimer(1)
         logger.debug("_is_blood_bar_exist")
         while 1:
+            time.sleep(0.2)
             if self.checkup_stop_func():
                 return
             if not combat_lib.combat_statement_detection()[0]:
@@ -216,7 +221,13 @@ class AimOperator(BaseThreading):
                 itt.key_up('w')
                 if self._is_blood_bar_exist():
                     logger.info(f"_moving_find_enemy: found enemy succ")
-                    return True
+                    logger.info(f"_moving_find_enemy: move to enemy closer")
+                    r = self._keep_distance_with_enemy()
+                    if r:
+                        return True
+                    else:
+                        logger.info(f"_moving_find_enemy: refind enemy: 2")
+                        return self._moving_find_enemy()
                 else:
                     itt.key_down('w')
             if combat_lib.combat_statement_detection()[1]:
@@ -308,20 +319,16 @@ class AimOperator(BaseThreading):
         self.enemy_loops = 0
         self.enemy_flag = True
 
-    def keep_distance_with_enemy(self):  # 期望敌方血条像素高度为6px # 与敌人保持距离
-        target_px = 6
-        if self.kdwe_timer.get_diff_time() < 1:
-            return 0
-        else:
-            self.kdwe_timer.reset()
+    def _keep_distance_with_enemy(self):  # 期望敌方血条像素高度为7px # 与敌人保持距离
+        target_px = 7
         if self.enemy_flag:
             px = self.get_enemy_feature(ret_mode=2)
             if px is None:
-                return 0
+                return False
             if px < target_px:
                 movement.move(movement.AHEAD, distance=target_px - px) # 
-            elif px > target_px + 1:
-                movement.move(movement.BACK, distance=px - target_px)
+            else:
+                return True
 
         # if self.auto_move: # 绕敌旋转
         #     if self.left_timer.get_diff_time() >= 15: # 每15秒重新按一次a

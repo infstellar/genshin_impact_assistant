@@ -227,6 +227,10 @@ class ConfigPage(Page):
         self.mode = True
         self.read_only = False
 
+        self.input_verify={
+            "test":lambda x:x
+        }
+
     def _load_config_files(self):
         for root, dirs, files in os.walk('config'):
             for f in files:
@@ -312,6 +316,30 @@ class ConfigPage(Page):
                 self.put_setting(pin.pin['file'])  # 配置配置页
 
             time.sleep(1)
+
+    def _str_verify(self, x, verify_list, scope_name):
+        if x in verify_list:
+            output.clear_scope(scope_name)
+            output.put_text(t2t("Verified!"), scope=scope_name).style(f'color: green; font_size: 20px')
+            return
+        else:
+            f1 = False
+            sl = []
+            for i in verify_list:
+                if x in i:
+                    f1 = True
+                    output.clear_scope(scope_name)
+                    output.put_text(t2t("Waiting..."), scope=scope_name).style(f'color: black; font_size: 20px')
+                    if len(sl)<=15:
+                        sl.append(i)
+            
+        if f1:
+            output.put_text(t2t("You may want to enter: "), scope=scope_name).style(f'color: black; font_size: 20px')
+            for i in sl:
+                output.put_text(i, scope=scope_name).style(f'color: black; font_size: 12px; font-style:italic')
+        else:
+            output.clear_scope(scope_name)
+            output.put_text(t2t("Not a valid name"), scope=scope_name).style(f'color: red; font_size: 20px')
 
     def _before_load_json(self):
         pass
@@ -429,6 +457,14 @@ class ConfigPage(Page):
                     sl, value=v,
                     label=display_name,
                     scope=scope_name)
+            elif doc_special[0] == "$INPUT_VERIFY$":
+                pin.put_input(component_name, label=display_name, value=v, scope=scope_name)
+                output.put_scope(name=component_name, content=[
+                    output.put_text("")
+                ], scope=scope_name)
+                def onchange(x):
+                    self._str_verify(x, verify_list=self.input_verify[doc_special[1]], scope_name=component_name)
+                pin.pin_on_change(component_name, onchange=onchange, clear=False, init_run=True)
         else:
             pin.put_input(component_name, label=display_name, value=v, scope=scope_name)
     
@@ -576,6 +612,13 @@ class SettingPage(ConfigPage):
 class CombatSettingPage(ConfigPage):
     def __init__(self):
         super().__init__(config_file_name = "auto_combat")
+        from source.common.lang_data import get_all_characters_name
+        self.character_names = get_all_characters_name()
+        self.input_verify={
+            "character_name":self.character_names
+        }
+        
+        
 
     def _load_config_files(self):
         self.config_files = []
@@ -623,7 +666,6 @@ class CombatSettingPage(ConfigPage):
                     os.path.join(ROOT_PATH, "config\\tactic", n + '.json'))
         self._reload_select()
         pass
-
 
 class CollectorSettingPage(ConfigPage):
     def __init__(self):

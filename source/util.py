@@ -619,30 +619,9 @@ def circle_mask(img,inner_r, outer_r):
 
 # Update for a program used before version v0.5.0.424
 if os.path.exists(os.path.join(ROOT_PATH, "config\\tastic")):
-    logger.info("检测到tastic文件夹。")
-    logger.info("版本v0.5.0.424后，tastic文件夹修正为tactic文件夹。")
-    time.sleep(1)
-    logger.warning("正在准备将tastic文件夹中的json文件迁移至tastic文件夹。")
-    time.sleep(1)
-    logger.warning("该操作可能有风险，您可以将config/tastic文件夹中的文件备份后再继续。")
-    time.sleep(1)
-    logger.warning("该操作将在15秒后开始。")
-    time.sleep(15)
-    for root, dirs, files in os.walk(os.path.join(ROOT_PATH, "config\\tastic")):
-        for f in files:
-            if f[f.index(".")+1:] == "json":
-                shutil.copy(os.path.join(ROOT_PATH, "config\\tastic", f), os.path.join(ROOT_PATH, "config\\tactic", f))
-    logger.warning("准备删除tastic文件夹。")
-    time.sleep(1)
-    logger.warning("该操作可能有风险，您可以将config/tastic文件夹中的文件备份后再继续。")
-    time.sleep(1)
-    logger.warning("该操作将在15秒后开始。")
-    time.sleep(15)
-    shutil.rmtree(os.path.join(ROOT_PATH, "config\\tastic"))
-    logger.info("操作完成。您可以手动删除残留的config/tactic/tastic.json文件。")
-    time.sleep(1)
-    # os.rename(os.path.join(root_path, "config\\tactic"), os.path.join(root_path, "config\\tactic"))
-# Over
+    logger.error("检测到tastic文件夹。")
+    logger.error("版本v0.5.0.424后，tastic文件夹修正为tactic文件夹。")
+    logger.error("请重新安装新版GIA。")
 
 
 if __name__ == '__main__':
