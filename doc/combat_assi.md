@@ -96,11 +96,15 @@
 
 ## 自动配置team文件
 
-在`character.json`文件中有一些已经配置好的角色,此时在`team.json`文件中只需要将`autofill`设置为`true`,并配置`name`
-,`priority`,`n`,`trigger`即可。
-在`character.json`中的`verify`属性可以查看该角色操作是否被验证通过。
+在GUI中，新建team文件，输入角色名后按下自动填充，所有空输入框和标记为-1的输入框会被自动填充。
 
-- 注：该方法可用，但目前暂不推荐。适用于有多个队伍时避免重复配置。
+角色在队伍中的位置、角色优先级和部分角色的触发器不会自动填充。
+
+[支持的角色列表](../assets/characters_data/characters_parameters.json)
+
+[角色名文件 感谢xicri/genshin-dictionary](../assets/characters_data/characters_name.json)
+
+欢迎贡献角色参数(ﾉﾟ∀ﾟ)ﾉ
 
 ## 角色元素战技、元素爆发图片设置
 

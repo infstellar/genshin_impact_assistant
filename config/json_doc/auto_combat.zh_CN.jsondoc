@@ -4,7 +4,7 @@
     },
     "name":{
         "doc":"角色名称",
-        "annotation":"根据character_dist.json填写角色名称",
+        "annotation":"支持输入验证与提示。根据characters_name.json填写角色名称",
         "special_index":"$INPUT_VERIFY$#character_name"
     },
     "E_long_cd_time":{

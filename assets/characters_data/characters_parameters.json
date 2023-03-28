@@ -45,7 +45,7 @@
         "Qcd_time": 12,
         "position": "Normal",
         "vision":"Pyro",
-        "trigger":"",
+        "trigger":"e_ready",
         "tactic_group": "e?e:none;#@e?a:none;"
         
     },
@@ -58,7 +58,7 @@
         "Qcd_time": 12,
         "position": "Normal",
         "vision":"Geo",
-        "trigger":"",
+        "trigger":"e_ready",
         "tactic_group": "e?e~:none;q?q:none"
         
     },
@@ -72,7 +72,7 @@
         "Qcd_time": 12,
         "position": "Shield",
         "vision":"Geo",
-        "trigger":"",
+        "trigger":"e_ready",
         "tactic_group": "e?e~:none"
         
     },
@@ -137,7 +137,7 @@
         "Qlast_time": 10,
         "Qcd_time": 20,
         "vision":"Pyro",
-        "trigger":"",
+        "trigger":"e_ready",
         "position": "Normal"
         
     },
