@@ -184,9 +184,10 @@ class MainPage(Page):
         # listening.MISSION_MANAGER.set_mission_list(list(pin.pin["MissionSelect"]))
         listening.TASK_MANAGER.set_tasklist(pin.pin["task_list"])
         listening.TASK_MANAGER.start_stop_tasklist()
-        cj = load_json()
-        cj["mission_group"] = pin.pin["MissionSelect"]
-        save_json(cj)
+        if pin.pin["MissionSelect"] != None and pin.pin["MissionSelect"] != "":
+            cj = load_json()
+            cj["mission_group"] = pin.pin["MissionSelect"]
+            save_json(cj)
         time.sleep(0.2)
         output.put_button(label=str(listening.TASK_MANAGER.start_tasklist_flag), onclick=self.on_click_startstop,
                           scope='Button_StartStop')
@@ -344,12 +345,13 @@ class ConfigPage(Page):
     def _before_load_json(self):
         pass
      
-    def put_setting(self, name=''):
+    def put_setting(self, name='', j=None):
         self.file_name = name
         self._before_load_json()
         output.put_markdown('## {}'.format(name), scope='now')  # 标题
-        with open(name, 'r', encoding='utf8') as f:
-            j = json.load(f)
+        if j is None:
+            with open(name, 'r', encoding='utf8') as f:
+                j = json.load(f)
 
         # with open(os.path.join(root_path, "config", "settings", "config.json"), 'r', encoding='utf8') as f:
         #     lang = json.load(f)["lang"]
@@ -618,7 +620,32 @@ class CombatSettingPage(ConfigPage):
             "character_name":self.character_names
         }
         
-        
+    def _autofill(self):
+        j = self.get_json(json.load(open(self.file_name, 'r', encoding='utf8')))
+        autofill_j = load_json("characters_parameters.json", f"{ASSETS_PATH}\\characters_data")
+        not_found = []
+            
+        from source.common.lang_data import translate_character_auto
+        for i in j:
+            cname = translate_character_auto(j[i]["name"])
+            if cname is None:
+                not_found.append(j[i]["name"])
+                continue
+            if cname in autofill_j:
+                for k in ["position", "E_short_cd_time", "E_long_cd_time", "Elast_time", "Epress_time", "tactic_group", "trigger", "Qlast_time", "Qcd_time", "vision"]:
+                    if j[i][k] == "" or j[i][k] == -10086:
+                        j[i][k] = autofill_j[cname][k]
+            else:
+                not_found.append(cname)
+        output.clear_scope('now')
+        if len(not_found)==0:
+            output.popup("自动填充", "自动填充成功\n以下选项不会自动填充:\n优先级,角色在队伍中的位置。\n记得保存(￣▽￣)~*")
+        else:
+            output.popup("自动填充", 
+                         "自动填充部分失败\n"+
+                         str(not_found)+"\n"+
+                         "以下选项不会自动填充:\n优先级,角色在队伍中的位置。\n记得保存(￣▽￣)~*")
+        self.put_setting(name=self.file_name, j=j)
 
     def _load_config_files(self):
         self.config_files = []
@@ -642,11 +669,9 @@ class CombatSettingPage(ConfigPage):
 
         # 添加team.json按钮
         output.put_row([
-            output.put_button(t2t("Add team"), onclick=self.onclick_add_teamjson, scope=self.main_scope),
+            output.put_button(t2t("Add team"), onclick=self.onclick_add_teamjson),
             None,
-            # output.put_button(t2t("Add team with characters"), onclick=self.onclick_add_teamjson_withcharacters,
-            #                   scope=self.main_scope)
-            None],
+            output.put_button(t2t("Auto fill"), onclick=self._autofill)],
             scope=self.main_scope, size="10% 10px 20%")
 
         # 配置页

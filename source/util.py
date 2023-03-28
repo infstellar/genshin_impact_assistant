@@ -51,11 +51,16 @@ from source.path_lib import *
 def load_json(json_name='config.json', default_path='config\\settings') -> dict:
     # if "$lang$" in default_path:
     #     default_path = default_path.replace("$lang$", GLOBAL_LANG)
+    all_path = os.path.join(ROOT_PATH, default_path, json_name)
     try:
-        return json.load(open(os.path.join(ROOT_PATH, default_path, json_name), 'r', encoding='utf-8'))
+        return json.load(open(all_path, 'r', encoding='utf-8'))
     except:
-        json.dump({}, open(os.path.join(ROOT_PATH, default_path, json_name), 'w', encoding='utf-8'))
-        return json.load(open(os.path.join(ROOT_PATH, default_path, json_name), 'r', encoding='utf-8'))
+        if DEBUG_MODE:
+            logger.critical(f"尝试访问{all_path}失败")
+            raise FileNotFoundError
+        else:
+            json.dump({}, open(all_path, 'w', encoding='utf-8'))
+            return json.load(open(all_path, 'r', encoding='utf-8'))
 try:
     config_json = load_json("config.json")
     DEBUG_MODE = config_json["DEBUG"] if "DEBUG" in config_json else False

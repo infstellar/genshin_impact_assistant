@@ -1,9 +1,9 @@
 from source.util import *
 import json5
 
-with open(f"{ROOT_PATH}\\assets\\LangData\\characters.json5", "r", encoding="utf-8") as f:
-    characters = json5.load(f)
-# characters = load_json("characters.json5", f"{ROOT_PATH}\\assets\\LangData\\characters.json5")
+# with open(f"{ROOT_PATH}\\assets\\LangData\\characters.json5", "r", encoding="utf-8") as f:
+#     characters = json5.load(f)
+characters = load_json("characters_name.json", f"{ROOT_PATH}\\assets\\characters_data")
 def get_all_characters_name():
     ret_list = []
     for item in characters:
