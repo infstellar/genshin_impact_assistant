@@ -633,7 +633,7 @@ class CombatSettingPage(ConfigPage):
                 continue
             if cname in autofill_j:
                 for k in ["position", "E_short_cd_time", "E_long_cd_time", "Elast_time", "Epress_time", "tactic_group", "trigger", "Qlast_time", "Qcd_time", "vision"]:
-                    if j[i][k] == "" or j[i][k] == -10086:
+                    if j[i][k] == "" or j[i][k] == -1:
                         j[i][k] = autofill_j[cname][k]
             else:
                 not_found.append(cname)
@@ -671,7 +671,7 @@ class CombatSettingPage(ConfigPage):
         output.put_row([
             output.put_button(t2t("Add team"), onclick=self.onclick_add_teamjson),
             None,
-            output.put_button(t2t("Auto fill"), onclick=self._autofill)],
+            output.put_button(t2t("自动填充"), onclick=self._autofill)],
             scope=self.main_scope, size="10% 10px 20%")
 
         # 配置页
