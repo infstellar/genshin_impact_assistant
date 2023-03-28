@@ -152,6 +152,8 @@ class FindingTree(FlowTemplate):
             if abs(dx) <= 20:
                 self.upper.lockOnFlag += 1
                 self.move_num = 1
+            else:
+                self.move_num = 2
             return True
         else:
             self.move_num = 4
