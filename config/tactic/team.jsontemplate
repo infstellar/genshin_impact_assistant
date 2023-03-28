@@ -1,6 +1,6 @@
 {
   "frist": {
-    "name": "yoimiya",
+    "name": "Yoimiya",
     "position": "Normal",
     "priority": 2,
     "n": 1,
@@ -16,7 +16,7 @@
     "vision":"Pyro"
   },
   "second": {
-    "name": "zhongli",
+    "name": "Zhongli",
     "position": "Shield",
     "priority": 1,
     "n": 2,
@@ -32,7 +32,7 @@
     "vision":"Geo"
   },
   "third": {
-    "name": "bennett",
+    "name": "Bennett",
     "position": "Normal",
     "priority": 3,
     "n": 3,
@@ -48,7 +48,7 @@
     "vision":"Pyro"
   },
   "forth": {
-    "name": "yunjin",
+    "name": "Yun Jin",
     "position": "Normal",
     "priority": 4,
     "n": 4,

@@ -150,7 +150,7 @@ class AimOperator(BaseThreading):
         for i in range(15):
             if self.checkup_stop_func():
                 return
-            combat_lib.chara_waiting()
+            combat_lib.chara_waiting(itt, self.checkup_stop_func)
             # self.itt.move_to(150, 0, relative=True)
             movement.cview(15)
             ret_points = self.get_enemy_feature()
