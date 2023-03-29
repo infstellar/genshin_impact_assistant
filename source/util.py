@@ -48,16 +48,16 @@ from source.path_lib import *
 
 
 # load config file
-def load_json(json_name='config.json', default_path='config\\settings') -> dict:
+def load_json(json_name='config.json', default_path='config\\settings', auto_create = False) -> dict:
     # if "$lang$" in default_path:
     #     default_path = default_path.replace("$lang$", GLOBAL_LANG)
     all_path = os.path.join(ROOT_PATH, default_path, json_name)
     try:
         return json.load(open(all_path, 'r', encoding='utf-8'))
     except:
-        if DEBUG_MODE:
+        if not auto_create:
             logger.critical(f"尝试访问{all_path}失败")
-            raise FileNotFoundError
+            # raise FileNotFoundError
         else:
             json.dump({}, open(all_path, 'w', encoding='utf-8'))
             return json.load(open(all_path, 'r', encoding='utf-8'))

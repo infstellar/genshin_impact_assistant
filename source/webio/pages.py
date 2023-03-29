@@ -63,6 +63,8 @@ class MainPage(Page):
             if pin.pin["MissionSelect"] != self.ui_mission_select:
                 self.ui_mission_select = pin.pin["MissionSelect"]
                 output.clear_scope("SCOPEMissionIntroduction")
+                if self.ui_mission_select is None:
+                    continue
                 output.put_text(self._get_mission_groups_dict()["introduction"][GLOBAL_LANG],scope="SCOPEMissionIntroduction")
             
             self.log_list_lock.acquire()
@@ -172,7 +174,10 @@ class MainPage(Page):
         return r
 
     def _get_mission_groups_dict(self):
-        return load_json(str(pin.pin["MissionSelect"]),default_path=f"{CONFIG_PATH}\\mission_groups")
+        jsonname = pin.pin["MissionSelect"]
+        if jsonname is None:
+            raise FileNotFoundError
+        return load_json(str(jsonname),default_path=f"{CONFIG_PATH}\\mission_groups")
     
     def on_click_pickup(self):
         output.clear('Button_PickUp')

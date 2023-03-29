@@ -42,8 +42,8 @@ class MissionAutoCollector(MissionExecutor):
             self.collector_type = COLLECTION
         elif collector_config["collection_type"] == "ENEMY":
             self.collector_type = ENEMY
-        self.collector_blacklist_id = load_json("collection_blacklist.json", default_path="config\\auto_collector")
-        self.collected_id = load_json("collected.json", default_path="config\\auto_collector")
+        self.collector_blacklist_id = load_json("collection_blacklist.json", default_path="config\\auto_collector", auto_create=True)
+        self.collected_id = load_json("collected.json", default_path="config\\auto_collector", auto_create=True)
         self.shielded_id = []
         self.collection_id = 0
         try:
@@ -60,7 +60,7 @@ class MissionAutoCollector(MissionExecutor):
 
         if not os.path.exists(os.path.join(ROOT_PATH, "config\\auto_collector", "collection_log.json")):
             save_json({}, os.path.join(ROOT_PATH, "config\\auto_collector", "collection_log.json"))
-        self.collection_log = load_json("collection_log.json", default_path="config\\auto_collector")
+        self.collection_log = load_json("collection_log.json", default_path="config\\auto_collector", auto_create=True)
         
         self.collector_posi_dict = []
         self.current_position = tracker.get_position()
@@ -69,7 +69,7 @@ class MissionAutoCollector(MissionExecutor):
         collector_lib.generate_collected_from_log()
         collector_lib.generate_col_succ_rate_from_log()
         logger.debug(f"generate collection_id_details succ")
-        self.collection_details = load_json("collection_id_details.json", "config\\auto_collector")
+        self.collection_details = load_json("collection_id_details.json", "config\\auto_collector", auto_create=True)
         
         
         self.collector_posi_dict = collector_lib.load_items_position(self.collector_name, blacklist_id=self.shielded_id)
@@ -77,7 +77,7 @@ class MissionAutoCollector(MissionExecutor):
         ui_control.ui_goto(UIPage.page_main)
         tracker.while_until_no_excessive_error()
         self.current_position = tracker.get_position()
-        self.collection_details = load_json("collection_id_details.json", "config\\auto_collector")
+        self.collection_details = load_json("collection_id_details.json", "config\\auto_collector", auto_create=True)
         self.collector_posi_dict.sort(key=self.sort_by_distance_and_succrate)
         logger.info("switch Flow to: BEFORE_MOVETO_COLLECTOR")
         self.current_state = ST.BEFORE_MOVETO_COLLECTOR

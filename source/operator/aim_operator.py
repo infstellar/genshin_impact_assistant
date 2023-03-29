@@ -77,30 +77,33 @@ class AimOperator(BaseThreading):
             if self.enemy_flag == False:
                 if combat_lib.CSDL.get_combat_state():
                     self.enemy_flag = True
-            else:
-                r = self._lock_on_enemy()
-                # if self.checkup_stop_func():continue
-                if not r:
-                    r = self._circle_find_enemy()
-                    # if self.checkup_stop_func():continue
-                    if r:
+            else: # 处于战斗状态
+                r = self._lock_on_enemy() # 锁定敌人
+                if self.checkup_stop_func():continue
+                if not r: # 没有找到血条
+                    r = self._circle_find_enemy() # 转圈寻找
+                    if self.checkup_stop_func():continue
+                    if r: # 找到了，退出
                         self.enemy_flag = True
                         self.circle_search_timer.reset()
-                    else:
+                    else: # 没找到，根据红色箭头移动寻找
+                        if self.checkup_stop_func():continue
                         self.sco_blocking_request.send_request() # 向SCO申请暂停Tactic执行
                         if True: # set to False when debug this module
-                            self.sco_blocking_request.waiting_until_reply(stop_func=self.checkup_stop_func, timeout=60)
+                            print(self.sco_blocking_request.waiting_until_reply(stop_func=self.checkup_stop_func, timeout=60))
                         r = self._moving_find_enemy()
                         self.sco_blocking_request.recovery_request() # 解除申请
                         if not r:
+                            if self.checkup_stop_func():continue
                             if not self._is_in_combat():
                                 logger.debug(f"AimOperator: No enemy exist.")
                                 self.enemy_flag = False
                 else:
-                    if self._is_enemy_too_far():
+                    if self._is_enemy_too_far(): # 敌人是否太远
+                        if self.checkup_stop_func():continue
                         self.sco_blocking_request.send_request()
                         if True: # set to False when debug this module
-                            self.sco_blocking_request.waiting_until_reply(stop_func=self.checkup_stop_func, timeout=60)
+                            print(self.sco_blocking_request.waiting_until_reply(stop_func=self.checkup_stop_func, timeout=60))
                         self._keep_distance_with_enemy()
                         self.sco_blocking_request.recovery_request() # 解除申请
             
@@ -148,10 +151,9 @@ class AimOperator(BaseThreading):
             return False
         # while self.enemy_loops < self.max_number_of_enemy_loops: # 当搜索敌人次数小于最大限制次数时，开始搜索
         for i in range(15):
-            if self.checkup_stop_func():
-                return
+            if i%4==0:
+                if self.checkup_stop_func():return
             combat_lib.chara_waiting(itt, self.checkup_stop_func)
-            # self.itt.move_to(150, 0, relative=True)
             movement.cview(15)
             ret_points = self.get_enemy_feature()
             if ret_points is None:
@@ -169,8 +171,7 @@ class AimOperator(BaseThreading):
         logger.debug("_is_blood_bar_exist")
         while 1:
             time.sleep(0.2)
-            if self.checkup_stop_func():
-                return
+            if self.checkup_stop_func():return
             if not combat_lib.combat_statement_detection()[0]:
                 return False
             if t.reached():
@@ -178,6 +179,8 @@ class AimOperator(BaseThreading):
     
     def _is_in_combat(self):
         for i in range(40):
+            if i%8==0:
+                if self.checkup_stop_func():return
             movement.cview(12)
             r = combat_lib.combat_statement_detection()
             if r[0] or r[1]:
@@ -211,6 +214,7 @@ class AimOperator(BaseThreading):
             logger.debug(f"no enemy exist, break")
             return False
         while 1:
+            if self.checkup_stop_func():return
             movement.cview(20)
             # itt.delay(0.1)
             r = combat_lib.combat_statement_detection()
@@ -218,10 +222,15 @@ class AimOperator(BaseThreading):
                 break
         
         itt.key_down('w')
+        move_timer = AdvanceTimer(15)
         while 1:
             if self.checkup_stop_func():
                 itt.key_up('w')
                 return
+            if move_timer.reached():
+                itt.key_up('w')
+                logger.debug(f"_moving_find_enemy timeout")
+                return False
             if combat_lib.combat_statement_detection()[0]:
                 itt.key_up('w')
                 if self._is_blood_bar_exist():
@@ -229,9 +238,11 @@ class AimOperator(BaseThreading):
                     logger.info(f"_moving_find_enemy: move to enemy closer")
                     r = self._keep_distance_with_enemy()
                     if r:
+                        itt.key_up('w')
                         return True
                     else:
                         logger.info(f"_moving_find_enemy: refind enemy: 2")
+                        itt.key_up('w')
                         return self._moving_find_enemy()
                 else:
                     itt.key_down('w')
