@@ -8,7 +8,7 @@
         "Qlast_time": 0,
         "vision": "Geo",
         "position":"Normal",
-        "trigger":"",
+        "trigger":"e_ready",
         "tactic_group":"e?e:none;q?q:none"
     },
     "Bennett": {
@@ -20,7 +20,7 @@
         "Qcd_time": 15,
         "position": "Normal",
         "vision":"Pyro",
-        "trigger":"",
+        "trigger":"e_ready",
         "tactic_group": "e?e:none;q?q:none"
     },
     "Ningguang": {
@@ -32,7 +32,7 @@
         "Qcd_time": 12,
         "position": "Normal",
         "vision":"Geo",
-        "trigger":"",
+        "trigger":"idle",
         "tactic_group": "e?e.500:none;q?q:none;a,700,a,500,a~"
         
     },
@@ -85,7 +85,7 @@
         "Qcd_time": 15,
         "position": "Normal",
         "vision":"Cryo",
-        "trigger":"",
+        "trigger":"idle",
         "tactic_group": "e?e:none;q?q:none;"
         
     },
@@ -98,7 +98,7 @@
         "Qcd_time": 18,
         "position": "Normal",
         "vision":"Hydro",
-        "trigger":"",
+        "trigger":"e_ready",
         "tactic_group": "e?e.e:none;q?q:none;#@q?a:none;"
         
     },
@@ -111,7 +111,7 @@
         "Qlast_time": 5,
         "Qcd_time": 20,
         "vision":"Cryo",
-        "trigger":"",
+        "trigger":"e_ready",
         "position": "Normal"
     
     },
@@ -124,8 +124,8 @@
         "Qlast_time": 12,
         "Qcd_time": 20,
         "vision":"Cryo",
-        "trigger":"",
-        "position": "Normal"
+        "trigger":"e_ready",
+        "position": "Shield"
 
     },
     "Xiangling": {
@@ -150,7 +150,7 @@
         "Qlast_time": 12,
         "Qcd_time": 20,
         "vision":"Cryo",
-        "trigger":"",
+        "trigger":"e_ready",
         "position": "Normal"
         
     },
@@ -163,7 +163,7 @@
         "Qlast_time": 8,
         "Qcd_time": 15,
         "vision":"Anemo",
-        "trigger":"",
+        "trigger":"e_ready",
         "position": "Normal"
         
     },
@@ -176,7 +176,7 @@
         "Qlast_time": 7,
         "Qcd_time": 18,
         "vision":"Electro",
-        "trigger":"",
+        "trigger":"e_ready",
         "position": "Normal"
         
     },
@@ -189,7 +189,7 @@
         "Qlast_time": 0,
         "Qcd_time": 15,
         "vision":"Pyro",
-        "trigger":"",
+        "trigger":"idle",
         "position": "Normal"
         
     },
@@ -202,7 +202,7 @@
         "Qlast_time": 0,
         "Qcd_time": 15,
         "vision":"Hydro",
-        "trigger":"",
+        "trigger":"e_ready",
         "position": "Normal"
         
     }
