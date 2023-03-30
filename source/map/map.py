@@ -9,6 +9,7 @@ from source.map.data.teleporter import DICT_TELEPORTER
 from source.map.detection.bigmap import BigMap
 from source.map.detection.minimap import MiniMap
 from source.map.extractor.convert import MapConverter
+from source.map.position.position import *
 from source.util import *
 
 REGION_TEYVAT = [
@@ -39,14 +40,14 @@ class Map(MiniMap, BigMap, MapConverter):
         self.smallmap_upd_timer = timer_module.Timer(2)
         self.small_map_init_flag = False
 
-    def _upd_smallmap(self):
+    def _upd_smallmap(self) -> None:
         if itt.get_img_existence(asset.ui_main_win, is_log=False):
             if not self.small_map_init_flag:
                 self.reinit_smallmap()
                 self.small_map_init_flag = True
             self.update_position(itt.capture(jpgmode=0))
 
-    def _upd_bigmap(self):
+    def _upd_bigmap(self) -> None:
         if ui_control.verify_page(UIPage.page_bigmap):
             self.update_bigmap(itt.capture(jpgmode=0))
 
@@ -56,28 +57,28 @@ class Map(MiniMap, BigMap, MapConverter):
         #     self.smallmap_upd_timer.reset()
         return self.convert_GIMAP_to_cvAutoTrack(self.position)
 
-    def reinit_smallmap(self):
+    def reinit_smallmap(self) -> None:
         if ui_control.verify_page(UIPage.page_main):
             ui_control.ui_goto(UIPage.page_bigmap)
-            self.init_position(tuple(map(int, list(self.get_bigmap_posi(return_position_format=COORDINATE_GIMAP)))))
+            self.init_position(tuple(map(int, list(self.get_bigmap_posi().tianli))))
             ui_control.ui_goto(UIPage.page_main)
             self.small_map_init_flag=True
 
-    def while_until_no_excessive_error(self):
+    def while_until_no_excessive_error(self) -> None:
         self.reinit_smallmap()
 
-    def get_direction(self):
+    def get_direction(self) -> float:
         imsrc = cv2.cvtColor(itt.capture(jpgmode=0),cv2.COLOR_BGR2RGB)
         self.update_direction(imsrc)
         # print(self.direction)
         return self.direction
     
-    def get_rotation(self):
+    def get_rotation(self) -> float:
         self.update_rotation(itt.capture(jpgmode=0))
         # print(self.direction)
         return self.rotation
 
-    def check_bigmap_scaling(self):
+    def check_bigmap_scaling(self) -> None:
         if not itt.get_img_existence(asset.BigMapScaling):
             origin_page = ui_control.get_page()
             while not itt.appear_then_click(asset.SwitchMapAreaButton): itt.delay(0.2)
@@ -90,16 +91,13 @@ class Map(MiniMap, BigMap, MapConverter):
                 ui_control.ui_goto(UIPage.page_main)
                 ui_control.ui_goto(UIPage.page_bigmap)
     
-    def get_bigmap_posi(self, is_upd=True, return_position_format: str = COORDINATE_TIANLI) -> np.ndarray:
+    def get_bigmap_posi(self, is_upd=True) -> GIMAPPosition:
         self.check_bigmap_scaling()
         if is_upd:
             self._upd_bigmap()
         logger.info(f"bigmap posi: {self.convert_GIMAP_to_cvAutoTrack(self.bigmap)}")
-        if return_position_format == COORDINATE_TIANLI:
-            return self.convert_GIMAP_to_cvAutoTrack(self.bigmap)
-        elif return_position_format == COORDINATE_GIMAP:
-            return np.array(self.bigmap)
-        return np.array(self.bigmap)
+        return GIMAPPosition(self.bigmap)
+
 
     def _move_bigmap(self, target_posi, float_posi=0) -> list:
         """move bigmap center to target position
@@ -137,7 +135,7 @@ class Map(MiniMap, BigMap, MapConverter):
                 itt.move_to(-10, -10, relative=True)
                 if i % 2 == 0:
                     itt.left_down()
-        curr_posi = self.get_bigmap_posi()
+        curr_posi = self.get_bigmap_posi().gimap
         dx = min((curr_posi[0] - target_posi[0]) * self.MAP_POSI2MOVE_POSI_RATE, self.BIGMAP_MOVE_MAX)
         dx = max(dx, -self.BIGMAP_MOVE_MAX)
         dy = min((curr_posi[1] - target_posi[1]) * self.MAP_POSI2MOVE_POSI_RATE, self.BIGMAP_MOVE_MAX)
@@ -153,7 +151,7 @@ class Map(MiniMap, BigMap, MapConverter):
         # if itt.get_img_existence(asset.confirm):
         # itt.key_press('esc')
 
-        after_move_posi = self.get_bigmap_posi()
+        after_move_posi = self.get_bigmap_posi().gimap
 
         if euclidean_distance(self.convert_cvAutoTrack_to_InGenshinMapPX(after_move_posi),
                               self.convert_cvAutoTrack_to_InGenshinMapPX(target_posi)) <= self.TP_RANGE:
@@ -165,14 +163,14 @@ class Map(MiniMap, BigMap, MapConverter):
                 np.array([screen_center_x, screen_center_y])
             )
 
-        if euclidean_distance(self.get_bigmap_posi(is_upd=False), target_posi) <= self.BIGMAP_TP_OFFSET:
+        if euclidean_distance(self.get_bigmap_posi(is_upd=False).gimap, target_posi) <= self.BIGMAP_TP_OFFSET:
             if IS_DEVICE_PC:
                 return list([1920 / 2, 1080 / 2])  # screen center
             else:
                 return list([1024 / 2, 768 / 2])
         else:
             itt.delay(0.2, comment="wait for a moment")
-            if euclidean_distance(self.get_bigmap_posi(is_upd=False), curr_posi) <= self.BIGMAP_TP_OFFSET:
+            if euclidean_distance(self.get_bigmap_posi(is_upd=False).gimap, curr_posi) <= self.BIGMAP_TP_OFFSET:
                 return self._move_bigmap(target_posi=target_posi, float_posi=float_posi + 45)
             else:
                 return self._move_bigmap(target_posi=target_posi)
@@ -197,7 +195,7 @@ class Map(MiniMap, BigMap, MapConverter):
                     min_dist = i_dist
         return min_teleporter
 
-    def bigmap_tp(self, posi: list, tp_mode=0, tp_type: list = None):
+    def bigmap_tp(self, posi: list, tp_mode=0, tp_type: list = None) -> TianLiPosition:
         """
 
         传送到指定坐标。
@@ -280,7 +278,7 @@ class Map(MiniMap, BigMap, MapConverter):
 
         self.reinit_smallmap()
         
-        return tp_posi
+        return TianLiPosition(tp_posi)
 
 
 genshin_map = Map()
