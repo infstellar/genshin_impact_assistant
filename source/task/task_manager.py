@@ -46,8 +46,7 @@ class TaskManager(BaseThreading):
         
     def start_stop_tasklist(self):
         self.start_tasklist_flag = not self.start_tasklist_flag
-        if self.curr_task.is_task_running:
-            self.curr_task.terminate_task()
+        self.curr_task.stop_threading()
 
     def start_stop_task(self, task_name):
         if not self.reg_task_flag:
@@ -67,15 +66,17 @@ class TaskManager(BaseThreading):
                 pass
             logger.info(t2t("Task") + task_name + t2t(" Start."))
             self.reg_task_flag = True
-            self.curr_task.task_running()
+            self._add_sub_threading(self.curr_task)
+            self.curr_task.continue_threading()
             
             # register sub-threading
-            for i in self.curr_task.thread_list:
-                self._add_sub_threading(i) # start thread
+            # for i in self.curr_task.thread_list:
+            #     self._add_sub_threading(i) # start thread
         else:
             logger.info(t2t("End Task"))
-            if self.curr_task.is_task_running:
-                self.curr_task.terminate_task()
+            # if self.curr_task.is_task_running:
+            #     self.curr_task.terminate_task()
+            self.curr_task.stop_threading()
             self.sub_threading_list = []
             self.reg_task_flag = not self.reg_task_flag
 
@@ -97,12 +98,12 @@ class TaskManager(BaseThreading):
                             break
                         if self.start_tasklist_flag == False:
                             break
-                        if not self.curr_task.is_task_running:
+                        if self.curr_task.pause_threading_flag:
                             break
-                        try:
-                            self.curr_task.exec_task()
-                        except TaskEndException as e:
-                            logger.info(f"Task end manually")
+                        # try:
+                        #     self.curr_task.exec_task()
+                        # except TaskEndException as e:
+                        #     logger.info(f"Task end manually")
                         time.sleep(0.2)
                     logger.info(f"task {i} end.")
                     self.start_stop_task(i)

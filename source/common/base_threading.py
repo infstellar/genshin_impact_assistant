@@ -35,6 +35,7 @@ class BaseThreading(threading.Thread):
 
     def stop_threading(self):
         self.stop_threading_flag = True
+        self.pause_threading_flag = True
         for i in self.sub_threading_list:
             i.stop_threading()
     

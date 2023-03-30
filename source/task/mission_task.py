@@ -15,11 +15,12 @@ class MissionTask(TaskTemplate):
         r = load_json(load_json()["mission_group"], f"{CONFIG_PATH}\\mission_groups")
         return r["missions"]
     
-    def exec_task(self):
+    def loop(self):
         self.MM.set_mission_list(self._analyze_mission_group())
         self.MM.start_missions()
         while 1:
+            if self.checkup_stop_func():return
             time.sleep(1)
             if self.MM.pause_threading_flag:
                 break
-        self.task_end()
+        self.pause_threading()

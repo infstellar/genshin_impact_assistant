@@ -8,6 +8,8 @@
 
 2. 若shape=xxx,xxx,4, 那么请确认原神分辨率为1080p，同时确认原神启动器窗口关闭。
 
+3. 如果系统时Windows11，请按照这个[issue](https://github.com/GengGode/cvAutoTrack/issues/9)设置
+
 </br></br>
 
 - 战斗时，设置了策略，但不切换到Q技能已经就绪的角色怎么办？

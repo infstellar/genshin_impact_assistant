@@ -48,10 +48,13 @@ class DomainTask(TaskTemplate):
     
     def _enter_domain(self):
         while 1:
+            if self.checkup_stop_func():return
             itt.key_press('f')
             if not f_recognition():
                 break
-        while not itt.get_img_existence(asset.solo_challenge): itt.delay("animation")
+        while not itt.get_img_existence(asset.solo_challenge):
+            if self.checkup_stop_func():return
+            itt.delay("animation")
         itt.delay(1,comment="genshin animation")
         from source.api.pdocr_complete import ocr
         from source.api.pdocr_api import SHAPE_MATCHING, ACCURATE_MATCHING
@@ -70,6 +73,7 @@ class DomainTask(TaskTemplate):
         # itt.delay(1, comment="too fast TAT")
         ctimer = timer_module.TimeoutTimer(5)
         while 1:
+            if self.checkup_stop_func():return
             time.sleep(0.2)
 
             itt.appear_then_click(asset.solo_challenge)
@@ -91,6 +95,7 @@ class DomainTask(TaskTemplate):
             # logger.info('start next domain.')
             self.last_domain_times -= 1
             while 1:
+                if self.checkup_stop_func():return
                 r = itt.appear_then_click(asset.conti_challenge)
                 if r:
                     break
@@ -101,11 +106,13 @@ class DomainTask(TaskTemplate):
             logger.info(t2t('次数结束。退出秘境'))
             # logger.info('no more times. exit domain.')
             while 1:
+                if self.checkup_stop_func():return
                 r = itt.appear_then_click(asset.exit_challenge)
                 if r:
                     break
+                
             # exit all threads
-            self.task_end()
+            self.pause_threading()
             time.sleep(10)
 
     def _check_state(self):
@@ -118,7 +125,7 @@ class DomainTask(TaskTemplate):
             logger.info(t2t("Unknown UI page"))
             ui_control.ui_goto(UIPage.page_main)
 
-    def exec_task(self):
+    def loop(self):
         if self.flow_mode == TI.DT_INIT:
             self._check_state()
             # self.flow_mode = TI.DT_MOVE_TO_DOMAIN
@@ -126,6 +133,7 @@ class DomainTask(TaskTemplate):
         if self.flow_mode == TI.DT_MOVE_TO_DOMAIN:
             self.TMFCF.start_flow()
             while 1:
+                if self.checkup_stop_func():return
                 time.sleep(0.2)
                 if self.TMFCF.pause_threading_flag:
                     break
@@ -139,6 +147,7 @@ class DomainTask(TaskTemplate):
             self.dfc.start_flow()
             # time.sleep(1)
             while 1:
+                if self.checkup_stop_func():return
                 time.sleep(0.2)
                 if self.dfc.pause_threading_flag:
                     break
@@ -152,4 +161,4 @@ if __name__ == '__main__':
     # dmt.flow_mode = TI.DT_IN_DOMAIN
     while 1:
         time.sleep(0.2)
-        dmt.exec_task()
+        dmt.start()
