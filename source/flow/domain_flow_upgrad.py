@@ -19,10 +19,6 @@ class DomainFlowConnector(FlowConnector):
         self.checkup_stop_func = None
         chara_list = combat_lib.get_chara_list()
         self.combat_loop = combat_loop.Combat_Controller(chara_list)
-        self.combat_loop.setDaemon(True)
-
-        self.combat_loop.pause_threading()
-        self.combat_loop.start()
         
         self.lockOnFlag = 0
         self.move_timer = timer_module.Timer()
@@ -239,6 +235,9 @@ class DomainFlowController(FlowController):
                          current_flow_id=ST.INIT_MOVETO_CHALLENGE,
                          flow_name="DomainFlow")
         self.flow_connector = self.flow_connector #type: DomainFlowConnector
+        
+        self._add_sub_threading(self.flow_connector.combat_loop)
+        
         
         self.append_flow(MoveToChallenge(self.flow_connector))
         self.append_flow(Challenge(self.flow_connector))

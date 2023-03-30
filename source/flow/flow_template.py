@@ -118,7 +118,6 @@ class FlowController(base_threading.BaseThreading):
         self.flow_connector = flow_connector
         self.get_while_sleep = flow_connector.get_while_sleep
         self.flow_connector.checkup_stop_func = self.checkup_stop_func
-        
     
     def start_flow(self):
         self.continue_threading()
