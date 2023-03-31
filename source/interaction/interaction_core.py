@@ -103,7 +103,7 @@ class InteractionBGD:
         """窗口客户区截图
 
         Args:
-            posi ( [y1,x1,y2,x2] ): 截图区域的坐标, y2>y1,x2>x1. 全屏截图时为None。
+            posi ( [x1,y1,x2,y2] ): 截图区域的坐标, y2>y1,x2>x1. 全屏截图时为None。
             shape (str): 为'yx'或'xy'.决定返回数组是[1080,1920]或[1920,1080]。
             jpgmode(int): 
                 0:return jpg (3 channels, delete the alpha channel)
@@ -160,17 +160,22 @@ class InteractionBGD:
             img = cv2.cvtColor(img, cv2.COLOR_BGRA2GRAY)
             template = cv2.cvtColor(template, cv2.COLOR_BGRA2GRAY)
         res_posi = []
-        result = cv2.matchTemplate(img, template, cv2.TM_CCORR_NORMED)  # TM_CCOEFF_NORMED
+        res = cv2.matchTemplate(img, template, cv2.TM_CCORR_NORMED)
+        # res = cv2.matchTemplate(img, template, cv2.TM_CCORR_NORMED)  # TM_CCOEFF_NORMED
         # img_manager.qshow(template)
-        h, w = template.shape[:2]  # 获取模板高和宽
-        loc = np.where(result >= threshold)  # 匹配结果小于阈值的位置
-        for pt in zip(*loc[::-1]):  # 遍历位置，zip把两个列表依次参数打包
-            right_bottom = (pt[0] + w, pt[1] + h)  # 右下角位置
-            if ret_mode == IMG_RECT:
-                res_posi.append([pt[0], pt[1], pt[0] + w, pt[1] + h])
-            else:
-                res_posi.append([pt[0] + w / 2, pt[1] + h / 2])
-            # cv2.rectangle((show_img), pt, right_bottom, (0,0,255), 2) #绘制匹配到的矩阵
+        # h, w = template.shape[:2]  # 获取模板高和宽
+        loc = np.where(res >= threshold)  # 匹配结果小于阈值的位置
+        
+        # Sort coordinates of matched pixels by their similarity score in descending order
+        matched_coordinates = sorted(zip(*loc[::-1]), key=lambda x: res[x[1], x[0]], reverse=True)
+        
+        # for pt in zip(*loc[::-1]):  # 遍历位置，zip把两个列表依次参数打包
+        #     right_bottom = (pt[0] + w, pt[1] + h)  # 右下角位置
+        #     if ret_mode == IMG_RECT:
+        #         res_posi.append([pt[0], pt[1], pt[0] + w, pt[1] + h])
+        #     else:
+        #         res_posi.append([pt[0] + w / 2, pt[1] + h / 2])
+        #     # cv2.rectangle((show_img), pt, right_bottom, (0,0,255), 2) #绘制匹配到的矩阵
         if is_show_res:
             show_img = img.copy()
             # print(*loc[::-1])
@@ -182,7 +187,7 @@ class InteractionBGD:
             cv2.waitKey(0)  # 获取按键的ASCII码
             cv2.destroyAllWindows()  # 释放所有的窗口
 
-        return res_posi
+        return matched_coordinates
 
     def similar_img(self, img, target, is_gray=False, is_show_res: bool = False, ret_mode=IMG_RATE):
         """单个图片匹配

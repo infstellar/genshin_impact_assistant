@@ -138,14 +138,14 @@ class MapConverter:
     
         return points
     
-    @classmethod
-    def convert_InGenshinMapPX_to_cvAutoTrack(cls, points, layer=LAYER_Teyvat) -> np.ndarray:
-        points = np.array(points)
+    # @classmethod
+    # def convert_InGenshinMapPX_to_cvAutoTrack(cls, points, layer=LAYER_Teyvat) -> np.ndarray:
+    #     points = np.array(points)
         
-        points = cls.convert_InGenshinMapPX_to_GIMAP(points, layer=layer)
-        points = cls.convert_GIMAP_to_cvAutoTrack(points)
+    #     points = cls.convert_InGenshinMapPX_to_GIMAP(points, layer=layer)
+    #     points = cls.convert_GIMAP_to_cvAutoTrack(points)
         
-        return points
+    #     return points
     
     @classmethod
     def convert_cvAutoTrack_to_InGenshinMapPX(cls, points, layer=LAYER_Teyvat) -> np.ndarray:

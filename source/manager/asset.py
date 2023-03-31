@@ -135,6 +135,7 @@ PartySetupCharaName1=posi_manager.PosiTemplate()
 PartySetupCharaName2=posi_manager.PosiTemplate()
 PartySetupCharaName3=posi_manager.PosiTemplate()
 PartySetupCharaName4=posi_manager.PosiTemplate()
+CommissionIcon = ImgIcon(path=fr"{ROOT_PATH}\assets\imgs\Windows\map\big_map\points\commission.jpg")
 
 QTSX = TextTemplate(text=
 {

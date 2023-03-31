@@ -135,7 +135,7 @@ class Map(MiniMap, BigMap, MapConverter):
                 itt.move_to(-10, -10, relative=True)
                 if i % 2 == 0:
                     itt.left_down()
-        curr_posi = self.get_bigmap_posi().gimap
+        curr_posi = self.get_bigmap_posi().tianli
         dx = min((curr_posi[0] - target_posi[0]) * self.MAP_POSI2MOVE_POSI_RATE, self.BIGMAP_MOVE_MAX)
         dx = max(dx, -self.BIGMAP_MOVE_MAX)
         dy = min((curr_posi[1] - target_posi[1]) * self.MAP_POSI2MOVE_POSI_RATE, self.BIGMAP_MOVE_MAX)
@@ -151,7 +151,7 @@ class Map(MiniMap, BigMap, MapConverter):
         # if itt.get_img_existence(asset.confirm):
         # itt.key_press('esc')
 
-        after_move_posi = self.get_bigmap_posi().gimap
+        after_move_posi = self.get_bigmap_posi().tianli
 
         if euclidean_distance(self.convert_cvAutoTrack_to_InGenshinMapPX(after_move_posi),
                               self.convert_cvAutoTrack_to_InGenshinMapPX(target_posi)) <= self.TP_RANGE:
@@ -163,14 +163,14 @@ class Map(MiniMap, BigMap, MapConverter):
                 np.array([screen_center_x, screen_center_y])
             )
 
-        if euclidean_distance(self.get_bigmap_posi(is_upd=False).gimap, target_posi) <= self.BIGMAP_TP_OFFSET:
+        if euclidean_distance(self.get_bigmap_posi(is_upd=False).tianli, target_posi) <= self.BIGMAP_TP_OFFSET:
             if IS_DEVICE_PC:
                 return list([1920 / 2, 1080 / 2])  # screen center
             else:
                 return list([1024 / 2, 768 / 2])
         else:
             itt.delay(0.2, comment="wait for a moment")
-            if euclidean_distance(self.get_bigmap_posi(is_upd=False).gimap, curr_posi) <= self.BIGMAP_TP_OFFSET:
+            if euclidean_distance(self.get_bigmap_posi(is_upd=False).tianli, curr_posi) <= self.BIGMAP_TP_OFFSET:
                 return self._move_bigmap(target_posi=target_posi, float_posi=float_posi + 45)
             else:
                 return self._move_bigmap(target_posi=target_posi)
@@ -287,6 +287,6 @@ if __name__ == '__main__':
     # genshin_map.bigmap_tp(genshin_map.convert_GIMAP_to_cvAutoTrack([6642.003, 5485.38]),
     #                       tp_type=["Domain"])  # tp to *染之庭
     while 1:
-        time.sleep(0.05)
-        print(genshin_map.get_direction())
+        input()
+        print(genshin_map.get_bigmap_posi().tianli)
     
