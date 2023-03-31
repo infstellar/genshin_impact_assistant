@@ -48,7 +48,8 @@ class CollectorFlowConnector(FlowConnector):
         self.is_combat = True
         self.is_activate_pickup = False
         self.pickup_points = []
-        
+
+        self.combat_stop_func = combat_lib.CSDL.get_combat_state
         self.pickup_points_index = 0
 
         self.puo = pickup_operator.PickupOperator()
@@ -60,6 +61,7 @@ class CollectorFlowConnector(FlowConnector):
     def reset(self):
         self.MODE = "PATH"
         self.collection_name = ""
+        self.combat_stop_func = combat_lib.CSDL.get_combat_state
         self.collector_type = COLLECTION
         self.is_combat = True
         self.is_activate_pickup = False
@@ -101,7 +103,7 @@ class CollectionCombat(FlowTemplate):
             self._set_rfc(FC.END)
             
     def state_in(self):
-        if combat_lib.CSDL.get_combat_state() == False and self.waiting_enemy_timer.reached():
+        if self.upper.combat_stop_func() == False and self.waiting_enemy_timer.reached():
             self.upper.stop_combat()
             self._next_rfc()
 
@@ -184,6 +186,7 @@ class CollectorFlowController(FlowController):
             collection_name =  None,
             collector_type =  None,
             is_combat =  None,
+            combat_stop_func = None,
             is_activate_pickup =  None,
             pickup_points = None
             ):
@@ -199,6 +202,8 @@ class CollectorFlowController(FlowController):
             self.flow_connector.is_activate_pickup = is_activate_pickup
         if pickup_points != None:
             self.flow_connector.pickup_points = pickup_points
+        if combat_stop_func != None:
+            self.flow_connector.combat_stop_func = combat_stop_func
         
 
     def reset(self):

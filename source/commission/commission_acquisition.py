@@ -11,21 +11,21 @@ example: ASmallStepForHilichurlsN1000P1000
 commission name: 
 thanks for https://genshin-dictionary.com/
 
-IncreasingDanger
-ASmallStepForHilichurls
-PudgyPyrotechnicians
-IcyIssues
-BigPudgyProblem
-RulesOfSafeTransportation
-DangerousHaul
-ImpregnableDefense
+IncreasingDanger IcD
+ASmallStepForHilichurls AASFH
+PudgyPyrotechnicians PP
+IcyIssues II
+BigPudgyProblem BPP
+RulesOfSafeTransportation ROST
+DangerousHaul DH
+ImpregnableDefense IpD
 etc.
 
 commission position: where commission located 
 format: (P/N)xxxC(P/N)xxx
-P:+ N:- C:comma
+P:+ N:- 
 example: -1000,1000 => N1000P1000
-offset within 60 TianLi Position
+offset within 50 TianLi Position
 """
 
 
@@ -38,6 +38,11 @@ def get_commission_object(commission_type, commission_position:GenshinPosition):
         if commission_index.COMMISSION_INDEX[i]["type"] == commission_type:
             if euclidean_distance(commission_index.COMMISSION_INDEX[i]["position"], posi)<=offset:
                 return commission_index.get_commission_object(i)
+    if commission_type == "AASFH":
+        import source.commission.general.ASSFH_general as GE
+        return GE
+        
+
 
 if __name__ == "__main__":
     a = get_commission_object("ASSFH",TianLiPosition([-999,999]))
