@@ -1,5 +1,6 @@
 import time
 from source.path_lib import *
+import pytz, datetime
 
 class Timer:
     def __init__(self, diff_start_time:float=0):
@@ -177,7 +178,31 @@ class FileTimer(Timer):
         with open(self.path, 'w') as f:
             f.write(str(self.start_time))
             f.close()
-            
+
+class Genshin400Timer():
+    def __init__(self):
+        timer_name = "Genshin400"
+        self.path = os.path.join(ROOT_PATH, "config\\timer", timer_name+".txt")
+        if not os.path.exists(self.path):
+            with open(self.path, 'w') as f:
+                f.write("0")
+    
+    def _get_date(self):
+        tz = pytz.timezone('Etc/GMT-4') # 该时区为中国服务器的原神时区，GMT+4
+        t = datetime.datetime.now(tz)
+        date = t.strftime("%Y%m%d")
+        return date
+    
+    def is_new_day(self):
+        with open(self.path, 'r') as f:
+            filedate = str(f.read())
+        return filedate != self._get_date()
+    
+    def set_today(self):
+        with open(self.path, 'w') as f:
+                f.write(self._get_date())
+      
 if __name__ == '__main__':
-    a = FileTimer("test1")
-    print(a.get_diff_time())
+    a = Genshin400Timer()
+    print(a.is_new_day())
+    # print(a.get_diff_time())

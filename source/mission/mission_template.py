@@ -84,7 +84,7 @@ class MissionExecutor(BaseThreading):
         self.TMCF.set_parameter(MODE=MODE,stop_rule=stop_rule,target_posi=target_posi,path_dict=path_dict,to_next_posi_offset=to_next_posi_offset,special_keys_posi_offset=special_keys_posi_offset,reaction_to_enemy=reaction_to_enemy,is_tp=is_tp,is_reinit=is_reinit,is_precise_arrival=is_precise_arrival)
         self.TMCF.start_flow()
         while 1:
-            time.sleep(0.2)
+            time.sleep(0.6)
             if self.TMCF.pause_threading_flag:
                 break
             if self._is_exception():

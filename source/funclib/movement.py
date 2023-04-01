@@ -2,7 +2,7 @@ from source.interaction.interaction_core import itt
 from source.funclib import small_map
 from source.util import *
 from source.funclib import generic_lib
-from source.interaction.minimap_tracker import tracker
+from source.map.map import genshin_map
 from source.manager import asset
 
 itt = itt
@@ -76,10 +76,10 @@ def calculate_delta_angle(cangle,tangle):
         dangle = (360+dangle)
     return dangle
 
-def change_view_to_angle(tangle, stop_func=lambda:False, maxloop=25, offset=5, print_log=True, angle_function=tracker.get_rotation):
+def change_view_to_angle(tangle, stop_func=lambda:False, maxloop=25, offset=5, print_log=True):
     i = 0
     while 1:
-        cangle = angle_function()
+        cangle = genshin_map.get_rotation()
         dangle = calculate_delta_angle(cangle,tangle)
         if abs(dangle) < offset:
             break
@@ -144,7 +144,7 @@ def view_to_angle_domain(angle, stop_func, deltanum=0.65, maxloop=100, corrected
 #             logger.debug('last degree: ' + str(degree))
 
 def calculate_posi2degree(pl):
-    tx, ty = tracker.get_position()
+    tx, ty = genshin_map.get_position()
     degree = generic_lib.points_angle([tx, ty], pl, coordinate=generic_lib.NEGATIVE_Y)
     if abs(degree)<1:
         return 0
@@ -164,7 +164,7 @@ def move_to_position(posi, offset=5, stop_func=lambda:False, delay=0.1):
     itt.key_down('w')
     while 1:
         time.sleep(delay)
-        curr_posi = tracker.get_position()
+        curr_posi = genshin_map.get_position()
         if abs(euclidean_distance(curr_posi, posi))<=offset:
             break
   

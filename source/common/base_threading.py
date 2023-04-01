@@ -49,11 +49,22 @@ class BaseThreading(threading.Thread):
         return not self.pause_threading_flag
 
     def checkup_stop_func(self):
+        pt = time.time()
+        def output_log(t):
+            if t<0.05:
+                pass
+            elif t<0.1:
+                logger.trace(f"checkup_stop_func spend to long: {t} {self.name}")
+            else:
+                logger.warning(f"checkup_stop_func spend to long: {t} {self.name}")
         if self.pause_threading_flag or self.stop_threading_flag:
+            output_log(time.time()-pt)
             return True
         for i in self.stop_func_list:
             if i():
+                output_log(time.time()-pt)
                 return True
+        output_log(time.time()-pt)
         return False
 
     def add_stop_func(self, x):

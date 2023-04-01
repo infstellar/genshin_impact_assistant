@@ -30,20 +30,21 @@ offset within 50 TianLi Position
 
 
 
-def get_commission_object(commission_type, commission_position:GenshinPosition):
+def get_commission_object(commission_type, commission_position:list):
     offset = 50
 
-    posi = commission_position.tianli
+    posi = commission_position
     for i in commission_index.COMMISSION_INDEX:
         if commission_index.COMMISSION_INDEX[i]["type"] == commission_type:
             if euclidean_distance(commission_index.COMMISSION_INDEX[i]["position"], posi)<=offset:
                 return commission_index.get_commission_object(i)
-    if commission_type == "AASFH":
-        import source.commission.general.ASSFH_general as GE
-        return GE
-        
-
+    logger.info(f"get commission fail, try to get general commission")
+    if commission_type == "ASmallStepForHilichurls":
+        import source.commission.general.ASmallStepForHilichurls_general as GE
+        return GE.ASmallStepForHilichurlsGeneral(commission_type, commission_position)
+    logger.error(f"get commission fail: {commission_type, commission_position}")
+    return False
 
 if __name__ == "__main__":
-    a = get_commission_object("ASSFH",TianLiPosition([-999,999]))
+    a = get_commission_object("ASmallStepForHilichurls",TianLiPosition([-999,999]))
     print()

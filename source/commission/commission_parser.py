@@ -5,8 +5,10 @@ from source.ui import page as UIPages
 from source.commission.util import *
 from source.interaction.interaction_core import itt
 from source.manager import asset
-from source.commission.commission_index import COMMISSION_INDEX, get_commission_object
+from source.commission.commission_index import COMMISSION_INDEX
+from source.commission.commission_acquisition import get_commission_object
 from source.api.pdocr_complete import ocr
+from source.common.timer_module import Genshin400Timer
 
 
 class CommissionParser():
@@ -65,6 +67,15 @@ class CommissionParser():
                         })
         return self.commission_dicts
     
+    def _set_and_save_and_load_commission_dicts(self):
+        g4t = Genshin400Timer()
+        if g4t.is_new_day():
+            logger.info(f"new genshin day, traverse mondstant commissions")
+            self.traverse_mondstant()
+            save_json(self.commission_dicts, json_name="commission_dict.json", default_path=rf"{CONFIG_PATH}\commission")
+            g4t.set_today()
+        else:
+            self.commission_dicts = load_json(json_name="commission_dict.json", default_path=rf"{CONFIG_PATH}\commission")
     def _detect_commission_type(self)->str:
         img = itt.capture(jpgmode=0)
         img_choose = crop(img.copy(), asset.BigmapChooseArea.position)
@@ -84,19 +95,22 @@ class CommissionParser():
         
         return None
         
-        
-    def get_commission_objects(self):
-        if len(self.commission_dicts) == 0:
-            self.traverse_mondstant()
-        if len(self.commission_dicts) == 0:
-            return False
-        commission_objects = []
-        # commission_index_positions = [COMMISSION_INDEX[i]["position"] for i in COMMISSION_INDEX]
-        for i in self.commission_dicts:
-            for ii in COMMISSION_INDEX:
-                if euclidean_distance(i, COMMISSION_INDEX[ii]["position"]) <= 30:
-                    commission_objects.append(ii)
-        return commission_objects
+    
+    def get_commissions_list(self):
+        return self._set_and_save_and_load_commission_dicts()
+      
+    # def get_commission_objects(self):
+    #     if len(self.commission_dicts) == 0:
+    #         self.traverse_mondstant()
+    #     if len(self.commission_dicts) == 0:
+    #         return False
+    #     commission_objects = []
+    #     # commission_index_positions = [COMMISSION_INDEX[i]["position"] for i in COMMISSION_INDEX]
+    #     for i in self.commission_dicts:
+    #         for ii in COMMISSION_INDEX:
+    #             if euclidean_distance(i, COMMISSION_INDEX[ii]["position"]) <= 30:
+    #                 commission_objects.append(ii)
+    #     return commission_objects
                     
             
 if __name__ == '__main__':

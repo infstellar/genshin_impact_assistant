@@ -1,4 +1,3 @@
-import keyboard
 from source.util import *
 from source.interaction.interaction_core import itt
 from source.common.base_threading import BaseThreading
@@ -20,6 +19,7 @@ class GenericEvent(BaseThreading):
             
     def run(self) -> None:
         '''if you're using this class, copy this'''
+        pt = time.time()
         while 1:
             time.sleep(self.while_sleep)
             if self.stop_threading_flag:
@@ -38,6 +38,9 @@ class GenericEvent(BaseThreading):
                 self.pause_threading_flag = True
                 continue
             '''write your code below'''
+            
+            logger.trace(f"time dilation rate: {self.while_sleep/(time.time()-pt)}")
+            pt = time.time()
             if INTERACTION_MODE == INTERACTION_DESKTOP_BACKGROUND or INTERACTION_DESKTOP:
                 if static_lib.W_KEYDOWN == True:
                     if self.w_down_flag == False:
@@ -63,8 +66,12 @@ class GenericEvent(BaseThreading):
                         logger.info(t2t("当前窗口焦点为") + str(win_name) + t2t("是原神窗口") + str(PROCESS_NAME) + t2t("，操作暂停 ") + str(5 - (time.time()%5)) +t2t(" 秒"))
                         time.sleep(5 - (time.time()%5))
                     bind()
+                    
+                    
+            
 
 if INTERACTION_MODE == INTERACTION_DESKTOP_BACKGROUND:
+    import keyboard
     keyboard.add_hotkey("ctrl+alt+9", unbind)
     keyboard.add_hotkey("ctrl+alt+shift+9", bind)
 logger.debug("start GenericEventThread")

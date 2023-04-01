@@ -735,6 +735,9 @@ def itt_test(itt: InteractionBGD):
 
 itt = InteractionBGD()
 
+# ge = source.common.generic_event.GenericEvent()
+# ge.start()
+
 if __name__ == '__main__':
     ib = InteractionBGD()
     rootpath = "D:\\Program Data\\vscode\\GIA\\genshin_impact_assistant\\dist\\imgs"

@@ -11,6 +11,7 @@ from source.map.detection.minimap import MiniMap
 from source.map.extractor.convert import MapConverter
 from source.map.position.position import *
 from source.util import *
+import threading
 
 REGION_TEYVAT = [
     "Inazuma",
@@ -39,6 +40,7 @@ class Map(MiniMap, BigMap, MapConverter):
 
         self.smallmap_upd_timer = timer_module.Timer(2)
         self.small_map_init_flag = False
+        self.lock = threading.Lock()
 
     def _upd_smallmap(self) -> None:
         if itt.get_img_existence(asset.ui_main_win, is_log=False):
@@ -74,8 +76,13 @@ class Map(MiniMap, BigMap, MapConverter):
         return self.direction
     
     def get_rotation(self) -> float:
+        self.lock.acquire()
+        pt = time.time()
         self.update_rotation(itt.capture(jpgmode=0))
+        if time.time()-pt>0.1:
+            logger.warning(f"get_rotation spent too long: {time.time()-pt}")
         # print(self.direction)
+        self.lock.release()
         return self.rotation
 
     def check_bigmap_scaling(self) -> None:
@@ -288,5 +295,5 @@ if __name__ == '__main__':
     #                       tp_type=["Domain"])  # tp to *染之庭
     while 1:
         input()
-        print(genshin_map.get_bigmap_posi().tianli)
+        print(genshin_map.get_rotation())
     

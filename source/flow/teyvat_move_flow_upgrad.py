@@ -139,28 +139,28 @@ class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon):
         self.history_position = []
         self.history_position_timer = timer_module.AdvanceTimer(limit=1)
 
-    def _calculate_next_priority_point(self, currentp, targetp):
-        float_distance = 35
-        # 计算当前点到所有优先点的曼哈顿距离
-        md = manhattan_distance_plist(currentp, self.upper.priority_waypoints_array)
-        nearly_pp_arg = np.argsort(md)
-        # 计算当前点到距离最近的50个优先点的欧拉距离
-        nearly_pp = self.upper.priority_waypoints_array[nearly_pp_arg[:50]]
-        ed = euclidean_distance_plist(currentp, nearly_pp)
-        # 将点按欧拉距离升序排序
-        nearly_pp_arg = np.argsort(ed)
-        nearly_pp = nearly_pp[nearly_pp_arg]
-        # 删除距离目标比现在更远的点
-        fd = euclidean_distance_plist(targetp, nearly_pp)
-        c2t_distance = euclidean_distance(currentp, targetp)
-        nearly_pp = np.delete(nearly_pp, (np.where(fd+float_distance >= (c2t_distance) )[0]), axis=0)
-        # 获得最近点
-        if len(nearly_pp) == 0:
-            return targetp
-        closest_pp = nearly_pp[0]
-        '''加一个信息输出'''
-        # print(currentp, closest_pp)
-        return closest_pp
+    # def _calculate_next_priority_point(self, currentp, targetp):
+    #     float_distance = 35
+    #     # 计算当前点到所有优先点的曼哈顿距离
+    #     md = manhattan_distance_plist(currentp, self.upper.priority_waypoints_array)
+    #     nearly_pp_arg = np.argsort(md)
+    #     # 计算当前点到距离最近的50个优先点的欧拉距离
+    #     nearly_pp = self.upper.priority_waypoints_array[nearly_pp_arg[:50]]
+    #     ed = euclidean_distance_plist(currentp, nearly_pp)
+    #     # 将点按欧拉距离升序排序
+    #     nearly_pp_arg = np.argsort(ed)
+    #     nearly_pp = nearly_pp[nearly_pp_arg]
+    #     # 删除距离目标比现在更远的点
+    #     fd = euclidean_distance_plist(targetp, nearly_pp)
+    #     c2t_distance = euclidean_distance(currentp, targetp)
+    #     nearly_pp = np.delete(nearly_pp, (np.where(fd+float_distance >= (c2t_distance) )[0]), axis=0)
+    #     # 获得最近点
+    #     if len(nearly_pp) == 0:
+    #         return targetp
+    #     closest_pp = nearly_pp[0]
+    #     '''加一个信息输出'''
+    #     # print(currentp, closest_pp)
+    #     return closest_pp
 
     def state_before(self):
         tracker.reinit_smallmap()
@@ -168,7 +168,11 @@ class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon):
         self.auto_move_timeout.reset()
         self.history_position_timer.reset()
         self.history_position = []
+        self.upper.while_sleep = 0.1
         self._next_rfc()
+    def state_after(self):
+        self.upper.while_sleep = 1
+        return super().state_after()
     
     def state_in(self):
         self.switch_motion_state()
@@ -184,8 +188,6 @@ class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon):
                 self._set_rfc(FC.END)
         # print(p1)
         movement.change_view_to_posi(p1, self.upper.checkup_stop_func)
-        if (not static_lib.W_KEYDOWN):
-            itt.key_down('w')
             
         # if len(tracker.history_posi) >= 29:
         #     p1 = tracker.history_posi[0][1:]
