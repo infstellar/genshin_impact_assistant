@@ -11,6 +11,7 @@ import cv2
 import win32gui, win32process, psutil
 import ctypes, pickle
 from PIL import Image, ImageDraw, ImageFont
+import traceback
 
 time.time()  # 防自动删除
 global GLOBAL_LANG, GLOBAL_DEVICE

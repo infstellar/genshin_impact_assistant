@@ -4,19 +4,12 @@ from source.manager.img_manager import LOG_WHEN_TRUE, LOG_ALL, LOG_NONE, LOG_WHE
 from path_lib import ASSETS_IMG, ASSETS_COMMON_IMG
 from source.manager.button_manager import Button
 from source.manager.text_manager import TextTemplate
+from source.manager.posi_manager import PosiTemplate
 
 # import scene_manager
 
-LEAVINGIN = TextTemplate(text=
-{
-    'zh_CN': '自动退出',
-    "en_US": 'Leaving in'
-}, cap_area = f"{ASSETS_IMG}\\common\\area\\LEAVINGIN.jpg")
-claim_rewards = TextTemplate(text=
-{
-    'zh_CN': '领取奖励',
-    "en_US": "Claim Rewards"
-})
+LEAVINGIN = TextTemplate(text={'zh_CN': '自动退出',"en_US": 'Leaving in'}, cap_area = f"{ASSETS_IMG}\\common\\area\\LEAVINGIN.jpg")
+claim_rewards = TextTemplate(text={'zh_CN': '领取奖励',"en_US": "Claim Rewards"})
 use_20x2resin = TextTemplate(text=
 {
     'zh_CN': '使用浓缩树脂',
@@ -102,7 +95,7 @@ ui_switch_to_time_menu = ImgIcon(path=f"{ASSETS_COMMON_IMG}\\ui\\switch_to_time_
                           print_log=LOG_WHEN_TRUE)
 ui_time_menu_core = ImgIcon(path=f"{ASSETS_COMMON_IMG}\\ui\\time_menu_core.jpg",
                           print_log=LOG_WHEN_TRUE, threshold=0.89)
-bigmap_choose_area = ImgIcon(path=f"{ASSETS_COMMON_IMG}\\ui\\bigmap_choose_area.jpg",  cap_posi='bbg')
+BigmapChooseArea = PosiTemplate(img_path=f"{ASSETS_COMMON_IMG}\\ui\\bigmap_choose_area.jpg")
 bigmap_tp = ImgIcon(path=f"{ASSETS_IMG}\\{GLOBAL_LANG}\\bigmap_tp.jpg",  cap_posi='bbg')
 start_challenge = Button(path=f"{ASSETS_IMG}\\{GLOBAL_LANG}\\start_challenge.jpg", print_log=LOG_WHEN_TRUE, threshold=0.98)
 switch_domain_area = posi_manager.PosiTemplate(img_path=f"{ASSETS_COMMON_IMG}\\area\\switch_challenge_area.jpg")
@@ -136,17 +129,21 @@ PartySetupCharaName2=posi_manager.PosiTemplate()
 PartySetupCharaName3=posi_manager.PosiTemplate()
 PartySetupCharaName4=posi_manager.PosiTemplate()
 CommissionIcon = ImgIcon(path=fr"{ROOT_PATH}\assets\imgs\Windows\map\big_map\points\commission.jpg")
+AreaSidebarCommissionName = PosiTemplate()
+SidebarIsCommissionExist = ImgIcon()
 
 QTSX = TextTemplate(text=
 {
     "zh_CN":"七天神像",
     "en_US":"Statues of The Seven"
-}, cap_area = bigmap_choose_area.cap_posi)
+}, cap_area = BigmapChooseArea.position)
 CSMD = TextTemplate(text=
 {
     "zh_CN":"传送锚点",
     "en_US": "Teleport Waypoint"
-}, cap_area = bigmap_choose_area.cap_posi)
+}, cap_area = BigmapChooseArea.position)
+ASmallStepForHilichurls = TextTemplate(text={"zh_CN":"丘丘人的一小步", "en_US": "A small step for hilichurls"})
+IncreasingDanger = TextTemplate(text={"zh_CN":"攀高危险", "en_US": "Increasing danger"})
 MapAreaMD = TextTemplate(text={
     "zh_CN":"蒙德"
 }, cap_area = SwitchMapArea.position)

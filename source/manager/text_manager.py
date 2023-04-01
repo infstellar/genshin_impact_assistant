@@ -1,7 +1,13 @@
 from source.util import *
 
-class TextTemplate():
-    def __init__(self, text:dict, cap_area=None) -> None:
+class TextTemplate:
+    def __init__(self, text:dict, cap_area=None, name=None) -> None:
+        if name is None:
+            (filename, line_number, function_name, texttt) = traceback.extract_stack()[-2]
+            self.name = texttt[:texttt.find('=')].strip()
+        else:
+            self.name = name
+            
         if cap_area == None:
             cap_area = [0,0,1920,1080]
         elif isinstance(cap_area, str):
@@ -16,7 +22,6 @@ class TextTemplate():
         
     def gettext(self):
         return self.origin_text[GLOBAL_LANG]
-
 
 
 

@@ -33,7 +33,7 @@ class Map(MiniMap, BigMap, MapConverter):
         # Set bigmap tp arguments
         self.MAP_POSI2MOVE_POSI_RATE = 0.2  # 移动距离与力度的比例
         self.BIGMAP_TP_OFFSET = 100  # 距离目标小于该误差则停止
-        self.BIGMAP_MOVE_MAX = 100  # 最大移动力度
+        self.BIGMAP_MOVE_MAX = 130  # 最大移动力度
         self.TP_RANGE = 350  # 在该像素范围内可tp
         self.MINIMAP_UPDATE_LIMIT = 0.1  # minimap更新最短时间
 
@@ -99,7 +99,7 @@ class Map(MiniMap, BigMap, MapConverter):
         return GIMAPPosition(self.bigmap)
 
 
-    def _move_bigmap(self, target_posi, float_posi=0) -> list:
+    def _move_bigmap(self, target_posi, float_posi=0, force_center = False) -> list:
         """move bigmap center to target position
 
         Args:
@@ -152,16 +152,16 @@ class Map(MiniMap, BigMap, MapConverter):
         # itt.key_press('esc')
 
         after_move_posi = self.get_bigmap_posi().tianli
-
-        if euclidean_distance(self.convert_cvAutoTrack_to_InGenshinMapPX(after_move_posi),
-                              self.convert_cvAutoTrack_to_InGenshinMapPX(target_posi)) <= self.TP_RANGE:
-            return list(
-                (self.convert_cvAutoTrack_to_InGenshinMapPX(target_posi))
-                -  # type: ignore
-                (self.convert_cvAutoTrack_to_InGenshinMapPX(after_move_posi))
-                +
-                np.array([screen_center_x, screen_center_y])
-            )
+        if not force_center:
+            if euclidean_distance(self.convert_cvAutoTrack_to_InGenshinMapPX(after_move_posi),
+                                self.convert_cvAutoTrack_to_InGenshinMapPX(target_posi)) <= self.TP_RANGE:
+                return list(
+                    (self.convert_cvAutoTrack_to_InGenshinMapPX(target_posi))
+                    -  # type: ignore
+                    (self.convert_cvAutoTrack_to_InGenshinMapPX(after_move_posi))
+                    +
+                    np.array([screen_center_x, screen_center_y])
+                )
 
         if euclidean_distance(self.get_bigmap_posi(is_upd=False).tianli, target_posi) <= self.BIGMAP_TP_OFFSET:
             if IS_DEVICE_PC:

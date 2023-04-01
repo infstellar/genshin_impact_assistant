@@ -2,32 +2,37 @@ from source.map.map import genshin_map
 from source.map.position.position import *
 from source.ui.ui import ui_control
 from source.ui import page as UIPages
-from source.util import *
+from source.commission.util import *
 from source.interaction.interaction_core import itt
 from source.manager import asset
 from source.commission.commission_index import COMMISSION_INDEX, get_commission_object
+from source.api.pdocr_complete import ocr
 
 
 class CommissionParser():
-    TRAVERSE_MONDSTADT_POSITION=[TianLiPosition([976, -6710]),
-                                 TianLiPosition([2488, -6448]),
-                                 TianLiPosition([3797, -6344]),
-                                 TianLiPosition([811, -5590]),
-                                 TianLiPosition([2571, -5485]),
-                                 TianLiPosition([1110, -4568]),
-                                 TianLiPosition([2733, -4542]),
-                                 TianLiPosition([4148, -4330]),
-                                 TianLiPosition([1670, -3418])]
+    TRAVERSE_MONDSTADT_POSITION=[TianLiPosition([1283.450352, -6343.497652]),
+                                 TianLiPosition([2489.331552, -6101.094052]),
+                                 TianLiPosition([3101.988752, -6431.458452]),
+                                 TianLiPosition([2860.607952, -5526.280452]),
+                                 TianLiPosition([2289.885552, -5515.029652]),
+                                 TianLiPosition([1698.707152, -5273.648852]),
+                                 TianLiPosition([2224.426352, -4798.046852]),
+                                 TianLiPosition([2156.921552, -3923.552852]),
+                                 TianLiPosition([2423.872352, -3427.494852]),
+                                 TianLiPosition([3367.916752, -4196.640452]),
+                                 TianLiPosition([3328.027552, -5106.932452])]
+    
+    
     
     def __init__(self) -> None:
-        self.commission_positions = []
+        self.commission_dicts = []
 
     def traverse_mondstant(self):
-        self.commission_positions = []
+        self.commission_dicts = []
         commission_positions = []
         ui_control.ensure_page(UIPages.page_bigmap)
         for posi in self.TRAVERSE_MONDSTADT_POSITION:
-            genshin_map._move_bigmap(posi.tianli)
+            genshin_map._move_bigmap(posi.tianli, force_center = True)
             cap_posi = [220,240,1920-200,1080-150]
             img = itt.capture(jpgmode=0)
             img = crop(img, cap_posi)
@@ -40,30 +45,62 @@ class CommissionParser():
                     delta_posi = genshin_map.convert_InGenshinMapPX_to_GIMAP(target_px_posi-np.array([SCREEN_CENTER_X,SCREEN_CENTER_Y]))
                     target_gimap_posi = curr_posi.gimap + delta_posi
                     target_tianli_posi = GIMAPPosition(target_gimap_posi).tianli
+                    
                     if len(commission_positions)>0:
-                        if min(euclidean_distance_plist(target_tianli_posi, commission_positions)) >= 50:
-                            commission_positions.append(target_tianli_posi)
+                        if not min(euclidean_distance_plist(target_tianli_posi, commission_positions)) >= 50:
+                            continue
+                    commission_positions.append(target_tianli_posi)
+                    
+                    itt.move_and_click(list(i))
+                    itt.delay("animation")
+                    com_type = self._detect_commission_type()
+                    itt.delay("animation")
+                    itt.key_press('esc')
+                    if com_type is None:
+                        continue
                     else:
-                        commission_positions.append(target_tianli_posi)
-        self.commission_positions = commission_positions
-        return commission_positions
+                        self.commission_dicts.append({
+                            "type":com_type,
+                            "position":list(target_tianli_posi)
+                        })
+        return self.commission_dicts
     
+    def _detect_commission_type(self)->str:
+        img = itt.capture(jpgmode=0)
+        img_choose = crop(img.copy(), asset.BigmapChooseArea.position)
+        img_sidebar = crop(img.copy(), asset.AreaSidebarCommissionName.position)
+        
+        if itt.get_img_existence(asset.SidebarIsCommissionExist, cap = img_sidebar):
+            ocr_res = ocr.get_all_texts(img_sidebar)
+        else:
+            ocr_res = ocr.get_all_texts(img_choose)
+        
+        for ocr_i in ocr_res:
+            for com_i in COMMISSION_NAMES:
+                if com_i.text in ocr_i:
+                    return com_i.name
+        
+        logger.warning(f"Unknown commission type: {ocr_res}")
+        
+        return None
+        
+        
     def get_commission_objects(self):
-        if len(self.commission_positions) == 0:
+        if len(self.commission_dicts) == 0:
             self.traverse_mondstant()
-        if len(self.commission_positions) == 0:
+        if len(self.commission_dicts) == 0:
             return False
-        commission_objects_name = []
+        commission_objects = []
         # commission_index_positions = [COMMISSION_INDEX[i]["position"] for i in COMMISSION_INDEX]
-        for i in self.commission_positions:
+        for i in self.commission_dicts:
             for ii in COMMISSION_INDEX:
                 if euclidean_distance(i, COMMISSION_INDEX[ii]["position"]) <= 30:
-                    commission_objects_name.append(ii)
-        return commission_objects_name
+                    commission_objects.append(ii)
+        return commission_objects
                     
             
 if __name__ == '__main__':
     cp = CommissionParser()
-    cp.commission_positions.append([-999,999])
-    a = cp.get_commission_objects()
+    # cp.commission_dicts.append([-999,999])
+    a = cp.traverse_mondstant()
     print()

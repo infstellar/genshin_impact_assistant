@@ -176,16 +176,16 @@ class InteractionBGD:
         #     else:
         #         res_posi.append([pt[0] + w / 2, pt[1] + h / 2])
         #     # cv2.rectangle((show_img), pt, right_bottom, (0,0,255), 2) #绘制匹配到的矩阵
-        if is_show_res:
-            show_img = img.copy()
-            # print(*loc[::-1])
-            for pt in zip(*loc[::-1]):  # 遍历位置，zip把两个列表依次参数打包
-                right_bottom = (pt[0] + w, pt[1] + h)  # 右下角位置
-                cv2.rectangle((show_img), pt, right_bottom, (0, 0, 255), 2)  # 绘制匹配到的矩阵
-            cv2.imshow("img", show_img)
-            cv2.imshow("template", template)
-            cv2.waitKey(0)  # 获取按键的ASCII码
-            cv2.destroyAllWindows()  # 释放所有的窗口
+        # if is_show_res:
+        #     show_img = img.copy()
+        #     # print(*loc[::-1])
+        #     for pt in zip(*loc[::-1]):  # 遍历位置，zip把两个列表依次参数打包
+        #         right_bottom = (pt[0] + w, pt[1] + h)  # 右下角位置
+        #         cv2.rectangle((show_img), pt, right_bottom, (0, 0, 255), 2)  # 绘制匹配到的矩阵
+        #     cv2.imshow("img", show_img)
+        #     cv2.imshow("template", template)
+        #     cv2.waitKey(0)  # 获取按键的ASCII码
+        #     cv2.destroyAllWindows()  # 释放所有的窗口
 
         return matched_coordinates
 
@@ -259,7 +259,7 @@ class InteractionBGD:
         else:
             return False
 
-    def get_img_existence(self, imgicon: img_manager.ImgIcon, is_gray=False, is_log=True, ret_mode = IMG_BOOL, show_res = False):
+    def get_img_existence(self, imgicon: img_manager.ImgIcon, is_gray=False, is_log=True, ret_mode = IMG_BOOL, show_res = False, cap = None):
         """检测图片是否存在
 
         Args:
@@ -271,8 +271,8 @@ class InteractionBGD:
             bool: bool
         """
         upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
-
-        cap = self.capture(posi=imgicon.cap_posi, jpgmode=imgicon.jpgmode)
+        if cap is None:
+            cap = self.capture(posi=imgicon.cap_posi, jpgmode=imgicon.jpgmode)
 
         matching_rate = self.similar_img(cap, imgicon.image)
         
