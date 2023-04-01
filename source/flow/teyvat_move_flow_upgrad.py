@@ -491,11 +491,20 @@ class TeyvatMoveFlowController(FlowController):
         if is_precise_arrival != None:
             self.flow_connector.is_precise_arrival = is_precise_arrival
         
-        
+
         
 if __name__ == '__main__':
+    genshin_map.reinit_smallmap()
+    while 1:
+        time.sleep(0.2)
+        
+        tx, ty = genshin_map.get_position()
+        degree = generic_lib.points_angle([tx, ty], [2083, -4844], coordinate=generic_lib.NEGATIVE_Y)
+        movement.change_view_to_angle(degree, lambda:False)
+    
     TMFC = TeyvatMoveFlowController()
-    TMFC.set_parameter(MODE="PATH",path_dict=load_json("te167910590161.json","assets\\TeyvatMovePath"), is_tp=True)
+    # TMFC.set_parameter(MODE="PATH",path_dict=load_json("te167910590161.json","assets\\TeyvatMovePath"), is_tp=True)
+    TMFC.set_parameter(MODE="AUTO", target_posi=[2083.714642000002,-4844.328552], is_tp=False)
     TMFC.start()
     TMFC.start_flow()
     while 1:

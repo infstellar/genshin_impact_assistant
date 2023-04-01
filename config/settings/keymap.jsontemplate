@@ -1,7 +1,3 @@
 {
-  "autoCombat": "",
-  "autoDomain": "",
-  "autoPickup": "",
-  "startstop": "[",
-  "task":"]"
+  "startstop": "["
 }

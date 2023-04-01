@@ -43,17 +43,21 @@ class Map(MiniMap, BigMap, MapConverter):
         self.lock = threading.Lock()
 
     def _upd_smallmap(self) -> None:
+        self.lock.acquire()
         if itt.get_img_existence(asset.ui_main_win, is_log=False):
-            if not self.small_map_init_flag:
-                self.reinit_smallmap()
-                self.small_map_init_flag = True
             self.update_position(itt.capture(jpgmode=0))
+        self.lock.release()
 
     def _upd_bigmap(self) -> None:
+        self.lock.acquire()
         if ui_control.verify_page(UIPage.page_bigmap):
             self.update_bigmap(itt.capture(jpgmode=0))
+        self.lock.release()
 
     def get_position(self):
+        # if not self.small_map_init_flag:
+        #     self.reinit_smallmap()
+        #     self.small_map_init_flag = True
         # if self.smallmap_upd_timer.get_diff_time() >= self.MINIMAP_UPDATE_LIMIT:
         self._upd_smallmap()
         #     self.smallmap_upd_timer.reset()
@@ -62,7 +66,7 @@ class Map(MiniMap, BigMap, MapConverter):
     def reinit_smallmap(self) -> None:
         if ui_control.verify_page(UIPage.page_main):
             ui_control.ui_goto(UIPage.page_bigmap)
-            self.init_position(tuple(map(int, list(self.get_bigmap_posi().tianli))))
+            self.init_position(tuple(map(int, list(self.get_bigmap_posi().gimap))))
             ui_control.ui_goto(UIPage.page_main)
             self.small_map_init_flag=True
 
@@ -71,7 +75,9 @@ class Map(MiniMap, BigMap, MapConverter):
 
     def get_direction(self) -> float:
         imsrc = cv2.cvtColor(itt.capture(jpgmode=0),cv2.COLOR_BGR2RGB)
+        self.lock.acquire()
         self.update_direction(imsrc)
+        self.lock.release()
         # print(self.direction)
         return self.direction
     
@@ -289,11 +295,13 @@ class Map(MiniMap, BigMap, MapConverter):
 
 
 genshin_map = Map()
+logger.info(f"genshin map object created")
 
 if __name__ == '__main__':
     # genshin_map.bigmap_tp(genshin_map.convert_GIMAP_to_cvAutoTrack([6642.003, 5485.38]),
     #                       tp_type=["Domain"])  # tp to *染之庭
     while 1:
-        input()
+        time.sleep(0.2)
+        # input()
         print(genshin_map.get_rotation())
     
