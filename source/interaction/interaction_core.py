@@ -334,6 +334,14 @@ class InteractionBGD:
             imgicon = inputvar
             upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
 
+            if not inputvar.click_retry_timer.reached_and_reset():
+                return False
+            
+            if not inputvar.click_fail_timer.reached_and_reset():
+                logger.error(t2t("appear then click fail"))
+                logger.info(f"{inputvar.name} {inputvar.click_position}")
+                return False
+            
             cap = self.capture(posi=imgicon.cap_posi, jpgmode=imgicon.jpgmode)
             # min_rate = img_manager.matching_rate_dict[imgname]
 
@@ -348,10 +356,6 @@ class InteractionBGD:
                     r = ocr.get_text_position(cap, imgicon.win_text)
                     if r==-1:
                         matching_rate = 0
-                # if imgicon.win_page != 'all':
-                #     pn = scene_lib.get_current_pagename()
-                #     if pn != imgicon.win_page:
-                #         matching_rate = 0
             
             if imgicon.is_print_log(matching_rate >= imgicon.threshold) or is_log:
                 logger.debug(
@@ -360,9 +364,6 @@ class InteractionBGD:
 
             if matching_rate >= imgicon.threshold:
                 p = imgicon.cap_posi
-                # center_p = [(p[1] + p[3]) / 2, (p[0] + p[2]) / 2]
-                # self.move_to(center_p[0], center_p[1])
-                # self.left_click()
                 if inputvar.is_bbg == True:
                     self.move_and_click(position=imgicon.click_position())
                 else:
@@ -387,10 +388,6 @@ class InteractionBGD:
                     r = ocr.get_text_position(cap, imgicon.win_text)
                     if r==-1:
                         matching_rate = 0
-                # if imgicon.win_page != 'all':
-                #     pn = scene_lib.get_current_pagename()
-                #     if pn != imgicon.win_page:
-                #         matching_rate = 0
             
             if imgicon.is_print_log(matching_rate >= imgicon.threshold) or is_log:
                 logger.debug('imgname: ' + imgicon.name + 'matching_rate: ' + str(matching_rate) + ' |function name: ' + upper_func_name)
@@ -398,8 +395,7 @@ class InteractionBGD:
             if matching_rate >= imgicon.threshold:
                 p = imgicon.cap_posi
                 center_p = [(p[0] + p[2]) / 2, (p[1] + p[3]) / 2]
-                self.move_and_click([center_p[0], center_p[1]])
-                # self.left_click()     
+                self.move_and_click([center_p[0], center_p[1]])  
                 logger.debug(f"appear then click: True: {imgicon.name} func: {upper_func_name}")
                 return True
             else:
