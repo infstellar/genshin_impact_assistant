@@ -49,7 +49,7 @@ class CommissionParser():
                     target_tianli_posi = GIMAPPosition(target_gimap_posi).tianli
                     
                     if len(commission_positions)>0:
-                        if not min(euclidean_distance_plist(target_tianli_posi, commission_positions)) >= 50:
+                        if not min(euclidean_distance_plist(target_tianli_posi, commission_positions)) >= 60:
                             continue
                     commission_positions.append(target_tianli_posi)
                     

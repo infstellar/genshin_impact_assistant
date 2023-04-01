@@ -55,9 +55,14 @@ class Map(MiniMap, BigMap, MapConverter):
         self.lock.release()
 
     def get_position(self):
-        # if not self.small_map_init_flag:
-        #     self.reinit_smallmap()
-        #     self.small_map_init_flag = True
+        """get current character position
+
+        Returns:
+            list: TianLiPosition format
+        """
+        if not self.small_map_init_flag:
+            self.reinit_smallmap()
+            self.small_map_init_flag = True
         # if self.smallmap_upd_timer.get_diff_time() >= self.MINIMAP_UPDATE_LIMIT:
         self._upd_smallmap()
         #     self.smallmap_upd_timer.reset()

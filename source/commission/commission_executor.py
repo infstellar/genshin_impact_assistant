@@ -22,6 +22,8 @@ class CommissionExecutor(TaskTemplate, CommissionParser):
                 time.sleep(2)
                 if self.checkup_stop_func():return
                 if co.pause_threading_flag: break
+            self.sub_threading_list=[]
+        self.pause_threading()
 
 if __name__ == '__main__':
     ce = CommissionExecutor()

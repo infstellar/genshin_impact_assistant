@@ -93,9 +93,13 @@ class CollectionCombat(FlowTemplate):
         self.waiting_enemy_timer = timer_module.AdvanceTimer(10)
         
     def state_init(self):
+        self.waiting_enemy_timer.reset()
         return super().state_init()
     
     def state_before(self):
+        if not self.upper.is_combat:
+            self._set_rfc(FC.END)
+            return
         if combat_lib.CSDL.get_combat_state():
             self.upper.start_combat()
             self._next_rfc()
