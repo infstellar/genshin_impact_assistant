@@ -12,7 +12,7 @@ from source.common.timer_module import Genshin400Timer
 
 
 class CommissionParser():
-    TRAVERSE_MONDSTADT_POSITION=[TianLiPosition([1283.450352, -6343.497652]),
+    TRAVERSE_MONDSTADT_POSITION=[TianLiPosition([783.450352, -6943.497652]),
                                  TianLiPosition([2489.331552, -6101.094052]),
                                  TianLiPosition([3101.988752, -6431.458452]),
                                  TianLiPosition([2860.607952, -5526.280452]),
@@ -34,6 +34,7 @@ class CommissionParser():
         commission_positions = []
         ui_control.ensure_page(UIPages.page_bigmap)
         for posi in self.TRAVERSE_MONDSTADT_POSITION:
+            genshin_map.get_bigmap_posi()
             genshin_map._move_bigmap(posi.tianli, force_center = True)
             cap_posi = [220,240,1920-200,1080-150]
             img = itt.capture(jpgmode=0)

@@ -36,6 +36,7 @@ class Button(ImgIcon):
             self.center_point = [self.bbg_posi[0]+self.image.shape[1]/2, self.bbg_posi[1]+self.image.shape[0]/2]
         self.click_retry_timer = AdvanceTimer(3)
         self.click_fail_timer = AdvanceTimer(1,60) # 60 retry max, 180 sec max 
+        self.click_fail_timer.reset()
     
     
     

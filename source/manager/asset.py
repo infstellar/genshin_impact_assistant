@@ -144,6 +144,9 @@ CSMD = TextTemplate(text=
 }, cap_area = BigmapChooseArea.position)
 ASmallStepForHilichurls = TextTemplate(text={"zh_CN":"丘丘人的一小步", "en_US": "A small step for hilichurls"})
 IncreasingDanger = TextTemplate(text={"zh_CN":"攀高危险", "en_US": "Increasing danger"})
+Emergency = TextTemplate(text={"zh_CN":"临危受命", "en_US": "Emergency"})
+IcyIssues = TextTemplate(text={"zh_CN":"冷冰冰的大麻烦", "en_US": "Icy Issues"})
+ForTheHarbingers = TextTemplate(text={"zh_CN":"为了执行官大人", "en_US": "For The Harbingers"})
 MapAreaMD = TextTemplate(text={
     "zh_CN":"蒙德"
 }, cap_area = SwitchMapArea.position)

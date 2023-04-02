@@ -43,16 +43,16 @@ class Map(MiniMap, BigMap, MapConverter):
         self.lock = threading.Lock()
 
     def _upd_smallmap(self) -> None:
-        self.lock.acquire()
+        # self.lock.acquire()
         if itt.get_img_existence(asset.ui_main_win, is_log=False):
             self.update_position(itt.capture(jpgmode=0))
-        self.lock.release()
+        # self.lock.release()
 
     def _upd_bigmap(self) -> None:
-        self.lock.acquire()
+        # self.lock.acquire()
         if ui_control.verify_page(UIPage.page_bigmap):
             self.update_bigmap(itt.capture(jpgmode=0))
-        self.lock.release()
+        # self.lock.release()
 
     def get_position(self):
         """get current character position
@@ -80,29 +80,33 @@ class Map(MiniMap, BigMap, MapConverter):
 
     def get_direction(self) -> float:
         imsrc = cv2.cvtColor(itt.capture(jpgmode=0),cv2.COLOR_BGR2RGB)
-        self.lock.acquire()
+        # self.lock.acquire()
         self.update_direction(imsrc)
-        self.lock.release()
+        # self.lock.release()
         # print(self.direction)
         return self.direction
     
     def get_rotation(self) -> float:
-        self.lock.acquire()
+        # self.lock.acquire()
         pt = time.time()
         self.update_rotation(itt.capture(jpgmode=0))
         if time.time()-pt>0.1:
             logger.warning(f"get_rotation spent too long: {time.time()-pt}")
         # print(self.direction)
-        self.lock.release()
+        # self.lock.release()
         return self.rotation
 
     def check_bigmap_scaling(self) -> None:
         if not itt.get_img_existence(asset.BigMapScaling):
             origin_page = ui_control.get_page()
             while not itt.appear_then_click(asset.SwitchMapAreaButton): itt.delay(0.2)
+            itt.delay("animation")
             while not itt.appear_then_click(asset.MapAreaCYJY): itt.delay(0.2)
+            itt.delay("animation")
             while not itt.appear_then_click(asset.SwitchMapAreaButton): itt.delay(0.2)
+            itt.delay("animation")
             while not itt.appear_then_click(asset.MapAreaLY): itt.delay(0.2)
+            itt.delay("animation")
             if origin_page == UIPage.page_main:
                 ui_control.ui_goto(UIPage.page_main)
             elif origin_page == UIPage.page_bigmap:
@@ -133,6 +137,8 @@ class Map(MiniMap, BigMap, MapConverter):
         1. 点击到某个东西弹出右侧弹框
         2. 点击到一坨按键弹出一坨东西
         
+        警告：此函数为内部函数，不要在外部调用。如果一定要调用应先设置地图缩放。
+        
         """
         if IS_DEVICE_PC:
             screen_center_x = 1920 / 2
@@ -153,6 +159,7 @@ class Map(MiniMap, BigMap, MapConverter):
                 itt.move_to(-10, -10, relative=True)
                 if i % 2 == 0:
                     itt.left_down()
+        
         curr_posi = self.get_bigmap_posi().tianli
         dx = min((curr_posi[0] - target_posi[0]) * self.MAP_POSI2MOVE_POSI_RATE, self.BIGMAP_MOVE_MAX)
         dx = max(dx, -self.BIGMAP_MOVE_MAX)
@@ -165,7 +172,6 @@ class Map(MiniMap, BigMap, MapConverter):
         itt.move_to(dx, dy, relative=True)
         itt.delay(0.2, comment="waiting genshin")
         itt.left_up()
-
         # if itt.get_img_existence(asset.confirm):
         # itt.key_press('esc')
 

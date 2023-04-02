@@ -477,17 +477,17 @@ class CombatStatementDetectionLoop(BaseThreading):
             state = r[0] or r[1]
         if state != self.current_state:
             
-            if self.current_state == True: # 切换到无敌人慢一点, 4s
+            if self.current_state == True: # 切换到无敌人慢一点, 8s
                 self.state_counter += 1
-                self.while_sleep = 0.4
+                self.while_sleep = 0.8
             elif self.current_state == False: # 快速切换到遇敌
                 self.while_sleep = 0.02
                 self.state_counter += 1
         else:
             self.state_counter = 0
-            self.while_sleep = 0.4
+            self.while_sleep = 0.5
         if self.state_counter >= 10:
-            logger.debug('combat_statement_detection change state')
+            logger.debug(f'combat_statement_detection change state: {self.current_state}')
             # if self.current_state == False:
             #     only_arrow_timer.reset()
             self.state_counter = 0

@@ -90,7 +90,7 @@ class CollectionCombat(FlowTemplate):
     def __init__(self, upper: CollectorFlowConnector):
         super().__init__(upper, flow_id=ST.COLLECTION_COMBAT, next_flow_id=ST.COLLECTION_PICKUP, flow_timeout_time=300)
         self.upper=upper
-        self.waiting_enemy_timer = timer_module.AdvanceTimer(10)
+        self.waiting_enemy_timer = timer_module.AdvanceTimer(30)
         
     def state_init(self):
         self.waiting_enemy_timer.reset()

@@ -337,7 +337,7 @@ class InteractionBGD:
             if not inputvar.click_retry_timer.reached_and_reset():
                 return False
             
-            if not inputvar.click_fail_timer.reached_and_reset():
+            if inputvar.click_fail_timer.reached_and_reset():
                 logger.error(t2t("appear then click fail"))
                 logger.info(f"{inputvar.name} {inputvar.click_position}")
                 return False
@@ -369,6 +369,8 @@ class InteractionBGD:
                 else:
                     self.move_and_click(position=click_posi)
                 logger.debug(f"appear then click: True: {imgicon.name} func: {upper_func_name}")
+                inputvar.click_fail_timer.reset()
+                inputvar.click_retry_timer.reset()
                 return True
             else:
                 return False
