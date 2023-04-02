@@ -334,7 +334,7 @@ class InteractionBGD:
             imgicon = inputvar
             upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
 
-            if not inputvar.click_retry_timer.reached_and_reset():
+            if not inputvar.click_retry_timer.reached():
                 return False
             
             if inputvar.click_fail_timer.reached_and_reset():

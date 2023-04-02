@@ -91,7 +91,7 @@ class Map(MiniMap, BigMap, MapConverter):
         pt = time.time()
         self.update_rotation(itt.capture(jpgmode=0))
         if time.time()-pt>0.1:
-            logger.warning(f"get_rotation spent too long: {time.time()-pt}")
+            logger.info(f"get_rotation spent too long: {time.time()-pt}")
         # print(self.direction)
         # self.lock.release()
         return self.rotation

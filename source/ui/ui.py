@@ -97,7 +97,7 @@ class UI():
                     continue
                 if page.is_current_page(itt):
                     logger.info(f'Page switch: {page} -> {page.parent}')
-                    if retry_timer.reached_and_reset():
+                    if retry_timer.reached():
                         button = page.links[page.parent]
                         if isinstance(button,str):
                             itt.key_press(button)
@@ -105,7 +105,9 @@ class UI():
                             itt.appear_then_click(button)
                         clicked = True
                         confirm_timer.reset()
+                        retry_timer.reset()
                     else:
+                        itt.delay(0.2) # wait
                         break
                 # if self.appear(page.check_button, offset=offset, interval=5):
                 #     logger.info(f'Page switch: {page} -> {page.parent}')
