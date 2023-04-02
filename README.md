@@ -138,18 +138,15 @@ To没用过github的小伙伴: 描述文档中的蓝色文字是链接,可以打
 
 ## 性能需求
 
-- 此程序至少需要`2.5G内存`与`6G存储空间`.
+- 此程序至少需要`2.5G内存`与`3G存储空间`(完整安装).
 
 ## 鸣谢
-
-### 开源库
-
-#### 特别感谢
+### 特别感谢
 - [Alas](https://github.com/LmeSzinc/AzurLaneAutoScript)
+### 开源库
+#### 原神相关
 
 - [原神-基于图像算法的坐标定位 GenshinImpact AutoTrack DLL](https://github.com/GengGode/cvAutoTrack)
-
-原地址：https://github.com/GengGode/GenshinImpact_AutoTrack_DLL
 
 - [空荧酒馆原神地图 kongying-tavern/yuan-shen-map](https://github.com/kongying-tavern/yuan-shen-map)
 
@@ -168,7 +165,7 @@ To没用过github的小伙伴: 描述文档中的蓝色文字是链接,可以打
 
 ### 其他贡献/参与者
 
-- 数据集标注,测试: [nɡ.](https://space.bilibili.com/396023811)
+- 数据集标注: [nɡ.](https://space.bilibili.com/396023811)
 
 ## 声明
 
