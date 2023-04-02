@@ -85,6 +85,7 @@ class MissionAutoCollector(MissionExecutor):
     
     def _set_target_position(self):
         while 1:
+            if self.checkup_stop_func():return
             self.collection_posi = self.collector_posi_dict[self.collector_i]["position"]
             self.collection_id = self.collector_posi_dict[self.collector_i]["id"]
             '''当两个collection坐标小于30时，认为是同一个。'''
@@ -140,6 +141,7 @@ class MissionAutoCollector(MissionExecutor):
     def exec_mission(self):
         
         while 1:
+            if self.checkup_stop_func():return
             self._set_target_position()
             r = self.move_straight(self.collection_posi, is_tp = True)
             if r == ERR_FAIL:

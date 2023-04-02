@@ -105,6 +105,8 @@ class UI():
                             itt.appear_then_click(button)
                         clicked = True
                         confirm_timer.reset()
+                    else:
+                        break
                 # if self.appear(page.check_button, offset=offset, interval=5):
                 #     logger.info(f'Page switch: {page} -> {page.parent}')
                 #     button = page.links[page.parent]

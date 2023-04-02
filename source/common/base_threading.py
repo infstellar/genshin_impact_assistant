@@ -37,9 +37,7 @@ class BaseThreading(threading.Thread):
         logger.info(f"{self.name} stop.")
         self.stop_threading_flag = True
         self.pause_threading_flag = True
-        for i in self.sub_threading_list:
-            logger.info(f"{self.name} stop {i.name}")
-            i.stop_threading()
+        self._clean_sub_threading()
     
     def checkup_stop_threading(self):
         if self.stop_threading_flag:
@@ -90,6 +88,12 @@ class BaseThreading(threading.Thread):
         self.sub_threading_list.append(threading_obj)
         logger.debug(f"sub threading {threading_obj.name} has been add.")
 
+    def _clean_sub_threading(self):
+        for thread_obj in self.sub_threading_list:
+            logger.debug(f"{self.name} stop {thread_obj.name}")
+            thread_obj.stop_threading()
+        self.sub_threading_list = []
+    
     def loop(self):
         pass
     

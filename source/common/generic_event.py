@@ -38,8 +38,9 @@ class GenericEvent(BaseThreading):
                 self.pause_threading_flag = True
                 continue
             '''write your code below'''
-            
-            logger.trace(f"time dilation rate: {self.while_sleep/(time.time()-pt)}")
+            dilation_rate = self.while_sleep/(time.time()-pt)
+            if dilation_rate<0.99:
+                logger.trace(f"time dilation rate: {dilation_rate}")
             pt = time.time()
             if INTERACTION_MODE == INTERACTION_DESKTOP_BACKGROUND or INTERACTION_DESKTOP:
                 if static_lib.W_KEYDOWN == True:
