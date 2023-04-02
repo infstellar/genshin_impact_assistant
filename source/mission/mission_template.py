@@ -163,7 +163,7 @@ class MissionExecutor(BaseThreading):
     
     def switch_character_to(self, name:str):
         r = combat_lib.get_characters_name()
-        curr_n = combat_lib.get_current_chara_num(itt)
+        curr_n = combat_lib.get_current_chara_num(self.checkup_stop_func)
         if name in r:
             if curr_n != r.index(name)+1:
                 itt.key_press(str(r.index(name)+1))

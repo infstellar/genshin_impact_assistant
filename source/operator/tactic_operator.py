@@ -155,7 +155,7 @@ class TacticOperator(BaseThreading):
     def unconventionality_situation_detection(self, autoDispose=True):  # unconventionality situation detection
         # situation 1: coming_out_by_space
         sf = lambda: self.checkup_stop_func() and self.pause_tactic_flag
-        return combat_lib.unconventionality_situation_detection(itt,detect_type='ac', stop_func=sf)
+        return combat_lib.unconventionality_situation_detection(detect_type='ac', stop_func=sf)
         
         situation_code = -1
 
@@ -171,7 +171,10 @@ class TacticOperator(BaseThreading):
 
         return situation_code
 
-    def chara_waiting(self, mode=0, is_while = True):
+    def _ccw_sf(self):
+        return self.pause_tactic_flag or self.checkup_stop_func()
+    
+    def chara_waiting(self, mode=0):
         self.unconventionality_situation_detection()
         if (mode == 0) and (self.enter_timer.get_diff_time() <= 1.2):
             if self.is_e_available():
@@ -179,17 +182,17 @@ class TacticOperator(BaseThreading):
                 return 0
             else:
                 logger.debug(f"t: {self.enter_timer.get_diff_time()} but e unavailable")
-        if is_while:
-            while self.get_character_busy() and (not self.checkup_stop_func()):
-                if self.checkup_stop_func():
-                    logger.debug('chara_waiting stop')
-                    return 0
-                if self.pause_tactic_flag:
-                    return 0
-                # logger.debug('waiting  ')
-                self.itt.delay(0.1)
-        else:
-            return self.get_character_busy()
+
+        combat_lib.chara_waiting(stop_func=self._ccw_sf)
+            
+            # while self.get_character_busy() and (not self.checkup_stop_func()):
+            #     if self.checkup_stop_func():
+            #         logger.debug('chara_waiting stop')
+            #         return 0
+            #     if self.pause_tactic_flag:
+            #         return 0
+            #     # logger.debug('waiting  ')
+            #     self.itt.delay(0.1)
 
     # def get_current_chara_num(self):
     #     cap = self.itt.capture(jpgmode=2)

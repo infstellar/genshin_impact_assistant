@@ -153,7 +153,7 @@ class AimOperator(BaseThreading):
         for i in range(15):
             if i%4==0:
                 if self.checkup_stop_func():return
-            combat_lib.chara_waiting(itt, self.checkup_stop_func)
+            combat_lib.chara_waiting(self.checkup_stop_func)
             movement.cview(15)
             ret_points = self.get_enemy_feature()
             if ret_points is None:
@@ -282,7 +282,7 @@ class AimOperator(BaseThreading):
         # # time.sleep(0.1)
         # if self.checkup_stop_func():
         #     return 0
-        # # combat_lib.chara_waiting(itt, stop_func = self.checkup_stop_func)
+        # # combat_lib.chara_waiting(stop_func = self.checkup_stop_func)
         # if ui_control.verify_page(UIPage.page_main):
         #     ret_points = self.get_enemy_feature() # 获得敌方血条坐标
         #     if ret_points is None:

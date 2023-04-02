@@ -24,14 +24,13 @@ class SwitchCharacterOperator(BaseThreading):
         super().__init__()
         self.setName('SwitchCharacterOperator')
         self.chara_list = chara_list
-        self.itt = itt
 
         self.tactic_operator = tactic_operator.TacticOperator()
         self.aim_operator = AimOperator()
         self._add_sub_threading(self.tactic_operator)
         self._add_sub_threading(self.aim_operator)
         self.chara_list.sort(key=sort_flag_1, reverse=False)
-        self.current_num = 1 # combat_lib.get_current_chara_num(self.itt, self.checkup_stop_func)
+        self.current_num = 1 # combat_lib.get_current_chara_num(self.checkup_stop_func)
         self.switch_timer = Timer(diff_start_time=2)
         self.tactic_operator.set_enter_timer(self.switch_timer)
 
@@ -131,7 +130,7 @@ class SwitchCharacterOperator(BaseThreading):
                     continue
             if (switch_type == "TRIGGER" and chara.trigger()) or (switch_type == "POSITION" and chara.is_position_ready()):
                 if chara.trigger():
-                    self.current_num = combat_lib.get_current_chara_num(self.itt, self.checkup_stop_func)
+                    self.current_num = combat_lib.get_current_chara_num(self.checkup_stop_func)
                     logger.debug(f"switch_character: {switch_type}: targetnum: {chara.n} current num: {self.current_num}")
                     if chara.n != self.current_num:
                         # self.aim_operator.pause_threading()
@@ -155,9 +154,9 @@ class SwitchCharacterOperator(BaseThreading):
         Returns:
             bool: True: 切换成功; False: 切换失败
         """
-        # self.itt.middle_click()
+        # itt.middle_click()
         t = self.switch_timer.get_diff_time()
-        self.tactic_operator.chara_waiting()
+        combat_lib.chara_waiting(self.checkup_stop_func)
         logger.debug('try switching to ' + str(x))
         switch_succ_num = 0
         switch_target_num = 2
@@ -165,14 +164,14 @@ class SwitchCharacterOperator(BaseThreading):
             if self.checkup_stop_func():
                 return True
             if i > 3:
-                is_busy = combat_lib.is_character_busy(self.checkup_stop_func)
+                is_busy = combat_lib.is_character_busy()
             else:
                 is_busy = False
             if not is_busy:
                 if i > 3:
-                    combat_lib.unconventionality_situation_detection(self.itt)
-                self.itt.key_press(str(x))
-                if combat_lib.get_current_chara_num(self.itt, self.checkup_stop_func, max_times = 5) == x:
+                    combat_lib.unconventionality_situation_detection()
+                itt.key_press(str(x))
+                if combat_lib.get_current_chara_num(self.checkup_stop_func, max_times = 5) == x:
                     switch_succ_num += 1
             if i >= 5 or is_busy == True:
                 r = self._check_and_reborn()
@@ -186,11 +185,11 @@ class SwitchCharacterOperator(BaseThreading):
                 logger.debug(f"switch chara to {x} succ")
                 self.current_num = x
                 self.switch_timer.reset()
-                # self.itt.delay(0.05)
+                # itt.delay(0.05)
                 return True
         # self.current_num = x
         self.switch_timer.reset()
-        # self.itt.delay(0.05)
+        # itt.delay(0.05)
         return False
 
     def pause_threading(self):
@@ -205,7 +204,7 @@ class SwitchCharacterOperator(BaseThreading):
             self.tactic_operator.set_parameter(None, None)
             self.tactic_operator.continue_threading()
             self.aim_operator.continue_threading()
-            self.current_num = combat_lib.get_current_chara_num(self.itt, self.checkup_stop_func)
+            self.current_num = combat_lib.get_current_chara_num(self.checkup_stop_func)
 
 
 if __name__ == '__main__':

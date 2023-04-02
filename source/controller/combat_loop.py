@@ -29,7 +29,6 @@ class Combat_Controller(BaseThreading):
 
         self.chara_list = chara_list
         self.pause_threading_flag = False
-        self.itt = itt
 
         self.sco = SwitchCharacterOperator(self.chara_list)
         self.sco.pause_threading()
@@ -51,12 +50,12 @@ class Combat_Controller(BaseThreading):
             
             
             if self.is_check_died:
-                if self.itt.get_img_existence(asset.character_died):
+                if itt.get_img_existence(asset.character_died):
                     logger.info(t2t('有人嘎了，停止自动战斗'))
                     self.last_err_code = CHARACTER_DIED
                     while 1:
                         time.sleep(0.5)
-                        r = self.itt.appear_then_click(asset.button_ui_cancel)
+                        r = itt.appear_then_click(asset.button_ui_cancel)
                         if r:
                             break
                     self.pause_threading()
@@ -91,7 +90,7 @@ class Combat_Controller(BaseThreading):
 
     def continue_threading(self):
         if self.pause_threading_flag != False:
-            self.current_num = combat_lib.get_current_chara_num(self.itt, self.checkup_stop_func)
+            self.current_num = combat_lib.get_current_chara_num(self.checkup_stop_func)
             # self.current_num = 1
             self.pause_threading_flag = False
             self.sco.continue_threading()
@@ -104,7 +103,7 @@ class Combat_Controller(BaseThreading):
 
     def checkup_trapped(self):
         pass
-        # if self.itt.capture(posi=posiM)
+        # if itt.capture(posi=posiM)
 
     def stop_threading(self):
         self.stop_threading_flag = True
