@@ -68,7 +68,10 @@ class DomainTask(TaskTemplate):
         if p1 != -1:
             itt.move_and_click([p1[0] + 5, p1[1] + 5], delay=1)
         else:
+            texts = ocr.get_all_texts(itt.capture(jpgmode=0, posi=cap_area))
+            
             logger.warning(t2t("找不到秘境名称，放弃选择。"))
+            logger.info(f"all texts: {texts}")
         
         # itt.delay(1, comment="too fast TAT")
         ctimer = timer_module.TimeoutTimer(5)

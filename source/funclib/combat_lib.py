@@ -220,7 +220,7 @@ def get_current_chara_num(stop_func, max_times = 1000):
     Returns:
         int: character num.
     """
-    chara_waiting(itt, stop_func, max_times = max_times)
+    chara_waiting(stop_func, max_times = max_times)
     cap = itt.capture(jpgmode=2)
     for i in range(4):
         p = posi_manager.chara_num_list_point[i]
