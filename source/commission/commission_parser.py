@@ -64,7 +64,8 @@ class CommissionParser():
                     else:
                         self.commission_dicts.append({
                             "type":com_type,
-                            "position":list(target_tianli_posi)
+                            "position":list(target_tianli_posi),
+                            "done":False
                         })
         return self.commission_dicts
     
