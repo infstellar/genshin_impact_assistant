@@ -36,7 +36,7 @@ class Capture():
         if DEBUG_MODE:
             r = self.cap_per_sec.count_times()
             if r:
-                logger.debug(f"capps: {r/3}")
+                logger.trace(f"capps: {r/3}")
         self._capture(is_next_img)
         self.capture_cache_lock.acquire()
         cp = self.capture_cache.copy()
@@ -111,7 +111,7 @@ class WindowsCapture(Capture):
         self.monitor_num = len(monitors)
         monitor = monitors[self.monitor_id][0]
         if self.monitor_num>1:
-            logger.warning(t2t("multiple monitor detected: ")+str(self.monitor_num))
+            logger.info(t2t("multiple monitor detected: ")+str(self.monitor_num))
         # Get a pointer to a DEVICE_SCALE_FACTOR value
         scale_factor = ctypes.c_int()
 

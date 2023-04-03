@@ -33,7 +33,7 @@ ANGLE_NEGATIVE_XY = 3
 PROCESS_NAME = ["YuanShen.exe", "GenshinImpact.exe"]
 SCREEN_CENTER_X = 1920/2
 SCREEN_CENTER_Y = 1080/2
-GIA_VERSION = "v0.7.2.775"
+GIA_VERSION = "v0.7.2.779"
 
 # configure paths
 ROOT_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -219,10 +219,7 @@ def is_json_equal(j1: str, j2: str) -> bool:
         return False
 
 def add_logger_to_GUI(cb_func):
-    if DEBUG_MODE:
-        logger.add(cb_func, level="DEBUG", backtrace=True, colorize=True)
-    else:
-        logger.add(cb_func, level="INFO", backtrace=True, colorize=True)
+    logger.add(cb_func, level="INFO", backtrace=True, colorize=True)
 
 
 
