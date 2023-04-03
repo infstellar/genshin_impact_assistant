@@ -416,6 +416,23 @@ class InteractionBGD:
             else:
                 return False
     
+    def appear_then_click_groups(self, verify_img:img_manager.ImgIcon, inputvar_list:list, stop_func, verify_mode=False):
+        """
+        Click each inputvar in list.
+        
+        """
+        succ_flags=[False for i in len(inputvar_list)]
+        while 1:
+            time.sleep(0.1)
+            if stop_func:return False
+            if all(succ_flags):
+                if self.get_img_existence(verify_img) == verify_mode:
+                    return True
+            for i in len(inputvar_list):
+                r = self.appear_then_click(inputvar_list[i])
+                if r: succ_flags[i]=True
+                
+
     def appear_then_press(self, imgicon: img_manager.ImgIcon, key_name, is_gray=False):
         """appear then press
 
