@@ -4,6 +4,7 @@ COMMISSION_NAMES = [asset.ASmallStepForHilichurls,
                     asset.IncreasingDanger,
                     asset.Emergency,
                     asset.IcyIssues,
-                    asset.ForTheHarbingers]
+                    asset.ForTheHarbingers,
+                    asset.BigIceColdCrisis]
 
 # ALL_COMMISSION_TYPE = ["ASmallStepForHilichurls", "IncreasingDanger"]
