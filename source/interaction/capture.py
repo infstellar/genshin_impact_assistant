@@ -88,19 +88,30 @@ class WindowsCapture(Capture):
     def __init__(self):
         super().__init__()
         self.max_fps = 30
+        self.monitor_num = 1
+        self.monitor_id = 0
         self.scale_factor = self._get_screen_scale_factor()
         
     def _check_shape(self, img:np.ndarray):
         if img.shape == (1080,1920,4):
             return True
         else:
-            logger.info(t2t("research handle"))
             static_lib.search_handle()
+            logger.info(t2t("research handle: ")+str(static_lib.HANDLE))
+            if self.monitor_num>1:
+                if self.monitor_id==(self.monitor_num-1):
+                    self.monitor_id=0
+                else:
+                    self.monitor_id+=1
+                logger.info(t2t("research monitor: ")+str(self.monitor_id))
             return False
     
     def _get_screen_scale_factor(self):
-        monitor = win32api.EnumDisplayMonitors()[0][0]
-
+        monitors = win32api.EnumDisplayMonitors()
+        self.monitor_num = len(monitors)
+        monitor = monitors[self.monitor_id][0]
+        if self.monitor_num>1:
+            logger.warning(t2t("multiple monitor detected: ")+str(self.monitor_num))
         # Get a pointer to a DEVICE_SCALE_FACTOR value
         scale_factor = ctypes.c_int()
 
@@ -151,6 +162,7 @@ class EmulatorCapture(Capture):
     
 if __name__ == '__main__':
     wc = WindowsCapture()
+    wc._get_screen_scale_factor()
     while 1:
         cv2.imshow("capture test", wc.capture())
         cv2.waitKey(10)
