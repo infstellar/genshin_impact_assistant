@@ -68,6 +68,16 @@ class PaddleOcrFastDeploy():
         img = cv2.cvtColor(img,cv2.COLOR_RGB2BGR)
         res = self.model.predict(img)
         return res
+    REPLACE_DICT = {
+            "惊垫":"惊蛰",
+            "烟排":"烟绯",
+            "花染":"椛染"
+        }
+    def _replace_texts(self, text:str):
+        for i in self.REPLACE_DICT:
+            if i in text:
+                text = text.replace(i, self.REPLACE_DICT[i])
+        return text
 
     def find_text(self,res,text,mode=CONTAIN_MATCHING,text_process=lambda x:x):
         ret_indexes = []
@@ -76,7 +86,7 @@ class PaddleOcrFastDeploy():
             max_rate = 0
             max_result = None
             for i in range(len(res.text)):
-                curr_rate = compare_texts(text, text_process(res.text[i]))
+                curr_rate = compare_texts(text, self._replace_texts(text_process(res.text[i])))
                 if curr_rate > max_rate:
                     max_result = i
                     max_rate = curr_rate
@@ -84,7 +94,7 @@ class PaddleOcrFastDeploy():
             return [max_result]
 
         for i in range(len(res.text)):
-            res_text = text_process(res.text[i])
+            res_text = self._replace_texts(text_process(res.text[i]))
             if mode == CONTAIN_MATCHING:
                 if text in res_text:
                     ret_indexes.append(i)

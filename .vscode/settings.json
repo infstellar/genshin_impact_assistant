@@ -62,6 +62,7 @@
         "dtype",
         "Elast",
         "Epress",
+        "fastdeploy",
         "fromarray",
         "funclib",
         "Genshin",
@@ -116,7 +117,8 @@
         "withalpha",
         "XCYD",
         "Ying",
-        "YOLOX"
+        "YOLOX",
+        "PPOCR"
     ],
     "codecheck.ExcludeDirectory": "",
     "codecheck.ScanDirectory": "source",
