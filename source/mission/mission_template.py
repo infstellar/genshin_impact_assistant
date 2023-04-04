@@ -7,7 +7,7 @@ from source.funclib import combat_lib, generic_lib
 from source.interaction.interaction_core import itt
 from source.funclib.err_code_lib import ERR_PASS
 from source.common.timer_module import AdvanceTimer
-from source.controller.combat_loop import CombatController
+from source.controller.combat_controller import CombatController
 
 
 ERR_FAIL = "FAIL"

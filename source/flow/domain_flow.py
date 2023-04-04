@@ -1,4 +1,4 @@
-from source.controller import combat_loop
+from source.controller import combat_controller
 from common import flow_state as ST, timer_module
 from source.funclib import generic_lib, movement, combat_lib
 from source.manager import posi_manager as PosiM, asset
@@ -19,7 +19,7 @@ class DomainFlow(BaseThreading):
 
         self.itt = itt
         chara_list = combat_lib.get_chara_list()
-        self.combat_loop = combat_loop.CombatController(chara_list)
+        self.combat_loop = combat_controller.CombatController(chara_list)
         self.combat_loop.setDaemon(True)
 
         self.combat_loop.pause_threading()

@@ -61,13 +61,19 @@ class Character:
         self.Elast_timer = Timer(diff_start_time=Elast_time)
         self.Qlast_timer = Timer(diff_start_time=Qlast_time)
         
-        
+        self.position_tactic = self._get_position_tactic()
 
         
         # self._init_log()
         self.trigger_list = []
         self._trigger_analyses()
 
+    def _get_position_tactic(self):
+        if self.position == "Shield":
+            return "e?e:none;"
+        elif self.position == "Core":
+            return "a,a"
+    
     def _init_log(self):
         logger.debug('---- character info ----')
         log_format(self.name, 'name')
@@ -219,10 +225,12 @@ class Character:
         else:
             return False
 
-    def is_position_ready(self):
-        if self.position == "Shield":
+    def is_position_ready(self, position_type):
+        if self.position == "Shield" and position_type == "SHIELD":
             if self.is_E_ready():
                 return True
+        if self.position == "Core" and position_type == "CORE":
+            return True
         return False
 
 if __name__ == '__main__':

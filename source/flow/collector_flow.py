@@ -4,7 +4,7 @@ from source.interaction.interaction_core import itt
 from source.operator import pickup_operator
 from source.flow import teyvat_move_flow
 from source.interaction.minimap_tracker import tracker
-from source.controller import combat_loop
+from source.controller import combat_controller
 from source.common.base_threading import BaseThreading
 from source.funclib import collector_lib, generic_lib, combat_lib
 import numpy as np
@@ -77,7 +77,7 @@ class CollectorFlow(BaseThreading):
         
         
         chara_list = combat_lib.get_chara_list()
-        self.cct = combat_loop.CombatController(chara_list)
+        self.cct = combat_controller.CombatController(chara_list)
         self.cct.is_check_died = True
         self.cct.setDaemon(True)
         self.cct.add_stop_func(self.checkup_stop_func)
@@ -253,7 +253,7 @@ class CollectorFlow(BaseThreading):
                 self.pause_threading_flag = True
                 continue
             
-            if self.cct.get_last_err_code() == combat_loop.CHARACTER_DIED:
+            if self.cct.get_last_err_code() == combat_controller.CHARACTER_DIED:
                 logger.warning(t2t("有人嘎了，正在停止此次采集"))
                 self.add_log("CHARACTER_DIED")
                 self.stop_all()

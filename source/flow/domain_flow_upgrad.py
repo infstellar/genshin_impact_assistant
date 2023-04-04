@@ -1,7 +1,7 @@
 from source.util import *
 from source.flow.flow_template import FlowController, FlowTemplate, FlowConnector, EndFlowTemplate
 import source.flow.flow_code as FC
-from source.controller import combat_loop
+from source.controller import combat_controller
 from common import timer_module
 from source.funclib import generic_lib, movement, combat_lib
 from source.funclib.err_code_lib import *
@@ -18,7 +18,7 @@ class DomainFlowConnector(FlowConnector):
         super().__init__()
         self.checkup_stop_func = None
         chara_list = combat_lib.get_chara_list()
-        self.combat_loop = combat_loop.CombatController(chara_list)
+        self.combat_loop = combat_controller.CombatController(chara_list)
         
         self.lockOnFlag = 0
         self.move_timer = timer_module.Timer()

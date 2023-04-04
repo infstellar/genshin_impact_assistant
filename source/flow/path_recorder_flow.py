@@ -4,7 +4,7 @@ from pynput.keyboard import Listener, KeyCode, Key
 from source.flow.flow_template import FlowController, FlowTemplate, FlowConnector, EndFlowTemplate
 import source.flow.flow_code as FC, source.flow.flow_state as ST
 from source.interaction.minimap_tracker import tracker
-from source.controller import combat_loop
+from source.controller import combat_controller
 from source.common import timer_module
 from source.funclib import generic_lib, movement, combat_lib
 from source.funclib.err_code_lib import *

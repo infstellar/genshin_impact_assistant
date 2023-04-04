@@ -5,13 +5,12 @@ from source.interaction.interaction_core import itt
 from source.operator import pickup_operator
 from source.flow import teyvat_move_flow_upgrad
 from source.interaction.minimap_tracker import tracker
-from source.controller import combat_loop
+from source.controller import combat_controller
 import numpy as np
 from funclib.err_code_lib import ERR_PASS, ERR_STUCK, ERR_COLLECTOR_FLOW_TIMEOUT
 from source.util import *
 from source.flow.flow_template import FlowController, FlowTemplate, FlowConnector, EndFlowTemplate
 import source.flow.flow_code as FC
-from source.controller import combat_loop
 from source.common import timer_module
 from source.funclib import generic_lib, movement, combat_lib
 from source.funclib.err_code_lib import *
@@ -54,7 +53,7 @@ class CollectorFlowConnector(FlowConnector):
 
         self.puo = pickup_operator.PickupOperator()
         chara_list = combat_lib.get_chara_list()
-        self.cct = combat_loop.CombatController(chara_list)
+        self.cct = combat_controller.CombatController(chara_list)
 
         
     
