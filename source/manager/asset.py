@@ -150,6 +150,7 @@ Emergency = TextTemplate(text={"zh_CN":"临危受命", "en_US": "Emergency"})
 IcyIssues = TextTemplate(text={"zh_CN":"冷冰冰的大麻烦", "en_US": "Icy Issues"})
 ForTheHarbingers = TextTemplate(text={"zh_CN":"为了执行官大人", "en_US": "For The Harbingers"})
 BigIceColdCrisis = TextTemplate(text={"zh_CN":"冰凉凉的大团危机", "en_US": "Big Ice-Cold Crisis"})
+SpreadingEvil = TextTemplate(text={"zh_CN":"邪恶的扩张", "en_US": "Spreading Evil"})
 MapAreaMD = TextTemplate(text={
     "zh_CN":"蒙德"
 }, cap_area = SwitchMapArea.position)
