@@ -41,8 +41,8 @@ def get_commission_object(commission_type, commission_position:list):
                 return commission_index.get_commission_object(i)
     logger.info(f"get commission fail, try to get general commission")
     if commission_type in ["ASmallStepForHilichurls", "Emergency", "IcyIssues", "ForTheHarbingers", "IncreasingDanger", "BigIceColdCrisis"]:
-        import source.commission.general.OnlyFight_general
-        return source.commission.general.OnlyFight_general.FightOnlyGeneral(commission_type, commission_position)
+        import source.commission.general.OnlyFight
+        return source.commission.general.OnlyFight.FightOnlyGeneral(commission_type, commission_position)
     # elif commission_type == "IncreasingDanger":
     #     import source.commission.general.IncreasingDanger_general
     #     return source.commission.general.IncreasingDanger_general.IncreasingDangerGeneral(commission_position)

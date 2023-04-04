@@ -10,7 +10,7 @@ class MissionSakuraBloom1(MissionExecutor):
         MissionExecutor (_type_): _description_
     """
     def __init__(self):
-        super().__init__()
+        super().__init__(is_CFCF=True,is_PUO=True,is_TMCF=True)
         self.setName("MissionSakuraBloom1")
         self.sakura1 = [
             "SakuraBloom167910986687",

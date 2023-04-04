@@ -20,7 +20,7 @@ class AlphaLoop(BaseThreading):
         self.setName('Alpha_Loop')
         self.stop_flag = False
         chara_list = combat_lib.get_chara_list()
-        self.combat_loop = combat_loop.Combat_Controller(chara_list)
+        self.combat_loop = combat_loop.CombatController(chara_list)
         # self.combat_loop.pause_threading()
         self.combat_loop.start()
 

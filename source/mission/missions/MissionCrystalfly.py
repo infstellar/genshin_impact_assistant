@@ -2,7 +2,7 @@ from source.mission.mission_template import MissionExecutor
 
 class MissionCrystalfly(MissionExecutor):
     def __init__(self):
-        super().__init__()
+        super().__init__(is_CFCF=True,is_PUO=True,is_TMCF=True)
         self.setName("MissionCrystalfly")
     
     def exec_mission(self):

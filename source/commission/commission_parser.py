@@ -40,7 +40,7 @@ class CommissionParser():
             img = itt.capture(jpgmode=0)
             img = crop(img, cap_posi)
             img = recorp(img, [1920,1080,3],cap_posi)
-            positions = itt.match_multiple_img(img, template=asset.CommissionIcon.image)
+            positions = itt.match_multiple_img(img, template=asset.BigmapCommissionIcon.image)
             if len(positions)>0:
                 curr_posi = genshin_map.get_bigmap_posi()
                 for i in positions:

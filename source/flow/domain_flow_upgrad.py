@@ -18,7 +18,7 @@ class DomainFlowConnector(FlowConnector):
         super().__init__()
         self.checkup_stop_func = None
         chara_list = combat_lib.get_chara_list()
-        self.combat_loop = combat_loop.Combat_Controller(chara_list)
+        self.combat_loop = combat_loop.CombatController(chara_list)
         
         self.lockOnFlag = 0
         self.move_timer = timer_module.Timer()

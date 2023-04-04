@@ -33,7 +33,7 @@ class MissionAutoCollector(MissionExecutor):
         return ret
     
     def __init__(self):
-        super().__init__()
+        super().__init__(is_CFCF=True,is_PUO=True,is_TMCF=True)
         self.setName("MissionAutoCollector")
         
         collector_config = load_json("auto_collector.json")

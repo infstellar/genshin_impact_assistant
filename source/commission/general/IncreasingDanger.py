@@ -4,8 +4,11 @@ from source.mission.mission_template import ERR_FAIL
 
 class IncreasingDangerGeneral(CommissionTemplate):
     def __init__(self, commission_position):
-        super().__init__("IncreasingDanger", commission_position)
+        super().__init__("IncreasingDanger", commission_position, is_CCT=True)
 
+    def _aim_to_commission_icon(self):
+        pass
+    
     def exec_mission(self):
         r = self.move_straight(self.commission_position, is_tp=True)
         if r == ERR_FAIL:return

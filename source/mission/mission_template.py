@@ -7,6 +7,7 @@ from source.funclib import combat_lib, generic_lib
 from source.interaction.interaction_core import itt
 from source.funclib.err_code_lib import ERR_PASS
 from source.common.timer_module import AdvanceTimer
+from source.controller.combat_loop import CombatController
 
 
 ERR_FAIL = "FAIL"
@@ -19,15 +20,25 @@ class TeyvatMoveError(Exception):pass
 class PickUpOperatorError(Exception):pass
 
 class MissionExecutor(BaseThreading):
-    def __init__(self):
+    def __init__(self, is_CFCF=False, is_TMCF=False, is_PUO=False, is_CCT=False):
         super().__init__()
-        self.CFCF = collector_flow_upgrad.CollectorFlowController()
-        self._add_sub_threading(self.CFCF,start=False)
+        self.is_CFCF=is_CFCF
+        self.is_TMCF=is_TMCF
+        self.is_PUO=is_PUO
+        self.is_CCT=is_CCT
+        if is_CFCF:
+            self.CFCF = collector_flow_upgrad.CollectorFlowController()
+            self._add_sub_threading(self.CFCF, start=False)
         self.picked_list = []
-        self.TMCF = teyvat_move_flow_upgrad.TeyvatMoveFlowController()
-        self._add_sub_threading(self.TMCF,start=False)
-        self.PUO = PickupOperator()
-        self._add_sub_threading(self.PUO,start=False)
+        if is_TMCF:
+            self.TMCF = teyvat_move_flow_upgrad.TeyvatMoveFlowController()
+            self._add_sub_threading(self.TMCF, start=False)
+        if is_PUO:
+            self.PUO = PickupOperator()
+            self._add_sub_threading(self.PUO, start=False)
+        if is_CCT:
+            self.CCT = CombatController()
+            self._add_sub_threading(self.CCT, start=False)
         self.setName(__name__)
         self.last_move_along_position = [99999,99999]
 
@@ -180,9 +191,10 @@ class MissionExecutor(BaseThreading):
             
         
     def start_thread(self):
-        self.PUO.start()
-        self.CFCF.start()
-        self.TMCF.start()
+        if self.is_CFCF: self.CFCF.start()
+        if self.is_TMCF: self.TMCF.start()
+        if self.is_PUO: self.PUO.start()
+        if self.is_CCT: self.CCT.start()
     
     def loop(self):
         self.start_thread()

@@ -54,7 +54,7 @@ class CollectorFlowConnector(FlowConnector):
 
         self.puo = pickup_operator.PickupOperator()
         chara_list = combat_lib.get_chara_list()
-        self.cct = combat_loop.Combat_Controller(chara_list)
+        self.cct = combat_loop.CombatController(chara_list)
 
         
     

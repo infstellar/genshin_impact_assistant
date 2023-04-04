@@ -2,7 +2,7 @@ from source.mission.mission_template import MissionExecutor
 
 class MissionSweatFlower1(MissionExecutor):
     def __init__(self):
-        super().__init__()
+        super().__init__(is_CFCF=True,is_PUO=True,is_TMCF=True)
         self.setName("MissionSweatFlower1")
     
     def exec_mission(self):

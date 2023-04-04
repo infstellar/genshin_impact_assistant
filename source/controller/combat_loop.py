@@ -20,7 +20,7 @@ def stop_func_example():  # True:stop;False:continue
     return False
 
 
-class Combat_Controller(BaseThreading):
+class CombatController(BaseThreading):
     def __init__(self, chara_list=None):
         super().__init__()
         if chara_list is None:
@@ -110,7 +110,7 @@ class Combat_Controller(BaseThreading):
 
 
 if __name__ == '__main__':
-    cl = Combat_Controller()
+    cl = CombatController()
     cl.start()
     # a = get_chara_list()
     # print()

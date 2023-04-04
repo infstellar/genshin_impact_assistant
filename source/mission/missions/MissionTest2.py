@@ -2,7 +2,7 @@ from source.mission.mission_template import MissionExecutor
 
 class MissionTest2(MissionExecutor):
     def __init__(self):
-        super().__init__()
+        super().__init__(is_CFCF=True,is_PUO=True,is_TMCF=True)
         self.setName("MissionTest")
     
     def exec_mission(self):

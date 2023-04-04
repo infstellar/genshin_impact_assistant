@@ -77,7 +77,7 @@ class CollectorFlow(BaseThreading):
         
         
         chara_list = combat_lib.get_chara_list()
-        self.cct = combat_loop.Combat_Controller(chara_list)
+        self.cct = combat_loop.CombatController(chara_list)
         self.cct.is_check_died = True
         self.cct.setDaemon(True)
         self.cct.add_stop_func(self.checkup_stop_func)

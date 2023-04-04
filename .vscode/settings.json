@@ -49,6 +49,7 @@
         "argmin",
         "Azur",
         "bigmap",
+        "CFCF",
         "chara",
         "charalist",
         "Cryo",
@@ -88,6 +89,7 @@
         "outwrapper",
         "pagename",
         "posi",
+        "PPOCR",
         "pyfile",
         "pynput",
         "Pyro",
@@ -109,6 +111,7 @@
         "TEYVAT",
         "Tian",
         "tianli",
+        "TMCF",
         "TOZERO",
         "Uiautomator",
         "uninit",
@@ -117,8 +120,7 @@
         "withalpha",
         "XCYD",
         "Ying",
-        "YOLOX",
-        "PPOCR"
+        "YOLOX"
     ],
     "codecheck.ExcludeDirectory": "",
     "codecheck.ScanDirectory": "source",

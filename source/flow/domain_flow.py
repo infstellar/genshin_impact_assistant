@@ -19,7 +19,7 @@ class DomainFlow(BaseThreading):
 
         self.itt = itt
         chara_list = combat_lib.get_chara_list()
-        self.combat_loop = combat_loop.Combat_Controller(chara_list)
+        self.combat_loop = combat_loop.CombatController(chara_list)
         self.combat_loop.setDaemon(True)
 
         self.combat_loop.pause_threading()
