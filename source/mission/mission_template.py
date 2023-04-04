@@ -14,6 +14,9 @@ class CharacterNotFound(Exception):
     pass
 
 class MissionEnd(Exception):pass
+class CollectError(Exception):pass
+class TeyvatMoveError(Exception):pass
+class PickUpOperatorError(Exception):pass
 
 class MissionExecutor(BaseThreading):
     def __init__(self):
@@ -183,14 +186,19 @@ class MissionExecutor(BaseThreading):
     
     def loop(self):
         self.start_thread()
+        # self.mission_result = False
         try:
             self.exec_mission()
+        except MissionEnd as e:
+            logger.info("Mission end by exception.")
+        # except CollectError as e:
+        #     logger.error("Mission end: CollectError")
+        # except TeyvatMoveError as e:
+        #     logger.error("Mission end: TeyvatMoveError")
         except Exception as e:
-            if isinstance(e, MissionEnd):
-                logger.info("Mission end by exception.")
-            else:
-                logger.error(f"ERROR in execute mission: {self.name} {e}")
-                logger.exception(e)
+            logger.error(f"ERROR in execute mission: {self.name} {e}")
+            logger.exception(e)
+
         itt.key_up('w') # 让所有按键起飞
         self.pause_threading()
     

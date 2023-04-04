@@ -13,6 +13,7 @@ class CommissionTemplate(MissionExecutor):
         self.commission_position = commission_position
 
         self.is_pickup_spoils = False 
+        self.is_commission_succ = False
 
     def is_mission_succ(self):
         pass
