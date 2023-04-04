@@ -132,6 +132,7 @@ BigmapCommissionIcon = ImgIcon(path=fr"{ROOT_PATH}\assets\imgs\Windows\map\big_m
 AreaSidebarCommissionName = PosiTemplate()
 SidebarIsCommissionExist = ImgIcon()
 CommissionIcon = ImgIcon()
+CommissionIconInCommission = ImgIcon(is_bbg=False)
 
 QTSX = TextTemplate(text=
 {

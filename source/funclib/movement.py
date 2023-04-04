@@ -121,6 +121,25 @@ def view_to_angle_domain(angle, stop_func, deltanum=0.65, maxloop=100, corrected
         if i > 1:
             logger.debug('last degree: ' + str(degree))
 
+def view_to_imgicon(cap:np.ndarray, imgicon:asset.ImgIcon):
+    corr_rate=1
+    ret_points = itt.match_multiple_img(cap, imgicon.image)
+    if len(ret_points)==0:return False
+    points_length=[]
+    for point in ret_points:
+        mx, my = SCREEN_CENTER_X,SCREEN_CENTER_Y
+        points_length.append((point[0] - mx) ** 2 + (point[1] - my) ** 2)
+    closest_point = ret_points[points_length.index(min(points_length))] # 获得距离鼠标坐标最近的一个坐标
+    px, py = closest_point
+    mx, my = SCREEN_CENTER_X,SCREEN_CENTER_Y
+    px = (px - mx) / (2.4*corr_rate)
+    py = (py - my) / (2*corr_rate) + 35 # 获得鼠标坐标偏移量
+    # print(px,py)
+    px=maxmin(px,200,-200)
+    py=maxmin(py,200,-200)
+    itt.move_to(px, py, relative=True)
+    return int(math.sqrt(px**2+py**2)) # threshold: 50
+    
 
 # def view_to_angle_teyvat(angle, stop_func, deltanum=1, maxloop=30, corrected_num=CORRECT_DEGREE):
 #     if IS_DEVICE_PC:
@@ -194,5 +213,11 @@ def get_current_motion_state() -> str:
 
 # view_to_angle(-90)
 if __name__ == '__main__':
+    while 1:
+        time.sleep(0.05)
+        cap = itt.capture(jpgmode=0)
+        ban_posi=asset.CommissionIcon.cap_posi
+        cap[ban_posi[1]:ban_posi[3],ban_posi[0]:ban_posi[2]]=0
+        print(view_to_imgicon(cap, asset.CommissionIconInCommission))
     # cview(-90, VERTICALLY)
     move_to_position([71, -2205])
