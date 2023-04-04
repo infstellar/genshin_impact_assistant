@@ -44,7 +44,7 @@ class CommissionParser():
             if len(positions)>0:
                 curr_posi = genshin_map.get_bigmap_posi()
                 for i in positions:
-                    target_px_posi = np.array(list(i))
+                    target_px_posi = np.array(list(i))+np.array([8,8])
                     delta_posi = genshin_map.convert_InGenshinMapPX_to_GIMAP(target_px_posi-np.array([SCREEN_CENTER_X,SCREEN_CENTER_Y]))
                     target_gimap_posi = curr_posi.gimap + delta_posi
                     target_tianli_posi = GIMAPPosition(target_gimap_posi).tianli

@@ -27,7 +27,7 @@ def stop_func_example():  # True:stop;False:continue
 
 
 class CombatController(AdvanceThreading):
-    def __init__(self, chara_list=None, mode='Normal'):
+    def __init__(self, chara_list=None):
         super().__init__()
         if chara_list is None:
             chara_list = combat_lib.get_chara_list()
@@ -41,8 +41,8 @@ class CombatController(AdvanceThreading):
         self.sco.pause_threading()
 
         self.is_check_died = False
-        self.mode=mode
-        
+        self.mode="Normal"
+        self.sco.mode = self.mode
         # self.super_stop_func=super_stop_func
     
     def loop(self):
@@ -67,6 +67,7 @@ class CombatController(AdvanceThreading):
         if self.pause_threading_flag != False:
             self.current_num = combat_lib.get_current_chara_num(self.checkup_stop_func)
             self.pause_threading_flag = False
+            self.sco.mode = self.mode
             self.sco.continue_threading()
 
     def pause_threading(self):

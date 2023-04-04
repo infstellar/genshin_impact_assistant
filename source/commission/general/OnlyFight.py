@@ -11,6 +11,6 @@ class FightOnlyGeneral(CommissionTemplate):
         if r == ERR_FAIL:return
         r = self.collect(is_combat=True, is_activate_pickup=self.is_pickup_spoils)
         if r == ERR_FAIL:return
-        self.commission_succ = True
+        self.is_commission_succ = True
 
         

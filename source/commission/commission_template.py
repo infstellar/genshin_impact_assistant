@@ -23,16 +23,22 @@ class CommissionTemplate(MissionExecutor):
         pass
         # itt.capture()
 
-    def is_commission_end(self):
+    def is_commission_complete(self):
         if self.is_commission_start == False:
             if self._is_in_commission():
                 self.is_commission_start = True
-                return True
+                return False
             else:
                 return False
         else:
             if not self._is_in_commission():
                 return self._commission_end_timer.reached_and_reset()
+                # for debug
+                if self._commission_end_timer.reached_and_reset():
+                    print()
+                    return True
+                else:
+                    return False
             else:
                 self._commission_end_timer.reset()
                 

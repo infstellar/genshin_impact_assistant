@@ -70,7 +70,7 @@ class Character:
 
     def _get_position_tactic(self):
         if self.position == "Shield":
-            return "e?e:none;"
+            return "e?e~:none;"
         elif self.position == "Core":
             return "a,a"
     

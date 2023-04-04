@@ -37,6 +37,7 @@ class SwitchCharacterOperator(BaseThreading):
         self.died_character = [] # 存储的是n而非name
         self.reborn_timer = Timer(diff_start_time=150)
         self.position_check_timer = AdvanceTimer(0.5)
+        self.mode="Normal"
     
     def run(self):
         while 1:
@@ -56,18 +57,23 @@ class SwitchCharacterOperator(BaseThreading):
             if self.checkup_stop_func():
                 self.pause_threading_flag = True
                 continue
-            if self.aim_operator.sco_blocking_request.is_blocking():
-                self.aim_operator.sco_blocking_request.reply_request()
+            if self.mode == 'Shield':
+                self.aim_operator.pause_threading()
                 self.switch_character(switch_type="SHIELD")
-                time.sleep(0.5)
-                continue
-            if self.tactic_operator.get_working_statement():  # tactic operator working
-                time.sleep(0.1)
-                if self.position_check_timer.reached_and_reset():
-                    self.switch_character(switch_type="SHIELD")
+                time.sleep(1)
             else:
-                self.switch_character(switch_type="TRIGGER")
-                time.sleep(0.5)
+                if self.aim_operator.sco_blocking_request.is_blocking():
+                    self.aim_operator.sco_blocking_request.reply_request()
+                    self.switch_character(switch_type="SHIELD")
+                    time.sleep(0.5)
+                    continue
+                if self.tactic_operator.get_working_statement():  # tactic operator working
+                    time.sleep(0.1)
+                    if self.position_check_timer.reached_and_reset():
+                        self.switch_character(switch_type="SHIELD")
+                else:
+                    self.switch_character(switch_type="TRIGGER")
+                    time.sleep(0.5)
 
     
     def _check_and_reborn(self) -> bool:

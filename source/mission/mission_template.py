@@ -128,9 +128,13 @@ class MissionExecutor(BaseThreading):
         r = self.move(MODE="PATH", path_dict = path_dict, is_tp = is_tp, is_reinit=is_reinit)
         self.last_move_along_position = path_dict["end_position"]
         return r
-    def combat(self):
-        pass
-
+    def start_combat(self, mode="Normal"):
+        self.CCT.mode=mode
+        self.CCT.continue_threading()
+    
+    def stop_combat(self):
+        self.CCT.pause_threading()
+    
     def pickup_once(self):
         self.PUO.pickup_recognize()
     
