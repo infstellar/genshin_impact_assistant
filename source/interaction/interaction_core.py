@@ -91,7 +91,11 @@ class InteractionBGD:
         else:
             from source.interaction.capture import EmulatorCapture
             self.capture_obj = EmulatorCapture()
-
+            
+        self.key_status={'w':False}
+        self.key_freeze={}
+        
+        
         # if handle != 0:
         #     static_lib.HANDLE = handle
         #     logger.debug(f"handle: {static_lib.HANDLE}")
@@ -665,6 +669,7 @@ class InteractionBGD:
         if key == 'w':
             static_lib.W_KEYDOWN = True
         self.itt_exec.key_down(key)
+        self.key_status[key]=True
         self.operation_lock.release()
         
         # if is_log:
@@ -683,6 +688,7 @@ class InteractionBGD:
         if key == 'w':
             static_lib.W_KEYDOWN = False
         self.itt_exec.key_up(key)
+        self.key_status[key]=False
         self.operation_lock.release()
         
         # if is_log:
@@ -698,6 +704,7 @@ class InteractionBGD:
         self.operation_lock.acquire()
         # print('lock!')
         self.itt_exec.key_press(key)
+        self.key_status[key]=False
         self.operation_lock.release()
         
         # logger.debug("keyPress " + key + ' |function name: ' + inspect.getframeinfo(inspect.currentframe().f_back)[2])
@@ -744,7 +751,20 @@ class InteractionBGD:
         # print('lock!')
         self.itt_exec.drag(origin_xy, targe_xy, isChromelessWindow=self.isChromelessWindow)
         self.operation_lock.release()
+        
+    def freeze_key(self, key, operate="down"):
+        self.key_freeze[key] = self.key_status[key]
+        if operate=="down":
+            itt.key_down(key)
+        else:
+            itt.key_up(key)
     
+    def unfreeze_key(self, key):
+        operate = self.key_freeze[key]
+        if operate:
+            itt.key_down(key)
+        else:
+            itt.key_up(key)
 def itt_test(itt: InteractionBGD):
     pass
 

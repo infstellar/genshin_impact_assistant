@@ -11,6 +11,7 @@ from source.map.detection.minimap import MiniMap
 from source.map.extractor.convert import MapConverter
 from source.map.position.position import *
 from source.util import *
+from source.common.timer_module import AdvanceTimer
 import threading
 
 REGION_TEYVAT = [
@@ -41,6 +42,7 @@ class Map(MiniMap, BigMap, MapConverter):
         self.smallmap_upd_timer = timer_module.Timer(2)
         self.small_map_init_flag = False
         self.lock = threading.Lock()
+        self.check_bigmap_timer = timer_module.Timer(5)
 
     def _upd_smallmap(self) -> None:
         # self.lock.acquire()
@@ -54,6 +56,40 @@ class Map(MiniMap, BigMap, MapConverter):
             self.update_bigmap(itt.capture(jpgmode=0))
         # self.lock.release()
 
+    def get_and_verify_position(self):
+        # print(self.check_bigmap_timer.get_diff_time())
+        curr_posi = self.get_position()
+        if self.check_bigmap_timer.get_diff_time()<5:
+            offset_rate = min(1, (self.check_bigmap_timer.get_diff_time())*0.1+0.5)
+        else:
+            offset_rate=1
+        print(offset_rate, 5-self.check_bigmap_timer.get_diff_time())
+        if not self.is_similarity_qualified(offset_rate):
+            logger.error(f"Please waiting, similarity too low.")
+            logger.info(f"{self.position_similarity} {self.position_similarity_local}")
+            i=0
+            itt.freeze_key('w', 'up')
+            while 1:
+                time.sleep(0.05)
+                curr_posi = self.get_position()
+                if i>=20:
+                    logger.warning(f"fail to get minimap position, try using bigmap instead.")
+                    ui_control.ensure_page(UIPage.page_bigmap)
+                    pp = self.get_bigmap_posi()
+                    curr_posi = pp.tianli
+                    self.init_position(tuple(map(int, list(pp.gimap))))
+                    logger.info(f"position: {curr_posi}")
+                    ui_control.ensure_page(UIPage.page_main)
+                    break
+                if self.is_similarity_qualified():
+                    logger.info(f"Continue.")
+                    break
+                i+=1
+            itt.unfreeze_key('w')
+            self.check_bigmap_timer.reset()
+        # print(self.check_bigmap_timer.get_diff_time())
+        return curr_posi
+    
     def get_position(self):
         """get current character position
 
@@ -68,6 +104,9 @@ class Map(MiniMap, BigMap, MapConverter):
         #     self.smallmap_upd_timer.reset()
         return self.convert_GIMAP_to_cvAutoTrack(self.position)
 
+    def is_similarity_qualified(self, offset_rate=1):
+        return self.position_similarity>=0.4*offset_rate and self.position_similarity_local>=0.05*offset_rate
+    
     def reinit_smallmap(self) -> None:
         if ui_control.verify_page(UIPage.page_main):
             ui_control.ui_goto(UIPage.page_bigmap)
@@ -311,8 +350,10 @@ logger.info(f"genshin map object created")
 if __name__ == '__main__':
     # genshin_map.bigmap_tp(genshin_map.convert_GIMAP_to_cvAutoTrack([6642.003, 5485.38]),
     #                       tp_type=["Domain"])  # tp to *染之庭
+    genshin_map.reinit_smallmap()
     while 1:
         time.sleep(0.2)
         # input()
-        print(genshin_map.get_rotation())
+        # itt.key_down('w')
+        print(genshin_map.get_and_verify_position())
     

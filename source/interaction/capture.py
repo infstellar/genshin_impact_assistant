@@ -130,10 +130,13 @@ class WindowsCapture(Capture):
         #desktop_dc = self.GetDC(0)
         #scale_x = self.GetDeviceCaps(desktop_dc, 88)
         #scale_y = self.GetDeviceCaps(desktop_dc, 90)
-
-        # 计算实际截屏区域大小
-        width = int(int(width)*self.scale_factor)
-        height = int(int(height)*self.scale_factor)
+        width=int(width)
+        if width in list(map(int, [1080*0.75, 1080*1, 1080*1.25, 1080*1.5, 1080*1.75, 1080*2, 1080*2.25, 1080*2.5, 1080*2.75, 1080*3])):
+            width = 1080
+            height = 1920
+            # 计算实际截屏区域大小
+            # width = int(int(width)*self.scale_factor)
+            # height = int(int(height)*self.scale_factor)
         
         # 开始截图
         dc = self.GetDC(static_lib.HANDLE)
