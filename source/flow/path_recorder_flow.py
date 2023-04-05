@@ -10,6 +10,7 @@ from source.funclib import generic_lib, movement, combat_lib
 from source.funclib.err_code_lib import *
 from source.manager import posi_manager as PosiM, asset
 from source.interaction.interaction_core import itt
+import pytz, datetime
 
 
 class PathRecorderConnector(FlowConnector):
@@ -96,6 +97,7 @@ class PathRecorderCore(FlowTemplate):
         self.upper = upper
         self.enter_flag = False
         self.upper.while_sleep = 0.05
+        self.record_index=0
         # self.all_position = []
 
     def _add_posi_to_dict(self, posi:list):
@@ -187,10 +189,11 @@ class PathRecorderCore(FlowTemplate):
         curr_posi = tracker.get_position()
         self.upper.collection_path_dict["end_position"]=list(curr_posi)
         self._add_break_position(curr_posi)
-        jsonname = \
-            self.upper.path_name +\
-            str(round(time.time(),2)).replace('.','')+\
-            ".json"
+        tz = pytz.timezone('Etc/GMT-8')
+        t = datetime.datetime.now(tz)
+        date = t.strftime("%Y%m%d%H%M%S")
+        jsonname = f"{self.upper.path_name}{date}i{self.record_index}.json"
+        self.record_index+=1
         
         save_json(self.upper.collection_path_dict,json_name=jsonname,default_path=f"assets\\TeyvatMovePath")
         logger.info(f"recording save as {jsonname}")

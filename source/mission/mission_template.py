@@ -49,6 +49,7 @@ class MissionExecutor(BaseThreading):
             "CharaDied":False,
             "LowHP":False
             }
+        self.itt = itt
 
     def refresh_picked_list(self):
         self.picked_list = []

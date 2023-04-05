@@ -95,7 +95,7 @@ class AimOperator(BaseThreading):
                         self.sco_blocking_request.recovery_request() # 解除申请
                         if not r:
                             if self.checkup_stop_func():continue
-                            if not self._is_in_combat():
+                            if not self._is_in_combat(times=3):
                                 logger.debug(f"AimOperator: No enemy exist.")
                                 self.enemy_flag = False
                 else:
@@ -177,15 +177,16 @@ class AimOperator(BaseThreading):
             if t.reached():
                 return True
     
-    def _is_in_combat(self):
-        for i in range(40):
-            if i%8==0:
-                if self.checkup_stop_func():return
-            movement.cview(12)
-            r = combat_lib.combat_statement_detection()
-            if r[0] or r[1]:
-                return True
-        return False
+    def _is_in_combat(self, times=1):
+        for ii in range(times):
+            for i in range(40):
+                if i%8==0:
+                    if self.checkup_stop_func():return
+                movement.cview(12)
+                r = combat_lib.combat_statement_detection()
+                if r[0] or r[1]:
+                    return True
+            return False
     
     def _moving_find_enemy(self):
         # enemy_possible_rotation = []

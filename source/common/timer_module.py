@@ -205,4 +205,7 @@ class Genshin400Timer():
 if __name__ == '__main__':
     a = Genshin400Timer()
     print(a.is_new_day())
+    tz = pytz.timezone('Etc/GMT-8')
+    t = datetime.datetime.now(tz)
+    date = t.strftime("%Y%m%d%H%M%S")
     # print(a.get_diff_time())
