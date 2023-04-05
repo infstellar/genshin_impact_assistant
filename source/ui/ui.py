@@ -51,7 +51,7 @@ class UI():
             destination (Page):
             confirm_wait:
         """
-        retry_timer = AdvanceTimer(3)
+        retry_timer = AdvanceTimer(1)
         self.switch_ui_lock.acquire()
         # Reset connection
         for page in self.ui_pages:
@@ -74,7 +74,7 @@ class UI():
             visited = new
 
         logger.info(f"UI goto {destination}")
-        confirm_timer = AdvanceTimer(confirm_wait, count=int(confirm_wait // 0.5)).start()
+        confirm_timer = AdvanceTimer(confirm_wait, count=1).start()
         while 1:
             # GOTO_MAIN.clear_offset()
             # if skip_first_screenshot:
@@ -97,18 +97,20 @@ class UI():
                     continue
                 if page.is_current_page(itt):
                     logger.info(f'Page switch: {page} -> {page.parent}')
-                    if retry_timer.reached():
-                        button = page.links[page.parent]
-                        if isinstance(button,str):
+                    # if retry_timer.reached():
+                    button = page.links[page.parent]
+                    if isinstance(button,str):
+                        if retry_timer.reached():
                             itt.key_press(button)
-                        elif isinstance(button,Button):
-                            itt.appear_then_click(button)
-                        clicked = True
-                        confirm_timer.reset()
-                        retry_timer.reset()
-                    else:
-                        itt.delay(0.2) # wait
-                        break
+                            retry_timer.reset()
+                    elif isinstance(button,Button):
+                        itt.appear_then_click(button)
+                    clicked = True
+                    confirm_timer.reset()
+                        # retry_timer.reset()
+                    # else:
+                    #     itt.delay(0.2) # wait
+                    #     break
                 # if self.appear(page.check_button, offset=offset, interval=5):
                 #     logger.info(f'Page switch: {page} -> {page.parent}')
                 #     button = page.links[page.parent]

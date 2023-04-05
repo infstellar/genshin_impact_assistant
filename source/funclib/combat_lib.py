@@ -235,7 +235,7 @@ def get_current_chara_num(stop_func, max_times = 1000):
 
 
     
-def get_arrow_img(img):
+def get_arrow_img(img, show_res=False):
     img = itt.png2jpg(img, channel='ui', alpha_num=150)
     red_num = 250
     blue_num = 90
@@ -280,7 +280,7 @@ def get_arrow_img(img):
     # arrow_img[im_src[:, :, 1] > green_num + float_num] = 0
     # arrow_img[im_src[:, :, 1] < green_num - float_num] = 0
 
-    if False:
+    if show_res:
         # cv2.imshow("mask",mask)
         cv2.imshow("2131231", arrow_img)
         cv2.waitKey(10)
@@ -484,18 +484,17 @@ class CombatStatementDetectionLoop(BaseThreading):
             r = combat_statement_detection()
             state = r[0] or r[1]
         if state != self.current_state:
-            
             if self.current_state == True: # 切换到无敌人慢一点, 8s
-                self.state_counter += 1
                 self.while_sleep = 0.8
             elif self.current_state == False: # 快速切换到遇敌
                 self.while_sleep = 0.02
-                self.state_counter += 1
+            
+            self.state_counter += 1
         else:
             self.state_counter = 0
             self.while_sleep = 0.5
         if self.state_counter >= 10:
-            logger.debug(f'combat_statement_detection change state: {self.current_state}')
+            logger.debug(f'combat_statement_detection change state: {self.current_state} -> {state} {r}')
             # if self.current_state == False:
             #     only_arrow_timer.reset()
             self.state_counter = 0
@@ -513,6 +512,6 @@ if __name__ == '__main__':
     # set_party_setup("Lisa")
     while 1:
         time.sleep(0.1)
-        combat_statement_detection()
+        get_arrow_img(itt.capture(),True)
         # print(get_character_busy(itt, default_stop_func))
         # time.sleep(0.2)

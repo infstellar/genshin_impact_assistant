@@ -56,6 +56,8 @@ class CommissionParser():
                     
                     itt.move_and_click(list(i))
                     itt.delay("animation")
+                    itt.delay("animation")
+                    itt.delay("animation")
                     com_type = self._detect_commission_type()
                     itt.delay("animation")
                     itt.key_press('esc')
@@ -94,6 +96,7 @@ class CommissionParser():
                     return com_i.name
         
         logger.warning(f"Unknown commission type: {ocr_res}")
+        
         
         return None
         
