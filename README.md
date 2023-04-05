@@ -136,6 +136,10 @@ To没用过github的小伙伴: 描述文档中的蓝色文字是链接,可以打
 
 [FAQ](doc/FAQ.md)
 
+## 已知问题 Known Issues
+
+[Known issues](doc/known_issues.md)
+
 ## 性能需求
 
 - 此程序至少需要`2.5G内存`与`3G存储空间`(完整安装).
