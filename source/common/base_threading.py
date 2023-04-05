@@ -34,7 +34,7 @@ class BaseThreading(threading.Thread):
             self.pause_threading_flag = False
 
     def stop_threading(self):
-        logger.debug(f"{self.name} stop.")
+        logger.debug(f"{self.name} stopping.")
         self.stop_threading_flag = True
         self.pause_threading_flag = True
         self._clean_sub_threading()
@@ -101,6 +101,7 @@ class BaseThreading(threading.Thread):
         while 1:
             time.sleep(self.while_sleep)
             if self.stop_threading_flag:
+                logger.debug(f"{self.name} stop.")
                 return
 
             if self.pause_threading_flag:

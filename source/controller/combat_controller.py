@@ -31,7 +31,7 @@ class CombatController(AdvanceThreading):
         super().__init__()
         if chara_list is None:
             chara_list = combat_lib.get_chara_list()
-        self.setName('Combat_Controller')
+        self.setName('CombatController')
 
         self.chara_list = chara_list
         self.pause_threading_flag = False
@@ -79,9 +79,6 @@ class CombatController(AdvanceThreading):
     def checkup_trapped(self):
         pass
         # if itt.capture(posi=posiM)
-
-    def stop_threading(self):
-        self.stop_threading_flag = True
 
 
 if __name__ == '__main__':

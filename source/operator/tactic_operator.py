@@ -20,7 +20,7 @@ def stop_func_example():  # True:stop;False:continue
 class TacticOperator(BaseThreading):
     def __init__(self):
         super().__init__()
-        self.setName('Tactic_Operator')
+        self.setName('TacticOperator')
         self.while_sleep = 0.05
         self.hp_chara_list_green = [34, 215, 150, 255]  # BGR
         self.hp_chara_list_red = [102, 102, 255, 255]  # BGR

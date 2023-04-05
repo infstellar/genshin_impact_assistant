@@ -365,7 +365,9 @@ def crop(image, area):
         image = cv2.copyMakeBorder(image, *border, borderType=cv2.BORDER_CONSTANT, value=(0, 0, 0))
     return image
 
-def recorp(image, size, area):
+def recorp(image, area, size=None):
+    if size is None:
+        size=[1920,1080,3]
     r = np.zeros((size[1], size[0], size[2]), dtype='uint8')
     r[area[1]:area[3], area[0]:area[2], :] = image
     return r

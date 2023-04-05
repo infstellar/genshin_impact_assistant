@@ -23,7 +23,7 @@ BG_num = 100
 class AimOperator(BaseThreading):
     def __init__(self):
         super().__init__()
-        self.setName('Aim_Operator')
+        self.setName('AimOperator')
         self.itt = itt
         self.loop_timer = Timer()
         auto_aim_json = load_json("auto_aim.json")
