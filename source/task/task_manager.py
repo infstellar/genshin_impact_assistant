@@ -7,6 +7,7 @@ from source.common.base_threading import BaseThreading
 COLLECTION_PATH_TASK = "CollectionPathTask"
 DOMAIN_TASK = "DomainTask"
 MISSION_TASK = "MissionTask"
+COMMISSION_TASK = "CommissionTask"
 
 class TaskManager(BaseThreading):
     def __init__(self) -> None:
@@ -62,6 +63,9 @@ class TaskManager(BaseThreading):
             elif task_name == MISSION_TASK:
                 from source.task.mission_task import MissionTask
                 self.curr_task = MissionTask()
+            elif task_name == COMMISSION_TASK:
+                from source.commission.commission_executor import CommissionExecutor
+                self.curr_task = CommissionExecutor()
             elif task_name == 'CollectorTask':
                 pass
             logger.info(t2t("Task") + task_name + t2t(" Start."))

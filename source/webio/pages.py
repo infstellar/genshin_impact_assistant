@@ -114,6 +114,10 @@ class MainPage(Page):
                         "value":"DomainTask"
                     },
                     {
+                        "label":t2t("Daily Commission"),
+                        "value":"CommissionTask"
+                    },
+                    {
                         "label":t2t("Mission"),
                         "value":"MissionTask"
                     }
