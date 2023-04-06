@@ -1,8 +1,16 @@
 import os
-
-for root, dirs, files in os.walk(os.path.abspath(r'source')):
-    for file in files:
-        if file.endswith('.py'):
-            print(file)
-            os.system(f'python translation\\pygettext.py -d zh_CN -o pott.pot {os.path.join(root, file)}')
-            # os.system(f'python translation\\pygettext.py -d en_US -p translation\\locale\\en_US\\LC_MESSAGES {os.path.join(root, file)}')
+os.path.abspath("translation\\pygettext")
+pyfile = os.path.abspath('translation\\pygettext.py')
+command_head_en = f"python translation\\pygettext.py -k t2t -d en_US -p translation\\locale\\en_US\\LC_MESSAGES"
+command_head_zh = f'python translation\\pygettext.py -k t2t -d zh_CN -p translation\\locale\\zh_CN\\LC_MESSAGES'
+command=''
+for root, dirs, files in os.walk(r'source'):
+    for d in dirs:
+        if '__pycache__' in root or d == '__pycache__':
+            continue
+        print(os.path.join(root,d))
+        command+=f"{os.path.join(root,d)}\\*.py "
+print(f'{command_head_en} {command}')
+os.system(f'{command_head_en} {command}')
+print(f'{command_head_zh} {command}')
+os.system(f'{command_head_zh} {command}')
