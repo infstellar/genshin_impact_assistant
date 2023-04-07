@@ -6,7 +6,7 @@ import time  # 8药删了，qq了
 import math
 import numpy as np
 import gettext
-from loguru import logger
+from source.logger import logger
 import cv2
 import win32gui, win32process, psutil
 import ctypes, pickle

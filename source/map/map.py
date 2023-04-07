@@ -279,7 +279,7 @@ class Map(MiniMap, BigMap, MapConverter):
 
         while not itt.appear_then_click(asset.SwitchMapAreaButton):
             itt.delay(0.2)
-
+        itt.delay(0.5)
         if tp_region == "Mondstadt":
             while not itt.appear_then_click(asset.MapAreaMD): itt.delay(0.2)
         elif tp_region == "Liyue":

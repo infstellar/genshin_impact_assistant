@@ -193,7 +193,7 @@ def is_character_busy(print_log = True):
         return False
     if np.std(cols)<=5:
         if abs(max(cap[46,1846])-np.average(cols))<=5:
-            print("1")
+            logger.warning_once(t2t("Located at the map boundary, the is_chara_busy function enables fuzzy recognition mode."))
             return False
     if print_log:
         logger.trace(f"waiting: character busy: t1{t1} t2{t2}")
