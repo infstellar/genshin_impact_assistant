@@ -180,17 +180,24 @@ def is_character_busy(print_log = True):
         # print(min(cap[p[0], p[1]]))
         if min(cap[p[0], p[1]]) > 248:
             t2 += 1
-    
+    cols = []
+    for i in range(4):
+        p = posi_manager.chara_num_list_point[i]
+        cols.append(max(cap[p[0], p[1]]))
+    del cols[cols.index(min(cols))]
     # elif t == 4:
     #     logger.debug("function: get_character_busy: t=4： 测试中功能，如果导致换人失败，反复输出 waiting 请上报。")
     #     return True
     
     if t1 >= 3 and t2 == 3:
         return False
-    else:
-        if print_log:
-            logger.trace(f"waiting: character busy: t1{t1} t2{t2}")
-        return True
+    if np.std(cols)<=5:
+        if abs(max(cap[46,1846])-np.average(cols))<=5:
+            print("1")
+            return False
+    if print_log:
+        logger.trace(f"waiting: character busy: t1{t1} t2{t2}")
+    return True
 
 def chara_waiting(stop_func, max_times = 1000, is_usd=True):
     if is_usd:
@@ -512,6 +519,7 @@ if __name__ == '__main__':
     # set_party_setup("Lisa")
     while 1:
         time.sleep(0.1)
-        get_arrow_img(itt.capture(),True)
+        print(is_character_busy())
+        # get_arrow_img(itt.capture(),True)
         # print(get_character_busy(itt, default_stop_func))
         # time.sleep(0.2)
