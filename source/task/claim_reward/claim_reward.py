@@ -18,8 +18,10 @@ class ClaimRewardMission(MissionExecutor, Talk):
         res = ocr.get_all_texts(img)
         rewards = []
         for text in res:
-            if text == "探索派遣奖励":
+            if "探索派遣" in text:
                 rewards.append("Expedition")
+            if "每日委托" in text:
+                rewards.append("Commission")
         logger.info(rewards)
         return rewards
     
@@ -30,16 +32,16 @@ class ClaimRewardMission(MissionExecutor, Talk):
         self.available_rewards = self.get_available_reward()
         if "Expedition" in self.available_rewards or "Commission" in self.available_rewards:
             self.move_along("Katheryne20230408124320i0", is_precise_arrival=True)
+            if "Commission" in self.available_rewards:
+                self.talk_with_npc()
+                self.talk_until_switch(self.checkup_stop_func)
+                self.talk_switch(ClaimDailyCommissionReward)
+                self.exit_talk()
             if "Expedition" in self.available_rewards:
                 self.talk_with_npc()
                 self.talk_until_switch(self.checkup_stop_func)
                 self.talk_switch(DispatchCharacterOnExpedition)
                 self._exec_dispatch()
-                self.exit_talk()
-            if "Commission" in self.available_rewards:
-                self.talk_with_npc()
-                self.talk_until_switch(self.checkup_stop_func)
-                self.talk_switch(ClaimDailyCommissionReward)
                 self.exit_talk()
         
 class ClaimRewardTask(TaskTemplate):

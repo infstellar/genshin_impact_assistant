@@ -6,6 +6,7 @@ from source.funclib.generic_lib import f_recognition
 from source.ui.ui import ui_control
 from source.ui import page as UIPage
 from source.api.pdocr_complete import ocr
+from source.common.timer_module import AdvanceTimer
 
 class Talk():
     def __init__(self) -> None:
@@ -70,13 +71,17 @@ class Talk():
             return True
     
     def exit_talk(self):
+        esc_timer = AdvanceTimer(2)
         while 1:
             if ui_control.verify_page(UIPage.page_main): return True
-            itt.key_press('esc')
+            itt.move_and_click(ButtonTalkSkip.click_position())
+            if esc_timer.reached_and_reset():
+                itt.key_press('esc')
             itt.delay(0.2)
     
 if __name__ == '__main__':
     t = Talk()
-    t.talk_with_npc()
-    t.talk_until_switch()
-    t.talk_switch(Expedition)
+    # t.talk_with_npc()
+    # t.talk_until_switch()
+    # t.talk_switch(Expedition)
+    t.exit_talk()

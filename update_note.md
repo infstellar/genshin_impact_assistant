@@ -5,7 +5,7 @@ collet增加一个在半径内逛街找敌人的功能
 秘境开局会点两下 原神动画问题
 自动战斗boss血条不动
 BigPudgyProblem需要对话
-蒙德传送点太多扫不到锚点
+检测。。。按钮识别是采集物还是人
 
 Done：
 游泳的usd有bug pass
@@ -17,6 +17,7 @@ QQ人哨塔可以识别委托标志去打 pass
 每日委托图片不够靠近中心 pass
 auto combat的shield模式有bug pass
 QQ人哨塔可以识别委托标志下面的距离 pass
+蒙德传送点太多扫不到锚点 pass
 
 Notice：
 太靠近地图边界会切换角色失败 alpha问题
