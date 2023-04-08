@@ -6,6 +6,7 @@ collet增加一个在半径内逛街找敌人的功能
 自动战斗boss血条不动
 BigPudgyProblem需要对话
 检测。。。按钮识别是采集物还是人
+move straight在移动视角前按下了w
 
 Done：
 游泳的usd有bug pass

@@ -209,7 +209,14 @@ def get_current_motion_state() -> str:
     else:
         return WALKING
 
-
+def move_to_posi_LoopMode(target_posi, stop_func):
+    delta_degree = abs(calculate_delta_angle(genshin_map.get_rotation(),calculate_posi2degree(target_posi)))
+    if delta_degree >= 20:
+        itt.key_up('w')
+        change_view_to_posi(target_posi, stop_func = stop_func)
+        itt.key_down('w')
+    else:
+        change_view_to_posi(target_posi, stop_func = stop_func, max_loop=4, offset=2, print_log = False)
 
 # view_to_angle(-90)
 if __name__ == '__main__':

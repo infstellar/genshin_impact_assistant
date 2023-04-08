@@ -622,6 +622,23 @@ def circle_mask(img,inner_r, outer_r):
     
     return masked_img
 
+def get_circle_points(x,y,  show_res = False):
+    points = []
+    for r in range(5, 30, 5):
+        n = int(2 * math.pi * r / 10)
+        for i in range(n):
+            angle = 2 * math.pi / n * i
+            px = x + r * math.cos(angle)
+            py = y + r * math.sin(angle)
+            if show_res:
+                import turtle
+                turtle.penup()
+                turtle.goto(px, py)
+                turtle.pendown()
+                turtle.dot(5)
+            points.append((px, py))
+    return points
+
 # Update for a program used before version v0.5.0.424
 if os.path.exists(os.path.join(ROOT_PATH, "config\\tastic")):
     logger.error("检测到tastic文件夹。")

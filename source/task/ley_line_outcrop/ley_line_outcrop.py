@@ -19,6 +19,7 @@ class LeyLineOutcropMission(MissionExecutor):
                                  TianLiPosition([2156.921552, -3923.552852]),
                                  TianLiPosition([2423.872352, -3427.494852]),
                                  TianLiPosition([3367.916752, -4196.640452]),
+                                 TianLiPosition([3328.027552, -5106.932452]),
                                  TianLiPosition([3328.027552, -5106.932452])]
     def __init__(self):
         super().__init__(is_TMCF=True, is_CFCF=True)
@@ -27,7 +28,6 @@ class LeyLineOutcropMission(MissionExecutor):
         ui_control.ensure_page(UIPage.page_bigmap)
         for posi in self.TRAVERSE_MONDSTADT_POSITION:
             genshin_map.get_bigmap_posi()
-            genshin_map._move_bigmap(posi.tianli, force_center = True)
             cap_posi = [220,240,1920-200,1080-150]
             img = itt.capture(jpgmode=0)
             img = crop(img, cap_posi)
@@ -41,6 +41,8 @@ class LeyLineOutcropMission(MissionExecutor):
                 target_gimap_posi = curr_posi.gimap + delta_posi
                 target_tianli_posi = GIMAPPosition(target_gimap_posi).tianli
                 return target_tianli_posi
+            genshin_map.get_bigmap_posi()
+            genshin_map._move_bigmap(posi.tianli, force_center = True)
     
     def touch_the_ley_line_blossom(self):
         while 1:
@@ -59,9 +61,11 @@ class LeyLineOutcropMission(MissionExecutor):
             
     
     def exec_mission(self):
-        # target_posi = self.traverse_mondstant()
-        # self.move(MODE='AUTO', stop_rule=1, target_posi=list(target_posi), is_tp=True)
-        # self.collect(is_combat=True)
+        target_posi = self.traverse_mondstant()
+        self.move(MODE='AUTO', stop_rule=0, target_posi=list(target_posi), is_tp=True, is_precise_arrival=True)
+        self.circle_search(target_posi)
+        itt.key_press('f')
+        self.collect(is_combat=True)
         r = self.touch_the_ley_line_blossom()
         if r:
             itt.key_press('f')

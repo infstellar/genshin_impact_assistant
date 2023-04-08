@@ -3,11 +3,12 @@ from source.flow import collector_flow_upgrad, teyvat_move_flow_upgrad
 from source.common.base_threading import BaseThreading
 from source.operator.pickup_operator import PickupOperator
 from source.interaction.minimap_tracker import tracker
-from source.funclib import combat_lib, generic_lib
+from source.funclib import combat_lib, generic_lib, movement
 from source.interaction.interaction_core import itt
 from source.funclib.err_code_lib import ERR_PASS
 from source.common.timer_module import AdvanceTimer
 from source.controller.combat_controller import CombatController
+from source.map.map import genshin_map
 
 
 ERR_FAIL = "FAIL"
@@ -179,6 +180,24 @@ class MissionExecutor(BaseThreading):
             self.CFCF.flow_connector.puo.reset_pickup_item_list()
         return self._handle_exception()
     
+    def circle_search(self, center_posi, stop_rule='F'):
+        points = get_circle_points(center_posi[0],center_posi[1])
+        itt.key_down('w')
+        for p in points:
+            while 1:
+                if self.checkup_stop_func():return
+                movement.move_to_posi_LoopMode(p, self.checkup_stop_func)
+                if euclidean_distance(p, genshin_map.get_position())<=2:
+                    logger.debug(f"circle_search: {p} arrived")
+                    break
+                if stop_rule == 'F':
+                    if generic_lib.f_recognition():
+                        itt.key_up('w')
+                        return True
+        itt.key_up('w')
+        return False
+                
+    
     def start_pickup(self):
         self.PUO.continue_threading()
     
@@ -238,6 +257,7 @@ if __name__ == '__main__':
     me = MissionExecutor(is_CCT=True)
     # me.exception_flag = True
     # me._handle_exception()
-    me.start_combat(mode="Shield")
+    # me.start_combat(mode="Shield")
+    me.circle_search([ 3834.9886,-6978.8201])
     while 1: time.sleep(1)
 
