@@ -74,6 +74,18 @@
                 "PYTHONPATH": "${workspaceFolder}"
             },
             "justMyCode": true
+        },
+        {
+            "name": "Python: Record Path",
+            "type": "python",
+            "console": "integratedTerminal",
+            "program":"${workspaceFolder}/source/flow/path_recorder_flow.py",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}"
+            },
+            "justMyCode": true
         }
         
     ]

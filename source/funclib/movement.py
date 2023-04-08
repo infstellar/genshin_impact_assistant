@@ -135,8 +135,8 @@ def view_to_imgicon(cap:np.ndarray, imgicon:asset.ImgIcon):
     px = (px - mx) / (2.4*corr_rate)
     py = (py - my) / (2*corr_rate) + 35 # 获得鼠标坐标偏移量
     # print(px,py)
-    px=maxmin(px,200,-200)
-    py=maxmin(py,200,-200)
+    px=maxmin(px,350,-350)
+    py=maxmin(py,350,-350)
     itt.move_to(px, py, relative=True)
     return int(math.sqrt(px**2+py**2)) # threshold: 50
     

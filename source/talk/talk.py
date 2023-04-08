@@ -69,6 +69,12 @@ class Talk():
         else:
             return True
     
+    def exit_talk(self):
+        while 1:
+            if ui_control.verify_page(UIPage.page_main): return True
+            itt.key_press('esc')
+            itt.delay(0.2)
+    
 if __name__ == '__main__':
     t = Talk()
     t.talk_with_npc()

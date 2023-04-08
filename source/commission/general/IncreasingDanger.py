@@ -31,16 +31,17 @@ class IncreasingDangerGeneral(CommissionTemplate):
                     if is_int(x):
                         n=int(i.replace('m',''))
             if n:
-                print(n)
+                if DEBUG_MODE:
+                    print(n)
                 if n<=3: 
                     itt.key_up('w')
+                    return True
                 else:
                     itt.key_down('w')
-            return True
         return False
     
     def exec_mission(self):
-        attack_timer = AdvanceTimer(0.6)
+        attack_timer = AdvanceTimer(0.3)
         r = self.move_straight(self.commission_position, is_tp=True)
         if r == ERR_FAIL:return
         self.start_combat(mode="Shield")

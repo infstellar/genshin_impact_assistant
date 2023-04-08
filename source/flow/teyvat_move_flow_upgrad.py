@@ -222,7 +222,12 @@ class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon):
                 self._next_rfc()
                 logger.info(t2t("已到达F附近，本次导航结束。"))
                 itt.key_up('w')
-            
+    def state_after(self):
+        self.switch_motion_state(jump=False)
+        if self.motion_state == IN_FLY:
+            logger.info(f"landing")
+            itt.left_click()
+        self._next_rfc()
         
         
 

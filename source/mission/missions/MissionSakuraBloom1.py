@@ -46,7 +46,7 @@ class MissionSakuraBloom1(MissionExecutor):
         self._reg_exception_chara_died()
         self._reg_exception_low_hp()
         for i in self.sakura1:
-            r = self.move_along(i)
+            r = self.move_along(i, is_precise_arrival=True)
             if r == ERR_FAIL:
                 break
             itt.key_press('e')
@@ -55,7 +55,7 @@ class MissionSakuraBloom1(MissionExecutor):
             itt.delay(0.5)
         self.switch_character_to("Lisa")    
         for i in self.sakura2:
-            r = self.move_along(i)
+            r = self.move_along(i, is_precise_arrival=True)
             if r == ERR_FAIL:
                 break
             itt.key_press('e')
@@ -64,7 +64,7 @@ class MissionSakuraBloom1(MissionExecutor):
             itt.delay(0.5)
         self.switch_character_to("Lisa")    
         for i in self.sakura3:
-            r = self.move_along(i)
+            r = self.move_along(i, is_precise_arrival=True)
             if r == ERR_FAIL:
                 break
             itt.key_press('e')

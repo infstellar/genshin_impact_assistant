@@ -111,7 +111,7 @@ class MissionExecutor(BaseThreading):
             self.exception_flag = True
         return self._handle_exception()
         
-    def move_straight(self, position, is_tp = False, is_precise_arrival=True):
+    def move_straight(self, position, is_tp = False, is_precise_arrival=False):
         if isinstance(position[0], int) or isinstance(position[0], float):
             p = position
         elif isinstance(position[0], str):
@@ -120,7 +120,7 @@ class MissionExecutor(BaseThreading):
         r = self.move(MODE="AUTO", target_posi=p, is_tp = is_tp, is_precise_arrival=is_precise_arrival)
         return r
         
-    def move_along(self, path, is_tp = None, is_precise_arrival=True):
+    def move_along(self, path, is_tp = None, is_precise_arrival=False):
         path_dict = self.get_path_file(path)
         is_reinit = True
         

@@ -143,7 +143,7 @@ class MissionAutoCollector(MissionExecutor):
         while 1:
             if self.checkup_stop_func():return
             self._set_target_position()
-            r = self.move_straight(self.collection_posi, is_tp = True)
+            r = self.move_straight(self.collection_posi, is_tp = True, is_precise_arrival=True)
             if r == ERR_FAIL:
                 self._add_logs("MOVE FAIL")
                 self._set_collected_id()

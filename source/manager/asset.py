@@ -133,6 +133,7 @@ AreaSidebarCommissionName = PosiTemplate()
 SidebarIsCommissionExist = ImgIcon(threshold=0.97)
 CommissionIcon = ImgIcon()
 CommissionIconInCommission = ImgIcon(is_bbg=False)
+AreaAvailableReward = PosiTemplate()
 
 QTSX = TextTemplate(text=
 {

@@ -1,0 +1,60 @@
+from source.task.claim_reward.util import *
+from source.mission.mission_template import MissionExecutor
+from source.task.task_template import TaskTemplate
+from source.talk.talk import Talk
+from source.manager import asset
+from source.task.claim_reward.assets import *
+    
+
+class ClaimRewardMission(MissionExecutor, Talk):
+    def __init__(self):
+        MissionExecutor.__init__(self, is_TMCF=True)
+        Talk.__init__(self)
+        
+    def get_available_reward(self):
+        ui_control.ensure_page(UIPage.page_bigmap)
+        cap = itt.capture(jpgmode=0, posi=asset.AreaAvailableReward.position)
+        img = extract_white_letters(cap)
+        res = ocr.get_all_texts(img)
+        rewards = []
+        for text in res:
+            if text == "探索派遣奖励":
+                rewards.append("Expedition")
+        logger.info(rewards)
+        return rewards
+    
+    def _exec_dispatch(self):
+        pass
+    
+    def exec_mission(self):
+        self.available_rewards = self.get_available_reward()
+        if "Expedition" in self.available_rewards or "Commission" in self.available_rewards:
+            self.move_along("Katheryne20230408124320i0", is_precise_arrival=True)
+            if "Expedition" in self.available_rewards:
+                self.talk_with_npc()
+                self.talk_until_switch(self.checkup_stop_func)
+                self.talk_switch(DispatchCharacterOnExpedition)
+                self._exec_dispatch()
+                self.exit_talk()
+            if "Commission" in self.available_rewards:
+                self.talk_with_npc()
+                self.talk_until_switch(self.checkup_stop_func)
+                self.talk_switch(ClaimDailyCommissionReward)
+                self.exit_talk()
+        
+class ClaimRewardTask(TaskTemplate):
+    def __init__(self):
+        super().__init__()
+        self.CRM = ClaimRewardMission()
+        self._add_sub_threading(self.CRM, start=False)
+        
+    def loop(self):
+        self.blocking_startup(self.CRM)
+        self.pause_threading()
+        
+if __name__ == '__main__':
+    # crm = ClaimRewardMission()
+    # r = crm.get_available_reward()
+    # print()
+    crt = ClaimRewardTask()
+    crt.start()
