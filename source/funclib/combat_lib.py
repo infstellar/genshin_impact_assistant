@@ -134,34 +134,44 @@ def unconventionality_situation_detection(autoDispose=True, detect_type='abc', s
     situation_code = -1
     if 'a' in detect_type:
         while itt.get_img_existence(asset.COMING_OUT_BY_SPACE):
-            if stop_func:break
+            if stop_func():break
             situation_code = 1
             itt.key_press('spacebar')
             logger.debug('Unconventionality Situation: COMING_OUT_BY_SPACE')
             time.sleep(0.1)
     if 'b' in detect_type:
-        while itt.get_img_existence(asset.motion_swimming):
-            if stop_func:break
-            situation_code = 2
+        if itt.get_img_existence(asset.motion_swimming):
             itt.key_down('w')
-            itt.key_down('left_shift')
-            logger.debug('Unconventionality Situation: SWIMMING')
-            if autoDispose:
-                time.sleep(5)
-            itt.key_up('left_shift')
+            # itt.key_down('left_shift')
+            while itt.get_img_existence(asset.motion_swimming):
+                if stop_func():
+                    # itt.key_up('left_shift')
+                    itt.key_up('w')
+                    break
+                situation_code = 2
+                if autoDispose:
+                    itt.key_down('left_shift')
+                    itt.delay(0.5)
+                    itt.key_up('left_shift')
+                logger.debug('Unconventionality Situation: SWIMMING')
+                time.sleep(0.1)
+            # itt.key_up('left_shift')
             itt.key_up('w')
-            time.sleep(0.1)
     if 'c' in detect_type:
         while itt.get_img_existence(asset.motion_climbing):
-            if stop_func:break
+            if stop_func():break
             situation_code = 3
             logger.debug('Unconventionality Situation: CLIMBING')
             if autoDispose:
                 itt.key_press('space')
-                itt.delay("animation")
+                itt.delay(1.2)
+                if not itt.get_img_existence(asset.motion_climbing):break
                 itt.key_press('space')
-                itt.delay("animation")
+                itt.delay(1.2)
+                if not itt.get_img_existence(asset.motion_climbing):break
                 itt.key_press('x')
+                itt.delay(1.2)
+                if not itt.get_img_existence(asset.motion_climbing):break
             time.sleep(0.1)
 
     return situation_code
@@ -191,7 +201,7 @@ def is_character_busy(print_log = True):
     
     if t1 >= 3 and t2 == 3:
         return False
-    if np.std(cols)<=5:
+    if t1 >= 3 and np.std(cols)<=5:
         if abs(max(cap[46,1846])-np.average(cols))<=5:
             logger.warning_once(t2t("Located at the map boundary, the is_chara_busy function enables fuzzy recognition mode."))
             return False
@@ -519,7 +529,8 @@ if __name__ == '__main__':
     # set_party_setup("Lisa")
     while 1:
         time.sleep(0.1)
-        print(is_character_busy())
+        # print(is_character_busy())
+        print(unconventionality_situation_detection())
         # get_arrow_img(itt.capture(),True)
         # print(get_character_busy(itt, default_stop_func))
         # time.sleep(0.2)

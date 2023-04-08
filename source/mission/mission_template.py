@@ -225,7 +225,9 @@ class MissionExecutor(BaseThreading):
         self.pause_threading()
     
 if __name__ == '__main__':
-    me = MissionExecutor()
-    me.exception_flag = True
-    me._handle_exception()
+    me = MissionExecutor(is_CCT=True)
+    # me.exception_flag = True
+    # me._handle_exception()
+    me.start_combat(mode="Shield")
+    while 1: time.sleep(1)
 

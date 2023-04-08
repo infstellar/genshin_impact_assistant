@@ -141,18 +141,16 @@ class SwitchCharacterOperator(BaseThreading):
                 tg=chara.position_tactic
             if tg != None: 
                 self.current_num = combat_lib.get_current_chara_num(self.checkup_stop_func)
-                logger.debug(f"switch_character: {switch_type}: targetnum: {chara.n} current num: {self.current_num}")
+                logger.debug(f"switch_character: {switch_type}: targetnum: {chara.n} current num: {self.current_num} tactic group: {tg}")
+                self.tactic_operator.pause_threading()
                 if chara.n != self.current_num:
-                    # self.aim_operator.pause_threading()
-                    self.tactic_operator.pause_threading()
                     r = self._switch_character(chara.n)
                     if not r: # Failed
                         continue
-                    self.tactic_operator.set_parameter(tg, chara)
-                    self.tactic_operator.restart_executor()
-                    self.tactic_operator.continue_threading()
-                    # self.aim_operator.continue_threading()
-                    return True
+                self.tactic_operator.set_parameter(tg, chara)
+                self.tactic_operator.restart_executor()
+                self.tactic_operator.continue_threading()
+                return True
             
        
 
