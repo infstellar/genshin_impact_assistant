@@ -96,9 +96,19 @@ class MissionExecutor(BaseThreading):
     def get_path_file(self, path_file_name:str):
         return load_json(path_file_name+".json","assets\\TeyvatMovePath")
     
-    def move(self, MODE:str = None,stop_rule:int = None,target_posi:list = None,path_dict:dict = None,to_next_posi_offset:float = None,special_keys_posi_offset:float = None,reaction_to_enemy:str = None,is_tp:bool=None,is_reinit:bool=None, is_precise_arrival:bool=None):
+    def move(self, MODE:str = None,
+             stop_rule:int = None,
+             target_posi:list = None,
+             path_dict:dict = None,
+             to_next_posi_offset:float = None,
+             special_keys_posi_offset:float = None,
+             reaction_to_enemy:str = None,
+             is_tp:bool = None,
+             is_reinit:bool = None, 
+             is_precise_arrival:bool = None,
+             stop_offset:int = None):
         self.TMCF.reset()
-        self.TMCF.set_parameter(MODE=MODE,stop_rule=stop_rule,target_posi=target_posi,path_dict=path_dict,to_next_posi_offset=to_next_posi_offset,special_keys_posi_offset=special_keys_posi_offset,reaction_to_enemy=reaction_to_enemy,is_tp=is_tp,is_reinit=is_reinit,is_precise_arrival=is_precise_arrival)
+        self.TMCF.set_parameter(MODE=MODE,stop_rule=stop_rule,target_posi=target_posi,path_dict=path_dict,to_next_posi_offset=to_next_posi_offset,special_keys_posi_offset=special_keys_posi_offset,reaction_to_enemy=reaction_to_enemy,is_tp=is_tp,is_reinit=is_reinit,is_precise_arrival=is_precise_arrival,stop_offset=stop_offset)
         self.TMCF.start_flow()
         while 1:
             time.sleep(0.6)
@@ -111,13 +121,13 @@ class MissionExecutor(BaseThreading):
             self.exception_flag = True
         return self._handle_exception()
         
-    def move_straight(self, position, is_tp = False, is_precise_arrival=False):
+    def move_straight(self, position, is_tp = False, is_precise_arrival=False, stop_rule=None):
         if isinstance(position[0], int) or isinstance(position[0], float):
             p = position
         elif isinstance(position[0], str):
             path_dict = self.get_path_file(position[0])
             p = path_dict[position[1]]
-        r = self.move(MODE="AUTO", target_posi=p, is_tp = is_tp, is_precise_arrival=is_precise_arrival)
+        r = self.move(MODE="AUTO", target_posi=p, is_tp = is_tp, is_precise_arrival=is_precise_arrival, stop_rule=stop_rule)
         return r
         
     def move_along(self, path, is_tp = None, is_precise_arrival=False):

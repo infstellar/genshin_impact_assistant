@@ -37,6 +37,7 @@ class TeyvatMoveFlowConnector(FlowConnector):
         self.ignore_space = True
         self.is_reinit = True
         self.is_precise_arrival = False
+        self.stop_offset = None
 
         self.motion_state = IN_MOVE
         self.jump_timer = timer_module.Timer()
@@ -62,6 +63,7 @@ class TeyvatMoveFlowConnector(FlowConnector):
         self.ignore_space = True
         self.is_reinit = True
         self.is_precise_arrival = False
+        self.stop_offset = None
         
         self.motion_state = IN_MOVE
         self.jump_timer = timer_module.Timer()
@@ -178,7 +180,7 @@ class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon):
         self.auto_move_timeout.reset()
         self.history_position_timer.reset()
         self.history_position = []
-        self.upper.while_sleep = 0.1
+        self.upper.while_sleep = 0
         self._next_rfc()
     def state_after(self):
         self.upper.while_sleep = 1
@@ -217,11 +219,16 @@ class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon):
                 self._set_nfid(ST.END_TEYVAT_MOVE_PASS)
                 self._next_rfc()
         elif self.upper.stop_rule == 1:
-            if generic_lib.f_recognition():
-                self._set_nfid(ST.END_TEYVAT_MOVE_PASS)
-                self._next_rfc()
-                logger.info(t2t("已到达F附近，本次导航结束。"))
-                itt.key_up('w')
+            if self.upper.stop_offset is None:
+                threshold = 25
+            else:
+                threshold = self.upper.stop_offset
+            if euclidean_distance(self.upper.target_posi, genshin_map.get_position())<=threshold:
+                if generic_lib.f_recognition():
+                    self._set_nfid(ST.END_TEYVAT_MOVE_PASS)
+                    self._next_rfc()
+                    logger.info(t2t("已到达F附近，本次导航结束。"))
+                    itt.key_up('w')
     def state_after(self):
         self.switch_motion_state(jump=False)
         if self.motion_state == IN_FLY:
@@ -493,7 +500,8 @@ class TeyvatMoveFlowController(FlowController):
                       reaction_to_enemy:str = None,
                       tp_type:list = None,
                       is_reinit:bool = None,
-                      is_precise_arrival:bool = None):
+                      is_precise_arrival:bool = None,
+                      stop_offset = None):
         if MODE != None:
             self.flow_connector.MODE = MODE
         if stop_rule != None:
@@ -516,7 +524,8 @@ class TeyvatMoveFlowController(FlowController):
             self.flow_connector.is_reinit = is_reinit
         if is_precise_arrival != None:
             self.flow_connector.is_precise_arrival = is_precise_arrival
-        
+        if stop_offset != None:
+            self.flow_connector.stop_offset = stop_offset
 
         
 if __name__ == '__main__':
