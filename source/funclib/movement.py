@@ -174,11 +174,11 @@ def calculate_posi2degree(pl):
     
 def change_view_to_posi(pl, stop_func, max_loop=25, offset=5, print_log = True):
     if IS_DEVICE_PC:
-        if print_log:
-            logger.debug(f"change_view_to_posi: pl: {pl}")
         degree = calculate_posi2degree(pl)
-        change_view_to_angle(degree# ,maxloop=max_loop, stop_func=stop_func, offset=offset, print_log=print_log
-                             )
+        if print_log:
+            if abs(degree)>=2:
+                logger.debug(f"change_view_to_posi: pl: {pl}")
+        change_view_to_angle(degree, maxloop=max_loop, stop_func=stop_func, offset=offset, print_log=print_log)
 
 def move_to_position(posi, offset=5, stop_func=lambda:False, delay=0.1):
     itt.key_down('w')

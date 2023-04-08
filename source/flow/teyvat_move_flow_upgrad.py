@@ -36,7 +36,7 @@ class TeyvatMoveFlowConnector(FlowConnector):
         self.tp_type = None
         self.ignore_space = True
         self.is_reinit = True
-        self.is_precise_arrival = True
+        self.is_precise_arrival = False
 
         self.motion_state = IN_MOVE
         self.jump_timer = timer_module.Timer()
@@ -61,7 +61,7 @@ class TeyvatMoveFlowConnector(FlowConnector):
         self.tp_type = None
         self.ignore_space = True
         self.is_reinit = True
-        self.is_precise_arrival = True
+        self.is_precise_arrival = False
         
         self.motion_state = IN_MOVE
         self.jump_timer = timer_module.Timer()
@@ -97,6 +97,8 @@ class TeyvatMoveCommon():
         self.jump_timer1 = timer_module.Timer()
         self.jump_timer2 = timer_module.Timer()
         self.jump_timer3 = timer_module.Timer()
+        self.history_position = []
+        self.history_position_timer = timer_module.AdvanceTimer(limit=1)
 
     def switch_motion_state(self, jump=True):
         if itt.get_img_existence(asset.motion_climbing):
@@ -127,6 +129,16 @@ class TeyvatMoveCommon():
             if self.jump_timer3.get_diff_time() >= 0.3:
                 itt.key_press('spacebar')
                 self.jump_timer3.reset()
+                
+    def is_stuck(self, posi, threshold=30):
+        if self.history_position_timer.reached_and_reset():
+            self.history_position.append(posi)
+        if len(self.history_position) >= threshold:
+            if euclidean_distance(self.history_position[0], self.history_position[-1])<=10:
+                logger.warning(f"MOVE STUCK")
+                return True
+        return False
+                
     
     
 class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon):
@@ -135,8 +147,7 @@ class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon):
         TeyvatMoveCommon.__init__(self)
         self.upper = upper
         self.auto_move_timeout = timer_module.AdvanceTimer(limit=300)
-        self.history_position = []
-        self.history_position_timer = timer_module.AdvanceTimer(limit=1)
+        
 
     # def _calculate_next_priority_point(self, currentp, targetp):
     #     float_distance = 35
@@ -178,16 +189,15 @@ class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon):
         
         self.current_posi = genshin_map.get_position()
         p1 = self.upper.target_posi
-        if self.history_position_timer.reached_and_reset():
-            self.history_position.append(self.current_posi)
-        if len(self.history_position) >= 30:
-            if euclidean_distance(self.history_position[0], self.history_position[-1])<=10:
-                logger.warning(f"MOVE STUCK")
-                self._set_nfid(ST.END_TEYVAT_MOVE_STUCK)
-                self._set_rfc(FC.END)
+        
+        if self.is_stuck(self.current_posi):
+            self._set_nfid(ST.END_TEYVAT_MOVE_STUCK)
+            self._set_rfc(FC.END)
+        
         # print(p1)
         movement.change_view_to_posi(p1, self.upper.checkup_stop_func)
-            
+
+        
         # if len(genshin_map.history_posi) >= 29:
         #     p1 = genshin_map.history_posi[0][1:]
         #     p2 = genshin_map.history_posi[-1][1:]
@@ -197,7 +207,11 @@ class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon):
         #         self._next_rfc()
         
         if self.upper.stop_rule == 0:
-            if euclidean_distance(self.upper.target_posi, genshin_map.get_position())<=10:
+            if self.upper.is_precise_arrival:
+                threshold=1
+            else:
+                threshold=6
+            if euclidean_distance(self.upper.target_posi, genshin_map.get_position())<=threshold:
                 logger.info(t2t("已到达目的地附近，本次导航结束。"))
                 itt.key_up('w')
                 self._set_nfid(ST.END_TEYVAT_MOVE_PASS)
@@ -371,6 +385,13 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
                     return
             else:
                 break
+        
+        if self.is_stuck(curr_posi, threshold=16):
+            itt.key_press('spacebar')
+        if self.is_stuck(curr_posi, threshold=30):
+            self._set_nfid(ST.END_TEYVAT_MOVE_STUCK)
+            self._set_rfc(FC.END)
+        
         if self.ready_to_end:
             self.end_times += 1
             logger.debug(f"ready to end: {self.end_times} {offset}")

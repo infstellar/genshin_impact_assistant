@@ -18,7 +18,7 @@ class Talk():
         while 1:
             time.sleep(0.1)
             if stop_func():return
-            itt.move_and_click(ButtonTalkSkip_Force.click_position())
+            itt.move_and_click(ButtonTalkSkip.click_position())
             # itt.move_to(-120,0,relative=True)
             if itt.get_img_existence(asset.ui_main_win): return True
             

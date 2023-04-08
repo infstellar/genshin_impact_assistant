@@ -13,3 +13,4 @@ BigPudgyProblem需要对话
 游泳的usd有bug
 auto combat的shield模式有bug
 QQ人哨塔可以识别委托标志下面的距离
+自动战斗预启动
