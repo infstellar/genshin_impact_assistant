@@ -337,7 +337,7 @@ def combat_statement_detection():
     
     im_src = itt.capture()
     orsrc = im_src.copy()
-    blood_bar_img = get_enemy_blood_bar_img(orsrc)
+    blood_bar_img = get_enemy_blood_bar_img(orsrc.copy())
     
     flag_is_blood_bar_exist = blood_bar_img.max() > 0
     
@@ -530,7 +530,7 @@ if __name__ == '__main__':
     while 1:
         time.sleep(0.1)
         # print(is_character_busy())
-        print(unconventionality_situation_detection())
-        # get_arrow_img(itt.capture(),True)
+        # print(unconventionality_situation_detection())
+        print(combat_statement_detection())
         # print(get_character_busy(itt, default_stop_func))
         # time.sleep(0.2)
