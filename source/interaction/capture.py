@@ -130,10 +130,11 @@ class WindowsCapture(Capture):
         #desktop_dc = self.GetDC(0)
         #scale_x = self.GetDeviceCaps(desktop_dc, 88)
         #scale_y = self.GetDeviceCaps(desktop_dc, 90)
-        width=int(width)
-        if width in list(map(int, [1080*0.75, 1080*1, 1080*1.25, 1080*1.5, 1080*1.75, 1080*2, 1080*2.25, 1080*2.5, 1080*2.75, 1080*3])):
-            width = 1080
-            height = 1920
+        height=int(height)
+        if height in list(map(int, [1080/0.75, 1080/1.25, 1080/1.5, 1080/1.75, 1080/2, 1080/2.25, 1080/2.5, 1080/2.75, 1080/3])):
+            logger.warning_once(t2t("You seem to have monitor scaling set? It is automatically recognized and this does not affect usage."))
+            width = 1920
+            height = 1080
             # 计算实际截屏区域大小
             # width = int(int(width)*self.scale_factor)
             # height = int(int(height)*self.scale_factor)
@@ -165,7 +166,7 @@ class EmulatorCapture(Capture):
     
 if __name__ == '__main__':
     wc = WindowsCapture()
-    wc._get_screen_scale_factor()
+    # wc._get_screen_scale_factor()
     while 1:
         cv2.imshow("capture test", wc.capture())
         cv2.waitKey(10)
