@@ -10,7 +10,6 @@ class CommissionExecutor(TaskTemplate, CommissionParser):
             
         self._set_and_save_and_load_commission_dicts()
         
-        
     def loop(self):
         for i in self.commission_dicts:
             co = get_commission_object(i["type"], i["position"])

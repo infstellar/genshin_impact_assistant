@@ -40,30 +40,6 @@
             "justMyCode": true
         },
         {
-            "name": "Python: Domain Task",
-            "type": "python",
-            "console": "integratedTerminal",
-            "program":"${workspaceFolder}/source/task/domain_task.py",
-            "request": "launch",
-            "cwd": "${workspaceFolder}",
-            "env": {
-                "PYTHONPATH": "${workspaceFolder}"
-            },
-            "justMyCode": true
-        },
-        {
-            "name": "Python: Task Manager",
-            "type": "python",
-            "console": "integratedTerminal",
-            "program":"${workspaceFolder}/source/task/task_manager.py",
-            "request": "launch",
-            "cwd": "${workspaceFolder}",
-            "env": {
-                "PYTHONPATH": "${workspaceFolder}"
-            },
-            "justMyCode": true
-        },
-        {
             "name": "Python: Get Position",
             "type": "python",
             "console": "integratedTerminal",

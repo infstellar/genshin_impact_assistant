@@ -22,7 +22,8 @@ class LeyLineOutcropMission(MissionExecutor):
                                  TianLiPosition([3328.027552, -5106.932452]),
                                  TianLiPosition([3328.027552, -5106.932452])]
     def __init__(self):
-        super().__init__(is_TMCF=True, is_CFCF=True)
+        super().__init__(is_TMCF=True, is_CFCF=True, is_PUO=True)
+        self.collect_times = 2
 
     def traverse_mondstant(self):
         ui_control.ensure_page(UIPage.page_bigmap)
@@ -57,24 +58,30 @@ class LeyLineOutcropMission(MissionExecutor):
                 itt.key_up('w')
             if f_recognition():
                 itt.key_up('w')
-                return True
+                itt.delay("2animation")
+                if "接触地脉之花" in self.PUO.get_pickup_item_names(extra_white=True):
+                    itt.key_up('w')
+                    return True
+                else:
+                    self.PUO.pickup_recognize()
             
     
     def exec_mission(self):
-        target_posi = self.traverse_mondstant()
-        self.move(MODE='AUTO', stop_rule=0, target_posi=list(target_posi), is_tp=True, is_precise_arrival=True)
-        self.circle_search(target_posi)
-        itt.key_press('f')
-        self.collect(is_combat=True)
-        r = self.touch_the_ley_line_blossom()
-        if r:
+        for i in range(self.collect_times):
+            target_posi = self.traverse_mondstant()
+            self.move(MODE='AUTO', stop_rule=0, target_posi=list(target_posi), is_tp=True, is_precise_arrival=True)
+            self.circle_search(target_posi)
             itt.key_press('f')
-        itt.delay("2animation")
-        while 1:
-            if self.checkup_stop_func():return
-            if ui_control.verify_page(UIPage.page_main):
-                break
-            itt.appear_then_click(ButtonUseOriginResin)
+            self.collect(is_combat=True)
+            r = self.touch_the_ley_line_blossom()
+            if r:
+                itt.key_press('f')
+            itt.delay("2animation")
+            while 1:
+                if self.checkup_stop_func():return
+                if ui_control.verify_page(UIPage.page_main):
+                    break
+                itt.appear_then_click(ButtonUseOriginResin)
         
         
 class LeyLineOutcropTask(TaskTemplate):
@@ -88,9 +95,9 @@ class LeyLineOutcropTask(TaskTemplate):
         self.pause_threading()
         
 if __name__ == '__main__':
-    # llom = LeyLineOutcropMission()
-    # r = llom.touch_the_ley_line_blossom() # 3800 -6790 [ 3817.3453 -6775.5386]
-    # print(r)
+    llom = LeyLineOutcropMission()
+    r = llom.touch_the_ley_line_blossom() # 3800 -6790 [ 3817.3453 -6775.5386]
+    print(r)
     llot = LeyLineOutcropTask()
     llot.start()
     while 1: time.sleep(1)

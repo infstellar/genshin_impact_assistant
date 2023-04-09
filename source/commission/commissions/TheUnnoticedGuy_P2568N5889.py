@@ -3,7 +3,7 @@ from source.talk.talk import Talk
 from source.commission.util import *
 
 meta = {
-    "type":"BigPudgyProblem",
+    "type":"TheUnnoticedGuy",
     "position":[2568,-5889]
 }
 
@@ -23,6 +23,7 @@ class TheUnnoticedGuy_P2568N5889(CommissionTemplate, Talk):
         if r == ERR_FAIL: return
         self.talk_with_npc()
         self.talk_skip(self.checkup_stop_func)
+        self.is_commission_succ=True
     
 if __name__ == '__main__':
     execc = TheUnnoticedGuy_P2568N5889()

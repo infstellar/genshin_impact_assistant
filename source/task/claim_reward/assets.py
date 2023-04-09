@@ -10,5 +10,6 @@ ButtonExpeditionClaim = asset.Button()
 ButtonExpeditionFirstCharacter = asset.Button()
 ButtonExpeditionSelectCharacters = asset.Button()
 ExpeditionComplete = asset.ImgIcon()
+ExpeditionComplete2 = asset.ImgIcon()
 ExpeditionIcon = asset.ImgIcon()
 

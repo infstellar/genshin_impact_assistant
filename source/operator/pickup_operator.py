@@ -136,6 +136,21 @@ class PickupOperator(BaseThreading):
     def get_err_code(self):
         return self.last_err_code
     
+    def get_pickup_item_names(self, extra_white = False)->list:
+        ret = self.itt.get_img_position(asset.F_BUTTON)
+        y1 = asset.F_BUTTON.cap_posi[1]
+        x1 = asset.F_BUTTON.cap_posi[0]
+        cap = self.itt.capture()
+        cap = crop(cap, [x1 + ret[0] + 53, y1 + ret[1] - 20, x1 + ret[0] + 361,  y1 + ret[1] + 54])
+        # img_manager.qshow(cap)
+        cap = self.itt.png2jpg(cap, channel='ui', alpha_num=160)
+        if extra_white:
+            img = extract_white_letters(cap)
+        else:
+            img = cap
+        res = ocr.get_all_texts(img)
+        return res
+    
     def pickup_recognize(self):
         flag1 = False
         ret = generic_lib.f_recognition()
@@ -153,8 +168,8 @@ class PickupOperator(BaseThreading):
             cap = self.itt.capture()
             cap = crop(cap, [x1 + ret[0] + 53, y1 + ret[1] - 20, x1 + ret[0] + 361,  y1 + ret[1] + 54])
             # img_manager.qshow(cap)
-            cap = self.itt.png2jpg(cap, channel='ui', alpha_num=180)
-            
+            cap = self.itt.png2jpg(cap, channel='ui', alpha_num=160)
+            # img = extract_white_letters(cap)
             res = ocr.get_all_texts(cap)
             if len(res) != 0:
                 for text in res:

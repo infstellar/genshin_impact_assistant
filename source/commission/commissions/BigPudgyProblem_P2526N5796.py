@@ -20,6 +20,7 @@ class BigPudgyProblem_P2526N5796(CommissionTemplate, Talk):
         self.switch_character_to("Sucrose")
         self.itt.key_press('e')
         self.collect(is_combat=True)
+        self.is_commission_succ=True
 
 if __name__ == '__main__':
     execc = BigPudgyProblem_P2526N5796()

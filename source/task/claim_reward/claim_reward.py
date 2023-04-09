@@ -30,6 +30,7 @@ class ClaimRewardMission(MissionExecutor, Talk):
             while 1:
                 cap = itt.capture(jpgmode=0)
                 complete_posi = itt.match_multiple_img(cap, ExpeditionComplete.image, ignore_close=True)
+                complete_posi += itt.match_multiple_img(cap, ExpeditionComplete2.image, ignore_close=True)
                 if len(complete_posi)==0:
                     return
                 chara_head_posi = np.array(complete_posi)+np.array([80,80])
@@ -82,8 +83,8 @@ class ClaimRewardTask(TaskTemplate):
         self.pause_threading()
         
 if __name__ == '__main__':
-    # crm = ClaimRewardMission()
-    # r = crm._exec_dispatch()
-    # print()
+    crm = ClaimRewardMission()
+    r = crm._exec_dispatch()
+    print()
     crt = ClaimRewardTask()
     crt.start()
