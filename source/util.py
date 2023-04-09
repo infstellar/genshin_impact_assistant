@@ -33,7 +33,7 @@ ANGLE_NEGATIVE_XY = 3
 PROCESS_NAME = ["YuanShen.exe", "GenshinImpact.exe"]
 SCREEN_CENTER_X = 1920/2
 SCREEN_CENTER_Y = 1080/2
-GIA_VERSION = "v0.7.2.779"
+GIA_VERSION = "v0.7.3.810"
 
 # configure paths
 ROOT_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
