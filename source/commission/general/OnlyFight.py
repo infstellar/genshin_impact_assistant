@@ -9,6 +9,7 @@ class FightOnlyGeneral(CommissionTemplate):
     def exec_mission(self):
         r = self.move_straight(self.commission_position, is_tp=True)
         if r == ERR_FAIL:return
+        self.circle_search(self.commission_position, stop_rule="Combat")
         r = self.collect(is_combat=True, is_activate_pickup=self.is_pickup_spoils)
         if r == ERR_FAIL:return
         self.is_commission_succ = True

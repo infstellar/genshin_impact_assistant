@@ -210,6 +210,12 @@ def get_current_motion_state() -> str:
         return WALKING
 
 def move_to_posi_LoopMode(target_posi, stop_func):
+    """移动到指定坐标。适合用于while循环的模式。
+
+    Args:
+        target_posi (_type_): 目标坐标
+        stop_func (_type_): 停止函数
+    """
     delta_degree = abs(calculate_delta_angle(genshin_map.get_rotation(),calculate_posi2degree(target_posi)))
     if delta_degree >= 20:
         itt.key_up('w')

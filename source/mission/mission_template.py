@@ -181,6 +181,15 @@ class MissionExecutor(BaseThreading):
         return self._handle_exception()
     
     def circle_search(self, center_posi, stop_rule='F'):
+        """进入一个循环，以中心坐标为圆心向外移动搜索。当符合stop_rule时退出。
+
+        Args:
+            center_posi (_type_): 中心坐标
+            stop_rule (str, optional): 停止条件. Defaults to 'F'.
+
+        Returns:
+            _type_: _description_
+        """
         points = get_circle_points(center_posi[0],center_posi[1])
         itt.key_down('w')
         for p in points:
@@ -192,6 +201,10 @@ class MissionExecutor(BaseThreading):
                     break
                 if stop_rule == 'F':
                     if generic_lib.f_recognition():
+                        itt.key_up('w')
+                        return True
+                elif stop_rule == "Combat":
+                    if combat_lib.CSDL.get_combat_state():
                         itt.key_up('w')
                         return True
         itt.key_up('w')

@@ -27,28 +27,29 @@ class ClaimRewardMission(MissionExecutor, Talk):
     
     def _exec_dispatch(self):
         def reset_character():
-            cap = itt.capture(jpgmode=0)
-            complete_posi = itt.match_multiple_img(cap, ExpeditionComplete.image, ignore_close=True)
-            if len(complete_posi)==0:
-                return
-            chara_head_posi = np.array(complete_posi)+np.array([0,80])
-            for posi in chara_head_posi:
-                itt.move_and_click(posi)
-                itt.delay("2animation")
-                r1 = itt.appear_then_click(ButtonExpeditionClaim)
-                itt.delay("2animation")
-                itt.move_and_click(ButtonExpeditionClaim.click_position())
-                itt.delay("2animation")
-                itt.appear_then_click(ButtonExpeditionSelectCharacters)
-                itt.delay("2animation")
-                i=0
-                while 1:
-                    cp = ButtonExpeditionFirstCharacter.click_position()
-                    itt.move_and_click([cp[0],cp[1]+i])
+            while 1:
+                cap = itt.capture(jpgmode=0)
+                complete_posi = itt.match_multiple_img(cap, ExpeditionComplete.image, ignore_close=True)
+                if len(complete_posi)==0:
+                    return
+                chara_head_posi = np.array(complete_posi)+np.array([80,80])
+                for posi in chara_head_posi:
+                    itt.move_and_click(posi)
                     itt.delay("2animation")
-                    if itt.get_img_existence(ExpeditionIcon):
-                        break
-                    i+=80
+                    r1 = itt.appear_then_click(ButtonExpeditionClaim)
+                    itt.delay("2animation")
+                    itt.move_and_click(ButtonExpeditionClaim.click_position())
+                    itt.delay("2animation")
+                    itt.appear_then_click(ButtonExpeditionSelectCharacters)
+                    itt.delay("2animation")
+                    i=0
+                    while 1:
+                        cp = ButtonExpeditionFirstCharacter.click_position()
+                        itt.move_and_click([cp[0],cp[1]+i])
+                        itt.delay("2animation")
+                        if itt.get_img_existence(ExpeditionIcon):
+                            break
+                        i+=80
         for area in [ButtonExpeditionMD, ButtonExpeditionLY, ButtonExpeditionDQ, ButtonExpeditionXM]:   
             itt.appear_then_click(area)
             itt.delay("2animation")
@@ -81,8 +82,8 @@ class ClaimRewardTask(TaskTemplate):
         self.pause_threading()
         
 if __name__ == '__main__':
-    crm = ClaimRewardMission()
-    r = crm._exec_dispatch()
-    print()
+    # crm = ClaimRewardMission()
+    # r = crm._exec_dispatch()
+    # print()
     crt = ClaimRewardTask()
     crt.start()
