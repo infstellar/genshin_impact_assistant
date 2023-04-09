@@ -205,6 +205,30 @@
         "trigger":"e_ready",
         "position": "Normal"
         
+    },
+    "Qiqi":{
+        "E_short_cd_time": 30,
+        "E_long_cd_time": 0,
+        "Elast_time": 15,
+        "Epress_time": 0,
+        "Qlast_time": 15,
+        "Qcd_time": 20,
+        "tactic_group": "e?e:none;q?q:none",
+        "vision":"Cryo",
+        "trigger":"e_ready",
+        "position": "Shield"
+    },
+    "Keqing":{
+        "E_short_cd_time": 7.5,
+        "E_long_cd_time": 0,
+        "Elast_time": 0,
+        "Epress_time": 0,
+        "Qlast_time": 0,
+        "Qcd_time": 12,
+        "tactic_group": "e?e,e:none;q?q:none",
+        "vision":"Electro",
+        "trigger":"e_ready",
+        "position": "Shield"
     }
     
 }

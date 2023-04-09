@@ -8,6 +8,8 @@ COLLECTION_PATH_TASK = "CollectionPathTask"
 DOMAIN_TASK = "DomainTask"
 MISSION_TASK = "MissionTask"
 COMMISSION_TASK = "CommissionTask"
+CLAIM_REWARD_TASK = "ClaimRewardTask"
+LEY_LINE_OUTCROP_TASK = "LeyLineOutcropTask"
 
 class TaskManager(BaseThreading):
     def __init__(self) -> None:
@@ -66,6 +68,12 @@ class TaskManager(BaseThreading):
             elif task_name == COMMISSION_TASK:
                 from source.commission.commission_executor import CommissionExecutor
                 self.curr_task = CommissionExecutor()
+            elif task_name == CLAIM_REWARD_TASK:
+                from source.task.claim_reward.claim_reward import ClaimRewardTask
+                self.curr_task = ClaimRewardTask()
+            elif task_name == COMMISSION_TASK:
+                from source.task.ley_line_outcrop.ley_line_outcrop import LeyLineOutcropTask
+                self.curr_task = LeyLineOutcropTask()
             elif task_name == 'CollectorTask':
                 pass
             logger.info(t2t("Task") + task_name + t2t(" Start."))

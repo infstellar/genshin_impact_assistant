@@ -8,6 +8,9 @@ BigPudgyProblem需要对话
 检测。。。按钮识别是采集物还是人
 move straight在移动视角前按下了w
 aim operator move to enemy按空格
+让sco get_characters_name()在continue时获得charalist
+tactic默认配置不要用json template
+ocr在角色名字时试试用in
 
 Done：
 游泳的usd有bug pass
