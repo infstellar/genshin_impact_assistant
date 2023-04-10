@@ -1,0 +1,7 @@
+{
+  "auto_distance": true,
+  "auto_move": false,
+  "fps": 20,
+  "max_number_of_enemy_loops": 150,
+  "reset_time": 40
+}

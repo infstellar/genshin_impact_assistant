@@ -16,7 +16,7 @@ class GIAConfig(GeneratedConfig):
 
     def load(self):
         for jsonname in self.CONFIG_FILE_NAMES:
-            j = load_json(json_name=f"{jsonname}.jsontemplate")
+            j = load_json(json_name=f"{jsonname}.jsontemplate", default_path=fr"{CONFIG_PATH}/json_template")
             for k in j:
                 # if f"{jsonname}_{k}" in self.__dict__:
                 self.__dict__[f"{jsonname}___{k}"] = j[k]
