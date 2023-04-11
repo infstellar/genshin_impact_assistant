@@ -433,15 +433,15 @@ def get_curr_team_file():
 def get_chara_list():
     global load_err_times
     load_err_times = 0
-    team_name = load_json("auto_combat.json",CONFIG_PATH_SETTING)["teamfile"]
+    team_name = GIAconfig.Combat_TeamFile
     auto_choose = DEBUG_MODE        
     if auto_choose:
         team_name = get_curr_team_file()
         if not team_name:
             logger.error(t2t("The strategy file for the current teaming is not found in the tactic folder: ")+str(get_characters_name()))
-            team_name = load_json("auto_combat.json",CONFIG_PATH_SETTING)["teamfile"]
+            team_name = GIAconfig.Combat_TeamFile
     else:
-        team_name = load_json("auto_combat.json",CONFIG_PATH_SETTING)["teamfile"]
+        team_name = GIAconfig.Combat_TeamFile
     logger.info(f"team file set as: {team_name}")
     
     team = load_json(team_name, default_path=r"config/tactic")

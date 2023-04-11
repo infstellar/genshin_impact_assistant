@@ -35,7 +35,6 @@ FLOW型功能：同时只能启动一个，空闲时为FLOW_IDLE
 FEAT型功能：可以启动多个，用bool值控制
 """
 
-keymap_json = load_json("keymap.json")
 global icm
 icm = False
 def call_you_import_module():
@@ -117,8 +116,8 @@ def startstop():
         startstop_flag = not startstop_flag
         switch_collector_loop()
 
-if keymap_json["startstop"] != "":
-    keyboard.add_hotkey(keymap_json["startstop"], startstop)
+if GIAconfig.Keymap_StartStop != "":
+    keyboard.add_hotkey(GIAconfig.Keymap_StartStop, startstop)
 # keyboard.add_hotkey(load_json("keymap.json", f"{CONFIG_PATH_SETTING}")["task"], TASK_MANAGER.start_stop_tasklist)
 
 @logger.catch

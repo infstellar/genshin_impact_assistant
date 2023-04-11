@@ -28,3 +28,4 @@ class GeneratedConfig:
    Domain_FastMove = True
    Domain_DomainName = '山脊守望'
    Domain_DomainStageName = '不移II'
+   Keymap_StartStop = '['

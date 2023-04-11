@@ -23,12 +23,12 @@ class DomainTask(TaskTemplate):
         self._add_sub_threading(self.dfc)
         self._add_sub_threading(self.TMFCF)
         
-        self.domain_name = load_json("auto_domain.json",f"{CONFIG_PATH_SETTING}")["domain_name"]
-        self.domain_stage_name = load_json("auto_domain.json",f"{CONFIG_PATH_SETTING}")["domain_stage_name"]
+        self.domain_name = GIAconfig.Domain_DomainName
+        self.domain_stage_name = GIAconfig.Domain_DomainStageName
         self.domain_posi = load_items_position(self.domain_name,mode=1, ret_mode=1)[0]
         self.TMFCF.set_parameter(stop_rule = 1, MODE = "AUTO", target_posi = self.domain_posi, is_tp=True, tp_type=["Domain"])
         self.TMFCF.set_target_posi(self.domain_posi)
-        self.last_domain_times = int(load_json("auto_domain.json",f"{CONFIG_PATH_SETTING}")["domain_times"])
+        self.last_domain_times = int(GIAconfig.Domain_ChallengeTimes)
 
         logger.info(f"domain_name: {self.domain_name} domain_stage_name {self.domain_stage_name} domain times {self.last_domain_times}")
     

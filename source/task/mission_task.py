@@ -12,7 +12,7 @@ class MissionTask(TaskTemplate):
         self.task_name_list = []
         
     def _analyze_mission_group(self):
-        r = load_json(load_json()["mission_group"], f"{CONFIG_PATH}\\mission_groups")
+        r = load_json(GIAconfig.General_MissionGroup, f"{CONFIG_PATH}\\mission_groups")
         return r["missions"]
     
     def loop(self):

@@ -183,6 +183,8 @@ source/test236.py
 
 
 config/tactic/*.json
+!config/tactic/team_example.json
+!config/tactic/team_example_3.json
 config/tastic_backup/*
 .vs/*
 translation/locale/en_US/LC_MESSAGES/en_US.pot

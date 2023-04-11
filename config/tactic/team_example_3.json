@@ -1,6 +1,6 @@
 {
   "frist": {
-    "name": "Kamisato Ayato",
+    "name": "kamisato_ayato",
     "position": "Normal",
     "priority": 2,
     "n": 1,
@@ -15,7 +15,7 @@
     "autofill": false
   },
   "second": {
-    "name": "Zhongli",
+    "name": "zhongli",
     "position": "Shield",
     "priority": 1,
     "n": 2,
@@ -30,7 +30,7 @@
     "autofill": false
   },
   "third": {
-    "name": "Bennett",
+    "name": "bennett",
     "position": "Normal",
     "priority": 3,
     "n": 3,
@@ -45,7 +45,7 @@
     "autofill": false
   },
   "forth": {
-    "name": "Nahida",
+    "name": "nahida",
     "position": "Normal",
     "priority": 3,
     "n": 4,

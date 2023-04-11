@@ -3,12 +3,12 @@ from source.util import *
 global W_KEYDOWN, HANDLE
 W_KEYDOWN = False
 
-if config_json["capture_mode"] == "compatibility":
+if GIAconfig.General_CaptureMode == "compatibility":
     d3d_capture = None
 else:
     d3d_capture = None
 def get_handle():
-    if not config_json["cloud_genshin"]:
+    if not GIAconfig.General_CloudGenshin:
         handle = ctypes.windll.user32.FindWindowW(None, 'Genshin Impact')
         if handle != 0:
             return handle

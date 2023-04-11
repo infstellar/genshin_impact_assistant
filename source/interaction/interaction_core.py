@@ -74,7 +74,7 @@ class InteractionBGD:
         self.DEFAULT_DELAY_TIME = 0.05
         self.DEBUG_MODE = False
         self.CONSOLE_ONLY = False
-        self.isBorderlessWindow = config_json["BorderlessWindow"]
+        self.isBorderlessWindow = GIAconfig.General_BorderlessWindow
         self.itt_exec = None
         self.capture_obj = None
         self.operation_lock = threading.Lock()

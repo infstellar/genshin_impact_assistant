@@ -23,19 +23,17 @@ class DomainFlowConnector(FlowConnector):
         self.lockOnFlag = 0
         self.move_timer = timer_module.Timer()
         self.ahead_timer = timer_module.Timer()
-        domain_json = load_json("auto_domain.json")
-        self.isLiYue = domain_json["isLiYueDomain"]
-        self.resin_mode = domain_json["resin"]
-        self.fast_mode = domain_json["fast_mode"]
+        self.isLiYue = GIAconfig.Domain_IsObscuredDomain
+        self.resin_mode = GIAconfig.Domain_Resin
+        self.fast_mode = GIAconfig.Domain_FastMove
     
     def reset(self):
         self.lockOnFlag = 0
         self.move_timer = timer_module.Timer()
         self.ahead_timer = timer_module.Timer()
-        domain_json = load_json("auto_domain.json")
-        self.isLiYue = domain_json["isLiYueDomain"]
-        self.resin_mode = domain_json["resin"]
-        self.fast_mode = domain_json["fast_mode"]
+        self.isLiYue = GIAconfig.Domain_IsObscuredDomain
+        self.resin_mode = GIAconfig.Domain_Resin
+        self.fast_mode = GIAconfig.Domain_FastMove
     
 class MoveToChallenge(FlowTemplate):
     """

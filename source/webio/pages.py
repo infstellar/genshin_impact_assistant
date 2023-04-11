@@ -210,6 +210,8 @@ class MainPage(Page):
             cj = load_json()
             cj["mission_group"] = pin.pin["MissionSelect"]
             save_json(cj)
+            GIAconfig.update()
+
         time.sleep(0.2)
         output.put_button(label=str(listening.TASK_MANAGER.start_tasklist_flag), onclick=self.on_click_startstop,
                           scope='Button_StartStop')

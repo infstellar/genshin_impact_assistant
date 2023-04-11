@@ -125,7 +125,7 @@ class TaskManager(BaseThreading):
 
 if __name__ == '__main__':
     tm = TaskManager()
-    keyboard.add_hotkey(load_json("keymap.json", f"{CONFIG_PATH_SETTING}")["task"], tm.start_stop_task, args=("CollectionPathTask",))
+    # keyboard.add_hotkey(load_json("keymap.json", f"{CONFIG_PATH_SETTING}")["task"], tm.start_stop_task, args=("CollectionPathTask",))
     while 1:
         time.sleep(1)
     

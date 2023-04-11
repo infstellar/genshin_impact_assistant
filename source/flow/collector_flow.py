@@ -28,11 +28,11 @@ class CollectorFlow(BaseThreading):
     def __init__(self):
         super().__init__()
         self.setName("CollectorFlow")
-        collector_config = load_json("auto_collector.json")
-        self.collector_name = collector_config["collection_name"]
-        if collector_config["collection_type"] == "COLLECTION":
+        # collector_config = load_json("auto_collector.json")
+        self.collector_name = GIAconfig.Collector_CollectionName
+        if GIAconfig.Collector_CollectionType == "COLLECTION":
             self.collector_type = COLLECTION
-        elif collector_config["collection_type"] == "ENEMY":
+        elif GIAconfig.Collector_CollectionType == "ENEMY":
             self.collector_type = ENEMY
         self.collector_blacklist_id = load_json("collection_blacklist.json", default_path="config\\auto_collector")
         self.collected_id = load_json("collected.json", default_path="config\\auto_collector")

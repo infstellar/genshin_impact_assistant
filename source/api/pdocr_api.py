@@ -21,7 +21,7 @@ logger.info(f"import pdocr time: {round(pdocr_timer_performance.get_diff_time(),
 #                     'dict_path': './ppocr/utils/en_dict.txt'
                 # },
 
-# globaldevice = config_json["device_paddle"]
+# globaldevice = 
 # if globaldevice == 'auto':
 #     import paddle
 

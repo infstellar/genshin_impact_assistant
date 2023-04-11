@@ -14,6 +14,8 @@ class GIAConfig(GeneratedConfig):
 
     def __init__(self) -> None:
         super().__init__()
+        self.merge()
+        self.load()
 
     def __setattr__(self, key, value, read_only=True):
         if not read_only:
@@ -26,7 +28,7 @@ class GIAConfig(GeneratedConfig):
             j = load_json(json_name=f"{jsonname}.json", default_path=fr"{CONFIG_PATH}/settings")
             for k in j:
                 # if f"{jsonname}_{k}" in self.__dict__:
-                self.__setattr__(f"{jsonname}_{k}", j[k])
+                self.__setattr__(f"{jsonname}_{k}", j[k], read_only=False)
                 if self.TRACE:
                     print(f"set {jsonname}_{k} to {j[k]}")
 
@@ -52,8 +54,9 @@ class GIAConfig(GeneratedConfig):
     def update(self):
         self.load()
 
-config = GIAConfig() 
+GIAconfig = GIAConfig() 
 
 if __name__ == '__main__':
-    config.merge()
-    print()
+    # config.merge()
+    print(GIAconfig.General_CaptureMode)
+    print(GIAconfig.Domain_DomainName)

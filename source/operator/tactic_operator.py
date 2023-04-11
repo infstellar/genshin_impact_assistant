@@ -10,8 +10,8 @@ from source.manager import posi_manager, asset
 from source.path_lib import *
 
 E_STRICT_MODE = True  # may cause more performance overhead
-DETERMINING_WEIGHT = load_json(JSONNAME_CONFIG, CONFIG_PATH_SETTING)["determining_strict_weight"]
-USING_ALPHA_CHANNEL = load_json(JSONNAME_CONFIG, CONFIG_PATH_SETTING)["using_alpha_channel"]
+DETERMINING_WEIGHT = GIAconfig.General_DeterminingStrictWeight
+USING_ALPHA_CHANNEL = GIAconfig.General_UsingAlphaChannel
 
 def stop_func_example():  # True:stop;False:continue
     return False

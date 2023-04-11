@@ -25,8 +25,6 @@ class DomainFlow(BaseThreading):
         self.combat_loop.pause_threading()
         self.combat_loop.start()
 
-        domain_json = load_json("auto_domain.json")
-
         domain_times = domain_json["domain_times"]
         if domain_times == 0:
             x = input(t2t("请输入秘境次数"))

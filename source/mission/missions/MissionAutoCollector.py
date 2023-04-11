@@ -36,11 +36,10 @@ class MissionAutoCollector(MissionExecutor):
         super().__init__(is_CFCF=True,is_PUO=True,is_TMCF=True)
         self.setName("MissionAutoCollector")
         
-        collector_config = load_json("auto_collector.json")
-        self.collector_name = collector_config["collection_name"]
-        if collector_config["collection_type"] == "COLLECTION":
+        self.collector_name = GIAconfig.Collector_CollectionName
+        if GIAconfig.Collector_CollectionType == "COLLECTION":
             self.collector_type = COLLECTION
-        elif collector_config["collection_type"] == "ENEMY":
+        elif GIAconfig.Collector_CollectionType == "ENEMY":
             self.collector_type = ENEMY
         self.collector_blacklist_id = load_json("collection_blacklist.json", default_path="config\\auto_collector", auto_create=True)
         self.collected_id = load_json("collected.json", default_path="config\\auto_collector", auto_create=True)

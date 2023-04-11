@@ -150,7 +150,8 @@ from source.map.extractor.convert import MapConverter
 
 def load_items_position(marker_title:str, mode=0, area_id=None, blacklist_id=None, ret_mode = 0, check_mode = 0, match_mode = 0):
     if area_id == None:
-        area_i = load_json("auto_collector.json", "config\\settings")["collection_area"]
+        # area_i = load_json("auto_collector.json", "config\\settings")["collection_area"]
+        area_i = GIAconfig.Collector_CollectionArea
         if area_i == 'ALL':
             area_id = AREA_ALL
         elif area_i == 'MD':

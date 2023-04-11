@@ -2,7 +2,7 @@ from source.util import *
 
 def upd_message():
     ret_message = ""
-    version_num = int(load_json()["version"].split('.')[-1])
+    version_num = int(GIAconfig.General_Version.split('.')[-1])
     if version_num!=int(GIA_VERSION.split(".")[-1]):
         ret_message+=f"GIA 已升级到{GIA_VERSION}。\n"
     if version_num <= 500:
@@ -15,4 +15,5 @@ def upd_message():
     x=load_json()
     x["version"]=GIA_VERSION
     save_json(x)
+    GIAconfig.update()
     return ret_message

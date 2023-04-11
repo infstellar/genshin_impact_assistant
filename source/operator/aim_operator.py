@@ -26,16 +26,14 @@ class AimOperator(BaseThreading):
         self.setName('AimOperator')
         self.itt = itt
         self.loop_timer = Timer()
-        auto_aim_json = load_json("auto_aim.json")
-        self.fps = 1 / auto_aim_json["fps"]
+        # self.fps = 1 / auto_aim_json["fps"]
         self.fps = 5
-        self.max_number_of_enemy_loops = auto_aim_json["max_number_of_enemy_loops"]
-        self.auto_distance = auto_aim_json["auto_distance"]
+        # self.max_number_of_enemy_loops = auto_aim_json["max_number_of_enemy_loops"]
         self.auto_distance = False
-        self.auto_move = auto_aim_json["auto_move"]
+        # self.auto_move = auto_aim_json["auto_move"]
         self.enemy_loops = 0
         self.enemy_flag = True
-        self.reset_time = auto_aim_json["reset_time"]
+        # self.reset_time = auto_aim_json["reset_time"]
         # self.left_timer = Timer()
         # self.reset_timer = Timer()
         self.kdwe_timer = Timer()
@@ -313,24 +311,24 @@ class AimOperator(BaseThreading):
         #     return px
             # print()
 
-    def finding_enemy(self):
-        if self.enemy_loops < self.max_number_of_enemy_loops:
-            movement.reset_view() # 重置视角
-            logger.debug(f" finding_enemy ")
-        while self.enemy_loops < self.max_number_of_enemy_loops: # 当搜索敌人次数小于最大限制次数时，开始搜索
-            if self.checkup_stop_func():
-                return 0
-            self.itt.move_to(150, 0, relative=True)
-            ret_points = self.get_enemy_feature()
-            if ret_points is None:
-                return False
-            if len(ret_points) != 0:
-                self._reset_enemy_loops()
-                return True
+    # def finding_enemy(self):
+    #     if self.enemy_loops < self.max_number_of_enemy_loops:
+    #         movement.reset_view() # 重置视角
+    #         logger.debug(f" finding_enemy ")
+    #     while self.enemy_loops < self.max_number_of_enemy_loops: # 当搜索敌人次数小于最大限制次数时，开始搜索
+    #         if self.checkup_stop_func():
+    #             return 0
+    #         self.itt.move_to(150, 0, relative=True)
+    #         ret_points = self.get_enemy_feature()
+    #         if ret_points is None:
+    #             return False
+    #         if len(ret_points) != 0:
+    #             self._reset_enemy_loops()
+    #             return True
 
-            self.enemy_loops += 1
+    #         self.enemy_loops += 1
 
-            # time.sleep(0.1)
+    #         # time.sleep(0.1)
 
     def _reset_enemy_loops(self):
         self.enemy_loops = 0
