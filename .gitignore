@@ -163,11 +163,7 @@ source/cvAutoTrack_7.2.3/CVAUTOTRACK.dll
 .idea/libraries/gui.xml
 .idea/libraries/jpg_0928.xml
 config/tastic/*.json
-config/settings/auto_aim.json
-config/settings/auto_combat.json
-config/settings/auto_pickup.json
-config/settings/config.json
-config/settings/keymap.json
+config/settings/*.json
 config/auto_collector/*.json
 toolkit/
 InstallerREADME.md

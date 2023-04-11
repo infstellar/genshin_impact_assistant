@@ -392,10 +392,10 @@ class DomainFlow(BaseThreading):
             return False
 
 
-if __name__ == '__main__':
+# if __name__ == '__main__':
 
-    # domain_times=configjson["domain_times"]
-    dfc = DomainFlow()
-    dfc.start()
-    while 1:
-        time.sleep(1)
+#     # domain_times=configjson["domain_times"]
+#     dfc = DomainFlow()
+#     dfc.start()
+#     while 1:
+#         time.sleep(1)

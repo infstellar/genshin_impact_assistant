@@ -5,26 +5,45 @@ from source.config.config_generated import GeneratedConfig
 
 
 
-
+class ReadOnlyError(Exception):
+    pass
 
 class GIAConfig(GeneratedConfig):
     bound = {}
-    CONFIG_FILE_NAMES = [CONFIGNAME_CONFIG, CONFIGNAME_COLLECTOR, CONFIGNAME_AIM, CONFIGNAME_COMBAT,
-                         CONFIGNAME_DOMAIN, CONFIGNAME_PICKUP, CONFIGNAME_PICKUP]
+    TRACE = True
 
     def __init__(self) -> None:
         super().__init__()
 
+    def __setattr__(self, key, value, read_only=True):
+        if not read_only:
+            super().__setattr__(key, value)
+        else:
+            raise ReadOnlyError
+
     def load(self):
-        for jsonname in self.CONFIG_FILE_NAMES:
-            j = load_json(json_name=f"{jsonname}.jsontemplate", default_path=fr"{CONFIG_PATH}/json_template")
+        for jsonname in CONFIG_FILE_NAMES:
+            j = load_json(json_name=f"{jsonname}.json", default_path=fr"{CONFIG_PATH}/settings")
             for k in j:
                 # if f"{jsonname}_{k}" in self.__dict__:
-                self.__dict__[f"{jsonname}_{k}"] = j[k]
-                print(f"set {jsonname}_{k} to {j[k]}")
+                self.__setattr__(f"{jsonname}_{k}", j[k])
+                if self.TRACE:
+                    print(f"set {jsonname}_{k} to {j[k]}")
 
+    def merge(self):
+        for jsonname in CONFIG_FILE_NAMES:
+            j_template = load_json(json_name=f"{jsonname}.jsontemplate", default_path=fr"{CONFIG_PATH}/json_template")
+            if not os.path.exists(os.path.join(fr"{CONFIG_PATH}/settings", f"{jsonname}.json")):
+                j_config = {}
+            else:
+                j_config = load_json(json_name=f"{jsonname}.json", default_path=fr"{CONFIG_PATH}/settings")
+            for k in j_template:
+                if k in j_config:
+                    j_template[k] = j_config[k]
+                    if self.TRACE: print(f"{j_template[k]} = {j_config[k]}")
+            save_json(j_template, json_name=f"{jsonname}.json", default_path=fr"{CONFIG_PATH}/settings")
     # def save(self):
-    #     var_names = [f"{i}_" for i in self.CONFIG_FILE_NAMES]
+    #     var_names = [f"{i}_" for i in CONFIG_FILE_NAMES]
     #     var_dicts = {}
     #     for k in self.__dict__:
     #         if f"{k.split('___')[0]}_" in var_names:
@@ -32,11 +51,9 @@ class GIAConfig(GeneratedConfig):
 
     def update(self):
         self.load()
-        
+
+config = GIAConfig() 
 
 if __name__ == '__main__':
-    conf = GIAConfig()
-    conf.update()
-    print(conf.config___DEBUG)
-    conf.update()
-    print(conf.config___DEBUG)
+    config.merge()
+    print()

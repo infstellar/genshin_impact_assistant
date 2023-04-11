@@ -7,6 +7,7 @@ import math
 import numpy as np
 import gettext
 from source.logger import logger
+from source.config.config import config
 import cv2
 import win32gui, win32process, psutil
 import ctypes, pickle
