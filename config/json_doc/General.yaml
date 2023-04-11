@@ -1,0 +1,19 @@
+Lang: 
+  select_items: [zh_CN, en_US, $locale$]
+
+DevicePaddle: 
+  select_items: [cpu, gpu, auto]
+
+DeviceTorch: 
+  select_items: [cpu, gpu, auto]
+
+CaptureMode:
+  select_items: [fast]
+
+InteractionMode:
+  select_items: [Desktop, Emulator, DesktopBackground]
+
+Resin: 
+  select_items: [20,40]
+
+

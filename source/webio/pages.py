@@ -15,6 +15,7 @@ from source.webio.page_manager import Page
 from source.funclib import collector_lib
 from source.common import timer_module
 from source.webio.update_notice import upd_message
+from source.config.cvars import *
 
 
 
@@ -390,6 +391,8 @@ class ConfigPage(Page):
                     doc_addi = yaml.load(f, Loader=yaml.FullLoader)
                 for k1 in doc_addi:
                     for k2 in doc_addi[k1]:
+                        if k1 not in doc:
+                            doc[k1] = doc_addi[k1]
                         doc[k1][k2] = doc_addi[k1][k2]
         else:
             doc = {}
@@ -613,7 +616,7 @@ class ConfigPage(Page):
 
 class SettingPage(ConfigPage):
     def __init__(self):
-        super().__init__(config_file_name = "config")
+        super().__init__(config_file_name = CONFIGNAME_GENERAL)
 
     def _load(self):
         self.last_file = None
@@ -631,17 +634,19 @@ class SettingPage(ConfigPage):
         pin.put_select('file', self._config_file2lableAfile(self.config_files), scope="select_scope", value="config\\settings\\config.json")
 
     def _load_config_files(self):
-        for root, dirs, files in os.walk('config\\settings'):
-            for f in files:
-                if f[:f.index('.')] in ["auto_combat", "auto_collector", "auto_pickup_default_blacklist"]:
-                    continue
-                if f[f.index('.') + 1:] == "json":
-                    self.config_files.append({"label": f, "value": os.path.join(root, f)})
-
+        # for root, dirs, files in os.walk('config\\settings'):
+        #     for f in files:
+        #         if f[:f.index('.')] in ["auto_combat", "auto_collector", "auto_pickup_default_blacklist"]:
+        #             continue
+        #         if f[f.index('.') + 1:] == "json":
+        #             self.config_files.append({"label": f, "value": os.path.join(root, f)})
+        for i in [CONFIGNAME_GENERAL, CONFIGNAME_DOMAIN, CONFIGNAME_KEYMAP]:
+            self.config_files.append({"label": f"{i}.json", "value": os.path.join(fr"{CONFIG_PATH_SETTING}", f"{i}.json")})
+        
 
 class CombatSettingPage(ConfigPage):
     def __init__(self):
-        super().__init__(config_file_name = "auto_combat")
+        super().__init__(config_file_name = CONFIGNAME_COMBAT)
         from source.common.lang_data import get_all_characters_name
         self.character_names = get_all_characters_name()
         self.input_verify={
@@ -681,7 +686,7 @@ class CombatSettingPage(ConfigPage):
             for f in files:
                 if f[f.index('.') + 1:] == "json":
                     self.config_files.append({"label": f, "value": os.path.join(root, f)})
-        self.config_files.append({"label": "auto_combat.json", "value": "config\\settings\\auto_combat.json"})
+        self.config_files.append({"label": f"{CONFIGNAME_COMBAT}.json", "value": fr"config/settings/{CONFIGNAME_COMBAT}.json"})
 
     def _load(self):
         self.last_file = None
@@ -722,7 +727,7 @@ class CombatSettingPage(ConfigPage):
 
 class CollectorSettingPage(ConfigPage):
     def __init__(self):
-        super().__init__(config_file_name = "auto_collector")
+        super().__init__(config_file_name = CONFIGNAME_COLLECTOR)
         self.collection_names = load_json("ITEM_NAME.json", f"assets\\POI_JSON_API\\{GLOBAL_LANG}")
 
     def _load_config_files(self):
@@ -731,7 +736,7 @@ class CollectorSettingPage(ConfigPage):
             for f in files:
                 if f[f.index('.') + 1:] == "json":
                     self.config_files.append({"label": f, "value": os.path.join(root, f)})
-        self.config_files.append({"label": "auto_collector.json", "value": os.path.join("config\\settings\\auto_collector.json")})
+        self.config_files.append({"label": f"{CONFIGNAME_COLLECTOR}.json", "value": os.path.join(fr"config/settings/{CONFIGNAME_COLLECTOR}.json")})
 
     # 重置列表
     @staticmethod

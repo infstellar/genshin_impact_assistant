@@ -8,6 +8,7 @@ import numpy as np
 import gettext
 from source.logger import logger
 from source.config.config import GIAconfig
+from source.i18n.i18n import t2t
 import cv2
 import win32gui, win32process, psutil
 import ctypes, pickle
@@ -139,9 +140,7 @@ if GLOBAL_LANG == "$locale$":
     GLOBAL_LANG = get_local_lang()
     GLOBAL_LANG = "zh_CN"
     logger.info(f"language set as: {GLOBAL_LANG}")
-l10n = gettext.translation(GLOBAL_LANG, localedir=os.path.join(ROOT_PATH, r"translation/locale"), languages=[GLOBAL_LANG])
-l10n.install()
-t2t = l10n.gettext
+
 # load translation module over
 
 

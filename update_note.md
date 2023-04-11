@@ -1,9 +1,4 @@
 ## TODO：
-- config的名字全部改成首字母大写，去掉下划线
-- jsontemplate与json分离
-- jsondoc的其他配置项与i18n分离,或者在加载时合并common与i18n两个jsondoc
-- 合并aim与combat
-- 合并pickup与collect
 - 自动战斗预启动
 - 自动战斗的e技能释放有延迟，可能是计时器问题
 - 秘境开局会点两下 原神动画问题
@@ -17,6 +12,11 @@
 - BigPudgyProblem需要对话
 
 ## Done：
+- config的名字全部改成首字母大写，去掉下划线 pass
+- jsontemplate与json分离 pass
+- jsondoc的其他配置项与i18n分离,或者在加载时合并common与i18n两个jsondoc pass
+- 合并aim与combat pass
+- 合并pickup与collect pass
 - collet增加一个在半径内逛街找敌人的功能 pass
 - 游泳的usd有bug pass
 - chara waiting增加更有效的usd。游泳、爬山、空格。 pass
