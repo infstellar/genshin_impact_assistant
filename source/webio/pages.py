@@ -409,6 +409,7 @@ class ConfigPage(Page):
         json.dump(self.get_json(j), open(self.file_name, 'w', encoding='utf8'), ensure_ascii=False, indent=4)
         # output.put_text('saved!', scope='now')
         output.toast(t2t('saved!'))
+        GIAconfig.update()
 
     # 
     def get_json(self, j: dict, add_name=''):
