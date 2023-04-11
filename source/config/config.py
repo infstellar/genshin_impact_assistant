@@ -1,4 +1,5 @@
-from source.util import *
+# from source.util import *
+from source.path_lib import *
 from source.config.util import *
 from source.config.config_generated import GeneratedConfig
 
@@ -19,8 +20,8 @@ class GIAConfig(GeneratedConfig):
             j = load_json(json_name=f"{jsonname}.jsontemplate", default_path=fr"{CONFIG_PATH}/json_template")
             for k in j:
                 # if f"{jsonname}_{k}" in self.__dict__:
-                self.__dict__[f"{jsonname}___{k}"] = j[k]
-                print(f"set {jsonname}___{k} to {j[k]}")
+                self.__dict__[f"{jsonname}_{k}"] = j[k]
+                print(f"set {jsonname}_{k} to {j[k]}")
 
     # def save(self):
     #     var_names = [f"{i}_" for i in self.CONFIG_FILE_NAMES]

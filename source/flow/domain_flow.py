@@ -35,7 +35,7 @@ class DomainFlow(BaseThreading):
         self.lockOnFlag = 0
         self.move_num = 2.5
 
-        refresh_config()
+        # refresh_config()
         self.isLiYue = domain_json["isLiYueDomain"]
         self.resin_mode = domain_json["resin"]
         self.fast_mode = domain_json["fast_mode"]

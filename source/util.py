@@ -62,24 +62,28 @@ def load_json(json_name='config.json', default_path='config\\settings', auto_cre
         else:
             json.dump({}, open(all_path, 'w', encoding='utf-8'))
             return json.load(open(all_path, 'r', encoding='utf-8'))
-try:
-    config_json = load_json("config.json")
-    DEBUG_MODE = config_json["DEBUG"] if "DEBUG" in config_json else False
-    GLOBAL_LANG = config_json["lang"]
-except:
-    logger.error("config文件导入失败，可能由于初次安装。跳过导入。 ERROR_IMPORT_CONFIG_001")
-    DEBUG_MODE = False
-    GLOBAL_LANG = "$locale$"
+# try:
+#     config_json = load_json("config.json")
+#     DEBUG_MODE = config_json["DEBUG"] if "DEBUG" in config_json else False
+#     GLOBAL_LANG = config_json["lang"]
+# except:
+#     logger.error("config文件导入失败，可能由于初次安装。跳过导入。 ERROR_IMPORT_CONFIG_001")
+#     DEBUG_MODE = False
+#     GLOBAL_LANG = "$locale$"
+DEBUG_MODE=True
+GLOBAL_LANG="zh_CN"
+INTERACTION_MODE = INTERACTION_DESKTOP
+IS_DEVICE_PC = True
 
-try:
-    INTERACTION_MODE = load_json("config.json", CONFIG_PATH_SETTING)["interaction_mode"]
-    if INTERACTION_MODE not in [INTERACTION_EMULATOR, INTERACTION_DESKTOP_BACKGROUND, INTERACTION_DESKTOP]:
-        logger.warning("UNKNOWN INTERACTION MODE. SET TO \'Desktop\' Default.")
-        INTERACTION_MODE = INTERACTION_DESKTOP
-except:
-    logger.error("config文件导入失败，可能由于初次安装。跳过导入。 ERROR_IMPORT_CONFIG_002")
-    INTERACTION_MODE = INTERACTION_DESKTOP
-IS_DEVICE_PC = (INTERACTION_MODE == INTERACTION_DESKTOP_BACKGROUND)or(INTERACTION_MODE == INTERACTION_DESKTOP)
+# try:
+#     INTERACTION_MODE = load_json("config.json", CONFIG_PATH_SETTING)["interaction_mode"]
+#     if INTERACTION_MODE not in [INTERACTION_EMULATOR, INTERACTION_DESKTOP_BACKGROUND, INTERACTION_DESKTOP]:
+#         logger.warning("UNKNOWN INTERACTION MODE. SET TO \'Desktop\' Default.")
+#         INTERACTION_MODE = INTERACTION_DESKTOP
+# except:
+#     logger.error("config文件导入失败，可能由于初次安装。跳过导入。 ERROR_IMPORT_CONFIG_002")
+#     INTERACTION_MODE = INTERACTION_DESKTOP
+# IS_DEVICE_PC = (INTERACTION_MODE == INTERACTION_DESKTOP_BACKGROUND)or(INTERACTION_MODE == INTERACTION_DESKTOP)
 # load config file over
 
 
@@ -265,9 +269,9 @@ def save_json(x, json_name='config.json', default_path='config\\settings', sort_
         json.dump(x, open(os.path.join(default_path, json_name), 'w', encoding='utf-8'),
               ensure_ascii=False)
 
-def refresh_config():
-    global config_json
-    config_json = load_json("config.json")
+# def refresh_config():
+#     global config_json
+#     config_json = load_json("config.json")
 
 def euclidean_distance(p1, p2):
     return math.sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2)
