@@ -25,7 +25,7 @@ class DomainFlow(BaseThreading):
         self.combat_loop.pause_threading()
         self.combat_loop.start()
 
-        domain_times = domain_json["domain_times"]
+        # domain_times = domain_json["domain_times"]
         if domain_times == 0:
             x = input(t2t("请输入秘境次数"))
             # x.replace(']','')
@@ -34,9 +34,9 @@ class DomainFlow(BaseThreading):
         self.move_num = 2.5
 
         # refresh_config()
-        self.isLiYue = domain_json["isLiYueDomain"]
-        self.resin_mode = domain_json["resin"]
-        self.fast_mode = domain_json["fast_mode"]
+        # self.isLiYue = domain_json["isLiYueDomain"]
+        # self.resin_mode = domain_json["resin"]
+        # self.fast_mode = domain_json["fast_mode"]
         self.move_timer = timer_module.Timer()
         self.ahead_timer = timer_module.Timer()
         self.fast_move_timer = timer_module.Timer()

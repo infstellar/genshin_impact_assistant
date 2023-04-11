@@ -1,0 +1,31 @@
+{
+  "collection_name": {
+    "doc": "物品名",
+    "special_index":"$PREDICT_AND_VERIFY_01$"
+  },
+  "collection_type": {
+    "select_items": [
+      "COLLECTION",
+      "ENEMY"
+    ]
+  },
+  "collection_area":{
+    "doc": "collect area",
+    "select_items": [
+      "ALL",
+      "MD",
+      "LY",
+      "DQ",
+      "XM"
+    ]
+  },
+  "collect mode": {
+    "select_items": [
+      "Auto",
+      "ManualAssi"
+    ]
+  },
+  "minimum_times_mask_col_id":{
+    "doc": "Minimum number of times to mask the collector id"
+  }
+}

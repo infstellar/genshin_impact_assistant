@@ -379,14 +379,18 @@ class ConfigPage(Page):
 
         # with open(os.path.join(root_path, "config", "settings", "config.json"), 'r', encoding='utf8') as f:
         #     lang = json.load(f)["lang"]
-        doc_name = f'config\\json_doc\\{self.config_file_name}.{GLOBAL_LANG}.jsondoc'
+        doc_name = f'config\\json_doc\\{self.config_file_name}.yaml'
+        lang_doc_name = f'config\\json_doc\\{self.config_file_name}.{GLOBAL_LANG}.yaml'
 
         if os.path.exists(doc_name):
             with open(doc_name, 'r', encoding='utf8') as f:
-                doc = json.load(f)
-        elif os.path.exists(f'{doc_name}.en_US.jsondoc'):
-            with open(f'{doc_name}.en_US.jsondoc', 'r', encoding='utf8') as f:
-                doc = json.load(f)
+                doc = yaml.load(f, Loader=yaml.FullLoader)
+            if os.path.exists(lang_doc_name):
+                with open(lang_doc_name, 'r', encoding='utf8') as f:
+                    doc_addi = yaml.load(f, Loader=yaml.FullLoader)
+                for k1 in doc_addi:
+                    for k2 in doc_addi[k1]:
+                        doc[k1][k2] = doc_addi[k1][k2]
         else:
             doc = {}
         self.put_json(j, doc, 'now', level=3)  # 载入json

@@ -13,6 +13,7 @@ import win32gui, win32process, psutil
 import ctypes, pickle
 from PIL import Image, ImageDraw, ImageFont
 import traceback
+import yaml
 
 time.time()  # 防自动删除
 global GLOBAL_LANG, GLOBAL_DEVICE
@@ -252,7 +253,7 @@ def points_angle(p1, p2, coordinate=ANGLE_NORMAL):
         degree -= 360
     return degree
 
-def save_json(x, json_name='config.json', default_path='config\\settings', sort_keys=True, auto_create=False):
+def save_json(x, json_name='General.json', default_path='config\\settings', sort_keys=True, auto_create=False):
     if not os.path.exists(default_path):
         logger.error(f"CANNOT FIND PATH: {default_path}")
     if sort_keys:

@@ -13,7 +13,7 @@ def upd_message():
         ret_message+=f"现已支持多显示器多缩放设置。可能存在问题，欢迎反馈。\n"
     
     x=load_json()
-    x["version"]=GIA_VERSION
+    x["Version"]=GIA_VERSION
     save_json(x)
     GIAconfig.update()
     return ret_message
