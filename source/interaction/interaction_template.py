@@ -34,7 +34,7 @@ class InteractionTemplate():
     def key_press(self, key):
         pass
     
-    def move_to(self, x: int, y: int, relative=False, isChromelessWindow=False):
+    def move_to(self, x: int, y: int, relative=False, isBorderlessWindow=False):
         pass
     
     def drag(self, origin_xy:list, targe_xy:list):

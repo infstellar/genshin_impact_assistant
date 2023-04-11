@@ -102,7 +102,7 @@ Before using, you need to pay attention to these configuration contents:
 
 |Location|Configuration Item|Content|
 |----|----|----|
-|config/settings/config.json| `ChromelessWindow` | Set to true if it is a borderless window or full screen. |
+|config/settings/config.json| `BorderlessWindow` | Set to true if it is a borderless window or full screen. |
 
 Can be modified in the GUI or directly from the file.
 

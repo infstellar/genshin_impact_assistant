@@ -1,0 +1,17 @@
+{
+  "BorderlessWindow": false,
+  "UsingAlphaChannel": true,
+  "DEBUG": false,
+  "CorrDegree": 0.95,
+  "DevicePaddle": "cpu",
+  "DeviceTorch": "auto",
+  "CheckImport": false,
+  "Lang":"$locale$",
+  "CloudGenshin": false,
+  "CaptureMode":"fast",
+  "DeterminingStrictWeight":0.9,
+  "InteractionMode": "Desktop",
+  "Python32Path": "",
+  "MissionGroup":"AutoCollectorMission.json",
+  "Version":"v0.7.2.779"
+}

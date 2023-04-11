@@ -95,7 +95,7 @@ To没用过github的小伙伴: 描述文档中的蓝色文字是链接,可以打
 
 |位置|配置项|内容|
 |----|----|----|
-|config/settings/config.json| `ChromelessWindow` | 如果是无边框窗口或全屏，设置为true。|
+|config/settings/config.json| `BorderlessWindow` | 如果是无边框窗口或全屏，设置为true。|
 
 可以在GUI或直接从文件中修改。
 

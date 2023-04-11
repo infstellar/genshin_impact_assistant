@@ -113,7 +113,7 @@ class InteractionNormal(InteractionTemplate):
             time.sleep(0.05)
             self.PostMessageW(static_lib.HANDLE, self.WM_KEYUP, wparam, lparam2)
     
-    def move_to(self, x: int, y: int, relative=False, isChromelessWindow=False):
+    def move_to(self, x: int, y: int, relative=False, isBorderlessWindow=False):
         x = int(x)
         y = int(y)
 
@@ -123,7 +123,7 @@ class InteractionNormal(InteractionTemplate):
 
             wx, wy, w, h = win32gui.GetWindowRect(static_lib.HANDLE)
             x += wx
-            if isChromelessWindow:
+            if isBorderlessWindow:
                 y += wy
             else:
                 y = y + wy + 26

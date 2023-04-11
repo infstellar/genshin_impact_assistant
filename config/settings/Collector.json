@@ -1,0 +1,8 @@
+{
+  "collect_mode": "Auto",
+  "collection_area": "ALL",
+  "collection_name": "史莱姆 - 蒙德",
+  "collection_type": "ENEMY",
+  "minimum_times_mask_col_id": 10000,
+  "PickupBlacklist":[]
+}

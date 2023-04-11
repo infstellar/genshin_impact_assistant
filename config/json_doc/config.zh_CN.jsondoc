@@ -9,7 +9,7 @@
     "annotation":"选择$locale$时，将根据系统语言自动选择。"
   },
 
-  "ChromelessWindow":{
+  "BorderlessWindow":{
     "doc":"是否为无边框窗口",
     "annotation":"全屏或无边窗窗口化时设置为True，窗口化时设置为False。"
   },

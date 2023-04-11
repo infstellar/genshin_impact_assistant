@@ -1,0 +1,8 @@
+{
+    "CollectionName": "史莱姆",
+    "CollectionType": "ENEMY",
+    "CollectionArea": "ALL",
+    "CollectionMode": "Auto",
+    "MinimumTimesMaskCollectorId": 10000,
+    "PickupBlacklist":[]
+}

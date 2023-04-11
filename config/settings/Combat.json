@@ -1,4 +1,5 @@
 {
+  "teamfile": "team.json",
   "auto_distance": true,
   "auto_move": false,
   "fps": 20,

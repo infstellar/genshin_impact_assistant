@@ -55,7 +55,7 @@ class InteractionDm(InteractionTemplate):
     def key_press(self, key):
         dmdll.KeyPress(self.get_virtual_keycode(key))
     
-    def move_to(self, x: int, y: int, relative=False, isChromelessWindow=False):
+    def move_to(self, x: int, y: int, relative=False, isBorderlessWindow=False):
         if relative:
             dmdll.MoveR(x, y)
         else:

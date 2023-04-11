@@ -1,6 +1,6 @@
 """This file is generated automatically. Do not manually modify it."""
 class GeneratedConfig:
-   config___ChromelessWindow = False
+   config___BorderlessWindow = False
    config___DEBUG = True
    config___capture_mode = 'fast'
    config___check_import = False
