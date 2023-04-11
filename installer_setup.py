@@ -14,8 +14,8 @@ def unzip():
 
 def auto_setup():
     print(unzip())
-    print(source.config.template_translator())
-    print(source.config.template_translator_tactic())
+    # print(source.config.template_translator())
+    # print(source.config.template_translator_tactic())
 
 if __name__ == '__main__':
     auto_setup()
