@@ -58,6 +58,7 @@
         "Crystalfly",
         "CSDL",
         "CSMD",
+        "cvars",
         "CVAUTOTRACK",
         "cview",
         "DLLAPI",
@@ -125,7 +126,8 @@
         "withalpha",
         "XCYD",
         "Ying",
-        "YOLOX"
+        "YOLOX",
+        "GIAconfig"
     ],
     "codecheck.ExcludeDirectory": "",
     "codecheck.ScanDirectory": "source",

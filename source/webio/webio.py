@@ -3,6 +3,7 @@ from source.webio.pages import *
 import subprocess
 import pywebio
 import source.webio.log_handler
+from source.logger import add_logger_to_GUI
 status = True
 global first_run
 first_run = False

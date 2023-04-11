@@ -1,55 +1,29 @@
-import json
-import os
-import shutil
-import sys
-import time  # 8药删了，qq了
-import math
+
+import time, math, shutil, sys, os, json
+import win32gui, win32process, psutil, ctypes, pickle, traceback
 import numpy as np
-import gettext
-from source.logger import logger
-from source.config.config import GIAconfig
-from source.i18n.i18n import t2t
-import cv2
-import win32gui, win32process, psutil
-import ctypes, pickle
+import cv2, yaml
 from PIL import Image, ImageDraw, ImageFont
-import traceback
-import yaml
-
-time.time()  # 防自动删除
-global GLOBAL_LANG, GLOBAL_DEVICE
-GLOBAL_LANG = "$locale$" # $locale$, zh_CN, en_US
-DESKTOP_CN = "Desktop_CN"
-DESKTOP_EN = "Desktop_EN"
-MOBILE_CN = "Mobile_CN"
-MOBILE_EN = "Mobile_EN"
-DEVICE = DESKTOP_CN
-INTERACTION_DESKTOP = "Desktop"
-INTERACTION_EMULATOR = "Emulator"
-INTERACTION_DESKTOP_BACKGROUND = "DesktopBackground"
-INTERACTION_MODE = INTERACTION_DESKTOP # Normal, Adb, Dm
-BBG = 100001
-ANGLE_NORMAL = 0
-ANGLE_NEGATIVE_Y = 1
-ANGLE_NEGATIVE_X = 2
-ANGLE_NEGATIVE_XY = 3
-PROCESS_NAME = ["YuanShen.exe", "GenshinImpact.exe"]
-SCREEN_CENTER_X = 1920/2
-SCREEN_CENTER_Y = 1080/2
-GIA_VERSION = "v0.7.3.810"
-
-# configure paths
 ROOT_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SOURCE_PATH = ROOT_PATH + '\\source'
 ASSETS_PATH = ROOT_PATH + '\\assets'
-if sys.path[0] != ROOT_PATH:
-    sys.path.insert(0, ROOT_PATH)
-if sys.path[1] != SOURCE_PATH:
-    sys.path.insert(1, SOURCE_PATH)
+if sys.path[0] != ROOT_PATH:   sys.path.insert(0, ROOT_PATH)
+if sys.path[1] != SOURCE_PATH: sys.path.insert(1, SOURCE_PATH)
+from source.logger import logger
+from source.config.config import GIAconfig
+from source.i18n import t2t, GLOBAL_LANG
 from source.path_lib import *
-# configure paths over
+from source.cvars import *
 
+time
+yaml
+shutil
+pickle
+traceback
 
+DEBUG_MODE = GIAconfig.General_DEBUG
+INTERACTION_MODE = INTERACTION_DESKTOP
+IS_DEVICE_PC = True
 
 # load config file
 def load_json(json_name='General.json', default_path='config\\settings', auto_create = False) -> dict:
@@ -66,10 +40,7 @@ def load_json(json_name='General.json', default_path='config\\settings', auto_cr
             json.dump({}, open(all_path, 'w', encoding='utf-8'))
             return json.load(open(all_path, 'r', encoding='utf-8'))
         
-DEBUG_MODE = GIAconfig.General_DEBUG
-GLOBAL_LANG = GIAconfig.General_Lang
-INTERACTION_MODE = INTERACTION_DESKTOP
-IS_DEVICE_PC = True
+
 
 # try:
 #     if INTERACTION_MODE not in [INTERACTION_EMULATOR, INTERACTION_DESKTOP_BACKGROUND, INTERACTION_DESKTOP]:
@@ -81,65 +52,20 @@ IS_DEVICE_PC = True
 # IS_DEVICE_PC = (INTERACTION_MODE == INTERACTION_DESKTOP_BACKGROUND)or(INTERACTION_MODE == INTERACTION_DESKTOP)
 # load config file over
 
-
-
-# configure loguru
-logger.remove(handler_id=None)
-logger.add(os.path.join(ROOT_PATH, os.path.join(ROOT_PATH, 'Logs', "{time:YYYY-MM-DD}.log")), level="TRACE", backtrace=True, retention='15 days')
-if DEBUG_MODE:
-    logger.add(sys.stdout, level="TRACE", backtrace=True)
-else:
-    logger.add(sys.stdout, level="INFO", backtrace=True)
-
-
-def hr(title, level=3):
-    title = str(title).upper()
-    if level == 1:
-        logger.info('=' * 20 + ' ' + title + ' ' + '=' * 20)
-    if level == 2:
-        logger.info('-' * 20 + ' ' + title + ' ' + '-' * 20)
-    if level == 3:
-        logger.info('<' * 3 + ' ' + title + ' ' + '>' * 3)
-    if level == 0:
-        middle = '|' + ' ' * 20 + title + ' ' * 20 + '|'
-        border = '+' + '-' * (len(middle) - 2) + '+'
-        logger.info(border)
-        logger.info(middle)
-        logger.info(border)
-
-
-def attr(name, text):
-    logger.info('[%s] %s' % (str(name), str(text)))
-
-
-def attr_align(name, text, front='', align=22):
-    name = str(name).rjust(align)
-    if front:
-        name = front + name[len(front):]
-    logger.info('%s: %s' % (name, str(text)))
-
-
-logger.hr = hr
-logger.attr = attr
-logger.attr_align = attr_align
-# configurate loguru over
-
-
-
 # load translation module
-def get_local_lang():
-    import locale
-    lang = locale.getdefaultlocale()[0]
-    logger.debug(f"locale: {locale.getdefaultlocale()}")
-    if lang in ["zh_CN", "zh_SG", "zh_MO", "zh_HK", "zh_TW"]:
-        return "zh_CN"
-    else:
-        return "en_US"
+# def get_local_lang():
+#     import locale
+#     lang = locale.getdefaultlocale()[0]
+#     logger.debug(f"locale: {locale.getdefaultlocale()}")
+#     if lang in ["zh_CN", "zh_SG", "zh_MO", "zh_HK", "zh_TW"]:
+#         return "zh_CN"
+#     else:
+#         return "en_US"
 
-if GLOBAL_LANG == "$locale$":
-    GLOBAL_LANG = get_local_lang()
-    GLOBAL_LANG = "zh_CN"
-    logger.info(f"language set as: {GLOBAL_LANG}")
+# if GLOBAL_LANG == "$locale$":
+#     GLOBAL_LANG = get_local_lang()
+#     GLOBAL_LANG = "zh_CN"
+logger.info(f"language set as: {GLOBAL_LANG}")
 
 # load translation module over
 
@@ -215,11 +141,6 @@ def is_json_equal(j1: str, j2: str) -> bool:
     except:
         return False
 
-def add_logger_to_GUI(cb_func):
-    logger.add(cb_func, level="INFO", backtrace=True, colorize=True)
-
-
-
 def is_int(x):
     try:
         int(x)
@@ -227,8 +148,6 @@ def is_int(x):
         return False
     else:
         return True
-
-
 
 def points_angle(p1, p2, coordinate=ANGLE_NORMAL):
     # p1: current point

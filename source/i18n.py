@@ -1,3 +1,5 @@
+"""i18n module for GIA."""
+
 import gettext, os, json, locale
 from source.path_lib import *
 
@@ -10,6 +12,9 @@ if os.path.exists(jpath):
     j = json.load(open(jpath, 'r', encoding='utf-8'))
     DEBUG_MODE = j["DEBUG"]
     GLOBAL_LANG = j["Lang"]
+else:
+    DEBUG_MODE = False
+    GLOBAL_LANG = "$locale$"
 def get_local_lang():
     lang = locale.getdefaultlocale()[0]
     if lang in ["zh_CN", "zh_SG", "zh_MO", "zh_HK", "zh_TW"]:
