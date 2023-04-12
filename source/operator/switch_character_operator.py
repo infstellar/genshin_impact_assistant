@@ -83,16 +83,16 @@ class SwitchCharacterOperator(BaseThreading):
             bool: #zh_CN 若复活成功或不需要复活，返回True，否则返回False. #en_US Returns True if resurrection is successful or not required, otherwise returns False.
             
         """
-        if itt.get_img_existence(asset.character_died, is_log=True):
+        if itt.get_img_existence(asset.IconCombatCharacterDied, is_log=True):
             succ_flag_1 = False
             print(self.died_character)
             for i in range(10):
-                if ocr.is_img_num_plus(itt.capture(posi=asset.Area_revival_foods.position, jpgmode=0))[0]:
+                if ocr.is_img_num_plus(itt.capture(posi=asset.AreaCombatRevivalFoods.position, jpgmode=0))[0]:
                     break
                 time.sleep(0.15)
                 if self.checkup_stop_func(): # break
                     return True
-                r = itt.appear_then_click(asset.ButtonEgg, is_log=True)
+                r = itt.appear_then_click(asset.ButtonFoodEgg, is_log=True)
                 if r:
                     succ_flag_1 = True 
                     break
@@ -103,7 +103,7 @@ class SwitchCharacterOperator(BaseThreading):
                   
             for i in range(3):
                 time.sleep(0.15)
-                ret_check_and_reborn_2 = itt.appear_then_click(asset.confirm, is_log=True)
+                ret_check_and_reborn_2 = itt.appear_then_click(asset.ButtonGeneralConfirm, is_log=True)
                 print(f"ret_check_and_reborn_2 {ret_check_and_reborn_2}")
                 if ret_check_and_reborn_2:
                     self.reborn_timer.reset()

@@ -8,7 +8,7 @@ pickup_blacklist = load_json("auto_pickup.json")["blacklist"]
 pickup_blacklist += load_json("auto_pickup_default_blacklist.json")["blacklist"]
 pickup_blacklist = list(set(pickup_blacklist))
 # print()
-a = itt.get_img_existence(asset.button_all_character_died)
+a = itt.get_img_existence(asset.ButtonGeneralAllCharacterDied)
 # print()
 
 while 1:

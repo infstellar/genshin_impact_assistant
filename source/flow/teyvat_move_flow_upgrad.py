@@ -103,11 +103,11 @@ class TeyvatMoveCommon():
         self.history_position_timer = timer_module.AdvanceTimer(limit=1)
 
     def switch_motion_state(self, jump=True):
-        if itt.get_img_existence(asset.motion_climbing):
+        if itt.get_img_existence(asset.IconGeneralMotionClimbing):
             self.motion_state = IN_CLIMB
-        elif itt.get_img_existence(asset.motion_flying):
+        elif itt.get_img_existence(asset.IconGeneralMotionFlying):
             self.motion_state = IN_FLY
-        elif itt.get_img_existence(asset.motion_swimming):
+        elif itt.get_img_existence(asset.IconGeneralMotionSwimming):
             self.motion_state = IN_WATER
         else:
             self.motion_state = IN_MOVE

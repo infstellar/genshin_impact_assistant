@@ -46,7 +46,7 @@ class Map(MiniMap, BigMap, MapConverter):
 
     def _upd_smallmap(self) -> None:
         # self.lock.acquire()
-        if itt.get_img_existence(asset.ui_main_win, is_log=False):
+        if itt.get_img_existence(asset.IconUIEmergencyFood, is_log=False):
             self.update_position(itt.capture(jpgmode=0))
         # self.lock.release()
 
@@ -136,13 +136,13 @@ class Map(MiniMap, BigMap, MapConverter):
         return self.rotation
 
     def check_bigmap_scaling(self) -> None:
-        if not itt.get_img_existence(asset.BigMapScaling):
+        if not itt.get_img_existence(asset.IconBigMapScaling):
             origin_page = ui_control.get_page()
-            while not itt.appear_then_click(asset.SwitchMapAreaButton): itt.delay(0.2)
+            while not itt.appear_then_click(asset.ButtonBigmapSwitchMap): itt.delay(0.2)
             itt.delay("animation")
             while not itt.appear_then_click(asset.MapAreaCYJY): itt.delay(0.2)
             itt.delay("animation")
-            while not itt.appear_then_click(asset.SwitchMapAreaButton): itt.delay(0.2)
+            while not itt.appear_then_click(asset.ButtonBigmapSwitchMap): itt.delay(0.2)
             itt.delay("animation")
             while not itt.appear_then_click(asset.MapAreaLY): itt.delay(0.2)
             itt.delay("animation")
@@ -277,7 +277,7 @@ class Map(MiniMap, BigMap, MapConverter):
 
         self.check_bigmap_scaling()
 
-        while not itt.appear_then_click(asset.SwitchMapAreaButton):
+        while not itt.appear_then_click(asset.ButtonBigmapSwitchMap):
             itt.delay(0.2)
         itt.delay(0.5)
         if tp_region == "Mondstadt":
@@ -290,18 +290,18 @@ class Map(MiniMap, BigMap, MapConverter):
             while not itt.appear_then_click(asset.MapAreaXM): itt.delay(0.2)
         itt.delay(0.5)
 
-        itt.appear_then_click(asset.CloseMarkTableInTP)
+        itt.appear_then_click(asset.ButtonBigmapCloseMarkTableInTP)
         itt.delay(0.5)
 
         click_posi = self._move_bigmap(tp_posi)
 
         if tp_type == "Domain": # 部分domain有特殊名字
             logger.debug("tp to Domain")
-            itt.appear_then_click(asset.ButtonSwitchDomainModeOn)
+            itt.appear_then_click(asset.ButtonBigmapSwitchDomainModeOn)
             itt.delay(0.2)
             # 点一下“仅查看秘境”
         else:
-            itt.appear_then_click(asset.ButtonSwitchDomainModeOff)
+            itt.appear_then_click(asset.ButtonBigmapSwitchDomainModeOff)
 
         
 
@@ -310,11 +310,11 @@ class Map(MiniMap, BigMap, MapConverter):
         tp_timeout_2 = timer_module.TimeoutTimer(5)
         tp_timeout_2.reset()
         
-        if not (itt.get_text_existence(asset.CSMD) or itt.get_text_existence(asset.QTSX) or itt.get_img_existence(asset.bigmap_tp)):
+        if not (itt.get_text_existence(asset.CSMD) or itt.get_text_existence(asset.QTSX) or itt.get_img_existence(asset.ButtonBigmapTP)):
             itt.move_and_click(click_posi)
         
         while 1:
-            if itt.appear_then_click(asset.bigmap_tp): break
+            if itt.appear_then_click(asset.ButtonBigmapTP): break
             
             if tp_type == "Teleporter":
                 logger.debug("tp to Teleporter")

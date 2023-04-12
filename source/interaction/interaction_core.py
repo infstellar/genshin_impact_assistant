@@ -789,7 +789,7 @@ if __name__ == '__main__':
     rootpath = "D:\\Program Data\\vscode\\GIA\\genshin_impact_assistant\\dist\\imgs"
     # ib.similar_img_pixel(cv2.imread(rootpath+"\\yunjin_q.png"),cv2.imread(rootpath+"\\zhongli_q.png"))
     from source.manager import asset
-    itt.appear_then_click(asset.ButtonEgg, is_log=True)
+    itt.appear_then_click(asset.ButtonFoodEgg, is_log=True)
     # print(win32api.GetCursorPos())
     # win32api.mouse_event(win32con.MOUSEEVENTF_MOVE, 150, 150)
     # print(win32api.GetCursorPos())

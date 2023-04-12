@@ -94,11 +94,11 @@ class TeyvatMoveFlow(BaseThreading):
         self.tmc.set_stop_rule(self.stop_rule)
 
     def switch_motion_state(self):
-        if self.itt.get_img_existence(asset.motion_climbing):
+        if self.itt.get_img_existence(asset.IconGeneralMotionClimbing):
             self.motion_state = IN_CLIMB
-        elif self.itt.get_img_existence(asset.motion_flying):
+        elif self.itt.get_img_existence(asset.IconGeneralMotionFlying):
             self.motion_state = IN_FLY
-        elif self.itt.get_img_existence(asset.motion_swimming):
+        elif self.itt.get_img_existence(asset.IconGeneralMotionSwimming):
             self.motion_state = IN_WATER
         else:
             self.motion_state = IN_MOVE
@@ -166,7 +166,7 @@ class TeyvatMoveFlow(BaseThreading):
                     if self.checkup_stop_func():
                         break
                     
-                    if self.itt.appear_then_click(asset.bigmap_tp) : break
+                    if self.itt.appear_then_click(asset.ButtonBigmapTP) : break
                     if check_mode == 1:
                         logger.debug("tp to tw")
                         self.itt.appear_then_click(asset.CSMD)
@@ -181,7 +181,7 @@ class TeyvatMoveFlow(BaseThreading):
 
                 self.itt.move_and_click([posi_manager.tp_button[0], posi_manager.tp_button[1]], delay=1)
                 
-                while not self.itt.get_img_existence(asset.ui_main_win):
+                while not self.itt.get_img_existence(asset.IconUIEmergencyFood):
                     if self.checkup_stop_func():
                         break
                     time.sleep(1)

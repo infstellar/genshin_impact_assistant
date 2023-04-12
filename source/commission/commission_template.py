@@ -44,5 +44,5 @@ class CommissionTemplate(MissionExecutor):
                 
     
     def _is_in_commission(self):
-        return itt.get_img_existence(asset.CommissionIcon)
+        return itt.get_img_existence(asset.IconCommissionCommissionIcon)
 

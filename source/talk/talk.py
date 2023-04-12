@@ -21,7 +21,7 @@ class Talk():
             if stop_func():return
             itt.move_and_click(ButtonTalkSkip.click_position())
             # itt.move_to(-120,0,relative=True)
-            if itt.get_img_existence(asset.ui_main_win): return True
+            if itt.get_img_existence(asset.IconUIEmergencyFood): return True
             
     def talk_switch(self, textobj:asset.TextTemplate):
         cap = itt.capture(posi=AreaTalkSelects.position, jpgmode=0)

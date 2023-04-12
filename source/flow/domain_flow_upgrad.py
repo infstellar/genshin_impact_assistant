@@ -51,14 +51,14 @@ class MoveToChallenge(FlowTemplate):
         movement.reset_view()
         if itt.get_text_existence(asset.LEYLINEDISORDER):
             self._next_rfc()
-        if itt.get_img_existence(asset.IN_DOMAIN):
+        if itt.get_img_existence(asset.IconUIInDomain):
             self._next_rfc()
         
         self.rfc = 1
     
     def state_before(self):
         while 1:
-            if itt.get_img_existence(asset.IN_DOMAIN):
+            if itt.get_img_existence(asset.IconUIInDomain):
                 break
             if itt.get_text_existence(asset.LEYLINEDISORDER):
                 itt.move_and_click([PosiM.posi_domain['CLLD'][0], PosiM.posi_domain['CLLD'][1]], delay=1)
@@ -216,9 +216,9 @@ class AttainReward(FlowTemplate):
 
     def state_in(self):
         if self.upper.resin_mode == '40':
-            itt.appear_then_click(asset.USE_20X2RESIN_DOUBLE_CHOICES)
+            itt.appear_then_click(asset.ButtonGeneralUseCondensedResin)
         elif self.upper.resin_mode == '20':
-            itt.appear_then_click(asset.USE_20RESIN_DOUBLE_CHOICES)
+            itt.appear_then_click(asset.ButtonGeneralUseOriginResin)
 
         if itt.get_text_existence(asset.domain_obtain):
             self._next_rfc()

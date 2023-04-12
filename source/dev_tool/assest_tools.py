@@ -11,4 +11,4 @@ def recaputer(img_obj: img_manager.ImgIcon, lang):
     save_path = img_obj.origin_path.replace("$lang$", lang)
     cv2.imwrite(save_path, imsrc)
 
-recaputer(USE_20X2RESIN_DOUBLE_CHOICES, "en_US")
+recaputer(ButtonGeneralUseCondensedResin, "en_US")

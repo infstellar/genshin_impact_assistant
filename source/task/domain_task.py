@@ -52,13 +52,13 @@ class DomainTask(TaskTemplate):
             itt.key_press('f')
             if not f_recognition():
                 break
-        while not itt.get_img_existence(asset.solo_challenge):
+        while not itt.get_img_existence(asset.ButtonDomainSoloChallenge):
             if self.checkup_stop_func():return
             itt.delay("animation")
         itt.delay(1,comment="genshin animation")
         from source.api.pdocr_complete import ocr
         from source.api.pdocr_api import SHAPE_MATCHING, ACCURATE_MATCHING
-        cap_area = asset.switch_domain_area.position
+        cap_area = asset.AreaDomainSwitchChallenge.position
         itt.delay(1,comment="genshin animation")
         p1 = ocr.get_text_position(itt.capture(jpgmode=0, posi=cap_area), self.domain_stage_name,
                                    cap_posi_leftup=cap_area[:2],
@@ -79,11 +79,11 @@ class DomainTask(TaskTemplate):
             if self.checkup_stop_func():return
             time.sleep(0.2)
 
-            itt.appear_then_click(asset.solo_challenge)
+            itt.appear_then_click(asset.ButtonDomainSoloChallenge)
             
-            itt.appear_then_click(asset.start_challenge)
+            itt.appear_then_click(asset.ButtonDomainStartChallenge)
 
-            if itt.get_img_existence(asset.IN_DOMAIN):
+            if itt.get_img_existence(asset.IconUIInDomain):
                 break
             if ctimer.istimeout():
                 if itt.get_text_existence(asset.LEYLINEDISORDER):
@@ -120,9 +120,9 @@ class DomainTask(TaskTemplate):
 
     def _check_state(self):
         
-        if itt.get_img_existence(asset.IN_DOMAIN) or itt.get_text_existence(asset.LEYLINEDISORDER):
+        if itt.get_img_existence(asset.IconUIInDomain) or itt.get_text_existence(asset.LEYLINEDISORDER):
             self.flow_mode = TI.DT_IN_DOMAIN
-        elif itt.get_img_existence(asset.ui_main_win):
+        elif itt.get_img_existence(asset.IconUIEmergencyFood):
             self.flow_mode = TI.DT_MOVE_TO_DOMAIN
         else:
             logger.info(t2t("Unknown UI page"))

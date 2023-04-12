@@ -200,11 +200,11 @@ def f():
     return False
     
 def get_current_motion_state() -> str:
-    if itt.get_img_existence(asset.motion_climbing):
+    if itt.get_img_existence(asset.IconGeneralMotionClimbing):
         return CLIMBING
-    elif itt.get_img_existence(asset.motion_flying):
+    elif itt.get_img_existence(asset.IconGeneralMotionFlying):
         return FLYING
-    elif itt.get_img_existence(asset.motion_swimming):
+    elif itt.get_img_existence(asset.IconGeneralMotionSwimming):
         return SWIMMING
     else:
         return WALKING
@@ -229,8 +229,8 @@ if __name__ == '__main__':
     while 1:
         time.sleep(0.05)
         cap = itt.capture(jpgmode=0)
-        ban_posi=asset.CommissionIcon.cap_posi
+        ban_posi=asset.IconCommissionCommissionIcon.cap_posi
         cap[ban_posi[1]:ban_posi[3],ban_posi[0]:ban_posi[2]]=0
-        print(view_to_imgicon(cap, asset.CommissionIconInCommission))
+        print(view_to_imgicon(cap, asset.IconCommissionInCommission))
     # cview(-90, VERTICALLY)
     move_to_position([71, -2205])

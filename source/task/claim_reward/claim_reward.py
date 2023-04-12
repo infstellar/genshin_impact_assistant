@@ -13,7 +13,7 @@ class ClaimRewardMission(MissionExecutor, Talk):
         
     def get_available_reward(self):
         ui_control.ensure_page(UIPage.page_bigmap)
-        cap = itt.capture(jpgmode=0, posi=asset.AreaAvailableReward.position)
+        cap = itt.capture(jpgmode=0, posi=asset.AreaClaimRewardAvailableReward.position)
         img = extract_white_letters(cap)
         res = ocr.get_all_texts(img)
         rewards = []

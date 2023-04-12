@@ -107,7 +107,7 @@ def get_tw_points(bigmatMat, stop_func):
     Returns:
         list: 坐标列表
     """
-    ret = itt.match_multiple_img(bigmatMat, asset.bigmap_TeleportWaypoint.image)
+    ret = itt.match_multiple_img(bigmatMat, asset.IconBigmapTeleportWaypoint.image)
     if len(ret) == 0: # 自动重试
         logger.warning("获取传送锚点坐标失败，正在重试")
         time.sleep(5)
@@ -126,7 +126,7 @@ def get_gs_points(bigmatMat, stop_func):
     Returns:
         list: 坐标列表
     """
-    ret = itt.match_multiple_img(bigmatMat, asset.bigmap_GodStatue.image, threshold=0.98)
+    ret = itt.match_multiple_img(bigmatMat, asset.IconBigmapGodStatue.image, threshold=0.98)
     if len(ret) == 0: # 自动重试
         logger.warning("获取七天神像坐标失败，正在重试")
         time.sleep(5)
@@ -145,7 +145,7 @@ def get_dm_points(bigmatMat, stop_func):
     Returns:
         list: 坐标列表
     """
-    ret = itt.match_multiple_img(bigmatMat, asset.bigmap_Domain.image, threshold=0.98)
+    ret = itt.match_multiple_img(bigmatMat, asset.IconBigmapDomain.image, threshold=0.98)
     return np.asarray(ret)
 
 def get_middle_gs_point(stop_func):

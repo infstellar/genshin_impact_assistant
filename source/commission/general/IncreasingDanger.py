@@ -14,9 +14,9 @@ class IncreasingDangerGeneral(CommissionTemplate):
     
     def _aim_to_commission_icon(self):
         cap = itt.capture(jpgmode=0)
-        ban_posi=asset.CommissionIcon.cap_posi
+        ban_posi=asset.IconCommissionCommissionIcon.cap_posi
         cap[ban_posi[1]:ban_posi[3],ban_posi[0]:ban_posi[2]]=0
-        r = movement.view_to_imgicon(cap, asset.CommissionIconInCommission)
+        r = movement.view_to_imgicon(cap, asset.IconCommissionInCommission)
         if not r:
             return False
         if r<=15:

@@ -40,7 +40,7 @@ class CommissionParser():
             img = itt.capture(jpgmode=0)
             img = crop(img, cap_posi)
             img = recorp(img,cap_posi)
-            positions = itt.match_multiple_img(img, template=asset.BigmapCommissionIcon.image)
+            positions = itt.match_multiple_img(img, template=asset.IconBigmapCommission.image)
             if len(positions)>0:
                 curr_posi = genshin_map.get_bigmap_posi()
                 for i in positions:
@@ -83,9 +83,9 @@ class CommissionParser():
     def _detect_commission_type(self)->str:
         img = itt.capture(jpgmode=0)
         img_choose = crop(img.copy(), asset.BigmapChooseArea.position)
-        img_sidebar = crop(img.copy(), asset.AreaSidebarCommissionName.position)
+        img_sidebar = crop(img.copy(), asset.AreaBigmapSidebarCommissionName.position)
         
-        if itt.get_img_existence(asset.SidebarIsCommissionExist, cap = img_sidebar):
+        if itt.get_img_existence(asset.IconBigmapSidebarIsCommissionExist, cap = img_sidebar):
             ocr_res = ocr.get_all_texts(img_sidebar)
         else:
             ocr_res = ocr.get_all_texts(img_choose)

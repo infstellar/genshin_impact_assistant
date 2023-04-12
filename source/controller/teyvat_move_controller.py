@@ -43,7 +43,7 @@ class TeyvatMoveController(BaseThreading):
         self.target_positon = target_positon
 
     def check_flying(self):
-        if self.itt.get_img_existence(asset.motion_flying):
+        if self.itt.get_img_existence(asset.IconGeneralMotionFlying):
             return True
         else:
             return False
@@ -52,7 +52,7 @@ class TeyvatMoveController(BaseThreading):
         self.stop_rule = mode
     
     def check_climbing(self):
-        if self.itt.get_img_existence(asset.motion_climbing):
+        if self.itt.get_img_existence(asset.IconGeneralMotionClimbing):
             return True
         else:
             return False
@@ -63,7 +63,7 @@ class TeyvatMoveController(BaseThreading):
             self.itt.key_up('w')
     
     def check_swimming(self):
-        if self.itt.get_img_existence(asset.motion_swimming):
+        if self.itt.get_img_existence(asset.IconGeneralMotionSwimming):
             return True
         else:
             return False

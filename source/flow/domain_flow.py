@@ -115,7 +115,7 @@ class DomainFlow(BaseThreading):
 
             if self.itt.get_text_existence(asset.LEYLINEDISORDER):
                 break
-            if self.itt.get_img_existence(asset.IN_DOMAIN):
+            if self.itt.get_img_existence(asset.IconUIInDomain):
                 break
             time.sleep(1)
             # cap=self.itt.capture(jpgmode=2)
@@ -186,9 +186,9 @@ class DomainFlow(BaseThreading):
 
         while 1:
             if self.resin_mode == '40':
-                self.itt.appear_then_click(asset.USE_20X2RESIN_DOUBLE_CHOICES)
+                self.itt.appear_then_click(asset.ButtonGeneralUseCondensedResin)
             elif self.resin_mode == '20':
-                self.itt.appear_then_click(asset.USE_20RESIN_DOUBLE_CHOICES)
+                self.itt.appear_then_click(asset.ButtonGeneralUseOriginResin)
 
             if self.itt.get_text_existence(asset.domain_obtain):
                 break

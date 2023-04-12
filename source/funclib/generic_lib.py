@@ -14,7 +14,7 @@ NEGATIVE_XY = 3
 itt = itt
 
 def f_recognition(mode='button_only'):
-    if itt.get_img_existence(asset.F_BUTTON):
+    if itt.get_img_existence(asset.IconGeneralFButton):
         return True
     else:
         return False
@@ -81,7 +81,7 @@ def recover_all(stop_func):
     itt.move_and_click([posi_manager.tp_button[0], posi_manager.tp_button[1]], delay=1)
     # itt.delay(1)
     # itt.left_click()
-    while not itt.get_img_existence(asset.ui_main_win):
+    while not itt.get_img_existence(asset.IconUIEmergencyFood):
         if stop_func():
             break
         time.sleep(1)
@@ -95,8 +95,8 @@ def recover_all(stop_func):
 def set_genshin_time(x=18, stop_func = lambda:False): # 调整时间至夜晚
     ui_control.ui_goto(UIPage.page_time)
     time.sleep(0.8)
-    itt.move_to(asset.ui_time_menu_core.cap_center_position_xy[0],
-                asset.ui_time_menu_core.cap_center_position_xy[1])
+    itt.move_to(asset.IconUITimeMenuCore.cap_center_position_xy[0],
+                asset.IconUITimeMenuCore.cap_center_position_xy[1])
     itt.left_down()
     time.sleep(0.8)
     itt.move_to(-10,0,relative=True)
@@ -112,7 +112,7 @@ def set_genshin_time(x=18, stop_func = lambda:False): # 调整时间至夜晚
     itt.move_and_click(position = [1454,1021])
     time.sleep(0.8)
     while 1:
-        ret = itt.appear_then_click(asset.button_exit)
+        ret = itt.appear_then_click(asset.ButtonGeneralExit)
         if ret:
             break
         if stop_func():

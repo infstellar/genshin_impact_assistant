@@ -39,19 +39,19 @@ class UIPage():
         self.check_icon_list.append(check_icon)
 
 
-page_main = UIPage(check_icon = asset.ui_main_win)
-page_esc = UIPage(check_icon = asset.ui_esc_menu)
-page_domain = UIPage(check_icon = asset.IN_DOMAIN)
-page_bigmap = UIPage(check_icon = asset.ui_bigmap_win)
-page_time = UIPage(check_icon = asset.ui_time_menu_core)
-page_configure_team = UIPage(check_icon=asset.UIConfigureTeam)
+page_main = UIPage(check_icon = asset.IconUIEmergencyFood)
+page_esc = UIPage(check_icon = asset.IconUIEscMenu)
+page_domain = UIPage(check_icon = asset.IconUIInDomain)
+page_bigmap = UIPage(check_icon = asset.IconUIBigmap)
+page_time = UIPage(check_icon = asset.IconUITimeMenuCore)
+page_configure_team = UIPage(check_icon=asset.IconUIPartySetup)
 
 page_main.link('m', page_bigmap)
 page_main.link('esc', page_esc)
-page_esc.link(asset.button_time_page, page_time)
+page_esc.link(asset.ButtonUISwitchToTimeMenu, page_time)
 page_esc.link('esc', page_main)
-page_esc.link(asset.ConfigureTeam, page_configure_team)
-page_time.link(asset.button_exit, page_esc)
+page_esc.link(asset.ButtonUIEnterPartySetup, page_configure_team)
+page_time.link(asset.ButtonGeneralExit, page_esc)
 page_bigmap.link('m', page_main)
 page_configure_team.link('esc', page_esc)
 

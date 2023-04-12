@@ -159,7 +159,7 @@ class TacticOperator(BaseThreading):
         
         situation_code = -1
 
-        while self.itt.get_img_existence(asset.COMING_OUT_BY_SPACE):
+        while self.itt.get_img_existence(asset.IconCombatComingOutBySpace):
             if self.checkup_stop_func():
                 return 0
             if self.pause_tactic_flag:

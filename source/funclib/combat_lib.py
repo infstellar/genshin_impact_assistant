@@ -70,17 +70,17 @@ def unconventionality_situation_detection(autoDispose=True, detect_type='abc', s
 
     situation_code = -1
     if 'a' in detect_type:
-        while itt.get_img_existence(asset.COMING_OUT_BY_SPACE):
+        while itt.get_img_existence(asset.IconCombatComingOutBySpace):
             if stop_func():break
             situation_code = 1
             itt.key_press('spacebar')
             logger.debug('Unconventionality Situation: COMING_OUT_BY_SPACE')
             time.sleep(0.1)
     if 'b' in detect_type:
-        if itt.get_img_existence(asset.motion_swimming):
+        if itt.get_img_existence(asset.IconGeneralMotionSwimming):
             itt.key_down('w')
             # itt.key_down('left_shift')
-            while itt.get_img_existence(asset.motion_swimming):
+            while itt.get_img_existence(asset.IconGeneralMotionSwimming):
                 if stop_func():
                     # itt.key_up('left_shift')
                     itt.key_up('w')
@@ -95,20 +95,20 @@ def unconventionality_situation_detection(autoDispose=True, detect_type='abc', s
             # itt.key_up('left_shift')
             itt.key_up('w')
     if 'c' in detect_type:
-        while itt.get_img_existence(asset.motion_climbing):
+        while itt.get_img_existence(asset.IconGeneralMotionClimbing):
             if stop_func():break
             situation_code = 3
             logger.debug('Unconventionality Situation: CLIMBING')
             if autoDispose:
                 itt.key_press('space')
                 itt.delay(1.2)
-                if not itt.get_img_existence(asset.motion_climbing):break
+                if not itt.get_img_existence(asset.IconGeneralMotionClimbing):break
                 itt.key_press('space')
                 itt.delay(1.2)
-                if not itt.get_img_existence(asset.motion_climbing):break
+                if not itt.get_img_existence(asset.IconGeneralMotionClimbing):break
                 itt.key_press('x')
                 itt.delay(1.2)
-                if not itt.get_img_existence(asset.motion_climbing):break
+                if not itt.get_img_existence(asset.IconGeneralMotionClimbing):break
             time.sleep(0.1)
 
     return situation_code
@@ -318,7 +318,7 @@ def combat_statement_detection():
     return ret
 
 def get_chara_blood():
-    img = itt.capture(jpgmode=0,posi=asset.BloodBar.position)
+    img = itt.capture(jpgmode=0,posi=asset.AreaCombatBloodBar.position)
     img = extract_white_letters(img, threshold=251)
     t = ocr_light.get_all_texts(img)
     t2 = ','.join(str(i) for i in t).replace(',','')
@@ -361,7 +361,7 @@ def get_characters_name():
     # img = extract_white_letters(cap)
     img = cap
     ret_list = []
-    for i in [asset.CharacterName1,asset.CharacterName2,asset.CharacterName3,asset.CharacterName4]:
+    for i in [asset.AreaCombatCharacterName1,asset.AreaCombatCharacterName2,asset.AreaCombatCharacterName3,asset.AreaCombatCharacterName4]:
         img2 = img.copy()
         img3 = crop(img2,i.position)
         texts = ocr.get_all_texts(img3)
@@ -404,11 +404,11 @@ def set_party_setup(names):
     def switch_select():
         for i in range(5):
             if is_accord(): return True
-            itt.appear_then_click(asset.SwitchTeamLeft)
+            itt.appear_then_click(asset.ButtonCombatSwitchTeamLeft)
             itt.delay("animation")
         return False
     if switch_select():
-        itt.appear_then_click(asset.GoToFight)
+        itt.appear_then_click(asset.CombatButtonGoToFight)
         itt.delay("animation")
         ui_control.ui_goto(UIPage.page_main)
         return True

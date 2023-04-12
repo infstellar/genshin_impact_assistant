@@ -47,12 +47,12 @@ class CombatController(AdvanceThreading):
     
     def loop(self):
         if self.is_check_died:
-            if itt.get_img_existence(asset.character_died):
+            if itt.get_img_existence(asset.IconCombatCharacterDied):
                 logger.info(t2t('有人嘎了，停止自动战斗'))
                 self.last_err_code = CHARACTER_DIED
                 while 1:
                     time.sleep(0.5)
-                    r = itt.appear_then_click(asset.button_ui_cancel)
+                    r = itt.appear_then_click(asset.ButtonUICancel)
                     if r:
                         break
                 self.pause_threading()
