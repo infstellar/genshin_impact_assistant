@@ -49,7 +49,7 @@ class MoveToChallenge(FlowTemplate):
         """
         logger.info(t2t('正在开始挑战秘境'))
         movement.reset_view()
-        if itt.get_text_existence(asset.LEYLINEDISORDER):
+        if itt.get_text_existence(asset.LEY_LINE_DISORDER):
             self._next_rfc()
         if itt.get_img_existence(asset.IconUIInDomain):
             self._next_rfc()
@@ -60,7 +60,7 @@ class MoveToChallenge(FlowTemplate):
         while 1:
             if itt.get_img_existence(asset.IconUIInDomain):
                 break
-            if itt.get_text_existence(asset.LEYLINEDISORDER):
+            if itt.get_text_existence(asset.LEY_LINE_DISORDER):
                 itt.move_and_click([PosiM.posi_domain['CLLD'][0], PosiM.posi_domain['CLLD'][1]], delay=1)
         time.sleep(0.5)
         movement.reset_view()
@@ -98,7 +98,7 @@ class Challenge(FlowTemplate):
         self._next_rfc()
     
     def state_in(self):
-        if itt.get_text_existence(asset.LEAVINGIN):
+        if itt.get_text_existence(asset.LEAVING_IN):
             self.rfc = FC.AFTER
         else:
             self.rfc = FC.IN

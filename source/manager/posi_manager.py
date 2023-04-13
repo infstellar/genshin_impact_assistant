@@ -14,24 +14,26 @@ d2y = 5
 #     "F_BUTTON": [526, 1104, 550, 1128]
 # }
 
-class PosiTemplate():
-    def __init__(self, posi=None, img_path=None):
+class PosiTemplate(AssetBase):
+    def __init__(self, name = None, posi=None, img_path=None):
         """坐标管理类
 
         Args:
             posi (list, optional): 可选。若有，则使用该坐标. Defaults to None.
             img_path (str, optional): 可选。若有，则使用该图片。图片应符合bbg格式. Defaults to None.
         """
+        if name is None:
+            super().__init__(get_name(traceback.extract_stack()[-2]))
+        else:
+            super().__init__(name)
         self.posi_list = []
         self.position = None
-
+        
         if posi is None and img_path is None:
-            (filename, line_number, function_name, text) = traceback.extract_stack()[-2]
-            img_name = text[:text.find('=')].strip()
-            img_path = search_path(img_name)
+            img_path = self.get_img_path()
         self.add_posi(posi=posi, img_path=img_path)
     
-    def add_posi(self, posi=None, img_path=None):
+    def add_posi(self, posi=None, img_path:str = None):
         """添加坐标
         
         Args:
@@ -41,11 +43,8 @@ class PosiTemplate():
         if posi != None:
             position = posi
         else:
-            if IS_DEVICE_PC:
-                self.origin_path = os.path.join(ROOT_PATH, img_path).replace("$device$", "Windows")
-            else:
-                self.origin_path = os.path.join(ROOT_PATH, img_path).replace("$device$", "Windows")
-            image = cv2.imread(self.origin_path)
+            # self.origin_path = img_path
+            image = cv2.imread(img_path)
             position = get_bbox(image, black_offset=18)
         self.posi_list.append(position)
         

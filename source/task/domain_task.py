@@ -86,7 +86,7 @@ class DomainTask(TaskTemplate):
             if itt.get_img_existence(asset.IconUIInDomain):
                 break
             if ctimer.istimeout():
-                if itt.get_text_existence(asset.LEYLINEDISORDER):
+                if itt.get_text_existence(asset.LEY_LINE_DISORDER):
                     break
     
     def _end_domain(self):
@@ -120,7 +120,7 @@ class DomainTask(TaskTemplate):
 
     def _check_state(self):
         
-        if itt.get_img_existence(asset.IconUIInDomain) or itt.get_text_existence(asset.LEYLINEDISORDER):
+        if itt.get_img_existence(asset.IconUIInDomain) or itt.get_text_existence(asset.LEY_LINE_DISORDER):
             self.flow_mode = TI.DT_IN_DOMAIN
         elif itt.get_img_existence(asset.IconUIEmergencyFood):
             self.flow_mode = TI.DT_MOVE_TO_DOMAIN

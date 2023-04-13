@@ -82,7 +82,7 @@ class CommissionParser():
             self.commission_dicts = load_json(json_name="commission_dict.json", default_path=rf"{CONFIG_PATH}\commission")
     def _detect_commission_type(self)->str:
         img = itt.capture(jpgmode=0)
-        img_choose = crop(img.copy(), asset.BigmapChooseArea.position)
+        img_choose = crop(img.copy(), asset.AreaBigmapChoose.position)
         img_sidebar = crop(img.copy(), asset.AreaBigmapSidebarCommissionName.position)
         
         if itt.get_img_existence(asset.IconBigmapSidebarIsCommissionExist, cap = img_sidebar):

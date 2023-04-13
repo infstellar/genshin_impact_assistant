@@ -13,10 +13,8 @@ def get_cap_posi(path, black_offset):
 
 class Button(ImgIcon):
     def __init__(self, path=None, name=None, black_offset=15, is_bbg = True , threshold=0.9,offset = 0, win_page = "all", win_text = None, print_log = LOG_NONE, cap_posi=None, click_offset=None):
-        if path is None:
-            (filename, line_number, function_name, text) = traceback.extract_stack()[-2]
-            img_name = text[:text.find('=')].strip()
-            path = search_path(img_name)
+        if name is None:
+            name = get_name(traceback.extract_stack()[-2])
         super().__init__(path=path, name=name, jpgmode = 0, is_bbg = is_bbg,
                          threshold=threshold, win_page=win_page, win_text=win_text, print_log=print_log, cap_posi=cap_posi, offset = offset)
         if click_offset is None:

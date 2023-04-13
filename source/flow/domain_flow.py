@@ -93,7 +93,7 @@ class DomainFlow(BaseThreading):
             return False
 
     def _Trigger_AFTER_CHALLENGE(self, cap=None):
-        if self.itt.get_text_existence(asset.LEAVINGIN):
+        if self.itt.get_text_existence(asset.LEAVING_IN):
             return True
         else:
             return False
@@ -113,7 +113,7 @@ class DomainFlow(BaseThreading):
             if self.checkup_stop_func():
                 return 0
 
-            if self.itt.get_text_existence(asset.LEYLINEDISORDER):
+            if self.itt.get_text_existence(asset.LEY_LINE_DISORDER):
                 break
             if self.itt.get_img_existence(asset.IconUIInDomain):
                 break
@@ -124,7 +124,7 @@ class DomainFlow(BaseThreading):
             return 0
 
         cap = self.itt.capture(jpgmode=2)
-        if self.itt.get_text_existence(asset.LEYLINEDISORDER):
+        if self.itt.get_text_existence(asset.LEY_LINE_DISORDER):
             self.itt.move_and_click([PosiM.posi_domain['CLLD'][0], PosiM.posi_domain['CLLD'][1]], delay=1)
             # time.sleep(1)
 

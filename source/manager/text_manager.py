@@ -1,20 +1,16 @@
-from source.util import *
+from source.manager.util import *
 
-class TextTemplate:
+class TextTemplate(AssetBase):
     def __init__(self, text:dict, cap_area=None, name=None) -> None:
         if name is None:
-            (filename, line_number, function_name, texttt) = traceback.extract_stack()[-2]
-            self.name = texttt[:texttt.find('=')].strip()
+            super().__init__(get_name(traceback.extract_stack()[-2]))
         else:
-            self.name = name
+            super().__init__(name)
             
         if cap_area == None:
             cap_area = [0,0,1920,1080]
         elif isinstance(cap_area, str):
-            if IS_DEVICE_PC:
-                path = os.path.join(ROOT_PATH, cap_area).replace("$device$", "Windows")
-            else:
-                path = os.path.join(ROOT_PATH, cap_area).replace("$device$", "Windows")
+            path = self.get_img_path()
             cap_area = get_bbox(cv2.imread(os.path.join(ROOT_PATH, path)))
         self.origin_text = text
         self.cap_area = cap_area
