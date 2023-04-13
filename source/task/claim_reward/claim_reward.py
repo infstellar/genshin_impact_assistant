@@ -29,8 +29,8 @@ class ClaimRewardMission(MissionExecutor, Talk):
         def reset_character():
             while 1:
                 cap = itt.capture(jpgmode=0)
-                complete_posi = itt.match_multiple_img(cap, ExpeditionComplete.image, ignore_close=True)
-                complete_posi += itt.match_multiple_img(cap, ExpeditionComplete2.image, ignore_close=True)
+                complete_posi = itt.match_multiple_img(cap, IconExpeditionComplete.image, ignore_close=True)
+                complete_posi += itt.match_multiple_img(cap, IconExpeditionComplete2.image, ignore_close=True)
                 if len(complete_posi)==0:
                     return
                 chara_head_posi = np.array(complete_posi)+np.array([80,80])
@@ -48,7 +48,7 @@ class ClaimRewardMission(MissionExecutor, Talk):
                         cp = ButtonExpeditionFirstCharacter.click_position()
                         itt.move_and_click([cp[0],cp[1]+i])
                         itt.delay("2animation")
-                        if itt.get_img_existence(ExpeditionIcon):
+                        if itt.get_img_existence(IconClaimRewardExpedition):
                             break
                         i+=80
         for area in [ButtonExpeditionMD, ButtonExpeditionLY, ButtonExpeditionDQ, ButtonExpeditionXM]:   

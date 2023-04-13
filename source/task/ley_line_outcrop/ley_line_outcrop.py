@@ -33,7 +33,7 @@ class LeyLineOutcropMission(MissionExecutor):
             img = itt.capture(jpgmode=0)
             img = crop(img, cap_posi)
             img = recorp(img,cap_posi)
-            positions = itt.match_multiple_img(img, template=IconBlossomOfRevelation.image)
+            positions = itt.match_multiple_img(img, template=IconLeyLindOutcropBlossomOfRevelation.image)
             if len(positions)>0:
                 curr_posi = genshin_map.get_bigmap_posi()
                 posi = positions[0]
@@ -51,7 +51,7 @@ class LeyLineOutcropMission(MissionExecutor):
                 itt.key_up('w')
                 return
             cap = itt.capture(jpgmode=0)
-            dist = movement.view_to_imgicon(cap, IconReward)
+            dist = movement.view_to_imgicon(cap, IconLeyLineOutcropReward)
             if dist<15:
                 itt.key_down('w')
             else:
@@ -81,7 +81,7 @@ class LeyLineOutcropMission(MissionExecutor):
                 if self.checkup_stop_func():return
                 if ui_control.verify_page(UIPage.page_main):
                     break
-                itt.appear_then_click(ButtonUseOriginResin)
+                itt.appear_then_click(ButtonGeneralUseOriginResin)
         
         
 class LeyLineOutcropTask(TaskTemplate):
