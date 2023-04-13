@@ -1,0 +1,242 @@
+{
+  "AreaBigmapChoose": {
+    "common": "assets\\imgs\\Windows\\Bigmap\\common\\AreaBigmapChoose.jpg"
+  },
+  "AreaBigmapSidebarCommissionName": {
+    "common": "assets\\imgs\\Windows\\Bigmap\\common\\AreaBigmapSidebarCommissionName.jpg"
+  },
+  "AreaBigmapSwitchMap": {
+    "common": "assets\\imgs\\Windows\\Bigmap\\common\\AreaBigmapSwitchMap.jpg"
+  },
+  "AreaClaimRewardAvailableReward": {
+    "common": "assets\\imgs\\Windows\\ClaimReward\\common\\AreaClaimRewardAvailableReward.jpg"
+  },
+  "AreaCombatBloodBar": {
+    "common": "assets\\imgs\\Windows\\Combat\\common\\AreaCombatBloodBar.jpg"
+  },
+  "AreaCombatCharacterName1": {
+    "common": "assets\\imgs\\Windows\\Combat\\common\\AreaCombatCharacterName1.jpg"
+  },
+  "AreaCombatCharacterName2": {
+    "common": "assets\\imgs\\Windows\\Combat\\common\\AreaCombatCharacterName2.jpg"
+  },
+  "AreaCombatCharacterName3": {
+    "common": "assets\\imgs\\Windows\\Combat\\common\\AreaCombatCharacterName3.jpg"
+  },
+  "AreaCombatCharacterName4": {
+    "common": "assets\\imgs\\Windows\\Combat\\common\\AreaCombatCharacterName4.jpg"
+  },
+  "AreaCombatPartySetupCharaName1": {
+    "common": "assets\\imgs\\Windows\\Combat\\common\\AreaCombatPartySetupCharaName1.jpg"
+  },
+  "AreaCombatPartySetupCharaName2": {
+    "common": "assets\\imgs\\Windows\\Combat\\common\\AreaCombatPartySetupCharaName2.jpg"
+  },
+  "AreaCombatPartySetupCharaName3": {
+    "common": "assets\\imgs\\Windows\\Combat\\common\\AreaCombatPartySetupCharaName3.jpg"
+  },
+  "AreaCombatPartySetupCharaName4": {
+    "common": "assets\\imgs\\Windows\\Combat\\common\\AreaCombatPartySetupCharaName4.jpg"
+  },
+  "AreaCombatQ1": {
+    "common": "assets\\imgs\\Windows\\Combat\\common\\AreaCombatQ1.jpg"
+  },
+  "AreaCombatQ2": {
+    "common": "assets\\imgs\\Windows\\Combat\\common\\AreaCombatQ2.jpg"
+  },
+  "AreaCombatQ3": {
+    "common": "assets\\imgs\\Windows\\Combat\\common\\AreaCombatQ3.jpg"
+  },
+  "AreaCombatQ4": {
+    "common": "assets\\imgs\\Windows\\Combat\\common\\AreaCombatQ4.jpg"
+  },
+  "AreaCombatRevivalFoods": {
+    "common": "assets\\imgs\\Windows\\Combat\\common\\AreaCombatRevivalFoods.jpg"
+  },
+  "AreaCombatTeamCharactersName": {
+    "common": "assets\\imgs\\Windows\\Combat\\common\\AreaCombatTeamCharactersName.jpg"
+  },
+  "AreaDomainLeaveIn": {
+    "common": "assets\\imgs\\Windows\\Domain\\common\\AreaDomainLeaveIn.jpg"
+  },
+  "AreaDomainLeyLindDisorder": {
+    "common": "assets\\imgs\\Windows\\Domain\\common\\AreaDomainLeyLindDisorder.jpg"
+  },
+  "AreaDomainSwitchChallenge": {
+    "common": "assets\\imgs\\Windows\\Domain\\common\\AreaDomainSwitchChallenge.jpg"
+  },
+  "AreaTalkSelects": {
+    "Talk": "assets\\imgs\\Windows\\Talk\\AreaTalkSelects.jpg"
+  },
+  "ButtonAllCharacterDied": {
+    "zh_CN": "assets\\imgs\\Windows\\Combat\\zh_CN\\ButtonAllCharacterDied.jpg"
+  },
+  "ButtonBigMapScaling": {
+    "common": "assets\\imgs\\Windows\\Bigmap\\common\\ButtonBigMapScaling.jpg"
+  },
+  "ButtonBigmapCloseMarkTableInTP": {
+    "common": "assets\\imgs\\Windows\\Bigmap\\common\\ButtonBigmapCloseMarkTableInTP.jpg"
+  },
+  "ButtonBigmapSwitchDomainModeOff": {
+    "common": "assets\\imgs\\Windows\\Bigmap\\common\\ButtonBigmapSwitchDomainModeOff.jpg"
+  },
+  "ButtonBigmapSwitchDomainModeOn": {
+    "common": "assets\\imgs\\Windows\\Bigmap\\common\\ButtonBigmapSwitchDomainModeOn.jpg"
+  },
+  "ButtonBigmapSwitchMap": {
+    "common": "assets\\imgs\\Windows\\Bigmap\\common\\ButtonBigmapSwitchMap.jpg"
+  },
+  "ButtonBigmapTP": {
+    "zh_CN": "assets\\imgs\\Windows\\Bigmap\\zh_CN\\ButtonBigmapTP.jpg"
+  },
+  "ButtonCombatSwitchTeamLeft": {
+    "common": "assets\\imgs\\Windows\\Combat\\common\\ButtonCombatSwitchTeamLeft.jpg"
+  },
+  "ButtonCombatSwitchTeamRight": {
+    "common": "assets\\imgs\\Windows\\Combat\\common\\ButtonCombatSwitchTeamRight.jpg"
+  },
+  "ButtonDomainSoloChallenge": {
+    "common": "assets\\imgs\\Windows\\Domain\\common\\ButtonDomainSoloChallenge.jpg"
+  },
+  "ButtonDomainStartChallenge": {
+    "common": "assets\\imgs\\Windows\\Domain\\common\\ButtonDomainStartChallenge.jpg"
+  },
+  "ButtonExpeditionClaim": {
+    "common": "assets\\imgs\\Windows\\Expedition\\common\\ButtonExpeditionClaim.jpg"
+  },
+  "ButtonExpeditionDQ": {
+    "common": "assets\\imgs\\Windows\\Expedition\\common\\ButtonExpeditionDQ.jpg"
+  },
+  "ButtonExpeditionFirstCharacter": {
+    "common": "assets\\imgs\\Windows\\Expedition\\common\\ButtonExpeditionFirstCharacter.jpg"
+  },
+  "ButtonExpeditionLY": {
+    "common": "assets\\imgs\\Windows\\Expedition\\common\\ButtonExpeditionLY.jpg"
+  },
+  "ButtonExpeditionMD": {
+    "common": "assets\\imgs\\Windows\\Expedition\\common\\ButtonExpeditionMD.jpg"
+  },
+  "ButtonExpeditionSelectCharacters": {
+    "common": "assets\\imgs\\Windows\\Expedition\\common\\ButtonExpeditionSelectCharacters.jpg"
+  },
+  "ButtonExpeditionXM": {
+    "common": "assets\\imgs\\Windows\\Expedition\\common\\ButtonExpeditionXM.jpg"
+  },
+  "ButtonFoodEgg": {
+    "common": "assets\\imgs\\Windows\\Food\\common\\ButtonFoodEgg.jpg"
+  },
+  "ButtonGeneralAllCharacterDied": {
+    "zh_CN": "assets\\imgs\\Windows\\General\\zh_CN\\ButtonGeneralAllCharacterDied.jpg"
+  },
+  "ButtonGeneralConfirm": {
+    "zh_CN": "assets\\imgs\\Windows\\General\\zh_CN\\ButtonGeneralConfirm.jpg"
+  },
+  "ButtonGeneralExit": {
+    "common": "assets\\imgs\\Windows\\General\\common\\ButtonGeneralExit.jpg"
+  },
+  "ButtonGeneralUseCondensedResin": {
+    "zh_CN": "assets\\imgs\\Windows\\General\\zh_CN\\ButtonGeneralUseCondensedResin.jpg"
+  },
+  "ButtonGeneralUseOriginResin": {
+    "zh_CN": "assets\\imgs\\Windows\\General\\zh_CN\\ButtonGeneralUseOriginResin.jpg"
+  },
+  "ButtonGenralUseOriginalResin": {
+    "zh_CN": "assets\\imgs\\Windows\\General\\zh_CN\\ButtonGenralUseOriginalResin.jpg"
+  },
+  "ButtonTalkSkip": {
+    "Talk": "assets\\imgs\\Windows\\Talk\\ButtonTalkSkip.jpg"
+  },
+  "ButtonUICancel": {
+    "common": "assets\\imgs\\Windows\\UI\\common\\ButtonUICancel.jpg"
+  },
+  "ButtonUIEnterPartySetup": {
+    "common": "assets\\imgs\\Windows\\UI\\common\\ButtonUIEnterPartySetup.jpg"
+  },
+  "ButtonUISwitchToTimeMenu": {
+    "common": "assets\\imgs\\Windows\\UI\\common\\ButtonUISwitchToTimeMenu.jpg"
+  },
+  "CombatButtonGoToFight": {
+    "zh_CN": "assets\\imgs\\Windows\\Combat\\zh_CN\\CombatButtonGoToFight.jpg"
+  },
+  "IconBigmapCommission": {
+    "common": "assets\\imgs\\Windows\\Bigmap\\common\\IconBigmapCommission.jpg"
+  },
+  "IconBigmapDomain": {
+    "common": "assets\\imgs\\Windows\\Bigmap\\common\\IconBigmapDomain.jpg"
+  },
+  "IconBigmapGodStatue": {
+    "common": "assets\\imgs\\Windows\\Bigmap\\common\\IconBigmapGodStatue.jpg"
+  },
+  "IconBigmapSidebarIsCommissionExist": {
+    "common": "assets\\imgs\\Windows\\Bigmap\\common\\IconBigmapSidebarIsCommissionExist.jpg"
+  },
+  "IconBigmapTeleportWaypoint": {
+    "common": "assets\\imgs\\Windows\\Bigmap\\common\\IconBigmapTeleportWaypoint.jpg"
+  },
+  "IconClaimRewardExpedition": {
+    "common": "assets\\imgs\\Windows\\Expedition\\common\\IconClaimRewardExpedition.jpg"
+  },
+  "IconCombatCharacterDied": {
+    "common": "assets\\imgs\\Windows\\Combat\\common\\IconCombatCharacterDied.jpg"
+  },
+  "IconCombatChooseTeam": {
+    "common": "assets\\imgs\\Windows\\Combat\\common\\IconCombatChooseTeam.jpg"
+  },
+  "IconCombatComingOutBySpace": {
+    "common": "assets\\imgs\\Windows\\Combat\\common\\IconCombatComingOutBySpace.jpg"
+  },
+  "IconCommissionCommissionIcon": {
+    "common": "assets\\imgs\\Windows\\Commission\\common\\IconCommissionCommissionIcon.jpg"
+  },
+  "IconCommissionInCommission": {
+    "common": "assets\\imgs\\Windows\\Commission\\common\\IconCommissionInCommission.jpg"
+  },
+  "IconExpeditionComplete": {
+    "zh_CN": "assets\\imgs\\Windows\\Expedition\\zh_CN\\IconExpeditionComplete.jpg"
+  },
+  "IconExpeditionComplete2": {
+    "zh_CN": "assets\\imgs\\Windows\\Expedition\\zh_CN\\IconExpeditionComplete2.jpg"
+  },
+  "IconGeneralFButton": {
+    "common": "assets\\imgs\\Windows\\General\\common\\IconGeneralFButton.jpg"
+  },
+  "IconGeneralMotionClimbing": {
+    "common": "assets\\imgs\\Windows\\General\\common\\IconGeneralMotionClimbing.jpg"
+  },
+  "IconGeneralMotionFlying": {
+    "common": "assets\\imgs\\Windows\\General\\common\\IconGeneralMotionFlying.jpg"
+  },
+  "IconGeneralMotionSwimming": {
+    "common": "assets\\imgs\\Windows\\General\\common\\IconGeneralMotionSwimming.jpg"
+  },
+  "IconLeyLindOurcropBlossomOfRevelation": {
+    "common": "assets\\imgs\\Windows\\LeyLineOurcrop\\common\\IconLeyLindOurcropBlossomOfRevelation.jpg"
+  },
+  "IconLeyLineOurcropBlossomOfWealth": {
+    "common": "assets\\imgs\\Windows\\LeyLineOurcrop\\common\\IconLeyLineOurcropBlossomOfWealth.jpg"
+  },
+  "IconLeyLineOurcropReward": {
+    "common": "assets\\imgs\\Windows\\LeyLineOurcrop\\common\\IconLeyLineOurcropReward.jpg"
+  },
+  "IconUIBag": {
+    "common": "assets\\imgs\\Windows\\UI\\common\\IconUIBag.jpg"
+  },
+  "IconUIBigmap": {
+    "common": "assets\\imgs\\Windows\\UI\\common\\IconUIBigmap.jpg"
+  },
+  "IconUIEmergencyFood": {
+    "common": "assets\\imgs\\Windows\\UI\\common\\IconUIEmergencyFood.jpg"
+  },
+  "IconUIEscMenu": {
+    "common": "assets\\imgs\\Windows\\UI\\common\\IconUIEscMenu.jpg"
+  },
+  "IconUIInDomain": {
+    "common": "assets\\imgs\\Windows\\UI\\common\\IconUIInDomain.jpg"
+  },
+  "IconUIPartySetup": {
+    "common": "assets\\imgs\\Windows\\UI\\common\\IconUIPartySetup.jpg"
+  },
+  "IconUITimeMenuCore": {
+    "common": "assets\\imgs\\Windows\\UI\\common\\IconUITimeMenuCore.jpg"
+  }
+}
