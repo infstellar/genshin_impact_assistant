@@ -10,7 +10,7 @@ class ReadOnlyError(Exception):
 
 class GIAConfig(GeneratedConfig):
     bound = {}
-    TRACE = True
+    TRACE = False
 
     def __init__(self) -> None:
         super().__init__()
@@ -39,10 +39,11 @@ class GIAConfig(GeneratedConfig):
                 j_config = {}
             else:
                 j_config = load_json(json_name=f"{jsonname}.json", default_path=fr"{CONFIG_PATH}/settings")
-            for k in j_template:
-                if k in j_config:
-                    j_template[k] = j_config[k]
-                    if self.TRACE: print(f"{j_template[k]} = {j_config[k]}")
+            j_template.update(j_config)
+            # for k in j_template:
+            #     if k in j_config:
+            #         j_template[k] = j_config[k]
+            #         if self.TRACE: print(f"{j_template[k]} = {j_config[k]}")
             save_json(j_template, json_name=f"{jsonname}.json", default_path=fr"{CONFIG_PATH}/settings")
     # def save(self):
     #     var_names = [f"{i}_" for i in CONFIG_FILE_NAMES]
