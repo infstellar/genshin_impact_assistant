@@ -43,7 +43,7 @@ class MissionExecutor(BaseThreading):
         self.setName(__name__)
         self.last_move_along_position = [99999,99999]
 
-        self._detect_exception_timer = AdvanceTimer(limit=2)
+        self._detect_exception_timer = AdvanceTimer(limit=2).start()
         self.exception_flag = False
         self.exception_list = {
             "FoundEnemy":False,                     

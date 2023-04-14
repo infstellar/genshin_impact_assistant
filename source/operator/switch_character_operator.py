@@ -36,7 +36,7 @@ class SwitchCharacterOperator(BaseThreading):
 
         self.died_character = [] # 存储的是n而非name
         self.reborn_timer = Timer(diff_start_time=150)
-        self.position_check_timer = AdvanceTimer(0.5)
+        self.position_check_timer = AdvanceTimer(0.5).start()
         self.mode="Normal"
     
     def run(self):

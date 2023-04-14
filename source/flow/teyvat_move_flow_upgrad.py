@@ -100,7 +100,7 @@ class TeyvatMoveCommon():
         self.jump_timer2 = timer_module.Timer()
         self.jump_timer3 = timer_module.Timer()
         self.history_position = []
-        self.history_position_timer = timer_module.AdvanceTimer(limit=1)
+        self.history_position_timer = timer_module.AdvanceTimer(limit=1).start()
 
     def switch_motion_state(self, jump=True):
         if itt.get_img_existence(asset.IconGeneralMotionClimbing):
@@ -148,7 +148,7 @@ class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon):
         FlowTemplate.__init__(self, upper, flow_id=ST.INIT_TEYVAT_MOVE, next_flow_id=ST.END_TEYVAT_MOVE_PASS)
         TeyvatMoveCommon.__init__(self)
         self.upper = upper
-        self.auto_move_timeout = timer_module.AdvanceTimer(limit=300)
+        self.auto_move_timeout = timer_module.AdvanceTimer(limit=300).start()
         
 
     # def _calculate_next_priority_point(self, currentp, targetp):

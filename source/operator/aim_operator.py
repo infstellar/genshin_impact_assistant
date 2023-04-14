@@ -37,7 +37,7 @@ class AimOperator(BaseThreading):
         # self.left_timer = Timer()
         # self.reset_timer = Timer()
         self.kdwe_timer = Timer()
-        self.circle_search_timer = AdvanceTimer(10,count=1)
+        self.circle_search_timer = AdvanceTimer(10,count=1).start()
         self.corr_rate = 1
         self.sco_blocking_request = ThreadBlockingRequest()
 
@@ -87,7 +87,7 @@ class AimOperator(BaseThreading):
                     else: # 没找到，根据红色箭头移动寻找
                         if self.checkup_stop_func():continue
                         self.sco_blocking_request.send_request() # 向SCO申请暂停Tactic执行
-                        if True: # set to False when debug this module
+                        if False: # set to False when debug this module
                             print(self.sco_blocking_request.waiting_until_reply(stop_func=self.checkup_stop_func, timeout=60))
                         r = self._moving_find_enemy()
                         self.sco_blocking_request.recovery_request() # 解除申请
@@ -100,7 +100,7 @@ class AimOperator(BaseThreading):
                     if self._is_enemy_too_far(): # 敌人是否太远
                         if self.checkup_stop_func():continue
                         self.sco_blocking_request.send_request()
-                        if True: # set to False when debug this module
+                        if False: # set to False when debug this module
                             print(self.sco_blocking_request.waiting_until_reply(stop_func=self.checkup_stop_func, timeout=60))
                         self._keep_distance_with_enemy()
                         self.sco_blocking_request.recovery_request() # 解除申请
@@ -221,7 +221,8 @@ class AimOperator(BaseThreading):
                 break
         
         itt.key_down('w')
-        move_timer = AdvanceTimer(15)
+        move_timer = AdvanceTimer(15).start()
+        move_timer.start()
         while 1:
             if self.checkup_stop_func():
                 itt.key_up('w')

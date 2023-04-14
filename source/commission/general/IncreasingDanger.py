@@ -41,7 +41,7 @@ class IncreasingDangerGeneral(CommissionTemplate):
         return False
     
     def exec_mission(self):
-        attack_timer = AdvanceTimer(0.3)
+        attack_timer = AdvanceTimer(0.3).start()
         r = self.move_straight(self.commission_position, is_tp=True)
         if r == ERR_FAIL:return
         self.start_combat(mode="Shield")

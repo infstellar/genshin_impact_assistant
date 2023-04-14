@@ -521,9 +521,9 @@ class CombatStatementDetectionLoop(BaseThreading):
         if r != None:
             self.is_low_health = not r
  
-        if only_arrow_timer.get_diff_time()>=30:
+        if only_arrow_timer.get_diff_time()>=150:
             if self.current_state == True:
-                logger.debug("only arrow but blood bar is not exist over 30s, ready to exit combat mode.")
+                logger.debug("only arrow but blood bar is not exist over 150, ready to exit combat mode.")
             r = combat_statement_detection()
             state = r[0] or r[1]
             state = False

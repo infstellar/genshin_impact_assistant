@@ -13,7 +13,7 @@ class Capture():
         self.fps_timer = timer_module.Timer(diff_start_time=1)
         self.capture_cache_lock = threading.Lock()
         self.capture_times = 0
-        self.cap_per_sec = timer_module.CyclicCounter(limit=3)
+        self.cap_per_sec = timer_module.CyclicCounter(limit=3).start()
 
     def _get_capture(self) -> np.ndarray:
         """

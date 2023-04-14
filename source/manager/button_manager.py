@@ -36,8 +36,8 @@ class Button(ImgIcon):
         # ___, self.image_binary = cv2.threshold(image_gray, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
         if self.is_bbg:
             self.center_point = [self.bbg_posi[0]+self.image.shape[1]/2, self.bbg_posi[1]+self.image.shape[0]/2]
-        self.click_retry_timer = AdvanceTimer(3)
-        self.click_fail_timer = AdvanceTimer(1,60) # 60 retry max, 180 sec max 
+        self.click_retry_timer = AdvanceTimer(3).start()
+        self.click_fail_timer = AdvanceTimer(1,60).start() # 60 retry max, 180 sec max 
         self.click_fail_timer.reset()
     
     

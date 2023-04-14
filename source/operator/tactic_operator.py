@@ -34,7 +34,7 @@ class TacticOperator(BaseThreading):
         self.formered_tactic = None
         self.tactic_group = None
         self.character = None
-        self.tactic_exec_timer = AdvanceTimer(0.4)
+        self.tactic_exec_timer = AdvanceTimer(0.4).start()
 
     def pause_threading(self):
         if self.pause_threading_flag != True:

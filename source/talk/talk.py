@@ -71,7 +71,7 @@ class Talk():
             return True
     
     def exit_talk(self):
-        esc_timer = AdvanceTimer(2)
+        esc_timer = AdvanceTimer(2).start()
         while 1:
             if ui_control.verify_page(UIPage.page_main): return True
             itt.move_and_click(ButtonTalkSkip.click_position())

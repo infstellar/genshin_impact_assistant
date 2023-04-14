@@ -17,7 +17,7 @@ class CommissionTemplate(MissionExecutor):
         self.is_commission_succ = False
         self.is_commission_start = False
         self._commission_end_timer = AdvanceTimer(4,2)
-        self._commission_end_timer.reset()
+        self._commission_end_timer.start()
 
     def is_mission_succ(self):
         pass
