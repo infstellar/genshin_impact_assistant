@@ -1,0 +1,45 @@
+E_long_cd_time:
+  annotation: 长Ecd时间，没有则为0
+  doc: 长元素战技cd时间
+E_short_cd_time:
+  annotation: 短Ecd时间，不能为0
+  doc: 短元素战技cd时间
+Elast_time:
+  annotation: E技能持续时间，没有则为0
+  doc: 元素战技持续时间
+Epress_time:
+  annotation: 按E技能的时间
+  doc: 元素战技按下时间
+Qcd_time:
+  annotation: Q技能冷却时间
+  doc: 元素爆发cd时间
+Qlast_time:
+  annotation: Q技能持续时间，没有则为0
+  doc: 元素爆发持续时间
+autofill:
+  doc: 是否自动填充
+n:
+  annotation: 角色在队伍中的位置（1~4），不可重复，不可为0
+  doc: 角色在队伍中的位置
+name:
+  annotation: 支持输入验证与提示。根据characters_name.json填写角色名称
+  doc: 角色名称
+position:
+  annotation: 填写"Shield"时，GIA认为该角色为护盾角色，在护盾就绪时强制忽略其他策略组切换至该角色
+  doc: 角色定位
+priority:
+  annotation: 出战优先级，从小到大依次降低，0为最高优先级。优先级可以同级
+  doc: 优先级
+tactic_group:
+  annotation: 配置角色战斗策略，详细说明见 combat_assi.md
+  doc: 策略组
+tastic_group:
+  annotation: 配置角色战斗策略，详细说明见 combat_assi.md
+  doc: 策略组
+trigger:
+  annotation: 触发器条件成立时，允许切换至该角色
+  doc: 触发器
+vision:
+  annotation: 填写以下类型：岩 `Geo`; 雷 `Electro`; 水 `Hydro`; 火 `Pyro`; 冰 `Cryo`; 草 `Dendro`;
+    风 `Anemo`
+  doc: 角色元素类型。

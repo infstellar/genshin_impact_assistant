@@ -1,0 +1,13 @@
+CollectMode:
+  annotation: 暂时没用
+  doc: 采集模式
+CollectionArea:
+  doc: 采集地区
+CollectionName:
+  annotation: 直接填写物品名
+  doc: 物品名
+CollectionType:
+  doc: 采集类型
+MinimumTimesMaskColId:
+  annotation: 没啥用
+  doc: 最小采集失败屏蔽次数
