@@ -15,11 +15,10 @@ CorrDegree:
 
 DevicePaddle: 
   doc: paddle运算设备
-  annotation: paddleocr运算使用的设备，如果安装了cudnn则设为`'gpu'`，否则设为`'cpu'`。 设置为`auto`时，会自动检测GPU可用性，但不会自动切换GPU，需要根据是否可用的提示手动切换。
 
 DeviceTorch: 
   doc: torch运算设备
-  annotation: yolox运算使用的设备，如果安装了cudnn则设为`'gpu'`，否则设为`'cpu'` 。 设置为`auto`时可以自动检测GPU可用性并自动切换。
+  annotation: yolox运算使用的设备,如果安装了cudnn则设为`'gpu'`(必须手动安装有cuda的pytorch。)，否则设为`'cpu'` 。 设置为`auto`时可以自动检测GPU可用性并自动切换。
 
 Version: 
   doc: 版本

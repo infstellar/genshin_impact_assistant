@@ -183,7 +183,7 @@ source/test236.py
 
 
 config/tactic/*.json
-!config/tactic/team_example.json
+!config/tactic/team_example_1.json
 !config/tactic/team_example_3.json
 config/tastic_backup/*
 .vs/*

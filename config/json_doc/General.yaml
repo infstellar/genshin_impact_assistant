@@ -2,7 +2,7 @@ Lang:
   select_items: [zh_CN, en_US, $locale$]
 
 DevicePaddle: 
-  select_items: [cpu, gpu, auto]
+  select_items: [cpu]
 
 DeviceTorch: 
   select_items: [cpu, gpu, auto]

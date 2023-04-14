@@ -1,62 +1,62 @@
 {
-    "frist": {
-        "name": "Kamisato Ayato",
+    "first": {
+        "name": "Yoimiya",
         "position": "Normal",
         "priority": 2,
         "n": 1,
-        "Elast_time": 5,
-        "E_short_cd_time": 12,
+        "Elast_time": 10,
+        "E_short_cd_time": 18,
         "E_long_cd_time": 0,
         "Epress_time": 0,
-        "tactic_group": "e?e:none;#@e?a:none;q?q:none",
+        "tactic_group": "e?e:none;#@e?a:none;",
         "trigger": "e_ready",
         "Qlast_time": 10,
         "Qcd_time": 12,
-        "autofill": false
+        "vision": "Pyro"
     },
     "second": {
         "name": "Zhongli",
         "position": "Shield",
         "priority": 1,
         "n": 2,
+        "Elast_time": 20,
         "E_short_cd_time": 4,
         "E_long_cd_time": 12,
-        "Elast_time": 18,
-        "Epress_time": 2,
-        "tactic_group": "e?e~:none;q?q:none",
+        "Epress_time": 1,
+        "tactic_group": "e?e~:none",
         "trigger": "e_ready",
         "Qlast_time": 0,
         "Qcd_time": 12,
-        "autofill": false
+        "vision": "Geo"
     },
     "third": {
         "name": "Bennett",
         "position": "Normal",
         "priority": 3,
         "n": 3,
-        "E_short_cd_time": 3,
-        "E_long_cd_time": 10,
         "Elast_time": 0,
-        "Epress_time": 2.5,
+        "E_short_cd_time": 5,
+        "E_long_cd_time": 10,
+        "Epress_time": 0,
         "tactic_group": "e?e:none;q?q:none",
+        "trigger": "e_ready",
+        "Qlast_time": 12,
+        "Qcd_time": 15,
+        "vision": "Pyro"
+    },
+    "forth": {
+        "name": "Yun Jin",
+        "position": "Normal",
+        "priority": 4,
+        "n": 4,
+        "Elast_time": 0,
+        "E_short_cd_time": 5,
+        "E_long_cd_time": 10,
+        "Epress_time": 3,
+        "tactic_group": "e?e~:none;q?q:none",
         "trigger": "e_ready",
         "Qlast_time": 0,
         "Qcd_time": 12,
-        "autofill": false
-    },
-    "forth": {
-        "name": "Nahida",
-        "position": "Normal",
-        "priority": 3,
-        "n": 4,
-        "E_short_cd_time": 5,
-        "E_long_cd_time": 6,
-        "Elast_time": 0,
-        "Epress_time": 3,
-        "tactic_group": "e?e:none;q?q:none",
-        "trigger": "e_ready",
-        "Qlast_time": 0,
-        "Qcd_time": 14,
-        "autofill": false
+        "vision": "Geo"
     }
 }
