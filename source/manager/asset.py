@@ -1,11 +1,9 @@
-from source.manager import img_manager, posi_manager
 from source.util import *
 from source.manager.img_manager import LOG_WHEN_TRUE, LOG_ALL, LOG_NONE, LOG_WHEN_FALSE, ImgIcon
 from path_lib import ASSETS_IMG, ASSETS_COMMON_IMG
 from source.manager.button_manager import Button
-from source.manager.text_manager import TextTemplate
-from source.manager.posi_manager import PosiTemplate
-
+from source.manager.text_manager import TextTemplate, Text
+from source.manager.posi_manager import PosiTemplate, Area
 # import scene_manager
 
 
@@ -29,10 +27,10 @@ IconUIBigmap = ImgIcon(cap_posi=[1300,36,1750, 59 ], print_log=LOG_WHEN_TRUE, th
 IconUIEscMenu = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.97)
 ButtonUISwitchToTimeMenu = ImgIcon(print_log=LOG_WHEN_TRUE)
 IconUITimeMenuCore = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.89)
-AreaBigmapChoose = PosiTemplate()
+AreaBigmapChoose = Area()
 ButtonBigmapTP = ImgIcon()
 ButtonDomainStartChallenge = Button(print_log=LOG_WHEN_TRUE, threshold=0.98)
-AreaDomainSwitchChallenge = PosiTemplate()
+AreaDomainSwitchChallenge = Area()
 ButtonDomainSoloChallenge = Button(print_log=LOG_WHEN_TRUE, threshold=0.98)
 character_q_skills = PosiTemplate(img_path=fr"{ASSETS_PATH}/imgs/Windows/Combat/common/AreaCombatQ1.jpg")
 character_q_skills.add_posi(img_path=fr"{ASSETS_PATH}/imgs/Windows/Combat/common/AreaCombatQ2.jpg")
@@ -40,28 +38,28 @@ character_q_skills.add_posi(img_path=fr"{ASSETS_PATH}/imgs/Windows/Combat/common
 character_q_skills.add_posi(img_path=fr"{ASSETS_PATH}/imgs/Windows/Combat/common/AreaCombatQ4.jpg")
 ButtonFoodEgg = Button(cap_posi='all', is_bbg = False)
 ButtonGeneralConfirm = Button(cap_posi='all', is_bbg = False)
-AreaCombatRevivalFoods = PosiTemplate()
+AreaCombatRevivalFoods = Area()
 ButtonBigmapSwitchDomainModeOn = Button(threshold=0.97)
 ButtonBigmapSwitchDomainModeOff = Button(threshold=0.97)
-AreaBigmapSwitchMap = PosiTemplate()
+AreaBigmapSwitchMap = Area()
 ButtonBigmapSwitchMap = Button()
 IconBigMapScaling = ImgIcon(threshold=0.98, print_log = LOG_ALL, offset=0)
 ButtonBigmapCloseMarkTableInTP = Button()
-AreaCombatBloodBar = PosiTemplate()
-AreaCombatCharacterName1 = PosiTemplate()
-AreaCombatCharacterName2 = PosiTemplate()
-AreaCombatCharacterName3 = PosiTemplate()
-AreaCombatCharacterName4 = PosiTemplate()
-AreaCombatTeamCharactersName = PosiTemplate()
+AreaCombatBloodBar = Area()
+AreaCombatCharacterName1 = Area()
+AreaCombatCharacterName2 = Area()
+AreaCombatCharacterName3 = Area()
+AreaCombatCharacterName4 = Area()
+AreaCombatTeamCharactersName = Area()
 ButtonUIEnterPartySetup = Button()
 CombatButtonGoToFight = Button()
 ButtonCombatSwitchTeamLeft = Button(threshold=0)
 ButtonCombatSwitchTeamRight = Button(threshold=0)
 IconUIPartySetup = ImgIcon(threshold=0.96)
-AreaCombatPartySetupCharaName1=PosiTemplate()
-AreaCombatPartySetupCharaName2=PosiTemplate()
-AreaCombatPartySetupCharaName3=PosiTemplate()
-AreaCombatPartySetupCharaName4=PosiTemplate()
+AreaCombatPartySetupCharaName1=Area()
+AreaCombatPartySetupCharaName2=Area()
+AreaCombatPartySetupCharaName3=Area()
+AreaCombatPartySetupCharaName4=Area()
 IconBigmapCommission = ImgIcon(is_bbg=False)
 AreaBigmapSidebarCommissionName = PosiTemplate()
 IconBigmapSidebarIsCommissionExist = ImgIcon(threshold=0.97)
@@ -94,8 +92,7 @@ conti_challenge = TextTemplate(text={'zh_CN': '继续挑战',"en_US": "Continue 
 exit_challenge = TextTemplate(text={'zh_CN': '退出秘境',"en_US": "Leave Domain"})
 domain_obtain = TextTemplate(text={'zh_CN': '获得',"en_US": "Obtained"})
 use_revival_item = TextTemplate(text={'zh_CN': '使用道具',"en_US": "Use revival item"})
-revival = TextTemplate(text={'zh_CN': '复苏',"en_US": "Revive"})
-
+revival = Text(zh="复苏", en="Revive")
 
 LEAVING_IN = TextTemplate(text={'zh_CN': '自动退出',"en_US": 'Leaving in'}, cap_area = AreaDomainLeaveIn.position)
 LEY_LINE_DISORDER = TextTemplate(text={'zh_CN': '地脉异常',"en_US": "Ley Line Disorder"}, cap_area = AreaDomainLeyLineDisorder.position)

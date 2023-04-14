@@ -53,6 +53,11 @@ class PosiTemplate(AssetBase):
         else:
             self.position = self.posi_list
 
+class Area(PosiTemplate):
+    def __init__(self, name=None):
+        name = get_name(traceback.extract_stack()[-2])
+        super().__init__(name)
+
 posi_charalist_q = [[339 - ly + dy, 1591 + dx, 339 - ly + 55, 1591 + 55], [339 + dy, 1591 + dx, 339 + 55, 1591 + 55],
                     [339 + ly + dy, 1591 + dx, 339 + ly + 55, 1591 + 55],
                     [339 + 2 * ly + dy, 1591 + dx, 339 + 2 * ly + 55, 1591 + 55]]
