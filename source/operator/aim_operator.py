@@ -223,12 +223,15 @@ class AimOperator(BaseThreading):
         itt.key_down('w')
         move_timer = AdvanceTimer(15).start()
         move_timer.start()
+        combat_lib.CSDL.freeze_state()
         while 1:
             if self.checkup_stop_func():
                 itt.key_up('w')
+                combat_lib.CSDL.unfreeze_state()
                 return
             if move_timer.reached():
                 itt.key_up('w')
+                combat_lib.CSDL.unfreeze_state()
                 logger.debug(f"_moving_find_enemy timeout")
                 return False
             if combat_lib.combat_statement_detection()[0]:
@@ -239,17 +242,21 @@ class AimOperator(BaseThreading):
                     r = self._keep_distance_with_enemy()
                     if r:
                         itt.key_up('w')
+                        combat_lib.CSDL.unfreeze_state()
                         return True
                     else:
                         logger.info(f"_moving_find_enemy: refind enemy: 2")
                         itt.key_up('w')
+                        combat_lib.CSDL.unfreeze_state()
                         return self._moving_find_enemy()
                 else:
                     itt.key_down('w')
             if combat_lib.combat_statement_detection()[1]:
                 itt.key_up('w')
                 logger.info(f"_moving_find_enemy: refind enemy")
+                combat_lib.CSDL.unfreeze_state()
                 return self._moving_find_enemy()
+        combat_lib.CSDL.unfreeze_state()
         return True    
         
                 

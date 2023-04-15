@@ -1,5 +1,7 @@
 ## TODO：
 - mission reg exception
+- TMF超过6s没检测到ui就退出
+- bp>100记录
 - mission reg precise arrive
 - mission reg fight if needed
 - webui list的显示要改改

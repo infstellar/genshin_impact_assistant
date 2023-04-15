@@ -74,7 +74,7 @@ class UI():
             visited = new
 
         logger.info(f"UI goto {destination}")
-        confirm_timer = AdvanceTimer(confirm_wait, count=1).start()
+        confirm_timer = AdvanceTimer(confirm_wait, count=1)
         while 1:
             # GOTO_MAIN.clear_offset()
             # if skip_first_screenshot:
@@ -85,7 +85,7 @@ class UI():
             # Destination page
             if destination.is_current_page(itt):
                 if confirm_timer.reached():
-                    logger.info(f'Page arrive: {destination}')
+                    logger.debug(f'Page arrive: {destination}')
                     break
             else:
                 confirm_timer.reset()
@@ -96,7 +96,7 @@ class UI():
                 if page.parent is None or len(page.check_icon_list)==0:
                     continue
                 if page.is_current_page(itt):
-                    logger.info(f'Page switch: {page} -> {page.parent}')
+                    logger.debug(f'Page switch: {page} -> {page.parent}')
                     # if retry_timer.reached():
                     button = page.links[page.parent]
                     if isinstance(button,str):

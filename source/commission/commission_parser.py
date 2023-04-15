@@ -69,6 +69,7 @@ class CommissionParser():
                             "position":list(target_tianli_posi),
                             "done":False
                         })
+                        logger.info(f"commission has been added: {self.commission_dicts[-1]}")
         return self.commission_dicts
     
     def _set_and_save_and_load_commission_dicts(self):

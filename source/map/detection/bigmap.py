@@ -57,7 +57,7 @@ class BigMap(MiniMapResource):
         self._predict_bigmap(image, layer=layer)
 
         # BigMap P:(5629.136, 4045.064) (0.622|0.123)
-        logger.info(
+        logger.trace(
             f'BigMap '
             f'P:({float2str(self.bigmap[0], 4)}, {float2str(self.bigmap[1], 4)}) '
             f'({float2str(self.bigmap_similarity, 3)}|{float2str(self.bigmap_similarity_local, 3)})'

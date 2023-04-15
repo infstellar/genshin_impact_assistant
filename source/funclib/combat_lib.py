@@ -512,6 +512,15 @@ class CombatStatementDetectionLoop(BaseThreading):
         self.state_counter = 0
         self.while_sleep = 0.4
         self.is_low_health = False
+        self.is_freeze_state = False
+    
+    def freeze_state(self):
+        logger.info(f"CSDL freeze state")
+        self.is_freeze_state = True
+    
+    def unfreeze_state(self):
+        logger.info(f"CSDL unfreeze state")
+        self.is_freeze_state = False
     
     def get_combat_state(self):
         return self.current_state
@@ -520,7 +529,9 @@ class CombatStatementDetectionLoop(BaseThreading):
         r = is_character_healthy()
         if r != None:
             self.is_low_health = not r
- 
+
+        if self.is_freeze_state:
+            return
         if only_arrow_timer.get_diff_time()>=150:
             if self.current_state == True:
                 logger.debug("only arrow but blood bar is not exist over 150, ready to exit combat mode.")

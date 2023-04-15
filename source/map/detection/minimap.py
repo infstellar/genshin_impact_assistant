@@ -352,7 +352,7 @@ class MiniMap(MiniMapResource):
         self.update_rotation(image, layer=MapConverter.LAYER_Teyvat, update_position=False)
 
         # MiniMap P:(4451.5, 3113.0) (0.184|0.050), S:wild, D:259.5 (0.949), R:180 (0.498)
-        logger.info(
+        logger.trace(
             f'MiniMap '
             f'P:({float2str(self.position[0], 4)}, {float2str(self.position[1], 4)}) '
             f'({float2str(self.position_similarity, 3)}|{float2str(self.position_similarity_local, 3)}), '
@@ -369,7 +369,7 @@ class MiniMap(MiniMapResource):
         self.update_rotation(image, layer=MapConverter.LAYER_Domain, update_position=False)
 
         # MiniMapDomain D:259.5 (0.949), R:180 (0.498)
-        logger.info(
+        logger.trace(
             f'MiniMapDomain '
             f'D:{float2str(self.direction, 3)} ({float2str(self.direction_similarity, 3)}), '
             f'R:{self.rotation} ({float2str(self.rotation_confidence)})')

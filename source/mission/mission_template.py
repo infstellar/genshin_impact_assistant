@@ -24,22 +24,15 @@ class MissionExecutor(BaseThreading):
     def __init__(self, is_CFCF=False, is_TMCF=False, is_PUO=False, is_CCT=False):
         super().__init__()
         self.is_CFCF=is_CFCF
+        self.CFCF_initialized = False
         self.is_TMCF=is_TMCF
+        self.TMCF_initialized = False
         self.is_PUO=is_PUO
+        self.PUO_initialized = False
         self.is_CCT=is_CCT
-        if is_CFCF:
-            self.CFCF = collector_flow_upgrad.CollectorFlowController()
-            self._add_sub_threading(self.CFCF, start=False)
+        self.CCT_initialized = False
         self.picked_list = []
-        if is_TMCF:
-            self.TMCF = teyvat_move_flow_upgrad.TeyvatMoveFlowController()
-            self._add_sub_threading(self.TMCF, start=False)
-        if is_PUO:
-            self.PUO = PickupOperator()
-            self._add_sub_threading(self.PUO, start=False)
-        if is_CCT:
-            self.CCT = CombatController()
-            self._add_sub_threading(self.CCT, start=False)
+            
         self.setName(__name__)
         self.last_move_along_position = [99999,99999]
 
@@ -50,8 +43,39 @@ class MissionExecutor(BaseThreading):
             "CharaDied":False,
             "LowHP":False
             }
+        self.default_precise_arrive = False
+        self.fight_if_needed = False
         self.itt = itt
 
+    def _init_sub_threading(self, feat_name=""):
+        if feat_name == "CFCF":
+            if not self.CFCF_initialized:
+                self.CFCF = collector_flow_upgrad.CollectorFlowController()
+                self._add_sub_threading(self.CFCF, start=False)
+                self.CFCF_initialized = True
+                self.CFCF.start()
+        if feat_name == "TMCF":
+            if not self.TMCF_initialized:
+                self.TMCF = teyvat_move_flow_upgrad.TeyvatMoveFlowController()
+                self._add_sub_threading(self.TMCF, start=False)
+                self.TMCF_initialized = True
+                self.TMCF.start()
+        if feat_name == "PUO":
+            if not self.PUO_initialized:
+                self.PUO = PickupOperator()
+                self._add_sub_threading(self.PUO, start=False)
+                self.PUO_initialized = True
+                self.PUO.start()
+        if feat_name == "CCT":
+            if not self.CCT_initialized:
+                self.CCT = CombatController()
+                self._add_sub_threading(self.CCT, start=False)
+                self.CCT_initialized = True
+                self.CCT.start()
+        logger.info(f"{self.name} {feat_name} has been initialized and started.")
+        
+        
+        
     def refresh_picked_list(self):
         self.picked_list = []
     
@@ -97,6 +121,14 @@ class MissionExecutor(BaseThreading):
     def get_path_file(self, path_file_name:str):
         return load_json(path_file_name+".json","assets\\TeyvatMovePath")
     
+    def _detect_fight_if_needed(self):
+        if self.fight_if_needed:
+            if combat_lib.CSDL.get_combat_state():
+                self.start_combat()
+            while combat_lib.CSDL.get_combat_state():
+                time.sleep(0.5)
+            self.stop_combat()
+    
     def move(self, MODE:str = None,
              stop_rule:int = None,
              target_posi:list = None,
@@ -108,6 +140,9 @@ class MissionExecutor(BaseThreading):
              is_reinit:bool = None, 
              is_precise_arrival:bool = None,
              stop_offset:int = None):
+        self._init_sub_threading("TMCF")
+        self._detect_fight_if_needed()
+        
         self.TMCF.reset()
         self.TMCF.set_parameter(MODE=MODE,stop_rule=stop_rule,target_posi=target_posi,path_dict=path_dict,to_next_posi_offset=to_next_posi_offset,special_keys_posi_offset=special_keys_posi_offset,reaction_to_enemy=reaction_to_enemy,is_tp=is_tp,is_reinit=is_reinit,is_precise_arrival=is_precise_arrival,stop_offset=stop_offset)
         self.TMCF.start_flow()
@@ -122,16 +157,18 @@ class MissionExecutor(BaseThreading):
             self.exception_flag = True
         return self._handle_exception()
         
-    def move_straight(self, position, is_tp = False, is_precise_arrival=False, stop_rule=None):
+    def move_straight(self, position, is_tp = False, is_precise_arrival=None, stop_rule=None):
         if isinstance(position[0], int) or isinstance(position[0], float):
             p = position
         elif isinstance(position[0], str):
             path_dict = self.get_path_file(position[0])
             p = path_dict[position[1]]
+        if is_precise_arrival is None:
+            is_precise_arrival = self.default_precise_arrive
         r = self.move(MODE="AUTO", target_posi=p, is_tp = is_tp, is_precise_arrival=is_precise_arrival, stop_rule=stop_rule)
         return r
         
-    def move_along(self, path, is_tp = None, is_precise_arrival=False):
+    def move_along(self, path, is_tp = None, is_precise_arrival=None):
         path_dict = self.get_path_file(path)
         is_reinit = True
         
@@ -141,11 +178,13 @@ class MissionExecutor(BaseThreading):
             else:
                 is_tp = False
                 is_reinit = False
-
+        if is_precise_arrival is None:
+            is_precise_arrival = self.default_precise_arrive
         r = self.move(MODE="PATH", path_dict = path_dict, is_tp = is_tp, is_reinit=is_reinit, is_precise_arrival=is_precise_arrival)
         self.last_move_along_position = path_dict["end_position"]
         return r
     def start_combat(self, mode="Normal"):
+        self._init_sub_threading("CCT")
         self.CCT.mode=mode
         self.CCT.continue_threading()
     
@@ -162,6 +201,8 @@ class MissionExecutor(BaseThreading):
                 is_activate_pickup = None,
                 pickup_points = None
                 ):
+        self._init_sub_threading("CFCF")
+        self._detect_fight_if_needed()
         self.CFCF.reset()
         self.CFCF.set_parameter(MODE=MODE,collection_name=collection_name,collector_type=collector_type,is_combat=is_combat,is_activate_pickup=is_activate_pickup,pickup_points=pickup_points)
         self.CFCF.start_flow()
@@ -192,6 +233,8 @@ class MissionExecutor(BaseThreading):
         """
         points = get_circle_points(center_posi[0],center_posi[1])
         itt.key_down('w')
+        jt = AdvanceTimer(2)
+        jt2 = AdvanceTimer(0.3)
         for p in points:
             while 1:
                 if self.checkup_stop_func():return
@@ -207,11 +250,18 @@ class MissionExecutor(BaseThreading):
                     if combat_lib.CSDL.get_combat_state():
                         itt.key_up('w')
                         return True
+                if jt.reached_and_reset():
+                    itt.key_press('spacebar')
+                    jt2.reset()
+                if jt2.reached_and_reset():
+                    itt.key_press('spacebar')
+                    
         itt.key_up('w')
         return False
                 
     
     def start_pickup(self):
+        self._init_sub_threading("PUO")
         self.PUO.continue_threading()
     
     def stop_pickup(self):
@@ -229,6 +279,15 @@ class MissionExecutor(BaseThreading):
     def _reg_exception_low_hp(self, state=True):
         self.exception_list["LowHP"] = state
     
+    def _reg_default_arrival_mode(self, state=True):
+        self.default_precise_arrive = state
+    
+    def _reg_fight_if_needed(self, state=True):
+        pass
+    
+    def _reg_raise_exception(self, state=True):
+        pass
+    
     def switch_character_to(self, name:str):
         r = combat_lib.get_characters_name()
         curr_n = combat_lib.get_current_chara_num(self.checkup_stop_func)
@@ -243,10 +302,11 @@ class MissionExecutor(BaseThreading):
             
         
     def start_thread(self):
-        if self.is_CFCF: self.CFCF.start()
-        if self.is_TMCF: self.TMCF.start()
-        if self.is_PUO: self.PUO.start()
-        if self.is_CCT: self.CCT.start()
+        pass
+        # if self.is_CFCF: self.CFCF.start()
+        # if self.is_TMCF: self.TMCF.start()
+        # if self.is_PUO: self.PUO.start()
+        # if self.is_CCT: self.CCT.start()
     
     def loop(self):
         self.start_thread()

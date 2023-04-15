@@ -4,6 +4,7 @@ import win32gui, win32process, psutil, ctypes, pickle, traceback
 import numpy as np
 import cv2, yaml
 from PIL import Image, ImageDraw, ImageFont
+from collections import OrderedDict
 ROOT_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SOURCE_PATH = ROOT_PATH + '\\source'
 ASSETS_PATH = ROOT_PATH + '\\assets'
@@ -31,7 +32,7 @@ def load_json(json_name='General.json', default_path='config\\settings', auto_cr
     #     default_path = default_path.replace("$lang$", GLOBAL_LANG)
     all_path = os.path.join(ROOT_PATH, default_path, json_name)
     try:
-        return json.load(open(all_path, 'r', encoding='utf-8'))
+        return json.load(open(all_path, 'r', encoding='utf-8'), object_pairs_hook=OrderedDict)
     except:
         if not auto_create:
             logger.critical(f"尝试访问{all_path}失败")
@@ -535,19 +536,21 @@ def circle_mask(img,inner_r, outer_r):
     return masked_img
 
 def get_circle_points(x,y,  show_res = False):
+    if show_res:
+        import turtle
+        turtle.speed(0)
     points = []
-    for r in range(5, 30, 5):
-        n = int(2 * math.pi * r / 10)
+    for r in range(6, 6*5, 6):
+        n = int(2 * math.pi * r / (6*2))
         for i in range(n):
             angle = 2 * math.pi / n * i
             px = x + r * math.cos(angle)
             py = y + r * math.sin(angle)
             if show_res:
-                import turtle
                 turtle.penup()
                 turtle.goto(px, py)
                 turtle.pendown()
-                turtle.dot(5)
+                turtle.dot(2)
             points.append((px, py))
     return points
 
@@ -560,6 +563,7 @@ if os.path.exists(os.path.join(ROOT_PATH, "config\\tastic")):
 
 if __name__ == '__main__':
     # a = load_jsons_from_folder(os.path.join(root_path, "config\\tactic"))
-    print(get_active_window_process_name())
+    print(load_json("team_example_1.json", fr"{CONFIG_PATH}/tactic"))
+    print()
     pass
     # load_jsons_from_floder((root_path, "config\\tactic"))
