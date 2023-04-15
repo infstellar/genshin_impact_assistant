@@ -3,7 +3,7 @@ from source.talk.talk import Talk
 from source.commission.assets import *
 
 meta = {
-    "type":"LanguageExchange",
+    "type":"PigeonsGoAWOL",
     "position":[2671,-5095]
 }
 class PigeonsGoAWOL_P2671N5095(CommissionTemplate, Talk):
@@ -12,6 +12,7 @@ class PigeonsGoAWOL_P2671N5095(CommissionTemplate, Talk):
         Talk.__init__(self)
     
     def exec_mission(self):
+        self._reg_raise_exception()
         self.move_along("PigeonsGoAWOL20230415140236i0", is_precise_arrival=True)
         self.talk_with_npc()
         self.talk_until_switch(self.checkup_stop_func)

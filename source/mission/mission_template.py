@@ -19,6 +19,7 @@ class MissionEnd(Exception):pass
 class CollectError(Exception):pass
 class TeyvatMoveError(Exception):pass
 class PickUpOperatorError(Exception):pass
+class HandleExceptionInMission(Exception):pass
 
 class MissionExecutor(BaseThreading):
     def __init__(self, is_CFCF=False, is_TMCF=False, is_PUO=False, is_CCT=False):
@@ -114,6 +115,8 @@ class MissionExecutor(BaseThreading):
             itt.delay(5,comment="Waiting for revival")
             self.exception_flag = False
             logger.info(f"End of handling exception")
+            if self.raise_exception_flag:
+                raise HandleExceptionInMission
             return ERR_FAIL
         else:
             return ERR_PASS
@@ -233,13 +236,13 @@ class MissionExecutor(BaseThreading):
         """
         points = get_circle_points(center_posi[0],center_posi[1])
         itt.key_down('w')
-        jt = AdvanceTimer(2)
+        jt = AdvanceTimer(5)
         jt2 = AdvanceTimer(0.3)
         for p in points:
             while 1:
                 if self.checkup_stop_func():return
                 movement.move_to_posi_LoopMode(p, self.checkup_stop_func)
-                if euclidean_distance(p, genshin_map.get_position())<=2:
+                if euclidean_distance(p, genshin_map.get_position())<=4:
                     logger.debug(f"circle_search: {p} arrived")
                     break
                 if stop_rule == 'F':
@@ -286,7 +289,7 @@ class MissionExecutor(BaseThreading):
         pass
     
     def _reg_raise_exception(self, state=True):
-        pass
+        self.raise_exception_flag = state
     
     def switch_character_to(self, name:str):
         r = combat_lib.get_characters_name()

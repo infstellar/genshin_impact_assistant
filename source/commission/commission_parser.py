@@ -81,6 +81,12 @@ class CommissionParser():
             g4t.set_today()
         else:
             self.commission_dicts = load_json(json_name="commission_dict.json", default_path=rf"{CONFIG_PATH}\commission")
+            for i in self.commission_dicts:
+                if i["done"] != True:
+                    return
+            logger.info(f"commission dicts all have been done. researching.")
+            self.traverse_mondstant()
+            save_json(self.commission_dicts, json_name="commission_dict.json", default_path=rf"{CONFIG_PATH}\commission")
     def _detect_commission_type(self)->str:
         img = itt.capture(jpgmode=0)
         img_choose = crop(img.copy(), asset.AreaBigmapChoose.position)

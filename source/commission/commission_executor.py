@@ -29,7 +29,9 @@ class CommissionExecutor(TaskTemplate, CommissionParser):
                 j = load_json(json_name="commission_dict.json", default_path=rf"{CONFIG_PATH}\commission")
                 j[self.commission_dicts.index(i)]["done"]=True
                 save_json(j ,json_name="commission_dict.json", default_path=rf"{CONFIG_PATH}\commission")
-        self.pause_threading()
+        self._set_and_save_and_load_commission_dicts()
+        if len(self.commission_dicts)==0:
+            self.pause_threading()
 
 if __name__ == '__main__':
     ce = CommissionExecutor()

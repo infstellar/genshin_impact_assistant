@@ -51,7 +51,7 @@ class UI():
             destination (Page):
             confirm_wait:
         """
-        retry_timer = AdvanceTimer(1).start()
+        retry_timer = AdvanceTimer(1)
         self.switch_ui_lock.acquire()
         # Reset connection
         for page in self.ui_pages:

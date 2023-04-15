@@ -36,7 +36,7 @@ def load_json(json_name='General.json', default_path='config\\settings', auto_cr
     except:
         if not auto_create:
             logger.critical(f"尝试访问{all_path}失败")
-            # raise FileNotFoundError
+            raise FileNotFoundError(all_path)
         else:
             json.dump({}, open(all_path, 'w', encoding='utf-8'))
             return json.load(open(all_path, 'r', encoding='utf-8'))
@@ -540,8 +540,8 @@ def get_circle_points(x,y,  show_res = False):
         import turtle
         turtle.speed(0)
     points = []
-    for r in range(6, 6*5, 6):
-        n = int(2 * math.pi * r / (6*2))
+    for r in range(8, 8*5, 8):
+        n = int(2 * math.pi * r / (8*2))
         for i in range(n):
             angle = 2 * math.pi / n * i
             px = x + r * math.cos(angle)
@@ -553,12 +553,6 @@ def get_circle_points(x,y,  show_res = False):
                 turtle.dot(2)
             points.append((px, py))
     return points
-
-# Update for a program used before version v0.5.0.424
-if os.path.exists(os.path.join(ROOT_PATH, "config\\tastic")):
-    logger.error("检测到tastic文件夹。")
-    logger.error("版本v0.5.0.424后，tastic文件夹修正为tactic文件夹。")
-    logger.error("请重新安装新版GIA。")
 
 
 if __name__ == '__main__':

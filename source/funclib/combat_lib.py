@@ -460,7 +460,7 @@ def get_chara_list():
         team_item.setdefault("Qlast_time", None)
         team_item.setdefault("Qcd_time", None)
         team_item.setdefault("vision", None)
-    save_json(team, team_name, default_path=r"config/tactic")
+    # save_json(team, team_name, default_path=r"config/tactic")
     
     # characters = load_json("character.json", default_path=dpath)
     chara_list = []
