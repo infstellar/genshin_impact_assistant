@@ -295,7 +295,7 @@ class TacticOperator(BaseThreading):
             return 0
         self.chara_waiting(mode=1)
         self.itt.left_down()
-        self.itt.delay(2.5)
+        self.itt.delay(self.character.long_attack_time)
         self.itt.left_up()
 
     def do_jump(self):
@@ -409,7 +409,7 @@ class TacticOperator(BaseThreading):
         tas = tactic[4:]
         tas = tas.split(':')
         if is_ready:
-            tas[0].replace('.', ',')
+            tas[0] = tas[0].replace('.', ',')
             while (not self.character.is_E_pass()) and (not self.checkup_stop_func()):
                 if self.checkup_stop_func():
                     return 0
@@ -418,7 +418,7 @@ class TacticOperator(BaseThreading):
                 self.unconventionality_situation_detection()
                 self.execute_tactic([tas[0]])
         else:
-            tas[1].replace('.', ',')
+            tas[1] = tas[1].replace('.', ',')
             self.execute_tactic([tas[1]])
 
     def estimate_lock_q_ready(self, tactic):  # #@q?

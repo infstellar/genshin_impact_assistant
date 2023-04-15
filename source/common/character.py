@@ -34,7 +34,7 @@ class Character:
                  Elast_time:float=0,
                  tactic_group='', trigger: str = '=',
                  Epress_time:float=0, Qlast_time = 0, Qcd_time = 12,
-                 vision:str = ''):
+                 vision:str = '', long_attack_time:float = 2.5):
 
         self.name = name
         self.position = position
@@ -48,6 +48,7 @@ class Character:
         self.n = n
         self.Epress_time = Epress_time
         self.vision = vision
+        self.long_attack_time = long_attack_time
 
         self.itt = itt
 
@@ -137,7 +138,7 @@ class Character:
         """获得该角色E技能cd剩余时间。
 
         Returns:
-            int: cd time
+            float: cd time
         """
         t = self.Ecd_timer.get_diff_time()
         t = self.Ecd_time - t

@@ -61,9 +61,9 @@ def import_current_module():
             elif current_flow == FLOW_COMBAT:
                 # logger.info("正在导入 FLOW_COMBAT 模块，可能需要一些时间。")
                 from source.flow import alpha_loop
-            elif current_flow == FLOW_COLLECTOR:
-                # logger.info("正在导入 FLOW_COLLECTOR 模块，可能需要一些时间。")
-                from source.flow import collector_flow
+            # elif current_flow == FLOW_COLLECTOR:
+            #     # logger.info("正在导入 FLOW_COLLECTOR 模块，可能需要一些时间。")
+            #     from source.flow import collector_flow
         except Exception as e:
             logger.critical(f"IMPORT ERROR: current_flow: {current_flow}")
             logger.exception(e)
@@ -75,11 +75,13 @@ def switch_combat_loop():
         logger.info(t2t('正在停止自动战斗'))
         t1.stop_threading()
     else:
-        from source.flow import alpha_loop
+        from source.controller.combat_controller import CombatController
         logger.info(t2t('启动自动战斗'))
-        t1 = alpha_loop.AlphaLoop()
+        t1 = CombatController()
         t1.setDaemon(True)
         t1.start()
+        time.sleep(4)
+        t1.continue_threading()
     combat_flag = not combat_flag
 
 def switch_collector_loop():

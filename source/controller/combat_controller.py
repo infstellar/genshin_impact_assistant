@@ -34,7 +34,7 @@ class CombatController(AdvanceThreading):
         self.setName('CombatController')
 
         self.chara_list = chara_list
-        self.pause_threading_flag = False
+        self.pause_threading_flag = True
 
         self.sco = SwitchCharacterOperator(self.chara_list)
         self._add_sub_threading(self.sco)

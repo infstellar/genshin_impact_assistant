@@ -64,14 +64,17 @@ class SwitchCharacterOperator(BaseThreading):
             else:
                 if self.aim_operator.sco_blocking_request.is_blocking():
                     self.aim_operator.sco_blocking_request.reply_request()
+                    logger.debug("sco_blocking_request")
                     self.switch_character(switch_type="SHIELD")
                     time.sleep(0.5)
                     continue
                 if self.tactic_operator.get_working_statement():  # tactic operator working
                     time.sleep(0.1)
                     if self.position_check_timer.reached_and_reset():
+                        logger.debug("tactic operator working")
                         self.switch_character(switch_type="SHIELD")
                 else:
+                    logger.debug("switch_character TRIGGER")
                     self.switch_character(switch_type="TRIGGER")
                     time.sleep(0.5)
 
@@ -138,7 +141,7 @@ class SwitchCharacterOperator(BaseThreading):
             if switch_type == "TRIGGER" and chara.trigger():
                 tg=chara.tactic_group
             elif switch_type in ["CORE","SHIELD"] and chara.is_position_ready(switch_type):
-                tg=chara.position_tactic
+                tg=chara.tactic_group
             if tg != None: 
                 self.current_num = combat_lib.get_current_chara_num(self.checkup_stop_func)
                 logger.debug(f"switch_character: {switch_type}: targetnum: {chara.n} current num: {self.current_num} tactic group: {tg}")

@@ -43,3 +43,5 @@ vision:
   annotation: 填写以下类型：岩 `Geo`; 雷 `Electro`; 水 `Hydro`; 火 `Pyro`; 冰 `Cryo`; 草 `Dendro`;
     风 `Anemo`
   doc: 角色元素类型。
+long_attack_time: 
+  doc: （可选）重击时间

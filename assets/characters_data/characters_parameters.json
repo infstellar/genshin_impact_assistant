@@ -7,7 +7,7 @@
         "Qcd_time": 0,
         "Qlast_time": 0,
         "vision": "Geo",
-        "position":"Normal",
+        "position":"Support",
         "trigger":"e_ready",
         "tactic_group":"e?e:none;q?q:none"
     },
@@ -18,7 +18,7 @@
         "Epress_time": 0,
         "Qlast_time": 12,
         "Qcd_time": 15,
-        "position": "Normal",
+        "position": "Support",
         "vision":"Pyro",
         "trigger":"e_ready",
         "tactic_group": "e?e:none;q?q:none"
@@ -30,7 +30,7 @@
         "Epress_time": 3,
         "Qlast_time": 0,
         "Qcd_time": 12,
-        "position": "Normal",
+        "position": "Main",
         "vision":"Geo",
         "trigger":"idle",
         "tactic_group": "e?e.500:none;q?q:none;a,700,a,500,a~"
@@ -43,7 +43,7 @@
         "Epress_time": 0,
         "Qlast_time": 10,
         "Qcd_time": 12,
-        "position": "Normal",
+        "position": "Main",
         "vision":"Pyro",
         "trigger":"e_ready",
         "tactic_group": "e?e:none;#@e?a:none;"
@@ -56,7 +56,7 @@
         "Epress_time": 3,
         "Qlast_time": 0,
         "Qcd_time": 12,
-        "position": "Normal",
+        "position": "Support",
         "vision":"Geo",
         "trigger":"e_ready",
         "tactic_group": "e?e~:none;q?q:none"
@@ -83,9 +83,9 @@
         "Epress_time": 0,
         "Qlast_time": 15,
         "Qcd_time": 15,
-        "position": "Normal",
+        "position": "Support",
         "vision":"Cryo",
-        "trigger":"idle",
+        "trigger":"e_ready,q_ready",
         "tactic_group": "e?e:none;q?q:none;"
         
     },
@@ -96,7 +96,7 @@
         "Epress_time": 0.5,
         "Qlast_time": 15,
         "Qcd_time": 18,
-        "position": "Normal",
+        "position": "Support",
         "vision":"Hydro",
         "trigger":"e_ready",
         "tactic_group": "e?e.e:none;q?q:none;#@q?a:none;"
@@ -112,7 +112,7 @@
         "Qcd_time": 20,
         "vision":"Cryo",
         "trigger":"e_ready",
-        "position": "Normal"
+        "position": "Main"
     
     },
     "Diona": {
@@ -137,8 +137,8 @@
         "Qlast_time": 10,
         "Qcd_time": 20,
         "vision":"Pyro",
-        "trigger":"e_ready",
-        "position": "Normal"
+        "trigger":"e_ready,q_ready",
+        "position": "Support"
         
     },
     "Shenhe": {
@@ -151,7 +151,7 @@
         "Qcd_time": 20,
         "vision":"Cryo",
         "trigger":"e_ready",
-        "position": "Normal"
+        "position": "Support"
         
     },
     "Kaedehara Kazuha": {
@@ -164,7 +164,7 @@
         "Qcd_time": 15,
         "vision":"Anemo",
         "trigger":"e_ready",
-        "position": "Normal"
+        "position": "Main"
         
     },
     "Raiden Shogun": {
@@ -177,7 +177,7 @@
         "Qcd_time": 18,
         "vision":"Electro",
         "trigger":"e_ready",
-        "position": "Normal"
+        "position": "Support"
         
     },
     "Hu Tao": {
@@ -185,12 +185,13 @@
         "E_long_cd_time": 0,
         "Elast_time": 9,
         "Epress_time": 0,
-        "tactic_group": "e?e:none;#@e?a~:none;q?q:none",
+        "tactic_group": "e?e:none;#@e?a~.j:none;q?q:none",
         "Qlast_time": 0,
         "Qcd_time": 15,
         "vision":"Pyro",
-        "trigger":"idle",
-        "position": "Normal"
+        "trigger":"e_ready",
+        "position": "Main",
+        "long_attack_time": 1.1
         
     },
     "Mona": {
@@ -203,7 +204,7 @@
         "Qcd_time": 15,
         "vision":"Hydro",
         "trigger":"e_ready",
-        "position": "Normal"
+        "position": "Support"
         
     },
     "Qiqi":{
@@ -225,10 +226,10 @@
         "Epress_time": 0,
         "Qlast_time": 0,
         "Qcd_time": 12,
-        "tactic_group": "e?e,e:none;q?q:none",
+        "tactic_group": "e?e:none;q?q:none",
         "vision":"Electro",
         "trigger":"e_ready",
-        "position": "Shield"
+        "position": "Support"
     },
     "Sangonomiya Kokomi":{
         "E_short_cd_time": 20,
@@ -237,8 +238,8 @@
         "Epress_time": 0,
         "Qlast_time": 10,
         "Qcd_time": 18,
-        "tactic_group": "e?e,e:none;q?q:none",
-        "vision":"Pyro",
+        "tactic_group": "e?e:none;q?q:none",
+        "vision":"Hydro",
         "trigger":"e_ready",
         "position": "Shield"
     },
@@ -249,10 +250,10 @@
         "Epress_time": 0,
         "Qlast_time": 15,
         "Qcd_time": 20,
-        "tactic_group": "e?e,e:none;q?q:none",
-        "vision":"Pyro",
+        "tactic_group": "e?e:none;q?q:none",
+        "vision":"Hydro",
         "trigger":"e_ready",
-        "position": "Shield"
+        "position": "Support"
     }
     
 }

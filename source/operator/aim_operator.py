@@ -87,7 +87,7 @@ class AimOperator(BaseThreading):
                     else: # 没找到，根据红色箭头移动寻找
                         if self.checkup_stop_func():continue
                         self.sco_blocking_request.send_request() # 向SCO申请暂停Tactic执行
-                        if False: # set to False when debug this module
+                        if True: # set to False when debug this module
                             print(self.sco_blocking_request.waiting_until_reply(stop_func=self.checkup_stop_func, timeout=60))
                         r = self._moving_find_enemy()
                         self.sco_blocking_request.recovery_request() # 解除申请
@@ -100,7 +100,7 @@ class AimOperator(BaseThreading):
                     if self._is_enemy_too_far(): # 敌人是否太远
                         if self.checkup_stop_func():continue
                         self.sco_blocking_request.send_request()
-                        if False: # set to False when debug this module
+                        if True: # set to False when debug this module
                             print(self.sco_blocking_request.waiting_until_reply(stop_func=self.checkup_stop_func, timeout=60))
                         self._keep_distance_with_enemy()
                         self.sco_blocking_request.recovery_request() # 解除申请

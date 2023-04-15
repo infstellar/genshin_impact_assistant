@@ -38,13 +38,15 @@ RAISE_WHEN_NOTFOUND = 1
 
 def get_param(team_item, para_name, auto_fill_flag, chara_name="", exception_mode = RAISE_WHEN_NOTFOUND, value_when_empty = None):
     global load_err_times
+    r = None
     if para_name not in team_item:
-        if exception_mode == RAISE_WHEN_NOTFOUND:
-            logger.error(f"{t2t('Tactic ERROR: INDEX NOT FOUND')}")
-            logger.error(f"{t2t('parameter name')}: {para_name}; {t2t('character name')}: {chara_name}")
-            raise TacticKeyNotFoundError(f"Key: {para_name}")
-        elif exception_mode == CREATE_WHEN_NOTFOUND:
-            pass
+        if value_when_empty is None:
+            if exception_mode == RAISE_WHEN_NOTFOUND:
+                logger.error(f"{t2t('Tactic ERROR: INDEX NOT FOUND')}")
+                logger.error(f"{t2t('parameter name')}: {para_name}; {t2t('character name')}: {chara_name}")
+                raise TacticKeyNotFoundError(f"Key: {para_name}")
+            elif exception_mode == CREATE_WHEN_NOTFOUND:
+                pass
     else:
         r = team_item[para_name]
 
@@ -428,6 +430,11 @@ def set_party_setup(names):
         return False
     
 def get_curr_team_file():
+    """获得与当前角色列表一致的队伍文件
+
+    Returns:
+        _type_: _description_
+    """
     if not (ui_control.verify_page(UIPage.page_main) or ui_control.verify_page(UIPage.page_domain)):
         ui_control.ui_goto(UIPage.page_main)
     curr_name_list = get_characters_name()
@@ -440,22 +447,69 @@ def get_curr_team_file():
         if name_list == curr_name_list:
             return i["label"]
     return False
+
+class CharacterNameNotInCharacterParametersError(Exception):pass
+def generate_teamfile_automatic():
+    if not (ui_control.verify_page(UIPage.page_main) or ui_control.verify_page(UIPage.page_domain)):
+        ui_control.ui_goto(UIPage.page_main)
+    POSITION2PRIORITY = {
+        "Main":3000,
+        "Shield":1000,
+        "Support":2000
+    }
+    INDEX2ORDINAL_NUMERAL = {
+        0:"first",
+        1:"second",
+        2:"third",
+        3:"forth",
+    }
+    team_file = {}
+    curr_name_list = get_characters_name()
+    chara_para = load_json("characters_parameters.json", default_path=fr"{ASSETS_PATH}/characters_data")
+    for name in curr_name_list:
+        if name in chara_para:
+            ordinal_numeral = INDEX2ORDINAL_NUMERAL[curr_name_list.index(name)]
+            team_file[ordinal_numeral] = chara_para[name]
+            team_file[ordinal_numeral]["priority"] = POSITION2PRIORITY[team_file[ordinal_numeral]["position"]]+curr_name_list.index(name)
+            team_file[ordinal_numeral]["name"] = name
+            team_file[ordinal_numeral]["n"] = curr_name_list.index(name)+1
+        else:
+            raise CharacterNameNotInCharacterParametersError(name)
+    return team_file
         
 def get_chara_list():
+    """获得一个由4个Character对象组合的列表，用于自动战斗。
+
+    Raises:
+        TacticKeyEmptyError: _description_
+
+    Returns:
+        _type_: _description_
+    """
     global load_err_times
     load_err_times = 0
     team_name = GIAconfig.Combat_TeamFile
+    # 决定team file
     auto_choose = DEBUG_MODE        
     if auto_choose:
+        # 自动选择1：查找有没有符合要求的队伍文件
         team_name = get_curr_team_file()
         if not team_name:
-            logger.error(t2t("The strategy file for the current teaming is not found in the tactic folder: ")+str(get_characters_name()))
-            team_name = GIAconfig.Combat_TeamFile
+            logger.info(t2t("The strategy file for the current teaming is not found in the tactic folder: ")+str(get_characters_name()))
+            # team_name = GIAconfig.Combat_TeamFile
+            # 自动选择2：尝试根据当前队伍创建
+            try:
+                team = generate_teamfile_automatic()
+            except CharacterNameNotInCharacterParametersError as e:
+                logger.info(f"CharacterNameNotInCharacterParametersError: {e}")
+        else:
+            team = load_json(team_name, default_path=r"config/tactic")    
     else:
-        team_name = GIAconfig.Combat_TeamFile
-    logger.info(f"team file set as: {team_name}")
+        team = load_json(GIAconfig.Combat_TeamFile, default_path=r"config/tactic")
+    names = [team[k]['name'] for k in team]
+    logger.info(f"team file set as: {names}")
     
-    team = load_json(team_name, default_path=r"config/tactic")
+    
     
     for team_n in team:
         team_item = team[team_n]
@@ -500,13 +554,15 @@ def get_chara_list():
         cQlast_time = get_param(team_item, "Qlast_time", autofill_flag, chara_name=cname)
         cQcd_time = get_param(team_item, "Qcd_time", autofill_flag, chara_name=cname)
         c_vision = get_param(team_item, "vision", autofill_flag, chara_name=cname)
+        c_long_attack_time = get_param(team_item, "long_attack_time", autofill_flag, chara_name=cname, value_when_empty=2.5)
     
         chara_list.append(
             character.Character(
                 name=cname, position=c_position, n=cn, priority=c_priority,
                 E_short_cd_time=cE_short_cd_time, E_long_cd_time=cE_long_cd_time, Elast_time=cElast_time,
                 tactic_group=c_tactic_group, trigger=c_trigger,
-                Epress_time=cEpress_time, Qlast_time=cQlast_time, Qcd_time=cQcd_time, vision = c_vision
+                Epress_time=cEpress_time, Qlast_time=cQlast_time, Qcd_time=cQcd_time, vision = c_vision,
+                long_attack_time = c_long_attack_time
             )
         )
     if load_err_times>0:
@@ -577,7 +633,8 @@ CSDL.start()
 
 if __name__ == '__main__':
     # get_curr_team_file()
-    
+    a = get_chara_list()
+    print()
     # set_party_setup("Lisa")
     while 1:
         time.sleep(1)
