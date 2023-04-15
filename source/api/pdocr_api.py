@@ -67,6 +67,7 @@ class PaddleOcrFastDeploy():
             cv2.waitKey(0)
         img = cv2.cvtColor(img,cv2.COLOR_RGB2BGR)
         res = self.model.predict(img)
+        logger.trace(str(res).replace('\n',''))
         return res
     REPLACE_DICT = {
             "惊垫":"惊蛰",

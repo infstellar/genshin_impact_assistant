@@ -356,27 +356,38 @@ def is_character_healthy():
         target_col = [35,215,150]
         return color_similar(col,target_col,threshold=20)
 
-def get_characters_name():
-    cap = itt.capture(jpgmode=0)
-    # img = extract_white_letters(cap)
-    img = cap
-    ret_list = []
-    for i in [asset.AreaCombatCharacterName1,asset.AreaCombatCharacterName2,asset.AreaCombatCharacterName3,asset.AreaCombatCharacterName4]:
-        img2 = img.copy()
-        img3 = crop(img2,i.position)
-        texts = ocr.get_all_texts(img3)
-        succ=False
-        for t in texts:
-            if translate_character_auto(t) != None:
-                ret_list.append(translate_character_auto(t))
-                succ=True
-        if not succ:ret_list.append(None)
+def get_characters_name(max_retry = 10):
+    retry_times = 0
+    for retry_times in range(max_retry):
+        cap = itt.capture(jpgmode=0)
+        # img = extract_white_letters(cap)
+        img = cap
+        ret_list = []
+        for i in [asset.AreaCombatCharacterName1,asset.AreaCombatCharacterName2,asset.AreaCombatCharacterName3,asset.AreaCombatCharacterName4]:
+            img2 = img.copy()
+            img3 = crop(img2,i.position)
+            texts = ocr.get_all_texts(img3)
+            succ=False
+            for t in texts:
+                if translate_character_auto(t) != None:
+                    ret_list.append(translate_character_auto(t))
+                    succ=True
+            if not succ:
+                if retry_times<max_retry-1:
+                    logger.warning(f"get characters name fail, retry {retry_times}")
+                    itt.delay(1)
+                    break
+                else:
+                    ret_list.append(None)
+        if len(ret_list)==4:
+            return ret_list
     return ret_list
 
 def get_team_chara_names_in_party_setup():
     ui_control.ensure_page(UIPage.page_configure_team)
     text_list = []
-    for i in [asset.PartySetupCharaName1,asset.PartySetupCharaName2,asset.PartySetupCharaName3,asset.PartySetupCharaName4]:
+    for i in [asset.AreaCombatPartySetupCharaName1,asset.AreaCombatPartySetupCharaName2,
+              asset.AreaCombatPartySetupCharaName3,asset.AreaCombatPartySetupCharaName4]:
         img = itt.capture(jpgmode=0, posi=i.position)
         img2 = extract_white_letters(img)
         text = ocr.get_all_texts(img2)
@@ -566,12 +577,13 @@ CSDL.start()
 
 if __name__ == '__main__':
     # get_curr_team_file()
-    print(get_characters_name())
+    
     # set_party_setup("Lisa")
     while 1:
-        time.sleep(0.1)
+        time.sleep(1)
+        print(get_characters_name())
         # print(is_character_busy())
         # print(unconventionality_situation_detection())
-        print(combat_statement_detection())
+        # print(combat_statement_detection())
         # print(get_character_busy(itt, default_stop_func))
         # time.sleep(0.2)
