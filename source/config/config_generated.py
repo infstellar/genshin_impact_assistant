@@ -29,3 +29,4 @@ class GeneratedConfig:
    Domain_DomainName = '山脊守望'
    Domain_DomainStageName = '不移II'
    Keymap_StartStop = '['
+   LeyLineDisorder_BlossomType = 'Wealth'

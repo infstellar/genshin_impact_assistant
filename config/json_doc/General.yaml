@@ -16,4 +16,7 @@ InteractionMode:
 Resin: 
   select_items: [20,40]
 
+BlossomType:
+  select_items: [Wealth, Revelation]
+
 

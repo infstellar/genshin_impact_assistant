@@ -1,3 +1,4 @@
+from source.util import *
 from source.task.ley_line_outcrop.assets import *
 from source.task.ley_line_outcrop.util import *
 from source.mission.mission_template import MissionExecutor
@@ -6,7 +7,7 @@ from source.map.position.position import *
 from source.funclib import movement
 from source.funclib.generic_lib import f_recognition
 
-BlossomOfWealth=""
+
 
 class LeyLineOutcropMission(MissionExecutor):
     TRAVERSE_MONDSTADT_POSITION=[TianLiPosition([783.450352, -6943.497652]),
@@ -24,6 +25,7 @@ class LeyLineOutcropMission(MissionExecutor):
     def __init__(self):
         super().__init__(is_TMCF=True, is_CFCF=True, is_PUO=True)
         self.collect_times = 2
+        self.type = GIAconfig.LeyLineDisorder_BlossomType
 
     def traverse_mondstant(self):
         ui_control.ensure_page(UIPage.page_bigmap)
@@ -33,11 +35,18 @@ class LeyLineOutcropMission(MissionExecutor):
             img = itt.capture(jpgmode=0)
             img = crop(img, cap_posi)
             img = recorp(img,cap_posi)
-            positions = itt.match_multiple_img(img, template=IconLeyLindOutcropBlossomOfRevelation.image)
+            if self.type == "Wealth":
+                template_img = IconLeyLineOutcropBlossomOfWealth.image
+            elif self.type == "Revelation":
+                template_img = IconLeyLindOutcropBlossomOfRevelation.image
+            positions = itt.match_multiple_img(img, template=template_img)
             if len(positions)>0:
                 curr_posi = genshin_map.get_bigmap_posi()
                 posi = positions[0]
-                target_px_posi = np.array(list(posi))+np.array([20,19])
+                if self.type == "Wealth":
+                    target_px_posi = np.array(list(posi))+np.array([17,17])
+                elif self.type == "Revelation":
+                    target_px_posi = np.array(list(posi))+np.array([20,19])
                 delta_posi = genshin_map.convert_InGenshinMapPX_to_GIMAP(target_px_posi-np.array([SCREEN_CENTER_X,SCREEN_CENTER_Y]))
                 target_gimap_posi = curr_posi.gimap + delta_posi
                 target_tianli_posi = GIMAPPosition(target_gimap_posi).tianli
