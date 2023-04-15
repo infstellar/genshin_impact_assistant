@@ -229,6 +229,30 @@
         "vision":"Electro",
         "trigger":"e_ready",
         "position": "Shield"
+    },
+    "Sangonomiya Kokomi":{
+        "E_short_cd_time": 20,
+        "E_long_cd_time": 0,
+        "Elast_time": 12,
+        "Epress_time": 0,
+        "Qlast_time": 10,
+        "Qcd_time": 18,
+        "tactic_group": "e?e,e:none;q?q:none",
+        "vision":"Pyro",
+        "trigger":"e_ready",
+        "position": "Shield"
+    },
+    "Xingqiu":{
+        "E_short_cd_time": 21,
+        "E_long_cd_time": 0,
+        "Elast_time": 15,
+        "Epress_time": 0,
+        "Qlast_time": 15,
+        "Qcd_time": 20,
+        "tactic_group": "e?e,e:none;q?q:none",
+        "vision":"Pyro",
+        "trigger":"e_ready",
+        "position": "Shield"
     }
     
 }

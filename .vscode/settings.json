@@ -70,6 +70,7 @@
         "fromarray",
         "funclib",
         "Genshin",
+        "GIAconfig",
         "GIMAP",
         "Hilichurls",
         "imgicon",
@@ -82,6 +83,7 @@
         "jpgmode",
         "jsontemplate",
         "KEYDOWN",
+        "Kokomi",
         "kongying",
         "Liyue",
         "loguru",
@@ -106,6 +108,7 @@
         "QTSX",
         "reinit",
         "Sakura",
+        "Sangonomiya",
         "Shen",
         "smallmap",
         "spacebar",
@@ -126,8 +129,7 @@
         "withalpha",
         "XCYD",
         "Ying",
-        "YOLOX",
-        "GIAconfig"
+        "YOLOX"
     ],
     "codecheck.ExcludeDirectory": "",
     "codecheck.ScanDirectory": "source",
