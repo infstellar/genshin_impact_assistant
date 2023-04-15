@@ -59,8 +59,8 @@
   "AreaDomainLeaveIn": {
     "common": "assets\\imgs\\Windows\\Domain\\common\\AreaDomainLeaveIn.jpg"
   },
-  "AreaDomainLeyLindDisorder": {
-    "common": "assets\\imgs\\Windows\\Domain\\common\\AreaDomainLeyLindDisorder.jpg"
+  "AreaDomainLeyLineDisorder": {
+    "common": "assets\\imgs\\Windows\\Domain\\common\\AreaDomainLeyLineDisorder.jpg"
   },
   "AreaDomainSwitchChallenge": {
     "common": "assets\\imgs\\Windows\\Domain\\common\\AreaDomainSwitchChallenge.jpg"
@@ -70,9 +70,6 @@
   },
   "ButtonAllCharacterDied": {
     "zh_CN": "assets\\imgs\\Windows\\Combat\\zh_CN\\ButtonAllCharacterDied.jpg"
-  },
-  "ButtonBigMapScaling": {
-    "common": "assets\\imgs\\Windows\\Bigmap\\common\\ButtonBigMapScaling.jpg"
   },
   "ButtonBigmapCloseMarkTableInTP": {
     "common": "assets\\imgs\\Windows\\Bigmap\\common\\ButtonBigmapCloseMarkTableInTP.jpg"
@@ -158,6 +155,9 @@
   "CombatButtonGoToFight": {
     "zh_CN": "assets\\imgs\\Windows\\Combat\\zh_CN\\CombatButtonGoToFight.jpg"
   },
+  "IconBigMapScaling": {
+    "common": "assets\\imgs\\Windows\\Bigmap\\common\\IconBigMapScaling.jpg"
+  },
   "IconBigmapCommission": {
     "common": "assets\\imgs\\Windows\\Bigmap\\common\\IconBigmapCommission.jpg"
   },
@@ -209,14 +209,14 @@
   "IconGeneralMotionSwimming": {
     "common": "assets\\imgs\\Windows\\General\\common\\IconGeneralMotionSwimming.jpg"
   },
-  "IconLeyLindOurcropBlossomOfRevelation": {
-    "common": "assets\\imgs\\Windows\\LeyLineOurcrop\\common\\IconLeyLindOurcropBlossomOfRevelation.jpg"
+  "IconLeyLindOutcropBlossomOfRevelation": {
+    "common": "assets\\imgs\\Windows\\LeyLineOutcrop\\common\\IconLeyLindOutcropBlossomOfRevelation.jpg"
   },
-  "IconLeyLineOurcropBlossomOfWealth": {
-    "common": "assets\\imgs\\Windows\\LeyLineOurcrop\\common\\IconLeyLineOurcropBlossomOfWealth.jpg"
+  "IconLeyLineOutcropBlossomOfWealth": {
+    "common": "assets\\imgs\\Windows\\LeyLineOutcrop\\common\\IconLeyLineOutcropBlossomOfWealth.jpg"
   },
-  "IconLeyLineOurcropReward": {
-    "common": "assets\\imgs\\Windows\\LeyLineOurcrop\\common\\IconLeyLineOurcropReward.jpg"
+  "IconLeyLineOutcropReward": {
+    "common": "assets\\imgs\\Windows\\LeyLineOutcrop\\common\\IconLeyLineOutcropReward.jpg"
   },
   "IconUIBag": {
     "common": "assets\\imgs\\Windows\\UI\\common\\IconUIBag.jpg"

@@ -31,7 +31,7 @@ class PathRecorderConnector(FlowConnector):
 
         self.min_distance = 1
         self.listener = self.listener = Listener(on_press=self._add_key_to_dict)
-        self.set_hotkey()
+        # self.set_hotkey()
         self.path_name = ""
         self.last_direction = 999
         '''
