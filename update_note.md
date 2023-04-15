@@ -1,5 +1,7 @@
 ## TODO：
-- 独立assets未完全重构
+- mission reg exception
+- mission reg precise arrive
+- mission reg fight if needed
 - webui list的显示要改改
 - 自动战斗预启动
 - 自动战斗的e技能释放有延迟，可能是计时器问题
@@ -14,6 +16,7 @@
 - BigPudgyProblem需要对话
 
 ## Done：
+- 独立assets未完全重构 pass
 - config的名字全部改成首字母大写，去掉下划线 pass
 - jsontemplate与json分离 pass
 - jsondoc的其他配置项与i18n分离,或者在加载时合并common与i18n两个jsondoc pass

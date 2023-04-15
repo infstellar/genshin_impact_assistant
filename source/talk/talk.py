@@ -15,6 +15,9 @@ class Talk():
     def _delay6(self):
         itt.delay(0.6)
     
+    def talk_wait(self, x):
+        itt.delay(x)
+    
     def talk_skip(self, stop_func):
         while 1:
             time.sleep(0.1)
