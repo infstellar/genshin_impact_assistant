@@ -9,17 +9,11 @@ from source.funclib.err_code_lib import ERR_PASS
 from source.common.timer_module import AdvanceTimer
 from source.controller.combat_controller import CombatController
 from source.map.map import genshin_map
+from source.exceptions.mission import *
 
 
 ERR_FAIL = "FAIL"
-class CharacterNotFound(Exception):
-    pass
 
-class MissionEnd(Exception):pass
-class CollectError(Exception):pass
-class TeyvatMoveError(Exception):pass
-class PickUpOperatorError(Exception):pass
-class HandleExceptionInMission(Exception):pass
 
 class MissionExecutor(BaseThreading):
     def __init__(self, is_CFCF=False, is_TMCF=False, is_PUO=False, is_CCT=False):
@@ -237,7 +231,7 @@ class MissionExecutor(BaseThreading):
         """
         points = get_circle_points(center_posi[0],center_posi[1])
         itt.key_down('w')
-        jt = AdvanceTimer(5)
+        jt = AdvanceTimer(8)
         jt2 = AdvanceTimer(0.3)
         for p in points:
             while 1:

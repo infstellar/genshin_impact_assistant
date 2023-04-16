@@ -24,8 +24,8 @@ class LeyLineOutcropMission(MissionExecutor):
                                  TianLiPosition([3328.027552, -5106.932452])]
     def __init__(self):
         super().__init__(is_TMCF=True, is_CFCF=True, is_PUO=True)
-        self.collect_times = 2
-        self.type = GIAconfig.LeyLineDisorder_BlossomType
+        self.collection_times = GIAconfig.LeyLineOutcrop_CollectionTimes
+        self.type = GIAconfig.LeyLineOutcrop_BlossomType
 
     def traverse_mondstant(self):
         ui_control.ensure_page(UIPage.page_bigmap)
@@ -76,22 +76,25 @@ class LeyLineOutcropMission(MissionExecutor):
             
     
     def exec_mission(self):
-        for i in range(self.collect_times):
-            target_posi = self.traverse_mondstant()
-            self.move(MODE='AUTO', stop_rule=0, target_posi=list(target_posi), is_tp=True, is_precise_arrival=True)
-            self.circle_search(target_posi)
-            itt.key_press('f')
-            self.collect(is_combat=True)
-            r = self.touch_the_ley_line_blossom()
-            if r:
+        for i in range(self.collection_times):
+            try:
+                target_posi = self.traverse_mondstant()
+                self.move(MODE='AUTO', stop_rule=0, target_posi=list(target_posi), is_tp=True, is_precise_arrival=True)
+                self.circle_search(target_posi)
                 itt.key_press('f')
-            itt.delay("2animation")
-            while 1:
-                if self.checkup_stop_func():return
-                if ui_control.verify_page(UIPage.page_main):
-                    break
-                itt.appear_then_click(ButtonGeneralUseOriginResin)
-        
+                self.collect(is_combat=True)
+                r = self.touch_the_ley_line_blossom()
+                if r:
+                    itt.key_press('f')
+                itt.delay("2animation")
+                while 1:
+                    if self.checkup_stop_func():return
+                    if ui_control.verify_page(UIPage.page_main):
+                        break
+                    itt.appear_then_click(ButtonGeneralUseOriginResin)
+            except HandleExceptionInMission as e:
+                logger.error(t2t("HandleExceptionInMission")+f": {e}")
+                logger.error(str(e))
         
 class LeyLineOutcropTask(TaskTemplate):
     def __init__(self):

@@ -641,7 +641,7 @@ class SettingPage(ConfigPage):
         #             continue
         #         if f[f.index('.') + 1:] == "json":
         #             self.config_files.append({"label": f, "value": os.path.join(root, f)})
-        for i in [CONFIGNAME_GENERAL, CONFIGNAME_DOMAIN, CONFIGNAME_KEYMAP, CONFIGNAME_LEY_LINE_DISORDER]:
+        for i in [CONFIGNAME_GENERAL, CONFIGNAME_DOMAIN, CONFIGNAME_KEYMAP, CONFIGNAME_LEY_LINE_OUTCROP]:
             self.config_files.append({"label": f"{i}.json", "value": os.path.join(fr"{CONFIG_PATH_SETTING}", f"{i}.json")})
         
 

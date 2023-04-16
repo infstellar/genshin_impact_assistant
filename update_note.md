@@ -1,5 +1,7 @@
 ## TODO：
 - ao在秘境里一走到底
+- sco切换失败时上下左右跳
+- 攀高危险按按中键
 - combat lib识别受ui限制
 - mission init加满
 - mission reg exception
