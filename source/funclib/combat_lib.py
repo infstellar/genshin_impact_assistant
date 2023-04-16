@@ -455,7 +455,9 @@ def generate_teamfile_automatic():
     POSITION2PRIORITY = {
         "Main":3000,
         "Shield":1000,
+        "Recovery":1500,
         "Support":2000
+        
     }
     INDEX2ORDINAL_NUMERAL = {
         0:"first",

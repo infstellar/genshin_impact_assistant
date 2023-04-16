@@ -1,7 +1,5 @@
 ## TODO：
 - sco切换失败时上下左右跳
-- 
-- 攀高危险按按中键
 - thread init
 - mission init加满
 - TMF超过6s没检测到ui就退出
@@ -21,6 +19,7 @@
 
 ## Done：
 - LLO使用Domian同款急停 pass
+- 攀高危险按按中键 pass
 - ao在秘境里一走到底 pass
 - mission reg exception pass
 - mission reg precise arrive pass

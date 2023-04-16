@@ -21,7 +21,7 @@
         "position": "Support",
         "vision":"Pyro",
         "trigger":"e_ready",
-        "tactic_group": "e?e:none;q?q:none"
+        "tactic_group": "e?e~:none;q?q:none"
     },
     "Ningguang": {
         "E_long_cd_time": 10,
@@ -217,7 +217,7 @@
         "tactic_group": "e?e:none;q?q:none",
         "vision":"Cryo",
         "trigger":"e_ready",
-        "position": "Shield"
+        "position": "Recovery"
     },
     "Keqing":{
         "E_short_cd_time": 7.5,
@@ -241,7 +241,7 @@
         "tactic_group": "e?e:none;q?q:none",
         "vision":"Hydro",
         "trigger":"e_ready",
-        "position": "Shield"
+        "position": "Recovery"
     },
     "Xingqiu":{
         "E_short_cd_time": 21,
