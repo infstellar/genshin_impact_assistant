@@ -13,10 +13,11 @@ tcpSerSock.listen(5)
 
 root_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 jso = json.load(open(os.path.join(root_path, "config\\settings\\dm.json"), 'r', encoding='utf-8'))
-key = jso[0]
-addition_key = jso[1]
+key = jso["key"]
+addition_key = jso["addition_key"]
+dll_path = jso["dll_path"]
 
-dmdll = dmlib.DM(key, addition_key)
+dmdll = dmlib.DM(key, addition_key, dll_path)
 
 def exec_rdata(rdata):
     func_name = rdata.split('$')[0]

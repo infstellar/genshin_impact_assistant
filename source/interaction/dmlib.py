@@ -23,7 +23,7 @@ class DM:
 
     """
 
-    def __init__(self, key, addtion_key) -> None:
+    def __init__(self, key, addition_key, dll_path) -> None:
         """
         初始化并且完成注册
 
@@ -33,16 +33,22 @@ class DM:
 
         if struct.calcsize("P") * 8 == 64:
             print("dm.dll不支持64位Python")
-            # return None
-        # else:
-        self.dll_prefix = "dm.dll"
+            return None
+        else:
+            self.dll_prefix = "dm.dll"
+            
+        self.dll_path = dll_path
+        # if dll_path is None:
+        #     self.dll_path = os.path.join(os.path.dirname(__file__.replace('/', '\\')), self.dll_prefix)
+        self.cmd_dll = 'regsvr32 \"' + self.dll_path + '\" /s'
+        print(self.cmd_dll)
 
         # 判断是否已经注册注册成功返回版本信息
         if self.__is_reg:
             print("成功注册：" + 'VER:', self.ver(), ',ID:', self.GetID(), ',PATH:',
                   os.path.join(self.GetBasePath(), self.dll_prefix))
         else:
-            # self.__reg_as_admin()
+            self.__reg_as_admin()
             if self.__is_reg:
                 print("成功注册：" + 'VER:', self.ver(), ',ID:', self.GetID(), ',PATH:',
                       os.path.join(self.GetBasePath(), self.dll_prefix))
@@ -50,7 +56,7 @@ class DM:
                 print("注册失败：" + time.strftime('%Y-%m-%d-%H:%M:%S',
                                               time.localtime(time.time())) + self.dll_path + "：注册失败")
 
-        r = self.dm.Reg(key, addtion_key)
+        r = self.dm.Reg(key, addition_key)
         print("注册结果：", r)
         
     def __unreg_as_admin(self) -> None:

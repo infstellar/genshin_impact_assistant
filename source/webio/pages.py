@@ -31,6 +31,7 @@ class MainPage(Page):
         self.ui_statement = -1
         self.refresh_flow_info_timer = timer_module.Timer()
         self.ui_mission_select = ""
+        self.is_task_start = False
 
     # todo:多语言支持
 
@@ -89,6 +90,13 @@ class MainPage(Page):
                     # elif isinstance(self.ui_statement, str):
                     output.put_text(f'{self.ui_statement}', scope="StateArea")
 
+                if listening.TASK_MANAGER.start_tasklist_flag != self.is_task_start:
+                    self.is_task_start = listening.TASK_MANAGER.start_tasklist_flag
+                    output.clear('Button_StartStop')
+                    output.put_button(label=str(listening.TASK_MANAGER.start_tasklist_flag), onclick=self.on_click_startstop,
+                          scope='Button_StartStop')
+
+            
             time.sleep(0.1)
     
     def _load(self):

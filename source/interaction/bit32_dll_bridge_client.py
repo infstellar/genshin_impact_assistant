@@ -9,7 +9,13 @@ import threading, time, os
 4. y
 5. conda activate XXXX;pip install pywin32
 6. 把地址放到config里
-7. 在config/setting新建dm.json,输入[XXXX,XXXX](两个注册代码)
+7. 在config/setting新建dm.json,复制
+{
+    key:0,
+    addition_key:0,
+    dll_path:xxx    
+}
+填入对应信息。
 """
 class Timer:
     def __init__(self, diff_start_time=0):

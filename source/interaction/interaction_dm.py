@@ -3,7 +3,9 @@ from source.util import *
 from source.interaction.interaction_template import InteractionTemplate
 from source.common import static_lib
 
-dbc.start_server(python_path=GIAconfig.General_Python32Path)
+root_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+jso = json.load(open(os.path.join(root_path, "config\\settings\\dm.json"), 'r', encoding='utf-8'))
+dbc.start_server(python_path=jso["python32_path"])
 dbc.connect()
 
 dmdll = dbc.DMDLL()

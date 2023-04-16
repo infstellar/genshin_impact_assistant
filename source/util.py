@@ -23,7 +23,7 @@ pickle
 traceback
 
 DEBUG_MODE = GIAconfig.General_DEBUG
-INTERACTION_MODE = INTERACTION_DESKTOP
+INTERACTION_MODE = GIAconfig.General_InteractionMode
 IS_DEVICE_PC = True
 
 # load config file
