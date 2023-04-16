@@ -1,5 +1,5 @@
 from source.util import *
-from source.task.ley_line_outcrop.assets import *
+from source.assets.ley_line_outcrop import *
 from source.task.ley_line_outcrop.util import *
 from source.mission.mission_template import MissionExecutor
 from source.task.task_template import TaskTemplate
@@ -24,6 +24,7 @@ class LeyLineOutcropMission(MissionExecutor):
                                  TianLiPosition([3328.027552, -5106.932452])]
     def __init__(self):
         super().__init__(is_TMCF=True, is_CFCF=True, is_PUO=True)
+        self.setName("LeyLineOutcropMission")
         self.collection_times = GIAconfig.LeyLineOutcrop_CollectionTimes
         self.type = GIAconfig.LeyLineOutcrop_BlossomType
 
@@ -82,7 +83,13 @@ class LeyLineOutcropMission(MissionExecutor):
                 self.move(MODE='AUTO', stop_rule=0, target_posi=list(target_posi), is_tp=True, is_precise_arrival=True)
                 self.circle_search(target_posi)
                 itt.key_press('f')
-                self.collect(is_combat=True)
+                # self.collect(is_combat=True)
+                self.start_combat()
+                while 1:
+                    time.sleep(1)
+                    if itt.get_img_existence(IconGeneralChallengeSuccess):break
+                    if self.checkup_stop_func():break
+                self.stop_combat()
                 r = self.touch_the_ley_line_blossom()
                 if r:
                     itt.key_press('f')

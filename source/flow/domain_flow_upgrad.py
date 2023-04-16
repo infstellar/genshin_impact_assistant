@@ -100,7 +100,7 @@ class Challenge(FlowTemplate):
         self._next_rfc()
     
     def state_in(self):
-        if itt.get_img_existence(IconDomainChallengeSuccess):
+        if itt.get_img_existence(IconGeneralChallengeSuccess):
             self.rfc = FC.AFTER
             return
         if self.text_detect_timer.reached_and_reset():

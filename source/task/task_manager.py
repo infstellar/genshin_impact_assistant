@@ -71,7 +71,7 @@ class TaskManager(BaseThreading):
             elif task_name == CLAIM_REWARD_TASK:
                 from source.task.claim_reward.claim_reward import ClaimRewardTask
                 self.curr_task = ClaimRewardTask()
-            elif task_name == COMMISSION_TASK:
+            elif task_name == LEY_LINE_OUTCROP_TASK:
                 from source.task.ley_line_outcrop.ley_line_outcrop import LeyLineOutcropTask
                 self.curr_task = LeyLineOutcropTask()
             elif task_name == 'CollectorTask':
