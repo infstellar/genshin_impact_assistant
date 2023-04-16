@@ -33,7 +33,8 @@ class MissionExecutor(BaseThreading):
         self.is_CCT=is_CCT
         self.CCT_initialized = False
         self.picked_list = []
-            
+        if self.is_PUO:
+            self._init_sub_threading("PUO")
         self.setName(__name__)
         self.last_move_along_position = [99999,99999]
 
@@ -242,7 +243,7 @@ class MissionExecutor(BaseThreading):
             while 1:
                 if self.checkup_stop_func():return
                 movement.move_to_posi_LoopMode(p, self.checkup_stop_func)
-                if euclidean_distance(p, genshin_map.get_position())<=4:
+                if euclidean_distance(p, genshin_map.get_position())<=2.2:
                     logger.debug(f"circle_search: {p} arrived")
                     break
                 if stop_rule == 'F':

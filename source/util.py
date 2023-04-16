@@ -540,8 +540,8 @@ def get_circle_points(x,y,  show_res = False):
         import turtle
         turtle.speed(0)
     points = []
-    for r in range(8, 8*5, 8):
-        n = int(2 * math.pi * r / (8*2))
+    for r in range(5, 5*6, 5):
+        n = int(2 * math.pi * r / (5))
         for i in range(n):
             angle = 2 * math.pi / n * i
             px = x + r * math.cos(angle)

@@ -1,9 +1,10 @@
 ## TODO：
+- ao在秘境里一走到底
+- combat lib识别受ui限制
+- mission init加满
 - mission reg exception
 - TMF超过6s没检测到ui就退出
 - bp>100记录
-- mission reg precise arrive
-- mission reg fight if needed
 - webui list的显示要改改
 - 自动战斗预启动
 - 自动战斗的e技能释放有延迟，可能是计时器问题
@@ -13,11 +14,13 @@
 - move straight在移动视角前按下了w
 - aim operator move to enemy按空格
 - 让sco get_characters_name()在continue时获得charalist
-- tactic默认配置不要用json template
 - ocr在角色名字时试试用in
 - BigPudgyProblem需要对话
 
 ## Done：
+- mission reg precise arrive pass
+- mission reg fight if needed pass
+- tactic默认配置不要用json template pass
 - 独立assets未完全重构 pass
 - config的名字全部改成首字母大写，去掉下划线 pass
 - jsontemplate与json分离 pass

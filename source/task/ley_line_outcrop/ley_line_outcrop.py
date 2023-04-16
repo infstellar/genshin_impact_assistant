@@ -104,9 +104,9 @@ class LeyLineOutcropTask(TaskTemplate):
         self.pause_threading()
         
 if __name__ == '__main__':
-    llom = LeyLineOutcropMission()
-    r = llom.touch_the_ley_line_blossom() # 3800 -6790 [ 3817.3453 -6775.5386]
-    print(r)
+    # llom = LeyLineOutcropMission()
+    # r = llom.touch_the_ley_line_blossom() # 3800 -6790 [ 3817.3453 -6775.5386]
+    # print(r)
     llot = LeyLineOutcropTask()
     llot.start()
     while 1: time.sleep(1)

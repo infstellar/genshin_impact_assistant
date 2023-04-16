@@ -191,7 +191,7 @@
         "vision":"Pyro",
         "trigger":"e_ready",
         "position": "Main",
-        "long_attack_time": 1.1
+        "long_attack_time": 0.9
         
     },
     "Mona": {
