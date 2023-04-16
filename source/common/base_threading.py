@@ -13,6 +13,7 @@ class BaseThreading(threading.Thread):
     """
     def __init__(self, thread_name = None):
         super().__init__()
+        self._init_succ_flag = False # Use in init slow threads
         self.pause_threading_flag = False
         self.stop_threading_flag = False
         self.working_flag = False

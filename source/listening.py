@@ -80,7 +80,7 @@ def switch_combat_loop():
         t1 = CombatController()
         t1.setDaemon(True)
         t1.start()
-        time.sleep(4)
+        time.sleep(1)
         t1.continue_threading()
     combat_flag = not combat_flag
 

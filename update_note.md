@@ -1,5 +1,6 @@
 ## TODO：
 - sco切换失败时上下左右跳
+- commission 执行完就是成功
 - thread init
 - mission init加满
 - TMF超过6s没检测到ui就退出
