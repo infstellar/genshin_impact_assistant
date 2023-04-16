@@ -191,6 +191,9 @@
   "IconCommissionInCommission": {
     "common": "assets\\imgs\\Windows\\Commission\\common\\IconCommissionInCommission.jpg"
   },
+  "IconDomainChallengeSuccess": {
+    "zh_CN": "assets\\imgs\\Windows\\Domain\\zh_CN\\IconDomainChallengeSuccess.jpg"
+  },
   "IconExpeditionComplete": {
     "zh_CN": "assets\\imgs\\Windows\\Expedition\\zh_CN\\IconExpeditionComplete.jpg"
   },

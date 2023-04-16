@@ -9,6 +9,8 @@ from source.manager import posi_manager as PosiM, asset
 from source.interaction.interaction_core import itt
 from source.api import yolox_api
 from source.flow import flow_state as ST
+from source.assets.domain import *
+from source.common.timer_module import AdvanceTimer
 
 class DomainFlowConnector(FlowConnector):
     """
@@ -17,8 +19,7 @@ class DomainFlowConnector(FlowConnector):
     def __init__(self):
         super().__init__()
         self.checkup_stop_func = None
-        chara_list = combat_lib.get_chara_list()
-        self.combat_loop = combat_controller.CombatController(chara_list)
+        self.combat_loop = combat_controller.CombatController()
         
         self.lockOnFlag = 0
         self.move_timer = timer_module.Timer()
@@ -86,6 +87,7 @@ class Challenge(FlowTemplate):
     def __init__(self, upper:DomainFlowConnector):
         super().__init__(upper, flow_id=ST.INIT_CHALLENGE, next_flow_id=ST.INIT_FINGING_TREE)
         self.upper = upper
+        self.text_detect_timer = AdvanceTimer(4).start()
         
     def state_init(self):
         logger.info(t2t('正在开始战斗'))
@@ -93,15 +95,19 @@ class Challenge(FlowTemplate):
         itt.key_press('f')
         time.sleep(0.1)
         
-        self.upper.while_sleep = 2
+        self.upper.while_sleep = 1
         
         self._next_rfc()
     
     def state_in(self):
-        if itt.get_text_existence(asset.LEAVING_IN):
+        if itt.get_img_existence(IconDomainChallengeSuccess):
             self.rfc = FC.AFTER
-        else:
-            self.rfc = FC.IN
+            return
+        if self.text_detect_timer.reached_and_reset():
+            if itt.get_text_existence(asset.LEAVING_IN):
+                self.rfc = FC.AFTER
+                return
+        self.rfc = FC.IN
     
     def state_after(self):
         

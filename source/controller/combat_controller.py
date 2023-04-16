@@ -29,14 +29,11 @@ def stop_func_example():  # True:stop;False:continue
 class CombatController(AdvanceThreading):
     def __init__(self, chara_list=None):
         super().__init__()
-        if chara_list is None:
-            chara_list = combat_lib.get_chara_list()
         self.setName('CombatController')
 
-        self.chara_list = chara_list
         self.pause_threading_flag = True
 
-        self.sco = SwitchCharacterOperator(self.chara_list)
+        self.sco = SwitchCharacterOperator()
         self._add_sub_threading(self.sco)
         self.sco.pause_threading()
 

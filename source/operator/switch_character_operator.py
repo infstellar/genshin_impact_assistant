@@ -20,16 +20,16 @@ def sort_flag_1(x: character.Character):
 
 
 class SwitchCharacterOperator(BaseThreading):
-    def __init__(self, chara_list):
+    def __init__(self):
         super().__init__()
         self.setName('SwitchCharacterOperator')
-        self.chara_list = chara_list
+        self.chara_list = None
 
         self.tactic_operator = tactic_operator.TacticOperator()
         self.aim_operator = AimOperator()
         self._add_sub_threading(self.tactic_operator)
         self._add_sub_threading(self.aim_operator)
-        self.chara_list.sort(key=sort_flag_1, reverse=False)
+        
         self.current_num = 1 # combat_lib.get_current_chara_num(self.checkup_stop_func)
         self.switch_timer = Timer(diff_start_time=2)
         self.tactic_operator.set_enter_timer(self.switch_timer)
@@ -212,6 +212,9 @@ class SwitchCharacterOperator(BaseThreading):
 
     def continue_threading(self):
         if self.pause_threading_flag != False:
+            logger.info(f"SCO is getting the character list")
+            self.chara_list = combat_lib.get_chara_list()
+            self.chara_list.sort(key=sort_flag_1, reverse=False)
             self.pause_threading_flag = False
             self.tactic_operator.set_parameter(None, None)
             self.tactic_operator.continue_threading()

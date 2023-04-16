@@ -18,8 +18,7 @@ class DomainFlow(BaseThreading):
         # self.current_state = ST.IN_MOVETO_TREE
 
         self.itt = itt
-        chara_list = combat_lib.get_chara_list()
-        self.combat_loop = combat_controller.CombatController(chara_list)
+        self.combat_loop = combat_controller.CombatController()
         self.combat_loop.setDaemon(True)
 
         self.combat_loop.pause_threading()
