@@ -27,6 +27,7 @@ class LeyLineOutcropMission(MissionExecutor):
         self.setName("LeyLineOutcropMission")
         self.collection_times = GIAconfig.LeyLineOutcrop_CollectionTimes
         self.type = GIAconfig.LeyLineOutcrop_BlossomType
+        self.target_posi = None
 
     def traverse_mondstant(self):
         ui_control.ensure_page(UIPage.page_bigmap)
@@ -56,12 +57,15 @@ class LeyLineOutcropMission(MissionExecutor):
             genshin_map._move_bigmap(posi.tianli, force_center = True)
     
     def touch_the_ley_line_blossom(self):
+        if not itt.get_img_existence(IconLeyLineOutcropReward):
+            movement.move_to_position(list(self.target_posi), stop_func=self.checkup_stop_func)
         while 1:
             if self.checkup_stop_func():
                 itt.key_up('w')
                 return
             cap = itt.capture(jpgmode=0)
             dist = movement.view_to_imgicon(cap, IconLeyLineOutcropReward)
+            
             if dist<15:
                 itt.key_down('w')
             else:
@@ -79,9 +83,9 @@ class LeyLineOutcropMission(MissionExecutor):
     def exec_mission(self):
         for i in range(self.collection_times):
             try:
-                target_posi = self.traverse_mondstant()
-                self.move(MODE='AUTO', stop_rule=0, target_posi=list(target_posi), is_tp=True, is_precise_arrival=True)
-                self.circle_search(target_posi)
+                self.target_posi = self.traverse_mondstant()
+                self.move(MODE='AUTO', stop_rule=0, target_posi=list(self.target_posi), is_tp=True, is_precise_arrival=True)
+                self.circle_search(self.target_posi)
                 itt.key_press('f')
                 # self.collect(is_combat=True)
                 self.start_combat()

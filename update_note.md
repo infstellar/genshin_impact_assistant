@@ -1,6 +1,6 @@
 ## TODO：
 - sco切换失败时上下左右跳
-- LLO找不到宝箱按钮往原坐标方向走
+- 
 - 攀高危险按按中键
 - thread init
 - mission init加满
