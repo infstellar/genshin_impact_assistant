@@ -17,261 +17,261 @@ msgstr ""
 "X-Generator: Poedit 2.4.1\n"
 
 #: ../genshin_assistant.py:20
-msgid "ÕıÔÚ³õÊ¼»¯£¬ÇëÉÔºó"
+msgid "æ­£åœ¨åˆå§‹åŒ–ï¼Œè¯·ç¨å"
 msgstr ""
 
 #: ../genshin_assistant.py:27
-msgid "µ¼ÈëÒÀÀµÊ±´íÎó; err code: 001_1"
+msgid "å¯¼å…¥ä¾èµ–æ—¶é”™è¯¯; err code: 001_1"
 msgstr ""
 
 #: ../genshin_assistant.py:29 ../genshin_assistant.py:36
-msgid "³ÌĞòÔİÍ£¡£°´ÈÎÒâ¼üÍË³ö"
+msgid "ç¨‹åºæš‚åœã€‚æŒ‰ä»»æ„é”®é€€å‡º"
 msgstr ""
 
 #: ../genshin_assistant.py:34
-msgid "µ¼ÈëÒÀÀµÊ±´íÎó; err code: 001_2"
+msgid "å¯¼å…¥ä¾èµ–æ—¶é”™è¯¯; err code: 001_2"
 msgstr ""
 
 #: ../genshin_assistant.py:38
-msgid "³õÊ¼»¯Íê³É"
+msgid "åˆå§‹åŒ–å®Œæˆ"
 msgstr ""
 
 #: ../genshin_assistant.py:39
-msgid "ÕıÔÚµÈ´ıwebioÆô¶¯"
+msgid "æ­£åœ¨ç­‰å¾…webioå¯åŠ¨"
 msgstr ""
 
 #: ../genshin_assistant.py:40
-msgid "Æô¶¯¼üÅÌ¼àÌı"
+msgid "å¯åŠ¨é”®ç›˜ç›‘å¬"
 msgstr ""
 
 #: ../source/webio\page_manager.py:33
 msgid "Main"
-msgstr "Ö÷Ò³Ãæ"
+msgstr "ä¸»é¡µé¢"
 
 #: ../source/webio\page_manager.py:34
 msgid "Setting"
-msgstr "ÉèÖÃÒ³Ãæ"
+msgstr "è®¾ç½®é¡µé¢"
 
 #: ../source/webio\page_manager.py:35
 msgid "CombatSetting"
-msgstr "×Ô¶¯Õ½¶·ÉèÖÃ"
+msgstr "è‡ªåŠ¨æˆ˜æ–—è®¾ç½®"
 
 #: ../source/webio\page_manager.py:36 ../source/webio\pages.py:572
 msgid "CollectorSetting"
-msgstr "×Ô¶¯²É¼¯ÉèÖÃ"
+msgstr "è‡ªåŠ¨é‡‡é›†è®¾ç½®"
 
 #: ../source/webio\pages.py:44 ../source/webio\pages.py:247
-msgid "Î´ÕÒµ½»á»°£¬¿ÉÄÜÓÉÓÚ´°¿Ú¹Ø±Õ¡£ÇëË¢ĞÂÒ³ÃæÖØÊÔ¡£"
+msgid "æœªæ‰¾åˆ°ä¼šè¯ï¼Œå¯èƒ½ç”±äºçª—å£å…³é—­ã€‚è¯·åˆ·æ–°é¡µé¢é‡è¯•ã€‚"
 msgstr ""
 
 #: ../source/webio\pages.py:49
-msgid "ÕıÔÚµ¼ÈëÄ£¿é, ¿ÉÄÜĞèÒªÒ»Ğ©Ê±¼ä¡£"
+msgid "æ­£åœ¨å¯¼å…¥æ¨¡å—, å¯èƒ½éœ€è¦ä¸€äº›æ—¶é—´ã€‚"
 msgstr ""
 
 #: ../source/webio\pages.py:51
-msgid "ÔÚµ¼ÈëÍê³ÉÇ°£¬Çë²»ÒªÇĞ»»Ò³Ãæ¡£"
+msgid "åœ¨å¯¼å…¥å®Œæˆå‰ï¼Œè¯·ä¸è¦åˆ‡æ¢é¡µé¢ã€‚"
 msgstr ""
 
 #: ../source/webio\pages.py:92
 msgid "Get IP address"
-msgstr "»ñÈ¡IPµØÖ·"
+msgstr "è·å–IPåœ°å€"
 
 #: ../source/webio\pages.py:98
 msgid "## Options"
-msgstr "## Ñ¡Ïî"
+msgstr "## é€‰é¡¹"
 
 #: ../source/webio\pages.py:101
 msgid "FlowMode"
-msgstr "Á÷³ÌÄ£Ê½"
+msgstr "æµç¨‹æ¨¡å¼"
 
 #: ../source/webio\pages.py:103
 msgid "Idle"
-msgstr "¿ÕÏĞ"
+msgstr "ç©ºé—²"
 
 #: ../source/webio\pages.py:104
 msgid "AutoCombat"
-msgstr "×Ô¶¯Õ½¶·"
+msgstr "è‡ªåŠ¨æˆ˜æ–—"
 
 #: ../source/webio\pages.py:105
 msgid "AutoDomain"
-msgstr "×Ô¶¯ÃØ¾³"
+msgstr "è‡ªåŠ¨ç§˜å¢ƒ"
 
 #: ../source/webio\pages.py:106
 msgid "AutoCollector"
-msgstr "×Ô¶¯²É¼¯"
+msgstr "è‡ªåŠ¨é‡‡é›†"
 
 #: ../source/webio\pages.py:109
-msgid "Æô¶¯/Í£Ö¹"
+msgid "å¯åŠ¨/åœæ­¢"
 msgstr ""
 
 #: ../source/webio\pages.py:111
 msgid "## Statement"
-msgstr "## ×´Ì¬"
+msgstr "## çŠ¶æ€"
 
 #: ../source/webio\pages.py:113
-msgid "µ±Ç°×´Ì¬"
+msgid "å½“å‰çŠ¶æ€"
 msgstr ""
 
 #: ../source/webio\pages.py:127
 msgid "## Log"
-msgstr "## ÈÕÖ¾"
+msgstr "## æ—¥å¿—"
 
 #: ../source/webio\pages.py:145
 msgid "Not Enabled"
-msgstr "Î´ÆôÓÃ"
+msgstr "æœªå¯ç”¨"
 
 #: ../source/webio\pages.py:146
 msgid "LAN IP"
-msgstr "¾ÖÓòÍøIP"
+msgstr "å±€åŸŸç½‘IP"
 
 #: ../source/webio\pages.py:146
 msgid "WAN IP"
-msgstr "ÒÔÌ«ÍøIP"
+msgstr "ä»¥å¤ªç½‘IP"
 
 #: ../source/webio\pages.py:188
 msgid "# Config"
-msgstr "# ÉèÖÃ"
+msgstr "# è®¾ç½®"
 
 #: ../source/webio\pages.py:194 ../source/webio\pages.py:489
 #: ../source/webio\pages.py:533 ../source/webio\pages.py:578
 msgid "## config:"
-msgstr "## ÉèÖÃ£º"
+msgstr "## è®¾ç½®ï¼š"
 
 #: ../source/webio\pages.py:208
 msgid "auto_aim.json"
-msgstr "×Ô¶¯Ãé×¼ÉèÖÃ"
+msgstr "è‡ªåŠ¨ç„å‡†è®¾ç½®"
 
 #: ../source/webio\pages.py:209 ../source/webio\pages.py:223
 msgid "auto_collector.json"
-msgstr "×Ô¶¯²É¼¯ÉèÖÃ"
+msgstr "è‡ªåŠ¨é‡‡é›†è®¾ç½®"
 
 #: ../source/webio\pages.py:210
 msgid "auto_combat.json"
-msgstr "×Ô¶¯Õ½¶·ÉèÖÃ"
+msgstr "è‡ªåŠ¨æˆ˜æ–—è®¾ç½®"
 
 #: ../source/webio\pages.py:211
 msgid "auto_domain.json"
-msgstr "×Ô¶¯ÃØ¾³ÉèÖÃ"
+msgstr "è‡ªåŠ¨ç§˜å¢ƒè®¾ç½®"
 
 #: ../source/webio\pages.py:212
 msgid "auto_pickup.json"
-msgstr "×Ô¶¯²É¼¯ÉèÖÃ"
+msgstr "è‡ªåŠ¨é‡‡é›†è®¾ç½®"
 
 #: ../source/webio\pages.py:213
 msgid "auto_pickup_default_blacklist.json"
-msgstr "×Ô¶¯²É¼¯ºÚÃûµ¥ÉèÖÃ"
+msgstr "è‡ªåŠ¨é‡‡é›†é»‘åå•è®¾ç½®"
 
 #: ../source/webio\pages.py:214
 msgid "config.json"
-msgstr "Í¨ÓÃÉèÖÃ"
+msgstr "é€šç”¨è®¾ç½®"
 
 #: ../source/webio\pages.py:215
 msgid "keymap.json"
-msgstr "¿ì½İ¼ü"
+msgstr "å¿«æ·é”®"
 
 #: ../source/webio\pages.py:216
 msgid "character.json"
-msgstr "Ä¬ÈÏ½ÇÉ«ÅäÖÃ"
+msgstr "é»˜è®¤è§’è‰²é…ç½®"
 
 #: ../source/webio\pages.py:217
 msgid "character_dist.json"
-msgstr "½ÇÉ«ÃûÁĞ±í"
+msgstr "è§’è‰²ååˆ—è¡¨"
 
 #: ../source/webio\pages.py:218
 msgid "team.json"
-msgstr "teamÊ¾ÀıÎÄ¼ş1"
+msgstr "teamç¤ºä¾‹æ–‡ä»¶1"
 
 #: ../source/webio\pages.py:219
 msgid "team_example_2.json"
-msgstr "teamÊ¾ÀıÎÄ¼ş2"
+msgstr "teamç¤ºä¾‹æ–‡ä»¶2"
 
 #: ../source/webio\pages.py:220
 msgid "collected.json"
-msgstr "×Ô¶¯²É¼¯-ÒÑ²É¼¯id"
+msgstr "è‡ªåŠ¨é‡‡é›†-å·²é‡‡é›†id"
 
 #: ../source/webio\pages.py:221
 msgid "collection_blacklist.json"
-msgstr "×Ô¶¯²É¼¯-ºÚÃûµ¥id"
+msgstr "è‡ªåŠ¨é‡‡é›†-é»‘åå•id"
 
 #: ../source/webio\pages.py:222
 msgid "collection_log.json"
-msgstr "×Ô¶¯²É¼¯¼ÇÂ¼"
+msgstr "è‡ªåŠ¨é‡‡é›†è®°å½•"
 
 #: ../source/webio\pages.py:299
 msgid "saved!"
-msgstr "±£´æ³É¹¦£¡"
+msgstr "ä¿å­˜æˆåŠŸï¼"
 
 #: ../source/webio\pages.py:341
 msgid "Do you need to save changes?"
-msgstr "ÄãÒª±£´æÉèÖÃÂğ£¿"
+msgstr "ä½ è¦ä¿å­˜è®¾ç½®å—ï¼Ÿ"
 
 #: ../source/webio\pages.py:342
 msgid "No"
-msgstr "·ñ"
+msgstr "å¦"
 
 #: ../source/webio\pages.py:342
 msgid "Yes"
-msgstr "ÊÇ"
+msgstr "æ˜¯"
 
 #: ../source/webio\pages.py:483
 msgid "# Setting"
-msgstr "# ÉèÖÃ"
+msgstr "# è®¾ç½®"
 
 #: ../source/webio\pages.py:516
 msgid "# CombatSetting"
-msgstr "# ×Ô¶¯Õ½¶·ÉèÖÃ"
+msgstr "# è‡ªåŠ¨æˆ˜æ–—è®¾ç½®"
 
 #: ../source/webio\pages.py:522
 msgid "# Add team"
-msgstr "# Ôö¼Ó¶ÓÎé"
+msgstr "# å¢åŠ é˜Ÿä¼"
 
 #: ../source/webio\pages.py:526
 msgid "Add team"
-msgstr "Ôö¼Ó¶ÓÎé"
+msgstr "å¢åŠ é˜Ÿä¼"
 
 #: ../source/webio\pages.py:528
 msgid "Add team with characters"
-msgstr "Ôö¼Ó¶ÓÎé£¨Ê¹ÓÃcharacter.jsonµÄÅäÖÃ£©"
+msgstr "å¢åŠ é˜Ÿä¼ï¼ˆä½¿ç”¨character.jsonçš„é…ç½®ï¼‰"
 
 #: ../source/webio\pages.py:597
 msgid "Automatic generate a list of collected items"
-msgstr "´Ó²É¼¯ÈÕÖ¾ÖĞ×Ô¶¯Éú³ÉÒÑ²É¼¯ÁĞ±íid"
+msgstr "ä»é‡‡é›†æ—¥å¿—ä¸­è‡ªåŠ¨ç”Ÿæˆå·²é‡‡é›†åˆ—è¡¨id"
 
 #: ../source/webio\pages.py:598
 msgid "Automatic generate a list of blacklist items"
-msgstr "´Ó²É¼¯ÈÕÖ¾ÖĞ×Ô¶¯Éú³ÉºÚÃûµ¥ÁĞ±íid"
+msgstr "ä»é‡‡é›†æ—¥å¿—ä¸­è‡ªåŠ¨ç”Ÿæˆé»‘åå•åˆ—è¡¨id"
 
 #: ../source/webio\pages.py:637
 msgid "Add to blacklist"
-msgstr "Ìí¼Óµ½ºÚÃûµ¥"
+msgstr "æ·»åŠ åˆ°é»‘åå•"
 
 #: ../source/webio\pages.py:638
 msgid "Add to collected"
-msgstr "Ìí¼Óµ½ÒÑ²É¼¯"
+msgstr "æ·»åŠ åˆ°å·²é‡‡é›†"
 
 #: ../source/webio\pages.py:644
-msgid "Õ¹¿ª/ÊÕÆğ"
+msgid "å±•å¼€/æ”¶èµ·"
 msgstr ""
 
 #: ../source/webio\pages.py:679
 msgid "clean list"
-msgstr "Çå¿ÕÁĞ±í"
+msgstr "æ¸…ç©ºåˆ—è¡¨"
 
 #: ../source/webio\webio.py:28
-msgid "webioÆô¶¯Íê³É"
+msgid "webioå¯åŠ¨å®Œæˆ"
 msgstr ""
 
 #: ../source\collector_flow.py:223
-msgid "Í£Ö¹×Ô¶¯²É¼¯"
+msgid "åœæ­¢è‡ªåŠ¨é‡‡é›†"
 msgstr ""
 
 #: ../source\collector_flow.py:227
-msgid "ËùÓĞ½ÇÉ«¶¼ÒÑ¸Âµô£¬ÕıÔÚÖĞ¶Ï´Ë´Î²É¼¯"
+msgid "æ‰€æœ‰è§’è‰²éƒ½å·²å˜æ‰ï¼Œæ­£åœ¨ä¸­æ–­æ­¤æ¬¡é‡‡é›†"
 msgstr ""
 
 #: ../source\collector_flow.py:242 ../source\collector_flow.py:248
 #: ../source\collector_flow.py:261
-msgid "ÖØÖÃÍê³É¡£×¼±¸½øĞĞÏÂÒ»´Î²É¼¯"
+msgid "é‡ç½®å®Œæˆã€‚å‡†å¤‡è¿›è¡Œä¸‹ä¸€æ¬¡é‡‡é›†"
 msgstr ""
 
 #: ../source\collector_flow.py:245
@@ -279,7 +279,7 @@ msgid "Flow timeout"
 msgstr ""
 
 #: ../source\collector_flow.py:255
-msgid "ÓĞÈË¸ÂÁË£¬ÕıÔÚÍ£Ö¹´Ë´Î²É¼¯"
+msgid "æœ‰äººå˜äº†ï¼Œæ­£åœ¨åœæ­¢æ­¤æ¬¡é‡‡é›†"
 msgstr ""
 
 #: ../source\collector_flow.py:330
@@ -288,11 +288,11 @@ msgstr ""
 
 #: ../source\collector_flow.py:334
 msgid "collect in"
-msgstr "ÔÚ²É¼¯"
+msgstr "åœ¨é‡‡é›†"
 
 #: ../source\collector_flow.py:334
 msgid "failed. reason: stuck"
-msgstr "Ê§°Ü¡£Ô­Òò£º¿¨×¡"
+msgstr "å¤±è´¥ã€‚åŸå› ï¼šå¡ä½"
 
 #: ../source\collector_flow.py:363
 msgid "switch Flow to: BEFORE_PICKUP_COLLECTOR"
@@ -307,273 +307,273 @@ msgid "switch Flow to: AFTER_PICKUP_COLLECTOR"
 msgstr ""
 
 #: ../source\combat_lib.py:93
-msgid "»ñµÃµ±Ç°½ÇÉ«±àºÅÊ§°Ü"
+msgid "è·å¾—å½“å‰è§’è‰²ç¼–å·å¤±è´¥"
 msgstr ""
 
 #: ../source\combat_loop.py:66
-msgid " µÄEcd_float_time´óÓÚ0£¬ÇëÈ·¶¨¸Ã½ÇÉ«²»ÊÇ¶à¶Îe¼¼ÄÜ½ÇÉ«¡£"
+msgid " çš„Ecd_float_timeå¤§äº0ï¼Œè¯·ç¡®å®šè¯¥è§’è‰²ä¸æ˜¯å¤šæ®µeæŠ€èƒ½è§’è‰²ã€‚"
 msgstr ""
 
 #: ../source\combat_loop.py:66
-msgid "½ÇÉ« "
+msgid "è§’è‰² "
 msgstr ""
 
 #: ../source\combat_loop.py:116
-msgid "ÓĞÈË¸ÂÁË£¬Í£Ö¹×Ô¶¯Õ½¶·"
+msgid "æœ‰äººå˜äº†ï¼Œåœæ­¢è‡ªåŠ¨æˆ˜æ–—"
 msgstr ""
 
 #: ../source\combat_loop.py:159 ../source\combat_loop.py:165
-msgid "Í£Ö¹×Ô¶¯Õ½¶·"
+msgid "åœæ­¢è‡ªåŠ¨æˆ˜æ–—"
 msgstr ""
 
 #: ../source\cvAutoTrack.py:103
 msgid "cleaning cvautotrack files"
-msgstr "ÕıÔÚÇåÀícvautotrackÎÄ¼ş"
+msgstr "æ­£åœ¨æ¸…ç†cvautotrackæ–‡ä»¶"
 
 #: ../source\cvAutoTrack.py:108
 msgid "autoTrack.log 1 cleaned"
-msgstr "autoTrack.log 1 ÒÑÇåÀí"
+msgstr "autoTrack.log 1 å·²æ¸…ç†"
 
 #: ../source\cvAutoTrack.py:113
 msgid "autoTrack.log 2 cleaned"
-msgstr "autoTrack.log 2 ÒÑÇåÀí"
+msgstr "autoTrack.log 2 å·²æ¸…ç†"
 
 #: ../source\cvAutoTrack.py:118
 msgid "autoTrack.log 3 cleaned"
-msgstr "autoTrack.log 3 ÒÑÇåÀí"
+msgstr "autoTrack.log 3 å·²æ¸…ç†"
 
 #: ../source\cvAutoTrack.py:140
 msgid "cvAutoTrack DLL has been loaded."
-msgstr "cvAutoTrack DLL ÒÑ¾­¼ÓÔØ"
+msgstr "cvAutoTrack DLL å·²ç»åŠ è½½"
 
 #: ../source\domain_flow.py:38
-msgid "ÇëÊäÈëÃØ¾³´ÎÊı"
+msgid "è¯·è¾“å…¥ç§˜å¢ƒæ¬¡æ•°"
 msgstr ""
 
 #: ../source\domain_flow.py:53
-msgid "ÃØ¾³´ÎÊı£º"
+msgid "ç§˜å¢ƒæ¬¡æ•°ï¼š"
 msgstr ""
 
 #: ../source\domain_flow.py:56
-msgid "Í£Ö¹×Ô¶¯ÃØ¾³"
+msgid "åœæ­¢è‡ªåŠ¨ç§˜å¢ƒ"
 msgstr ""
 
 #: ../source\domain_flow.py:120
-msgid "ÕıÔÚ¿ªÊ¼ÌôÕ½ÃØ¾³"
+msgid "æ­£åœ¨å¼€å§‹æŒ‘æˆ˜ç§˜å¢ƒ"
 msgstr ""
 
 #: ../source\domain_flow.py:270
-msgid "ÕıÔÚ¿ªÊ¼Õ½¶·"
+msgid "æ­£åœ¨å¼€å§‹æˆ˜æ–—"
 msgstr ""
 
 #: ../source\domain_flow.py:284
-msgid "ÕıÔÚÍ£Ö¹Õ½¶·"
+msgid "æ­£åœ¨åœæ­¢æˆ˜æ–—"
 msgstr ""
 
 #: ../source\domain_flow.py:287
-msgid "µÈ´ıÑÒÔìÎïÏûÊ§"
+msgid "ç­‰å¾…å²©é€ ç‰©æ¶ˆå¤±"
 msgstr ""
 
 #: ../source\domain_flow.py:295
-msgid "ÕıÔÚ¼¤»îÊ¯»¯¹ÅÊ÷"
+msgid "æ­£åœ¨æ¿€æ´»çŸ³åŒ–å¤æ ‘"
 msgstr ""
 
 #: ../source\domain_flow.py:340
-msgid "ÃØ¾³½áÊø¡£"
+msgid "ç§˜å¢ƒç»“æŸã€‚"
 msgstr ""
 
 #: ../source\domain_flow.py:351
-msgid "¿ªÊ¼ÏÂÒ»´ÎÃØ¾³"
+msgid "å¼€å§‹ä¸‹ä¸€æ¬¡ç§˜å¢ƒ"
 msgstr ""
 
 #: ../source\domain_flow.py:365
-msgid "´ÎÊı½áÊø¡£ÍË³öÃØ¾³"
+msgid "æ¬¡æ•°ç»“æŸã€‚é€€å‡ºç§˜å¢ƒ"
 msgstr ""
 
 #: ../source\flow_state.py:91
-msgid "¿ÕÏĞ"
+msgid "ç©ºé—²"
 msgstr ""
 
 #: ../source\flow_state.py:94
-msgid "ÕıÔÚ³õÊ¼»¯"
+msgid "æ­£åœ¨åˆå§‹åŒ–"
 msgstr ""
 
 #: ../source\flow_state.py:96
-msgid "ÕıÔÚ×¼±¸"
+msgid "æ­£åœ¨å‡†å¤‡"
 msgstr ""
 
 #: ../source\flow_state.py:98
-msgid "ÕıÔÚ½øĞĞ"
+msgid "æ­£åœ¨è¿›è¡Œ"
 msgstr ""
 
 #: ../source\flow_state.py:100
-msgid "×¼±¸½áÊø"
+msgid "å‡†å¤‡ç»“æŸ"
 msgstr ""
 
 #: ../source\flow_state.py:102
-msgid "½áÊø"
+msgid "ç»“æŸ"
 msgstr ""
 
 #: ../source\flow_state.py:105
-msgid "ÒÆ¶¯µ½ÌôÕ½Î»ÖÃ"
+msgid "ç§»åŠ¨åˆ°æŒ‘æˆ˜ä½ç½®"
 msgstr ""
 
 #: ../source\flow_state.py:107
-msgid "ÌôÕ½ÃØ¾³ÖĞ"
+msgid "æŒ‘æˆ˜ç§˜å¢ƒä¸­"
 msgstr ""
 
 #: ../source\flow_state.py:109
-msgid "×¼±¸ÁìÈ¡½±Àø"
+msgid "å‡†å¤‡é¢†å–å¥–åŠ±"
 msgstr ""
 
 #: ../source\flow_state.py:111
-msgid "ÕıÔÚÑ°ÕÒÊ¯»¯¹ÅÊ÷Î»ÖÃ"
+msgid "æ­£åœ¨å¯»æ‰¾çŸ³åŒ–å¤æ ‘ä½ç½®"
 msgstr ""
 
 #: ../source\flow_state.py:113
-msgid "ÒÆ¶¯µ½Ê¯»¯¹ÅÊ÷Î»ÖÃ"
+msgid "ç§»åŠ¨åˆ°çŸ³åŒ–å¤æ ‘ä½ç½®"
 msgstr ""
 
 #: ../source\flow_state.py:115
-msgid "ÁìÈ¡½±Àø"
+msgid "é¢†å–å¥–åŠ±"
 msgstr ""
 
 #: ../source\flow_state.py:117
-msgid "½áÊøÃØ¾³"
+msgid "ç»“æŸç§˜å¢ƒ"
 msgstr ""
 
 #: ../source\flow_state.py:119
-msgid "ÔÚµØÍ¼ÉÏ´«ËÍ"
+msgid "åœ¨åœ°å›¾ä¸Šä¼ é€"
 msgstr ""
 
 #: ../source\flow_state.py:121
-msgid "ÒÆ¶¯µ½Ä¿±ê×ø±êÎ»ÖÃ"
+msgid "ç§»åŠ¨åˆ°ç›®æ ‡åæ ‡ä½ç½®"
 msgstr ""
 
 #: ../source\flow_state.py:123
-msgid "ÒÆ¶¯µ½²É¼¯ÎïÎ»ÖÃ"
+msgid "ç§»åŠ¨åˆ°é‡‡é›†ç‰©ä½ç½®"
 msgstr ""
 
 #: ../source\flow_state.py:125
-msgid "Ê°È¡²É¼¯Îï"
+msgid "æ‹¾å–é‡‡é›†ç‰©"
 msgstr ""
 
 #: ../source\flow_state.py:127
-msgid "½áÊø×Ô¶¯²É¼¯"
+msgid "ç»“æŸè‡ªåŠ¨é‡‡é›†"
 msgstr ""
 
 #: ../source\forgettext.py:2
 msgid "day(s)"
-msgstr "Ìì"
+msgstr "å¤©"
 
 #: ../source\forgettext.py:3
 msgid "success rate"
-msgstr "³É¹¦ÂÊ"
+msgstr "æˆåŠŸç‡"
 
 #: ../source\forgettext.py:4
 msgid "total num"
-msgstr "×Ü´ÎÊı"
+msgstr "æ€»æ¬¡æ•°"
 
 #: ../source\forgettext.py:5
 msgid "success num"
-msgstr "³É¹¦´ÎÊı"
+msgstr "æˆåŠŸæ¬¡æ•°"
 
 #: ../source\forgettext.py:6
 msgid "fail num"
-msgstr "Ê§°Ü´ÎÊı"
+msgstr "å¤±è´¥æ¬¡æ•°"
 
 #: ../source\forgettext.py:7
 msgid "Within"
-msgstr "ÔÚ"
+msgstr "åœ¨"
 
 #: ../source\generic_lib.py:72 ../source\teyvat_move_flow.py:163
-msgid "»ñÈ¡´«ËÍÃªµãÊ§°Ü£¬ÕıÔÚÖØÊÔ"
+msgid "è·å–ä¼ é€é”šç‚¹å¤±è´¥ï¼Œæ­£åœ¨é‡è¯•"
 msgstr ""
 
 #: ../source\interaction_background.py:44
-msgid "»Ö¸´²Ù×÷"
+msgid "æ¢å¤æ“ä½œ"
 msgstr ""
 
 #: ../source\interaction_background.py:46
-msgid " Ãë"
+msgid " ç§’"
 msgstr ""
 
 #: ../source\interaction_background.py:46
-msgid "²»ÊÇÔ­Éñ´°¿Ú"
+msgid "ä¸æ˜¯åŸç¥çª—å£"
 msgstr ""
 
 #: ../source\interaction_background.py:46
-msgid "µ±Ç°´°¿Ú½¹µãÎª"
+msgid "å½“å‰çª—å£ç„¦ç‚¹ä¸º"
 msgstr ""
 
 #: ../source\interaction_background.py:46
-msgid "£¬²Ù×÷ÔİÍ£ "
+msgid "ï¼Œæ“ä½œæš‚åœ "
 msgstr ""
 
 #: ../source\interaction_background.py:95
-msgid "Î´ÕÒµ½¾ä±ú£¬ÇëÈ·ÈÏÔ­Éñ´°¿ÚÊÇ·ñ¿ªÆô¡£"
+msgid "æœªæ‰¾åˆ°å¥æŸ„ï¼Œè¯·ç¡®è®¤åŸç¥çª—å£æ˜¯å¦å¼€å¯ã€‚"
 msgstr ""
 
 #: ../source\interaction_background.py:143
 #: ../source\interaction_background.py:150
-msgid "½«ÔÚ2ÃëºóÖØÊÔ¡£"
+msgid "å°†åœ¨2ç§’åé‡è¯•ã€‚"
 msgstr ""
 
 #: ../source\interaction_background.py:143
 #: ../source\interaction_background.py:150
-msgid "½ØÍ¼Ê§°Ü, shape="
+msgid "æˆªå›¾å¤±è´¥, shape="
 msgstr ""
 
 #: ../source\listening.py:55
 msgid "Program stop."
-msgstr "³ÌĞòÖÕÖ¹"
+msgstr "ç¨‹åºç»ˆæ­¢"
 
 #: ../source\listening.py:60
-msgid "ÕıÔÚÍ£Ö¹×Ô¶¯Õ½¶·"
+msgid "æ­£åœ¨åœæ­¢è‡ªåŠ¨æˆ˜æ–—"
 msgstr ""
 
 #: ../source\listening.py:64
-msgid "Æô¶¯×Ô¶¯Õ½¶·"
+msgid "å¯åŠ¨è‡ªåŠ¨æˆ˜æ–—"
 msgstr ""
 
 #: ../source\listening.py:74
-msgid "ÕıÔÚÍ£Ö¹×Ô¶¯ÃØ¾³"
+msgid "æ­£åœ¨åœæ­¢è‡ªåŠ¨ç§˜å¢ƒ"
 msgstr ""
 
 #: ../source\listening.py:78
-msgid "Æô¶¯×Ô¶¯ÃØ¾³"
+msgid "å¯åŠ¨è‡ªåŠ¨ç§˜å¢ƒ"
 msgstr ""
 
 #: ../source\listening.py:87
-msgid "ÕıÔÚÍ£Ö¹×Ô¶¯²É¼¯"
+msgid "æ­£åœ¨åœæ­¢è‡ªåŠ¨é‡‡é›†"
 msgstr ""
 
 #: ../source\listening.py:90
-msgid "Æô¶¯×Ô¶¯²É¼¯"
+msgid "å¯åŠ¨è‡ªåŠ¨é‡‡é›†"
 msgstr ""
 
 #: ../source\listening.py:134
-msgid "µ¼ÈëÍê³É"
+msgid "å¯¼å…¥å®Œæˆ"
 msgstr ""
 
 #: ../source\pdocr_api.py:3
 msgid "Creating ocr object."
-msgstr "ÕıÔÚ´´½¨OCR¶ÔÏó"
+msgstr "æ­£åœ¨åˆ›å»ºOCRå¯¹è±¡"
 
 #: ../source\pdocr_api.py:14
-msgid "µ¼ÈëpaddleocrÊ±´íÎó; err code: 001"
+msgid "å¯¼å…¥paddleocræ—¶é”™è¯¯; err code: 001"
 msgstr ""
 
 #: ../source\pdocr_api.py:40
 msgid "ocr device: "
-msgstr "OCR ÔËĞĞÉè±¸£º"
+msgstr "OCR è¿è¡Œè®¾å¤‡ï¼š"
 
 #: ../source\pickup_operator.py:53
-msgid "ÕıÔÚÉèÖÃÊ±¼äÎªÒ¹Íí"
+msgid "æ­£åœ¨è®¾ç½®æ—¶é—´ä¸ºå¤œæ™š"
 msgstr ""
 
 #: ../source\pickup_operator.py:80
-msgid "Í£Ö¹×Ô¶¯Ê°È¡"
+msgid "åœæ­¢è‡ªåŠ¨æ‹¾å–"
 msgstr ""
 
 #: ../source\pickup_operator.py:118
@@ -581,7 +581,7 @@ msgid "PICKUP_TIMEOUT_001"
 msgstr ""
 
 #: ../source\pickup_operator.py:120 ../source\pickup_operator.py:126
-msgid "Í£Ö¹Ê°È¡"
+msgid "åœæ­¢æ‹¾å–"
 msgstr ""
 
 #: ../source\pickup_operator.py:124
@@ -589,82 +589,82 @@ msgid "PICKUP_TIMEOUT_002"
 msgstr ""
 
 #: ../source\pickup_operator.py:133
-msgid "ÒÑÕÒµ½ÎïÆ·ÇÒÎŞ·¨ÕÒµ½ÏÂÒ»¸öÎïÆ·£¬Í£Ö¹Ê°È¡"
+msgid "å·²æ‰¾åˆ°ç‰©å“ä¸”æ— æ³•æ‰¾åˆ°ä¸‹ä¸€ä¸ªç‰©å“ï¼Œåœæ­¢æ‹¾å–"
 msgstr ""
 
 #: ../source\pickup_operator.py:166
 msgid "pickup: "
-msgstr "Ê°È¡µ½£º"
+msgstr "æ‹¾å–åˆ°ï¼š"
 
 #: ../source\pickup_operator.py:168
-msgid "ÒÑÕÒµ½£º"
+msgid "å·²æ‰¾åˆ°ï¼š"
 msgstr ""
 
 #: ../source\scene_manager.py:66
-msgid "UI½çÃæ¼ì²âÊ§°Ü£¬ÕıÔÚ³¢ÊÔ°´esc·µ»Ø"
+msgid "UIç•Œé¢æ£€æµ‹å¤±è´¥ï¼Œæ­£åœ¨å°è¯•æŒ‰escè¿”å›"
 msgstr ""
 
 #: ../source\scene_manager.py:68
-msgid "½«ÔÚ1ÃëºóÔÙ´Î³¢ÊÔ»ñÈ¡UI½çÃæ"
+msgid "å°†åœ¨1ç§’åå†æ¬¡å°è¯•è·å–UIç•Œé¢"
 msgstr ""
 
 #: ../source\scene_manager.py:69 ../source\scene_manager.py:75
-msgid "³¢ÊÔ´ÎÊı£º"
+msgid "å°è¯•æ¬¡æ•°ï¼š"
 msgstr ""
 
 #: ../source\scene_manager.py:73
-msgid "UI½çÃæ¼ì²âÊ§°Ü"
+msgid "UIç•Œé¢æ£€æµ‹å¤±è´¥"
 msgstr ""
 
 #: ../source\scene_manager.py:74
-msgid "½«ÔÚ0.2ÃëºóÔÙ´Î³¢ÊÔ»ñÈ¡UI½çÃæ"
+msgid "å°†åœ¨0.2ç§’åå†æ¬¡å°è¯•è·å–UIç•Œé¢"
 msgstr ""
 
 #: ../source\static_lib.py:33
-msgid "µÈ´ıcvautotrack»ñÈ¡×ø±ê"
+msgid "ç­‰å¾…cvautotrackè·å–åæ ‡"
 msgstr ""
 
 #: ../source\teyvat_move_controller.py:147
-msgid "ÒÑµ½´ïÄ¿µÄµØ¸½½ü£¬±¾´Îµ¼º½½áÊø¡£"
+msgid "å·²åˆ°è¾¾ç›®çš„åœ°é™„è¿‘ï¼Œæœ¬æ¬¡å¯¼èˆªç»“æŸã€‚"
 msgstr ""
 
 #: ../source\teyvat_move_controller.py:153
-msgid "ÒÑµ½´ïF¸½½ü£¬±¾´Îµ¼º½½áÊø¡£"
+msgid "å·²åˆ°è¾¾Fé™„è¿‘ï¼Œæœ¬æ¬¡å¯¼èˆªç»“æŸã€‚"
 msgstr ""
 
 #: ../source\teyvat_move_flow.py:122
-msgid "Í£Ö¹×Ô¶¯ÒÆ¶¯"
+msgid "åœæ­¢è‡ªåŠ¨ç§»åŠ¨"
 msgstr ""
 
 #: ../source\teyvat_move_flow.py:288
-msgid "ÕıÔÚÂäµØ"
+msgid "æ­£åœ¨è½åœ°"
 msgstr ""
 
 #: ../source\teyvat_move_flow.py:290
-msgid "½áÊø×Ô¶¯ĞĞ×ß"
+msgid "ç»“æŸè‡ªåŠ¨è¡Œèµ°"
 msgstr ""
 
 #: ../source\util.py:80 ../source\util.py:82
-msgid " Çë¼ì²é"
+msgid " è¯·æ£€æŸ¥"
 msgstr ""
 
 #: ../source\util.py:80 ../source\util.py:82
-msgid "Ä¿Â¼²»´æÔÚ£º"
+msgid "ç›®å½•ä¸å­˜åœ¨ï¼š"
 msgstr ""
 
 #: ../source\util.py:95
-msgid "ÇëÓÃ¹ÜÀíÔ±È¨ÏŞÔËĞĞ"
+msgid "è¯·ç”¨ç®¡ç†å‘˜æƒé™è¿è¡Œ"
 msgstr ""
 
 #: ../source\yolox_api.py:6
 msgid "Creating yolox obj. It may takes a few second."
-msgstr "ÕıÔÚ´´½¨YOLOX¶ÔÏó¡£Õâ¿ÉÄÜĞèÒªÒ»Ğ©Ê±¼ä¡£"
+msgstr "æ­£åœ¨åˆ›å»ºYOLOXå¯¹è±¡ã€‚è¿™å¯èƒ½éœ€è¦ä¸€äº›æ—¶é—´ã€‚"
 
 #: ../source\yolox_api.py:23
-msgid "µ¼ÈëtorchÊ±´íÎó; err code: 002"
+msgid "å¯¼å…¥torchæ—¶é”™è¯¯; err code: 002"
 msgstr ""
 
 #: ../source\yolox_api.py:535
 msgid "Created yolox obj."
-msgstr "YOLOX¶ÔÏóÒÑ´´½¨"
+msgstr "YOLOXå¯¹è±¡å·²åˆ›å»º"
 

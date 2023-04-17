@@ -295,21 +295,14 @@ class ConfigPage(Page):
 
     def _config_file2lableAfile(self, l1):
         replace_dict = {
-            "auto_aim.json": t2t("auto_aim.json"),
-            "auto_collector.json": t2t("auto_collector.json"),
-            "auto_combat.json": t2t("auto_combat.json"),
-            "auto_domain.json": t2t("auto_domain.json"),
-            "auto_pickup.json": t2t("auto_pickup.json"),
-            "config.json": t2t("config.json"),
-            "keymap.json": t2t("keymap.json"),
-            "character.json": t2t("character.json"),
-            "character_dist.json": t2t("character_dist.json"),
-            "team.json": t2t("team.json"),
-            "team_example_2.json": t2t("team_example_2.json"),
+            "Combat.json": t2t("Combat.json"),
+            "Domain.json": t2t("Domain.json"),
+            "General.json": t2t("General.json"),
+            "Keymap.json": t2t("Keymap.json"),
             "collected.json": t2t("collected.json"),
             "collection_blacklist.json": t2t("collection_blacklist.json"),
             "collection_log.json": t2t("collection_log.json"),
-            "auto_collector.json": t2t("auto_collector.json")
+            "Collector.json": t2t("Collector.json")
         }
         
         for i in range(len(l1)):
