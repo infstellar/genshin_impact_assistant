@@ -122,9 +122,9 @@ n=角色在队伍中的位置
 
 角色在队伍中的位置、角色优先级和部分角色的触发器不会自动填充。
 
-[支持的角色列表](../assets/characters_data/characters_parameters.json)
+[支持的角色列表](../../assets/characters_data/characters_parameters.json)
 
-[角色名文件 感谢xicri/genshin-dictionary](../assets/characters_data/characters_name.json)
+[角色名文件 感谢xicri/genshin-dictionary](../../assets/characters_data/characters_name.json)
 
 欢迎贡献角色参数(ﾉﾟ∀ﾟ)ﾉ
 
@@ -132,9 +132,9 @@ n=角色在队伍中的位置
 
 如果在设置中启用了自动生成team文件，则会在战斗开始前扫描角色列表并扫描tactic下的所有策略文件，选择符合的策略文件。
 
-如果没有符合的策略文件吗，则根据[支持的角色列表](../assets/characters_data/characters_parameters.json)自动生成一套战斗策略。
+如果没有符合的策略文件吗，则根据[支持的角色列表](../../assets/characters_data/characters_parameters.json)自动生成一套战斗策略。
 
-如果角色不存在于[支持的角色列表](../assets/characters_data/characters_parameters.json)则会使用默认的team文件。
+如果角色不存在于[支持的角色列表](../../assets/characters_data/characters_parameters.json)则会使用默认的team文件。
 
 ## 角色元素战技、元素爆发图片设置
 
