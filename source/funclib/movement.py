@@ -4,6 +4,7 @@ from source.util import *
 from source.funclib import generic_lib
 from source.map.map import genshin_map
 from source.manager import asset
+from source.common.timer_module import Timer
 
 itt = itt
 AHEAD = 0
@@ -39,6 +40,16 @@ def move(direction, distance=1):
             itt.key_down('s')
             itt.delay(0.1 * distance)
             itt.key_up('s')
+jump_timer1 = Timer()
+jump_timer2 = Timer()
+def jump_in_loop(jump_dt:float=2):
+    if jump_timer1.get_diff_time() >= jump_dt:
+        jump_timer1.reset()
+        jump_timer2.reset()
+        itt.key_press('spacebar')
+    if jump_timer2.get_diff_time() >= 0.3 and jump_timer2.get_diff_time()<=2: # double jump
+        itt.key_press('spacebar')
+        jump_timer2.start_time -= 2
 
 def angle2movex(angle):
     cvn = maxmin(angle*10,500,-500) # 10: magic num, test from test246.py

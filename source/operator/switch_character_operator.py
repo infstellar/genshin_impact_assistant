@@ -8,6 +8,7 @@ from source.util import *
 from source.manager import asset
 from source.operator.aim_operator import AimOperator
 from source.api.pdocr_complete import ocr
+from source.funclib import movement
 
 
 SHIELD = 'Shield'
@@ -172,6 +173,7 @@ class SwitchCharacterOperator(BaseThreading):
         logger.debug('try switching to ' + str(x))
         switch_succ_num = 0
         switch_target_num = 2
+        jump_timer = AdvanceTimer(2)
         for i in range(60):
             if self.checkup_stop_func():
                 return True
@@ -185,12 +187,15 @@ class SwitchCharacterOperator(BaseThreading):
                 itt.key_press(str(x))
                 if combat_lib.get_current_chara_num(self.checkup_stop_func, max_times = 5) == x:
                     switch_succ_num += 1
-            if i >= 5 or is_busy == True:
+            if i >= 2 or is_busy == True:
                 r = self._check_and_reborn()
                 if not r: # if r == False
                     self.died_character.append(x)
                     itt.key_press('esc')
                     return True
+            if i > 5:
+                movement.move(i, distance=1)
+                movement.jump_in_loop(jump_dt=1.5)
             if i > 55:
                 logger.warning('角色切换失败')
             if switch_succ_num >= switch_target_num:

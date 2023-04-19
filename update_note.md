@@ -1,5 +1,4 @@
 ## TODO：
-- sco切换失败时上下左右跳
 - commission 执行完就是成功
 - thread init
 - mission init加满
@@ -11,7 +10,6 @@
 - 秘境开局会点两下 原神动画问题
 - 自动战斗boss血条不动
 - 检测。。。按钮识别是采集物还是人
-- move straight在移动视角前按下了w
 - aim operator move to enemy按空格
 - 让sco get_characters_name()在continue时获得charalist
 - ocr在角色名字时试试用in
@@ -19,6 +17,8 @@
 - combat lib识别受ui限制
 
 ## Done：
+- move straight在移动视角前按下了w
+- sco切换失败时上下左右跳
 - LLO使用Domian同款急停 pass
 - 攀高危险按按中键 pass
 - ao在秘境里一走到底 pass

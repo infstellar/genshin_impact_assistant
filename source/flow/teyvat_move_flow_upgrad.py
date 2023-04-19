@@ -149,7 +149,7 @@ class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon):
         TeyvatMoveCommon.__init__(self)
         self.upper = upper
         self.auto_move_timeout = timer_module.AdvanceTimer(limit=300).start()
-        
+        self.in_flag = False
 
     # def _calculate_next_priority_point(self, currentp, targetp):
     #     float_distance = 35
@@ -176,15 +176,12 @@ class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon):
 
     def state_before(self):
         genshin_map.reinit_smallmap()
-        itt.key_down('w')
         self.auto_move_timeout.reset()
         self.history_position_timer.reset()
         self.history_position = []
         self.upper.while_sleep = 0
+        self.in_flag = False
         self._next_rfc()
-    def state_after(self):
-        self.upper.while_sleep = 1
-        return super().state_after()
     
     def state_in(self):
         self.switch_motion_state()
@@ -198,7 +195,9 @@ class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon):
         
         # print(p1)
         movement.change_view_to_posi(p1, self.upper.checkup_stop_func)
-
+        if not self.in_flag:
+            itt.key_down('w')
+            self.in_flag = True
         
         # if len(genshin_map.history_posi) >= 29:
         #     p1 = genshin_map.history_posi[0][1:]
@@ -230,6 +229,7 @@ class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon):
                     logger.info(t2t("已到达F附近，本次导航结束。"))
                     itt.key_up('w')
     def state_after(self):
+        self.upper.while_sleep = 1
         self.switch_motion_state(jump=False)
         if self.motion_state == IN_FLY:
             logger.info(f"landing")
