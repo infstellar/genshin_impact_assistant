@@ -10,7 +10,7 @@ Portions of this document were manually proofread.
 Portions of this document may out of date.
 ```
 
-<strong> The program's support for English is not yet complete. If you want to use it at this stage, please switch Genshin Impact to Simplified Chinese. Full support will be completed in January 2023 ~ February 2023.  </strong>
+<strong> The program's support for English is not yet complete. If you want to use it at this stage, please switch Genshin Impact to Simplified Chinese. Full support will be completed in January 2023 ~ April 2023.  </strong>
 
 <div align="center">
 
@@ -33,7 +33,7 @@ The goal of GIA is: Let the program be responsible for playing Genshin, and you 
 
 # Introduce
 
-Genshin's automatic operation assistance based on image recognition. Using image recognition and simulated keyboard operations does not involve illegal operations.
+Genshin's automatic operation assistance based on image recognition. Using image recognition and simulated keyboard operations. No irregularities involved.
 
 ## Demo video
 
@@ -54,9 +54,9 @@ For other settings, see [Introduction to Auto Combat Assist](./combat_assi.md).
 ### 2. [Auto Domain Assist](./domain_assi.md)
 
 1. Set the number of times to challenge the domain and other settings in config, see [config settings](./config.md) for details.
-2. Manually select the team, configure the team, and enter the domain
-3. After entering the domain, switch the FlowMode to AutoDomain in the GUI and wait for the module to be imported
-4. Press the `[` key to start/stop the function. Can be changed in `keymap.json`.
+2. Manually select the team and configure the team.
+3. After entering the domain(or not), select the Domain task in the GUI.
+4. Press the `start task` button to start/stop the function. Wait for the import to complete and then switch to the Genshin window.
 
 - Please read the notes in [domain_assi.md](./domain_assi.md).
 

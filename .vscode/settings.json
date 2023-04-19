@@ -133,5 +133,8 @@
     ],
     "codecheck.ExcludeDirectory": "",
     "codecheck.ScanDirectory": "source",
-    "window.zoomLevel": 1
+    "window.zoomLevel": 1,
+    "i18n-ally.localesPaths": [
+        "translation/locale"
+    ]
 }

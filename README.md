@@ -45,7 +45,7 @@ To没用过github的小伙伴: 描述文档中的蓝色文字是链接,可以打
 
 1. 在config中设置挑战秘境的次数与其他设置,详见[config设置](./doc/config.md).
 2. 手动选择队伍,配置队伍,进入秘境.
-3. 进入秘境后,在GUI TaskList中选中DomainTask，点击启动任务
+3. 进入秘境后(也可以在大世界),在GUI TaskList中选中DomainTask，点击启动任务
 4. 等待导入完成后切换到原神
 
 - 注意阅读[domain_assi.md](./doc/domain_assi.md)中的注意事项.
