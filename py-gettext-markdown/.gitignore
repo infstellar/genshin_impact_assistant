@@ -1,0 +1,6 @@
+markdown_i18n/locale/zh_CN/LC_MESSAGES/zh_CN.pot
+markdown_i18n/locale/en_US/LC_MESSAGES/en_US.pot
+node_modules/
+md_test/
+.vscode/
+__pycache__/

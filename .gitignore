@@ -220,3 +220,10 @@ source/test/test600.py
 test1.py
 testt.py
 config/commission/commission_dict.json
+
+# gettext-markdown
+doc/base/*.py
+doc/base/code_standard/*.py
+doc/en_US_old
+doc/markdown_i18n/locale/en_US/LC_MESSAGES/en_US.pot
+doc/markdown_i18n/locale/zh_CN/LC_MESSAGES/zh_CN.pot
