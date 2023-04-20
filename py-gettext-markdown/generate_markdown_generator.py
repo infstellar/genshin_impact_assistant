@@ -51,6 +51,12 @@ class GenerateMarkdownGenerator():
                             if "```" in text_list[i]:
                                 write_origin(text_list[i])
                                 break
+                elif text_list[i] == "":
+                    pass
+                elif text_list[i] == "\n":
+                    write_newline()    
+                elif text_list[i] == "\\n":
+                    write_newline()   
                 else:
                     write_gettext(text_list[i])
                 write_newline()

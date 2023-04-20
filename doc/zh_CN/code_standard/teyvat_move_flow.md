@@ -50,16 +50,4 @@ PATH模式会沿着坐标前进。在循环过程中，执行以下3个步骤：
 1. 朝着break position（转折点）前进。距离BP小于规定的offset即切换到下一个BP，直到没有更多BP。
 2. 自动识别当前的position，并检测motion和special key并执行。
 
-Project-Id-Version: 
-PO-Revision-Date: 2023-04-20 22:58+0800
-Last-Translator: 
-Language-Team: 
-Language: zh_CN
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-Plural-Forms: nplurals=1; plural=0;
-Generated-By: pygettext.py 1.5
-X-Generator: Poedit 3.2
-
 
