@@ -1,5 +1,5 @@
 # genshin_impact_assistant 原神助手
-**|[Chinese](./doc/zh_CN/README.md)|[English](doc/en_US/README.md)|**
+<strong>|[Chinese](./)|[English](en_US/readme.md)|</strong>
 <div align="center">
 
 基于图像识别和模拟按键的多功能原神自动辅助操作,包括自动战斗,自动刷秘境,自动刷大世界材料。
@@ -15,7 +15,7 @@ GIA的目标是：让程序负责玩原神，你负责抽卡和带着角色逛�
 [![contributors](https://img.shields.io/github/contributors/infstellar/genshin_impact_assistant?style=flat-square)](https://github.com/infstellar/genshin_impact_assistant/graphs/contributors)
 </br></br>
 [![QQ群](https://img.shields.io/badge/QQ群-901372518-blue.svg?style=flat-square&color=12b7f5&logo=qq)](https://jq.qq.com/?_wv=1027&k=YLTrqlzX)
-[![Bilibili](https://img.shields.io/badge/bilibili-infstellar-blue.svg?style=flat-square&logo=bilibili)](https://space.bilibili.com/313212782)
+[![Bilibili](https://img.shields.io/badge/bilibili-infstellar-blue.svg?style=flat-square&logo=bilibili)](https://space.bilibili.com/313212782)<!-- ignore gettext -->
 
 </div>
 
@@ -33,26 +33,26 @@ To没用过github的小伙伴: 描述文档中的蓝色文字是链接,可以打
 
 ## 功能介绍
 
-### 1. [自动战斗辅助](./doc/zh_CN/combat_assi.md)
+### 1. [自动战斗辅助](./combat_assi.md)
 
 - 在GUI中将FlowMode切换到AutoCombat，等待模块导入
 
 - 按下`[`键启动/停止功能。可在`keymap.json`中更改。
 
-其他设置参见[自动战斗辅助介绍](./doc/combat_assi.md).
+其他设置参见[自动战斗辅助介绍](./combat_assi.md).
 
-### 2. [自动秘境辅助](./doc/zh_CN/domain_assi.md)
+### 2. [自动秘境辅助](./domain_assi.md)
 
-1. 在config中设置挑战秘境的次数与其他设置,详见[config设置](./doc/config.md).
+1. 在config中设置挑战秘境的次数与其他设置,详见[config设置](./config.md).
 2. 手动选择队伍,配置队伍,进入秘境.
 3. 进入秘境后(也可以在大世界),在GUI TaskList中选中DomainTask，点击启动任务
 4. 等待导入完成后切换到原神
 
-- 注意阅读[domain_assi.md](./doc/domain_assi.md)中的注意事项.
+- 注意阅读[domain_assi.md](./domain_assi.md)中的注意事项.
 
-其他设置参见[自动秘境辅助介绍](./doc/domain_assi.md).
+其他设置参见[自动秘境辅助介绍](./domain_assi.md).
 
-### 3. [自动采集辅助](./doc/zh_CN/collector_assi.md)
+### 3. [自动采集辅助](./collector_assi.md)
 
 演示视频：<https://www.bilibili.com/video/BV163411Q7fD>
 
@@ -60,30 +60,30 @@ To没用过github的小伙伴: 描述文档中的蓝色文字是链接,可以打
 
 - 选中Task List -> Mission，启动Task
 
-- 注意阅读[collector_assi.md](./doc/collector_assi.md)中的注意事项.
+- 注意阅读[collector_assi.md](./collector_assi.md)中的注意事项.
 
-其他设置参见[自动采集辅助介绍](./doc/collector_assi.md).
+其他设置参见[自动采集辅助介绍](./collector_assi.md).
 
-### 4. [自动每日委托辅助](./doc/zh_CN/commission_assi.md)
+### 4. [自动每日委托辅助](./commission_assi.md)
 **正在早期测试，请谨慎开启并汇报遇到的错误。**
 
-详情参见[自动每日委托辅助介绍](./doc/zh_CN/commission_assi.md).
+详情参见[自动每日委托辅助介绍](./commission_assi.md).
 
-### 5. [每日领取凯瑟琳](./doc/zh_CN/claim_reward.md)
-参见[领取日常奖励](./doc/zh_CN/commission_assi.md).
+### 5. [每日领取凯瑟琳](./claim_reward.md)
+参见[领取日常奖励](./commission_assi.md).
 
-### 6. [自动地脉衍出辅助](./doc/zh_CN/ley_line_ourcrop.md)
-参见[自动地脉衍出辅助介绍](./doc/zh_CN/commission_assi.md).
+### 6. [自动地脉衍出辅助](./ley_line_ourcrop.md)
+参见[自动地脉衍出辅助介绍](./commission_assi.md).
 
 ## 使用方法
 
 ### 快速安装
 
-请参见[GIA Launcher自动安装器使用方法](doc/zh_CN/install.md).
+请参见[GIA Launcher自动安装器使用方法](install.md).
 
 ### 从源代码构建
 
-请参见[源代码安装方法](doc/zh_CN/git_install.md)
+请参见[源代码安装方法](git_install.md)
 
 ## 使用前设置
 
@@ -127,7 +127,7 @@ To没用过github的小伙伴: 描述文档中的蓝色文字是链接,可以打
 
 - 在下拉列表中选择对应的项目，进行配置。
 
-远程操作等更多GUI使用方法，参考[GUI使用](./doc/zh_CN/gui.md)
+远程操作等更多GUI使用方法，参考[GUI使用](./gui.md)
 
 ### 自动战斗，自动采集设置窗口
 
@@ -137,7 +137,7 @@ To没用过github的小伙伴: 描述文档中的蓝色文字是链接,可以打
 
 如果在使用中遇到问题，可以提交issue或在Q群中反馈。
 
-反馈错误前，请务必确认您已经阅读文档和[FAQ](doc/zh_CN/FAQ.md)中的已知问题与解决方案。
+反馈错误前，请务必确认您已经阅读文档和[FAQ](FAQ.md)中的已知问题与解决方案。
 
 反馈错误时，请一并提交 Logs 文件夹中的日志文件。
 
@@ -145,11 +145,11 @@ To没用过github的小伙伴: 描述文档中的蓝色文字是链接,可以打
 
 如果在使用时遇到问题，可以先看看FAQ：
 
-[FAQ](doc/zh_CN/FAQ.md)
+[FAQ](FAQ.md)
 
 ## 已知问题 Known Issues
 
-[Known issues](doc/zh_CN/known_issues.md)
+[Known issues](known_issues.md)
 
 ## 性能需求
 
@@ -193,3 +193,5 @@ qq群:[901372518](https://jq.qq.com/?_wv=1027&k=YLTrqlzX)
 
 开发者交流群:[680029885](https://jq.qq.com/?_wv=1027&k=CGuTvCXU)
 (请确保你已经会使用git以及github)
+
+
