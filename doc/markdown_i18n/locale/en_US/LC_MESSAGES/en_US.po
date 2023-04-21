@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2023-04-21 12:45+0800\n"
-"PO-Revision-Date: 2023-04-21 12:58+0800\n"
+"POT-Creation-Date: 2023-04-21 20:01+0800\n"
+"PO-Revision-Date: 2023-04-21 21:22+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_US\n"
@@ -127,7 +127,7 @@ msgstr ""
 
 #: ../doc\base\README.pygettext:24
 msgid "## 演示视频"
-msgstr "##Demo Video"
+msgstr "## Demo Video"
 
 #: ../doc\base\README.pygettext:26
 msgid "<https://www.bilibili.com/video/BV1RV4y157m6>(挂了)"
@@ -183,78 +183,90 @@ msgstr ""
 
 #: ../doc\base\README.pygettext:44
 msgid "- 注意阅读[domain_assi.md](./domain_assi.md)中的注意事项."
-msgstr ""
+msgstr "Be careful to read the notes in [domain_assi.md](./domain_assi.md)."
 
 #: ../doc\base\README.pygettext:46
 msgid "其他设置参见[自动秘境辅助介绍](./domain_assi.md)."
 msgstr ""
+"For other settings, sett [Auto Domain Assist introduction](./domain_assi.md)."
 
 #: ../doc\base\README.pygettext:48
 msgid "### 3. [自动采集辅助](./collector_assi.md)"
-msgstr ""
+msgstr "### 3. [Auto Collect Assist](./collector_assi.md)"
 
 #: ../doc\base\README.pygettext:50
 msgid "演示视频：<https://www.bilibili.com/video/BV163411Q7fD>"
-msgstr ""
+msgstr "Demo video：<https://www.bilibili.com/video/BV163411Q7fD>"
 
 #: ../doc\base\README.pygettext:52
 msgid "- 在GUI中将Mission Group切换到AutoCollectorMission.json"
-msgstr ""
+msgstr "- Switch the Mission Group to AutoCollectorMission.json in GUI."
 
 #: ../doc\base\README.pygettext:54
 msgid "- 选中Task List -> Mission，启动Task"
-msgstr ""
+msgstr "- Select Mission in Task List, then start Task."
 
 #: ../doc\base\README.pygettext:56
 msgid "- 注意阅读[collector_assi.md](./collector_assi.md)中的注意事项."
 msgstr ""
+"- Be careful to read the notes in [collector_assi.md](./collector_assi.md)."
 
 #: ../doc\base\README.pygettext:58
 msgid "其他设置参见[自动采集辅助介绍](./collector_assi.md)."
 msgstr ""
+"For other settings, see[Auto Collector Assist introduction](./collector_assi."
+"md)."
 
 #: ../doc\base\README.pygettext:60
 msgid ""
 "### 4. [自动每日委托辅助](./commission_assi.md)\n"
 "**正在早期测试，请谨慎开启并汇报遇到的错误。**"
 msgstr ""
+"### 4. [Auto Daily Commission Assist](./commission_assi.md)\n"
+"**In Early Access, pls use it with caution and report any error occuring. **"
 
 #: ../doc\base\README.pygettext:62
 msgid "详情参见[自动每日委托辅助介绍](./commission_assi.md)."
 msgstr ""
+"For more detiles, see [Auto Daily Commission Assist introduction](./"
+"commission_assi.md)."
 
 #: ../doc\base\README.pygettext:64
 msgid ""
 "### 5. [每日领取凯瑟琳](./claim_reward.md)\n"
 "参见[领取日常奖励](./commission_assi.md)."
 msgstr ""
+"### 5. [Claim Daily Reward](./claim_reward.md)\n"
+"see [Claim Daily Reward introduction](./commission_assi.md)."
 
 #: ../doc\base\README.pygettext:66
 msgid ""
 "### 6. [自动地脉衍出辅助](./ley_line_ourcrop.md)\n"
 "参见[自动地脉衍出辅助介绍](./commission_assi.md)."
 msgstr ""
+"### 6. [Auto Ley Line Outcrop Assist](./ley_line_ourcrop.md)\n"
+"See [[Auto Ley Line Outcrop Assist introduction](./commission_assi.md)."
 
 #: ../doc\base\README.pygettext:68 ../doc\base\commission_assi.pygettext:12
 #: ../doc\base\domain_assi.pygettext:20
 msgid "## 使用方法"
-msgstr ""
+msgstr "## How to use"
 
 #: ../doc\base\README.pygettext:70
 msgid "### 快速安装"
-msgstr ""
+msgstr "### Quick installation"
 
 #: ../doc\base\README.pygettext:72
 msgid "请参见[GIA Launcher自动安装器使用方法](install.md)."
-msgstr ""
+msgstr "See [GIA Launcher Auto Installer Tutorial](install.md)."
 
 #: ../doc\base\README.pygettext:74
 msgid "### 从源代码构建"
-msgstr ""
+msgstr "### Run from source code"
 
 #: ../doc\base\README.pygettext:76
 msgid "请参见[源代码安装方法](git_install.md)"
-msgstr ""
+msgstr "See [Source code running tutorial](git_install.md)"
 
 #: ../doc\base\README.pygettext:78
 msgid "## 使用前设置"
@@ -262,62 +274,70 @@ msgstr "## Pre-use settings"
 
 #: ../doc\base\README.pygettext:80
 msgid "### 原神窗口设置"
-msgstr ""
+msgstr "### Genshin window settings"
 
 #: ../doc\base\README.pygettext:82
 msgid "- 需要在原神启动后再运行程序."
-msgstr ""
+msgstr "- Need to run GIA after the Genshin Impact starts."
 
 #: ../doc\base\README.pygettext:84
 msgid "- 原神需要以1080p窗口化运行(全屏也可以),设置抗锯齿为SMAA,中或以上特效."
 msgstr ""
+"- The Genshin needs to run in 1080p window (full screen is also possible), "
+"set anti-aliasing to SMAA, effects to meduim or above."
 
 #: ../doc\base\README.pygettext:86
 msgid ""
 "- 窗口焦点应在原神窗口上。如果切换焦点窗口，程序会暂停所有键鼠操作并等待。"
 msgstr ""
+"- The focus of windows shoule be on Genshin window. If the focus window is "
+"switched to another window, the program will pause all the operation of "
+"keyboard and mouse and wait."
 
 #: ../doc\base\README.pygettext:88
 msgid "### config配置"
-msgstr ""
+msgstr "### Config configuration"
 
 #: ../doc\base\README.pygettext:90
 msgid "在使用前，需要注意这些配置内容："
-msgstr ""
+msgstr "Before use, these configuration elements shoule be noted:"
 
 #: ../doc\base\README.pygettext:92
 msgid "|位置|配置项|内容|"
-msgstr ""
+msgstr "|Path|Configuration|Content|"
 
 #: ../doc\base\README.pygettext:94
 msgid ""
 "|config/settings/config.json| `BorderlessWindow` | 如果是无边框窗口或全屏，设"
 "置为true。|"
 msgstr ""
+"|config/settings/config.json| `BorderlessWindow` | When using boradless "
+"window or full screen, set to true.|"
 
 #: ../doc\base\README.pygettext:96
 msgid "可以在GUI或直接从文件中修改。"
-msgstr ""
+msgstr "Can be modified in the GUI or directly from the file."
 
 #: ../doc\base\README.pygettext:98
 msgid "更多其他配置项，参见GUI内的设置介绍。"
-msgstr ""
+msgstr "For other configurations, see the notes of settings within the GUI."
 
 #: ../doc\base\README.pygettext:100
 msgid "### GUI使用"
-msgstr ""
+msgstr "### GUI Tutorials"
 
 #: ../doc\base\README.pygettext:102
 msgid "#### main窗口"
-msgstr ""
+msgstr "#### Main window"
 
 #: ../doc\base\README.pygettext:104
 msgid "- 点击main按钮进入"
-msgstr ""
+msgstr "- click `main` button to enter."
 
 #: ../doc\base\README.pygettext:106
 msgid "- Task List：选择要执行的任务，只能从GUI里启动"
 msgstr ""
+"- Task List: select the task to be executed, can only be active in the GUI."
 
 #: ../doc\base\README.pygettext:108
 msgid "- FlowMode：选择当前启用的功能，只能按快捷键启动"
@@ -1454,10 +1474,7 @@ msgid ""
 msgstr ""
 
 #: ../doc\base\dev\gettext-markdown.pygettext:8
-msgid ""
-"cd py-gettext-markdown\n"
-"python gettext-markdown.py pot -l zh_CN,en_US -f ../doc\n"
-"python gettext-markdown.py md -l zh_CN,en_US -f ../doc"
+msgid "# Gettext Markdown"
 msgstr ""
 
 #: ../doc\base\dev\mission.pygettext:8

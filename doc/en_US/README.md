@@ -25,7 +25,7 @@ An Genshin automatic operation assistance based on image recognization and simil
 
 To those who have not used github: the blue text in the docs is a hyperlink that can be clicked.
 
-##Demo Video
+## Demo Video
 
 <https://www.bilibili.com/video/BV1RV4y157m6>(hung up)
 
@@ -48,72 +48,72 @@ For other settings, see [Auto Combat Assist introduction](./combat_assi.md).
 3. After enter domain(also in the Teyvat world ), select the DomainTask in GUI Tasklist, then click `start task` button.
 4. Switch to Genshin window after imported.
 
-- 注意阅读[domain_assi.md](./domain_assi.md)中的注意事项.
+Be careful to read the notes in [domain_assi.md](./domain_assi.md).
 
-其他设置参见[自动秘境辅助介绍](./domain_assi.md).
+For other settings, sett [Auto Domain Assist introduction](./domain_assi.md).
 
-### 3. [自动采集辅助](./collector_assi.md)
+### 3. [Auto Collect Assist](./collector_assi.md)
 
-演示视频：<https://www.bilibili.com/video/BV163411Q7fD>
+Demo video：<https://www.bilibili.com/video/BV163411Q7fD>
 
-- 在GUI中将Mission Group切换到AutoCollectorMission.json
+- Switch the Mission Group to AutoCollectorMission.json in GUI.
 
-- 选中Task List -> Mission，启动Task
+- Select Mission in Task List, then start Task.
 
-- 注意阅读[collector_assi.md](./collector_assi.md)中的注意事项.
+- Be careful to read the notes in [collector_assi.md](./collector_assi.md).
 
-其他设置参见[自动采集辅助介绍](./collector_assi.md).
+For other settings, see[Auto Collector Assist introduction](./collector_assi.md).
 
-### 4. [自动每日委托辅助](./commission_assi.md)
-**正在早期测试，请谨慎开启并汇报遇到的错误。**
+### 4. [Auto Daily Commission Assist](./commission_assi.md)
+**In Early Access, pls use it with caution and report any error occuring. **
 
-详情参见[自动每日委托辅助介绍](./commission_assi.md).
+For more detiles, see [Auto Daily Commission Assist introduction](./commission_assi.md).
 
-### 5. [每日领取凯瑟琳](./claim_reward.md)
-参见[领取日常奖励](./commission_assi.md).
+### 5. [Claim Daily Reward](./claim_reward.md)
+see [Claim Daily Reward introduction](./commission_assi.md).
 
-### 6. [自动地脉衍出辅助](./ley_line_ourcrop.md)
-参见[自动地脉衍出辅助介绍](./commission_assi.md).
+### 6. [Auto Ley Line Outcrop Assist](./ley_line_ourcrop.md)
+See [[Auto Ley Line Outcrop Assist introduction](./commission_assi.md).
 
-## 使用方法
+## How to use
 
-### 快速安装
+### Quick installation
 
-请参见[GIA Launcher自动安装器使用方法](install.md).
+See [GIA Launcher Auto Installer Tutorial](install.md).
 
-### 从源代码构建
+### Run from source code
 
-请参见[源代码安装方法](git_install.md)
+See [Source code running tutorial](git_install.md)
 
 ## Pre-use settings
 
-### 原神窗口设置
+### Genshin window settings
 
-- 需要在原神启动后再运行程序.
+- Need to run GIA after the Genshin Impact starts.
 
-- 原神需要以1080p窗口化运行(全屏也可以),设置抗锯齿为SMAA,中或以上特效.
+- The Genshin needs to run in 1080p window (full screen is also possible), set anti-aliasing to SMAA, effects to meduim or above.
 
-- 窗口焦点应在原神窗口上。如果切换焦点窗口，程序会暂停所有键鼠操作并等待。
+- The focus of windows shoule be on Genshin window. If the focus window is switched to another window, the program will pause all the operation of keyboard and mouse and wait.
 
-### config配置
+### Config configuration
 
-在使用前，需要注意这些配置内容：
+Before use, these configuration elements shoule be noted:
 
-|位置|配置项|内容|
+|Path|Configuration|Content|
 |----|----|----|
-|config/settings/config.json| `BorderlessWindow` | 如果是无边框窗口或全屏，设置为true。|
+|config/settings/config.json| `BorderlessWindow` | When using boradless window or full screen, set to true.|
 
-可以在GUI或直接从文件中修改。
+Can be modified in the GUI or directly from the file.
 
-更多其他配置项，参见GUI内的设置介绍。
+For other configurations, see the notes of settings within the GUI.
 
-### GUI使用
+### GUI Tutorials
 
-#### main窗口
+#### Main window
 
-- 点击main按钮进入
+- click `main` button to enter.
 
-- Task List：选择要执行的任务，只能从GUI里启动
+- Task List: select the task to be executed, can only be active in the GUI.
 
 - FlowMode：选择当前启用的功能，只能按快捷键启动
 
