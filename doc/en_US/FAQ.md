@@ -6,7 +6,7 @@ Q: It shows "ERROR: Screenshot failed". What should I do?
 - if shape=xxx,xxx,4, please make sure that the Genshin window resolution is 1080p and that the Genshin launcher window is closed
 - If the system is Windows 11, please follow this [issue](https://github.com/GengGode/cvAutoTrack/issues/9) setting 
 
-Q: 战斗时，设置了策略，但不切换到Q技能已经就绪的角色怎么办？
+Q: What if I set up a strategy during battle but do not switch to a character whose Q skill is already ready?
 
 - 检查特效是否为中或以上。
 

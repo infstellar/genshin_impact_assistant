@@ -10,7 +10,7 @@ class GenerateMarkdown():
         command_head = "python"
         for root, dirs, files in os.walk(f"{self.folder_path}\\base"):
             for f in files:
-                if f.split('.')[-1] == 'py':
+                if f.split('.')[-1] == 'pygettext':
                     command = os.path.join(root, f)
                     print(f'{command_head} {command} {self.LANG}')
                     os.system(f'{command_head} {command} {self.LANG}')

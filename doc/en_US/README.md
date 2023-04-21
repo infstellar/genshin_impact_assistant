@@ -21,32 +21,32 @@ The aim of GIA is: let the program play Genshin, and you just need to selected c
 
 ## Introduction
 
-基于图像识别的原神自动操作辅助.使用图片识别与模拟键盘操作,不涉及违规操作.
+An Genshin automatic operation assistance based on image recognization and similated keyboard operation. Does not involve not-allowed operation.
 
-To没用过github的小伙伴: 描述文档中的蓝色文字是链接,可以打开的.
+To those who have not used github: the blue text in the docs is a hyperlink that can be clicked.
 
-## 演示视频
+##Demo Video
 
-<https://www.bilibili.com/video/BV1RV4y157m6>(挂了)
+<https://www.bilibili.com/video/BV1RV4y157m6>(hung up)
 
-补档 <https://www.youtube.com/watch?v=ZieBDx6Go4A> v0.2.0的演示视频，可能部分过期
+Addendum <https://www.youtube.com/watch?v=ZieBDx6Go4A> v0.2.0 demo video, may be partially out of date.
 
-## 功能介绍
+## Function Introduction
 
-### 1. [自动战斗辅助](./combat_assi.md)
+### 1. [Auto Combat Assist](./combat_assi.md)
 
-- 在GUI中将FlowMode切换到AutoCombat，等待模块导入
+- Switch Function to AutoCombat and wait for the module to be imported.
 
-- 按下`[`键启动/停止功能。可在`keymap.json`中更改。
+- Press `[` key to start/stop function. Can be edited in `keymap`.
 
-其他设置参见[自动战斗辅助介绍](./combat_assi.md).
+For other settings, see [Auto Combat Assist introduction](./combat_assi.md).
 
-### 2. [自动秘境辅助](./domain_assi.md)
+### 2. [Auto Domain Assist](./domain_assi.md)
 
-1. 在config中设置挑战秘境的次数与其他设置,详见[config设置](./config.md).
-2. 手动选择队伍,配置队伍,进入秘境.
-3. 进入秘境后(也可以在大世界),在GUI TaskList中选中DomainTask，点击启动任务
-4. 等待导入完成后切换到原神
+1. Set the number of challenges and other settings in the config, see [config settings](./config.md).
+2. select the party manually, then enter the domain.
+3. After enter domain(also in the Teyvat world ), select the DomainTask in GUI Tasklist, then click `start task` button.
+4. Switch to Genshin window after imported.
 
 - 注意阅读[domain_assi.md](./domain_assi.md)中的注意事项.
 

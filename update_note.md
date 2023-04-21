@@ -11,12 +11,12 @@
 - 自动战斗boss血条不动
 - 检测。。。按钮识别是采集物还是人
 - aim operator move to enemy按空格
-- 让sco get_characters_name()在continue时获得charalist
 - ocr在角色名字时试试用in
 - BigPudgyProblem需要对话
 - combat lib识别受ui限制
 
 ## Done：
+- 让sco get_characters_name()在continue时获得charalist
 - move straight在移动视角前按下了w
 - sco切换失败时上下左右跳
 - LLO使用Domian同款急停 pass

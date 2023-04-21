@@ -9,11 +9,10 @@ class GenerateMarkdownGenerator():
         self.LANG = LANG
 
     def _write_file(self, file_path):
-        print(file_path)
         origin_file = open(file_path, 'r', encoding='utf-8').read()
         text_list = re.split('  \n|\n\n|<br>',origin_file)
         text_list = [i.replace('\n', '\\n').replace('\"', '\\"') for i in text_list]
-        with open(file_path.replace('.md','.py'), 'w', encoding='utf-8') as f:
+        with open(file_path.replace('.md','.pygettext'), 'w', encoding='utf-8') as f:
             f.write(f'import gettext, sys\n')
             f.write(f"sys.argv.pop(0)\n")
             f.write(f"LANG = sys.argv[0]\n")
@@ -67,6 +66,7 @@ class GenerateMarkdownGenerator():
         for root, dirs, files in os.walk(self.folder_path+'\\base'):
             for f in files:
                 if f.split('.')[-1] in ['md', 'markdown']:
+                    print(f"generate pygettext {root}/{f}")
                     self._write_file(f"{root}/{f}")
       
 if __name__ == "__main__":

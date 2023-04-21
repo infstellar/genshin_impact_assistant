@@ -222,10 +222,12 @@ testt.py
 config/commission/commission_dict.json
 
 # gettext-markdown
-doc/base/*.py
-doc/base/code_standard/*.py
-doc/base/code_standard/abandoned/*.py
+doc/base/*.pygettext
+doc/base/dev/*.pygettext
+doc/base/dev/abandoned/*.pygettext
 doc/en_US_old
 doc/markdown_i18n/locale/en_US/LC_MESSAGES/en_US.pot
 doc/markdown_i18n/locale/zh_CN/LC_MESSAGES/zh_CN.pot
 
+doc/markdown_i18n/locale/en_US/LC_MESSAGES/en_US.mo
+doc/markdown_i18n/locale/zh_CN/LC_MESSAGES/zh_CN.mo
