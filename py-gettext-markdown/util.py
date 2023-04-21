@@ -4,3 +4,7 @@ def verify_path(root):
         verify_path(os.path.join(root, "../"))
         os.mkdir(root)
         print(f"dir {root} has been created")
+
+def exec_cmd(cmd):
+    print(cmd)
+    os.system(cmd)
