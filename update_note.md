@@ -1,4 +1,6 @@
 ## TODO：
+- 传送点识别区域还是不够大
+- 自动战斗main的优先级调高
 - commission 执行完就是成功
 - thread init
 - mission init加满
