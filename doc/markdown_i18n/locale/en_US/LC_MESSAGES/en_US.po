@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2023-04-21 20:01+0800\n"
-"PO-Revision-Date: 2023-04-21 21:22+0800\n"
+"POT-Creation-Date: 2023-04-23 20:06+0800\n"
+"PO-Revision-Date: 2023-04-23 20:59+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_US\n"
@@ -47,15 +47,17 @@ msgstr ""
 
 #: ../doc\base\FAQ.pygettext:16
 msgid "- 检查特效是否为中或以上。"
-msgstr ""
+msgstr "- Check if the effets are medium or above."
 
 #: ../doc\base\FAQ.pygettext:18
 msgid "Q: 启动GIA Launcher后跳出大量文字卡住怎么办？"
 msgstr ""
+"Q: What should I do if I get stuck with a lot of text popping up after "
+"launching GIA Launcher?"
 
 #: ../doc\base\FAQ.pygettext:20
 msgid "- 是pip正在复制文件, 如果没有报错, 等待即可."
-msgstr ""
+msgstr "- It is pip copying files, if no error is reported, just wait."
 
 #: ../doc\base\FAQ.pygettext:22
 msgid ""
@@ -63,10 +65,14 @@ msgid ""
 "现，请按下回车以继续程序。 GIA Launcher的本体是bat批处理文件，在点击命令窗口"
 "后会暂停，所以不要点击命令行界面。"
 msgstr ""
+"- Notice if the **Select: GIA Launcher** words `Select` appear in the "
+"window. If it appears, press enter to continue the program. The base of GIA "
+"Launcher is a bat file and will pause when you click on the command window, "
+"so do no click on the command line interface."
 
 #: ../doc\base\FAQ.pygettext:24
 msgid "Q: 打架的时候，角色嘎了会卡住？"
-msgstr ""
+msgstr "Q: When fighting, the program will get stuck if character(s) dies?"
 
 #: ../doc\base\FAQ.pygettext:26
 msgid "- 在自动采集时检测到角色嘎了会去神像回血。"
@@ -342,84 +348,95 @@ msgstr ""
 #: ../doc\base\README.pygettext:108
 msgid "- FlowMode：选择当前启用的功能，只能按快捷键启动"
 msgstr ""
+"- FlowMode: Select the function to be enable, can only be activated by "
+"hotkey."
 
 #: ../doc\base\README.pygettext:110
 msgid ""
 "- Mission: 选择要启动的任务组，然后在Task List选中Mission，启动Task List"
 msgstr ""
+"- Mission: select the mission group to be started, then select the `Mission` "
+"in `Task List` to start task list."
 
 #: ../doc\base\README.pygettext:112
 msgid "- Log：输出日志"
-msgstr ""
+msgstr "- Log: output logs."
 
 #: ../doc\base\README.pygettext:114
 msgid "#### 设置页面"
-msgstr ""
+msgstr "#### Setting page"
 
 #: ../doc\base\README.pygettext:116
 msgid "- 点击按钮进入"
-msgstr ""
+msgstr "- click button to enter"
 
 #: ../doc\base\README.pygettext:118
 msgid "- 在下拉列表中选择对应的项目，进行配置。"
-msgstr ""
+msgstr "- Select the corresponding item in the drop-down list to configure."
 
 #: ../doc\base\README.pygettext:120
 msgid "远程操作等更多GUI使用方法，参考[GUI使用](./gui.md)"
-msgstr ""
+msgstr "Other features such as remote control, see the [GUI guide](./gui.md)"
 
 #: ../doc\base\README.pygettext:122
 msgid "### 自动战斗，自动采集设置窗口"
-msgstr ""
+msgstr "### Auto combat, auto collect settings windows"
 
 #: ../doc\base\README.pygettext:124
 msgid "- 点击对应按钮进入，按照提示操作"
-msgstr ""
+msgstr "- Click the corresponding button to enter and follow the instructions."
 
 #: ../doc\base\README.pygettext:126
 msgid "## 错误报告"
-msgstr ""
+msgstr "## Bug report"
 
 #: ../doc\base\README.pygettext:128
 msgid "如果在使用中遇到问题，可以提交issue或在Q群中反馈。"
 msgstr ""
+"If you encounter ploblems in using, you can create an issue or give a "
+"feedback in qq group or discord."
 
 #: ../doc\base\README.pygettext:130
 msgid ""
 "反馈错误前，请务必确认您已经阅读文档和[FAQ](FAQ.md)中的已知问题与解决方案。"
 msgstr ""
+"Please make sure you have read the document and [FAQ](FAQ.md) before "
+"feedback bugs."
 
 #: ../doc\base\README.pygettext:132
 msgid "反馈错误时，请一并提交 Logs 文件夹中的日志文件。"
-msgstr ""
+msgstr "Please send the log file in the Logs folder when you feedback."
 
 #: ../doc\base\README.pygettext:134
 msgid "## 常见问题 FAQ"
-msgstr ""
+msgstr "## Frequently ask question"
 
 #: ../doc\base\README.pygettext:136
 msgid "如果在使用时遇到问题，可以先看看FAQ："
 msgstr ""
+"If you enconter any problem when using, you can take a look at FAQ frist:"
 
 #: ../doc\base\README.pygettext:138
 msgid "[FAQ](FAQ.md)"
-msgstr ""
+msgstr "[FAQ](FAQ.md)"
 
 #: ../doc\base\README.pygettext:140
 msgid "## 已知问题 Known Issues"
-msgstr ""
+msgstr "## Known issues"
 
 #: ../doc\base\README.pygettext:142
 msgid "[Known issues](known_issues.md)"
-msgstr ""
+msgstr "[Known issues](known_issues.md)"
 
 #: ../doc\base\README.pygettext:144
 msgid "## 性能需求"
-msgstr ""
+msgstr "## Performance requirements"
 
 #: ../doc\base\README.pygettext:146
 msgid "- 此程序至少需要`2.5G内存`与`3G存储空间`(完整安装)."
 msgstr ""
+"- This program requires at least `2.5G` RAM and `3G` storage space (full "
+"installation)."
 
 #: ../doc\base\README.pygettext:148
 msgid ""
@@ -435,22 +452,26 @@ msgid ""
 "- [原神-基于图像算法的坐标定位 GenshinImpact AutoTrack DLL](https://github."
 "com/GengGode/cvAutoTrack)"
 msgstr ""
+"- [GenshinImpact AutoTrack DLL](https://github.com/GengGode/cvAutoTrack)"
 
 #: ../doc\base\README.pygettext:152
 msgid ""
 "- [空荧酒馆原神地图 kongying-tavern/yuan-shen-map](https://github.com/"
 "kongying-tavern/yuan-shen-map)"
 msgstr ""
+"- [kongying-tavern/yuan-shen-map](https://github.com/kongying-tavern/yuan-"
+"shen-map)"
 
 #: ../doc\base\README.pygettext:154
 msgid ""
 "- [原神英語・中国語辞典 xicri/genshin-dictionary](https://github.com/xicri/"
 "genshin-dictionary)"
 msgstr ""
+"- [xicri/genshin-dictionary](https://github.com/xicri/genshin-dictionary)"
 
 #: ../doc\base\README.pygettext:156
 msgid "#### 开源库调用"
-msgstr ""
+msgstr "#### Open source library"
 
 #: ../doc\base\README.pygettext:158
 msgid ""
@@ -459,28 +480,32 @@ msgid ""
 "- [yolox](https://github.com/Megvii-BaseDetection/YOLOX)\n"
 "- [pyinstaller](https://github.com/pyinstaller/pyinstaller)"
 msgstr ""
+"- [opencv](https://github.com/opencv/opencv)\n"
+"- [paddleocr](https://github.com/PaddlePaddle/PaddleOCR)\n"
+"- [yolox](https://github.com/Megvii-BaseDetection/YOLOX)\n"
+"- [pyinstaller](https://github.com/pyinstaller/pyinstaller)"
 
 #: ../doc\base\README.pygettext:160
 msgid "#### 其他"
-msgstr ""
+msgstr "#### Others"
 
 #: ../doc\base\README.pygettext:162
 msgid ""
 "- [GIS 参考了自动战斗脚本的格式](https://github.com/phonowell/genshin-impact-"
 "script)"
-msgstr ""
+msgstr "- [GIS](https://github.com/phonowell/genshin-impact-script)"
 
 #: ../doc\base\README.pygettext:164
 msgid "### 其他贡献/参与者"
-msgstr ""
+msgstr "### Other Contributors"
 
 #: ../doc\base\README.pygettext:166
 msgid "- 数据集标注: [nɡ.](https://space.bilibili.com/396023811)"
-msgstr ""
+msgstr "- Dataset labeling: [nɡ.](https://space.bilibili.com/396023811)"
 
 #: ../doc\base\README.pygettext:168
 msgid "## 声明"
-msgstr ""
+msgstr "## Announcement"
 
 #: ../doc\base\README.pygettext:170
 msgid ""
@@ -493,7 +518,7 @@ msgstr ""
 
 #: ../doc\base\README.pygettext:172
 msgid "qq群:[901372518](https://jq.qq.com/?_wv=1027&k=YLTrqlzX)"
-msgstr ""
+msgstr "QQ group:[901372518](https://jq.qq.com/?_wv=1027&k=YLTrqlzX)"
 
 #: ../doc\base\README.pygettext:174
 msgid ""

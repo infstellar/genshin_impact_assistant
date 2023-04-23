@@ -50,6 +50,12 @@ class GenerateMarkdownGenerator():
                             if "```" in text_list[i]:
                                 write_origin(text_list[i])
                                 break
+                elif '- ' in text_list[i]:
+                    if text_list[i][0:2] == '- ':
+                        for ii in text_list[i].split('\\n'):
+                            write_gettext(ii)
+                    else:
+                        write_gettext(text_list[i])
                 elif text_list[i] == "":
                     pass
                 elif text_list[i] == "\n":

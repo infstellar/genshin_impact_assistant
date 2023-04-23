@@ -2,21 +2,21 @@
 
 Q: It shows "ERROR: Screenshot failed". What should I do?
 
-- if `shape=0,0,4`, pls confirm your Genshin Window not minimized.
-- if shape=xxx,xxx,4, please make sure that the Genshin window resolution is 1080p and that the Genshin launcher window is closed
-- If the system is Windows 11, please follow this [issue](https://github.com/GengGode/cvAutoTrack/issues/9) setting 
+- 若shape=0,0,4 ,那么请确认原神窗口没有最小化。
+- 若shape=xxx,xxx,4, 那么请确认原神分辨率为1080p，同时确认原神启动器窗口关闭。
+- 如果系统是Windows11，请按照这个[issue](https://github.com/GengGode/cvAutoTrack/issues/9)设置
 
 Q: What if I set up a strategy during battle but do not switch to a character whose Q skill is already ready?
 
-- 检查特效是否为中或以上。
+- Check if the effets are medium or above.
 
-Q: 启动GIA Launcher后跳出大量文字卡住怎么办？
+Q: What should I do if I get stuck with a lot of text popping up after launching GIA Launcher?
 
-- 是pip正在复制文件, 如果没有报错, 等待即可.
+- It is pip copying files, if no error is reported, just wait.
 
-- 注意窗口是否出现 `选择：GIA Launcher`的<strong>选择</strong>字样。如果出现，请按下回车以继续程序。 GIA Launcher的本体是bat批处理文件，在点击命令窗口后会暂停，所以不要点击命令行界面。
+- Notice if the **Select: GIA Launcher** words `Select` appear in the window. If it appears, press enter to continue the program. The base of GIA Launcher is a bat file and will pause when you click on the command window, so do no click on the command line interface.
 
-Q: 打架的时候，角色嘎了会卡住？
+Q: When fighting, the program will get stuck if character(s) dies?
 
 - 在自动采集时检测到角色嘎了会去神像回血。
 

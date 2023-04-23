@@ -112,84 +112,84 @@ For other configurations, see the notes of settings within the GUI.
 #### Main window
 
 - click `main` button to enter.
-
 - Task List: select the task to be executed, can only be active in the GUI.
+- FlowMode: Select the function to be enable, can only be activated by hotkey.
+- Mission: select the mission group to be started, then select the `Mission` in `Task List` to start task list.
+- Log: output logs.
 
-- FlowMode：选择当前启用的功能，只能按快捷键启动
+#### Setting page
 
-- Mission: 选择要启动的任务组，然后在Task List选中Mission，启动Task List
+- click button to enter
 
-- Log：输出日志
+- Select the corresponding item in the drop-down list to configure.
 
-#### 设置页面
+Other features such as remote control, see the [GUI guide](./gui.md)
 
-- 点击按钮进入
+### Auto combat, auto collect settings windows
 
-- 在下拉列表中选择对应的项目，进行配置。
+- Click the corresponding button to enter and follow the instructions.
 
-远程操作等更多GUI使用方法，参考[GUI使用](./gui.md)
+## Bug report
 
-### 自动战斗，自动采集设置窗口
+If you encounter ploblems in using, you can create an issue or give a feedback in qq group or discord.
 
-- 点击对应按钮进入，按照提示操作
+Please make sure you have read the document and [FAQ](FAQ.md) before feedback bugs.
 
-## 错误报告
+Please send the log file in the Logs folder when you feedback.
 
-如果在使用中遇到问题，可以提交issue或在Q群中反馈。
+## Frequently ask question
 
-反馈错误前，请务必确认您已经阅读文档和[FAQ](FAQ.md)中的已知问题与解决方案。
-
-反馈错误时，请一并提交 Logs 文件夹中的日志文件。
-
-## 常见问题 FAQ
-
-如果在使用时遇到问题，可以先看看FAQ：
+If you enconter any problem when using, you can take a look at FAQ frist:
 
 [FAQ](FAQ.md)
 
-## 已知问题 Known Issues
+## Known issues
 
 [Known issues](known_issues.md)
 
-## 性能需求
+## Performance requirements
 
-- 此程序至少需要`2.5G内存`与`3G存储空间`(完整安装).
+- This program requires at least `2.5G` RAM and `3G` storage space (full installation).
 
 ## 鸣谢
+
 ### 特别感谢
+
 - [Alas](https://github.com/LmeSzinc/AzurLaneAutoScript)
+
 ### 开源库
+
 #### 原神相关
 
-- [原神-基于图像算法的坐标定位 GenshinImpact AutoTrack DLL](https://github.com/GengGode/cvAutoTrack)
+- [GenshinImpact AutoTrack DLL](https://github.com/GengGode/cvAutoTrack)
 
-- [空荧酒馆原神地图 kongying-tavern/yuan-shen-map](https://github.com/kongying-tavern/yuan-shen-map)
+- [kongying-tavern/yuan-shen-map](https://github.com/kongying-tavern/yuan-shen-map)
 
-- [原神英語・中国語辞典 xicri/genshin-dictionary](https://github.com/xicri/genshin-dictionary)
+- [xicri/genshin-dictionary](https://github.com/xicri/genshin-dictionary)
 
-#### 开源库调用
+#### Open source library
 
 - [opencv](https://github.com/opencv/opencv)
 - [paddleocr](https://github.com/PaddlePaddle/PaddleOCR)
 - [yolox](https://github.com/Megvii-BaseDetection/YOLOX)
 - [pyinstaller](https://github.com/pyinstaller/pyinstaller)
 
-#### 其他
+#### Others
 
-- [GIS 参考了自动战斗脚本的格式](https://github.com/phonowell/genshin-impact-script)
+- [GIS](https://github.com/phonowell/genshin-impact-script)
 
-### 其他贡献/参与者
+### Other Contributors
 
-- 数据集标注: [nɡ.](https://space.bilibili.com/396023811)
+- Dataset labeling: [nɡ.](https://space.bilibili.com/396023811)
 
-## 声明
+## Announcement
 
-- 本软件开源免费,仅供学习交流使用,请勿用于非法用途.使用本软件进行代练的商家所收取的费用均为商家的人工/设备费用,产生的<strong>
-任何问题</strong>与本软件无关.
+- 本软件开源免费,仅供学习交流使用,请勿用于非法用途.使用本软件进行代练的商家所收取的费用均为商家的人工/设备费用,产生的**任何问题**与本软件无关.
+
 > 用别怂,怂别用 --unknown
 ## 广告
 
-qq群:[901372518](https://jq.qq.com/?_wv=1027&k=YLTrqlzX)
+QQ group:[901372518](https://jq.qq.com/?_wv=1027&k=YLTrqlzX)
 
 开发者交流群:[680029885](https://jq.qq.com/?_wv=1027&k=CGuTvCXU)
 (请确保你已经会使用git以及github)
