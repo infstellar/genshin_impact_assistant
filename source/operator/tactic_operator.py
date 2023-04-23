@@ -65,11 +65,11 @@ class TacticOperator(BaseThreading):
                 return
 
             if self.pause_threading_flag:
-                if self.pause_timer.get_diff_time()>=1:
+                if self.pause_timer.get_diff_time()<=2:
                     time.sleep(0.02)
-                elif self.pause_timer.get_diff_time()>=3:
+                elif self.pause_timer.get_diff_time()<=4:
                     time.sleep(0.1)
-                elif self.pause_timer.get_diff_time()>=10:
+                elif self.pause_timer.get_diff_time()<=10:
                     time.sleep(0.25)
                 else:
                     time.sleep(1)

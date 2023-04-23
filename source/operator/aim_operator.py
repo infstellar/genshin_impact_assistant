@@ -213,6 +213,7 @@ class AimOperator(BaseThreading):
             logger.debug(f"no enemy exist, break")
             return False
         while 1:
+            # move view to blood bar exist or arrow no exist, where is the enemy located.
             if self.checkup_stop_func():return
             movement.cview(20)
             # itt.delay(0.1)
@@ -225,6 +226,7 @@ class AimOperator(BaseThreading):
         move_timer.start()
         combat_lib.CSDL.freeze_state()
         while 1:
+            time.sleep(0.1)
             if self.checkup_stop_func():
                 itt.key_up('w')
                 combat_lib.CSDL.unfreeze_state()
@@ -357,6 +359,7 @@ class AimOperator(BaseThreading):
             if px < target_px:
                 itt.key_down('w')
                 while 1:
+                    time.sleep(0.05)
                     if self.checkup_stop_func(): 
                         itt.key_up('w')
                         return False

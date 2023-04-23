@@ -187,13 +187,13 @@ class SwitchCharacterOperator(BaseThreading):
                 itt.key_press(str(x))
                 if combat_lib.get_current_chara_num(self.checkup_stop_func, max_times = 5) == x:
                     switch_succ_num += 1
-            if i >= 2 or is_busy == True:
+            if i >= 4 or is_busy == True:
                 r = self._check_and_reborn()
                 if not r: # if r == False
                     self.died_character.append(x)
                     itt.key_press('esc')
                     return True
-            if i > 5:
+            if i > 10:
                 movement.move(i, distance=1)
                 movement.jump_in_loop(jump_dt=1.5)
             if i > 55:
