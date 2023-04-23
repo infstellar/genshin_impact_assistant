@@ -377,6 +377,7 @@ def get_characters_name(max_retry = 10):
             if not succ:
                 if retry_times<max_retry-1:
                     logger.warning(f"get characters name fail, retry {retry_times}")
+                    itt.move_to(200,0,relative=True)
                     itt.delay(1)
                     break
                 else:

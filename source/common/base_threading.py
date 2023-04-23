@@ -140,8 +140,8 @@ class ThreadBlockingRequest():
         self.blocking_request_flag = False
         self.reply_request_flag = False
     
-    def send_request(self):
-        logger.debug(f"ThreadBlockingRequest sent request.")
+    def send_request(self, message=''):
+        logger.debug(f"ThreadBlockingRequest sent request: {message}")
         self.blocking_request_flag = True
         
     def reply_request(self):

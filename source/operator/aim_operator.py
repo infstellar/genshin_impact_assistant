@@ -37,7 +37,8 @@ class AimOperator(BaseThreading):
         # self.left_timer = Timer()
         # self.reset_timer = Timer()
         self.kdwe_timer = Timer()
-        self.circle_search_timer = AdvanceTimer(10,count=1).start()
+        self.circle_search_timer = AdvanceTimer(4,count=3).start() # call 3 times and continue 4 sec.
+        self.keep_distance_timer = AdvanceTimer(3,count=3).start()
         self.corr_rate = 1
         self.sco_blocking_request = ThreadBlockingRequest()
 
@@ -83,10 +84,9 @@ class AimOperator(BaseThreading):
                     if self.checkup_stop_func():continue
                     if r: # 找到了，退出
                         self.enemy_flag = True
-                        self.circle_search_timer.reset()
                     else: # 没找到，根据红色箭头移动寻找
                         if self.checkup_stop_func():continue
-                        self.sco_blocking_request.send_request() # 向SCO申请暂停Tactic执行
+                        self.sco_blocking_request.send_request('_moving_find_enemy') # 向SCO申请暂停Tactic执行
                         if True: # set to False when debug this module
                             print(self.sco_blocking_request.waiting_until_reply(stop_func=self.checkup_stop_func, timeout=60))
                         r = self._moving_find_enemy()
@@ -99,11 +99,14 @@ class AimOperator(BaseThreading):
                 else:
                     if self._is_enemy_too_far(): # 敌人是否太远
                         if self.checkup_stop_func():continue
-                        self.sco_blocking_request.send_request()
-                        if True: # set to False when debug this module
-                            print(self.sco_blocking_request.waiting_until_reply(stop_func=self.checkup_stop_func, timeout=60))
-                        self._keep_distance_with_enemy()
-                        self.sco_blocking_request.recovery_request() # 解除申请
+                        if self.keep_distance_timer.reached_and_reset():
+                            self.sco_blocking_request.send_request('_keep_distance_with_enemy')
+                            if True: # set to False when debug this module
+                                print(self.sco_blocking_request.waiting_until_reply(stop_func=self.checkup_stop_func, timeout=60))
+                            self._keep_distance_with_enemy()
+                            self.sco_blocking_request.recovery_request() # 解除申请
+                    else:
+                        self.keep_distance_timer.reset()
             
             # ret = self.auto_aim() # 自动瞄准
             # if ret is None:
@@ -142,11 +145,11 @@ class AimOperator(BaseThreading):
     
     def _circle_find_enemy(self):
         if self.circle_search_timer.reached_and_reset():
+            logger.debug(f"circle_search_timer reached, skip")
+            return False
+        else:
             movement.reset_view() # 重置视角
             logger.debug(f" finding_enemy ")
-        else:
-            logger.debug(f"circle_search_timer does not reached, skip")
-            return False
         # while self.enemy_loops < self.max_number_of_enemy_loops: # 当搜索敌人次数小于最大限制次数时，开始搜索
         for i in range(15):
             if i%4==0:
@@ -159,7 +162,9 @@ class AimOperator(BaseThreading):
             if len(ret_points) != 0:
                 # self._reset_enemy_loops()
                 if self._is_blood_bar_exist():
+                    self.circle_search_timer.reset()
                     return True
+                
 
             # self.enemy_loops += 1
         return False
