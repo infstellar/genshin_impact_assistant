@@ -181,8 +181,8 @@ class FindingTree(FlowTemplate):
                         movement.move(movement.RIGHT, distance=4)
 
                 else:  # maybe can't look at tree
-                    logger.debug('can not find tree. moving  forward.')
-                    movement.move(movement.AHEAD, distance=4)
+                    logger.debug('can not find tree. moving back.')
+                    movement.move(movement.BACK, distance=4)
         else:
             self._next_rfc()
 
@@ -221,9 +221,9 @@ class AttainReward(FlowTemplate):
             self._next_rfc()
 
     def state_in(self):
-        if self.upper.resin_mode == '40':
+        if str(self.upper.resin_mode) == '40':
             itt.appear_then_click(asset.ButtonGeneralUseCondensedResin)
-        elif self.upper.resin_mode == '20':
+        elif str(self.upper.resin_mode) == '20':
             itt.appear_then_click(asset.ButtonGeneralUseOriginResin)
 
         if itt.get_text_existence(asset.domain_obtain):
