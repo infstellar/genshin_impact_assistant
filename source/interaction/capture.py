@@ -163,7 +163,21 @@ class EmulatorCapture(Capture):
     
     def _get_capture(self):
         pass
+
+class CustomCapture(Capture):
+    def __init__(self):
+        super().__init__()
+        self.curr_cap = np.zeros_like((1080,1920,3), dtype="uint8")
     
+    def _check_shape(self, img):
+        return True
+
+    def _get_capture(self) -> np.ndarray:
+        return self.curr_cap
+
+    def set_cap(self, img):
+        self.curr_cap = img
+
 if __name__ == '__main__':
     wc = WindowsCapture()
     # wc._get_screen_scale_factor()

@@ -583,6 +583,7 @@ class CombatStatementDetectionLoop(BaseThreading):
         self.while_sleep = 0.4
         self.is_low_health = False
         self.is_freeze_state = False
+        self._is_init = False
     
     def freeze_state(self):
         logger.info(f"CSDL freeze state")
@@ -596,6 +597,9 @@ class CombatStatementDetectionLoop(BaseThreading):
         return self.current_state
     
     def loop(self):
+        if not self._is_init:
+            time.sleep(2)
+            self._is_init = True
         r = is_character_healthy()
         if r != None:
             self.is_low_health = not r

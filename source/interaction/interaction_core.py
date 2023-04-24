@@ -134,7 +134,9 @@ class InteractionBGD:
         # img_manager.qshow(ret)
         if posi is not None:
             ret = crop(ret, posi)
-        if jpgmode == 0:
+        if ret.shape[2]==3:
+            pass
+        elif jpgmode == 0:
             ret = ret[:, :, :3]
         elif jpgmode == 1:
             ret = self.png2jpg(ret, bgcolor='black', channel='bg')

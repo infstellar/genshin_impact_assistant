@@ -11,6 +11,8 @@ from source.funclib.err_code_lib import *
 from source.manager import posi_manager as PosiM, asset
 from source.interaction.interaction_core import itt
 import pytz, datetime
+from source.ui.ui import ui_control
+from source.ui import page as UIPage
 
 
 class PathRecorderConnector(FlowConnector):
@@ -160,7 +162,8 @@ class PathRecorderCore(FlowTemplate):
             logger.warning(f"break position too close")
     
     def state_in(self):
-
+        if not ui_control.verify_page(UIPage.page_main):
+            return super().state_in()
         all_posi = self.get_all_position(self.upper.collection_path_dict)
         curr_posi = tracker.get_position()
         curr_direction = tracker.get_direction()

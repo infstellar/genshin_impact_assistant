@@ -44,3 +44,4 @@ pynput
 
 fastdeploy-python
 json5
+sortedcontainers
