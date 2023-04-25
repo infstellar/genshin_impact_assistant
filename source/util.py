@@ -198,17 +198,17 @@ def manhattan_distance(p1, p2):
 def manhattan_distance_plist(p1, p2) -> np.ndarray:
     return abs(p1[0]-p2[:,0]) + abs(p1[1]-p2[:,1])
 
-def quick_euclidean_distance_plist(p1, p2, max_points_num = 50)-> np.ndarray:
+def quick_euclidean_distance_plist(p1, plist, max_points_num = 50)-> np.ndarray:
     if not isinstance(p1, np.ndarray):
         p1 = np.array(p1)
-    if not isinstance(p2, np.ndarray):
-        p2 = np.array(p2)
+    if not isinstance(plist, np.ndarray):
+        plist = np.array(plist)
     # 计算当前点到所有优先点的曼哈顿距离
-    md = manhattan_distance_plist(p1, p2)
+    md = manhattan_distance_plist(p1, plist)
     nearly_pp_arg = np.argsort(md)
     # 计算当前点到距离最近的50个优先点的欧拉距离
     cache_num = min(max_points_num, len(nearly_pp_arg))
-    nearly_pp = p2[nearly_pp_arg[:cache_num]]
+    nearly_pp = plist[nearly_pp_arg[:cache_num]]
     ed = euclidean_distance_plist(p1, nearly_pp)
 
     return ed
@@ -221,7 +221,7 @@ def quick_euclidean_distance_plist(p1, p2, max_points_num = 50)-> np.ndarray:
     
 
 
-    return np.sqrt((p1[0] - p2[:,0]) ** 2 + (p1[1] - p2[:,1]) ** 2)
+    return np.sqrt((p1[0] - plist[:,0]) ** 2 + (p1[1] - plist[:,1]) ** 2)
 
 
 

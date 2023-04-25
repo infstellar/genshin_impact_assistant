@@ -13,6 +13,7 @@ from source.flow import flow_state as ST
 from source.flow import flow_code as FC
 from source.ui.ui import ui_control
 import source.ui.page as UIPage
+from source.dev_tool.tianli_navigator import TianliNavigator
 
 
 IN_MOVE = 0
@@ -140,9 +141,35 @@ class TeyvatMoveCommon():
                 logger.warning(f"MOVE STUCK")
                 return True
         return False
-                
-    
-    
+
+class Navigation(TianliNavigator):
+    def __init__(self, start, end) -> None:
+        super().__init__()
+        self.start_p = start
+        self.end_p = end    
+        self._curr_posi = [0,0]
+        self.all_navigation_posi = [p[1].position for p in self.NAVIGATION_POINTS.items()]
+        self.navigation_path = []
+        self._init_path()
+
+    def _get_closest_node(self, position):
+        plist = quick_euclidean_distance_plist(position, self.all_navigation_posi)
+        for i in self.NAVIGATION_POINTS.items():
+            if euclidean_distance(plist[0], i[1].position) <= 1:
+                return i[1]
+
+    def _init_path(self):
+        self.navigation_path = self.astar(
+                                        self._get_closest_node(self.start_p),
+                                        self._get_closest_node(self.end_p))
+
+    def set_curr_posi(self, posi):
+        self._curr_posi = posi
+
+    def get_navigation_positions(self):
+        return [self.NAVIGATION_POINTS[i] for i in self.navigation_path]
+
+
 class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon):
     def __init__(self, upper: TeyvatMoveFlowConnector):
         FlowTemplate.__init__(self, upper, flow_id=ST.INIT_TEYVAT_MOVE, next_flow_id=ST.END_TEYVAT_MOVE_PASS)
@@ -183,6 +210,7 @@ class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon):
         self.in_flag = False
         self._next_rfc()
     
+
     def state_in(self):
         self.switch_motion_state()
         
