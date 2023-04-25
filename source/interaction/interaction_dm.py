@@ -11,20 +11,27 @@ dbc.connect()
 dmdll = dbc.DMDLL()
 dmdll.start()
 logger.debug(dmdll.ver())
-
+global bind_flag
+bind_flag = False
 def unbind():
-    dmdll.EnableBind(0)
-    logger.debug(dmdll.GetLastError())
-    dmdll.UnBindWindow()
-    logger.debug(dmdll.GetLastError())
+    global bind_flag
+    if bind_flag != False:
+        bind_flag = False
+        dmdll.EnableBind(0)
+        logger.debug(dmdll.GetLastError())
+        dmdll.UnBindWindow()
+        logger.debug(dmdll.GetLastError())
 
 def bind():
-    dmdll.BindWindow(hwnd=static_lib.get_handle(), display='dx',
-                     mouse="dx.mouse.position.lock.api|dx.mouse.position.lock.message|dx.mouse.state.message|dx.mouse.raw.input|dx.mouse.input.lock.api2|dx.mouse.api|dx.mouse.input.lock.api3",
-                     keypad='dx.keypad.raw.input', mode=101)
-    logger.debug(dmdll.GetLastError())
-    dmdll.EnableBind(1)
-    logger.debug(dmdll.GetLastError())
+    global bind_flag
+    if bind_flag != True:
+        bind_flag = True
+        dmdll.BindWindow(hwnd=static_lib.get_handle(), display='dx',
+                        mouse="dx.mouse.position.lock.api|dx.mouse.position.lock.message|dx.mouse.state.message|dx.mouse.raw.input|dx.mouse.input.lock.api2|dx.mouse.api|dx.mouse.input.lock.api3",
+                        keypad='dx.keypad.raw.input', mode=101)
+        logger.debug(dmdll.GetLastError())
+        dmdll.EnableBind(1)
+        logger.debug(dmdll.GetLastError())
 
 class InteractionDm(InteractionTemplate):
     def __init__(self):

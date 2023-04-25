@@ -14,6 +14,7 @@ class Capture():
         self.capture_cache_lock = threading.Lock()
         self.capture_times = 0
         self.cap_per_sec = timer_module.CyclicCounter(limit=3).start()
+        self.last_cap_times = 0
 
     def _get_capture(self) -> np.ndarray:
         """
@@ -36,7 +37,15 @@ class Capture():
         if DEBUG_MODE:
             r = self.cap_per_sec.count_times()
             if r:
-                logger.trace(f"capps: {r/3}")
+                if r != self.last_cap_times:
+                    logger.trace(f"capps: {r/3}")
+                    self.last_cap_times = r
+                elif r >= 10*3:
+                    logger.trace(f"capps: {r/3}")
+                elif r >= 20*3:
+                    logger.debug(f"capps: {r/3}")
+                elif r >= 40*3:
+                    logger.info(f"capps: {r/3}")
         self._capture(is_next_img)
         self.capture_cache_lock.acquire()
         cp = self.capture_cache.copy()

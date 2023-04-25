@@ -454,10 +454,10 @@ def generate_teamfile_automatic():
     if not (ui_control.verify_page(UIPage.page_main) or ui_control.verify_page(UIPage.page_domain)):
         ui_control.ui_goto(UIPage.page_main)
     POSITION2PRIORITY = {
-        "Main":3000,
+        "Main":2000,
         "Shield":1000,
         "Recovery":1500,
-        "Support":2000
+        "Support":3000
         
     }
     INDEX2ORDINAL_NUMERAL = {

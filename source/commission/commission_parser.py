@@ -72,21 +72,23 @@ class CommissionParser():
                         logger.info(f"commission has been added: {self.commission_dicts[-1]}")
         return self.commission_dicts
     
-    def _set_and_save_and_load_commission_dicts(self):
+    def _set_and_save_and_load_commission_dicts(self) -> bool:
         g4t = Genshin400Timer()
         if g4t.is_new_day():
             logger.info(f"new genshin day, traverse mondstant commissions")
             self.traverse_mondstant()
             save_json(self.commission_dicts, json_name="commission_dict.json", default_path=rf"{CONFIG_PATH}\commission")
             g4t.set_today()
+            return True
         else:
             self.commission_dicts = load_json(json_name="commission_dict.json", default_path=rf"{CONFIG_PATH}\commission")
             for i in self.commission_dicts:
                 if i["done"] != True:
-                    return
+                    return False
             logger.info(f"commission dicts all have been done. researching.")
             self.traverse_mondstant()
             save_json(self.commission_dicts, json_name="commission_dict.json", default_path=rf"{CONFIG_PATH}\commission")
+            return True
     def _detect_commission_type(self)->str:
         img = itt.capture(jpgmode=0)
         img_choose = crop(img.copy(), asset.AreaBigmapChoose.position)

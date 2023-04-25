@@ -123,8 +123,10 @@ class TaskManager(BaseThreading):
                 self.stop_tasklist()
                 # self.pause_threading()
 
+TASK_MANAGER = TaskManager()
+
 if __name__ == '__main__':
-    tm = TaskManager()
+    tm = TASK_MANAGER
     # keyboard.add_hotkey(load_json("keymap.json", f"{CONFIG_PATH_SETTING}")["task"], tm.start_stop_task, args=("CollectionPathTask",))
     while 1:
         time.sleep(1)

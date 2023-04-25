@@ -6,6 +6,7 @@ from common.timer_module import Timer
 from source.path_lib import CONFIG_PATH_SETTING
 if GIAconfig.General_InteractionMode == INTERACTION_DESKTOP_BACKGROUND:
     from source.interaction.interaction_dm import unbind, bind
+    from source.task.task_manager import TASK_MANAGER
 
 global W_KEYDOWN
 class GenericEvent(BaseThreading):
@@ -19,8 +20,8 @@ class GenericEvent(BaseThreading):
             
     def run(self) -> None:
         '''if you're using this class, copy this'''
-        pt = time.time()
         while 1:
+            pt = time.time()
             time.sleep(self.while_sleep)
             if self.stop_threading_flag:
                 return
@@ -39,9 +40,13 @@ class GenericEvent(BaseThreading):
                 continue
             '''write your code below'''
             dilation_rate = self.while_sleep/(time.time()-pt)
-            if dilation_rate<0.99:
+            if dilation_rate < 0.6:
+                logger.warning(f"time dilation rate: {dilation_rate}")
+            if dilation_rate < 0.9:
+                logger.info(f"time dilation rate: {dilation_rate}")
+            elif dilation_rate<0.99:
                 logger.trace(f"time dilation rate: {dilation_rate}")
-            pt = time.time()
+            
             if INTERACTION_MODE == INTERACTION_DESKTOP_BACKGROUND or INTERACTION_DESKTOP:
                 if static_lib.W_KEYDOWN == True:
                     if self.w_down_flag == False:
@@ -58,15 +63,20 @@ class GenericEvent(BaseThreading):
             
             if INTERACTION_MODE == INTERACTION_DESKTOP_BACKGROUND:
                 win_name = get_active_window_process_name()
-                if win_name in PROCESS_NAME:
+                if TASK_MANAGER.start_tasklist_flag:
+                    if win_name in PROCESS_NAME:
+                        unbind()
+                        while 1:
+                            if get_active_window_process_name() not in PROCESS_NAME:
+                                logger.info(t2t("恢复操作"))
+                                break
+                            logger.info(t2t("当前窗口焦点为") + str(win_name) + t2t("是原神窗口") + str(PROCESS_NAME) + t2t("，操作暂停 ") + str(5 - (time.time()%5)) +t2t(" 秒"))
+                            time.sleep(5 - (time.time()%5))
+                        bind()
+                    else:
+                        bind()
+                else:
                     unbind()
-                    while 1:
-                        if get_active_window_process_name() not in PROCESS_NAME:
-                            logger.info(t2t("恢复操作"))
-                            break
-                        logger.info(t2t("当前窗口焦点为") + str(win_name) + t2t("是原神窗口") + str(PROCESS_NAME) + t2t("，操作暂停 ") + str(5 - (time.time()%5)) +t2t(" 秒"))
-                        time.sleep(5 - (time.time()%5))
-                    bind()
                     
                     
             

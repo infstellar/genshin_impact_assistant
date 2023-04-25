@@ -42,6 +42,9 @@ def move(direction, distance=1):
             itt.key_up('s')
 jump_timer1 = Timer()
 jump_timer2 = Timer()
+def jump_timer_reset():
+    jump_timer1.reset()
+
 def jump_in_loop(jump_dt:float=2):
     if jump_timer1.get_diff_time() >= jump_dt:
         jump_timer1.reset()

@@ -156,7 +156,7 @@ class Map(MiniMap, BigMap, MapConverter):
         self.check_bigmap_scaling()
         if is_upd:
             self._upd_bigmap()
-        logger.info(f"bigmap posi: {self.convert_GIMAP_to_cvAutoTrack(self.bigmap)}")
+        logger.debug(f"bigmap posi: {self.convert_GIMAP_to_cvAutoTrack(self.bigmap)}")
         return GIMAPPosition(self.bigmap)
 
 
@@ -205,8 +205,8 @@ class Map(MiniMap, BigMap, MapConverter):
         dy = min((curr_posi[1] - target_posi[1]) * self.MAP_POSI2MOVE_POSI_RATE, self.BIGMAP_MOVE_MAX)
         dy = max(dy, -self.BIGMAP_MOVE_MAX)
 
-        logger.info(f"curr: {curr_posi} target: {target_posi}")
-        logger.info(f"_move_bigmap: {dx} {dy}")
+        logger.debug(f"curr: {curr_posi} target: {target_posi}")
+        logger.debug(f"_move_bigmap: {dx} {dy}")
 
         itt.move_to(dx, dy, relative=True)
         itt.delay(0.2, comment="waiting genshin")

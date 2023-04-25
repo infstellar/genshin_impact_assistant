@@ -225,6 +225,7 @@ class AimOperator(BaseThreading):
         move_timer = AdvanceTimer(15).start()
         move_timer.start()
         combat_lib.CSDL.freeze_state()
+        movement.jump_timer_reset()
         while 1:
             time.sleep(0.1)
             if self.checkup_stop_func():
@@ -359,6 +360,7 @@ class AimOperator(BaseThreading):
                 return False
             if px < target_px:
                 itt.key_down('w')
+                movement.jump_timer_reset()
                 while 1:
                     time.sleep(0.05)
                     if self.checkup_stop_func(): 
