@@ -37,7 +37,7 @@ class SwitchCharacterOperator(BaseThreading):
 
         self.died_character = [] # 存储的是n而非name
         self.reborn_timer = Timer(diff_start_time=150)
-        self.position_check_timer = AdvanceTimer(0.5).start()
+        self.position_check_timer = AdvanceTimer(0.3).start()
         self.mode="Normal"
     
     def run(self):
@@ -67,7 +67,7 @@ class SwitchCharacterOperator(BaseThreading):
                     self.aim_operator.sco_blocking_request.reply_request()
                     logger.debug("sco_blocking_request")
                     self.switch_character(switch_type="SHIELD")
-                    time.sleep(0.5)
+                    time.sleep(0.3)
                     continue
                 if self.tactic_operator.get_working_statement():  # tactic operator working
                     time.sleep(0.1)

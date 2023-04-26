@@ -52,6 +52,7 @@ class IncreasingDangerGeneral(CommissionTemplate):
                 return
             if reset_view_timer.reached_and_reset():
                 movement.reset_view()
+            movement.jump_in_loop(6)
             if self._aim_to_commission_icon():
                 if attack_timer.reached_and_reset():itt.left_click()
             if self.is_commission_complete():
