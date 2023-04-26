@@ -80,7 +80,7 @@ def move_view_p(x, y):
 def reset_view():
     if IS_DEVICE_PC:
         itt.middle_click()
-        time.sleep(1)
+        itt.delay(0.4)
 
 def calculate_delta_angle(cangle,tangle):
     dangle = cangle - tangle

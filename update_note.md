@@ -1,5 +1,7 @@
 ## TODO：
 - 传送点识别区域还是不够大
+- domain 退出 识别错误
+- combat sco shield与复活不兼容 考虑加入usd。
 - 自动战斗main的优先级调高
 - commission 执行完就是成功
 - thread init
