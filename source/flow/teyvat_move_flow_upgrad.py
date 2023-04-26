@@ -39,6 +39,7 @@ class TeyvatMoveFlowConnector(FlowConnector):
         self.is_reinit = True
         self.is_precise_arrival = False
         self.stop_offset = None
+        self.is_tianli_navigation = True
 
         self.motion_state = IN_MOVE
         self.jump_timer = timer_module.Timer()
@@ -65,6 +66,7 @@ class TeyvatMoveFlowConnector(FlowConnector):
         self.is_reinit = True
         self.is_precise_arrival = False
         self.stop_offset = None
+        self.is_tianli_navigation = True
         
         self.motion_state = IN_MOVE
         self.jump_timer = timer_module.Timer()
@@ -152,31 +154,44 @@ class Navigation(TianliNavigator):
         self.navigation_path = []
         self._init_path()
 
-    def _get_closest_node(self, position):
+    def _get_closest_node(self, position, threshold=150):
         plist = quick_euclidean_distance_plist(position, self.all_navigation_posi)
         for i in self.NAVIGATION_POINTS.items():
             if euclidean_distance(plist[0], i[1].position) <= 1:
-                return i[1]
+                if euclidean_distance(plist[0], position) > threshold:
+                    return None
+                else:
+                    return i[1]
 
     def _init_path(self):
-        self.navigation_path = self.astar(
-                                        self._get_closest_node(self.start_p),
-                                        self._get_closest_node(self.end_p))
+        start_node = self._get_closest_node(self.start_p)
+        end_node = self._get_closest_node(self.end_p)
+        if start_node != None and end_node != None:
+            self.navigation_path = self.astar(start_node,end_node)
+        else:
+            logger.info(f"不在服务区")
+            self.navigation_path = None
 
     def set_curr_posi(self, posi):
         self._curr_posi = posi
 
     def get_navigation_positions(self):
-        return [self.NAVIGATION_POINTS[i] for i in self.navigation_path]
+        if self.navigation_path is None:
+            return [self.end_p]
+        else:
+            return [self.NAVIGATION_POINTS[i].position for i in self.navigation_path]
 
 
-class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon):
+class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon, Navigation):
     def __init__(self, upper: TeyvatMoveFlowConnector):
         FlowTemplate.__init__(self, upper, flow_id=ST.INIT_TEYVAT_MOVE, next_flow_id=ST.END_TEYVAT_MOVE_PASS)
         TeyvatMoveCommon.__init__(self)
+        Navigation.__init__(self, genshin_map.get_position(), self.upper.target_posi)
         self.upper = upper
         self.auto_move_timeout = timer_module.AdvanceTimer(limit=300).start()
         self.in_flag = False
+        self.posi_list = []
+        self.posi_index = 0
 
     # def _calculate_next_priority_point(self, currentp, targetp):
     #     float_distance = 35
@@ -208,6 +223,13 @@ class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon):
         self.history_position = []
         self.upper.while_sleep = 0
         self.in_flag = False
+
+        if self.upper.is_tianli_navigation:
+            self.posi_list = self.get_navigation_positions()
+            self.posi_list.append([self.upper.target_posi])
+        else:
+            self.posi_list = [self.upper.target_posi]
+        
         self._next_rfc()
     
 
@@ -222,7 +244,10 @@ class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon):
             self._set_rfc(FC.END)
         
         # print(p1)
-        movement.change_view_to_posi(p1, self.upper.checkup_stop_func)
+        if movement.move_to_posi_LoopMode(self.posi_list[self.posi_index], self.upper.checkup_stop_func):
+            self.posi_index += 1
+            self.posi_index = min(len(self.posi_list)-1, self.posi_index)
+        # movement.change_view_to_posi(p1, self.upper.checkup_stop_func)
         if not self.in_flag:
             itt.key_down('w')
             self.in_flag = True

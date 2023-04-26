@@ -223,7 +223,7 @@ def get_current_motion_state() -> str:
     else:
         return WALKING
 
-def move_to_posi_LoopMode(target_posi, stop_func):
+def move_to_posi_LoopMode(target_posi, stop_func, threshold = 6):
     """移动到指定坐标。适合用于while循环的模式。
 
     Args:
@@ -237,6 +237,7 @@ def move_to_posi_LoopMode(target_posi, stop_func):
         itt.key_down('w')
     else:
         change_view_to_posi(target_posi, stop_func = stop_func, max_loop=4, offset=2, print_log = False)
+    return euclidean_distance(genshin_map.get_position(), target_posi) <= threshold
 
 # view_to_angle(-90)
 if __name__ == '__main__':

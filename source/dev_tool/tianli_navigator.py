@@ -17,16 +17,20 @@ class TianliNavigator(astar.AStar, MapConverter):
     GIMAP_RAWIMG = cv2.imread(fr"F:/GIMAP.png")
     def __init__(self) -> None:
         super().__init__()
-        ps = load_json("tianli_navigation_points_test.json", default_path=fr"{ASSETS_PATH}")
-        self._build_navigation_points(ps)
+        self.navigation_dict = load_json("tianli_navigation_points_test.json", default_path=fr"{ASSETS_PATH}")
+        self._build_navigation_points()
         # self.GIMAP_IMG = cv2.cvtColor(self.GIMAP_RAWIMG, cv2.COLOR_BGRA2RGB)
+        plt.title("title")
+        plt.ion()
+        self.fig, self.axe = plt.subplots(1, 1)
+        self.axe.invert_yaxis()
+        
 
-    def _build_navigation_points(self, ps:dict):
-        for i in ps:
-            inti = int(i)
-            self.NAVIGATION_POINTS[i] = GenshinNavigationPoint(i, position=ps[i]['position'])
+    def _build_navigation_points(self):
+        for i in self.navigation_dict:
+            self.NAVIGATION_POINTS[i] = GenshinNavigationPoint(i, position=self.navigation_dict[i]['position'])
         for i in self.NAVIGATION_POINTS:
-            for ii in ps[i]['links']:
+            for ii in self.navigation_dict[i]['links']:
                 self.NAVIGATION_POINTS[i].links.append(self.NAVIGATION_POINTS[ii])
     
     def _distance(self, n1:GenshinNavigationPoint, n2:GenshinNavigationPoint):
@@ -64,28 +68,62 @@ class TianliNavigator(astar.AStar, MapConverter):
         """
         return node.links
 
-    
-
 class TianLiNavigatorDev(TianliNavigator):
     def __init__(self) -> None:
         super().__init__()
 
-    def draw_navigation_in_gimap(self):
-        fig, axe = plt.subplots(1, 1)
-        plt.title("title")
-        axe.invert_yaxis()
-        plt.imshow(cv2.cvtColor(self.GIMAP_RAWIMG,cv2.COLOR_BGRA2RGB))
-        xs = [self.convert_cvAutoTrack_to_GIMAP(p[1].position[0]) for p in self.NAVIGATION_POINTS.items()]
-        ys = [self.convert_cvAutoTrack_to_GIMAP(p[1].position[1]) for p in self.NAVIGATION_POINTS.items()]
-        print(xs,ys)
-        plt.scatter(xs,ys)
-        plt.show()
+    def _scatter(self, position, convert=False):
+        if convert:
+            position = self.convert_cvAutoTrack_to_GIMAP(position)
+        plt.scatter(position[0],position[1],c='r',s=20)
 
-    def exec_command(self,x):
+    def _arrow(self, p_start, pend, convert=False):
+        if convert:
+            p_start = self.convert_cvAutoTrack_to_GIMAP(p_start)
+            pend = self.convert_cvAutoTrack_to_GIMAP(pend)
+        plt.arrow(p_start[0], p_start[1], pend[0]-p_start[0], pend[1]-p_start[1], width=0.2, head_width=0.6, fc='b')
+
+    def draw_navigation_in_gimap(self, refresh = True):
+        # if refresh:
+        #     self.fig.canvas.draw()
+        if refresh:
+            xlim, ylim = plt.xlim(), plt.ylim()
+            plt.clf()
+        plt.imshow(cv2.cvtColor(self.GIMAP_RAWIMG,cv2.COLOR_BGRA2RGB))
+        # print(xlim, ylim)
+        for k in self.NAVIGATION_POINTS.items():
+            self._scatter(k[1].position, convert=True)
+            for link_node in k[1].links:
+                # link_node = self.NAVIGATION_POINTS[link]
+                self._arrow(k[1].position, link_node.position, convert=True)
+            plt.annotate(str(k[0]), xy=tuple(self.convert_cvAutoTrack_to_GIMAP(k[1].position)))
+            # print(k[1].position, link_node.position)
+        self.fig.canvas.draw()
+        self.fig.canvas.flush_events()
+        if refresh:
+            print(xlim, ylim)
+            plt.xlim(xlim)
+            plt.ylim(ylim)
+
+    def exec_command(self,x:str):
         """
         exec command when using
         """
-        pass
+        cmd = x.split(' ')
+        if cmd[0]=='del':
+            self.del_point(cmd[1])
+        elif cmd[0]=='link':
+            self.link_points(cmd[1], cmd[2])
+        elif cmd[0]=='add':
+            kid = str(int(list(self.NAVIGATION_POINTS.items())[-1][0])+1)
+            self.add_point(list(map(int, cmd[1].split(','))), kid)
+        elif cmd[0]=='move':
+            self.move_point(cmd[1], list(map(int, cmd[2].split(','))))
+        elif cmd[0]=='del':
+            self.del_point(cmd[1])
+        elif cmd[0]=='save':
+            self.save()
+        self.draw_navigation_in_gimap()
 
     def analyze_path(self, filename):
         """
@@ -97,23 +135,47 @@ class TianLiNavigatorDev(TianliNavigator):
         """
         del point by id
         """
-        pass
+        for i in self.NAVIGATION_POINTS.items():
+            if x in [i.id for i in i[1].links]:
+                i[1].links.pop(i[1].links.index(self.NAVIGATION_POINTS[x]))
+        self.NAVIGATION_POINTS.pop(x)
 
+
+    def link_points(self, x, y):
+        self.NAVIGATION_POINTS[x].links.append(self.NAVIGATION_POINTS[y])
+    
     def move_point(self,x,delta:list):
         """
         move point by id and list[x,y]
         """
-        pass
-    
+        self.NAVIGATION_POINTS[x].position=list(np.array(self.NAVIGATION_POINTS[x]).position+np.array(delta))
+
+    def add_point(self, posi:list, id:str):
+        posi=list(self.convert_GIMAP_to_cvAutoTrack(posi))
+        self.navigation_dict[id] = {
+            "position":posi,
+            "links":[]
+        }
+        self._build_navigation_points()
+        # self.NAVIGATION_POINTS[id]=GenshinNavigationPoint(id=id, position=posi)
+
+    def save(self):
+        save_json(self.navigation_dict,"tianli_navigation_points_test.json", default_path=fr"{ASSETS_PATH}")
+
     def speak(self):
         """
         高德地图持续为您导航
         """
         pass
+# add 4506,3016
+    def run(self):
+        self.draw_navigation_in_gimap(refresh=False)
+        while 1:
+            self.exec_command(input("command:"))
 
 if __name__ == '__main__':
-    tn = TianLiNavigatorDev()
-    tn.draw_navigation_in_gimap()
+    tlnd = TianLiNavigatorDev()
+    tlnd.run()
     # print([f"{i.id}" for i in tn.astar(tn.NAVIGATION_POINTS['1'], tn.NAVIGATION_POINTS['5'])])
     print()
 
