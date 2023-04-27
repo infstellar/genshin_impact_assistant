@@ -61,23 +61,23 @@ class SwitchCharacterOperator(BaseThreading):
             if self.mode == 'Shield':
                 self.aim_operator.pause_threading()
                 self.switch_character(switch_type="SHIELD")
-                time.sleep(0.5)
+                time.sleep(0.4)
             else:
                 if self.aim_operator.sco_blocking_request.is_blocking():
                     self.aim_operator.sco_blocking_request.reply_request()
                     logger.debug("sco_blocking_request")
                     self.switch_character(switch_type="SHIELD")
-                    time.sleep(0.3)
+                    time.sleep(0.2)
                     continue
                 if self.tactic_operator.get_working_statement():  # tactic operator working
-                    time.sleep(0.1)
+                    # time.sleep(0.1)
                     if self.position_check_timer.reached_and_reset():
                         logger.debug("tactic operator working")
                         self.switch_character(switch_type="SHIELD")
                 else:
                     logger.debug("switch_character TRIGGER")
                     self.switch_character(switch_type="TRIGGER")
-                    time.sleep(0.5)
+                    time.sleep(0.4)
 
     
     def _check_and_reborn(self,x) -> bool:
@@ -183,7 +183,9 @@ class SwitchCharacterOperator(BaseThreading):
             combat_lib.unconventionality_situation_detection()
             itt.key_press(str(x))
             if combat_lib.get_current_chara_num(self.checkup_stop_func, max_times = 5) == x:
-                switch_succ_num += 1
+                itt.delay(0.1, comment='quick switch delay')
+                if combat_lib.get_current_chara_num(self.checkup_stop_func, max_times = 5) == x:
+                    switch_succ_num += 2
             r = self._check_and_reborn(x)
             if not r: # if r == False
                 return False
@@ -195,13 +197,13 @@ class SwitchCharacterOperator(BaseThreading):
                     movement.move(i, distance=3)
             if i > 55:
                 logger.warning('角色切换失败')
+            logger.trace(f"sco loop cost: {time.time()-pt}")
             if switch_succ_num >= switch_target_num:
                 logger.debug(f"switch chara to {x} succ")
                 self.current_num = x
                 self.switch_timer.reset()
                 # itt.delay(0.05)
                 return True
-            logger.trace(f"sco loop cost: {time.time()-pt}")
         # self.current_num = x
         self.switch_timer.reset()
         # itt.delay(0.05)

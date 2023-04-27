@@ -39,7 +39,7 @@ class TeyvatMoveFlowConnector(FlowConnector):
         self.is_reinit = True
         self.is_precise_arrival = False
         self.stop_offset = None
-        self.is_tianli_navigation = True
+        self.is_tianli_navigation = False
 
         self.motion_state = IN_MOVE
         self.jump_timer = timer_module.Timer()
@@ -66,7 +66,7 @@ class TeyvatMoveFlowConnector(FlowConnector):
         self.is_reinit = True
         self.is_precise_arrival = False
         self.stop_offset = None
-        self.is_tianli_navigation = True
+        self.is_tianli_navigation = False
         
         self.motion_state = IN_MOVE
         self.jump_timer = timer_module.Timer()
@@ -182,11 +182,11 @@ class Navigation(TianliNavigator):
             return [self.NAVIGATION_POINTS[i].position for i in self.navigation_path]
 
 
-class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon, Navigation):
+class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon): # , Navigation
     def __init__(self, upper: TeyvatMoveFlowConnector):
         FlowTemplate.__init__(self, upper, flow_id=ST.INIT_TEYVAT_MOVE, next_flow_id=ST.END_TEYVAT_MOVE_PASS)
         TeyvatMoveCommon.__init__(self)
-        Navigation.__init__(self, genshin_map.get_position(), self.upper.target_posi)
+        # Navigation.__init__(self, genshin_map.get_position(), self.upper.target_posi)
         self.upper = upper
         self.auto_move_timeout = timer_module.AdvanceTimer(limit=300).start()
         self.in_flag = False
