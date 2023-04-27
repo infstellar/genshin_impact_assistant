@@ -61,7 +61,7 @@ class SwitchCharacterOperator(BaseThreading):
             if self.mode == 'Shield':
                 self.aim_operator.pause_threading()
                 self.switch_character(switch_type="SHIELD")
-                time.sleep(1)
+                time.sleep(0.5)
             else:
                 if self.aim_operator.sco_blocking_request.is_blocking():
                     self.aim_operator.sco_blocking_request.reply_request()
@@ -80,7 +80,7 @@ class SwitchCharacterOperator(BaseThreading):
                     time.sleep(0.5)
 
     
-    def _check_and_reborn(self) -> bool:
+    def _check_and_reborn(self,x) -> bool:
         """重生角色
 
         Returns:
@@ -103,6 +103,8 @@ class SwitchCharacterOperator(BaseThreading):
             if not succ_flag_1:
                 logger.info("reborn failed")
                 self.reborn_timer.reset()
+                self.died_character.append(x)
+                itt.key_press('esc')
                 return False # failed
                   
             for i in range(3):
@@ -117,6 +119,8 @@ class SwitchCharacterOperator(BaseThreading):
             self.reborn_timer.reset()
             itt.key_press('esc')
             time.sleep(0.3) # 防止重复检测
+            self.died_character.append(x)
+            itt.key_press('esc')
             return False # failed
         else:
             return True
@@ -174,24 +178,15 @@ class SwitchCharacterOperator(BaseThreading):
         switch_succ_num = 0
         switch_target_num = 2
         for i in range(60):
-            if self.checkup_stop_func():
-                return True
-            if i > 3:
-                is_busy = combat_lib.is_character_busy()
-            else:
-                is_busy = False
-            if not is_busy:
-                if i > 3:
-                    combat_lib.unconventionality_situation_detection()
-                itt.key_press(str(x))
-                if combat_lib.get_current_chara_num(self.checkup_stop_func, max_times = 5) == x:
-                    switch_succ_num += 1
-            if i >= 4 or is_busy == True:
-                r = self._check_and_reborn()
-                if not r: # if r == False
-                    self.died_character.append(x)
-                    itt.key_press('esc')
-                    return True
+            pt = time.time()
+            if self.checkup_stop_func(): return False
+            combat_lib.unconventionality_situation_detection()
+            itt.key_press(str(x))
+            if combat_lib.get_current_chara_num(self.checkup_stop_func, max_times = 5) == x:
+                switch_succ_num += 1
+            r = self._check_and_reborn(x)
+            if not r: # if r == False
+                return False
             if i > 10:
                 if i == 11:
                     movement.jump_timer_reset()
@@ -206,6 +201,7 @@ class SwitchCharacterOperator(BaseThreading):
                 self.switch_timer.reset()
                 # itt.delay(0.05)
                 return True
+            logger.trace(f"sco loop cost: {time.time()-pt}")
         # self.current_num = x
         self.switch_timer.reset()
         # itt.delay(0.05)

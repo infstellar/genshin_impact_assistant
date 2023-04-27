@@ -1,6 +1,5 @@
 from source.util import *
 import keyboard
-# from pynput.keyboard import Listener, KeyCode, Key
 from source.flow.flow_template import FlowController, FlowTemplate, FlowConnector, EndFlowTemplate
 import source.flow.flow_code as FC, source.flow.flow_state as ST
 from source.interaction.minimap_tracker import tracker
@@ -32,7 +31,6 @@ class PathRecorderConnector(FlowConnector):
         }
 
         self.min_distance = 1
-        # self.listener = self.listener = Listener(on_press=self._add_key_to_dict)
         # self.set_hotkey()
         self.path_name = ""
         self.last_direction = 999

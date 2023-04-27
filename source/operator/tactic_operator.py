@@ -65,14 +65,16 @@ class TacticOperator(BaseThreading):
                 return
 
             if self.pause_threading_flag:
-                if self.pause_timer.get_diff_time()<=2:
+                if self.pause_timer.get_diff_time()<=4:
                     time.sleep(0.02)
-                elif self.pause_timer.get_diff_time()<=4:
+                elif self.pause_timer.get_diff_time()<=8:
+                    time.sleep(0.05)
+                elif self.pause_timer.get_diff_time()<=20:
                     time.sleep(0.1)
-                elif self.pause_timer.get_diff_time()<=10:
-                    time.sleep(0.25)
+                elif self.pause_timer.get_diff_time()<=60:
+                    time.sleep(0.2)
                 else:
-                    time.sleep(1)
+                    time.sleep(0.4)
                 continue
             self.pause_timer.reset()
             if self.checkup_stop_func():
@@ -82,6 +84,7 @@ class TacticOperator(BaseThreading):
             # print('5')
 
             if (self.formered_tactic is None or len(self.formered_tactic) == 0):
+                logger.trace(f"no valid tactic, skip")
                 self.pause_threading()
             if not self.pause_threading_flag:
                 logger.debug(f"exec tactic start")
