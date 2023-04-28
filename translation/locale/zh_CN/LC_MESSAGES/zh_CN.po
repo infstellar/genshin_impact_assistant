@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2023-04-17 20:54+0800\n"
-"PO-Revision-Date: 2023-04-18 12:58+0800\n"
+"POT-Creation-Date: 2023-04-28 16:57+0800\n"
+"PO-Revision-Date: 2023-04-28 17:08+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -112,23 +112,23 @@ msgstr ""
 msgid "结束自动采集"
 msgstr ""
 
-#: source\common\generic_event.py:65 source\interaction\interaction_core.py:42
+#: source\common\generic_event.py:71 source\interaction\interaction_core.py:42
 msgid "恢复操作"
 msgstr ""
 
-#: source\common\generic_event.py:67
+#: source\common\generic_event.py:73
 msgid "是原神窗口"
 msgstr ""
 
-#: source\common\generic_event.py:67 source\interaction\interaction_core.py:44
+#: source\common\generic_event.py:73 source\interaction\interaction_core.py:44
 msgid " 秒"
 msgstr ""
 
-#: source\common\generic_event.py:67 source\interaction\interaction_core.py:44
+#: source\common\generic_event.py:73 source\interaction\interaction_core.py:44
 msgid "当前窗口焦点为"
 msgstr ""
 
-#: source\common\generic_event.py:67 source\interaction\interaction_core.py:44
+#: source\common\generic_event.py:73 source\interaction\interaction_core.py:44
 msgid "，操作暂停 "
 msgstr ""
 
@@ -142,13 +142,13 @@ msgstr ""
 
 #: source\controller\teyvat_move_controller.py:143
 #: source\controller\teyvat_move_controller_upgrad.py:138
-#: source\flow\teyvat_move_flow_upgrad.py:217
+#: source\flow\teyvat_move_flow_upgrad.py:269
 msgid "已到达目的地附近，本次导航结束。"
 msgstr ""
 
 #: source\controller\teyvat_move_controller.py:149
 #: source\controller\teyvat_move_controller_upgrad.py:144
-#: source\flow\teyvat_move_flow_upgrad.py:230
+#: source\flow\teyvat_move_flow_upgrad.py:282
 msgid "已到达F附近，本次导航结束。"
 msgstr ""
 
@@ -167,7 +167,7 @@ msgstr ""
 
 #: source\flow\collector_flow.py:244
 msgid "Flow timeout"
-msgstr ""
+msgstr "流程超时"
 
 #: source\flow\collector_flow.py:256
 msgid "有人嘎了，正在停止此次采集"
@@ -241,10 +241,6 @@ msgstr ""
 msgid "次数结束。退出秘境"
 msgstr ""
 
-#: source\flow\path_recorder_flow.py:86
-msgid "special key added:"
-msgstr ""
-
 #: source\flow\path_recorder_flow.py:114
 msgid "position added:"
 msgstr "坐标已添加："
@@ -257,7 +253,7 @@ msgstr "准备开始记录"
 msgid "ready to stop recording"
 msgstr "准备停止记录"
 
-#: source\flow\path_recorder_flow.py:182
+#: source\flow\path_recorder_flow.py:183
 msgid "start recording"
 msgstr "开始记录"
 
@@ -287,16 +283,16 @@ msgstr "处于地图边界，is_chara_busy 函数启用模糊匹配。"
 msgid "获得当前角色编号失败"
 msgstr ""
 
-#: source\funclib\combat_lib.py:500
+#: source\funclib\combat_lib.py:501
 msgid ""
 "The strategy file for the current teaming is not found in the tactic folder: "
-msgstr ""
+msgstr "在tactic文件夹中没有找到当前组队的tactic文件"
 
-#: source\funclib\combat_lib.py:552
+#: source\funclib\combat_lib.py:553
 msgid "请将配对文件中的tastic_group更名为tactic_group. 已自动识别。"
 msgstr ""
 
-#: source\funclib\combat_lib.py:571
+#: source\funclib\combat_lib.py:572
 msgid "Character Key Empty Error"
 msgstr ""
 
@@ -321,27 +317,27 @@ msgstr ""
 msgid "将在0.2秒后再次尝试获取UI界面"
 msgstr ""
 
-#: source\interaction\capture.py:57
+#: source\interaction\capture.py:66
 msgid "Fail to get capture: "
 msgstr "截图失败"
 
-#: source\interaction\capture.py:59
+#: source\interaction\capture.py:68
 msgid " waiting 2 sec."
 msgstr "等待2秒"
 
-#: source\interaction\capture.py:100
+#: source\interaction\capture.py:109
 msgid "research handle: "
 msgstr "重新搜索句柄"
 
-#: source\interaction\capture.py:106
+#: source\interaction\capture.py:115
 msgid "research monitor: "
 msgstr ""
 
-#: source\interaction\capture.py:114
+#: source\interaction\capture.py:123
 msgid "multiple monitor detected: "
 msgstr ""
 
-#: source\interaction\capture.py:135
+#: source\interaction\capture.py:144
 msgid ""
 "You seem to have monitor scaling set? It is automatically recognized and "
 "this does not affect usage."
@@ -351,7 +347,7 @@ msgstr "你看起来使用了多个不同的显示器缩放？已自动识别。
 msgid "不是原神窗口"
 msgstr ""
 
-#: source\interaction\interaction_core.py:353
+#: source\interaction\interaction_core.py:355
 msgid "appear then click fail"
 msgstr "appear then click失败"
 
@@ -420,23 +416,23 @@ msgstr "任务"
 msgid "End Task"
 msgstr "任务结束"
 
-#: source\webio\page_manager.py:33
+#: source\webio\page_manager.py:31
 msgid "Main"
 msgstr "主页面"
 
-#: source\webio\page_manager.py:34
+#: source\webio\page_manager.py:32
 msgid "Setting"
 msgstr "设置页面"
 
-#: source\webio\page_manager.py:35
+#: source\webio\page_manager.py:33
 msgid "CombatSetting"
 msgstr "自动战斗设置"
 
-#: source\webio\page_manager.py:36 source\webio\pages.py:752
+#: source\webio\page_manager.py:34 source\webio\pages.py:750
 msgid "CollectorSetting"
 msgstr "自动采集设置"
 
-#: source\webio\pages.py:51 source\webio\pages.py:54 source\webio\pages.py:329
+#: source\webio\pages.py:51 source\webio\pages.py:54 source\webio\pages.py:327
 msgid "未找到会话，可能由于窗口关闭。请刷新页面重试。"
 msgstr ""
 
@@ -452,196 +448,196 @@ msgstr ""
 msgid "Get IP address"
 msgstr "获取IP地址"
 
-#: source\webio\pages.py:115 source\webio\pages.py:119
+#: source\webio\pages.py:117
 msgid "Domain Task"
 msgstr "秘境任务"
 
-#: source\webio\pages.py:115 source\webio\pages.py:135
-msgid "Mission"
-msgstr "Mission"
-
-#: source\webio\pages.py:123
+#: source\webio\pages.py:121
 msgid "Daily Commission"
 msgstr "每日委托"
 
-#: source\webio\pages.py:127
+#: source\webio\pages.py:125
 msgid "Claim Reward"
 msgstr "领取日常奖励"
 
-#: source\webio\pages.py:131
+#: source\webio\pages.py:129
 msgid "Ley Line Outcrop"
-msgstr ""
+msgstr "地脉衍出"
 
-#: source\webio\pages.py:141
+#: source\webio\pages.py:133
+msgid "Mission"
+msgstr "Mission"
+
+#: source\webio\pages.py:139
 msgid "Task List"
 msgstr "任务列表"
 
-#: source\webio\pages.py:142
+#: source\webio\pages.py:140
 msgid "Can only be activated from the button"
 msgstr "只能通过按钮启动"
 
-#: source\webio\pages.py:148
+#: source\webio\pages.py:146
 msgid "启动/停止Task"
 msgstr ""
 
-#: source\webio\pages.py:150
+#: source\webio\pages.py:148
 msgid "## Statement"
 msgstr "## 状态"
 
-#: source\webio\pages.py:152
+#: source\webio\pages.py:150
 msgid "任务状态"
 msgstr ""
 
-#: source\webio\pages.py:154
+#: source\webio\pages.py:152
 msgid "## Mission"
 msgstr ""
 
-#: source\webio\pages.py:158
+#: source\webio\pages.py:156
 msgid "Mission Group"
 msgstr "Mission组"
 
-#: source\webio\pages.py:165
+#: source\webio\pages.py:163
 msgid "## Function"
 msgstr "## 功能"
 
-#: source\webio\pages.py:166
+#: source\webio\pages.py:164
 msgid "Can only be activated from the hotkey '['"
 msgstr "只能通过快捷键启动（默认为‘['）"
 
-#: source\webio\pages.py:168
+#: source\webio\pages.py:166
 msgid "FlowMode"
 msgstr "流程模式"
 
-#: source\webio\pages.py:170
+#: source\webio\pages.py:168
 msgid "Idle"
 msgstr "空闲"
 
-#: source\webio\pages.py:171
+#: source\webio\pages.py:169
 msgid "AutoCombat"
 msgstr "自动战斗"
 
-#: source\webio\pages.py:188
+#: source\webio\pages.py:186
 msgid "## Log"
 msgstr "## 日志"
 
-#: source\webio\pages.py:195
+#: source\webio\pages.py:193
 msgid "更新提示"
 msgstr ""
 
-#: source\webio\pages.py:230
+#: source\webio\pages.py:228
 msgid "Not Enabled"
 msgstr "未启用"
 
-#: source\webio\pages.py:231
+#: source\webio\pages.py:229
 msgid "LAN IP"
 msgstr "局域网IP"
 
-#: source\webio\pages.py:231
+#: source\webio\pages.py:229
 msgid "WAN IP"
 msgstr "以太网IP"
 
-#: source\webio\pages.py:278
+#: source\webio\pages.py:276
 msgid "# Config"
 msgstr "# 设置"
 
-#: source\webio\pages.py:284 source\webio\pages.py:633
-#: source\webio\pages.py:713 source\webio\pages.py:758
+#: source\webio\pages.py:282 source\webio\pages.py:631
+#: source\webio\pages.py:711 source\webio\pages.py:756
 msgid "## config:"
 msgstr "## 设置："
 
-#: source\webio\pages.py:298
+#: source\webio\pages.py:296
 msgid "Combat.json"
 msgstr "自动战斗设置"
 
-#: source\webio\pages.py:299
+#: source\webio\pages.py:297
 msgid "Domain.json"
 msgstr "自动秘境设置"
 
-#: source\webio\pages.py:300
+#: source\webio\pages.py:298
 msgid "General.json"
 msgstr "通用设置"
 
-#: source\webio\pages.py:301
+#: source\webio\pages.py:299
 msgid "Keymap.json"
 msgstr "快捷键设置"
 
-#: source\webio\pages.py:302
+#: source\webio\pages.py:300
 msgid "collected.json"
 msgstr "自动采集-已采集id"
 
-#: source\webio\pages.py:303
+#: source\webio\pages.py:301
 msgid "collection_blacklist.json"
 msgstr "自动采集-黑名单id"
 
-#: source\webio\pages.py:304
+#: source\webio\pages.py:302
 msgid "collection_log.json"
 msgstr "自动采集记录"
 
-#: source\webio\pages.py:305
+#: source\webio\pages.py:303
 msgid "Collector.json"
 msgstr "自动采集设置"
 
-#: source\webio\pages.py:350 source\webio\pages.py:874
+#: source\webio\pages.py:348 source\webio\pages.py:872
 msgid "Verified!"
 msgstr "验证通过！"
 
-#: source\webio\pages.py:359 source\webio\pages.py:883
+#: source\webio\pages.py:357 source\webio\pages.py:881
 msgid "Waiting..."
 msgstr "等待中..."
 
-#: source\webio\pages.py:364 source\webio\pages.py:888
+#: source\webio\pages.py:362 source\webio\pages.py:886
 msgid "You may want to enter: "
 msgstr "你可能想输入："
 
-#: source\webio\pages.py:369 source\webio\pages.py:893
+#: source\webio\pages.py:367 source\webio\pages.py:891
 msgid "Not a valid name"
 msgstr "不是一个有效的名称"
 
-#: source\webio\pages.py:412
+#: source\webio\pages.py:410
 msgid "saved!"
 msgstr "保存成功！"
 
-#: source\webio\pages.py:455
+#: source\webio\pages.py:453
 msgid "Do you need to save changes?"
 msgstr "你要保存设置吗？"
 
-#: source\webio\pages.py:456
+#: source\webio\pages.py:454
 msgid "No"
 msgstr "否"
 
-#: source\webio\pages.py:456
+#: source\webio\pages.py:454
 msgid "Yes"
 msgstr "是"
 
-#: source\webio\pages.py:627
+#: source\webio\pages.py:625
 msgid "# Setting"
 msgstr "# 设置"
 
-#: source\webio\pages.py:697
+#: source\webio\pages.py:695
 msgid "# CombatSetting"
 msgstr "# 自动战斗设置"
 
-#: source\webio\pages.py:703
+#: source\webio\pages.py:701
 msgid "# Add team"
 msgstr "# 增加队伍"
 
-#: source\webio\pages.py:707
+#: source\webio\pages.py:705
 msgid "Add team"
 msgstr "增加队伍"
 
-#: source\webio\pages.py:709
+#: source\webio\pages.py:707
 msgid "自动填充"
 msgstr ""
 
-#: source\webio\pages.py:819
+#: source\webio\pages.py:817
 msgid "Add to blacklist"
 msgstr "添加到黑名单"
 
-#: source\webio\pages.py:827
+#: source\webio\pages.py:825
 msgid "展开/收起"
 msgstr ""
 
-#: source\webio\pages.py:862
+#: source\webio\pages.py:860
 msgid "clean list"
 msgstr "清空列表"
 

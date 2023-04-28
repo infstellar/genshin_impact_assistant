@@ -300,7 +300,8 @@ class ConfigPage(Page):
             "collected.json": t2t("collected.json"),
             "collection_blacklist.json": t2t("collection_blacklist.json"),
             "collection_log.json": t2t("collection_log.json"),
-            "Collector.json": t2t("Collector.json")
+            "Collector.json": t2t("Collector.json"),
+            "LeyLineOutcrop": t2t("LeyLineOutcrop.json")
         }
         
         for i in range(len(l1)):

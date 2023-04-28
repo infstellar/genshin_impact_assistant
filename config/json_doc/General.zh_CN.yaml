@@ -86,3 +86,9 @@ DomainName:
 StartStop:
   doc: 功能启停
 
+BlossomType:
+  doc: 花朵类型
+
+CollectionTimes:
+  doc: 采集次数
+
