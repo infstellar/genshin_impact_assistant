@@ -258,6 +258,27 @@ class Map(MiniMap, BigMap, MapConverter):
                     min_dist = i_dist
         return min_teleporter
 
+    def _switch_to_area(self, tp_region):
+        while 1:
+            time.sleep(0.1)
+            itt.appear_then_click(asset.ButtonBigmapSwitchMap)
+            if not itt.get_img_existence(asset.IconUIBigmap): break
+        itt.delay('animation')
+        if tp_region == "Mondstadt":
+            while not itt.appear_then_click(asset.MapAreaMD): itt.delay(0.2)
+        elif tp_region == "Liyue":
+            while not itt.appear_then_click(asset.MapAreaLY): itt.delay(0.2)
+        elif tp_region == "Inazuma":
+            while not itt.appear_then_click(asset.MapAreaDQ): itt.delay(0.2)
+        elif tp_region == "Sumeru":
+            while not itt.appear_then_click(asset.MapAreaXM): itt.delay(0.2)
+        itt.delay('animation')
+        while 1:
+            time.sleep(0.1)
+            if itt.get_img_existence(asset.IconUIBigmap): break
+            itt.appear_then_click(asset.ButtonBigmapCloseMarkTableInTP)
+        itt.delay('animation')
+
     def bigmap_tp(self, posi: list, tp_mode=0, tp_type: list = None) -> TianLiPosition:
         """
 
@@ -277,21 +298,7 @@ class Map(MiniMap, BigMap, MapConverter):
 
         self.check_bigmap_scaling()
 
-        while not itt.appear_then_click(asset.ButtonBigmapSwitchMap):
-            itt.delay(0.2)
-        itt.delay(0.5)
-        if tp_region == "Mondstadt":
-            while not itt.appear_then_click(asset.MapAreaMD): itt.delay(0.2)
-        elif tp_region == "Liyue":
-            while not itt.appear_then_click(asset.MapAreaLY): itt.delay(0.2)
-        elif tp_region == "Inazuma":
-            while not itt.appear_then_click(asset.MapAreaDQ): itt.delay(0.2)
-        elif tp_region == "Sumeru":
-            while not itt.appear_then_click(asset.MapAreaXM): itt.delay(0.2)
-        itt.delay(0.5)
-
-        itt.appear_then_click(asset.ButtonBigmapCloseMarkTableInTP)
-        itt.delay(0.5)
+        self._switch_to_area(tp_region)
 
         click_posi = self._move_bigmap(tp_posi)
 

@@ -40,11 +40,11 @@ class GenericEvent(BaseThreading):
                 continue
             '''write your code below'''
             dilation_rate = self.while_sleep/(time.time()-pt)
-            if dilation_rate < 0.6:
+            if dilation_rate < 0.8:
                 logger.warning(f"time dilation rate: {dilation_rate}")
-            if dilation_rate < 0.9:
+            if dilation_rate < 0.95:
                 logger.info(f"time dilation rate: {dilation_rate}")
-            elif dilation_rate<0.99:
+            elif dilation_rate<0.98:
                 logger.trace(f"time dilation rate: {dilation_rate}")
             
             if INTERACTION_MODE == INTERACTION_DESKTOP_BACKGROUND or INTERACTION_DESKTOP:
