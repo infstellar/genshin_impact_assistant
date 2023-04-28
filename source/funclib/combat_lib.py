@@ -493,7 +493,7 @@ def get_chara_list():
     load_err_times = 0
     team_name = GIAconfig.Combat_TeamFile
     # 决定team file
-    auto_choose = DEBUG_MODE        
+    auto_choose = GIAconfig.Combat_AdaptiveTeamSetup        
     if auto_choose:
         # 自动选择1：查找有没有符合要求的队伍文件
         team_name = get_curr_team_file()

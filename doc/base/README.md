@@ -67,13 +67,15 @@ To没用过github的小伙伴: 描述文档中的蓝色文字是链接,可以打
 ### 4. [自动每日委托辅助](./commission_assi.md)
 **正在早期测试，请谨慎开启并汇报遇到的错误。**
 
+> 目前仅能完成以下委托：ASmallStepForHilichurls,Emergency,IcyIssues,ForTheHarbingers,BigIceColdCrisis,SpreadingEvil,PudgyPyrotechnicians,IncreasingDanger.
+
 详情参见[自动每日委托辅助介绍](./commission_assi.md).
 
 ### 5. [每日领取凯瑟琳](./claim_reward.md)
 参见[领取日常奖励](./commission_assi.md).
 
 ### 6. [自动地脉衍出辅助](./ley_line_ourcrop.md)
-参见[自动地脉衍出辅助介绍](./commission_assi.md).
+参见[自动地脉衍出辅助介绍](./ley_line_ourcrop.md).
 
 ## 使用方法
 

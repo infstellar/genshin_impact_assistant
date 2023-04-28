@@ -8,13 +8,11 @@ class Page:
         self.loaded = False
         self.main_scope = 'Main'
 
-
     def load(self):
         if not self.loaded:
             self.loaded = True
             output.put_scope(self.main_scope)  # 创建主scope
             self._on_load()
-
 
     def unload(self):
         if self.loaded:

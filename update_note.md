@@ -1,4 +1,6 @@
 ## TODO：
+- time dilation rate
+- i18n
 - 传送点识别区域还是不够大
 - domain 退出 识别错误
 - combat sco shield与复活不兼容 考虑加入usd。

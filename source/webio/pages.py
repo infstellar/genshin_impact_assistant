@@ -111,31 +111,29 @@ class MainPage(Page):
             output.put_button(label=t2t("Get IP address"), onclick=self.on_click_ip_address, scope=self.main_scope)
 
         ], scope=self.main_scope)
-        if not DEBUG_MODE:
-            task_options = [{"label":t2t("Domain Task"),"value":"DomainTask"},{"label":t2t("Mission"),"value":"MissionTask"}]
-        else:
-            task_options = [
-                    {
-                        "label":t2t("Domain Task"),
-                        "value":"DomainTask"
-                    },
-                    {
-                        "label":t2t("Daily Commission"),
-                        "value":"CommissionTask"
-                    },
-                    {
-                        "label":t2t("Claim Reward"),
-                        "value":"ClaimRewardTask"
-                    },
-                    {
-                        "label":t2t("Ley Line Outcrop"),
-                        "value":"LeyLineOutcropTask"
-                    },
-                    {
-                        "label":t2t("Mission"),
-                        "value":"MissionTask"
-                    }
-                ]
+
+        task_options = [
+                {
+                    "label":t2t("Domain Task"),
+                    "value":"DomainTask"
+                },
+                {
+                    "label":t2t("Daily Commission"),
+                    "value":"CommissionTask"
+                },
+                {
+                    "label":t2t("Claim Reward"),
+                    "value":"ClaimRewardTask"
+                },
+                {
+                    "label":t2t("Ley Line Outcrop"),
+                    "value":"LeyLineOutcropTask"
+                },
+                {
+                    "label":t2t("Mission"),
+                    "value":"MissionTask"
+                }
+            ]
         output.put_row([  # 横列
             output.put_column([  # 左竖列
                 output.put_markdown('## '+t2t("Task List")),

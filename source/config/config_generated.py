@@ -21,7 +21,8 @@ class GeneratedConfig:
    Collector_CollectionMode = 'Auto'
    Collector_MinimumTimesMaskCollectorId = 10000
    Collector_PickupBlacklist = []
-   Combat_TeamFile = 'team.json'
+   Combat_TeamFile = 'team_example_1.json'
+   Combat_AdaptiveTeamSetup = True
    Domain_ChallengeTimes = 1
    Domain_Resin = '20'
    Domain_IsObscuredDomain = False
