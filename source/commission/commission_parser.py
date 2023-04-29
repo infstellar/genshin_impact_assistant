@@ -33,6 +33,7 @@ class CommissionParser():
         self.commission_dicts = []
         commission_positions = []
         ui_control.ensure_page(UIPages.page_bigmap)
+        genshin_map.get_bigmap_posi()
         genshin_map._switch_to_area("Mondstadt")
         for posi in self.TRAVERSE_MONDSTADT_POSITION:
             genshin_map.get_bigmap_posi()

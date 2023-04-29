@@ -1,6 +1,4 @@
 ## TODO：
-- time dilation rate
-- i18n
 - 传送点识别区域还是不够大
 - domain 退出 识别错误
 - combat sco shield与复活不兼容 考虑加入usd。
@@ -21,6 +19,9 @@
 - combat lib识别受ui限制
 
 ## Done：
+- time dilation rate
+- i18n
+- 支持无须弥人
 - aim operator move to enemy按空格
 - 让sco get_characters_name()在continue时获得charalist
 - move straight在移动视角前按下了w

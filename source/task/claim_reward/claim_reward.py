@@ -52,7 +52,8 @@ class ClaimRewardMission(MissionExecutor, Talk):
                             break
                         i+=80
         for area in [ButtonExpeditionMD, ButtonExpeditionLY, ButtonExpeditionDQ, ButtonExpeditionXM]:   
-            itt.appear_then_click(area)
+            r = itt.appear_then_click(area)
+            if not r: continue
             itt.delay("2animation")
             reset_character()
 
