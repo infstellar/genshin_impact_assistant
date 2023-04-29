@@ -67,13 +67,15 @@ For other settings, see[Auto Collector Assist introduction](./collector_assi.md)
 ### 4. [Auto Daily Commission Assist](./commission_assi.md)
 **In Early Access, pls use it with caution and report any error occuring. **
 
+> 目前仅能完成以下委托：ASmallStepForHilichurls,Emergency,IcyIssues,ForTheHarbingers,BigIceColdCrisis,SpreadingEvil,PudgyPyrotechnicians,IncreasingDanger.
+
 For more detiles, see [Auto Daily Commission Assist introduction](./commission_assi.md).
 
 ### 5. [Claim Daily Reward](./claim_reward.md)
 see [Claim Daily Reward introduction](./commission_assi.md).
 
-### 6. [Auto Ley Line Outcrop Assist](./ley_line_ourcrop.md)
-See [[Auto Ley Line Outcrop Assist introduction](./commission_assi.md).
+### 6. [自动地脉衍出辅助](./ley_line_ourcrop.md)
+参见[自动地脉衍出辅助介绍](./ley_line_ourcrop.md).
 
 ## How to use
 
@@ -137,7 +139,12 @@ Please make sure you have read the document and [FAQ](FAQ.md) before feedback bu
 
 Please send the log file in the Logs folder when you feedback.
 
-## Frequently ask question
+## 错误码
+
+如果日志输出了`ERR_CODE`或`WARN_CODE`，可以在[ERROR_CODE](error_code.md)中查看对应的信息：
+
+
+## 常见问题 FAQ
 
 If you enconter any problem when using, you can take a look at FAQ frist:
 
