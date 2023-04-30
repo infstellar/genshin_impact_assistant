@@ -114,6 +114,10 @@ class MainPage(Page):
 
         task_options = [
                 {
+                    "label":t2t("Launch genshin"),
+                    "value":"LaunchGenshinTask"
+                },
+                {
                     "label":t2t("Domain Task"),
                     "value":"DomainTask"
                 },

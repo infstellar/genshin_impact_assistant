@@ -251,7 +251,7 @@ class MissionExecutor(BaseThreading):
                 if jt.reached_and_reset():
                     itt.key_press('spacebar')
                     jt2.reset()
-                if jt2.reached_and_reset():
+                if jt2.reached():
                     itt.key_press('spacebar')
                     
         itt.key_up('w')

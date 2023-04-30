@@ -10,6 +10,7 @@ MISSION_TASK = "MissionTask"
 COMMISSION_TASK = "CommissionTask"
 CLAIM_REWARD_TASK = "ClaimRewardTask"
 LEY_LINE_OUTCROP_TASK = "LeyLineOutcropTask"
+LAUNCH_GENSHIN_TASK = "LaunchGenshinTask"
 
 class TaskManager(BaseThreading):
     def __init__(self) -> None:
@@ -74,6 +75,9 @@ class TaskManager(BaseThreading):
             elif task_name == LEY_LINE_OUTCROP_TASK:
                 from source.task.ley_line_outcrop.ley_line_outcrop import LeyLineOutcropTask
                 self.curr_task = LeyLineOutcropTask()
+            elif task_name == LAUNCH_GENSHIN_TASK:
+                from source.task.launch_genshin.launch_genshin import LaunchGenshin
+                self.curr_task = LaunchGenshin()
             elif task_name == 'CollectorTask':
                 pass
             logger.info(t2t("Task") + task_name + t2t(" Start."))
