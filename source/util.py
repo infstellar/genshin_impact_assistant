@@ -206,11 +206,17 @@ def quick_euclidean_distance_plist(p1, plist, max_points_num = 50)-> np.ndarray:
     # 计算当前点到所有优先点的曼哈顿距离
     md = manhattan_distance_plist(p1, plist)
     nearly_pp_arg = np.argsort(md)
+    ed = md.copy()
     # 计算当前点到距离最近的50个优先点的欧拉距离
-    cache_num = min(max_points_num, len(nearly_pp_arg))
-    nearly_pp = plist[nearly_pp_arg[:cache_num]]
-    ed = euclidean_distance_plist(p1, nearly_pp)
-
+    # cache_num = min(max_points_num, len(nearly_pp_arg))
+    i = 0
+    for i in nearly_pp_arg:
+        ed[i] = euclidean_distance(plist[i], p1)
+        i += 1
+        if i >= max_points_num:
+            break
+    # nearly_pp = plist[nearly_pp_arg[:cache_num]]
+    # ed = euclidean_distance_plist(p1, nearly_pp)
     return ed
 
     # 将点按欧拉距离升序排序

@@ -11,21 +11,17 @@ class GenshinNavigationPoint():
         self.id = id
         self.position = position
         self.links = []
+    
+    def __str__(self):
+        return f"GNP: {self.id}"
 
 class TianliNavigator(astar.AStar, MapConverter):
     NAVIGATION_POINTS = {}
-    GIMAP_RAWIMG = cv2.imread(fr"F:/GIMAP.png")
-    
     def __init__(self) -> None:
         super().__init__()
         self.navigation_dict = load_json("tianli_navigation_points_test.json", default_path=fr"{ASSETS_PATH}")
         self._build_navigation_points()
         # self.GIMAP_IMG = cv2.cvtColor(self.GIMAP_RAWIMG, cv2.COLOR_BGRA2RGB)
-        plt.title("title")
-        plt.ion()
-        self.fig, self.axe = plt.subplots(1, 1)
-        self.axe.invert_yaxis()
-        self.history_dict = {}
         
 
     def _build_navigation_points(self):
@@ -72,19 +68,28 @@ class TianliNavigator(astar.AStar, MapConverter):
         return node.links
 
 class TianLiNavigatorDev(TianliNavigator):
+    GIMAP_RAWIMG = cv2.imread(fr"F:/GIMAP.png")
     def __init__(self) -> None:
         super().__init__()
+        plt.title("title")
+        plt.ion()
+        self.fig, self.axe = plt.subplots(1, 1)
+        self.axe.invert_yaxis()
+        self.history_dict = {}
+        self.scatter_s = 50
+        self.head_width = 4
+        self.head_length = 6
 
     def _scatter(self, position, convert=False):
         if convert:
             position = self.convert_cvAutoTrack_to_GIMAP(position)
-        plt.scatter(position[0],position[1],c='r',s=50)
+        plt.scatter(position[0],position[1],c='r',s=self.scatter_s)
 
     def _arrow(self, p_start, pend, convert=False):
         if convert:
             p_start = self.convert_cvAutoTrack_to_GIMAP(p_start)
             pend = self.convert_cvAutoTrack_to_GIMAP(pend)
-        plt.arrow(p_start[0], p_start[1], pend[0]-p_start[0], pend[1]-p_start[1], width=0.3,head_width=2,head_length=2,fc='b')
+        plt.arrow(p_start[0], p_start[1], pend[0]-p_start[0], pend[1]-p_start[1], width=0.3,head_width=self.head_width,head_length=self.head_length,fc='b')
 
     def draw_navigation_in_gimap(self, refresh = True):
         # if refresh:
@@ -112,7 +117,7 @@ class TianLiNavigatorDev(TianliNavigator):
         """
         exec command when using
         """
-        
+        redraw = True
         for command in x.split(';'):
             cmd = command.split(' ')
             if cmd[0]!='undo':
@@ -120,6 +125,7 @@ class TianLiNavigatorDev(TianliNavigator):
             if cmd[0]=='del':
                 self.del_point(cmd[1])
             elif cmd[0]=='link':
+                logger.info(f"link {cmd[1]} -> {cmd[2]}")
                 self.link_points(cmd[1], cmd[2])
             elif cmd[0]=='add':
                 kid = str(max([int(i[0]) for i in self.navigation_dict.items()])+1)
@@ -137,11 +143,15 @@ class TianLiNavigatorDev(TianliNavigator):
                 self.move_point(cmd[1], list(map(float, cmd[2].split(','))))
             elif cmd[0]=='save':
                 self.save()
+                redraw = False
                 logger.info('saved')
             elif cmd[0]=='undo':
                 self.navigation_dict = self.history_dict
                 logger.info('undo succ')
-        self.draw_navigation_in_gimap()
+            elif cmd[0]=='size':
+                self.scatter_s, self.head_width, self.head_length = list(map(int,cmd[1].split(',')))
+        if redraw:
+            self.draw_navigation_in_gimap()
 
     def analyze_path(self, filename):
         """
@@ -169,6 +179,7 @@ class TianLiNavigatorDev(TianliNavigator):
 
     def link_points(self, x, y):
         self.navigation_dict[x]['links'].append(y)
+        self._build_navigation_points()
     
     def move_point(self,x,delta:list):
         """
@@ -204,11 +215,15 @@ class TianLiNavigatorDev(TianliNavigator):
     def run(self):
         self.draw_navigation_in_gimap(refresh=False)
         while 1:
-            self.exec_command(input("command:"))
+            try:
+                self.exec_command(input("command:"))
+            except Exception as e:
+                logger.exception(e)
 
 if __name__ == '__main__':
     tlnd = TianLiNavigatorDev()
-    tlnd.run()
+    print(list(tlnd.astar(tlnd.NAVIGATION_POINTS['14'], tlnd.NAVIGATION_POINTS['16'])))
+    # tlnd.run()
     # print([f"{i.id}" for i in tn.astar(tn.NAVIGATION_POINTS['1'], tn.NAVIGATION_POINTS['5'])])
     print()
 

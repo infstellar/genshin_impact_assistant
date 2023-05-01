@@ -39,7 +39,7 @@ class TeyvatMoveFlowConnector(FlowConnector):
         self.is_reinit = True
         self.is_precise_arrival = False
         self.stop_offset = None
-        self.is_tianli_navigation = False
+        self.is_tianli_navigation = True
 
         self.motion_state = IN_MOVE
         self.jump_timer = timer_module.Timer()
@@ -66,7 +66,7 @@ class TeyvatMoveFlowConnector(FlowConnector):
         self.is_reinit = True
         self.is_precise_arrival = False
         self.stop_offset = None
-        self.is_tianli_navigation = False
+        self.is_tianli_navigation = True
         
         self.motion_state = IN_MOVE
         self.jump_timer = timer_module.Timer()
@@ -147,27 +147,32 @@ class TeyvatMoveCommon():
 class Navigation(TianliNavigator):
     def __init__(self, start, end) -> None:
         super().__init__()
+        # 千万不要对这里的列表的顺序进行修改！！！
         self.start_p = start
         self.end_p = end    
         self._curr_posi = [0,0]
-        self.all_navigation_posi = [p[1].position for p in self.NAVIGATION_POINTS.items()]
+        self.all_navigation_posi = [p[1].position for p in self.NAVIGATION_POINTS.items()] # READ ONLY
         self.navigation_path = []
         self._init_path()
 
     def _get_closest_node(self, position, threshold=150):
         plist = quick_euclidean_distance_plist(position, self.all_navigation_posi)
-        for i in self.NAVIGATION_POINTS.items():
-            if euclidean_distance(plist[0], i[1].position) <= 1:
-                if euclidean_distance(plist[0], position) > threshold:
-                    return None
-                else:
-                    return i[1]
+        min_index = np.argmin(plist)
+        if euclidean_distance(self.all_navigation_posi[min_index], position) > threshold:
+            return None
+        else:
+            return list(self.NAVIGATION_POINTS.items())[min_index][1]
 
     def _init_path(self):
         start_node = self._get_closest_node(self.start_p)
         end_node = self._get_closest_node(self.end_p)
         if start_node != None and end_node != None:
-            self.navigation_path = self.astar(start_node,end_node)
+            self.navigation_path = list(self.astar(start_node,end_node))
+            if len(self.navigation_path) == 0:
+                logger.info(f"未找到路径")
+                self.navigation_path = None
+            else:
+                logger.info(f"navigation_path: {list(map(str, self.navigation_path))}")
         else:
             logger.info(f"不在服务区")
             self.navigation_path = None
@@ -179,14 +184,28 @@ class Navigation(TianliNavigator):
         if self.navigation_path is None:
             return [self.end_p]
         else:
-            return [self.NAVIGATION_POINTS[i].position for i in self.navigation_path]
+            return [i.position for i in self.navigation_path]
 
+    def get_navigation_info(self, i):
+        if i >= len(self.navigation_path):
+            return f""
+        return f"{self.navigation_path[i]}"
 
-class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon): # , Navigation
+    def print_TLPS_info(self, i, cp, speak=False):
+        r = self.get_navigation_info(i)
+        if r != '':
+            output_id = r
+            output_distance = euclidean_distance(cp, self.navigation_path[i].position)
+            output_remaining_navigation = f"{i+1} in {len(self.navigation_path)}"
+            # logger.info(f"TianLi Positioning System")
+            logger.info(f"Moving to Navigation {output_id}")
+            logger.info(f"Distance: {output_distance}")
+            logger.info(f"Remaining navigation: {output_remaining_navigation}")
+class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon, Navigation):
     def __init__(self, upper: TeyvatMoveFlowConnector):
         FlowTemplate.__init__(self, upper, flow_id=ST.INIT_TEYVAT_MOVE, next_flow_id=ST.END_TEYVAT_MOVE_PASS)
         TeyvatMoveCommon.__init__(self)
-        # Navigation.__init__(self, genshin_map.get_position(), self.upper.target_posi)
+        Navigation.__init__(self, genshin_map.get_position(), self.upper.target_posi)
         self.upper = upper
         self.auto_move_timeout = timer_module.AdvanceTimer(limit=300).start()
         self.in_flag = False
@@ -237,7 +256,7 @@ class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon): # , Navigation
         self.switch_motion_state()
         
         self.current_posi = genshin_map.get_position()
-        p1 = self.upper.target_posi
+        # p1 = self.upper.target_posi
         
         if self.is_stuck(self.current_posi):
             self._set_nfid(ST.END_TEYVAT_MOVE_STUCK)
@@ -247,6 +266,8 @@ class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon): # , Navigation
         if movement.move_to_posi_LoopMode(self.posi_list[self.posi_index], self.upper.checkup_stop_func):
             self.posi_index += 1
             self.posi_index = min(len(self.posi_list)-1, self.posi_index)
+            if self.upper.is_tianli_navigation:
+                self.print_TLPS_info(self.posi_index, self.current_posi)
         # movement.change_view_to_posi(p1, self.upper.checkup_stop_func)
         if not self.in_flag:
             itt.key_down('w')
@@ -582,19 +603,20 @@ class TeyvatMoveFlowController(FlowController):
 
         
 if __name__ == '__main__':
-    genshin_map.reinit_smallmap()
-    while 1:
-        time.sleep(0.2)
+    # genshin_map.reinit_smallmap()
+    # while 1:
+    #     time.sleep(0.2)
         
-        tx, ty = genshin_map.get_position()
-        degree = generic_lib.points_angle([tx, ty], [2083, -4844], coordinate=generic_lib.NEGATIVE_Y)
-        movement.change_view_to_angle(degree, lambda:False)
+    #     tx, ty = genshin_map.get_position()
+    #     degree = generic_lib.points_angle([tx, ty], [2083, -4844], coordinate=generic_lib.NEGATIVE_Y)
+    #     movement.change_view_to_angle(degree, lambda:False)
     
     TMFC = TeyvatMoveFlowController()
     # TMFC.set_parameter(MODE="PATH",path_dict=load_json("te167910590161.json","assets\\TeyvatMovePath"), is_tp=True)
-    TMFC.set_parameter(MODE="AUTO", target_posi=[2083.714642000002,-4844.328552], is_tp=False)
-    TMFC.start()
+    TMFC.set_parameter(MODE="AUTO", target_posi=[2430.9398, -5201.7051], is_tp=False)
     TMFC.start_flow()
+    TMFC.start()
+    
     while 1:
         time.sleep(1)
     
