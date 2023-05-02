@@ -1,6 +1,6 @@
 from source.commission.commission_template import CommissionTemplate
 from source.mission.mission_template import ERR_FAIL
-from source.funclib import movement
+from source.funclib import movement, combat_lib
 from source.util import *
 from source.interaction.interaction_core import itt
 from source.manager import asset
@@ -8,9 +8,9 @@ from source.common.timer_module import AdvanceTimer
 from source.api.pdocr_light import ocr_light
 
 
-class IncreasingDangerGeneral(CommissionTemplate):
+class DangerousHaulGeneral(CommissionTemplate):
     def __init__(self, commission_position):
-        super().__init__("IncreasingDanger", commission_position, is_CCT=True, is_CFCF=False)
+        super().__init__("DangerousHaul", commission_position, is_CCT=True, is_CFCF=False)
     
     def _aim_to_commission_icon(self):
         cap = itt.capture(jpgmode=0)
@@ -44,7 +44,7 @@ class IncreasingDangerGeneral(CommissionTemplate):
         attack_timer = AdvanceTimer(0.1).start()
         r = self.move_straight(self.commission_position, is_tp=True)
         if r == ERR_FAIL:return
-        self.start_combat(mode="Shield")
+        self.start_combat()
         reset_view_timer = AdvanceTimer(20)
         while 1:
             if self.checkup_stop_func():
@@ -52,20 +52,20 @@ class IncreasingDangerGeneral(CommissionTemplate):
                 return
             if reset_view_timer.reached_and_reset():
                 movement.reset_view()
-            movement.jump_in_loop(6)
+            movement.jump_in_loop(8)
             if self._aim_to_commission_icon():
-                if attack_timer.reached_and_reset():itt.left_click()
-            if self.is_commission_complete():
+                pass
+                # if attack_timer.reached_and_reset():itt.left_click()
+            if not combat_lib.CSDL.get_combat_state():
                 self.stop_combat()
                 break
         self.is_commission_succ=True
         # self.pause_threading()
         
 if __name__ == '__main__':
-    idg = IncreasingDangerGeneral([3447.9764219999997,
-      -4490.925582000001])
-    while 1:
-        idg._aim_to_commission_icon()
+    idg = DangerousHaulGeneral([3070.957,-6539.2718])
+    # while 1:
+    #     idg._aim_to_commission_icon()
     idg.start()
     idg.continue_threading()
     while 1:

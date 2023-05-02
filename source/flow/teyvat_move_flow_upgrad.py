@@ -187,11 +187,13 @@ class Navigation(TianliNavigator):
             return [i.position for i in self.navigation_path]
 
     def get_navigation_info(self, i):
+        if self.navigation_path is None: return None
         if i >= len(self.navigation_path):
             return f""
         return f"{self.navigation_path[i]}"
 
     def print_TLPS_info(self, i, cp, speak=False):
+        if self.navigation_path is None: return None
         r = self.get_navigation_info(i)
         if r != '':
             output_id = r
@@ -613,7 +615,7 @@ if __name__ == '__main__':
     
     TMFC = TeyvatMoveFlowController()
     # TMFC.set_parameter(MODE="PATH",path_dict=load_json("te167910590161.json","assets\\TeyvatMovePath"), is_tp=True)
-    TMFC.set_parameter(MODE="AUTO", target_posi=[2430.9398, -5201.7051], is_tp=False)
+    TMFC.set_parameter(MODE="AUTO", target_posi=[2032,-4879], is_tp=False)
     TMFC.start_flow()
     TMFC.start()
     
