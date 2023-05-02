@@ -105,8 +105,10 @@ class TianLiNavigatorDev(TianliNavigator):
         if refresh:
             xlim, ylim = plt.xlim(), plt.ylim()
             plt.clf()
+        logger.debug(f"reshow GIMAP")
         plt.imshow(cv2.cvtColor(self.GIMAP_RAWIMG,cv2.COLOR_BGRA2RGB))
         # print(xlim, ylim)
+        logger.debug(f"drawing points and links")
         for k in self.NAVIGATION_POINTS.items():
             self._scatter(k[1].position, convert=True)
             for link_node in k[1].links:
@@ -114,8 +116,10 @@ class TianLiNavigatorDev(TianliNavigator):
                 self._arrow(k[1].position, link_node.position, convert=True)
             plt.annotate(str(k[0]), xy=tuple(self.convert_cvAutoTrack_to_GIMAP(k[1].position)))
             # print(k[1].position, link_node.position)
+        logger.debug('drawing')
         self.fig.canvas.draw()
         self.fig.canvas.flush_events()
+        logger.debug(f"refreshing")
         if refresh:
             print(xlim, ylim)
             plt.xlim(xlim)
@@ -137,7 +141,13 @@ class TianLiNavigatorDev(TianliNavigator):
             else:
                 self.history_dict = self.navigation_dict.copy()
             if cmd[0]=='del':
-                self.del_point(cmd[1])
+                if '~' in cmd[1]:
+                    start = int(cmd[1].split('~')[0])
+                    end = int(cmd[1].split('~')[1])
+                    for i in range(start, end):
+                        self.del_point(str(i))
+                else:
+                    self.del_point(cmd[1])
             elif cmd[0]=='link':
                 logger.info(f"link {cmd[1]} -> {cmd[2]}")
                 self.link_points(cmd[1], cmd[2])
@@ -161,16 +171,30 @@ class TianLiNavigatorDev(TianliNavigator):
                     posi = f"{self.last_press_x},{self.last_press_y}"
                 logger.info(f"posi {posi} kid {kid} upper_link {upper_link} full_link {full_link}")
                 self.add_point(list(map(float, posi.split(','))), kid, upper_link=upper_link, full_link=full_link)
-            elif cmd[0]=='move':
+            elif cmd[0]=='move': # move `x`,`y`
                 self.move_point(cmd[1], list(map(float, cmd[2].split(','))))
-            elif cmd[0]=='save':
+            elif cmd[0]=='save': # save
                 self.save()
                 redraw = False
                 logger.info('saved')
-            elif cmd[0]=='size':
+            elif cmd[0]=='size': # size `x`,`y`,`z`
                 self.scatter_s, self.head_width, self.head_length = list(map(int,cmd[1].split(',')))
-            elif cmd[0]=='import':
+            elif cmd[0]=='import': # import `tmf path id`
                 self.analyze_path(cmd[1])
+            elif cmd[0]=='flink': # flink `a` `b`
+                logger.info(f"link {cmd[1]} <-> {cmd[2]}")
+                self.link_points(cmd[1], cmd[2])
+                self.link_points(cmd[2], cmd[1])
+            elif cmd[0]=='relink': # relink `a`~`b`
+                # 删除a,b间所有id相邻的点，仅保留a,b并将a,b重新全连接。
+                logger.info(f"relink {cmd[1]}")
+                start = int(cmd[1].split('~')[0])
+                end = int(cmd[1].split('~')[1])
+                for i in range(start+1, end):
+                    self.del_point(str(i))
+                self.link_points(str(start), str(end))
+                self.link_points(str(end), str(start))
+                
         if redraw:
             self._build_navigation_points()
             self.draw_navigation_in_gimap()
@@ -203,13 +227,13 @@ class TianLiNavigatorDev(TianliNavigator):
 
         for i in self.navigation_dict.items():
             if x in i[1]['links']:
-                logger.trace(f"del {i[0]} {i[1]['links']}.pop{i[1]['links'].index(x)}")
+                logger.info(f"del {i[0]} {i[1]['links']}.pop{i[1]['links'].index(x)}")
                 i[1]['links'].pop(i[1]['links'].index(x))
 
         # for i in self.navigation_dict.items():
         #     if x in [i.id for i in i[1].links]:
         #         i[1].links.pop(i[1].links.index(self.NAVIGATION_POINTS[x]))
-        logger.trace(f"pop {x}")
+        logger.info(f"pop {x}")
         self.navigation_dict.pop(x)
         # self.NAVIGATION_POINTS.pop(x)
 

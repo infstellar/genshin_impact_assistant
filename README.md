@@ -60,9 +60,9 @@ To没用过github的小伙伴: 描述文档中的蓝色文字是链接,可以打
 
 - 选中Task List -> Mission，启动Task
 
-- 注意阅读[collector_assi.md](./doc/collector_assi.md)中的注意事项.
+- 注意阅读[collector_assi.md](./doc/zh_CN/collector_assi.md)中的注意事项.
 
-其他设置参见[自动采集辅助介绍](./doc/collector_assi.md).
+其他设置参见[自动采集辅助介绍](./doc/zh_CN/collector_assi.md).
 
 ### 4. [自动每日委托辅助](./doc/zh_CN/commission_assi.md)
 **正在早期测试，请谨慎开启并汇报遇到的错误。**
