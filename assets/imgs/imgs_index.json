@@ -66,10 +66,7 @@
     "common": "assets\\imgs\\Windows\\Domain\\common\\AreaDomainSwitchChallenge.jpg"
   },
   "AreaTalkSelects": {
-    "Talk": "assets\\imgs\\Windows\\Talk\\AreaTalkSelects.jpg"
-  },
-  "ButtonAllCharacterDied": {
-    "zh_CN": "assets\\imgs\\Windows\\Combat\\zh_CN\\ButtonAllCharacterDied.jpg"
+    "common": "assets\\imgs\\Windows\\Talk\\common\\AreaTalkSelects.jpg"
   },
   "ButtonBigmapCloseMarkTableInTP": {
     "common": "assets\\imgs\\Windows\\Bigmap\\common\\ButtonBigmapCloseMarkTableInTP.jpg"
@@ -84,7 +81,7 @@
     "common": "assets\\imgs\\Windows\\Bigmap\\common\\ButtonBigmapSwitchMap.jpg"
   },
   "ButtonBigmapTP": {
-    "zh_CN": "assets\\imgs\\Windows\\Bigmap\\zh_CN\\ButtonBigmapTP.jpg"
+    "common": "assets\\imgs\\Windows\\Bigmap\\common\\ButtonBigmapTP.jpg"
   },
   "ButtonCombatSwitchTeamLeft": {
     "common": "assets\\imgs\\Windows\\Combat\\common\\ButtonCombatSwitchTeamLeft.jpg"
@@ -93,10 +90,12 @@
     "common": "assets\\imgs\\Windows\\Combat\\common\\ButtonCombatSwitchTeamRight.jpg"
   },
   "ButtonDomainSoloChallenge": {
-    "common": "assets\\imgs\\Windows\\Domain\\common\\ButtonDomainSoloChallenge.jpg"
+    "en_US": "assets\\imgs\\Windows\\Domain\\en_US\\ButtonDomainSoloChallenge.jpg",
+    "zh_CN": "assets\\imgs\\Windows\\Domain\\zh_CN\\ButtonDomainSoloChallenge.jpg"
   },
   "ButtonDomainStartChallenge": {
-    "common": "assets\\imgs\\Windows\\Domain\\common\\ButtonDomainStartChallenge.jpg"
+    "en_US": "assets\\imgs\\Windows\\Domain\\en_US\\ButtonDomainStartChallenge.jpg",
+    "zh_CN": "assets\\imgs\\Windows\\Domain\\zh_CN\\ButtonDomainStartChallenge.jpg"
   },
   "ButtonExpeditionClaim": {
     "common": "assets\\imgs\\Windows\\Expedition\\common\\ButtonExpeditionClaim.jpg"
@@ -123,25 +122,24 @@
     "common": "assets\\imgs\\Windows\\Food\\common\\ButtonFoodEgg.jpg"
   },
   "ButtonGeneralAllCharacterDied": {
+    "en_US": "assets\\imgs\\Windows\\General\\en_US\\ButtonGeneralAllCharacterDied.jpg",
     "zh_CN": "assets\\imgs\\Windows\\General\\zh_CN\\ButtonGeneralAllCharacterDied.jpg"
   },
   "ButtonGeneralConfirm": {
+    "en_US": "assets\\imgs\\Windows\\General\\en_US\\ButtonGeneralConfirm.jpg",
     "zh_CN": "assets\\imgs\\Windows\\General\\zh_CN\\ButtonGeneralConfirm.jpg"
   },
   "ButtonGeneralExit": {
     "common": "assets\\imgs\\Windows\\General\\common\\ButtonGeneralExit.jpg"
   },
   "ButtonGeneralUseCondensedResin": {
-    "zh_CN": "assets\\imgs\\Windows\\General\\zh_CN\\ButtonGeneralUseCondensedResin.jpg"
+    "common": "assets\\imgs\\Windows\\General\\common\\ButtonGeneralUseCondensedResin.jpg"
   },
   "ButtonGeneralUseOriginResin": {
-    "zh_CN": "assets\\imgs\\Windows\\General\\zh_CN\\ButtonGeneralUseOriginResin.jpg"
-  },
-  "ButtonGenralUseOriginalResin": {
-    "zh_CN": "assets\\imgs\\Windows\\General\\zh_CN\\ButtonGenralUseOriginalResin.jpg"
+    "common": "assets\\imgs\\Windows\\General\\common\\ButtonGeneralUseOriginResin.jpg"
   },
   "ButtonTalkSkip": {
-    "Talk": "assets\\imgs\\Windows\\Talk\\ButtonTalkSkip.jpg"
+    "common": "assets\\imgs\\Windows\\Talk\\common\\ButtonTalkSkip.jpg"
   },
   "ButtonUICancel": {
     "common": "assets\\imgs\\Windows\\UI\\common\\ButtonUICancel.jpg"
@@ -153,6 +151,7 @@
     "common": "assets\\imgs\\Windows\\UI\\common\\ButtonUISwitchToTimeMenu.jpg"
   },
   "CombatButtonGoToFight": {
+    "en_US": "assets\\imgs\\Windows\\Combat\\en_US\\CombatButtonGoToFight.jpg",
     "zh_CN": "assets\\imgs\\Windows\\Combat\\zh_CN\\CombatButtonGoToFight.jpg"
   },
   "IconBigMapScaling": {
@@ -191,14 +190,15 @@
   "IconCommissionInCommission": {
     "common": "assets\\imgs\\Windows\\Commission\\common\\IconCommissionInCommission.jpg"
   },
-  "IconDomainChallengeSuccess": {
-    "zh_CN": "assets\\imgs\\Windows\\Domain\\zh_CN\\IconDomainChallengeSuccess.jpg"
-  },
   "IconExpeditionComplete": {
     "zh_CN": "assets\\imgs\\Windows\\Expedition\\zh_CN\\IconExpeditionComplete.jpg"
   },
   "IconExpeditionComplete2": {
     "zh_CN": "assets\\imgs\\Windows\\Expedition\\zh_CN\\IconExpeditionComplete2.jpg"
+  },
+  "IconGeneralChallengeSuccess": {
+    "en_US": "assets\\imgs\\Windows\\General\\en_US\\IconGeneralChallengeSuccess.jpg",
+    "zh_CN": "assets\\imgs\\Windows\\General\\zh_CN\\IconGeneralChallengeSuccess.jpg"
   },
   "IconGeneralFButton": {
     "common": "assets\\imgs\\Windows\\General\\common\\IconGeneralFButton.jpg"

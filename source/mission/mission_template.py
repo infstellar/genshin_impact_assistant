@@ -215,7 +215,7 @@ class MissionExecutor(BaseThreading):
         if self.CFCF.get_and_reset_err_code() != ERR_PASS:
             self.exception_flag = True
         else:
-            self.picked_list.append(self.CFCF.flow_connector.puo.pickup_item_list.copy())
+            self.picked_list += self.CFCF.flow_connector.puo.pickup_item_list.copy()
             self.CFCF.flow_connector.puo.reset_pickup_item_list()
         return self._handle_exception()
     
@@ -231,8 +231,7 @@ class MissionExecutor(BaseThreading):
         """
         points = get_circle_points(center_posi[0],center_posi[1])
         itt.key_down('w')
-        jt = AdvanceTimer(8)
-        jt2 = AdvanceTimer(0.3)
+        jil = movement.JumpInLoop(8)
         for p in points:
             while 1:
                 if self.checkup_stop_func():return
@@ -248,11 +247,7 @@ class MissionExecutor(BaseThreading):
                     if combat_lib.CSDL.get_combat_state():
                         itt.key_up('w')
                         return True
-                if jt.reached_and_reset():
-                    itt.key_press('spacebar')
-                    jt2.reset()
-                if jt2.reached():
-                    itt.key_press('spacebar')
+                jil.jump_in_loop()
                     
         itt.key_up('w')
         return False

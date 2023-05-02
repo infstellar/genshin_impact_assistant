@@ -99,8 +99,7 @@ class TeyvatTeleport(FlowTemplate):
 class TeyvatMoveCommon():
     def __init__(self):
         self.motion_state = IN_MOVE
-        self.jump_timer1 = timer_module.Timer()
-        self.jump_timer2 = timer_module.Timer()
+        self.jil = movement.JumpInLoop(2)
         self.jump_timer3 = timer_module.Timer()
         self.history_position = []
         self.history_position_timer = timer_module.AdvanceTimer(limit=1).start()
@@ -121,13 +120,7 @@ class TeyvatMoveCommon():
         else:
             jump_dt = 99999
         if jump:
-            if self.jump_timer1.get_diff_time() >= jump_dt:
-                self.jump_timer1.reset()
-                self.jump_timer2.reset()
-                itt.key_press('spacebar')
-            if self.jump_timer2.get_diff_time() >= 0.3 and self.jump_timer2.get_diff_time()<=2: # double jump
-                itt.key_press('spacebar')
-                self.jump_timer2.start_time -= 2
+            self.jil.jump_in_loop(jump_dt=jump_dt)
     
     def try_fly(self):
         if self.motion_state == IN_MOVE:
@@ -247,7 +240,7 @@ class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon, Navigation):
 
         if self.upper.is_tianli_navigation:
             self.posi_list = self.get_navigation_positions()
-            self.posi_list.append([self.upper.target_posi])
+            self.posi_list.append(self.upper.target_posi)
         else:
             self.posi_list = [self.upper.target_posi]
         

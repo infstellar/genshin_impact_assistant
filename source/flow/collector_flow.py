@@ -169,7 +169,7 @@ class CollectorFlow(BaseThreading):
         if rate < 0.1:
             rate = 0.1
         ret = ((1/rate)*SUCC_RATE_WEIGHTING) * distance
-        logger.trace(f"ret: {ret} rate: {rate} distance:{distance} rate_weight: {(1/rate)*SUCC_RATE_WEIGHTING}")
+        # logger.trace(f"ret: {ret} rate: {rate} distance:{distance} rate_weight: {(1/rate)*SUCC_RATE_WEIGHTING}")
         return ret
     
     def add_log(self, x):

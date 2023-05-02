@@ -54,6 +54,36 @@ def jump_in_loop(jump_dt:float=2):
         itt.key_press('spacebar')
         jump_timer2.start_time -= 2
 
+class JumpInLoop():
+    def __init__(self, jump_dt:float=2) -> None:
+        self.jump_dt = jump_dt
+        self.jump_timer1 = Timer()
+        self.jump_timer2 = Timer()
+        self.jump_times = 0
+        self.jump_timer3 = Timer()
+    
+    def jump_in_loop(self, skip_first = True, jump_dt = None):
+        if jump_dt != None:
+            self.jump_dt = jump_dt
+        if skip_first:
+            if self.jump_timer3.get_diff_time() >= 2: # first
+                self.jump_times += 1
+                self.jump_timer3.reset()
+                return
+            elif self.jump_times >= 2: # 2 first
+                self.jump_times = 0
+                self.jump_timer3.reset()
+            else:
+                self.jump_times = 0
+                self.jump_timer3.reset()
+        if self.jump_timer1.get_diff_time() >= self.jump_dt:
+            self.jump_timer1.reset()
+            self.jump_timer2.reset()
+            itt.key_press('spacebar')
+        if self.jump_timer2.get_diff_time() >= 0.3 and self.jump_timer2.get_diff_time()<=2: # double jump
+            itt.key_press('spacebar')
+            self.jump_timer2.start_time -= 2
+
 def angle2movex(angle):
     cvn = maxmin(angle*10,500,-500) # 10: magic num, test from test246.py
     return cvn
