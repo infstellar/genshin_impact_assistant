@@ -13,6 +13,7 @@ COMMISSION_NAMES = [asset.ASmallStepForHilichurls,
                     asset.PudgyPyrotechnicians,
                     BasicKnowledgeOfTheKnights,
                     LanguageExchange,
-                    FloralFresh]
+                    FloralFresh,
+                    CrisisOfShields]
 
 # ALL_COMMISSION_TYPE = ["ASmallStepForHilichurls", "IncreasingDanger"]

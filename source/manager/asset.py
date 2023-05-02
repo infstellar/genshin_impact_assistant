@@ -4,10 +4,8 @@ from path_lib import ASSETS_IMG, ASSETS_COMMON_IMG
 from source.manager.button_manager import Button
 from source.manager.text_manager import TextTemplate, Text
 from source.manager.posi_manager import PosiTemplate, Area
-# import scene_manager
 
-
-
+# Button&ImgIcon&Area
 ButtonUISwitchToTimeMenu = Button(black_offset = 15, print_log=LOG_WHEN_TRUE)
 ButtonGeneralExit = Button(print_log=LOG_WHEN_TRUE)
 ButtonUICancel = Button(print_log=LOG_WHEN_TRUE)
@@ -69,6 +67,7 @@ AreaClaimRewardAvailableReward = PosiTemplate()
 AreaDomainLeaveIn = PosiTemplate()
 AreaDomainLeyLineDisorder = PosiTemplate()
 
+# Text
 QTSX = TextTemplate(text={"zh_CN":"七天神像","en_US":"Statues of The Seven"}, cap_area = AreaBigmapChoose.position)
 CSMD = TextTemplate(text={"zh_CN":"传送锚点","en_US": "Teleport Waypoint"}, cap_area = AreaBigmapChoose.position)
 ASmallStepForHilichurls = TextTemplate(text={"zh_CN":"丘丘人的一小步", "en_US": "A small step for hilichurls"})
@@ -80,11 +79,11 @@ BigIceColdCrisis = TextTemplate(text={"zh_CN":"冰凉凉的大团危机", "en_US
 SpreadingEvil = TextTemplate(text={"zh_CN":"邪恶的扩张", "en_US": "Spreading Evil"})
 BigPudgyProblem = TextTemplate(text={"zh_CN":"圆滚滚的大团骚乱", "en_US": "Big Pudgy Problem"})
 PudgyPyrotechnicians = TextTemplate(text={"zh_CN":"圆滚滚的易爆品", "en_US": "Pudgy Pyrotechnicians"})
-MapAreaMD = TextTemplate(text={"zh_CN":"蒙德"}, cap_area = AreaBigmapSwitchMap.position)
-MapAreaLY = TextTemplate(text={"zh_CN":"璃月"}, cap_area = AreaBigmapSwitchMap.position)
-MapAreaDQ = TextTemplate(text={"zh_CN":"稻妻"}, cap_area = AreaBigmapSwitchMap.position)
-MapAreaXM = TextTemplate(text={"zh_CN":"须弥"}, cap_area = AreaBigmapSwitchMap.position)
-MapAreaCYJY = TextTemplate(text={"zh_CN":"层岩巨渊"}, cap_area = AreaBigmapSwitchMap.position)
+MapAreaMD = TextTemplate(text={"zh_CN":"蒙德", "en_US":"Mondstadt"}, cap_area = AreaBigmapSwitchMap.position)
+MapAreaLY = TextTemplate(text={"zh_CN":"璃月", "en_US":"Liyue"}, cap_area = AreaBigmapSwitchMap.position)
+MapAreaDQ = TextTemplate(text={"zh_CN":"稻妻", "en_US":"Inazuma"}, cap_area = AreaBigmapSwitchMap.position)
+MapAreaXM = TextTemplate(text={"zh_CN":"须弥", "en_US":"Sumeru"}, cap_area = AreaBigmapSwitchMap.position)
+MapAreaCYJY = TextTemplate(text={"zh_CN":"层岩巨渊", "en_US":"The Chasm"}, cap_area = AreaBigmapSwitchMap.position)
 claim_rewards = TextTemplate(text={'zh_CN': '领取奖励',"en_US": "Claim Rewards"})
 use_20x2resin = TextTemplate(text={'zh_CN': '使用浓缩树脂',"en_US": "Use Condensed Resin"})
 use_20resin = TextTemplate(text={'zh_CN': '使用原粹树脂',"en_US": "Use Original Resin"})
@@ -93,11 +92,10 @@ exit_challenge = TextTemplate(text={'zh_CN': '退出秘境',"en_US": "Leave Doma
 domain_obtain = TextTemplate(text={'zh_CN': '获得',"en_US": "Obtained"})
 use_revival_item = TextTemplate(text={'zh_CN': '用道具',"en_US": "revival item"})
 revival = Text(zh="复苏", en="Revive")
-
 LEAVING_IN = TextTemplate(text={'zh_CN': '自动退出',"en_US": 'Leaving in'}, cap_area = AreaDomainLeaveIn.position)
 LEY_LINE_DISORDER = TextTemplate(text={'zh_CN': '地脉异常',"en_US": "Ley Line Disorder"}, cap_area = AreaDomainLeyLineDisorder.position)
 
-
+# ImgIcon&Button which based on text
 IconCombatCharacterDied = ImgIcon(win_text = use_revival_item.text, threshold=0.98, print_log=LOG_WHEN_TRUE)
 ButtonGeneralAllCharacterDied = Button(threshold=0.988, win_text=revival.text, print_log=LOG_WHEN_TRUE)
 

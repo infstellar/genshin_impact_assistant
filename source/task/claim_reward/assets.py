@@ -1,7 +1,7 @@
 from source.manager import asset
 
-ClaimDailyCommissionReward = asset.TextTemplate(text={"zh_CN":"每日委托","en_US":"ClaimDailyCommissionReward"})
-DispatchCharacterOnExpedition = asset.TextTemplate(text={"zh_CN":"探索派遣","en_US":"DispatchCharacterOnExpedition"})
+ClaimDailyCommissionReward = asset.TextTemplate(text={"zh_CN":"每日委托","en_US":"Daily Commission"})
+DispatchCharacterOnExpedition = asset.TextTemplate(text={"zh_CN":"探索派遣","en_US":"Dispatch Character"})
 ButtonExpeditionMD = asset.Button(threshold=0)
 ButtonExpeditionLY = asset.Button(threshold=0)
 ButtonExpeditionDQ = asset.Button(threshold=0)
@@ -12,4 +12,3 @@ ButtonExpeditionSelectCharacters = asset.Button()
 IconExpeditionComplete = asset.ImgIcon()
 IconExpeditionComplete2 = asset.ImgIcon()
 IconClaimRewardExpedition = asset.ImgIcon()
-
