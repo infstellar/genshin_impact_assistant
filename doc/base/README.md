@@ -1,5 +1,4 @@
 # genshin_impact_assistant 原神助手
-<strong>|[Chinese](./)|[English](en_US/readme.md)|</strong>
 <div align="center">
 
 基于图像识别和模拟按键的多功能原神自动辅助操作,包括自动战斗,自动刷秘境,自动刷大世界材料。

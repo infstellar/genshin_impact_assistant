@@ -41,6 +41,7 @@ class MissionExecutor(BaseThreading):
             }
         self.default_precise_arrive = False
         self.fight_if_needed = False
+        self.raise_exception_flag = False
         self.itt = itt
 
     def _init_sub_threading(self, feat_name=""):

@@ -128,11 +128,11 @@ class TeyvatMoveCommon():
                 itt.key_press('spacebar')
                 self.jump_timer3.reset()
                 
-    def is_stuck(self, posi, threshold=30):
+    def is_stuck(self, posi, threshold=40):
         if self.history_position_timer.reached_and_reset():
             self.history_position.append(posi)
         if len(self.history_position) >= threshold:
-            if euclidean_distance(self.history_position[0], self.history_position[-1])<=10:
+            if euclidean_distance(self.history_position[-threshold+1], self.history_position[-1])<=10:
                 logger.warning(f"MOVE STUCK")
                 return True
         return False
@@ -141,12 +141,10 @@ class Navigation(TianliNavigator):
     def __init__(self, start, end) -> None:
         super().__init__()
         # 千万不要对这里的列表的顺序进行修改！！！
-        self.start_p = start
-        self.end_p = end    
         self._curr_posi = [0,0]
         self.all_navigation_posi = [p[1].position for p in self.NAVIGATION_POINTS.items()] # READ ONLY
         self.navigation_path = []
-        self._init_path()
+        self.init_path(start, end)
 
     def _get_closest_node(self, position, threshold=150):
         plist = quick_euclidean_distance_plist(position, self.all_navigation_posi)
@@ -156,9 +154,9 @@ class Navigation(TianliNavigator):
         else:
             return list(self.NAVIGATION_POINTS.items())[min_index][1]
 
-    def _init_path(self):
-        start_node = self._get_closest_node(self.start_p)
-        end_node = self._get_closest_node(self.end_p)
+    def init_path(self, start, end):
+        start_node = self._get_closest_node(start)
+        end_node = self._get_closest_node(end)
         if start_node != None and end_node != None:
             self.navigation_path = list(self.astar(start_node,end_node))
             if len(self.navigation_path) == 0:
@@ -237,10 +235,14 @@ class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon, Navigation):
         self.history_position = []
         self.upper.while_sleep = 0
         self.in_flag = False
-
+        self.current_posi = genshin_map.get_position()
         if self.upper.is_tianli_navigation:
+            self.init_path(self.current_posi, self.upper.target_posi)
             self.posi_list = self.get_navigation_positions()
             self.posi_list.append(self.upper.target_posi)
+            if euclidean_distance(self.posi_list[0], self.upper.target_posi)>euclidean_distance(self.current_posi, self.upper.target_posi):
+                logger.info(f"the distance to target is closer than TLPS, give up using TLPS.")
+                self.posi_list = [self.upper.target_posi]
         else:
             self.posi_list = [self.upper.target_posi]
         
@@ -248,9 +250,13 @@ class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon, Navigation):
     
 
     def state_in(self):
-        self.switch_motion_state()
-        
         self.current_posi = genshin_map.get_position()
+        if euclidean_distance(self.current_posi, self.upper.target_posi) <= 8:
+            self.switch_motion_state(jump=False)
+        else:
+            self.switch_motion_state(jump=True)
+        
+        
         # p1 = self.upper.target_posi
         
         if self.is_stuck(self.current_posi):

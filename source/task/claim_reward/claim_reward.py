@@ -18,7 +18,7 @@ class ClaimRewardMission(MissionExecutor, Talk):
         res = ocr.get_all_texts(img)
         rewards = []
         for text in res:
-            if "探索派遣" in text:
+            if ExpeditionReward.text in text:
                 rewards.append("Expedition")
             if "每日委托" in text:
                 rewards.append("Commission")

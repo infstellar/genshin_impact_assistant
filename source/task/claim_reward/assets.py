@@ -1,5 +1,6 @@
 from source.manager import asset
 
+ExpeditionReward = asset.Text(zh="探索派遣", en="Expedition Reward")
 ClaimDailyCommissionReward = asset.TextTemplate(text={"zh_CN":"每日委托","en_US":"Daily Commission"})
 DispatchCharacterOnExpedition = asset.TextTemplate(text={"zh_CN":"探索派遣","en_US":"Dispatch Character"})
 ButtonExpeditionMD = asset.Button(threshold=0)

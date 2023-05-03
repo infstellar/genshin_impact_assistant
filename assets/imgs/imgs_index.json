@@ -191,9 +191,11 @@
     "common": "assets\\imgs\\Windows\\Commission\\common\\IconCommissionInCommission.jpg"
   },
   "IconExpeditionComplete": {
+    "en_US": "assets\\imgs\\Windows\\Expedition\\en_US\\IconExpeditionComplete.jpg",
     "zh_CN": "assets\\imgs\\Windows\\Expedition\\zh_CN\\IconExpeditionComplete.jpg"
   },
   "IconExpeditionComplete2": {
+    "en_US": "assets\\imgs\\Windows\\Expedition\\en_US\\IconExpeditionComplete2.jpg",
     "zh_CN": "assets\\imgs\\Windows\\Expedition\\zh_CN\\IconExpeditionComplete2.jpg"
   },
   "IconGeneralChallengeSuccess": {

@@ -146,12 +146,16 @@ class MissionAutoCollector(MissionExecutor):
             if r == ERR_FAIL:
                 self._add_logs("MOVE FAIL")
                 self._set_collected_id()
+                if not self._add_collection_i():
+                    break
                 continue
             
             r = self.collect(MODE="AUTO", collector_type=self.collector_type, is_combat = (self.collector_type==ENEMY), is_activate_pickup=True)
             if r == ERR_FAIL:
                 self._add_logs("COLLECT FAIL")
                 self._set_collected_id()
+                if not self._add_collection_i():
+                    break
                 continue
             self._add_logs("SUCCESS")
 
