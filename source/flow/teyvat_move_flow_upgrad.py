@@ -171,9 +171,9 @@ class Navigation(TianliNavigator):
     def set_curr_posi(self, posi):
         self._curr_posi = posi
 
-    def get_navigation_positions(self):
+    def get_navigation_positions(self, end_p):
         if self.navigation_path is None:
-            return [self.end_p]
+            return [end_p]
         else:
             return [i.position for i in self.navigation_path]
 
@@ -238,7 +238,7 @@ class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon, Navigation):
         self.current_posi = genshin_map.get_position()
         if self.upper.is_tianli_navigation:
             self.init_path(self.current_posi, self.upper.target_posi)
-            self.posi_list = self.get_navigation_positions()
+            self.posi_list = self.get_navigation_positions(self.upper.target_posi)
             self.posi_list.append(self.upper.target_posi)
             if euclidean_distance(self.posi_list[0], self.upper.target_posi)>euclidean_distance(self.current_posi, self.upper.target_posi):
                 logger.info(f"the distance to target is closer than TLPS, give up using TLPS.")
