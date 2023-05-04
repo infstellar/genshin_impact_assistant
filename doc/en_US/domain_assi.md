@@ -1,6 +1,6 @@
 # 自动秘境战斗
 
-## 简介
+## Introduction
 
 - 能够自动连续刷大部分秘境，包括自动开始挑战、自动战斗和自动领取奖励。
 
@@ -8,7 +8,7 @@
 
 - 自动秘境功能开始前请先配置好自动战斗阵容。自动战斗的部分参见[自动战斗辅助](combat_assi.md)
 
-- 需要原神以1080p窗口化运行。不建议设置色彩滤镜。
+- Require the Genshin to run in 1080p windowing. Not recommend to set color filters.
 
 ## How to use
 

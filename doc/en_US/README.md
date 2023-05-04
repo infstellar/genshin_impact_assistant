@@ -1,5 +1,4 @@
 # genshin_impact_assistant 原神助手
-<strong>|[Chinese](./)|[English](en_US/readme.md)|</strong>
 <div align="center">
 
 A multi-functional auto-assist based on image recognition and keystroke simulation, including auto combat, auto domain and auto claim materials in Teyvat world
@@ -67,15 +66,15 @@ For other settings, see[Auto Collector Assist introduction](./collector_assi.md)
 ### 4. [Auto Daily Commission Assist](./commission_assi.md)
 **In Early Access, pls use it with caution and report any error occuring. **
 
-> 目前仅能完成以下委托：ASmallStepForHilichurls,Emergency,IcyIssues,ForTheHarbingers,BigIceColdCrisis,SpreadingEvil,PudgyPyrotechnicians,IncreasingDanger.
+> For now, it can only complete this request: ASmallStepForHilichurls,Emergency,IcyIssues,ForTheHarbingers,BigIceColdCrisis,SpreadingEvil,PudgyPyrotechnicians,IncreasingDanger.
 
 For more detiles, see [Auto Daily Commission Assist introduction](./commission_assi.md).
 
 ### 5. [Claim Daily Reward](./claim_reward.md)
 see [Claim Daily Reward introduction](./commission_assi.md).
 
-### 6. [自动地脉衍出辅助](./ley_line_ourcrop.md)
-参见[自动地脉衍出辅助介绍](./ley_line_ourcrop.md).
+### 6. [Auto Ley Line Outcrop Assist](./ley_line_ourcrop.md)
+See [Auto Ley Line Outcrop Assist introduction](./commission_assi.md).
 
 ## How to use
 
@@ -139,12 +138,12 @@ Please make sure you have read the document and [FAQ](FAQ.md) before feedback bu
 
 Please send the log file in the Logs folder when you feedback.
 
-## 错误码
+## ERR Code
 
-如果日志输出了`ERR_CODE`或`WARN_CODE`，可以在[ERROR_CODE](error_code.md)中查看对应的信息：
+If the log outputs `ERR_CODE` or `WARN_CODE`, you can see the corresponding information in [ERROR_CODE](error_code.md).
 
 
-## 常见问题 FAQ
+## Frequently ask question
 
 If you enconter any problem when using, you can take a look at FAQ frist:
 
@@ -158,15 +157,15 @@ If you enconter any problem when using, you can take a look at FAQ frist:
 
 - This program requires at least `2.5G` RAM and `3G` storage space (full installation).
 
-## 鸣谢
+## Acknowledgements
 
-### 特别感谢
+### Special Thanks
 
 - [Alas](https://github.com/LmeSzinc/AzurLaneAutoScript)
 
-### 开源库
+#### Open Source Library
 
-#### 原神相关
+### Genshin Related
 
 - [GenshinImpact AutoTrack DLL](https://github.com/GengGode/cvAutoTrack)
 
@@ -198,7 +197,7 @@ If you enconter any problem when using, you can take a look at FAQ frist:
 
 QQ group:[901372518](https://jq.qq.com/?_wv=1027&k=YLTrqlzX)
 
-开发者交流群:[680029885](https://jq.qq.com/?_wv=1027&k=CGuTvCXU)
-(请确保你已经会使用git以及github)
+Developers' Communication Group: [680029885](https://jq.qq.com/?_wv=1027&k=CGuTvCXU)
+(Make sure you already know how to use git and github)
 
 

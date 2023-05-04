@@ -1,25 +1,26 @@
-# 自动战斗辅助
+# Auto Combat Assist
 
-## 简介
+## Introduction
 
-- 位置：`config/settings/tactic`
+- Location: `config/settings/tactic` or CombatSetting in GUI.
 
-- 自动战斗辅助可以按照设定的角色、策略、优先级、触发条件等自动切换角色和执行攻击，使用元素战技和元素爆发。
+- Auto Combat Assist can automatic switch characters, do attack, use E and Q skill accroding to set character name, tactic group, priorities, tiggers, etc.
 
-- 适用于不需要手动瞄准的角色并配合护盾角色使用。（要瞄准的勉强也能用，只是勉强）
+- Suitable for characters who do not need to manually aim and use with shield characters. (Barely works with those who need to aim, just barely)
 
-- 需要原神以1080p窗口化运行。不建议设置色彩滤镜。
+- Require the Genshin to run in 1080p windowing. Not recommend to set color filters.
 
-- 需要设置`team.json`文件，设置方法如下所示。
+- Need to set `team.json` file. The setting method is shown below.
 
-## 策略组 tactic_group
+- Recommend to bring Zhongli, if not can bring 3~4 shield characters.
+## tactic_group
 
-自动战斗辅助支持以下策略：
+Auto Combat Assist support the following tactic:
 
-| 策略关键字         | 说明                             |
+| Tactic Keyword | Description |
 |---------------|--------------------------------|
-| `>`           | 立刻跳转至下一组                       |
-| `@e?A:B`      | 元素战技是否生效。生效执行A，否则执行B。          |
+| `>` | Skip to next group immediately |
+| `@e?A:B` | Detect whether the Elemental Skill is in effetc. If it take effect, execute A. Otherwise, execute B. |
 | `e?A:B`       | 元素战技是否就绪。就绪执行A，否则执行B。          |
 | `q?A:B`       | 元素爆发是否就绪。就绪执行A，否则执行B。          |
 | `#@e?A:B`     | 元素战技是否正在持续，如果正在持续，循环执行A,否则执行B。 |
@@ -95,12 +96,12 @@
 
 这是GIA的默认优先级配置：
 
-n=角色在队伍中的位置
+n=角色在队伍中的位置, n∈{1,2,3,4}
 
 - `Shield`:1000+n
 - `Recovery`:1500+n
-- `Support`:2000+n
-- `Main`:3000+n
+- `Support`:3000+n
+- `Main`:2000+n
 
 你可以不使用基于千位数的值，这只是用于区分配置是否自动生成。
 

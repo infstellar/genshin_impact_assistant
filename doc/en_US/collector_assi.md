@@ -1,30 +1,30 @@
-# 自动采集辅助
+# Auto collector Assist
 
-- 注：在v0.6.1以后，自动采集从Flow改为Mission。
+- Note: After v0.6.1, Auto Collector wan changed from Flow to Mission.
 
-## 简介
+## Introduction
 
-自动采集辅助能够自动获取大部分提瓦特世界中的材料，例如可采集物，战利品等。
+Auto Collector Assist can automatically acquire most of the materials in Teyvat World such as gatherables, loot, etc.
 
-例子：自动采集甜甜花、琉璃百合，自动刷史莱姆、愚人众（高练度要求）。
+Example: Automatic collect sweet flowers, automatic kill Silme.
 
-本功能集成了自动战斗辅助，自动移动辅助，拾取辅助。在使用前，请确保已经阅读有关它们的配置信息。
+This function intergrates Auto Combat Assist, Auto Move Assist, Auto Pickup Assist. Make sure you have read the information about them before using.
 
 ## Function Introduction
 
-- 指定采集物，从数据库中选择距离启动时位置最近的采集物进行采集
+- Specify the collection, GIA will select the cloest collection from the database and start-up.
 
-- 可以采集资源/怪物
+- Can collect resource/enemy
 
-- 自动连续采集
+- Automatic continuous collect
 
-- 有角色死亡时自动前往七天神像回血
+- Revive at the State when somebody died.
 
-## 快速开始
+## Quick Start
 
-在GUI或config文件夹的settings/auto_collector.json 文件中设置基本参数。
+Set the paramaters at the Collector.json.
 
-从GUI界面启动自动采集。
+Start the Auto Collector from the GUI.
 
 ## 参数设置
 
