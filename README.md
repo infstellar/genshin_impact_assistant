@@ -1,5 +1,5 @@
 # Genshin Impact Assistant 原神小助手
-**|[Chinese](./doc/zh_CN/README.md)|[English](doc/en_US/README.md)|**
+**|[Chinese](https://github.com/GenshinImpactAssistant/GIA-Document/tree/main/zh_CN/README.md)|[English](https://github.com/GenshinImpactAssistant/GIA-Document/tree/main/en_US/README.md)|**
 <div align="center">
 
 A multi-functional auto-assist based on image recognition and keystroke simulation, including auto combat, auto domain and auto claim materials in Teyvat world.  
@@ -30,8 +30,8 @@ To没用过github的小伙伴: 描述文档中的蓝色文字是链接,可以打
 
 ## Complete Documentation 详细信息
 
-**[中文文档](./doc/zh_CN/README.md)**  
-**[English Document](doc/en_US/README.md)**
+**[中文文档](https://github.com/GenshinImpactAssistant/GIA-Document/tree/main/zh_CN/README.md)**  
+**[English Document](https://github.com/GenshinImpactAssistant/GIA-Document/tree/main/en_US/README.md)**
 
 ## Demo Video 演示视频
 
@@ -51,8 +51,8 @@ Functions currently available
 ### 4. Auto Daily Commission Assist 自动每日委托辅助(仅部分委托)
 ### 5. Claim Daily Reward 领取日常奖励
 ### 6. Auto Lay Line Outcrop Assist 自动地脉衍出辅助  
-For more details, see **[English Document](doc/en_US/README.md)**  
-更多信息，查阅 **[中文文档](./doc/zh_CN/README.md)**  
+For more details, see **[English Document](https://github.com/GenshinImpactAssistant/GIA-Document/tree/main/en_US/README.md)**  
+更多信息，查阅 **[中文文档](https://github.com/GenshinImpactAssistant/GIA-Document/tree/main/zh_CN/README.md)**  
 
 ## LICENSE 许可证
 This project is licensed under the GNU General Public License v3.0.
