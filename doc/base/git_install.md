@@ -7,7 +7,7 @@
 
 - python版本[3.7.6](https://www.python.org/downloads/release/python-376/).
 - [git](https://git-scm.com/download/win).
-- <strong>使用管理员权限打开命令提示符和你的代码编写器(IDE)!!!</strong>
+- **使用管理员权限打开命令提示符和你的代码编写器(IDE)!!!**
 
 ## 安装
 
@@ -20,6 +20,8 @@
    ```shell
    git clone https://github.com/infstellar/genshin_impact_assistant.git;cd genshin_impact_assistant;python setup.py install;git submodule init;git submodule update
    ```
+
+   **注意子模块(submodule)是否同时clone成功！**
 
 2. 输入以下命令运行程序:
 

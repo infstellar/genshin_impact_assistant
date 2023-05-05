@@ -1,5 +1,18 @@
 # FAQ
 
+## 无法运行
+
+Q: 程序崩溃？
+- 检查文件路径是否为全英文或下划线
+- 检查submodule是否clone成功
+
+Q: What should I do if I get stuck with a lot of text popping up after launching GIA Launcher?
+
+- It is pip copying files, if no error is reported, just wait.
+- Notice if the **Select: GIA Launcher** words `Select` appear in the window. If it appears, press enter to continue the program. The base of GIA Launcher is a bat file and will pause when you click on the command window, so do no click on the command line interface.
+
+## 运行时问题
+
 Q: It shows "ERROR: Screenshot failed". What should I do?
 
 - 若shape=0,0,4 ,那么请确认原神窗口没有最小化。
@@ -9,16 +22,6 @@ Q: It shows "ERROR: Screenshot failed". What should I do?
 Q: What if I set up a strategy during battle but do not switch to a character whose Q skill is already ready?
 
 - Check if the effets are medium or above.
-
-Q: What should I do if I get stuck with a lot of text popping up after launching GIA Launcher?
-
-- It is pip copying files, if no error is reported, just wait.
-
-- Notice if the **Select: GIA Launcher** words `Select` appear in the window. If it appears, press enter to continue the program. The base of GIA Launcher is a bat file and will pause when you click on the command window, so do no click on the command line interface.
-
-Q: When fighting, the program will get stuck if character(s) dies?
-
-- 在自动采集时检测到角色嘎了会去神像回血。
 
 Q: 在大地图总是点歪怎么办？
 
