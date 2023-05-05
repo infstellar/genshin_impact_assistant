@@ -16,3 +16,6 @@
 [submodule "doc"]
 	path = doc
 	url = https://github.com/GenshinImpactAssistant/GIA-Document
+[submodule "assets/imgs"]
+	path = assets/imgs
+	url = https://github.com/GenshinImpactAssistant/GIA-imgs
