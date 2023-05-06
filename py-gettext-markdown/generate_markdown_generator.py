@@ -23,7 +23,10 @@ class GenerateMarkdownGenerator():
             verify_path(os.path.dirname(md_path))
             f.write(f'f = open(r"{md_path}", "w", encoding="utf-8")\n')
             def write_gettext(x):
-                f.write(f'f.write(_("{x}")+str(\'\\n\'))\n')
+                if x == '':
+                    print("ERR: WRONG STR: NONE")
+                else:
+                    f.write(f'f.write(_("{x}")+str(\'\\n\'))\n')
             def write_origin(x):
                 f.write(f'f.write("{x}"+str(\'\\n\'))\n')
             def write_newline():
@@ -61,7 +64,18 @@ class GenerateMarkdownGenerator():
                 elif text_list[i] == "\n":
                     write_newline()    
                 elif text_list[i] == "\\n":
-                    write_newline()   
+                    write_newline()
+                elif '#' in text_list[i]:
+                    if text_list[i][0] == '#':
+                        textlistii = text_list[i].split('\\n')
+                        write_gettext(textlistii[0])
+                        write_newline()
+                        if len(textlistii) > 1:
+                            write_text = ''
+                            for ii in textlistii[1:]:
+                                write_text += ii
+                            print(write_text)
+                            write_gettext(write_text)
                 else:
                     write_gettext(text_list[i])
                 write_newline()
