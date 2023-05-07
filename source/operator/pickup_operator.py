@@ -26,7 +26,7 @@ class PickupOperator(BaseThreading):
         self.reset_time = 120
         self.collector_loops = 0
         self.collector_flag = True
-        self.max_number_of_collector_loops = 100
+        self.max_number_of_collector_loops = 35
         self.pickup_timer = timer_module.Timer()
         self.pickup_fail_timeout = timer_module.TimeoutTimer(65)
         self.night_timer = timer_module.FileTimer("night_timer")
@@ -274,7 +274,7 @@ class PickupOperator(BaseThreading):
         while self.collector_loops < self.max_number_of_collector_loops:
             if self.checkup_stop_func():
                 return 0
-            self.itt.move_to(50, 0, relative=True)
+            self.itt.move_to(200, 0, relative=True)
             ret_points = self.find_collector()
             if len(ret_points) != 0:  # type: ignore
                 self.reset_collector_loops()

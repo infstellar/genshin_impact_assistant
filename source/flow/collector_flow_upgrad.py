@@ -3,18 +3,16 @@ from common import timer_module
 from source.flow import flow_state as ST
 from source.interaction.interaction_core import itt
 from source.operator import pickup_operator
-from source.flow import teyvat_move_flow_upgrad
 from source.interaction.minimap_tracker import tracker
 from source.controller import combat_controller
-import numpy as np
 from funclib.err_code_lib import ERR_PASS, ERR_STUCK, ERR_COLLECTOR_FLOW_TIMEOUT
 from source.util import *
 from source.flow.flow_template import FlowController, FlowTemplate, FlowConnector, EndFlowTemplate
 import source.flow.flow_code as FC
 from source.common import timer_module
-from source.funclib import generic_lib, movement, combat_lib
+from source.funclib import movement
+from source.funclib import combat_lib
 from source.funclib.err_code_lib import *
-from source.manager import asset
 from source.interaction.interaction_core import itt
 
 COLLECTION = 0

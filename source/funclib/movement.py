@@ -259,12 +259,13 @@ def get_current_motion_state() -> str:
     r2 = itt.similar_img(img1, IconMovementSwimming.image[:,:,0])
     img1 = crop(cap.copy(), IconMovementFly.cap_posi)
     r3 = itt.similar_img(img1, IconMovementFlying.image[:,:,0])
-    logger.trace(f"get_current_motion_state: climb{round(r1,2)} swim{round(r2,2)} fly{round(r3,2)}")
+    if max(r1,r2,r3)>0.8:
+        logger.trace(f"get_current_motion_state: climb{round(r1,2)} swim{round(r2,2)} fly{round(r3,2)}")
     if r1 > 0.85:
         return CLIMBING
     if r2 > 0.85:
         return SWIMMING
-    if r3 > 0.85:
+    if r3 > 0.8:
         return FLYING
     return WALKING
     # if itt.get_img_existence(asset.IconGeneralMotionClimbing):

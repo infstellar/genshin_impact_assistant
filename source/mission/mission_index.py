@@ -1,5 +1,5 @@
 """This file is generated automatically. Do not manually modify it."""
-MISSION_INDEX = ['MissionAutoCollector', 'MissionCrystalfly', 'MissionSakuraBloom1', 'MissionSweatFlower1', 'MissionTest', 'MissionTest2']
+MISSION_INDEX = ['MissionAutoCollector', 'MissionCrystalfly', 'MissionSakuraBloom1', 'MissionSweatFlower1', 'MissionSweatFlower2', 'MissionTest', 'MissionTest2', 'MissionVioletgrass1']
 def get_mission_object(mission_name:str):
     if mission_name == 'MissionAutoCollector':
         import source.mission.missions.MissionAutoCollector
@@ -13,9 +13,15 @@ def get_mission_object(mission_name:str):
     if mission_name == 'MissionSweatFlower1':
         import source.mission.missions.MissionSweatFlower1
         return source.mission.missions.MissionSweatFlower1.MissionSweatFlower1()
+    if mission_name == 'MissionSweatFlower2':
+        import source.mission.missions.MissionSweatFlower2
+        return source.mission.missions.MissionSweatFlower2.MissionSweatFlower2()
     if mission_name == 'MissionTest':
         import source.mission.missions.MissionTest
         return source.mission.missions.MissionTest.MissionTest()
     if mission_name == 'MissionTest2':
         import source.mission.missions.MissionTest2
         return source.mission.missions.MissionTest2.MissionTest2()
+    if mission_name == 'MissionVioletgrass1':
+        import source.mission.missions.MissionVioletgrass1
+        return source.mission.missions.MissionVioletgrass1.MissionVioletgrass1()

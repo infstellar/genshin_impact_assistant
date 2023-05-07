@@ -16,10 +16,10 @@ import source.ui.page as UIPage
 from source.dev_tool.tianli_navigator import TianliNavigator
 
 
-IN_MOVE = 0
-IN_FLY = 1
-IN_WATER = 2
-IN_CLIMB = 3
+IN_MOVE = movement.WALKING
+IN_FLY = movement.FLYING
+IN_WATER = movement.SWIMMING
+IN_CLIMB = movement.CLIMBING
 
 class TeyvatMoveFlowConnector(FlowConnector):
     def __init__(self):
@@ -105,18 +105,19 @@ class TeyvatMoveCommon():
         self.history_position_timer = timer_module.AdvanceTimer(limit=1).start()
 
     def switch_motion_state(self, jump=True):
-        if itt.get_img_existence(asset.IconGeneralMotionClimbing):
-            self.motion_state = IN_CLIMB
-        elif itt.get_img_existence(asset.IconGeneralMotionFlying):
-            self.motion_state = IN_FLY
-        elif itt.get_img_existence(asset.IconGeneralMotionSwimming):
-            self.motion_state = IN_WATER
-        else:
-            self.motion_state = IN_MOVE
+        self.motion_state = movement.get_current_motion_state()
+        # if itt.get_img_existence(asset.IconGeneralMotionClimbing):
+        #     self.motion_state = IN_CLIMB
+        # elif itt.get_img_existence(asset.IconGeneralMotionFlying):
+        #     self.motion_state = IN_FLY
+        # elif itt.get_img_existence(asset.IconGeneralMotionSwimming):
+        #     self.motion_state = IN_WATER
+        # else:
+        #     self.motion_state = IN_MOVE
         if self.motion_state == IN_CLIMB:
             jump_dt = 20
         elif self.motion_state == IN_MOVE:
-            jump_dt = 2
+            jump_dt = 1.6
         else:
             jump_dt = 99999
         if jump:

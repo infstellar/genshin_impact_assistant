@@ -7,7 +7,7 @@ class MissionSweatFlower1(MissionExecutor):
     
     def exec_mission(self):
         self.start_pickup()
-        self.move_along("SweatFlower167910289922", is_tp=True, is_precise_arrival=True)
+        self.move_along("SweatFlower167910289922", is_tp=True, is_precise_arrival=False)
         self.stop_pickup()
         # self.collect(MODE="AUTO",pickup_points=[[71, -2205],[65,-2230]])
         

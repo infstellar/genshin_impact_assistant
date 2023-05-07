@@ -212,6 +212,8 @@ config/mission_groups/*.json
 !config/mission_groups/AutoCollectorMission.json
 !config/mission_groups/SakuraBloomMissionGroup.json
 !config/mission_groups/Default.json
+!config/mission_groups/SweatFlowerMissionGroup.json
+!config/mission_groups/VioletgrassMissionGroup.json
 
 # test file
 source/test/test242.py

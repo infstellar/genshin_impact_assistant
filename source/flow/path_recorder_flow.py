@@ -3,11 +3,8 @@ import keyboard
 from source.flow.flow_template import FlowController, FlowTemplate, FlowConnector, EndFlowTemplate
 import source.flow.flow_code as FC, source.flow.flow_state as ST
 from source.interaction.minimap_tracker import tracker
-from source.controller import combat_controller
-from source.common import timer_module
-from source.funclib import generic_lib, movement, combat_lib
+from source.funclib import movement
 from source.funclib.err_code_lib import *
-from source.manager import posi_manager as PosiM, asset
 from source.interaction.interaction_core import itt
 import pytz, datetime
 from source.ui.ui import ui_control
@@ -136,7 +133,8 @@ class PathRecorderCore(FlowTemplate):
             "position_list":[],
         }
         self.enter_flag = False
-        tracker.reinit_smallmap()
+        # if not 
+        # tracker.reinit_smallmap()
         curr_posi = tracker.get_position()
         self._add_break_position(curr_posi)
         self._next_rfc()

@@ -219,7 +219,7 @@ class MainPage(Page):
         listening.TASK_MANAGER.start_stop_tasklist()
         if pin.pin["MissionSelect"] != None and pin.pin["MissionSelect"] != "":
             cj = load_json()
-            cj["mission_group"] = pin.pin["MissionSelect"]
+            cj["MissionGroup"] = pin.pin["MissionSelect"]
             save_json(cj)
             GIAconfig.update()
 

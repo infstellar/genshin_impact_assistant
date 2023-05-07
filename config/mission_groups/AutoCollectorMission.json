@@ -1,6 +1,6 @@
 {
   "introduction": {
-    "en_US": "Fully automatic acquisition, set the acquisition name, type and other parameters in the automatic acquisition settings.",
+    "en_US": "Fully automatic collection, set the collection name, type and other parameters in the automatic collector settings.",
     "zh_CN": "全自动采集，在自动采集设置中设置采集名称、类型等参数。"
   },
   "missions": [

@@ -112,7 +112,7 @@ class Map(MiniMap, BigMap, MapConverter):
             ui_control.ui_goto(UIPage.page_bigmap)
             self.init_position(tuple(map(int, list(self.get_bigmap_posi().gimap))))
             ui_control.ui_goto(UIPage.page_main)
-            self.small_map_init_flag=True
+            self.small_map_init_flag = True
 
     def while_until_no_excessive_error(self) -> None:
         self.reinit_smallmap()
