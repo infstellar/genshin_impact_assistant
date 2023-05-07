@@ -26,7 +26,7 @@ class ImgIcon(AssetBase):
         """创建一个img对象，用于图片识别等。
 
         Args:
-            path (str): 图片路径，必填。
+            path (str): 图片路径。
             name (str): 图片名称。默认为图片名。
             is_bbg (bool, optional): 是否为黑色背景图片. Defaults to True.
             alpha (int, optional): 截图时的alpha通道，已废弃. Defaults to None.

@@ -225,3 +225,4 @@ config/commission/commission_dict.json
 
 translation/locale/en_US/LC_MESSAGES/en_US.mo
 translation/locale/zh_CN/LC_MESSAGES/zh_CN.mo
+.history/*

@@ -13,7 +13,8 @@
         "yolox\\**",
         "out\\**",
         "yoloxtools\\**",
-        "exps\\**"
+        "exps\\**",
+        ".history\\**"
     ],
     "python.analysis.diagnosticSeverityOverrides": {
         "reportImportCycles": "error",

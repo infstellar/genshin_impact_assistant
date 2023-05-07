@@ -19,19 +19,6 @@ def f_recognition(mode='button_only'):
     else:
         return False
 
-
-# def euclidean_distance(p1, p2):
-#     return math.sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2)
-
-# def euclidean_distance_plist(p1, p2):
-#     return np.sqrt((p1[0] - p2[:,0]) ** 2 + (p1[1] - p2[:,1]) ** 2)
-
-# def manhattan_distance(p1, p2):
-#     return abs(p1[0]-p2[0]) + abs(p1[1]-p2[1])
-
-# def manhattan_distance_plist(p1, p2):
-#     return abs(p1[0]-p2[:,0]) + abs(p1[1]-p2[:,1])
-
 def points_angle(p1, p2, coordinate=NORMAL):
     # p1: current point
     # p2: target point

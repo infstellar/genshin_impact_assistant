@@ -5,6 +5,7 @@ from source.funclib import generic_lib
 from source.map.map import genshin_map
 from source.manager import asset
 from source.common.timer_module import Timer
+from source.assets.movement import *
 
 itt = itt
 AHEAD = 0
@@ -244,14 +245,36 @@ def f():
     return False
     
 def get_current_motion_state() -> str:
-    if itt.get_img_existence(asset.IconGeneralMotionClimbing):
+    def preprocessing(img):
+        hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+        lower_white = np.array([0, 0, 200])
+        upper_white = np.array([180, 60, 255])
+        mask = cv2.inRange(hsv, lower_white, upper_white)
+        return mask
+    cap = itt.capture()
+    cap = preprocessing(cap)
+    img1 = crop(cap.copy(), IconMovementClimb.cap_posi)
+    r1 = itt.similar_img(img1, IconMovementClimbing.image[:,:,0])
+    img1 = crop(cap.copy(), IconMovementSwim.cap_posi)
+    r2 = itt.similar_img(img1, IconMovementSwimming.image[:,:,0])
+    img1 = crop(cap.copy(), IconMovementFly.cap_posi)
+    r3 = itt.similar_img(img1, IconMovementFlying.image[:,:,0])
+    logger.trace(f"get_current_motion_state: climb{round(r1,2)} swim{round(r2,2)} fly{round(r3,2)}")
+    if r1 > 0.85:
         return CLIMBING
-    elif itt.get_img_existence(asset.IconGeneralMotionFlying):
-        return FLYING
-    elif itt.get_img_existence(asset.IconGeneralMotionSwimming):
+    if r2 > 0.85:
         return SWIMMING
-    else:
-        return WALKING
+    if r3 > 0.85:
+        return FLYING
+    return WALKING
+    # if itt.get_img_existence(asset.IconGeneralMotionClimbing):
+    #     return CLIMBING
+    # elif itt.get_img_existence(asset.IconGeneralMotionFlying):
+    #     return FLYING
+    # elif itt.get_img_existence(asset.IconGeneralMotionSwimming):
+    #     return SWIMMING
+    # else:
+    #     return WALKING
 
 def move_to_posi_LoopMode(target_posi, stop_func, threshold = 6):
     """移动到指定坐标。适合用于while循环的模式。
@@ -272,10 +295,11 @@ def move_to_posi_LoopMode(target_posi, stop_func, threshold = 6):
 # view_to_angle(-90)
 if __name__ == '__main__':
     while 1:
-        time.sleep(0.05)
-        cap = itt.capture(jpgmode=0)
-        ban_posi=asset.IconCommissionCommissionIcon.cap_posi
-        cap[ban_posi[1]:ban_posi[3],ban_posi[0]:ban_posi[2]]=0
-        print(view_to_imgicon(cap, asset.IconCommissionInCommission))
-    # cview(-90, VERTICALLY)
-    move_to_position([71, -2205])
+        time.sleep(0.1)
+        print(get_current_motion_state())
+    #     cap = itt.capture(jpgmode=0)
+    #     ban_posi=asset.IconCommissionCommissionIcon.cap_posi
+    #     cap[ban_posi[1]:ban_posi[3],ban_posi[0]:ban_posi[2]]=0
+    #     print(view_to_imgicon(cap, asset.IconCommissionInCommission))
+    # # cview(-90, VERTICALLY)
+    # move_to_position([71, -2205])

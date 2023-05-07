@@ -66,6 +66,8 @@ IconCommissionInCommission = ImgIcon(is_bbg=False)
 AreaClaimRewardAvailableReward = PosiTemplate()
 AreaDomainLeaveIn = PosiTemplate()
 AreaDomainLeyLineDisorder = PosiTemplate()
+AreaGeneralInteractiveItemInformation = ImgIcon()
+IconGeneralTalkBubble = ImgIcon()
 
 # Text
 QTSX = TextTemplate(text={"zh_CN":"七天神像","en_US":"Statues of The Seven"}, cap_area = AreaBigmapChoose.position)
