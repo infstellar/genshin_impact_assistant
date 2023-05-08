@@ -36,7 +36,7 @@ class UI():
                 else:
                     logger.warning(f"检测到多个Page")
         if ret_page is None:
-            logger.warning(f"未知Page, 重新检测")
+            logger.warning(t2t("未知Page, 重新检测"))
             self.ui_additional()
             time.sleep(1)
             ret_page = self.get_page()  

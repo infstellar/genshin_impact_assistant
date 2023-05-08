@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2023-05-08 20:55+0800\n"
-"PO-Revision-Date: 2023-05-08 20:57+0800\n"
+"POT-Creation-Date: 2023-05-08 23:52+0800\n"
+"PO-Revision-Date: 2023-05-08 23:54+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_US\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: pygettext.py 1.5\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.2\n"
 
 #: genshin_assistant.py:26
 msgid "正在初始化，请稍后"
@@ -301,6 +301,10 @@ msgstr "Landing"
 msgid "结束自动行走"
 msgstr "Stop AutoMove"
 
+#: source\flow\teyvat_move_flow_upgrad.py:169
+msgid "不在服务区"
+msgstr "Out of service area"
+
 #: source\funclib\combat_lib.py:145
 msgid ""
 "Located at the map boundary, the is_chara_busy function enables fuzzy "
@@ -417,7 +421,7 @@ msgstr "pickup: "
 
 #: source\operator\pickup_operator.py:183
 msgid "已找到："
-msgstr "Found"
+msgstr "Found:"
 
 #: source\task\domain_task.py:73
 msgid "找不到秘境名称，放弃选择。"
@@ -450,6 +454,10 @@ msgstr "Task"
 #: source\task\task_manager.py:92
 msgid "End Task"
 msgstr "End Task"
+
+#: source\ui\ui.py:39
+msgid "未知Page, 重新检测"
+msgstr "Unknown Page, Redetect"
 
 #: source\webio\page_manager.py:31
 msgid "Main"
@@ -685,6 +693,10 @@ msgstr "Expand / Close"
 #: source\webio\pages.py:865
 msgid "clean list"
 msgstr "clean list"
+
+#: source\webio\update_notice.py:7
+msgid "GIA 已升级到"
+msgstr "GIA has been upgraded to"
 
 #: source\webio\webio.py:34
 msgid "webio启动完成"

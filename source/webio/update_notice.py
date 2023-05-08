@@ -4,7 +4,7 @@ def upd_message():
     ret_message = ""
     version_num = int(GIAconfig.General_Version.split('.')[-1])
     if version_num!=int(GIA_VERSION.split(".")[-1]):
-        ret_message+=f"GIA 已升级到{GIA_VERSION}。\n"
+        ret_message+=t2t("GIA 已升级到")+f"{GIA_VERSION}. \n"
     if version_num <= 500:
         ret_message+=f"推荐删除tactic中的team.json和team_example_3.json，然后重启GIA。\n"
     if version_num < 753:

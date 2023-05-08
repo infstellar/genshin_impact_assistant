@@ -8,7 +8,7 @@ from source.manager import asset
 from source.commission.commission_index import COMMISSION_INDEX
 from source.commission.commission_acquisition import get_commission_object
 from source.api.pdocr_complete import ocr
-from source.common.timer_module import Genshin400Timer
+from source.common.timer_module import FileTimer
 
 
 class CommissionParser():
@@ -75,12 +75,12 @@ class CommissionParser():
         return self.commission_dicts
     
     def _set_and_save_and_load_commission_dicts(self) -> bool:
-        g4t = Genshin400Timer()
-        if g4t.is_new_day():
+        g4t = FileTimer("daily_commission")
+        if g4t.get_diff_time()>=3600:
             logger.info(f"new genshin day, traverse mondstant commissions")
             self.traverse_mondstant()
             save_json(self.commission_dicts, json_name="commission_dict.json", default_path=rf"{CONFIG_PATH}\commission")
-            g4t.set_today()
+            g4t.reset()
             return True
         else:
             self.commission_dicts = load_json(json_name="commission_dict.json", default_path=rf"{CONFIG_PATH}\commission")

@@ -166,7 +166,7 @@ class Navigation(TianliNavigator):
             else:
                 logger.info(f"navigation_path: {list(map(str, self.navigation_path))}")
         else:
-            logger.info(f"不在服务区")
+            logger.info(t2t("不在服务区"))
             self.navigation_path = None
 
     def set_curr_posi(self, posi):
