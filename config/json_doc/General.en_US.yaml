@@ -1,85 +1,76 @@
 Lang: 
   doc: 语言(language)
-  annotation: 选择$locale$时，将根据系统语言自动选择。
+  annotation: When $locale$ is selected, it will be automatically selected based on the system language.
 
 BorderlessWindow:
-  doc: 是否为无边框窗口
-  annotation: 全屏或无边窗窗口化时设置为True，窗口化时设置为False。
+  doc: Whether it is a borderless window
+  annotation: Set to True for full-screen or borderless windowing and False for windowing.
 
 DEBUG: 
- doc: 调试模式
+ doc: Debug mode
 
 corr_degree:
-  doc: 视角校准
-  annotation: 秘境内视角校准时的辅助参数。若在秘境内视角偏左则增大该值，反之亦然。
+  doc: Viewing angle calibration
+  annotation: Auxiliary parameter for perspective calibration in the domain. Increase this value if the viewpoint is to the left in the domain, and vice versa.
 
 DevicePaddle: 
-  doc: paddle运算设备
-  annotation: paddleocr运算使用的设备，如果安装了cudnn则设为`'gpu'`，否则设为`'cpu'`。 设置为`auto`时，会自动检测GPU可用性，但不会自动切换GPU，需要根据是否可用的提示手动切换。
+  doc: Paddle device
+  annotation: The device used for Paddleocr operations is set to `'gpu'` if cudnn is installed, otherwise it is set to `'cpu'`. When set to `auto`, it will automatically detect GPU availability, but will not automatically switch GPUs, you need to switch them manually according to the availability prompt.
 
 DeviceTorch: 
-  doc: torch运算设备
-  annotation: yolox运算使用的设备，如果安装了cudnn则设为`'gpu'`，否则设为`'cpu'` 。 设置为`auto`时可以自动检测GPU可用性并自动切换。
+  doc: Torch device
+  annotation: The device used for yolox computing is set to `'gpu'` if cudnn is installed, otherwise it is set to `'cpu'`. When set to `auto`, GPU availability can be automatically detected and switched automatically.
 
 Version: 
-  doc: 版本
+  doc: Version
 
 CaptureMode:
-  doc: 截图模式
+  doc: Capture Mode
 
 UsingAlphaChannel:
-  doc: 是否使用透明度通道
-  annotation: 如果的确无法使用BitBlt截图，设置为True。
+  doc: Whether to use the transparency channel
+  annotation: If it is indeed impossible to take a screenshot with BitBlt, set it to True.
 
 CheckImport:
-  doc: 是否在启动时检查导入
+  doc: Whether to check the import at startup
 
 CloudGenshin:
-  doc: 是否为云原神
+  doc: Whether the Cloud Genshin
 
 DeterminingStrictWeight:
-  doc: 检测裕度百分比
-  annotation: 部分cv检测会使用该值。如果有些地方检测失败，可以尝试降低或提高该值。
+  doc: Detection margin percentage
+  annotation: Some cv detections will use this value. If the detection fails in some places, you can try to lower or raise the value.
 
 InteractionMode:
-  doc: 交互模式
+  doc: Interaction Mode
 
 Python32Path:
-  doc: 32位python绝对路径
-  annotation: 使用Dm模式时填写。
+  doc: 32-bit python absolute path
+  annotation: Fill in when using Dm mode.
 
 DomainTimes:
-  doc:  秘境探险次数
+  doc:  Number of Domain
 
 FastMode:
-  doc:  快速模式，当开启挑战时走过头时关闭。
+  doc:  Fast mode, closed when walking over the head when start the challenge.
 
 IsObscuredDomain:
-  doc:  是否为石化古树有被遮挡的副本
+  doc:  Is the petrified ancient trees have copies that are obscured
 
 Resin: 
-  doc: 树脂
+  doc: Resin
   
 AutoDistance:
-  doc: 自动控距
+  doc: Automatic distance control
 
 AutoMove:
-  doc: 自动移视角
-
-Fps:
-  doc: 识别频率 默认值：20
-
-MaxNumberOfEnemyLoops:
-  doc: 最大索敌次数 推荐值：130~160；默认值：150
-
-ResetTime:
-  doc: 索敌失败后冷却时间
+  doc: Auto View Shift
 
 DomainStageName:
-  doc: 秘境关卡名
-  annotation: 必须包含等级，等级必须为大写字母I。如果从秘境内启动则无需填写。当前版本可能有识别错误问题。
+  doc: Secret level name
+  annotation: The level must be included, and the level must be a capital I. This is not required if starting from within the domain. Current version may have recognition error issues.
   
 DomainName:
-  doc: 秘境名
-  annotation: 如果从秘境内启动则无需填写。
+  doc: Domain name
+  annotation: This is not required if you are starting from within the domain.
 

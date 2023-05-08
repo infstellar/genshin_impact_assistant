@@ -17,6 +17,7 @@ else:
     GLOBAL_LANG = "$locale$"
 def get_local_lang():
     lang = locale.getdefaultlocale()[0]
+    print(lang)
     if lang in ["zh_CN", "zh_SG", "zh_MO", "zh_HK", "zh_TW"]:
         return "zh_CN"
     else:
@@ -24,7 +25,7 @@ def get_local_lang():
 
 if GLOBAL_LANG == "$locale$":
     GLOBAL_LANG = get_local_lang()
-    GLOBAL_LANG = "zh_CN"
+    
 # create .mo files
 po_file_path = os.path.join(ROOT_PATH, r'translation/locale', GLOBAL_LANG, 'LC_MESSAGES', f'{GLOBAL_LANG}.po')
 mo_file_path = os.path.splitext(po_file_path)[0] + '.mo'

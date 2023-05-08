@@ -1,13 +1,13 @@
 CollectMode:
-  annotation: 暂时没用
-  doc: 采集模式
+  annotation: No use for now
+  doc: Collect Mode
 CollectionArea:
-  doc: 采集地区
+  doc: Collect Area
 CollectionName:
-  annotation: 直接填写物品名
-  doc: 物品名
+  annotation: Fill in the item name directly
+  doc: Collection Name
 CollectionType:
-  doc: 采集类型
+  doc: Collection Type
 MinimumTimesMaskColId:
-  annotation: 没啥用
-  doc: 最小采集失败屏蔽次数
+  annotation: No use for now
+  doc: Minimum number of collection failure blocking

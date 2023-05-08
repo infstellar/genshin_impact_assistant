@@ -5,503 +5,728 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2023-01-13 18:01+0800\n"
-"PO-Revision-Date: 2023-01-13 18:08+0800\n"
+"POT-Creation-Date: 2023-05-08 20:55+0800\n"
+"PO-Revision-Date: 2023-05-08 20:57+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_US\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=cp936\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: pygettext.py 1.5\n"
-"X-Generator: Poedit 3.2\n"
+"X-Generator: Poedit 3.2.2\n"
 
-#: ../genshin_assistant.py:20
-msgid "ÕıÔÚ³õÊ¼»¯£¬ÇëÉÔºó"
+#: genshin_assistant.py:26
+msgid "æ­£åœ¨åˆå§‹åŒ–ï¼Œè¯·ç¨å"
 msgstr "Initializing, please wait"
 
-#: ../genshin_assistant.py:27
-msgid "µ¼ÈëÒÀÀµÊ±´íÎó; err code: 001_1"
-msgstr "Error importing dependencies; err code: 001_1"
+#: genshin_assistant.py:33 genshin_assistant.py:41
+msgid "å¯¼å…¥ä¾èµ–æ—¶é”™è¯¯"
+msgstr "Error in importing dependencies."
 
-#: ../genshin_assistant.py:29
-msgid "³ÌĞòÔİÍ£¡£°´ÈÎÒâ¼üÍË³ö"
+#: genshin_assistant.py:36 genshin_assistant.py:44
+msgid "ç¨‹åºæš‚åœã€‚æŒ‰ä»»æ„é”®é€€å‡º"
 msgstr "Program paused. press any key to exit"
 
-#: ../genshin_assistant.py:31
-msgid "³õÊ¼»¯Íê³É"
+#: genshin_assistant.py:46
+msgid "åˆå§‹åŒ–å®Œæˆ"
 msgstr "Initializing successfully"
 
-#: ../genshin_assistant.py:32
-msgid "ÕıÔÚµÈ´ıwebioÆô¶¯"
+#: genshin_assistant.py:47
+msgid "æ­£åœ¨ç­‰å¾…webioå¯åŠ¨"
 msgstr "Waiting for webio to start"
 
-#: ../genshin_assistant.py:33
-msgid "Æô¶¯¼üÅÌ¼àÌı"
+#: genshin_assistant.py:48
+msgid "å¯åŠ¨é”®ç›˜ç›‘å¬"
 msgstr "Start keyboard listening"
 
-#: ../source/webio\pages.py:44 ../source/webio\pages.py:218
-msgid "Î´ÕÒµ½»á»°£¬¿ÉÄÜÓÉÓÚ´°¿Ú¹Ø±Õ¡£ÇëË¢ĞÂÒ³ÃæÖØÊÔ¡£"
-msgstr "Session not found, possibly due to window being closed. Please refresh the page and try again."
-
-#: ../source/webio\pages.py:49
-msgid "ÕıÔÚµ¼ÈëÄ£¿é, ¿ÉÄÜĞèÒªÒ»Ğ©Ê±¼ä¡£"
-msgstr "Modules are being imported and may take some time."
-
-#: ../source/webio\pages.py:51
-msgid "ÔÚµ¼ÈëÍê³ÉÇ°£¬Çë²»ÒªÇĞ»»Ò³Ãæ¡£"
-msgstr "Please do not switch pages until the import is complete."
-
-#: ../source/webio\pages.py:88
-msgid "Get IP address"
-msgstr ""
-
-#: ../source/webio\pages.py:94
-msgid "## Options"
-msgstr ""
-
-#: ../source/webio\pages.py:97 ../source/webio\pages.py:98
-msgid "FlowMode"
-msgstr ""
-
-#: ../source/webio\pages.py:99
-msgid "Idle"
-msgstr ""
-
-#: ../source/webio\pages.py:100
-msgid "AutoCombat"
-msgstr ""
-
-#: ../source/webio\pages.py:101
-msgid "AutoDomain"
-msgstr ""
-
-#: ../source/webio\pages.py:102
-msgid "AutoCollector"
-msgstr ""
-
-#: ../source/webio\pages.py:105
-msgid "Æô¶¯/Í£Ö¹"
-msgstr "Start/Stop"
-
-#: ../source/webio\pages.py:107
-msgid "## Statement"
-msgstr ""
-
-#: ../source/webio\pages.py:109
-msgid "µ±Ç°×´Ì¬"
-msgstr "Current status"
-
-#: ../source/webio\pages.py:123
-msgid "## Log"
-msgstr ""
-
-#: ../source/webio\pages.py:141
-msgid "Not Enabled"
-msgstr ""
-
-#: ../source/webio\pages.py:142
-msgid "LAN IP"
-msgstr ""
-
-#: ../source/webio\pages.py:142
-msgid "WAN IP"
-msgstr ""
-
-#: ../source/webio\pages.py:183
-msgid "# Config"
-msgstr ""
-
-#: ../source/webio\pages.py:189 ../source/webio\pages.py:453
-#: ../source/webio\pages.py:497 ../source/webio\pages.py:542
-msgid "## config:"
-msgstr ""
-
-#: ../source/webio\pages.py:264
-msgid "saved!"
-msgstr ""
-
-#: ../source/webio\pages.py:305
-msgid "Do you need to save changes?"
-msgstr ""
-
-#: ../source/webio\pages.py:306
-msgid "No"
-msgstr ""
-
-#: ../source/webio\pages.py:306
-msgid "Yes"
-msgstr ""
-
-#: ../source/webio\pages.py:447
-msgid "# Setting"
-msgstr ""
-
-#: ../source/webio\pages.py:480
-msgid "# CombatSetting"
-msgstr ""
-
-#: ../source/webio\pages.py:486
-msgid "# Add team"
-msgstr ""
-
-#: ../source/webio\pages.py:490
-msgid "Add team"
-msgstr ""
-
-#: ../source/webio\pages.py:492
-msgid "Add team with characters"
-msgstr ""
-
-#: ../source/webio\pages.py:536 ../source/webio\webio.py:23
-msgid "CollectorSetting"
-msgstr ""
-
-#: ../source/webio\pages.py:581
-msgid "clean list"
-msgstr ""
-
-#: ../source/webio\webio.py:20
-msgid "Main"
-msgstr ""
-
-#: ../source/webio\webio.py:21
-msgid "Setting"
-msgstr ""
-
-#: ../source/webio\webio.py:22
-msgid "CombatSetting"
-msgstr ""
-
-#: ../source/webio\webio.py:26
-msgid "webioÆô¶¯Íê³É"
-msgstr "webio startup successfully"
-
-#: ../source\collector_flow.py:303
-msgid "switch Flow to: AFTER_MOVETO_COLLECTOR"
-msgstr ""
-
-#: ../source\collector_flow.py:329
-msgid "switch Flow to: BEFORE_PICKUP_COLLECTOR"
-msgstr ""
-
-#: ../source\collector_flow.py:337
-msgid "switch Flow to: IN_PICKUP_COLLECTOR"
-msgstr ""
-
-#: ../source\collector_flow.py:347
-msgid "switch Flow to: AFTER_PICKUP_COLLECTOR"
-msgstr ""
-
-#: ../source\combat_lib.py:84
-msgid "»ñµÃµ±Ç°½ÇÉ«±àºÅÊ§°Ü"
-msgstr "Failed to get the current character number"
-
-#: ../source\combat_loop.py:65
-msgid " µÄEcd_float_time´óÓÚ0£¬ÇëÈ·¶¨¸Ã½ÇÉ«²»ÊÇ¶à¶Îe¼¼ÄÜ½ÇÉ«¡£"
-msgstr "'s Ecd_float_time is greater than 0, please make sure that the character is not a character with multiple E skills."
-
-#: ../source\combat_loop.py:65
-msgid "½ÇÉ« "
-msgstr "character"
-
-#: ../source\combat_loop.py:115
-msgid "ÓĞÈË¸ÂÁË£¬Í£Ö¹×Ô¶¯Õ½¶·"
-msgstr "Someone's dead, stop auto combat"
-
-#: ../source\combat_loop.py:158 ../source\combat_loop.py:164
-msgid "Í£Ö¹×Ô¶¯Õ½¶·"
-msgstr "stop auto combat"
-
-#: ../source\cvAutoTrack.py:103
-msgid "cleaning cvautotrack files"
-msgstr ""
-
-#: ../source\cvAutoTrack.py:108
-msgid "autoTrack.log 1 cleaned"
-msgstr ""
-
-#: ../source\cvAutoTrack.py:113
-msgid "autoTrack.log 2 cleaned"
-msgstr ""
-
-#: ../source\cvAutoTrack.py:118
-msgid "autoTrack.log 3 cleaned"
-msgstr ""
-
-#: ../source\cvAutoTrack.py:138
-msgid "cvAutoTrack DLL has been loaded."
-msgstr ""
-
-#: ../source\domain_flow.py:38
-msgid "ÇëÊäÈëÃØ¾³´ÎÊı"
-msgstr "Please enter the number of challenges"
-
-#: ../source\domain_flow.py:53
-msgid "ÃØ¾³´ÎÊı£º"
-msgstr "Challenge times:"
-
-#: ../source\domain_flow.py:56
-msgid "Í£Ö¹×Ô¶¯ÃØ¾³"
-msgstr "stop AutoDomain"
-
-#: ../source\domain_flow.py:124
-msgid "ÕıÔÚ¿ªÊ¼ÌôÕ½ÃØ¾³"
-msgstr "Starting to challenge the domain"
-
-#: ../source\domain_flow.py:274
-msgid "ÕıÔÚ¿ªÊ¼Õ½¶·"
-msgstr "starting combat"
-
-#: ../source\domain_flow.py:288
-msgid "ÕıÔÚÍ£Ö¹Õ½¶·"
-msgstr "stopting combat"
-
-#: ../source\domain_flow.py:291
-msgid "µÈ´ıÑÒÔìÎïÏûÊ§"
-msgstr "Waiting for the rock-made to disappear"
-
-#: ../source\domain_flow.py:299
-msgid "ÕıÔÚ¼¤»îÊ¯»¯¹ÅÊ÷"
-msgstr "Activating the tree"
-
-#: ../source\domain_flow.py:344
-msgid "ÃØ¾³½áÊø¡£"
-msgstr "Domain over."
-
-#: ../source\domain_flow.py:355
-msgid "¿ªÊ¼ÏÂÒ»´ÎÃØ¾³"
-msgstr "Starting next domain"
-
-#: ../source\domain_flow.py:371
-msgid "´ÎÊı½áÊø¡£ÍË³öÃØ¾³"
-msgstr "The number of times is over. Exit the domain"
-
-#: ../source\flow_state.py:91
-msgid "¿ÕÏĞ"
-msgstr "Idle"
-
-#: ../source\flow_state.py:94
-msgid "ÕıÔÚ³õÊ¼»¯"
-msgstr "Initializing"
-
-#: ../source\flow_state.py:96
-msgid "ÕıÔÚ×¼±¸"
-msgstr "Prepareing"
-
-#: ../source\flow_state.py:98
-msgid "ÕıÔÚ½øĞĞ"
-msgstr "Doing"
-
-#: ../source\flow_state.py:100
-msgid "×¼±¸½áÊø"
-msgstr "Ready to end"
-
-#: ../source\flow_state.py:102
-msgid "½áÊø"
-msgstr "End"
-
-#: ../source\flow_state.py:105
-msgid "ÒÆ¶¯µ½ÌôÕ½Î»ÖÃ"
-msgstr "move to challenge position"
-
-#: ../source\flow_state.py:107
-msgid "ÌôÕ½ÃØ¾³ÖĞ"
-msgstr "In challenging"
-
-#: ../source\flow_state.py:109
-msgid "×¼±¸ÁìÈ¡½±Àø"
-msgstr "ready to claim reward"
-
-#: ../source\flow_state.py:111
-msgid "ÕıÔÚÑ°ÕÒÊ¯»¯¹ÅÊ÷Î»ÖÃ"
-msgstr "Looking for the location of the tree"
-
-#: ../source\flow_state.py:113
-msgid "ÒÆ¶¯µ½Ê¯»¯¹ÅÊ÷Î»ÖÃ"
-msgstr "Move to the location of the tree"
-
-#: ../source\flow_state.py:115
-msgid "ÁìÈ¡½±Àø"
-msgstr "Obtain reaward"
-
-#: ../source\flow_state.py:117
-msgid "½áÊøÃØ¾³"
-msgstr "End domain"
-
-#: ../source\flow_state.py:119
-msgid "ÔÚµØÍ¼ÉÏ´«ËÍ"
-msgstr "teleport on map"
-
-#: ../source\flow_state.py:121
-msgid "ÒÆ¶¯µ½Ä¿±ê×ø±êÎ»ÖÃ"
-msgstr "Move to the target coordinate position"
-
-#: ../source\flow_state.py:123
-msgid "ÒÆ¶¯µ½²É¼¯ÎïÎ»ÖÃ"
-msgstr "Move to collection location"
-
-#: ../source\flow_state.py:125
-msgid "Ê°È¡²É¼¯Îï"
-msgstr "Pick up collection"
-
-#: ../source\flow_state.py:127
-msgid "½áÊø×Ô¶¯²É¼¯"
-msgstr "End AutoCollection"
-
-#: ../source\generic_lib.py:72 ../source\teyvat_move_flow.py:157
-msgid "»ñÈ¡´«ËÍÃªµãÊ§°Ü£¬ÕıÔÚÖØÊÔ"
-msgstr "Failed to get teleportation, retrying"
-
-#: ../source\interaction_background.py:43
-msgid "»Ö¸´²Ù×÷"
-msgstr "recovery operation"
-
-#: ../source\interaction_background.py:45
-msgid "µ±Ç°´°¿Ú½¹µãÎª"
-msgstr "The current window focus is"
-
-#: ../source\listening.py:55
-msgid "Program stop."
-msgstr ""
-
-#: ../source\listening.py:60
-msgid "ÕıÔÚÍ£Ö¹×Ô¶¯Õ½¶·"
-msgstr "Stopping AutoCombat"
-
-#: ../source\listening.py:64
-msgid "Æô¶¯×Ô¶¯Õ½¶·"
-msgstr "Start AutoCombat"
-
-#: ../source\listening.py:74
-msgid "ÕıÔÚÍ£Ö¹×Ô¶¯ÃØ¾³"
-msgstr "Stoping AutoDomain"
-
-#: ../source\listening.py:78
-msgid "Æô¶¯×Ô¶¯ÃØ¾³"
-msgstr "Start AutoDomain"
-
-#: ../source\listening.py:87
-msgid "ÕıÔÚÍ£Ö¹×Ô¶¯²É¼¯"
-msgstr "Stoping AutoCollector"
-
-#: ../source\listening.py:90
-msgid "Æô¶¯×Ô¶¯²É¼¯"
-msgstr "Start AutoCollector"
-
-#: ../source\listening.py:134
-msgid "µ¼ÈëÍê³É"
-msgstr "Import complete"
-
-#: ../source\pdocr_api.py:3
+#: source\api\pdocr_api.py:4
 msgid "Creating ocr object."
-msgstr ""
+msgstr "Creating ocr object."
 
-#: ../source\pdocr_api.py:14
-msgid "µ¼ÈëpaddleocrÊ±´íÎó; err code: 001"
+#: source\api\pdocr_api.py:14
+msgid "å¯¼å…¥paddleocræ—¶é”™è¯¯; err code: 001"
 msgstr "Error when importing paddleocr; err code: 001"
 
-#: ../source\pdocr_api.py:40
+#: source\api\pdocr_api.py:200
 msgid "ocr device: "
-msgstr ""
+msgstr "ocr device: "
 
-#: ../source\pickup_operator.py:53
-msgid "ÕıÔÚÉèÖÃÊ±¼äÎªÒ¹Íí"
-msgstr "Setting time to night"
-
-#: ../source\pickup_operator.py:80
-msgid "Í£Ö¹×Ô¶¯Ê°È¡"
-msgstr "Stop AutoCollector"
-
-#: ../source\pickup_operator.py:113
-msgid "PICKUP_TIMEOUT_001"
-msgstr ""
-
-#: ../source\pickup_operator.py:115 ../source\pickup_operator.py:121
-msgid "Í£Ö¹Ê°È¡"
-msgstr "Stop pickup"
-
-#: ../source\pickup_operator.py:119
-msgid "PICKUP_TIMEOUT_002"
-msgstr ""
-
-#: ../source\pickup_operator.py:128
-msgid "ÒÑÕÒµ½ÎïÆ·ÇÒÎŞ·¨ÕÒµ½ÏÂÒ»¸öÎïÆ·£¬Í£Ö¹Ê°È¡"
-msgstr "Item found and can't find next item, stop picking"
-
-#: ../source\pickup_operator.py:161
-msgid "pickup: "
-msgstr ""
-
-#: ../source\pickup_operator.py:163
-msgid "ÒÑÕÒµ½£º"
-msgstr "Found"
-
-#: ../source\scene_manager.py:66
-msgid "UI½çÃæ¼ì²âÊ§°Ü£¬ÕıÔÚ³¢ÊÔ°´esc·µ»Ø"
-msgstr "UI interface detection failed, trying to press esc to return"
-
-#: ../source\scene_manager.py:68
-msgid "½«ÔÚ1ÃëºóÔÙ´Î³¢ÊÔ»ñÈ¡UI½çÃæ"
-msgstr "Will try to get the UI again after 1 second"
-
-#: ../source\scene_manager.py:69 ../source\scene_manager.py:75
-msgid "³¢ÊÔ´ÎÊı£º"
-msgstr "Retry times:"
-
-#: ../source\scene_manager.py:73
-msgid "UI½çÃæ¼ì²âÊ§°Ü"
-msgstr "UI interface detection failed"
-
-#: ../source\scene_manager.py:74
-msgid "½«ÔÚ0.2ÃëºóÔÙ´Î³¢ÊÔ»ñÈ¡UI½çÃæ"
-msgstr "Will try to get the UI again after 0.2 seconds"
-
-#: ../source\static_lib.py:32
-msgid "µÈ´ıcvautotrack»ñÈ¡×ø±ê"
-msgstr "Wait for cvautotrack to get the coordinates"
-
-#: ../source\teyvat_move_controller.py:138
-msgid "ÒÑµ½´ïÄ¿µÄµØ¸½½ü£¬±¾´Îµ¼º½½áÊø¡£"
-msgstr "Near the destination has been reached, this navigation is over."
-
-#: ../source\teyvat_move_controller.py:143
-msgid "ÒÑµ½´ïF¸½½ü£¬±¾´Îµ¼º½½áÊø¡£"
-msgstr "You have reached the button of F, and this navigation is over."
-
-#: ../source\teyvat_move_flow.py:121
-msgid "Í£Ö¹×Ô¶¯ÒÆ¶¯"
-msgstr "Stop AutoMove"
-
-#: ../source\teyvat_move_flow.py:268
-msgid "ÕıÔÚÂäµØ"
-msgstr "Landing"
-
-#: ../source\teyvat_move_flow.py:270
-msgid "½áÊø×Ô¶¯ĞĞ×ß"
-msgstr "Stop AutoMove"
-
-#: ../source\util.py:80 ../source\util.py:82
-msgid " Çë¼ì²é"
-msgstr "Please check up"
-
-#: ../source\util.py:80 ../source\util.py:82
-msgid "Ä¿Â¼²»´æÔÚ£º"
-msgstr "Directory does not exist:"
-
-#: ../source\util.py:95
-msgid "ÇëÓÃ¹ÜÀíÔ±È¨ÏŞÔËĞĞ"
-msgstr "Please run with administrator level"
-
-#: ../source\yolox_api.py:6
+#: source\api\yolox_api.py:6
 msgid "Creating yolox obj. It may takes a few second."
-msgstr ""
+msgstr "Creating yolox obj. It may takes a few second."
 
-#: ../source\yolox_api.py:23
-msgid "µ¼ÈëtorchÊ±´íÎó; err code: 002"
+#: source\api\yolox_api.py:22
+msgid "å¯¼å…¥torchæ—¶é”™è¯¯; err code: 002"
 msgstr "Error when importing torch; err code: 002"
 
-#: ../source\yolox_api.py:535
+#: source\api\yolox_api.py:534
 msgid "Created yolox obj."
-msgstr ""
+msgstr "Created yolox obj."
 
+#: source\common\flow_state.py:99
+msgid "ç©ºé—²"
+msgstr "Idle"
+
+#: source\common\flow_state.py:102
+msgid "æ­£åœ¨åˆå§‹åŒ–"
+msgstr "Initializing"
+
+#: source\common\flow_state.py:104
+msgid "æ­£åœ¨å‡†å¤‡"
+msgstr "Prepareing"
+
+#: source\common\flow_state.py:106
+msgid "æ­£åœ¨è¿›è¡Œ"
+msgstr "Doing"
+
+#: source\common\flow_state.py:108
+msgid "å‡†å¤‡ç»“æŸ"
+msgstr "Ready to end"
+
+#: source\common\flow_state.py:110
+msgid "ç»“æŸ"
+msgstr "End"
+
+#: source\common\flow_state.py:113
+msgid "ç§»åŠ¨åˆ°æŒ‘æˆ˜ä½ç½®"
+msgstr "move to challenge position"
+
+#: source\common\flow_state.py:115
+msgid "æŒ‘æˆ˜ç§˜å¢ƒä¸­"
+msgstr "In challenging"
+
+#: source\common\flow_state.py:117
+msgid "å‡†å¤‡é¢†å–å¥–åŠ±"
+msgstr "ready to claim reward"
+
+#: source\common\flow_state.py:119
+msgid "æ­£åœ¨å¯»æ‰¾çŸ³åŒ–å¤æ ‘ä½ç½®"
+msgstr "Looking for the location of the tree"
+
+#: source\common\flow_state.py:121
+msgid "ç§»åŠ¨åˆ°çŸ³åŒ–å¤æ ‘ä½ç½®"
+msgstr "Move to the location of the tree"
+
+#: source\common\flow_state.py:123
+msgid "é¢†å–å¥–åŠ±"
+msgstr "Obtain reaward"
+
+#: source\common\flow_state.py:125
+msgid "ç»“æŸç§˜å¢ƒ"
+msgstr "End domain"
+
+#: source\common\flow_state.py:127
+msgid "åœ¨åœ°å›¾ä¸Šä¼ é€"
+msgstr "teleport on map"
+
+#: source\common\flow_state.py:129
+msgid "ç§»åŠ¨åˆ°ç›®æ ‡åæ ‡ä½ç½®"
+msgstr "Move to the target coordinate position"
+
+#: source\common\flow_state.py:131
+msgid "ç§»åŠ¨åˆ°é‡‡é›†ç‰©ä½ç½®"
+msgstr "Move to collection location"
+
+#: source\common\flow_state.py:133
+msgid "æ‹¾å–é‡‡é›†ç‰©"
+msgstr "Pick up collection"
+
+#: source\common\flow_state.py:135
+msgid "ç»“æŸè‡ªåŠ¨é‡‡é›†"
+msgstr "End AutoCollection"
+
+#: source\common\generic_event.py:71 source\interaction\interaction_core.py:42
+msgid "æ¢å¤æ“ä½œ"
+msgstr "recovery operation"
+
+#: source\common\generic_event.py:73
+msgid "æ˜¯åŸç¥çª—å£"
+msgstr "is Genshin window"
+
+#: source\common\generic_event.py:73 source\interaction\interaction_core.py:44
+msgid " ç§’"
+msgstr " second"
+
+#: source\common\generic_event.py:73 source\interaction\interaction_core.py:44
+msgid "å½“å‰çª—å£ç„¦ç‚¹ä¸º"
+msgstr "The current window focus is"
+
+#: source\common\generic_event.py:73 source\interaction\interaction_core.py:44
+msgid "ï¼Œæ“ä½œæš‚åœ "
+msgstr ", operation stopped. "
+
+#: source\common\static_lib.py:22
+msgid "CANNOT FIND HANDLE"
+msgstr "CANNOT FIND HANDLE"
+
+#: source\controller\combat_controller.py:48
+msgid "æœ‰äººå˜äº†ï¼Œåœæ­¢è‡ªåŠ¨æˆ˜æ–—"
+msgstr "Someone's dead, stop auto combat"
+
+#: source\controller\combat_controller.py:59
+msgid "åœæ­¢è‡ªåŠ¨æˆ˜æ–—"
+msgstr "stop auto combat"
+
+#: source\controller\teyvat_move_controller.py:143
+#: source\controller\teyvat_move_controller_upgrad.py:138
+#: source\flow\teyvat_move_flow_upgrad.py:292
+msgid "å·²åˆ°è¾¾ç›®çš„åœ°é™„è¿‘ï¼Œæœ¬æ¬¡å¯¼èˆªç»“æŸã€‚"
+msgstr "Near the destination has been reached, this navigation is over."
+
+#: source\controller\teyvat_move_controller.py:149
+#: source\controller\teyvat_move_controller_upgrad.py:144
+#: source\flow\teyvat_move_flow_upgrad.py:305
+msgid "å·²åˆ°è¾¾Fé™„è¿‘ï¼Œæœ¬æ¬¡å¯¼èˆªç»“æŸã€‚"
+msgstr "You have reached the button of F, and this navigation is over."
+
+#: source\flow\collector_flow.py:220
+msgid "åœæ­¢è‡ªåŠ¨é‡‡é›†"
+msgstr "Stoping AutoCollector"
+
+#: source\flow\collector_flow.py:224
+msgid "æ‰€æœ‰è§’è‰²éƒ½å·²å˜æ‰ï¼Œæ­£åœ¨ä¸­æ–­æ­¤æ¬¡é‡‡é›†"
+msgstr "All characters have been died and are interrupting this collection"
+
+#: source\flow\collector_flow.py:240 source\flow\collector_flow.py:247
+#: source\flow\collector_flow.py:262
+msgid "é‡ç½®å®Œæˆã€‚å‡†å¤‡è¿›è¡Œä¸‹ä¸€æ¬¡é‡‡é›†"
+msgstr "Reset is complete. Ready for the next collection"
+
+#: source\flow\collector_flow.py:244
+msgid "Flow timeout"
+msgstr "Flow timeout"
+
+#: source\flow\collector_flow.py:256
+msgid "æœ‰äººå˜äº†ï¼Œæ­£åœ¨åœæ­¢æ­¤æ¬¡é‡‡é›†"
+msgstr "Someone's dead, stop collection"
+
+#: source\flow\collector_flow.py:338
+msgid "switch Flow to: AFTER_MOVETO_COLLECTOR"
+msgstr "switch Flow to: AFTER_MOVETO_COLLECTOR"
+
+#: source\flow\collector_flow.py:342
+msgid "collect in"
+msgstr "collect in"
+
+#: source\flow\collector_flow.py:342
+msgid "failed. reason: stuck"
+msgstr "failed. reason: stuck"
+
+#: source\flow\collector_flow.py:373
+msgid "switch Flow to: BEFORE_PICKUP_COLLECTOR"
+msgstr "switch Flow to: BEFORE_PICKUP_COLLECTOR"
+
+#: source\flow\collector_flow.py:381
+msgid "switch Flow to: IN_PICKUP_COLLECTOR"
+msgstr "switch Flow to: IN_PICKUP_COLLECTOR"
+
+#: source\flow\collector_flow.py:391
+msgid "switch Flow to: AFTER_PICKUP_COLLECTOR"
+msgstr "switch Flow to: AFTER_PICKUP_COLLECTOR"
+
+#: source\flow\domain_flow.py:29
+msgid "è¯·è¾“å…¥ç§˜å¢ƒæ¬¡æ•°"
+msgstr "Please enter the number of challenges"
+
+#: source\flow\domain_flow.py:44
+msgid "ç§˜å¢ƒæ¬¡æ•°ï¼š"
+msgstr "Challenge times:"
+
+#: source\flow\domain_flow.py:47
+msgid "åœæ­¢è‡ªåŠ¨ç§˜å¢ƒ"
+msgstr "stop AutoDomain"
+
+#: source\flow\domain_flow.py:107 source\flow\domain_flow_upgrad.py:51
+msgid "æ­£åœ¨å¼€å§‹æŒ‘æˆ˜ç§˜å¢ƒ"
+msgstr "Starting to challenge the domain"
+
+#: source\flow\domain_flow.py:252 source\flow\domain_flow_upgrad.py:93
+msgid "æ­£åœ¨å¼€å§‹æˆ˜æ–—"
+msgstr "starting combat"
+
+#: source\flow\domain_flow.py:266 source\flow\domain_flow_upgrad.py:116
+msgid "æ­£åœ¨åœæ­¢æˆ˜æ–—"
+msgstr "stopting combat"
+
+#: source\flow\domain_flow.py:269 source\flow\domain_flow_upgrad.py:119
+msgid "ç­‰å¾…å²©é€ ç‰©æ¶ˆå¤±"
+msgstr "Waiting for the rock-made to disappear"
+
+#: source\flow\domain_flow.py:277 source\flow\domain_flow_upgrad.py:163
+msgid "æ­£åœ¨æ¿€æ´»çŸ³åŒ–å¤æ ‘"
+msgstr "Activating the tree"
+
+#: source\flow\domain_flow.py:322
+msgid "ç§˜å¢ƒç»“æŸã€‚"
+msgstr "Domain over."
+
+#: source\flow\domain_flow.py:333 source\task\domain_task.py:97
+msgid "å¼€å§‹ä¸‹ä¸€æ¬¡ç§˜å¢ƒ"
+msgstr "Starting next domain"
+
+#: source\flow\domain_flow.py:347 source\task\domain_task.py:109
+msgid "æ¬¡æ•°ç»“æŸã€‚é€€å‡ºç§˜å¢ƒ"
+msgstr "The number of times is over. Exit the domain"
+
+#: source\flow\path_recorder_flow.py:111
+msgid "position added:"
+msgstr "position added:"
+
+#: source\flow\path_recorder_flow.py:145
+msgid "ready to start recording"
+msgstr "ready to start recording"
+
+#: source\flow\path_recorder_flow.py:148
+msgid "ready to stop recording"
+msgstr "ready to stop recording"
+
+#: source\flow\path_recorder_flow.py:181
+msgid "start recording"
+msgstr "start recording"
+
+#: source\flow\teyvat_move_flow.py:115
+msgid "åœæ­¢è‡ªåŠ¨ç§»åŠ¨"
+msgstr "Stop AutoMove"
+
+#: source\flow\teyvat_move_flow.py:156 source\funclib\generic_lib.py:59
+msgid "è·å–ä¼ é€é”šç‚¹å¤±è´¥ï¼Œæ­£åœ¨é‡è¯•"
+msgstr "Failed to get teleportation, retrying"
+
+#: source\flow\teyvat_move_flow.py:274
+msgid "æ­£åœ¨è½åœ°"
+msgstr "Landing"
+
+#: source\flow\teyvat_move_flow.py:276
+msgid "ç»“æŸè‡ªåŠ¨è¡Œèµ°"
+msgstr "Stop AutoMove"
+
+#: source\funclib\combat_lib.py:145
+msgid ""
+"Located at the map boundary, the is_chara_busy function enables fuzzy "
+"recognition mode."
+msgstr ""
+"Located at the map boundary, the is_chara_busy function enables fuzzy "
+"recognition mode."
+
+#: source\funclib\combat_lib.py:189
+msgid "è·å¾—å½“å‰è§’è‰²ç¼–å·å¤±è´¥"
+msgstr "Failed to get the current character number"
+
+#: source\funclib\combat_lib.py:501
+msgid ""
+"The strategy file for the current teaming is not found in the tactic folder: "
+msgstr ""
+"The strategy file for the current teaming is not found in the tactic folder: "
+
+#: source\funclib\combat_lib.py:553
+msgid "è¯·å°†é…å¯¹æ–‡ä»¶ä¸­çš„tastic_groupæ›´åä¸ºtactic_group. å·²è‡ªåŠ¨è¯†åˆ«ã€‚"
+msgstr ""
+"Please rename the tastic_group to tactic_group in the tactic file. It is "
+"automatically recognized."
+
+#: source\funclib\combat_lib.py:572
+msgid "Character Key Empty Error"
+msgstr "Character Key Empty Error"
+
+#: source\funclib\scene_lib.py:22
+msgid "UIç•Œé¢æ£€æµ‹å¤±è´¥ï¼Œæ­£åœ¨å°è¯•æŒ‰escè¿”å›"
+msgstr "UI interface detection failed, trying to press esc to return"
+
+#: source\funclib\scene_lib.py:24
+msgid "å°†åœ¨1ç§’åå†æ¬¡å°è¯•è·å–UIç•Œé¢"
+msgstr "Will try to get the UI again after 1 second"
+
+#: source\funclib\scene_lib.py:25 source\funclib\scene_lib.py:36
+#: source\funclib\scene_lib.py:39
+msgid "å°è¯•æ¬¡æ•°ï¼š"
+msgstr "Retry times:"
+
+#: source\funclib\scene_lib.py:30 source\funclib\scene_lib.py:32
+msgid "UIç•Œé¢æ£€æµ‹å¤±è´¥"
+msgstr "UI interface detection failed"
+
+#: source\funclib\scene_lib.py:33
+msgid "å°†åœ¨0.2ç§’åå†æ¬¡å°è¯•è·å–UIç•Œé¢"
+msgstr "Will try to get the UI again after 0.2 seconds"
+
+#: source\interaction\capture.py:66
+msgid "Fail to get capture: "
+msgstr "Fail to get capture: "
+
+#: source\interaction\capture.py:68
+msgid " waiting 2 sec."
+msgstr " waiting 2 sec."
+
+#: source\interaction\capture.py:109
+msgid "research handle: "
+msgstr "research handle: "
+
+#: source\interaction\capture.py:115
+msgid "research monitor: "
+msgstr "research monitor: "
+
+#: source\interaction\capture.py:123
+msgid "multiple monitor detected: "
+msgstr "multiple monitor detected: "
+
+#: source\interaction\capture.py:144
+msgid ""
+"You seem to have monitor scaling set? It is automatically recognized and "
+"this does not affect usage."
+msgstr ""
+"You seem to have monitor scaling set? It is automatically recognized and "
+"this does not affect usage."
+
+#: source\interaction\interaction_core.py:44
+msgid "ä¸æ˜¯åŸç¥çª—å£"
+msgstr "Not the Genshin window"
+
+#: source\interaction\interaction_core.py:355
+msgid "appear then click fail"
+msgstr "appear then click fail"
+
+#: source\operator\pickup_operator.py:53
+msgid "æ­£åœ¨è®¾ç½®æ—¶é—´ä¸ºå¤œæ™š"
+msgstr "Setting time to night"
+
+#: source\operator\pickup_operator.py:80
+msgid "åœæ­¢è‡ªåŠ¨æ‹¾å–"
+msgstr "Stop AutoCollector"
+
+#: source\operator\pickup_operator.py:118
+msgid "PICKUP_TIMEOUT_001"
+msgstr "PICKUP_TIMEOUT_001"
+
+#: source\operator\pickup_operator.py:120
+#: source\operator\pickup_operator.py:126
+msgid "åœæ­¢æ‹¾å–"
+msgstr "Stop pickup"
+
+#: source\operator\pickup_operator.py:124
+msgid "PICKUP_TIMEOUT_002"
+msgstr "PICKUP_TIMEOUT_002"
+
+#: source\operator\pickup_operator.py:133
+msgid "å·²æ‰¾åˆ°ç‰©å“ä¸”æ— æ³•æ‰¾åˆ°ä¸‹ä¸€ä¸ªç‰©å“ï¼Œåœæ­¢æ‹¾å–"
+msgstr "Item found and can't find next item, stop picking"
+
+#: source\operator\pickup_operator.py:181
+msgid "pickup: "
+msgstr "pickup: "
+
+#: source\operator\pickup_operator.py:183
+msgid "å·²æ‰¾åˆ°ï¼š"
+msgstr "Found"
+
+#: source\task\domain_task.py:73
+msgid "æ‰¾ä¸åˆ°ç§˜å¢ƒåç§°ï¼Œæ”¾å¼ƒé€‰æ‹©ã€‚"
+msgstr "Can't find the name of the domain, give up the choice."
+
+#: source\task\domain_task.py:128
+msgid "Unknown UI page"
+msgstr "Unknown UI page"
+
+#: source\task\ley_line_outcrop\ley_line_outcrop.py:107
+msgid "HandleExceptionInMission"
+msgstr "HandleExceptionInMission"
+
+#: source\task\task_manager.py:38
+msgid "No Task Running"
+msgstr "No Task Running"
+
+#: source\task\task_manager.py:40
+msgid "Loading"
+msgstr "Loading"
+
+#: source\task\task_manager.py:83
+msgid " Start."
+msgstr " Start."
+
+#: source\task\task_manager.py:83
+msgid "Task"
+msgstr "Task"
+
+#: source\task\task_manager.py:92
+msgid "End Task"
+msgstr "End Task"
+
+#: source\webio\page_manager.py:31
+msgid "Main"
+msgstr "Main"
+
+#: source\webio\page_manager.py:32
+msgid "Setting"
+msgstr "Setting"
+
+#: source\webio\page_manager.py:33
+msgid "CombatSetting"
+msgstr "CombatSetting"
+
+#: source\webio\page_manager.py:34 source\webio\pages.py:755
+msgid "CollectorSetting"
+msgstr "CollectorSetting"
+
+#: source\webio\pages.py:51 source\webio\pages.py:54 source\webio\pages.py:332
+msgid "æœªæ‰¾åˆ°ä¼šè¯ï¼Œå¯èƒ½ç”±äºçª—å£å…³é—­ã€‚è¯·åˆ·æ–°é¡µé¢é‡è¯•ã€‚"
+msgstr ""
+"Session not found, possibly due to window being closed. Please refresh the "
+"page and try again."
+
+#: source\webio\pages.py:59
+msgid "æ­£åœ¨å¯¼å…¥æ¨¡å—, å¯èƒ½éœ€è¦ä¸€äº›æ—¶é—´ã€‚"
+msgstr "Modules are being imported and may take some time."
+
+#: source\webio\pages.py:61
+msgid "åœ¨å¯¼å…¥å®Œæˆå‰ï¼Œè¯·ä¸è¦åˆ‡æ¢é¡µé¢ã€‚"
+msgstr "Please do not switch pages until the import is complete."
+
+#: source\webio\pages.py:111
+msgid "Get IP address"
+msgstr "Get IP address"
+
+#: source\webio\pages.py:117
+msgid "Launch genshin"
+msgstr "Launch genshin"
+
+#: source\webio\pages.py:121
+msgid "Domain Task"
+msgstr "Domain Task"
+
+#: source\webio\pages.py:125
+msgid "Daily Commission"
+msgstr "Daily Commission"
+
+#: source\webio\pages.py:129
+msgid "Claim Reward"
+msgstr "Claim Reward"
+
+#: source\webio\pages.py:133
+msgid "Ley Line Outcrop"
+msgstr "Ley Line Outcrop"
+
+#: source\webio\pages.py:137
+msgid "Mission"
+msgstr "Mission"
+
+#: source\webio\pages.py:143
+msgid "Task List"
+msgstr "Task List"
+
+#: source\webio\pages.py:144
+msgid "Can only be activated from the button"
+msgstr "Can only be activated from the button"
+
+#: source\webio\pages.py:150
+msgid "å¯åŠ¨/åœæ­¢Task"
+msgstr "Start/Stop Task"
+
+#: source\webio\pages.py:152
+msgid "## Statement"
+msgstr "## Statement"
+
+#: source\webio\pages.py:154
+msgid "ä»»åŠ¡çŠ¶æ€"
+msgstr "Mission Status"
+
+#: source\webio\pages.py:156
+msgid "## Mission"
+msgstr "## Mission"
+
+#: source\webio\pages.py:160
+msgid "Mission Group"
+msgstr "Mission Group"
+
+#: source\webio\pages.py:167
+msgid "## Function"
+msgstr "## Function"
+
+#: source\webio\pages.py:168
+msgid "Can only be activated from the hotkey '['"
+msgstr "Can only be activated from the hotkey '['"
+
+#: source\webio\pages.py:170
+msgid "FlowMode"
+msgstr "FlowMode"
+
+#: source\webio\pages.py:172
+msgid "Idle"
+msgstr "Idle"
+
+#: source\webio\pages.py:173
+msgid "AutoCombat"
+msgstr "AutoCombat"
+
+#: source\webio\pages.py:190
+msgid "## Log"
+msgstr "## Log"
+
+#: source\webio\pages.py:197
+msgid "æ›´æ–°æç¤º"
+msgstr "Update Tips"
+
+#: source\webio\pages.py:232
+msgid "Not Enabled"
+msgstr "Not Enabled"
+
+#: source\webio\pages.py:233
+msgid "LAN IP"
+msgstr "LAN IP"
+
+#: source\webio\pages.py:233
+msgid "WAN IP"
+msgstr "WAN IP"
+
+#: source\webio\pages.py:280
+msgid "# Config"
+msgstr "# Config"
+
+#: source\webio\pages.py:286 source\webio\pages.py:636
+#: source\webio\pages.py:716 source\webio\pages.py:761
+msgid "## config:"
+msgstr "# Config"
+
+#: source\webio\pages.py:300
+msgid "Combat.json"
+msgstr "Combat Settings"
+
+#: source\webio\pages.py:301
+msgid "Domain.json"
+msgstr "Domain Settings"
+
+#: source\webio\pages.py:302
+msgid "General.json"
+msgstr "General Settings"
+
+#: source\webio\pages.py:303
+msgid "Keymap.json"
+msgstr "Keymap Settings"
+
+#: source\webio\pages.py:304
+msgid "collected.json"
+msgstr "collected.json"
+
+#: source\webio\pages.py:305
+msgid "collection_blacklist.json"
+msgstr "collection_blacklist.json"
+
+#: source\webio\pages.py:306
+msgid "collection_log.json"
+msgstr "collection_log.json"
+
+#: source\webio\pages.py:307
+msgid "Collector.json"
+msgstr "Collector Settings"
+
+#: source\webio\pages.py:308
+msgid "LeyLineOutcrop.json"
+msgstr "Ley Line Outcrop Settings"
+
+#: source\webio\pages.py:353 source\webio\pages.py:877
+msgid "Verified!"
+msgstr "Verified!"
+
+#: source\webio\pages.py:362 source\webio\pages.py:886
+msgid "Waiting..."
+msgstr "Waiting..."
+
+#: source\webio\pages.py:367 source\webio\pages.py:891
+msgid "You may want to enter: "
+msgstr "You may want to enter: "
+
+#: source\webio\pages.py:372 source\webio\pages.py:896
+msgid "Not a valid name"
+msgstr "Not a valid name"
+
+#: source\webio\pages.py:415
+msgid "saved!"
+msgstr "saved!"
+
+#: source\webio\pages.py:458
+msgid "Do you need to save changes?"
+msgstr "Do you need to save changes?"
+
+#: source\webio\pages.py:459
+msgid "No"
+msgstr "No"
+
+#: source\webio\pages.py:459
+msgid "Yes"
+msgstr "Yes"
+
+#: source\webio\pages.py:630
+msgid "# Setting"
+msgstr "# Setting"
+
+#: source\webio\pages.py:700
+msgid "# CombatSetting"
+msgstr "# Combat Setting"
+
+#: source\webio\pages.py:706
+msgid "# Add team"
+msgstr "# Add team"
+
+#: source\webio\pages.py:710
+msgid "Add team"
+msgstr "Add team"
+
+#: source\webio\pages.py:712
+msgid "è‡ªåŠ¨å¡«å……"
+msgstr "Auto Fill"
+
+#: source\webio\pages.py:822
+msgid "Add to blacklist"
+msgstr "Add to blacklist"
+
+#: source\webio\pages.py:830
+msgid "å±•å¼€/æ”¶èµ·"
+msgstr "Expand / Close"
+
+#: source\webio\pages.py:865
+msgid "clean list"
+msgstr "clean list"
+
+#: source\webio\webio.py:34
+msgid "webioå¯åŠ¨å®Œæˆ"
+msgstr "webio startup successfully"
+
+msgid "å½“å‰çŠ¶æ€"
+msgstr "Current status"
+
+msgid " çš„Ecd_float_timeå¤§äº0ï¼Œè¯·ç¡®å®šè¯¥è§’è‰²ä¸æ˜¯å¤šæ®µeæŠ€èƒ½è§’è‰²ã€‚"
+msgstr ""
+"'s Ecd_float_time is greater than 0, please make sure that the character "
+"is not a character with multiple E skills."
+
+msgid "è§’è‰² "
+msgstr "character"
+
+msgid "æ­£åœ¨åœæ­¢è‡ªåŠ¨æˆ˜æ–—"
+msgstr "Stopping AutoCombat"
+
+msgid "å¯åŠ¨è‡ªåŠ¨æˆ˜æ–—"
+msgstr "Start AutoCombat"
+
+msgid "æ­£åœ¨åœæ­¢è‡ªåŠ¨ç§˜å¢ƒ"
+msgstr "Stoping AutoDomain"
+
+msgid "å¯åŠ¨è‡ªåŠ¨ç§˜å¢ƒ"
+msgstr "Start AutoDomain"
+
+msgid "å¯åŠ¨è‡ªåŠ¨é‡‡é›†"
+msgstr "Start AutoCollector"
+
+msgid "å¯¼å…¥å®Œæˆ"
+msgstr "Import complete"
+
+msgid "ç­‰å¾…cvautotrackè·å–åæ ‡"
+msgstr "Wait for cvautotrack to get the coordinates"
+
+msgid " è¯·æ£€æŸ¥"
+msgstr "Please check up"
+
+msgid "ç›®å½•ä¸å­˜åœ¨ï¼š"
+msgstr "Directory does not exist:"
+
+msgid "è¯·ç”¨ç®¡ç†å‘˜æƒé™è¿è¡Œ"
+msgstr "Please run with administrator level"

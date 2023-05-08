@@ -1,0 +1,35 @@
+E_long_cd_time:
+  annotation: long Ecd time, or 0 if none
+E_short_cd_time:
+  annotation: Short Ecd time, can't be 0
+Elast_time:
+  annotation: E skill duration, or 0 if none
+  doc: Elemental Skill last time
+Epress_time:
+  annotation: the time to press and hold E, or 0 if none
+  doc: Elemental Skill press time
+Qcd_time:
+  annotation: Q skill cooldown time
+  doc: Elemental Burst cd time
+Qlast_time:
+  annotation: Q skill duration, or 0 if none
+  doc: Elemental Burst Duration
+autofill:
+  doc: Whether to auto-fill
+n:
+  annotation: The position of the character in the team (1~4), cannot be repeated, cannot be 0
+  doc: Position of the character in the team
+name:
+  annotation: Support input validation with hints. Fill in character names according to characters_name.json
+position:
+  annotation: When "Shield" is filled in, GIA considers this character as a shield character and forces other policy groups to ignore switching to this character when the shield is ready
+priority:
+  annotation: The priority decreases from smallest to largest, with 0 being the highest priority. The priority can be the same level.
+tactic_group:
+  annotation: Configure the character's combat strategy, as detailed in combat_assi.md
+trigger:
+  annotation: Allows switching to the character when trigger condition is established.
+vision:
+  annotation: Fill in the following types:`Geo`;`Electro`;`Hydro`;`Pyro`;`Cryo`;`Dendro`;`Anemo`
+long_attack_time: 
+  doc: (Optional) Heavy attack time
