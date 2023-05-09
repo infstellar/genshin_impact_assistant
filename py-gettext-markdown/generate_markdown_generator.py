@@ -10,7 +10,9 @@ class GenerateMarkdownGenerator():
 
     def _write_file(self, file_path):
         origin_file = open(file_path, 'r', encoding='utf-8').read()
-        text_list = re.split('  \n|\n\n|<br>',origin_file)
+        text_list = re.split('  \n|\n{2,999}|<br>',origin_file)
+        # if "README" in file_path:
+        #     print(text_list) 
         text_list = [i.replace('\n', '\\n').replace('\"', '\\"') for i in text_list]
         with open(file_path.replace('.md','.pygettext'), 'w', encoding='utf-8') as f:
             f.write(f'import gettext, sys\n')
@@ -31,55 +33,60 @@ class GenerateMarkdownGenerator():
                 f.write(f'f.write("{x}"+str(\'\\n\'))\n')
             def write_newline():
                 f.write(f'f.write("\\n")\n')
-            i=0
-            while 1:
-                if i>=len(text_list):break
-                if "<!-- ignore gettext -->" in text_list[i]:
-                    write_origin(text_list[i])
-                elif "----|----" in text_list[i]:
-                    for ii in text_list[i].split('\\n'):
-                        if "----|----" in ii:
-                            write_origin(ii)
-                        else:
-                            write_gettext(ii)
-                elif "```" in text_list[i]:
-                    if text_list[i].count("```")>=2:
-                        write_origin(text_list[i])
+            def write_table(x):
+                for ii in x.split('\\n'):
+                    if "----|----" in ii:
+                        write_origin(ii)
                     else:
-                        while 1:
-                            write_origin(text_list[i])
-                            write_newline()
-                            i+=1
-                            if "```" in text_list[i]:
-                                write_origin(text_list[i])
-                                break
-                elif '- ' in text_list[i]:
-                    if text_list[i][0:2] == '- ':
-                        for ii in text_list[i].split('\\n'):
-                            write_gettext(ii)
-                    else:
-                        write_gettext(text_list[i])
-                elif text_list[i] == "":
-                    pass
-                elif text_list[i] == "\n":
-                    write_newline()    
-                elif text_list[i] == "\\n":
+                        write_gettext(ii)
+            def write_title(x):
+                if x[0] == '#':
+                    ii = x.split('\\n')
+                    write_gettext(ii[0])
                     write_newline()
-                elif '#' in text_list[i]:
-                    if text_list[i][0] == '#':
-                        textlistii = text_list[i].split('\\n')
-                        write_gettext(textlistii[0])
-                        write_newline()
-                        if len(textlistii) > 1:
-                            write_text = ''
-                            for ii in textlistii[1:]:
-                                write_text += ii
-                            print(write_text)
-                            write_gettext(write_text)
+                    if len(ii) > 1:
+                        write_text = ''
+                        for ii in ii[1:]:
+                            write_text += ii
+                        print(ii, write_text)
+                        write_gettext(write_text)
+            def write_point(x):
+                if x[0:2] == '- ':
+                    for ii in x.split('\\n'):
+                        write_gettext(ii)
                 else:
-                    write_gettext(text_list[i])
+                    write_gettext(x)
+            
+            code_flag = False
+            
+            for line in text_list:
+                if "<!-- ignore gettext -->" in line:
+                    write_origin(line)
+                elif "----|----" in line:
+                    write_table(line)
+                elif "```" in line:
+                    if line.count("```")>=2:
+                        write_origin(line)
+                    else:
+                        code_flag = not code_flag
+                        write_origin(line)
+                elif '- ' in line:
+                    write_point(line)
+                elif line == "":
+                    pass
+                elif line == "\n":
+                    write_newline()    
+                elif line == "\\n":
+                    write_newline()
+                elif '#' in line:
+                    write_title(line)
+                else:
+                    if not code_flag:
+                        write_gettext(line)
+                    else:
+                        write_origin(line)
                 write_newline()
-                i+=1
+
             f.write(f'f.close()')
     
     def run(self):
