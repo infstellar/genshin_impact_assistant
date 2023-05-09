@@ -114,20 +114,28 @@ class Map(MiniMap, BigMap, MapConverter):
             ui_control.ui_goto(UIPage.page_main)
             self.small_map_init_flag = True
 
-    def init_smallmap_from_teleporter(self) -> None:
+    def init_smallmap_from_teleporter(self, area=None) -> None:
+        if area == None:
+            area = ['Inazuma',"Liyue","Mondstadt"]
         max_position = [0,0]
         max_n = -100
         max_tper = None
         for i in DICT_TELEPORTER:
             tper = DICT_TELEPORTER[i]
+            if not tper.region in area:
+                continue
             self.init_position(tper.position)
             self.get_position()
-            simi = self.position_similarity_local
+            simi = self.position_similarity
             if simi > max_n:
-                logger.info(f"{self.position_similarity} {self.position_similarity_local}")
-                max_position = tper.position
-                max_n = simi
-                max_tper = tper
+                logger.info(f"1 {self.position_similarity} {self.position_similarity_local}")
+                d = euclidean_distance(self.get_position(), self.convert_GIMAP_to_cvAutoTrack(tper.position))
+                if d<=12:
+                    max_position = tper.position
+                    max_n = simi
+                    max_tper = tper
+                    logger.info(f"set init position to {max_position}, d={d}")
+                    
         self.init_position(tuple(list(map(int,max_position))))
         logger.info(f"init_smallmap_from_teleporter:{max_n} {max_position} {max_tper.name}")
 

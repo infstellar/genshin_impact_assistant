@@ -14,7 +14,9 @@ itt.capture_obj = cc
 
 class VideoNotFoundError(Exception):pass
 
-fcap = cv2.VideoCapture(r'F:/Downkyi/video2.mp4')
+fcap = cv2.VideoCapture(r'M:/Downkyi/BV15a411Y7V1.mp4')
+frameToStart = 1000
+fcap.set(cv2.CAP_PROP_POS_FRAMES, frameToStart)
 success, frame = fcap.read()
 if not success:
     raise VideoNotFoundError
@@ -30,6 +32,8 @@ prc.start()
 logger.info(f"Load over.")
 logger.info(f"ready to start.")
 # press `\` to start
+fps = 30
+i=1
 while success:
     success, frame = fcap.read()
     cc.set_cap(frame)
@@ -39,8 +43,24 @@ while success:
     if ui_control.verify_page(UIPage.page_main):
         pass
         # print(genshin_map.get_position(), genshin_map.position_similarity)
-    k = cv2.waitKey(int((1/999)*1000))
+    k = cv2.waitKey(int((1/fps)*1000))
     if k & 0xFF == ord(' '):
         cv2.waitKey(0)
+    elif k & 0xFF == ord('a'):
+        posi = input("pls input GIMAP posi")
+        p = genshin_map.convert_GIMAP_to_cvAutoTrack(list(map(int,posi.split(','))))
+        pp = tuple(list(map(int,genshin_map._find_closest_teleporter(p).position)))
+        genshin_map.init_position(pp)
+        logger.info(f"position init as {pp}, press any key to continue.")
+        cv2.waitKey(0)
+    elif k & 0xFF == ord('.'):
+        fps+=5
+        logger.info(f"fps set as {fps}")
+    elif k & 0xFF == ord(','):
+        fps-=5
+        logger.info(f"fps set as {fps}")
+    i+=1
+    if i%120==0:
+        logger.info(f"frame: {i}")
     # print()
     
