@@ -14,7 +14,7 @@ itt.capture_obj = cc
 
 class VideoNotFoundError(Exception):pass
 
-fcap = cv2.VideoCapture(r'M:/Downkyi/video2.mp4')
+fcap = cv2.VideoCapture(r'F:/Downkyi/video2.mp4')
 success, frame = fcap.read()
 if not success:
     raise VideoNotFoundError
@@ -23,7 +23,7 @@ cc.set_cap(frame)
 genshin_map.init_position(tuple(genshin_map.convert_cvAutoTrack_to_GIMAP([ 1170.8503, -3181.4194])))
 genshin_map.small_map_init_flag = True
 
-pn = "LLDV2P1"
+pn = "V2Ptest11"
 prc = PathRecorderController()
 prc.flow_connector.path_name = pn
 prc.start()
@@ -39,6 +39,8 @@ while success:
     if ui_control.verify_page(UIPage.page_main):
         pass
         # print(genshin_map.get_position(), genshin_map.position_similarity)
-    cv2.waitKey(1/30)
+    k = cv2.waitKey(int((1/999)*1000))
+    if k & 0xFF == ord(' '):
+        cv2.waitKey(0)
     # print()
     

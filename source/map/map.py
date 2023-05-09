@@ -114,6 +114,23 @@ class Map(MiniMap, BigMap, MapConverter):
             ui_control.ui_goto(UIPage.page_main)
             self.small_map_init_flag = True
 
+    def init_smallmap_from_teleporter(self) -> None:
+        max_position = [0,0]
+        max_n = -100
+        max_tper = None
+        for i in DICT_TELEPORTER:
+            tper = DICT_TELEPORTER[i]
+            self.init_position(tper.position)
+            self.get_position()
+            simi = self.position_similarity_local
+            if simi > max_n:
+                logger.info(f"{self.position_similarity} {self.position_similarity_local}")
+                max_position = tper.position
+                max_n = simi
+                max_tper = tper
+        self.init_position(tuple(list(map(int,max_position))))
+        logger.info(f"init_smallmap_from_teleporter:{max_n} {max_position} {max_tper.name}")
+
     def while_until_no_excessive_error(self) -> None:
         self.reinit_smallmap()
 

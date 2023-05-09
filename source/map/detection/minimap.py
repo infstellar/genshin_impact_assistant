@@ -111,8 +111,8 @@ class MiniMap(MiniMapResource):
                 best_loca = location
                 best_scene = scene
 
-        self.position_similarity = round(best_sim, 3)
-        self.position_similarity_local = round(best_local_sim, 3)
+        self.position_similarity = round(best_sim, 5)
+        self.position_similarity_local = round(best_local_sim, 5)
         self.position = tuple(np.round(best_loca, 1))
         self.scene = best_scene
         return self.position
