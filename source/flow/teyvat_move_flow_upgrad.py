@@ -434,7 +434,10 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
             else:
                 offset = 6 # SK
             if self.curr_path[self.curr_path_index]["motion"]=="FLYING":
-                offset = 9
+                offset = 12
+            if self.curr_break_point_index in self.upper.path_dict["additional_info"]["pickup_points"]:
+                logger.debug('bp is pp, o=3.5.')
+                offset = 3.5
             if self.ready_to_end:
                 offset = min(3,max(1,(self.end_times)/10))
             # 如果两个BP距离小于offset就会瞬移，排除一下。
@@ -445,8 +448,8 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
                     offset = dist/2
                     logger.trace(f"offset: {offset}")
                 elif dist < 1:
-                    logger.trace(f"BPs too close: dist: {dist}")
-                    offset = 1.
+                    logger.trace(f"BPs too close <1: dist: {dist}")
+                    offset = 1
                     logger.trace(f"offset: {offset}")
             # 执行SK
             if special_key != None: 

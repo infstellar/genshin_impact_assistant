@@ -3,12 +3,13 @@ import keyboard
 from source.flow.flow_template import FlowController, FlowTemplate, FlowConnector, EndFlowTemplate
 import source.flow.flow_code as FC, source.flow.flow_state as ST
 from source.interaction.minimap_tracker import tracker
-from source.funclib import movement
+from source.funclib import movement, generic_lib
 from source.funclib.err_code_lib import *
 from source.interaction.interaction_core import itt
 import pytz, datetime
 from source.ui.ui import ui_control
 from source.ui import page as UIPage
+from common.timer_module import AdvanceTimer
 
 
 class PathRecorderConnector(FlowConnector):
@@ -31,6 +32,7 @@ class PathRecorderConnector(FlowConnector):
         # self.set_hotkey()
         self.path_name = ""
         self.last_direction = 999
+        self.is_pickup_mode = False
         '''
         Template:
         {
@@ -95,6 +97,7 @@ class PathRecorderCore(FlowTemplate):
         self.enter_flag = False
         self.upper.while_sleep = 0.05
         self.record_index=0
+        self.pickup_icon_timer = AdvanceTimer(1).reset().start()
         # self.all_position = []
 
     def _add_posi_to_dict(self, posi:list):
@@ -131,6 +134,9 @@ class PathRecorderCore(FlowTemplate):
             "break_position":[],
             "end_position":[],
             "position_list":[],
+            "additional_info":{
+                "pickup_points":[]
+            }
         }
         self.enter_flag = False
         # if not 
@@ -147,21 +153,35 @@ class PathRecorderCore(FlowTemplate):
             self.rfc = FC.AFTER
             logger.info(t2t("ready to stop recording"))
 
-    def _add_break_position(self, posi):
+    def _add_break_position(self, posi, f=False):
+        bpindex = len(self.upper.collection_path_dict["break_position"])
         if len(self.upper.collection_path_dict["break_position"])==0:
             self.upper.collection_path_dict["break_position"].append(list(posi))
             logger.info(f"break position added {posi}")
         elif (abs(euclidean_distance(posi,self.upper.collection_path_dict["break_position"][-1])) >= 5):
             self.upper.collection_path_dict["break_position"].append(list(posi))
             logger.info(f"break position added {posi}")
+            if self.upper.is_pickup_mode:
+                if f:
+                    self.upper.collection_path_dict["additional_info"]["pickup_points"].append(bpindex)
+                    logger.info(f"pickup bp added: {bpindex}")
         else:
             logger.warning(f"break position too close")
+            if self.upper.is_pickup_mode:
+                if f:
+                    if bpindex-1 not in self.upper.collection_path_dict["additional_info"]["pickup_points"]:
+                        self.upper.collection_path_dict["additional_info"]["pickup_points"].append(bpindex-1)
+                        logger.info(f"pickup bp added to bp-1: {bpindex-1}")
     
     def state_in(self):
         if not ui_control.verify_page(UIPage.page_main):
             return super().state_in()
         all_posi = self.get_all_position(self.upper.collection_path_dict)
         curr_posi = tracker.get_position()
+        if self.upper.is_pickup_mode:
+            if generic_lib.f_recognition():
+                logger.info(f"found f")
+                self._add_break_position(curr_posi, f=True)
         curr_direction = tracker.get_direction()
         if len(all_posi)>10:
             min_dist = quick_euclidean_distance_plist(curr_posi, all_posi[-10:-1]).min()

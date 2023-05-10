@@ -14,8 +14,9 @@ itt.capture_obj = cc
 
 class VideoNotFoundError(Exception):pass
 
+# fcap = cv2.VideoCapture(r'F:/Downkyi/video1.mp4')
 fcap = cv2.VideoCapture(r'M:/Downkyi/BV15a411Y7V1.mp4')
-frameToStart = 1000
+frameToStart = 400
 fcap.set(cv2.CAP_PROP_POS_FRAMES, frameToStart)
 success, frame = fcap.read()
 if not success:
@@ -28,12 +29,14 @@ genshin_map.small_map_init_flag = True
 pn = "V2Ptest11"
 prc = PathRecorderController()
 prc.flow_connector.path_name = pn
+prc.flow_connector.is_pickup_mode = True
 prc.start()
 logger.info(f"Load over.")
 logger.info(f"ready to start.")
 # press `\` to start
 fps = 30
 i=1
+
 while success:
     success, frame = fcap.read()
     cc.set_cap(frame)
@@ -58,8 +61,12 @@ while success:
         logger.info(f"fps set as {fps}")
     elif k & 0xFF == ord(','):
         fps-=5
+        if fps <= 0:
+            fps = 1
         logger.info(f"fps set as {fps}")
+        
     i+=1
+    prc.run()
     if i%120==0:
         logger.info(f"frame: {i}")
     # print()
