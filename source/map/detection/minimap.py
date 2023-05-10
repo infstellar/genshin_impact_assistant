@@ -18,6 +18,24 @@ class MiniMap(MiniMapResource):
         image = crop(image, area)
         return image
 
+    def get_img_near_posi(self, image, posi):
+        scale = self.POSITION_SCALE_DICT['wild']
+        # image = np.zeros_like((1080,1920,3), dtype="uint8")
+        image = self._get_minimap(image, self.MINIMAP_POSITION_RADIUS)
+        image = rgb2luma(image)
+        image &= self._minimap_mask
+        scale *= self.POSITION_SEARCH_SCALE
+        local = cv2.resize(image, None, fx=scale, fy=scale, interpolation=cv2.INTER_NEAREST)
+        # Product search area
+        search_position = np.array(posi, dtype=np.int64)
+        search_size = np.array(image_size(local)) * self.POSITION_SEARCH_RADIUS
+        search_size = (search_size // 2 * 2).astype(np.int64)
+        search_area = area_offset((0, 0, *search_size), offset=(-search_size // 2).astype(np.int64))
+        search_area = area_offset(search_area, offset=np.multiply(search_position, self.POSITION_SEARCH_SCALE))
+        search_area = np.array(search_area).astype(np.int64)
+        search_image = crop(self.GIMAP, search_area)
+        return search_image
+    
     def _predict_position(self, image, scale):
         """
         Args:

@@ -103,7 +103,7 @@ class EndFlowTemplate(FlowTemplate):
         self.err_code_id = fid
 
 
-class FlowController(base_threading.BaseThreading):
+class FlowController(base_threading.AdvanceThreading):
     def __init__(self, flow_connector:FlowConnector, current_flow_id, flow_name=None):
         super().__init__(thread_name = flow_name)
         if flow_name != None:
@@ -140,7 +140,16 @@ class FlowController(base_threading.BaseThreading):
             bool: if True, then mean pause thread.
         """
         return True
-        
+    
+    def loop(self):
+        rcode = self.flow_dict[self.current_flow_id].enter_flow()
+        if "$END$" in rcode:
+            self.last_err_code = self.flow_dict[rcode].enter_flow()
+            logger.debug(f"Flow END, code:{self.last_err_code}")
+            self.pause_threading()
+        else:
+            self.current_flow_id = rcode
+    
     def run(self) -> None:
         '''if you're using this class, copy this'''
         while 1:

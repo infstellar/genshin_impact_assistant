@@ -16,7 +16,7 @@ class VideoNotFoundError(Exception):pass
 
 # fcap = cv2.VideoCapture(r'F:/Downkyi/video1.mp4')
 fcap = cv2.VideoCapture(r'M:/Downkyi/BV15a411Y7V1.mp4')
-frameToStart = 400
+frameToStart = 720+240
 fcap.set(cv2.CAP_PROP_POS_FRAMES, frameToStart)
 success, frame = fcap.read()
 if not success:
@@ -50,6 +50,23 @@ while success:
     if k & 0xFF == ord(' '):
         cv2.waitKey(0)
     elif k & 0xFF == ord('a'):
+        rlist, rd = genshin_map.get_smallmap_from_teleporter(area=['Liyue'])
+        iii=0
+        for tper in rlist:
+            logger.info(f"id {iii} position {tper.position} {tper.name} {tper.region}, d={rd[iii]}")
+            iii+=1
+        while 1:
+            iii = input("pls input id.")
+            if iii == '':
+                break
+            else:
+                iii = int(iii)
+            cv2.imshow(f'tper{iii}', genshin_map.get_img_near_posi(itt.capture(), rlist[iii].position))
+            cv2.waitKey(1)
+            genshin_map.init_position(rlist[iii].position)
+        logger.info(f"press any key to continue.")
+        cv2.waitKey(0)
+    elif k & 0xFF == ord('b'):
         posi = input("pls input GIMAP posi")
         p = genshin_map.convert_GIMAP_to_cvAutoTrack(list(map(int,posi.split(','))))
         pp = tuple(list(map(int,genshin_map._find_closest_teleporter(p).position)))
@@ -66,7 +83,7 @@ while success:
         logger.info(f"fps set as {fps}")
         
     i+=1
-    prc.run()
+    prc.loop()
     if i%120==0:
         logger.info(f"frame: {i}")
     # print()
