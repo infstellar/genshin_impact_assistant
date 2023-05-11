@@ -342,6 +342,8 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
         self.ready_to_end = False
         self.end_times = 0
         self.init_start = False
+        
+        self.landing_timer = timer_module.Timer(2)
 
     
     def CalculateTheDistanceBetweenTheAngleExtensionLineAndTheTarget(self, curr,target):
@@ -409,15 +411,19 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
         
         
         if self.motion_state == IN_FLY and self.curr_path[self.curr_path_index]["motion"]=="WALKING" and (not fly_flag): # 降落
-            logger.info("landing")
-            itt.left_click()
-            while 1:
-                if self.upper.checkup_stop_func():
-                    break
-                self.switch_motion_state()
-                time.sleep(0.1)
-                if self.motion_state != IN_FLY:
-                    break
+            if self.landing_timer.get_diff_time()>2:
+                if self.landing_timer.get_diff_time()<5:
+                    logger.info("landing")
+                    itt.left_click()
+                    while 1:
+                        if self.upper.checkup_stop_func():
+                            break
+                        self.switch_motion_state()
+                        time.sleep(0.1)
+                        if self.motion_state != IN_FLY:
+                            break
+                else:
+                    self.landing_timer.reset()
         
         # 更新BP和CP
         while 1: 
@@ -617,8 +623,8 @@ if __name__ == '__main__':
     #     movement.change_view_to_angle(degree, lambda:False)
     
     TMFC = TeyvatMoveFlowController()
-    # TMFC.set_parameter(MODE="PATH",path_dict=load_json("te167910590161.json","assets\\TeyvatMovePath"), is_tp=True)
-    TMFC.set_parameter(MODE="AUTO", target_posi=[2032,-4879], is_tp=False)
+    TMFC.set_parameter(MODE="PATH",path_dict=load_json("V2Ptest1120230511225601i0.json","assets\\TeyvatMovePath"), is_tp=True)
+    # TMFC.set_parameter(MODE="AUTO", target_posi=[2032,-4879], is_tp=False)
     TMFC.start_flow()
     TMFC.start()
     

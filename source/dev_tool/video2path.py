@@ -14,9 +14,9 @@ itt.capture_obj = cc
 
 class VideoNotFoundError(Exception):pass
 
-fcap = cv2.VideoCapture(r'F:/Downkyi/video1.mp4')
-# fcap = cv2.VideoCapture(r'M:/Downkyi/BV15a411Y7V1.mp4')
-frameToStart = 0 # 720+240
+# fcap = cv2.VideoCapture(r'F:/Downkyi/video1.mp4')
+fcap = cv2.VideoCapture(r'M:/Downkyi/BV15a411Y7V1.mp4') # 3720+1320
+frameToStart = 3720 # 720+240
 fcap.set(cv2.CAP_PROP_POS_FRAMES, frameToStart)
 success, frame = fcap.read()
 if not success:

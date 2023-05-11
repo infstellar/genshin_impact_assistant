@@ -257,6 +257,8 @@ def get_current_motion_state() -> str:
     r1 = itt.similar_img(img1, IconMovementClimbing.image[:,:,0])
     img1 = crop(cap.copy(), IconMovementSwim.cap_posi)
     r2 = itt.similar_img(img1, IconMovementSwimming.image[:,:,0])
+    # cv2.imshow('flying', img1)
+    # cv2.waitKey(1)
     img1 = crop(cap.copy(), IconMovementFly.cap_posi)
     r3 = itt.similar_img(img1, IconMovementFlying.image[:,:,0])
     if max(r1,r2,r3)>0.8:
@@ -265,7 +267,7 @@ def get_current_motion_state() -> str:
         return CLIMBING
     if r2 > 0.85:
         return SWIMMING
-    if r3 > 0.8:
+    if r3 > 0.6:
         return FLYING
     return WALKING
     # if itt.get_img_existence(asset.IconGeneralMotionClimbing):
