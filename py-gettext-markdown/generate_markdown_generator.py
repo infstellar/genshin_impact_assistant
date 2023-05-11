@@ -3,6 +3,26 @@ import re
 import os
 from util import *
 
+def is_number(s):
+    """
+    懒得写,抄的
+    https://www.runoob.com/python3/python3-check-is-number.html
+    """
+    try:
+        float(s)
+        return True
+    except ValueError:
+        pass
+
+    try:
+        import unicodedata
+        unicodedata.numeric(s)
+        return True
+    except (TypeError, ValueError):
+        pass
+
+    return False
+
 class GenerateMarkdownGenerator():
     def __init__(self, folder_path, LANG):
         self.folder_path = folder_path
@@ -57,6 +77,16 @@ class GenerateMarkdownGenerator():
                 else:
                     write_gettext(x)
             
+            def write_123(x):
+                for ii in x.split('\\n'):
+                    if '. ' in ii:
+                        if is_number(ii[:ii.index('. ')]):
+                            write_gettext(ii)
+                        else:
+                            write_gettext(x)
+                    else:
+                        write_gettext(x)
+            
             code_flag = False
             
             for line in text_list:
@@ -80,6 +110,8 @@ class GenerateMarkdownGenerator():
                     write_newline()
                 elif '#' in line:
                     write_title(line)
+                elif '. ' in line:
+                    write_123(line)
                 else:
                     if not code_flag:
                         write_gettext(line)

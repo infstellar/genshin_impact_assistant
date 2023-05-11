@@ -14,9 +14,9 @@ itt.capture_obj = cc
 
 class VideoNotFoundError(Exception):pass
 
-# fcap = cv2.VideoCapture(r'F:/Downkyi/video1.mp4')
-fcap = cv2.VideoCapture(r'M:/Downkyi/BV15a411Y7V1.mp4')
-frameToStart = 720+240
+fcap = cv2.VideoCapture(r'F:/Downkyi/video1.mp4')
+# fcap = cv2.VideoCapture(r'M:/Downkyi/BV15a411Y7V1.mp4')
+frameToStart = 0 # 720+240
 fcap.set(cv2.CAP_PROP_POS_FRAMES, frameToStart)
 success, frame = fcap.read()
 if not success:
@@ -50,7 +50,7 @@ while success:
     if k & 0xFF == ord(' '):
         cv2.waitKey(0)
     elif k & 0xFF == ord('a'):
-        rlist, rd = genshin_map.get_smallmap_from_teleporter(area=['Liyue'])
+        rlist, rd = genshin_map.get_smallmap_from_teleporter(area=['Liyue','Mondstant'])
         iii=0
         for tper in rlist:
             logger.info(f"id {iii} position {tper.position} {tper.name} {tper.region}, d={rd[iii]}")
@@ -81,6 +81,10 @@ while success:
         if fps <= 0:
             fps = 1
         logger.info(f"fps set as {fps}")
+    elif k & 0xFF == ord(']'):
+        prc.pc._start_stop_recording()
+        logger.info(f"press any key to continue.")
+        cv2.waitKey(0)
         
     i+=1
     prc.loop()

@@ -229,7 +229,9 @@ class PathRecorderController(FlowController):
         self.flow_connector = self.flow_connector # type: PathRecorderConnector
         self.flow_connector.checkup_stop_func = self.checkup_stop_func
 
-        self.append_flow(PathRecorderCore(self.flow_connector))   
+        self.pc = PathRecorderCore(self.flow_connector)
+
+        self.append_flow(self.pc)   
         self.append_flow(PathRecorderEnd(self.flow_connector))
 
     def reset(self):

@@ -1,17 +1,14 @@
-from cached_property import cached_property
-
 from source.common import timer_module
 from source.ui.ui import ui_control
 import source.ui.page as UIPage
 from source.interaction.interaction_core import itt
-from source.manager import asset, scene_manager
+from source.manager import asset
 from source.map.data.teleporter import DICT_TELEPORTER
 from source.map.detection.bigmap import BigMap
 from source.map.detection.minimap import MiniMap
 from source.map.extractor.convert import MapConverter
 from source.map.position.position import *
 from source.util import *
-from source.common.timer_module import AdvanceTimer
 import threading
 
 REGION_TEYVAT = [
@@ -57,6 +54,11 @@ class Map(MiniMap, BigMap, MapConverter):
         # self.lock.release()
 
     def get_and_verify_position(self):
+        """Not in use
+
+        Returns:
+            None
+        """
         # print(self.check_bigmap_timer.get_diff_time())
         curr_posi = self.get_position()
         if self.check_bigmap_timer.get_diff_time()<5:
