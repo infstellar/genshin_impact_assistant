@@ -3,7 +3,7 @@ import keyboard
 from source.flow.flow_template import FlowController, FlowTemplate, FlowConnector, EndFlowTemplate
 import source.flow.flow_code as FC, source.flow.flow_state as ST
 from source.interaction.minimap_tracker import tracker
-from source.funclib import movement, generic_lib
+from source.funclib import movement, generic_lib, collector_lib
 from source.funclib.err_code_lib import *
 from source.interaction.interaction_core import itt
 import pytz, datetime
@@ -33,6 +33,7 @@ class PathRecorderConnector(FlowConnector):
         self.path_name = ""
         self.last_direction = 999
         self.is_pickup_mode = False
+        self.coll_name = ""
         '''
         Template:
         {
@@ -88,16 +89,22 @@ class PathRecorderConnector(FlowConnector):
 
 
 class PathRecorderCore(FlowTemplate):
+    
+    
+    
     def __init__(self, upper: PathRecorderConnector):
         super().__init__(upper,flow_id=ST.PATH_RECORDER ,next_flow_id=ST.PATH_RECORDER_END)
 
         keyboard.add_hotkey('\\', self._start_stop_recording)
-
+        self.COLLECTION_POSITION = []
+        for i in load_json("all_position.json", fr"{ROOT_PATH}/assets/POI_JSON_API"):
+            self.COLLECTION_POSITION.append(tracker.convert_kongying_to_cvAutoTrack(i))
         self.upper = upper
         self.enter_flag = False
         self.upper.while_sleep = 0.05
         self.record_index=0
         self.pickup_icon_timer = AdvanceTimer(1).reset().start()
+        self.used_collection_position = []
         # self.all_position = []
 
     def _add_posi_to_dict(self, posi:list):
@@ -138,7 +145,15 @@ class PathRecorderCore(FlowTemplate):
                 "pickup_points":[]
             }
         }
+        self.force_add_flag = False
+        if self.upper.coll_name != "":
+            self.COLLECTION_POSITION = collector_lib.load_items_position(self.upper.coll_name)
+            self.COLLECTION_POSITION = [i['position'] for i in self.COLLECTION_POSITION]
+            self.force_add_flag = True
         self.enter_flag = False
+        self.used_collection_position = []
+        self.record_index=0
+        self.pickup_icon_timer = AdvanceTimer(1).reset().start()
         # if not 
         # tracker.reinit_smallmap()
         curr_posi = tracker.get_position()
@@ -153,22 +168,46 @@ class PathRecorderCore(FlowTemplate):
             self.rfc = FC.AFTER
             logger.info(t2t("ready to stop recording"))
 
-    def _add_break_position(self, posi, f=False):
+    def _fix_position(self, p):
+        ed_list = quick_euclidean_distance_plist(p, self.COLLECTION_POSITION)
+        if min(ed_list)<9:
+            rp = self.COLLECTION_POSITION[np.argmin(ed_list)]
+            if list(rp) in self.used_collection_position:
+                logger.info(f"position refix fail: {rp} used.")
+                return p,False
+            else:
+                logger.info(f"position refix succ: {p} -> {rp}")
+                self.used_collection_position.append(list(rp))
+                return rp,True
+        else:
+            if min(ed_list)<15:
+                logger.info(f"position refix fail: {p} {self.COLLECTION_POSITION[np.argmin(ed_list)]} 9<{min(ed_list)}<15")
+            return p,False
+    
+    def _add_break_position(self, posi, f_exist=False):
+        
         bpindex = len(self.upper.collection_path_dict["break_position"])
         if len(self.upper.collection_path_dict["break_position"])==0:
             self.upper.collection_path_dict["break_position"].append(list(posi))
             logger.info(f"break position added {posi}")
-        elif (abs(euclidean_distance(posi,self.upper.collection_path_dict["break_position"][-1])) >= 5):
+        elif (abs(euclidean_distance(posi,self.upper.collection_path_dict["break_position"][-1])) >= 5.2):
+            if self.upper.is_pickup_mode:
+                posi,succ = self._fix_position(posi)
+                if self.force_add_flag:
+                    if succ:
+                        f_exist = True
             self.upper.collection_path_dict["break_position"].append(list(posi))
             logger.info(f"break position added {posi}")
+            
             if self.upper.is_pickup_mode:
-                if f:
+                if f_exist:
                     self.upper.collection_path_dict["additional_info"]["pickup_points"].append(bpindex)
                     logger.info(f"pickup bp added: {bpindex}")
         else:
             logger.warning(f"break position too close")
+            
             if self.upper.is_pickup_mode:
-                if f:
+                if f_exist:
                     if bpindex-1 not in self.upper.collection_path_dict["additional_info"]["pickup_points"]:
                         self.upper.collection_path_dict["additional_info"]["pickup_points"].append(bpindex-1)
                         logger.info(f"pickup bp added to bp-1: {bpindex-1}")
@@ -178,10 +217,10 @@ class PathRecorderCore(FlowTemplate):
             return super().state_in()
         all_posi = self.get_all_position(self.upper.collection_path_dict)
         curr_posi = tracker.get_position()
-        if self.upper.is_pickup_mode:
+        if self.upper.is_pickup_mode and not self.force_add_flag:
             if generic_lib.f_recognition():
                 logger.info(f"found f")
-                self._add_break_position(curr_posi, f=True)
+                self._add_break_position(curr_posi, f_exist=True)
         curr_direction = tracker.get_direction()
         if len(all_posi)>10:
             min_dist = quick_euclidean_distance_plist(curr_posi, all_posi[-10:-1]).min()

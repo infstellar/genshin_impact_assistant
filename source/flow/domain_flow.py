@@ -175,7 +175,7 @@ class DomainFlow(BaseThreading):
             if generic_lib.f_recognition(self.itt):
                 break
 
-            t = self.fast_move_timer.loop_time()  # max check up speed: 1/10 second
+            t = self.fast_move_timer.reset_and_get()  # max check up speed: 1/10 second
             if t <= 1 / 10:
                 time.sleep(1 / 10 - t)
 
@@ -240,7 +240,7 @@ class DomainFlow(BaseThreading):
                     self.while_sleep = 0.2
                     self.current_state = ST.INIT_CHALLENGE
 
-                t = self.fast_move_timer.loop_time()  # max check up speed: 1/10 second
+                t = self.fast_move_timer.reset_and_get()  # max check up speed: 1/10 second
                 if t <= 1 / 10:
                     time.sleep(1 / 10 - t)
                 else:

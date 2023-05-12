@@ -343,7 +343,10 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
         self.end_times = 0
         self.init_start = False
         
+        
         self.landing_timer = timer_module.Timer(2)
+        self.sprint_timer = timer_module.AdvanceTimer(5).reset()
+        self.in_pt = timer_module.Performance()
 
     
     def CalculateTheDistanceBetweenTheAngleExtensionLineAndTheTarget(self, curr,target):
@@ -391,39 +394,8 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
         self._next_rfc()
     
     def state_in(self):
+        self.in_pt.reset()
         # 如果循环太慢而走的太快就会回头 可能通过量化移动时间和距离解决
-        
-        # 动作识别
-        is_jump = False
-        check_jump = self.curr_path[self.curr_path_index:min(self.curr_path_index+5, len(self.curr_path)-1)] # 起跳
-        for i in check_jump:
-            if i["special_key"]=="space":
-                is_jump = True
-        
-        self.switch_motion_state(jump=((not self.ready_to_end) and is_jump))
-        fly_flag = False
-        check_fly = self.curr_path[self.curr_path_index:min(self.curr_path_index+5, len(self.curr_path)-1)] # 起飞
-        for i in check_fly:
-            if i["motion"]=="FLYING":
-                self.try_fly()
-                fly_flag = True
-        
-        
-        
-        if self.motion_state == IN_FLY and self.curr_path[self.curr_path_index]["motion"]=="WALKING" and (not fly_flag): # 降落
-            if self.landing_timer.get_diff_time()>2:
-                if self.landing_timer.get_diff_time()<5:
-                    logger.info("landing")
-                    itt.left_click()
-                    while 1:
-                        if self.upper.checkup_stop_func():
-                            break
-                        self.switch_motion_state()
-                        time.sleep(0.1)
-                        if self.motion_state != IN_FLY:
-                            break
-                else:
-                    self.landing_timer.reset()
         
         # 更新BP和CP
         while 1: 
@@ -463,7 +435,7 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
             # 检测是否要切换到下一个BP
             if euclidean_distance(target_posi, curr_posi) <= offset: 
                 if len(self.curr_breaks) - 1 > self.curr_break_point_index:
-                    self.curr_break_point_index += 1
+                    self.curr_break_point_index += 1 # BP+1
                     logger.debug(f"index {self.curr_break_point_index} posi {self.curr_breaks[self.curr_break_point_index]}")
                 elif not self.ready_to_end:
                     if self.upper.is_precise_arrival:
@@ -483,11 +455,52 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
             else:
                 break
         
-        if self.is_stuck(curr_posi, threshold=16):
+        # 动作识别
+        is_jump = False
+        is_nearby = euclidean_distance(curr_posi, target_posi)<2
+        check_jump = self.curr_path[self.curr_path_index:min(self.curr_path_index+5, len(self.curr_path)-1)] # 起跳
+        for i in check_jump:
+            if i["special_key"]=="space":
+                is_jump = True
+        
+        self.switch_motion_state(jump=((not self.ready_to_end) and is_jump))
+        fly_flag = False
+        check_fly = self.curr_path[self.curr_path_index:min(self.curr_path_index+5, len(self.curr_path)-1)] # 起飞
+        for i in check_fly:
+            if i["motion"]=="FLYING":
+                self.try_fly()
+                fly_flag = True
+        
+        if self.motion_state == IN_FLY and self.curr_path[self.curr_path_index]["motion"]=="WALKING" and (not fly_flag): # 降落
+            if self.landing_timer.get_diff_time()>2:
+                if self.landing_timer.get_diff_time()<5:
+                    logger.info("landing")
+                    itt.left_click()
+                    while 1:
+                        if self.upper.checkup_stop_func():
+                            break
+                        self.switch_motion_state()
+                        time.sleep(0.1)
+                        if self.motion_state != IN_FLY:
+                            break
+                else:
+                    self.landing_timer.reset()
+        
+        
+        
+        
+        if self.is_stuck(curr_posi, threshold=18):
             itt.key_press('spacebar')
-        if self.is_stuck(curr_posi, threshold=30):
+        if self.is_stuck(curr_posi, threshold=60):
             self._set_nfid(ST.END_TEYVAT_MOVE_STUCK)
             self._set_rfc(FC.END)
+        
+        if self.sprint_timer.reached():
+            if euclidean_distance(curr_posi, target_posi)>=20:
+                if self.motion_state == IN_MOVE:
+                    logger.debug('sprint')
+                    itt.key_press('lshift')
+                    self.sprint_timer.reset()
         
         if self.ready_to_end:
             self.end_times += 1
@@ -497,6 +510,7 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
             self._set_nfid(ST.END_TEYVAT_MOVE_STUCK)
             self._set_rfc(FC.END)
         logger.debug(f"next break position distance: {euclidean_distance(target_posi, curr_posi)}")
+        self.in_pt.output_log(mess='TMF Path Performance:')
         # delta_distance = self.CalculateTheDistanceBetweenTheAngleExtensionLineAndTheTarget(curr_posi,target_posi)
         delta_degree = abs(movement.calculate_delta_angle(genshin_map.get_rotation(),movement.calculate_posi2degree(target_posi)))
         if delta_degree >= 20:
@@ -513,7 +527,8 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
         if self.init_start == False:
             itt.key_down('w')
             self.init_start = True
-            
+        
+        
     def state_after(self):
         self.next_flow_id = self.flow_id
         # movement.move_to_position(posi=self.upper.path_dict["end_position"], offset=1,delay=0.01)

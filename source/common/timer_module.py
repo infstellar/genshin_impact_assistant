@@ -1,6 +1,7 @@
 import time
 from source.path_lib import *
 import pytz, datetime
+from source.logger import *
 
 class Timer:
     def __init__(self, diff_start_time:float=0):
@@ -22,10 +23,11 @@ class Timer:
         self.stop()
         return self.end_time - self.start_time
 
-    def loop_time(self):
+    def reset_and_get(self):
         t = self.get_diff_time()
         self.reset()
         return t
+    
 
 class AdvanceTimer:
     def __init__(self, limit, count=0):
@@ -201,7 +203,19 @@ class Genshin400Timer():
     def set_today(self):
         with open(self.path, 'w') as f:
                 f.write(self._get_date())
-      
+                
+class Performance(Timer):
+    def __init__(self, diff_start_time: float = 0, output_cycle=5):
+        super().__init__(diff_start_time)
+        self.output_cycle = output_cycle
+        self._output_num = 0
+    
+    def output_log(self, mess=''):
+        if self._output_num%self.output_cycle==0:
+            logger.info(f"{mess} {self.reset_and_get()}")
+        else:
+            self.reset_and_get()
+                   
 if __name__ == '__main__':
     a = Genshin400Timer()
     print(a.is_new_day())

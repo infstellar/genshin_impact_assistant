@@ -6,6 +6,7 @@ from source.interaction.capture import CustomCapture
 from source.map.map import genshin_map
 from source.flow.path_recorder_flow import PathRecorderController
 from source.funclib.combat_lib import CSDL
+from source.common.timer_module import Timer
 
 CSDL.pause_threading()
 CSDL.stop_threading()
@@ -26,18 +27,19 @@ cc.set_cap(frame)
 genshin_map.init_position(tuple(genshin_map.convert_cvAutoTrack_to_GIMAP([1170.8503, -3181.4194])))
 genshin_map.small_map_init_flag = True
 
-pn = "V2Ptest11"
-prc = PathRecorderController()
-prc.flow_connector.path_name = pn
-prc.flow_connector.is_pickup_mode = True
-prc.start()
+pn = "V2Ptest12"
+PRF = PathRecorderController()
+PRF.flow_connector.path_name = pn
+PRF.flow_connector.is_pickup_mode = True
+PRF.flow_connector.coll_name = "清心"
 logger.info(f"Load over.")
 logger.info(f"ready to start.")
 # press `\` to start
 fps = 30
 i=1
-
+pt = Timer()
 while success:
+    
     success, frame = fcap.read()
     cc.set_cap(frame)
     # do something in here
@@ -46,7 +48,14 @@ while success:
     if ui_control.verify_page(UIPage.page_main):
         pass
         # print(genshin_map.get_position(), genshin_map.position_similarity)
-    k = cv2.waitKey(int((1/fps)*1000))
+    dt = pt.get_diff_time()-(1/fps)
+    if dt<-0.001:
+        k = cv2.waitKey(int((-dt)*1000))
+    else:
+        if i%20==0:
+            logger.info(f"fps low:{round(1/(dt+(1/fps)),2)}")
+        k = cv2.waitKey(1)
+    pt.reset()
     if k & 0xFF == ord(' '):
         cv2.waitKey(0)
     elif k & 0xFF == ord('a'):
@@ -82,12 +91,12 @@ while success:
             fps = 1
         logger.info(f"fps set as {fps}")
     elif k & 0xFF == ord(']'):
-        prc.pc._start_stop_recording()
+        PRF.pc._start_stop_recording()
         logger.info(f"press any key to continue.")
         cv2.waitKey(0)
         
     i+=1
-    prc.loop()
+    PRF.loop()
     if i%120==0:
         logger.info(f"frame: {i}")
     # print()
