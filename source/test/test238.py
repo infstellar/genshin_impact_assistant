@@ -76,8 +76,16 @@ def create_refreshTime():
         # print(s)
     save_json(s, "REFRESHTIME_INDEX.json", f"assets\\POI_JSON_API")
 
-create_refreshTime()
-reshape_json()
-create_indexes()
-create_name()
+def get_all_position():
+    rl = []
+    for ii in range(1,15):
+        j = load_json(json_name=str(ii)+".json", default_path=f"assets\\POI_JSON_API\\{LANG}\\dataset")
+        for i in j:
+            rl.append(list(map(float,i['position'].split(',') )))
+    save_json(rl, "all_position.json", f"assets\\POI_JSON_API", sort_keys=False)
+# create_refreshTime()
+# reshape_json()
+# create_indexes()
+# create_name()
+get_all_position()
 #test

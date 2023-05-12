@@ -184,7 +184,7 @@ class Map(MiniMap, BigMap, MapConverter):
         return GIMAPPosition(self.bigmap)
 
 
-    def _move_bigmap(self, target_posi, float_posi=0, force_center = False) -> list:
+    def _move_bigmap(self, target_posi, float_posi=0, force_center = False, csf=lambda:False) -> list:
         """move bigmap center to target position
 
         Args:
@@ -210,6 +210,9 @@ class Map(MiniMap, BigMap, MapConverter):
             screen_center_x = 1024 / 2
             screen_center_y = 768 / 2
 
+        if csf():
+            return
+        
         itt.move_to(screen_center_x + float_posi, screen_center_y + float_posi)  # screen center
 
         itt.left_down()
@@ -303,13 +306,17 @@ class Map(MiniMap, BigMap, MapConverter):
             itt.appear_then_click(asset.ButtonBigmapCloseMarkTableInTP)
         itt.delay('animation')
 
-    def bigmap_tp(self, posi: list, tp_mode=0, tp_type: list = None) -> TianLiPosition:
-        """
+    def bigmap_tp(self, posi: list, tp_mode=0, tp_type: list = None, csf=lambda:False) -> TianLiPosition:
+        """传送到指定坐标。
 
-        传送到指定坐标。
-        模式: 
-        0: 自动选择最近的可传送目标传送
-        
+        Args:
+            posi (list): _description_
+            tp_mode (int, optional): 0: 自动选择最近的可传送目标传送. Defaults to 0.
+            tp_type (list, optional): _description_. Defaults to None.
+            csf (_type_, optional): checkup stop func. Defaults to lambda:False.
+
+        Returns:
+            TianLiPosition: _description_
         """
         if tp_type == None:
             tp_type = ["Teleporter", "Statue", "Domain"]
@@ -324,7 +331,7 @@ class Map(MiniMap, BigMap, MapConverter):
 
         self._switch_to_area(tp_region)
 
-        click_posi = self._move_bigmap(tp_posi)
+        click_posi = self._move_bigmap(tp_posi, csf=csf)
 
         if tp_type == "Domain": # 部分domain有特殊名字
             logger.debug("tp to Domain")

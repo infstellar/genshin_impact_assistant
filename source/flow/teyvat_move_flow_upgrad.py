@@ -89,7 +89,7 @@ class TeyvatTeleport(FlowTemplate):
         self._next_rfc()
 
     def state_in(self):
-        genshin_map.bigmap_tp(self.upper.target_posi, tp_type=self.upper.tp_type)
+        genshin_map.bigmap_tp(self.upper.target_posi, tp_type=self.upper.tp_type, csf=self.upper.checkup_stop_func)
         self._next_rfc()
 
     def state_end(self):

@@ -65,7 +65,8 @@ class Capture():
                     logger.warning(
                         t2t("Fail to get capture: ")+
                         f"shape: {self.capture_cache.shape},"+
-                        t2t(" waiting 2 sec."))
+                        t2t(" waiting 2 sec.")+'\n'+
+                        t2t("请确认原神窗口没有最小化，原神启动器关闭，原神分辨率为1080p"))
                     time.sleep(2)
                 else:
                     break

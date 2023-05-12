@@ -23,7 +23,7 @@ if not success:
     raise VideoNotFoundError
 cc.set_cap(frame)
 
-genshin_map.init_position(tuple(genshin_map.convert_cvAutoTrack_to_GIMAP([ 1170.8503, -3181.4194])))
+genshin_map.init_position(tuple(genshin_map.convert_cvAutoTrack_to_GIMAP([1170.8503, -3181.4194])))
 genshin_map.small_map_init_flag = True
 
 pn = "V2Ptest11"

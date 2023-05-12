@@ -100,7 +100,7 @@ class MissionExecutor(BaseThreading):
             # 跑到七天神像去回血
             tracker.reinit_smallmap()
             curr_posi = list(tracker.get_position())
-            target_posi = list(tracker.bigmap_tp(posi=curr_posi, tp_type=["Statue"]).tianli)
+            target_posi = list(tracker.bigmap_tp(posi=curr_posi, tp_type=["Statue"], csf=self.checkup_stop_func).tianli)
             self.TMCF.reset()
             self.TMCF.set_parameter(MODE="AUTO",stop_rule=1,target_posi=target_posi,is_tp=False)
             self.TMCF.start_flow()
