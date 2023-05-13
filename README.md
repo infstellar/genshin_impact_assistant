@@ -20,23 +20,18 @@ The aim of GIA is: let the program play Genshin, and you just need to selected c
 </div>
 
 # General Introduction 基本介绍
-An Genshin automatic operation assistance based on image recognization and similated keyboard operation. Does not involve not-allowed operation.
-
+An Genshin automatic operation assistance based on image recognization and similated keyboard operation. Does not involve not-allowed operation.  
 基于图像识别的原神自动操作辅助.使用图片识别与模拟键盘操作,不涉及违规操作.
 
-To those who have not used github: the blue text in the docs is a hyperlink that can be clicked.
-
+To those who have not used github: the blue text in the docs is a hyperlink that can be clicked.  
 To没用过github的小伙伴: 描述文档中的蓝色文字是链接,可以打开的.
 
 ## Complete Documentation 详细信息
 
-**[中文文档](https://github.com/GenshinImpactAssistant/GIA-Document/tree/main/zh_CN/README.md)**  
-**[English Document](https://github.com/GenshinImpactAssistant/GIA-Document/tree/main/en_US/README.md)**
+**[中文文档](https://github.com/GenshinImpactAssistant/GIA-Document/tree/main/zh_CN/README.md)** **如果喜欢，点个星星~** ⭐  
+**[English Document](https://github.com/GenshinImpactAssistant/GIA-Document/tree/main/en_US/README.md)** **star~** ⭐  
 
 ## Demo Video 演示视频
-
-<https://www.bilibili.com/video/BV1RV4y157m6>(挂了)  
-<https://www.bilibili.com/video/BV1RV4y157m6>(Hang up)
 
 <https://www.youtube.com/watch?v=ZieBDx6Go4A> v0.2.0的演示视频，可能部分过期  
 <https://www.youtube.com/watch?v=ZieBDx6Go4A> v0.2.0 demo video, may be partially out of date.
@@ -45,10 +40,10 @@ To没用过github的小伙伴: 描述文档中的蓝色文字是链接,可以打
 
 Functions currently available  
 目前可以使用的功能
-### 1. Auto Combat Assist 自动战斗辅助
-### 2. Auto Domain Assist 自动秘境辅助
-### 3. Auto Collect Assist自动采集辅助
-### 4. Auto Daily Commission Assist 自动每日委托辅助(仅部分委托)
+### 1. Auto Combat Assist 战斗辅助
+### 2. Auto Domain Assist 自动秘境
+### 3. Auto Collect Assist 自动采集(基于Mission)
+### 4. Auto Daily Commission Assist 每日委托(仅部分委托)
 ### 5. Claim Daily Reward 领取日常奖励
 ### 6. Auto Lay Line Outcrop Assist 自动地脉衍出辅助  
 For more details, see **[English Document](https://github.com/GenshinImpactAssistant/GIA-Document/tree/main/en_US/README.md)**  
