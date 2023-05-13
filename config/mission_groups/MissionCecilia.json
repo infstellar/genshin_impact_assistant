@@ -1,0 +1,9 @@
+{
+  "introduction": {
+    "en_US": " Automatic collect Cecilia.",
+    "zh_CN": "自动采集塞西莉亚花。"
+  },
+  "missions": [
+    "MissionCecilia"
+  ]
+}

@@ -214,6 +214,11 @@ config/mission_groups/*.json
 !config/mission_groups/Default.json
 !config/mission_groups/SweatFlowerMissionGroup.json
 !config/mission_groups/VioletgrassMissionGroup.json
+!config/mission_groups/MissionCecilia.json
+!config/mission_groups/MissionJueyunChili.json
+!config/mission_groups/MissionWindwhellAster.json
+!config/mission_groups/MissionGlazeLily.json
+!config/mission_groups/QingXinMissionGroup.json
 
 # test file
 source/test/test242.py

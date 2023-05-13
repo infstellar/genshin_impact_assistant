@@ -15,8 +15,8 @@ itt.capture_obj = cc
 
 class VideoNotFoundError(Exception):pass
 
-fcap = cv2.VideoCapture(r'M:/V/2023-05-13 11-19-11.mp4') # 3720+
-frameToStart = 0 # 5700 # 1800 # 3720+1320+840 # 720+240
+fcap = cv2.VideoCapture(r'M:/Downkyi/BV16Y411j7mn.mp4') # 3720+
+frameToStart = 3500 # 5700 # 1800 # 3720+1320+840 # 720+240
 fcap.set(cv2.CAP_PROP_POS_FRAMES, frameToStart)
 success, frame = fcap.read()
 if not success:
@@ -26,11 +26,11 @@ cc.set_cap(frame)
 genshin_map.init_position(tuple(genshin_map.convert_cvAutoTrack_to_GIMAP([1170.8503, -3181.4194])))
 genshin_map.small_map_init_flag = True
 
-pn = "QXV"
+pn = "GlazeLily"
 PRF = PathRecorderController()
 PRF.flow_connector.path_name = pn
 PRF.flow_connector.is_pickup_mode = True
-PRF.flow_connector.coll_name = "清心"
+PRF.flow_connector.coll_name = "琉璃百合"
 logger.info(f"Load over.")
 logger.info(f"ready to start.")
 # press `\` to start
@@ -58,7 +58,7 @@ while success:
     if k & 0xFF == ord(' '):
         cv2.waitKey(0)
     elif k & 0xFF == ord('a'):
-        rlist, rd = genshin_map.get_smallmap_from_teleporter(area=['Liyue','Mondstant', 'TheChasm'])
+        rlist, rd = genshin_map.get_smallmap_from_teleporter(area=['Liyue','Mondstadt'])
         iii=0
         for tper in rlist:
             logger.info(f"id {iii} position {tper.position} {tper.name} {tper.region}, d={rd[iii]}")

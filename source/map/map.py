@@ -79,6 +79,7 @@ class Map(MiniMap, BigMap, MapConverter):
                     ui_control.ensure_page(UIPage.page_bigmap)
                     pp = self.get_bigmap_posi()
                     curr_posi = pp.tianli
+                    logger.info(f"init_position:{pp.gimap}")
                     self.init_position(tuple(map(int, list(pp.gimap))))
                     logger.info(f"position: {curr_posi}")
                     ui_control.ensure_page(UIPage.page_main)
@@ -112,6 +113,7 @@ class Map(MiniMap, BigMap, MapConverter):
     def reinit_smallmap(self) -> None:
         if ui_control.verify_page(UIPage.page_main):
             ui_control.ui_goto(UIPage.page_bigmap)
+            logger.info(f"init_position:{self.get_bigmap_posi().gimap}")
             self.init_position(tuple(map(int, list(self.get_bigmap_posi().gimap))))
             ui_control.ui_goto(UIPage.page_main)
             self.small_map_init_flag = True
@@ -121,18 +123,25 @@ class Map(MiniMap, BigMap, MapConverter):
             area = ['Inazuma',"Liyue","Mondstadt"]
         rlist = []
         rd = []
-        for md in range(10,22):
+        added = []
+        for md in range(10,60,10):
+            logger.info(f"d: {md}")
             for i in DICT_TELEPORTER:
                 tper = DICT_TELEPORTER[i]
                 if not tper.region in area:
                     continue
+                
+                # logger.info(f"init_position:{tper.position}")
                 self.init_position(tper.position)
                 self.get_position()
                 d = euclidean_distance(self.get_position(), self.convert_GIMAP_to_cvAutoTrack(tper.position))
                 if d<=md:
+                    if tper in added:
+                        continue
                     rlist.append(tper)
                     rd.append(d)
                     logger.info(f"id {len(rlist)-1} position {tper.position} {tper.name} {tper.region}, d={d}")
+                    added.append(tper)
         
         return rlist, rd         
         # self.init_position(tuple(list(map(int,max_position))))

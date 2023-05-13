@@ -10,7 +10,7 @@ from source.util import logger
 
 class MiniMap(MiniMapResource):
     def init_position(self, position: t.Tuple[int, int]):
-        logger.info(f"init_position:{position}")
+        # logger.info(f"init_position:{position}")
         self.position = position
 
     def _get_minimap(self, image, radius):
