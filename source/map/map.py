@@ -121,7 +121,7 @@ class Map(MiniMap, BigMap, MapConverter):
             area = ['Inazuma',"Liyue","Mondstadt"]
         rlist = []
         rd = []
-        for md in range(10,16):
+        for md in range(10,22):
             for i in DICT_TELEPORTER:
                 tper = DICT_TELEPORTER[i]
                 if not tper.region in area:

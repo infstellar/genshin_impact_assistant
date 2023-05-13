@@ -1,9 +1,11 @@
 {
   "introduction": {
-    "en_US": " Automatic collect violetgrass. 4 in total.",
-    "zh_CN": "自动采集琉璃袋。 共4个。"
+    "en_US": " Automatic collect violetgrass.",
+    "zh_CN": "自动采集琉璃袋。"
   },
   "missions": [
+    "MissionVioletgrass3",
+    "MissionVioletgrass2",
     "MissionVioletgrass1"
   ]
 }

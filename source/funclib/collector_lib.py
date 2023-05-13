@@ -113,9 +113,8 @@ def col_succ_times_from_log(key_name, day=1):
     return round(succ_rate*100, 1), total_n, succ_n, fail_n
 
 
-AREA_ALL = [1,2,5,6,11,12,13,14,18,19,21,22]
 AREA_MD = [5,6]
-AREA_LY = [1,2]
+AREA_LY = [1,2,3]
 AREA_DQ = [11,12,13,14]
 AREA_DQ_CORE = [11,12,13]
 AREA_DQ_HG = [14]
@@ -123,6 +122,7 @@ AREA_XM = [18,19,21,22]
 AREA_XM_CORE = [18]
 AREA_XM_FOREST = [19]
 AREA_XM_DESERT = [21,22]
+AREA_ALL = AREA_MD+AREA_LY+AREA_DQ+AREA_XM
 def get_item_id(item_name:str, area_id:list, match_mode = 0) -> list:
     j = load_json("item.json", f"assets\\POI_JSON_API\\{GLOBAL_LANG}\\dataset")
     ret_id = []

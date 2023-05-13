@@ -168,9 +168,9 @@ class PathRecorderCore(FlowTemplate):
             self.rfc = FC.AFTER
             logger.info(t2t("ready to stop recording"))
 
-    def _fix_position(self, p):
+    def _fix_position(self, p, offset=9.3):
         ed_list = quick_euclidean_distance_plist(p, self.COLLECTION_POSITION)
-        if min(ed_list)<9:
+        if min(ed_list)<offset:
             rp = self.COLLECTION_POSITION[np.argmin(ed_list)]
             if list(rp) in self.used_collection_position:
                 logger.info(f"position refix fail: {rp} used.")
@@ -184,7 +184,7 @@ class PathRecorderCore(FlowTemplate):
                 logger.info(f"position refix fail: {p} {self.COLLECTION_POSITION[np.argmin(ed_list)]} 9<{min(ed_list)}<15")
             return p,False
     
-    def _add_break_position(self, posi, f_exist=False):
+    def _add_break_position(self, posi, f_exist=False, is_end = False):
         
         bpindex = len(self.upper.collection_path_dict["break_position"])
         if len(self.upper.collection_path_dict["break_position"])==0:
@@ -199,13 +199,18 @@ class PathRecorderCore(FlowTemplate):
             self.upper.collection_path_dict["break_position"].append(list(posi))
             logger.info(f"break position added {posi}")
             
-            if self.upper.is_pickup_mode:
-                if f_exist:
-                    self.upper.collection_path_dict["additional_info"]["pickup_points"].append(bpindex)
-                    logger.info(f"pickup bp added: {bpindex}")
+            if self.upper.is_pickup_mode and f_exist:
+                self.upper.collection_path_dict["additional_info"]["pickup_points"].append(bpindex)
+                logger.info(f"pickup bp added: {bpindex}")
         else:
             logger.warning(f"break position too close")
-            
+            if is_end and self.upper.is_pickup_mode and self.force_add_flag:
+                posi,succ = self._fix_position(posi, offset=20)
+                if succ:
+                    self.upper.collection_path_dict["break_position"].append(list(posi))
+                    self.upper.collection_path_dict["additional_info"]["pickup_points"].append(bpindex)
+                    logger.info(f"break position added {posi}")
+                    logger.info(f"last pickup bp added: {bpindex}")
             if self.upper.is_pickup_mode:
                 if f_exist:
                     if bpindex-1 not in self.upper.collection_path_dict["additional_info"]["pickup_points"]:
@@ -242,17 +247,25 @@ class PathRecorderCore(FlowTemplate):
             self.upper.collection_path_dict["start_position"]=list(tracker.get_position())
         return super().state_in()
 
+    def _fix_bps(self):
+        logger.info(f'bps fix {len(self.upper.collection_path_dict["break_position"])} -> {self.upper.collection_path_dict["additional_info"]["pickup_points"][-1]+1}')
+        self.upper.collection_path_dict["break_position"] = \
+        self.upper.collection_path_dict["break_position"]   \
+        [:self.upper.collection_path_dict["additional_info"]["pickup_points"][-1]+1]
+        return True
+    
     def state_after(self):
         # self.upper.total_collection_list.append(self.upper.collection_path_dict)
         curr_posi = tracker.get_position()
         self.upper.collection_path_dict["end_position"]=list(curr_posi)
-        self._add_break_position(curr_posi)
+        self._add_break_position(curr_posi, is_end=True)
         tz = pytz.timezone('Etc/GMT-8')
         t = datetime.datetime.now(tz)
         date = t.strftime("%Y%m%d%H%M%S")
         jsonname = f"{self.upper.path_name}{date}i{self.record_index}.json"
         self.record_index+=1
-        
+        # if self.upper.is_pickup_mode:
+        #     self._fix_bps() # 这个功能好像与is_end=True功能冲突...
         save_json(self.upper.collection_path_dict,json_name=jsonname,default_path=f"assets\\TeyvatMovePath")
         logger.info(f"recording save as {jsonname}")
         self.rfc = FC.INIT

@@ -413,9 +413,10 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
                 offset = 6 # SK
             if self.curr_path[self.curr_path_index]["motion"]=="FLYING":
                 offset = 12
-            if self.curr_break_point_index in self.upper.path_dict["additional_info"]["pickup_points"]:
-                logger.debug('bp is pp, o=3.5.')
-                offset = 3.5
+            if "additional_info" in self.upper.path_dict:
+                if self.curr_break_point_index in self.upper.path_dict["additional_info"]["pickup_points"]:
+                    logger.debug('bp is pp, o=3.5.')
+                    offset = 3.5
             if self.ready_to_end:
                 offset = min(3,max(1,(self.end_times)/10))
             # 如果两个BP距离小于offset就会瞬移，排除一下。
@@ -465,7 +466,7 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
         
         self.switch_motion_state(jump=((not self.ready_to_end) and is_jump))
         fly_flag = False
-        check_fly = self.curr_path[self.curr_path_index:min(self.curr_path_index+5, len(self.curr_path)-1)] # 起飞
+        check_fly = self.curr_path[self.curr_path_index:min(self.curr_path_index+10, len(self.curr_path)-1)] # 起飞
         for i in check_fly:
             if i["motion"]=="FLYING":
                 self.try_fly()
@@ -496,10 +497,10 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
             self._set_rfc(FC.END)
         
         if self.sprint_timer.reached():
-            if euclidean_distance(curr_posi, target_posi)>=20:
+            if euclidean_distance(curr_posi, target_posi)>=30:
                 if self.motion_state == IN_MOVE:
-                    logger.debug('sprint')
-                    itt.key_press('lshift')
+                    logger.debug(f'sprint {euclidean_distance(curr_posi, target_posi)}')
+                    itt.key_press('left_shift')
                     self.sprint_timer.reset()
         
         if self.ready_to_end:
@@ -638,7 +639,7 @@ if __name__ == '__main__':
     #     movement.change_view_to_angle(degree, lambda:False)
     
     TMFC = TeyvatMoveFlowController()
-    TMFC.set_parameter(MODE="PATH",path_dict=load_json("V2Ptest1120230511225601i0.json","assets\\TeyvatMovePath"), is_tp=True)
+    TMFC.set_parameter(MODE="PATH",path_dict=load_json("LLDV20230513110820i0.json","assets\\TeyvatMovePath"), is_tp=True)
     # TMFC.set_parameter(MODE="AUTO", target_posi=[2032,-4879], is_tp=False)
     TMFC.start_flow()
     TMFC.start()
