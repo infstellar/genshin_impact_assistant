@@ -3,7 +3,7 @@ from source.flow.flow_template import FlowController, FlowTemplate, FlowConnecto
 import source.flow.flow_code as FC
 from source.controller import combat_controller
 from common import timer_module
-from source.funclib import generic_lib, movement, combat_lib
+from source.funclib import generic_lib, movement
 from source.funclib.err_code_lib import *
 from source.manager import posi_manager as PosiM, asset
 from source.interaction.interaction_core import itt
@@ -11,6 +11,8 @@ from source.api import yolox_api
 from source.flow import flow_state as ST
 from source.assets.domain import *
 from source.common.timer_module import AdvanceTimer
+from source.ui import page as UIPage
+from source.ui.ui import ui_control
 
 class DomainFlowConnector(FlowConnector):
     """
@@ -125,6 +127,7 @@ class FindingTree(FlowTemplate):
         super().__init__(upper, flow_id=ST.INIT_FINGING_TREE, next_flow_id=ST.INIT_MOVETO_TREE)
         self.upper = upper
         self.move_num = 0
+        self.keep_w_flag = False
 
     def get_tree_posi(self):
         cap =itt.capture(jpgmode=0)
@@ -162,6 +165,7 @@ class FindingTree(FlowTemplate):
     def state_init(self):
         logger.info(t2t('正在激活石化古树'))
         self.upper.lockOnFlag = 0
+        self.keep_w_flag = False
         self._next_rfc()
 
     def state_in(self):
@@ -185,6 +189,12 @@ class FindingTree(FlowTemplate):
                     movement.move(movement.BACK, distance=4)
         else:
             self._next_rfc()
+        if not ui_control.verify_page(UIPage.page_domain):
+            time.sleep(0.2)
+            if not ui_control.verify_page(UIPage.page_domain):
+                logger.warning(f"Domain move fail")
+                self.keep_w_flag = True
+                self._next_rfc()
 
 class MoveToTree(FlowTemplate):
     def __init__(self, upper:DomainFlowConnector):
@@ -241,7 +251,7 @@ class DomainFlowController(FlowController):
         self.flow_connector = self.flow_connector #type: DomainFlowConnector
         
         self._add_sub_threading(self.flow_connector.combat_loop)
-        
+
         
         self.append_flow(MoveToChallenge(self.flow_connector))
         self.append_flow(Challenge(self.flow_connector))

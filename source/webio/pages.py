@@ -37,10 +37,6 @@ class MainPage(Page):
 
     def _on_load(self):  # 加载事件
         super()._on_load()
-        self._load()  # 加载主页
-        t = threading.Thread(target=self._event_thread, daemon=False)  # 创建事件线程
-        session.register_thread(t)  # 注册线程
-        t.start()  # 启动线程
         pin.pin['FlowMode'] = listening.current_flow
 
     def _event_thread(self):
@@ -74,7 +70,7 @@ class MainPage(Page):
                 if text == "$$end$$":
                     output.put_text("", scope='LogArea')
                 else:
-                    output.put_text(text, scope='LogArea', inline=True).style(f'color: {color}; font_size: 20px')
+                    output.put_text(text, scope='LogArea', inline=True).style(f'color: {color}; font_size: 20px') # ; background: aqua
             
             self.log_list.clear()
             self.log_list_lock.release()
@@ -142,28 +138,19 @@ class MainPage(Page):
             output.put_column([  # 左竖列
                 output.put_markdown('## '+t2t("Task List")),
                 output.put_markdown(t2t("Can only be activated from the button")),
-
-                
-                
-                pin.put_checkbox(name="task_list", options=task_options),
-
+                pin.put_checkbox(name="task_list", options=task_options), # 10%
                 output.put_row([output.put_text(t2t('启动/停止Task')), None, output.put_scope('Button_StartStop')],size='40% 10px 60%'),
-                
                 output.put_markdown(t2t('## Statement')),
-
-                output.put_row([output.put_text(t2t('任务状态')), None, output.put_scope('StateArea')],size='40% 10px 60%'),
-
-                output.put_markdown(t2t('## Mission')),  # 左竖列标题
-
+                output.put_row([output.put_text(t2t('任务状态')), None, output.put_scope('StateArea')],size='40% 10px 60%'), # 5%
+                output.put_markdown(t2t('## Mission')),  # 左竖列标题 # 2%
                 #Mission select
-                output.put_row([  
+                output.put_row([  # 5%
                     output.put_text(t2t('Mission Group')),
                     output.put_column([
                         pin.put_select("MissionSelect",self._get_mission_groups_config()),
                         output.put_scope("SCOPEMissionIntroduction")
                         ])
                 ]),
-                
                 output.put_markdown(t2t('## Function')),  # 左竖列标题
                 output.put_markdown(t2t("Can only be activated from the hotkey \'[\'")),
                 output.put_row([  # FlowMode
@@ -174,8 +161,7 @@ class MainPage(Page):
                         # {'label': t2t('AutoDomain'), 'value': listening.FLOW_DOMAIN},
                         # {'label': t2t('AutoCollector'), 'value': listening.FLOW_COLLECTOR}
                     ])])
-                
-            ]), None,
+            ], size='auto'), None,
             output.put_scope('Log')
 
         ], scope=self.main_scope, size='40% 10px 60%')
@@ -213,7 +199,6 @@ class MainPage(Page):
         output.put_button(label=str(listening.FEAT_PICKUP), onclick=self.on_click_pickup, scope='Button_PickUp')
     
     def on_click_startstop(self):
-        output.clear('Button_StartStop')
         # listening.MISSION_MANAGER.set_mission_list(list(pin.pin["MissionSelect"]))
         listening.TASK_MANAGER.set_tasklist(pin.pin["task_list"])
         listening.TASK_MANAGER.start_stop_tasklist()
@@ -224,6 +209,7 @@ class MainPage(Page):
             GIAconfig.update()
 
         time.sleep(0.2)
+        output.clear('Button_StartStop')
         output.put_button(label=str(listening.TASK_MANAGER.start_tasklist_flag), onclick=self.on_click_startstop,
                           scope='Button_StartStop')
 
@@ -290,10 +276,6 @@ class ConfigPage(Page):
 
     def _on_load(self):
         super()._on_load()
-        self._load()  # 加载页面
-        t = threading.Thread(target=self._event_thread, daemon=False)
-        session.register_thread(t)  # 注册线程
-        t.start()
 
     def _config_file2lableAfile(self, l1):
         replace_dict = {
@@ -926,3 +908,7 @@ class CollectorSettingPage(ConfigPage):
                 output.put_text(f"{display_name} : {v}", scope=scope_name)
             else:
                 pin.put_input(component_name, label=display_name, value=v, scope=scope_name, type='number')
+
+
+
+    

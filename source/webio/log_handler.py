@@ -11,7 +11,7 @@ def ansl_code2col(ansl_code):
     elif ansl_code == "32":
         return "green"
     elif ansl_code == "33":
-        return "yellow"
+        return "olive"
     elif ansl_code == "34":
         return "blue"
     elif ansl_code == "35":

@@ -1,5 +1,5 @@
 """This file is generated automatically. Do not manually modify it."""
-MISSION_INDEX = ['MissionAutoCollector', 'MissionCecilia', 'MissionCrystalfly', 'MissionGlazeLily', 'MissionJueyunChili', 'MissionQingXin1', 'MissionQingXin2', 'MissionSakuraBloom1', 'MissionSweatFlower1', 'MissionSweatFlower2', 'MissionTest', 'MissionTest2', 'MissionV2PTest', 'MissionVioletgrass1', 'MissionVioletgrass2', 'MissionVioletgrass3', 'MissionWindwhellAster']
+MISSION_INDEX = ['MissionAutoCollector', 'MissionCecilia', 'MissionCrystalfly', 'MissionJueyunChili', 'MissionQingXin1', 'MissionQingXin2', 'MissionSakuraBloom1', 'MissionSweatFlower1', 'MissionSweatFlower2', 'MissionTest', 'MissionTest2', 'MissionV2PTest', 'MissionVioletgrass1', 'MissionVioletgrass2', 'MissionVioletgrass3', 'MissionWindwhellAster']
 def get_mission_object(mission_name:str):
     if mission_name == 'MissionAutoCollector':
         import source.mission.missions.MissionAutoCollector
@@ -10,9 +10,6 @@ def get_mission_object(mission_name:str):
     if mission_name == 'MissionCrystalfly':
         import source.mission.missions.MissionCrystalfly
         return source.mission.missions.MissionCrystalfly.MissionCrystalfly()
-    if mission_name == 'MissionGlazeLily':
-        import source.mission.missions.MissionGlazeLily
-        return source.mission.missions.MissionGlazeLily.MissionGlazeLily()
     if mission_name == 'MissionJueyunChili':
         import source.mission.missions.MissionJueyunChili
         return source.mission.missions.MissionJueyunChili.MissionJueyunChili()
@@ -52,3 +49,6 @@ def get_mission_object(mission_name:str):
     if mission_name == 'MissionWindwhellAster':
         import source.mission.missions.MissionWindwhellAster
         return source.mission.missions.MissionWindwhellAster.MissionWindwhellAster()
+    if mission_name == 'MissionGlazeLily':
+        import missions.MissionGlazeLily
+        return missions.MissionGlazeLily.MissionGlazeLily()
