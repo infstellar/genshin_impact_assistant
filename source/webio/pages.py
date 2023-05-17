@@ -11,7 +11,7 @@ import time
 
 from source import listening, webio
 from source.webio import manager
-from source.webio.page_manager import Page
+from source.webio.advance_page import AdvancePage
 from source.funclib import collector_lib
 from source.common import timer_module
 from source.webio.update_notice import upd_message
@@ -22,7 +22,7 @@ from source.config.cvars import *
 # from source.webio.log_handler import webio_poster
 
 
-class MainPage(Page):
+class MainPage(AdvancePage):
     def __init__(self):
         super().__init__()
         self.log_list = []
@@ -97,16 +97,8 @@ class MainPage(Page):
     
     def _load(self):
         # 标题
-        output.put_markdown('# Main', scope=self.main_scope)
-
-        output.put_row([
-            # 页面切换按钮
-            
-            output.put_buttons(self._value_list2buttons_type(list(manager.page_dict)), onclick=webio.manager.load_page, scope=self.main_scope),
-            # 获得链接按钮
-            output.put_button(label=t2t("Get IP address"), onclick=self.on_click_ip_address, scope=self.main_scope)
-
-        ], scope=self.main_scope)
+        # 获得链接按钮
+        output.put_button(label=t2t("Get IP address"), onclick=self.on_click_ip_address, scope=self.main_scope)
 
         task_options = [
                 {
@@ -225,11 +217,8 @@ class MainPage(Page):
             self.log_list.append((text, color))
             self.log_list_lock.release()
 
-    def _on_unload(self):
-        pass
 
-
-class ConfigPage(Page):
+class ConfigPage(AdvancePage):
     def __init__(self, config_file_name):
         super().__init__()
 
@@ -262,20 +251,11 @@ class ConfigPage(Page):
     def _load(self):
         self.last_file = None
 
-        # 标题
-        output.put_markdown(t2t('# Config'), scope=self.main_scope)
-
-        # 页面切换按钮
-        output.put_buttons(self._value_list2buttons_type(list(manager.page_dict)), onclick=webio.manager.load_page, scope=self.main_scope)
-
         # 配置页
         output.put_markdown(t2t('## config:'), scope=self.main_scope)
 
         output.put_scope("select_scope", scope=self.main_scope)
         pin.put_select('file', self._config_file2lableAfile(self.config_files), scope="select_scope")
-
-    def _on_load(self):
-        super()._on_load()
 
     def _config_file2lableAfile(self, l1):
         replace_dict = {
@@ -608,12 +588,6 @@ class SettingPage(ConfigPage):
     def _load(self):
         self.last_file = None
 
-        # 标题
-        output.put_markdown(t2t('# Setting'), scope=self.main_scope)
-
-        # 页面切换按钮
-        output.put_buttons(self._value_list2buttons_type(list(manager.page_dict)), onclick=webio.manager.load_page, scope=self.main_scope)
-
         # 配置页
         output.put_markdown(t2t('## config:'), scope=self.main_scope)
         output.put_scope("select_scope", scope=self.main_scope)
@@ -678,12 +652,6 @@ class CombatSettingPage(ConfigPage):
     def _load(self):
         self.last_file = None
 
-        # 标题
-        output.put_markdown(t2t('# CombatSetting'), scope=self.main_scope)
-
-        # 页面切换按钮
-        output.put_buttons(self._value_list2buttons_type(list(manager.page_dict)), onclick=webio.manager.load_page, scope=self.main_scope)
-
         # 添加team.json
         output.put_markdown(t2t('# Add team'), scope=self.main_scope)
 
@@ -732,12 +700,6 @@ class CollectorSettingPage(ConfigPage):
     
     def _load(self):
         self.last_file = None
-
-        # 标题
-        output.put_markdown('# ' + t2t('CollectorSetting'), scope=self.main_scope)
-
-        # 页面切换按钮
-        output.put_buttons(self._value_list2buttons_type(list(manager.page_dict)), onclick=webio.manager.load_page, scope=self.main_scope)
 
         # 配置页
         output.put_markdown(t2t('## config:'), scope=self.main_scope)

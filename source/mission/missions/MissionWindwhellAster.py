@@ -1,5 +1,10 @@
 from source.mission.template.mission_just_collect import MissionJustCollectGroup
-
+META={
+    'name':{
+        'zh_CN':'采集塞西莉亚花',
+        'en_US':'Collect Cecilia'
+    }
+}
 class MissionWindwhellAster(MissionJustCollectGroup):
     def __init__(self):
         super().__init__(['WindwheelAster20230513192646i0',

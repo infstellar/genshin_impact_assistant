@@ -1,20 +1,19 @@
 from source.util import *
-from common import flow_state as ST, timer_module
-from source.interaction.interaction_core import itt
-from source.operator import pickup_operator
-from source.flow import teyvat_move_flow
+from common import flow_state as ST
 from source.interaction.minimap_tracker import tracker
-from source.controller import combat_controller
-from source.common.base_threading import BaseThreading
-from source.funclib import collector_lib, generic_lib, combat_lib
-import numpy as np
+from source.funclib import collector_lib
 import datetime
-from source.manager import asset
-from funclib.err_code_lib import ERR_PASS, ERR_STUCK, ERR_COLLECTOR_FLOW_TIMEOUT
 from source.ui.ui import ui_control
 import source.ui.page as UIPage
 from source.mission.mission_template import MissionExecutor, ERR_FAIL,ERR_PASS
 from source.funclib.err_code_lib import ERR_NONE
+
+META={
+    'name':{
+        'zh_CN':'采集塞西莉亚花',
+        'en_US':'Collect Cecilia'
+    }
+}
 
 SUCC_RATE_WEIGHTING = 6
 COLLECTION = 0

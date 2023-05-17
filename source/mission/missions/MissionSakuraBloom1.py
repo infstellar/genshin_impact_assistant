@@ -1,6 +1,11 @@
 from source.mission.mission_template import MissionExecutor, ERR_PASS, ERR_FAIL
 from source.interaction.interaction_core import itt
-
+META={
+    'name':{
+        'zh_CN':'采集塞西莉亚花',
+        'en_US':'Collect Cecilia'
+    }
+}
 
 
 class MissionSakuraBloom1(MissionExecutor):

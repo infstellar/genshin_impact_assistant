@@ -1,5 +1,10 @@
 from source.mission.mission_template import MissionExecutor
-
+META={
+    'name':{
+        'zh_CN':'采集塞西莉亚花',
+        'en_US':'Collect Cecilia'
+    }
+}
 class MissionTest2(MissionExecutor):
     def __init__(self):
         super().__init__(is_CFCF=True,is_PUO=True,is_TMCF=True)
