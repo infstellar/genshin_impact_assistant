@@ -130,19 +130,19 @@ class MainPage(AdvancePage):
             output.put_column([  # 左竖列
                 output.put_markdown('## '+t2t("Task List")),
                 output.put_markdown(t2t("Can only be activated from the button")),
-                pin.put_checkbox(name="task_list", options=task_options), # 10%
+                pin.put_checkbox(name="task_list", options=task_options),
                 output.put_row([output.put_text(t2t('启动/停止Task')), None, output.put_scope('Button_StartStop')],size='40% 10px 60%'),
                 output.put_markdown(t2t('## Statement')),
-                output.put_row([output.put_text(t2t('任务状态')), None, output.put_scope('StateArea')],size='40% 10px 60%'), # 5%
-                output.put_markdown(t2t('## Mission')),  # 左竖列标题 # 2%
-                #Mission select
-                output.put_row([  # 5%
-                    output.put_text(t2t('Mission Group')),
-                    output.put_column([
-                        pin.put_select("MissionSelect",self._get_mission_groups_config()),
-                        output.put_scope("SCOPEMissionIntroduction")
-                        ])
-                ]),
+                output.put_row([output.put_text(t2t('任务状态')), None, output.put_scope('StateArea')],size='40% 10px 60%'),
+                # output.put_markdown(t2t('## Mission')),  # 左竖列标题
+                # Mission select
+                # output.put_row([  # 5%
+                #     output.put_text(t2t('Mission Group')),
+                #     output.put_column([
+                #         pin.put_select("MissionSelect",self._get_mission_groups_config()),
+                #         output.put_scope("SCOPEMissionIntroduction")
+                #         ])
+                # ]),
                 output.put_markdown(t2t('## Function')),  # 左竖列标题
                 output.put_markdown(t2t("Can only be activated from the hotkey \'[\'")),
                 output.put_row([  # FlowMode
@@ -174,16 +174,16 @@ class MainPage(AdvancePage):
         if m!="":
             output.popup(t2t('更新提示'), m)
         
-    def _get_mission_groups_config(self):
-        jsons = load_json_from_folder(f"{CONFIG_PATH}\\mission_groups")
-        r = [i["label"] for i in jsons]
-        return r
+    # def _get_mission_groups_config(self):
+    #     jsons = load_json_from_folder(f"{CONFIG_PATH}\\mission_groups")
+    #     r = [i["label"] for i in jsons]
+    #     return r
 
-    def _get_mission_groups_dict(self):
-        jsonname = pin.pin["MissionSelect"]
-        if jsonname is None:
-            raise FileNotFoundError
-        return load_json(str(jsonname),default_path=f"{CONFIG_PATH}\\mission_groups")
+    # def _get_mission_groups_dict(self):
+    #     jsonname = pin.pin["MissionSelect"]
+    #     if jsonname is None:
+    #         raise FileNotFoundError
+    #     return load_json(str(jsonname),default_path=f"{CONFIG_PATH}\\mission_groups")
     
     def on_click_pickup(self):
         output.clear('Button_PickUp')

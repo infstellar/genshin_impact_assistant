@@ -16,7 +16,7 @@ def server_thread():
     asyncio.set_event_loop(loop)
     ###
 
-    platform.tornado.start_server(webio.main, auto_open_webbrowser=True, port = 22268, debug=source.util.DEBUG_MODE)
+    platform.tornado.start_server(webio.main, auto_open_webbrowser=True, port = 22268, debug=False)
 
 threading.Thread(target=server_thread, daemon=False).start()
 

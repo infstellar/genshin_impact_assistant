@@ -1,4 +1,6 @@
 """This file is generated automatically. Do not manually modify it."""
+import os, sys
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 MISSION_INDEX = ['MissionAutoCollector', 'MissionCecilia', 'MissionCrystalfly', 'MissionJueyunChili', 'MissionQingXin1', 'MissionQingXin2', 'MissionSakuraBloom1', 'MissionSweatFlower1', 'MissionSweatFlower2', 'MissionTest', 'MissionTest2', 'MissionV2PTest', 'MissionVioletgrass1', 'MissionVioletgrass2', 'MissionVioletgrass3', 'MissionWindwhellAster']
 def get_mission_object(mission_name:str):
     if mission_name == 'MissionAutoCollector':

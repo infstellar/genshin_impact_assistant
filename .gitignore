@@ -208,17 +208,7 @@ config/collection_path/*
 !config/collection_path/.gitkeep
 
 # Mission groups
-config/mission_groups/*.json
-!config/mission_groups/AutoCollectorMission.json
-!config/mission_groups/SakuraBloomMissionGroup.json
-!config/mission_groups/Default.json
-!config/mission_groups/SweatFlowerMissionGroup.json
-!config/mission_groups/VioletgrassMissionGroup.json
-!config/mission_groups/MissionCecilia.json
-!config/mission_groups/MissionJueyunChili.json
-!config/mission_groups/MissionWindwhellAster.json
-!config/mission_groups/MissionGlazeLily.json
-!config/mission_groups/QingXinMissionGroup.json
+config/mission/*.json
 
 # test file
 source/test/test242.py

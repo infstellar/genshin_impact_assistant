@@ -1,8 +1,8 @@
 from source.mission.template.mission_just_collect import MissionJustCollectGroup
 META={
     'name':{
-        'zh_CN':'采集塞西莉亚花',
-        'en_US':'Collect Cecilia'
+        'zh_CN':'采集绝云椒椒',
+        'en_US':'Collect Jueyun Chili'
     }
 }
 class MissionJueyunChili(MissionJustCollectGroup):

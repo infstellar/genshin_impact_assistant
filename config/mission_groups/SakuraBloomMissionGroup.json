@@ -1,9 +1,0 @@
-{
-  "introduction": {
-    "en_US": " Automatic collect sakura bloom. At least one of the four parties contain the character Lisa.",
-    "zh_CN": "自动采集绯樱绣球。在4个队伍配置中必须至少有一个包含角色丽莎(Lisa)"
-  },
-  "missions": [
-    "MissionSakuraBloom1"
-  ]
-}

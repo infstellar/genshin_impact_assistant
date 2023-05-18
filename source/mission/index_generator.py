@@ -14,9 +14,11 @@ def generate_mission_index():
         for file in files:
             if file[file.index('.'):]==".py":
                 extra_mission_list.append(file.replace('.py',''))
-
+    
     with open(os.path.join(ROOT_PATH,"source\\mission\\mission_index.py"), "w") as f:
         f.write("\"\"\"This file is generated automatically. Do not manually modify it.\"\"\"\n")
+        f.write(f"import os, sys\n")
+        f.write(f"sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))\n")
         f.write(f"MISSION_INDEX = {str(mission_list)}\n")
         f.write("def get_mission_object(mission_name:str):\n")
         for i in mission_list:

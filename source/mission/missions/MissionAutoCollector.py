@@ -10,8 +10,8 @@ from source.funclib.err_code_lib import ERR_NONE
 
 META={
     'name':{
-        'zh_CN':'采集塞西莉亚花',
-        'en_US':'Collect Cecilia'
+        'zh_CN':'通用自动采集',
+        'en_US':'General Auto Collect'
     }
 }
 

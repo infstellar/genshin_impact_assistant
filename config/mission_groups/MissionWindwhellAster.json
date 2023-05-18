@@ -1,9 +1,0 @@
-{
-  "introduction": {
-    "en_US": " Automatic collect Windwhell Aster.",
-    "zh_CN": "自动采集风车菊。"
-  },
-  "missions": [
-    "MissionWindwhellAster"
-  ]
-}

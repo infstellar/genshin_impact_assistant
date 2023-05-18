@@ -1,8 +1,8 @@
 from source.mission.template.mission_just_collect import MissionJustCollect
 META={
     'name':{
-        'zh_CN':'采集塞西莉亚花',
-        'en_US':'Collect Cecilia'
+        'zh_CN':'采集清心1',
+        'en_US':'Collect Qing xin 1'
     }
 }
 class MissionQingXin1(MissionJustCollect):

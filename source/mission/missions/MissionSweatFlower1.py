@@ -1,8 +1,8 @@
 from source.mission.mission_template import MissionExecutor
 META={
     'name':{
-        'zh_CN':'采集塞西莉亚花',
-        'en_US':'Collect Cecilia'
+        'zh_CN':'采集甜甜花1',
+        'en_US':'Collect Sweat Flower 1'
     }
 }
 class MissionSweatFlower1(MissionExecutor):

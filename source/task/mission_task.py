@@ -12,8 +12,8 @@ class MissionTask(TaskTemplate):
         self.task_name_list = []
         
     def _analyze_mission_group(self):
-        r = load_json(GIAconfig.General_MissionGroup, f"{CONFIG_PATH}\\mission_groups")
-        return r["missions"]
+        r = load_json('mission_group.json', f"{CONFIG_PATH}\\mission")
+        return r
     
     def loop(self):
         self.MM.set_mission_list(self._analyze_mission_group())
