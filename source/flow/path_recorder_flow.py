@@ -143,7 +143,8 @@ class PathRecorderCore(FlowTemplate):
             "position_list":[],
             "additional_info":{
                 "pickup_points":[]
-            }
+            },
+            "adsorptive_position":[]
         }
         self.force_add_flag = False
         if self.upper.coll_name != "":
@@ -234,6 +235,13 @@ class PathRecorderCore(FlowTemplate):
         else:
             min_dist = 99999
 
+        ed_list = quick_euclidean_distance_plist(curr_posi, self.COLLECTION_POSITION)
+        if min(ed_list)<12:
+            rp = self.COLLECTION_POSITION[np.argmin(ed_list)]
+            if list(rp) not in self.upper.collection_path_dict["adsorptive_position"]:
+                logger.info(f"add adsorptive position succ: {rp}")
+                self.upper.collection_path_dict["adsorptive_position"].append(list(rp))
+        
         if min_dist >= self.upper.min_distance:
             self._add_posi_to_dict(list(curr_posi))
 
