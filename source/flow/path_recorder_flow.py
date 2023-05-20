@@ -9,7 +9,7 @@ from source.interaction.interaction_core import itt
 import pytz, datetime
 from source.ui.ui import ui_control
 from source.ui import page as UIPage
-from common.timer_module import AdvanceTimer
+from common.timer_module import AdvanceTimer, Timer
 
 
 class PathRecorderConnector(FlowConnector):
@@ -47,10 +47,14 @@ class PathRecorderCore(FlowTemplate):
         self.upper.while_sleep = 0.05
         self.record_index=0
         self.pickup_icon_timer = AdvanceTimer(1).reset().start()
+        self.position_migration_times = 0
+        self.position_migration_timer = Timer()
         self.used_collection_position = []
         # self.all_position = []
 
     def _add_posi_to_dict(self, posi:list):
+        posi[0] = round(posi[0],3)
+        posi[1] = round(posi[1],3)
         curr_motion = movement.get_current_motion_state()
         self.upper.collection_path_dict["position_list"].append(
             {
@@ -98,6 +102,7 @@ class PathRecorderCore(FlowTemplate):
         self.used_collection_position = []
         self.record_index=0
         self.pickup_icon_timer = AdvanceTimer(1).reset().start()
+        self.position_migration_times = 0
         # if not 
         # tracker.reinit_smallmap()
         curr_posi = tracker.get_position()
@@ -129,7 +134,9 @@ class PathRecorderCore(FlowTemplate):
             return p,False
     
     def _add_break_position(self, posi, f_exist=False, is_end = False):
-        
+        # 添加BP
+        posi[0] = round(posi[0],3)
+        posi[1] = round(posi[1],3)
         bpindex = len(self.upper.collection_path_dict["break_position"])
         if len(self.upper.collection_path_dict["break_position"])==0:
             self.upper.collection_path_dict["break_position"].append(list(posi))
@@ -162,15 +169,35 @@ class PathRecorderCore(FlowTemplate):
                         logger.info(f"pickup bp added to bp-1: {bpindex-1}")
     
     def state_in(self):
+        # 验证UI界面
         if not ui_control.verify_page(UIPage.page_main):
             return super().state_in()
+        # 获得所有position
         all_posi = self.get_all_position(self.upper.collection_path_dict)
         curr_posi = tracker.get_position()
-        if self.upper.is_pickup_mode and not self.force_add_flag:
-            if generic_lib.f_recognition():
-                logger.info(f"found f")
-                self._add_break_position(curr_posi, f_exist=True)
+        # 识别当前角色方向
         curr_direction = tracker.get_direction()
+        # 修正坐标偏移过大问题
+        migration_flag = False
+        if len(self.upper.collection_path_dict["position_list"])>0:
+            last_position = self.upper.collection_path_dict["position_list"][-1]["position"]
+            if self.position_migration_times == 0:
+                migration_offset = 10
+            else:
+                migration_offset = 10+min(4,self.position_migration_timer.get_diff_time())*10 # 考虑时间与距离关系，*6不一定准确，Max=10+10*4=50
+            if euclidean_distance(curr_posi, last_position)>=migration_offset:
+                migration_flag = True # 偏移过大
+                if self.position_migration_times >= 2:
+                    if self.position_migration_timer.get_diff_time()>=4: # 偏移超过4s，强制修正
+                        logger.warning(f"Position migration>28 within 4, reset position {last_position} -> {curr_posi}")
+                        self.position_migration_times = 0
+                        migration_flag = False # 强制修正坐标
+                if self.position_migration_times == 0:
+                    self.position_migration_timer.reset() # 重置计时器
+                self.position_migration_times += 1
+        if migration_flag:return super().state_in()
+        
+        # 添加position用于记录motion
         if len(all_posi)>10:
             min_dist = quick_euclidean_distance_plist(curr_posi, all_posi[-10:-1]).min()
         elif len(all_posi)>0:
@@ -178,20 +205,28 @@ class PathRecorderCore(FlowTemplate):
         else:
             min_dist = 99999
 
-        ed_list = quick_euclidean_distance_plist(curr_posi, self.COLLECTION_POSITION)
-        if min(ed_list)<12:
-            rp = self.COLLECTION_POSITION[np.argmin(ed_list)]
-            if list(rp) not in self.upper.collection_path_dict["adsorptive_position"]:
-                logger.info(f"add adsorptive position succ: {rp}")
-                self.upper.collection_path_dict["adsorptive_position"].append(list(rp))
-        
         if min_dist >= self.upper.min_distance:
             self._add_posi_to_dict(list(curr_posi))
-
+        # 识别F
+        if self.upper.is_pickup_mode and not self.force_add_flag:
+            if generic_lib.f_recognition():
+                logger.info(f"found f")
+                self._add_break_position(curr_posi, f_exist=True)
+        # 吸附采集点
+        if self.upper.is_pickup_mode:
+            ed_list = quick_euclidean_distance_plist(curr_posi, self.COLLECTION_POSITION)
+            if min(ed_list)<12:
+                rp = self.COLLECTION_POSITION[np.argmin(ed_list)]
+                if list(rp) not in self.upper.collection_path_dict["adsorptive_position"]:
+                    logger.info(f"add adsorptive position succ: {rp}")
+                    self.upper.collection_path_dict["adsorptive_position"].append(list(rp))
+        
+        # 计算视角朝向并添加BP
         if abs(movement.calculate_delta_angle(curr_direction, self.upper.last_direction)) >= 3.5:
             self._add_break_position(curr_posi)
             self.upper.last_direction = curr_direction
         
+        # 第一次运行时初始化
         if not self.enter_flag:
             logger.info(t2t("start recording"))
             self.enter_flag = True

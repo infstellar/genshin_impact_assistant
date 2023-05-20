@@ -63,7 +63,7 @@ class MainPage(AdvancePage):
                 output.clear_scope("SCOPEMissionIntroduction")
                 if self.ui_mission_select is None:
                     continue
-                output.put_text(self._get_mission_groups_dict()["introduction"][GLOBAL_LANG],scope="SCOPEMissionIntroduction")
+                # output.put_text(self._get_mission_groups_dict()["introduction"][GLOBAL_LANG],scope="SCOPEMissionIntroduction")
             
             self.log_list_lock.acquire()
             for text, color in self.log_list:

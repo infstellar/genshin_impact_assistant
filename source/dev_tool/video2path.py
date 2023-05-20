@@ -18,33 +18,35 @@ cc = CustomCapture()
 itt.capture_obj = cc
 class VideoNotFoundError(Exception):pass
 
-video_path = r"" # 填写你的视频路径
-frameToStart = 0 # 填写视频播放开始帧
-pn = "GlazeLily" # 填写TLPP文件名开头
-coll_name = "琉璃百合" # 填写采集物名称
+VIDEO_PATH = r"" # 填写你的视频路径
+FRAME_TO_START = 0 # 填写视频播放开始帧，控制台会输出 frame:xxx来提示当前帧
+PATH_HEAD_NAME = "GlazeLily" # 填写TLPP文件名开头。保存时会以该字符串作为文件名的开头。
+COLL_NAME = "琉璃百合" # 填写采集物名称。务必填写正确的名称，否则生成的TLPP文件中的adsorptive_position可能为空列表。
+COLL_AREA = ['Liyue','Mondstadt', 'Inazuma'] # 填写采集区域
+IS_PICKUP_MODE = True # 是否为采集路径模式
 
-fcap = cv2.VideoCapture(video_path)
-fcap.set(cv2.CAP_PROP_POS_FRAMES, frameToStart)
+fcap = cv2.VideoCapture(VIDEO_PATH)
+fcap.set(cv2.CAP_PROP_POS_FRAMES, FRAME_TO_START)
 try:
     success, frame = fcap.read()
 except Exception as e:
     logger.exception(e)
 if not success:
-    raise VideoNotFoundError(video_path)
+    raise VideoNotFoundError(VIDEO_PATH)
 cc.set_cap(frame)
 genshin_map.init_position(tuple(genshin_map.convert_cvAutoTrack_to_GIMAP([1170.8503, -3181.4194])))
 genshin_map.small_map_init_flag = True
 
 
 PRF = PathRecorderController()
-PRF.flow_connector.path_name = pn
-PRF.flow_connector.is_pickup_mode = True
-PRF.flow_connector.coll_name = coll_name
+PRF.flow_connector.path_name = PATH_HEAD_NAME
+PRF.flow_connector.is_pickup_mode = IS_PICKUP_MODE
+PRF.flow_connector.coll_name = COLL_NAME
 logger.info(f"Load over.")
 logger.info(f"ready to start.")
 # press `\` to start
 fps = 30
-i=frameToStart
+i=FRAME_TO_START
 pt = Timer()
 while success:
     
@@ -67,22 +69,25 @@ while success:
     if k & 0xFF == ord(' '):
         cv2.waitKey(0)
     elif k & 0xFF == ord('a'):
-        rlist, rd = genshin_map.get_smallmap_from_teleporter(area=['Liyue','Mondstadt'])
-        iii=0
-        for tper in rlist:
-            logger.info(f"id {iii} position {tper.position} {tper.name} {tper.region}, d={rd[iii]}")
-            iii+=1
-        while 1:
-            iii = input("please input id.")
-            if iii == '':
-                break
-            else:
-                iii = int(iii)
-            cv2.imshow(f'tper{iii}', genshin_map.get_img_near_posi(itt.capture(), rlist[iii].position))
-            cv2.waitKey(1)
-            genshin_map.init_position(rlist[iii].position)
-        logger.info(f"press any key to continue.")
-        cv2.waitKey(0)
+        if not ui_control.verify_page(UIPage.page_main):
+            logger.error(f"不在主界面/画质过低/错误的视频大小/不完整的录屏")
+        else:    
+            rlist, rd = genshin_map.get_smallmap_from_teleporter(area=COLL_AREA)
+            iii=0
+            for tper in rlist:
+                logger.info(f"id {iii} position {tper.position} {tper.name} {tper.region}, d={rd[iii]}")
+                iii+=1
+            while 1:
+                iii = input("please input id.")
+                if iii == '':
+                    break
+                else:
+                    iii = int(iii)
+                cv2.imshow(f'tper{iii}', genshin_map.get_img_near_posi(itt.capture(), rlist[iii].position))
+                cv2.waitKey(1)
+                genshin_map.init_position(rlist[iii].position)
+            logger.info(f"press any key to continue.")
+            cv2.waitKey(0)
     elif k & 0xFF == ord('b'):
         posi = input("please input GIMAP posi")
         p = genshin_map.convert_GIMAP_to_cvAutoTrack(list(map(int,posi.split(','))))

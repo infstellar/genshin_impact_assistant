@@ -35,6 +35,7 @@ class GenerateMarkdownGenerator():
         #     print(text_list) 
         text_list = [i.replace('\n', '\\n').replace('\"', '\\"') for i in text_list]
         with open(file_path.replace('.md','.pygettext'), 'w', encoding='utf-8') as f:
+            f.write(f'# coding:utf-8\n')
             f.write(f'import gettext, sys\n')
             f.write(f"sys.argv.pop(0)\n")
             f.write(f"LANG = sys.argv[0]\n")

@@ -6,8 +6,11 @@ LANG = 'en_US'
 EN2ZH = load_json('en_US.json',r"assets/POI_JSON_API/LANGUAGE")
 
 def en2zh(x):
-    if x in EN2ZH:
-        return EN2ZH[x]
+    if LANG == 'en_US':
+        if x in EN2ZH:
+            return EN2ZH[x]
+        else:
+            return x
     else:
         return x
 
@@ -83,9 +86,9 @@ def get_all_position():
         for i in j:
             rl.append(list(map(float,i['position'].split(',') )))
     save_json(rl, "all_position.json", f"assets\\POI_JSON_API", sort_keys=False)
-# create_refreshTime()
+create_refreshTime()
 # reshape_json()
-# create_indexes()
-# create_name()
+create_indexes()
+create_name()
 get_all_position()
 #test

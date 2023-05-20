@@ -529,6 +529,8 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
                             logger.info(f"adsorption: {adsor_p} start")
                             for i in range(20):
                                 if movement.move_to_posi_LoopMode(adsor_p, self.upper.checkup_stop_func, threshold=1):break
+                                if self.upper.is_auto_pickup:
+                                    if self.upper.PUO.pickup_recognize():break
                                 time.sleep(0.2)
                                 if i%5==0:
                                     logger.debug(f"adsorption: {i}")
