@@ -1,5 +1,5 @@
 """This file is generated automatically. Do not manually modify it."""
-MISSION_INDEX = ['MissionAutoCollector', 'MissionCecilia', 'MissionCrystalfly', 'MissionJueyunChili', 'MissionQingXin2', 'MissionSakuraBloom1', 'MissionSkikFlower', 'MissionSweatFlower1', 'MissionSweatFlower2', 'MissionVioletgrass1', 'MissionVioletgrass2', 'MissionVioletgrass3', 'MissionWindwhellAster']
+MISSION_INDEX = ['MissionAutoCollector', 'MissionCecilia', 'MissionCrystalfly', 'MissionJueyunChili', 'MissionQingXin2', 'MissionSakuraBloom1', 'MissionSilkFlower', 'MissionSweatFlower1', 'MissionSweatFlower2', 'MissionVioletgrass1', 'MissionVioletgrass2', 'MissionVioletgrass3', 'MissionWindwhellAster']
 def get_mission_object(mission_name:str):
     if mission_name == 'MissionAutoCollector':
         import source.mission.missions.MissionAutoCollector
@@ -19,7 +19,7 @@ def get_mission_object(mission_name:str):
     if mission_name == 'MissionSakuraBloom1':
         import source.mission.missions.MissionSakuraBloom1
         return source.mission.missions.MissionSakuraBloom1.MissionMain()
-    if mission_name == 'MissionSkikFlower':
+    if mission_name == 'MissionSilkFlower':
         import source.mission.missions.MissionSilkFlower
         return source.mission.missions.MissionSilkFlower.MissionMain()
     if mission_name == 'MissionSweatFlower1':
@@ -63,7 +63,7 @@ if __name__ == '__main__':
     import source.mission.missions.MissionSakuraBloom1
     META['MissionSakuraBloom1'] = source.mission.missions.MissionSakuraBloom1.META
     import source.mission.missions.MissionSilkFlower
-    META['MissionSkikFlower'] = source.mission.missions.MissionSilkFlower.META
+    META['MissionSilkFlower'] = source.mission.missions.MissionSilkFlower.META
     import source.mission.missions.MissionSweatFlower1
     META['MissionSweatFlower1'] = source.mission.missions.MissionSweatFlower1.META
     import source.mission.missions.MissionSweatFlower2
