@@ -1,7 +1,10 @@
 from source.util import *
 
 from source.common.base_threading import AdvanceThreading
-from source.mission.mission_index import get_mission_object
+try:
+    from missions.mission_index import get_mission_object
+except:
+    from source.mission.mission_index import get_mission_object
 
 class MissionManager(AdvanceThreading):
     def __init__(self):

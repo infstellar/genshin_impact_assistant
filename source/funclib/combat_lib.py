@@ -599,6 +599,7 @@ class CombatStatementDetectionLoop(BaseThreading):
     def loop(self):
         if not self._is_init:
             time.sleep(2)
+            if self.stop_threading_flag:return
             self._is_init = True
         r = is_character_healthy()
         if r != None:
