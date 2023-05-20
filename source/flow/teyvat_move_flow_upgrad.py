@@ -3,7 +3,7 @@ from source.common import timer_module, static_lib
 from source.funclib import generic_lib, movement
 from source.manager import scene_manager, asset
 from source.interaction.interaction_core import itt
-from source.controller import teyvat_move_controller
+from source.pickup.pickup_operator import PickupOperator
 from funclib.err_code_lib import ERR_PASS, ERR_STUCK
 from source.ui.ui import ui_control
 import source.ui.page as UIPage
@@ -40,6 +40,8 @@ class TeyvatMoveFlowConnector(FlowConnector):
         self.is_precise_arrival = False
         self.stop_offset = None
         self.is_tianli_navigation = True
+        self.is_auto_pickup = False
+        self.PUO = PickupOperator()
 
         self.motion_state = IN_MOVE
         self.jump_timer = timer_module.Timer()
@@ -67,6 +69,7 @@ class TeyvatMoveFlowConnector(FlowConnector):
         self.is_precise_arrival = False
         self.stop_offset = None
         self.is_tianli_navigation = True
+        self.is_auto_pickup = False
         
         self.motion_state = IN_MOVE
         self.jump_timer = timer_module.Timer()
@@ -103,6 +106,8 @@ class TeyvatMoveCommon():
         self.jump_timer3 = timer_module.Timer()
         self.history_position = []
         self.history_position_timer = timer_module.AdvanceTimer(limit=1).start()
+        self.last_w_position = [0,0]
+        self.press_w_timer = timer_module.AdvanceTimer(limit=1).start()
 
     def switch_motion_state(self, jump=True):
         self.motion_state = movement.get_current_motion_state()
@@ -137,6 +142,12 @@ class TeyvatMoveCommon():
                 logger.warning(f"MOVE STUCK")
                 return True
         return False
+    
+    def auto_w(self, curr_posi):
+        if self.press_w_timer.reached_and_reset():
+            if list(self.last_w_position) == list(curr_posi):
+                logger.info(f"position duplication, press w")
+                itt.key_press('w')
 
 class Navigation(TianliNavigator):
     def __init__(self, start, end) -> None:
@@ -274,6 +285,8 @@ class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon, Navigation):
         if not self.in_flag:
             itt.key_down('w')
             self.in_flag = True
+        
+        self.auto_w(self.current_posi)
         
         # if len(genshin_map.history_posi) >= 29:
         #     p1 = genshin_map.history_posi[0][1:]
@@ -523,6 +536,10 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
                             self.adsorptive_position.pop(self.adsorptive_position.index(adsor_p))
                             break
         
+        # 自动拾取
+        if self.upper.is_auto_pickup:
+            while self.upper.PUO.pickup_recognize():pass
+        
         # 检测移动是否卡住
         if self.is_stuck(curr_posi, threshold=45):
             itt.key_press('spacebar')
@@ -537,6 +554,9 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
                     logger.debug(f'sprint {euclidean_distance(curr_posi, target_posi)}')
                     itt.key_press('left_shift')
                     self.sprint_timer.reset()
+        
+        # w
+        self.auto_w(curr_posi)
         
         # 是否准备结束
         if self.ready_to_end:
@@ -642,7 +662,25 @@ class TeyvatMoveFlowController(FlowController):
                       tp_type:list = None,
                       is_reinit:bool = None,
                       is_precise_arrival:bool = None,
-                      stop_offset = None):
+                      stop_offset = None,
+                      is_auto_pickup:bool = None):
+        """设置参数，如果不填则使用上次的设置。
+
+        Args:
+            MODE (str, optional): 选择移动模式。可选为“AUTO”自动移动或“PATH”沿路径移动. Defaults to None.\n
+            target_posi (list, optional): 目标坐标。TianLi格式. Defaults to None.\n
+            path_dict (dict, optional): 路径字典。PATH模式时必填. Defaults to None.\n
+            stop_rule (int, optional): 停止条件. Defaults to None.\n
+            is_tp (bool, optional): 是否在移动前TP. Defaults to None.\n
+            to_next_posi_offset (float, optional): 到下一个posi的offset。一般无需设置. Defaults to None.\n
+            special_keys_posi_offset (float, optional): SK的offset。无需设置. Defaults to None.\n
+            reaction_to_enemy (str, optional): 对敌反应。无效设置. Defaults to None.\n
+            tp_type (list, optional): tp类型。列表可包含`Domain` `Teleporter` `Statue`. Defaults to None.\n
+            is_reinit (bool, optional): 是否重初始化TLPS小地图. Defaults to None.\n
+            is_precise_arrival (bool, optional): 是否需要准确到达移动终点. Defaults to None.\n
+            stop_offset (_type_, optional): 停止范围，小于时停止. Defaults to None.\n
+            is_auto_pickup (bool, optional): 是否自动拾取可采集物. Defaults to None.
+        """
         if MODE != None:
             self.flow_connector.MODE = MODE
         if stop_rule != None:
@@ -667,6 +705,8 @@ class TeyvatMoveFlowController(FlowController):
             self.flow_connector.is_precise_arrival = is_precise_arrival
         if stop_offset != None:
             self.flow_connector.stop_offset = stop_offset
+        if is_auto_pickup != None:
+            self.flow_connector.is_auto_pickup = is_auto_pickup
 
         
 if __name__ == '__main__':

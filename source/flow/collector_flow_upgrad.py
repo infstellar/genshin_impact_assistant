@@ -2,7 +2,7 @@ from source.util import *
 from common import timer_module
 from source.flow import flow_state as ST
 from source.interaction.interaction_core import itt
-from source.operator import pickup_operator
+from source.pickup import pickup_operator
 from source.interaction.minimap_tracker import tracker
 from source.controller import combat_controller
 from funclib.err_code_lib import ERR_PASS, ERR_STUCK, ERR_COLLECTOR_FLOW_TIMEOUT

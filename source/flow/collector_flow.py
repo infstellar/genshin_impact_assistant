@@ -1,7 +1,7 @@
 from source.util import *
 from common import flow_state as ST, timer_module
 from source.interaction.interaction_core import itt
-from source.operator import pickup_operator
+from source.pickup import pickup_operator
 from source.flow import teyvat_move_flow
 from source.interaction.minimap_tracker import tracker
 from source.controller import combat_controller

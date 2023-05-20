@@ -7,6 +7,7 @@ from source.funclib import generic_lib, movement
 from source.manager import img_manager, asset
 import cv2
 from source.interaction.minimap_tracker import tracker
+from source.assets.pickup import *
 
 SEARCH_MODE_FINDING = 1
 SEARCH_MODE_PICKUP = 0
@@ -93,8 +94,7 @@ class PickupOperator(BaseThreading):
                 self.pause_threading_flag = True
                 continue
             while 1:
-                if self.checkup_stop_func():
-                    break
+                if self.checkup_stop_func():break
                 ret = self.pickup_recognize()
                 if not ret:
                     break
@@ -164,6 +164,9 @@ class PickupOperator(BaseThreading):
             time.sleep(0.1)
             cap = self.itt.capture()
             cap = crop(cap, [x1 + ret[0] + 53, y1 + ret[1] - 20, x1 + ret[0] + 361,  y1 + ret[1] + 54])
+            if itt.similar_img(cap[:,:,:3], IconGeneralTalkBubble.image)>0.99:
+                logger.info(f"pickup recognize: talk bubble; skip")
+                return False
             # img_manager.qshow(cap)
             cap = self.itt.png2jpg(cap, channel='ui', alpha_num=160)
             # img = extract_white_letters(cap)
@@ -295,7 +298,7 @@ if __name__ == '__main__':
     # po.continue_threading()
     while 1:
         # po.find_collector()
-        time.sleep(0.5)
-        po.auto_pickup()
+        time.sleep(0.1)
+        po.pickup_recognize()
         # po.pickup_recognize()
         # print()
