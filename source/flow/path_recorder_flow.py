@@ -29,69 +29,12 @@ class PathRecorderConnector(FlowConnector):
         }
 
         self.min_distance = 1
-        # self.set_hotkey()
         self.path_name = ""
         self.last_direction = 999
         self.is_pickup_mode = False
         self.coll_name = ""
-        '''
-        Template:
-        {
-            "name":"",
-            "start_position":[],
-            "end_position":[],
-            "break_position":[],
-            "position_list":[
-                {
-                    "position":list,
-                    "motion":str, include 'move'(or 'walk'), 'swim', 'climb', 'fly'.
-                    "id":int
-                    "special_key":str
-                }, ...
-            ]
-        }
-
-        '''
-
-    # def set_hotkey(self):
-    #     self.listener.start()
-
-    # def unset_hotkey(self):
-    #     self.listener.stop()
-    #     pass
-
-    # def _add_key_to_dict(self, key):
-    #     if key == KeyCode.from_char('f'):
-    #         key = 'f'
-    #     elif key == Key.space:
-    #         key = 'space'
-    #     elif key == KeyCode.from_char('x'):
-    #         key = 'x'
-    #     elif key == Key.shift:
-    #         key = 'shift'
-    #     elif key == KeyCode.from_char('e'):
-    #         key = 'e'
-    #     else:
-    #         return
-    #     curr_posi = tracker.get_position()
-    #     self.collection_path_dict["position_list"].append(
-    #         {
-    #             "position":list(curr_posi),
-    #             "motion":None,
-    #             "id":len(self.collection_path_dict["position_list"])+1,
-    #             "special_key":key
-    #         }
-    #     )
-    #     # self.collection_path_dict["all_position"].append(curr_posi)
-    #     logger.info(t2t("special key added:")+
-    #                 str(key)
-    #                 )
-
 
 class PathRecorderCore(FlowTemplate):
-    
-    
-    
     def __init__(self, upper: PathRecorderConnector):
         super().__init__(upper,flow_id=ST.PATH_RECORDER ,next_flow_id=ST.PATH_RECORDER_END)
 

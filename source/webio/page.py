@@ -45,7 +45,8 @@ class Page:
             "MainPage": t2t("Main"),
             "SettingPage": t2t("Setting"),
             "CombatSettingPage": t2t("CombatSetting"),
-            "CollectorSettingPage": t2t("CollectorSetting")
+            "CollectorSettingPage": t2t("CollectorSetting"),
+            "MissionPage": t2t("MissionPage")
         }
         for i in range(len(l1)):
             if l1[i] in replace_dict:

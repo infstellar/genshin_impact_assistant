@@ -1,3 +1,7 @@
+import os, sys
+ROOT_PATH = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+if sys.path[0] != ROOT_PATH:
+    sys.path.insert(0, ROOT_PATH)
 from source.util import *
 from source.ui.ui import ui_control
 from source.ui import page as UIPage
@@ -15,15 +19,18 @@ itt.capture_obj = cc
 class VideoNotFoundError(Exception):pass
 
 video_path = r"" # 填写你的视频路径
-frameToStart = 3500 # 填写视频播放开始帧率
+frameToStart = 0 # 填写视频播放开始帧
 pn = "GlazeLily" # 填写TLPP文件名开头
 coll_name = "琉璃百合" # 填写采集物名称
 
 fcap = cv2.VideoCapture(video_path)
 fcap.set(cv2.CAP_PROP_POS_FRAMES, frameToStart)
-success, frame = fcap.read()
+try:
+    success, frame = fcap.read()
+except Exception as e:
+    logger.exception(e)
 if not success:
-    raise VideoNotFoundError
+    raise VideoNotFoundError(video_path)
 cc.set_cap(frame)
 genshin_map.init_position(tuple(genshin_map.convert_cvAutoTrack_to_GIMAP([1170.8503, -3181.4194])))
 genshin_map.small_map_init_flag = True
@@ -66,7 +73,7 @@ while success:
             logger.info(f"id {iii} position {tper.position} {tper.name} {tper.region}, d={rd[iii]}")
             iii+=1
         while 1:
-            iii = input("pls input id.")
+            iii = input("please input id.")
             if iii == '':
                 break
             else:
@@ -77,7 +84,7 @@ while success:
         logger.info(f"press any key to continue.")
         cv2.waitKey(0)
     elif k & 0xFF == ord('b'):
-        posi = input("pls input GIMAP posi")
+        posi = input("please input GIMAP posi")
         p = genshin_map.convert_GIMAP_to_cvAutoTrack(list(map(int,posi.split(','))))
         pp = tuple(list(map(int,genshin_map._find_closest_teleporter(p).position)))
         genshin_map.init_position(pp)

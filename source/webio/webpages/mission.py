@@ -112,7 +112,8 @@ class MissionPage(AdvancePage):
         output.put_row([output.put_button(label=t2t('Compile Missions'), onclick=self._onclick_rebuild_missions),
                         # output.put_button(label=t2t('Add Mission'), onclick=self._onclick_add_missions),
                         output.put_button(label=t2t('Save Changes'), onclick=self._onclick_save_missions)],scope=self.main_scope)
-        output.put_text(t2t('If no mission is displayed here or if you have modified any mission in the missions folder, click on the Compile Missions button'),scope=self.main_scope)
+        output.put_text(t2t('If no mission is displayed here or if you have modified any mission in the missions folder, click on the Compile Missions button.'),scope=self.main_scope)
+        output.put_text(t2t('The order of execution decreases from smallest to largest, with 0 being the highest priority.'),scope=self.main_scope)
         output.put_scope(name='SCOPE_PROCESSBAR',scope=self.main_scope)
         
         # put missions grid
