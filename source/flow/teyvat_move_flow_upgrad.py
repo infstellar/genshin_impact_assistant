@@ -345,11 +345,20 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
         
         
         self.landing_timer = timer_module.Timer(2)
-        self.sprint_timer = timer_module.AdvanceTimer(5).reset()
-        self.in_pt = timer_module.Performance()
+        self.sprint_timer = timer_module.AdvanceTimer(2.5).reset()
+        self.in_pt = timer_module.Performance(output_cycle=25)
 
     
     def CalculateTheDistanceBetweenTheAngleExtensionLineAndTheTarget(self, curr,target):
+        """Not In Use
+
+        Args:
+            curr (_type_): _description_
+            target (_type_): _description_
+
+        Returns:
+            _type_: _description_
+        """
         θ = genshin_map.get_rotation()
         if θ<0:
             θ+=360
@@ -367,6 +376,11 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
         return D
     
     def _exec_special_key(self, special_key):
+        """Not In Use
+
+        Args:
+            special_key (_type_): _description_
+        """
         # key_name = special_key
         itt.key_press(special_key)
         logger.info(f"key {special_key} exec.")
@@ -382,6 +396,10 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
     def state_before(self):
         self.curr_path = self.upper.path_dict["position_list"]
         self.curr_breaks = self.upper.path_dict["break_position"]
+        if 'adsorptive_position' in self.upper.path_dict:
+            self.adsorptive_position = self.upper.path_dict["adsorptive_position"]
+        else:
+            self.adsorptive_position = []
         self.ready_to_end = False
         self.init_start = False
         self.curr_path_index = 0
@@ -456,6 +474,7 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
             else:
                 break
         
+        
         # 动作识别
         is_jump = False
         is_nearby = euclidean_distance(curr_posi, target_posi)<2
@@ -487,15 +506,31 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
                 else:
                     self.landing_timer.reset()
         
+        # 吸附模式: 当当前距离小于允许吸附距离，开始向目标吸附点移动
+        if len(self.adsorptive_position)>0:
+            adsorptive_threshold = 6
+            if self.motion_state != IN_FLY:
+                if min(euclidean_distance_plist(curr_posi, self.adsorptive_position)) < adsorptive_threshold:
+                    for adsor_p in self.adsorptive_position:
+                        if euclidean_distance(adsor_p, curr_posi) < adsorptive_threshold:
+                            logger.info(f"adsorption: {adsor_p} start")
+                            for i in range(20):
+                                if movement.move_to_posi_LoopMode(adsor_p, self.upper.checkup_stop_func, threshold=1):break
+                                time.sleep(0.2)
+                                if i%5==0:
+                                    logger.debug(f"adsorption: {i}")
+                            logger.info(f"adsorption: {adsor_p} end")        
+                            self.adsorptive_position.pop(self.adsorptive_position.index(adsor_p))
+                            break
         
-        
-        
-        if self.is_stuck(curr_posi, threshold=18):
+        # 检测移动是否卡住
+        if self.is_stuck(curr_posi, threshold=45):
             itt.key_press('spacebar')
         if self.is_stuck(curr_posi, threshold=60):
             self._set_nfid(ST.END_TEYVAT_MOVE_STUCK)
             self._set_rfc(FC.END)
         
+        # 冲
         if self.sprint_timer.reached():
             if euclidean_distance(curr_posi, target_posi)>=30:
                 if self.motion_state == IN_MOVE:
@@ -503,6 +538,7 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
                     itt.key_press('left_shift')
                     self.sprint_timer.reset()
         
+        # 是否准备结束
         if self.ready_to_end:
             self.end_times += 1
             logger.debug(f"ready to end: {self.end_times} {offset}")
@@ -510,9 +546,13 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
             logger.warning(f"TMF PATH FAIL: CANNOT APPROACH TO END POSITION")
             self._set_nfid(ST.END_TEYVAT_MOVE_STUCK)
             self._set_rfc(FC.END)
+        
+        # 输出日志
         logger.debug(f"next break position distance: {euclidean_distance(target_posi, curr_posi)}")
         self.in_pt.output_log(mess='TMF Path Performance:')
         # delta_distance = self.CalculateTheDistanceBetweenTheAngleExtensionLineAndTheTarget(curr_posi,target_posi)
+        
+        # 移动视角
         delta_degree = abs(movement.calculate_delta_angle(genshin_map.get_rotation(),movement.calculate_posi2degree(target_posi)))
         if delta_degree >= 20:
             itt.key_up('w')
@@ -639,7 +679,7 @@ if __name__ == '__main__':
     #     movement.change_view_to_angle(degree, lambda:False)
     
     TMFC = TeyvatMoveFlowController()
-    TMFC.set_parameter(MODE="PATH",path_dict=load_json("LLDV20230513110820i0.json","assets\\TeyvatMovePath"), is_tp=True)
+    TMFC.set_parameter(MODE="PATH",path_dict=load_json("Cecilia20230513195754i0.json","assets\\TeyvatMovePath"), is_tp=True)
     # TMFC.set_parameter(MODE="AUTO", target_posi=[2032,-4879], is_tp=False)
     TMFC.start_flow()
     TMFC.start()

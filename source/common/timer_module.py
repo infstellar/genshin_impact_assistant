@@ -213,6 +213,7 @@ class Performance(Timer):
     def output_log(self, mess=''):
         if self._output_num%self.output_cycle==0:
             logger.info(f"{mess} {self.reset_and_get()}")
+            self._output_num+=1
         else:
             self.reset_and_get()
                    
