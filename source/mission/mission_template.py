@@ -187,7 +187,10 @@ class MissionExecutor(BaseThreading):
         return r
         
     def move_along(self, path, is_tp = None, is_precise_arrival=None):
-        path_dict = self.get_path_file(path)
+        if isinstance(path,str):
+            path_dict = self.get_path_file(path)
+        elif isinstance(path,dict):
+            path_dict = path
         is_reinit = True
         
         if is_tp is None:

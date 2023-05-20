@@ -5,7 +5,7 @@ META={
         'en_US':'Collect Crystalfly'
     }
 }
-class MissionCrystalfly(MissionExecutor):
+class MissionMain(MissionExecutor):
     def __init__(self):
         super().__init__(is_CFCF=True,is_PUO=True,is_TMCF=True)
         self.setName("MissionCrystalfly")
@@ -19,6 +19,6 @@ class MissionCrystalfly(MissionExecutor):
         # self.collect(MODE="AUTO",pickup_points=[[71, -2205],[65,-2230]])
         
 if __name__ == '__main__':
-    mission = MissionCrystalfly()
+    mission = MissionMain()
     mission.start()
     mission.continue_threading()

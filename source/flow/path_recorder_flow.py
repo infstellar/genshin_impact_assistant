@@ -270,11 +270,13 @@ class PathRecorderCore(FlowTemplate):
         tz = pytz.timezone('Etc/GMT-8')
         t = datetime.datetime.now(tz)
         date = t.strftime("%Y%m%d%H%M%S")
-        jsonname = f"{self.upper.path_name}{date}i{self.record_index}.json"
+        jsonname = f"{self.upper.path_name}{date}i{self.record_index}"
         self.record_index+=1
         # if self.upper.is_pickup_mode:
         #     self._fix_bps() # 这个功能好像与is_end=True功能冲突...
-        save_json(self.upper.collection_path_dict,json_name=jsonname,default_path=f"assets\\TeyvatMovePath")
+        with open(fr"{ROOT_PATH}/dev/tlpp/{jsonname}.pydict", 'w') as f:
+            f.write(str(self.upper.collection_path_dict))
+        # save_json(self.upper.collection_path_dict,json_name=jsonname,default_path=f"assets\\TeyvatMovePath")
         logger.info(f"recording save as {jsonname}")
         self.rfc = FC.INIT
 

@@ -5,7 +5,7 @@ META={
         'en_US':'Collect Sweat Flower 1'
     }
 }
-class MissionSweatFlower1(MissionExecutor):
+class MissionMain(MissionExecutor):
     def __init__(self):
         super().__init__(is_CFCF=True,is_PUO=True,is_TMCF=True)
         self.setName("MissionSweatFlower1")
@@ -17,6 +17,6 @@ class MissionSweatFlower1(MissionExecutor):
         # self.collect(MODE="AUTO",pickup_points=[[71, -2205],[65,-2230]])
         
 if __name__ == '__main__':
-    mission = MissionSweatFlower1()
+    mission = MissionMain()
     mission.start()
     mission.continue_threading()

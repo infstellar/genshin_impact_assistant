@@ -5,6 +5,6 @@ META={
         'en_US':'Collect Violetgrass 3'
     }
 }
-class MissionVioletgrass3(MissionJustCollect):
+class MissionMain(MissionJustCollect):
     def __init__(self):
         super().__init__("VioletgrassV220230513100802i0", "MissionVioletgrass3")

@@ -5,7 +5,7 @@ META={
         'en_US':'Collect Windwhell Aster'
     }
 }
-class MissionWindwhellAster(MissionJustCollectGroup):
+class MissionMain(MissionJustCollectGroup):
     def __init__(self):
         super().__init__(['WindwheelAster20230513192646i0',
                           'WindwheelAster20230513192116i0',
@@ -19,5 +19,5 @@ class MissionWindwhellAster(MissionJustCollectGroup):
 
 if __name__ == '__main__':
     import time
-    MissionWindwhellAster().start()
+    MissionMain().start()
     while 1:time.sleep(1)

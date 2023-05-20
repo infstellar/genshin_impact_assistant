@@ -12,25 +12,27 @@ CSDL.pause_threading()
 CSDL.stop_threading()
 cc = CustomCapture()
 itt.capture_obj = cc
-
 class VideoNotFoundError(Exception):pass
 
-fcap = cv2.VideoCapture(r'M:/Downkyi/BV16Y411j7mn.mp4') # 3720+
-frameToStart = 3500 # 5700 # 1800 # 3720+1320+840 # 720+240
+video_path = r"" # 填写你的视频路径
+frameToStart = 3500 # 填写视频播放开始帧率
+pn = "GlazeLily" # 填写TLPP文件名开头
+coll_name = "琉璃百合" # 填写采集物名称
+
+fcap = cv2.VideoCapture(video_path)
 fcap.set(cv2.CAP_PROP_POS_FRAMES, frameToStart)
 success, frame = fcap.read()
 if not success:
     raise VideoNotFoundError
 cc.set_cap(frame)
-
 genshin_map.init_position(tuple(genshin_map.convert_cvAutoTrack_to_GIMAP([1170.8503, -3181.4194])))
 genshin_map.small_map_init_flag = True
 
-pn = "GlazeLily"
+
 PRF = PathRecorderController()
 PRF.flow_connector.path_name = pn
 PRF.flow_connector.is_pickup_mode = True
-PRF.flow_connector.coll_name = "琉璃百合"
+PRF.flow_connector.coll_name = coll_name
 logger.info(f"Load over.")
 logger.info(f"ready to start.")
 # press `\` to start

@@ -25,11 +25,11 @@ def generate_mission_index():
         for i in mission_list:
             f.write(f"    if mission_name == '{i}':\n")
             f.write(f"        import source.mission.missions.{i}\n")
-            f.write(f"        return source.mission.missions.{i}.{i}()\n")
+            f.write(f"        return source.mission.missions.{i}.MissionMain()\n")
         for i in extra_mission_list:
             f.write(f"    if mission_name == '{i}':\n")
             f.write(f"        import missions.{i}\n")
-            f.write(f"        return missions.{i}.{i}()\n")
+            f.write(f"        return missions.{i}.MissionMain()\n")
         f.write("META = {}\n")
         f.write("if __name__ == '__main__':\n")
         f.write(f"    from source.funclib import combat_lib\n")

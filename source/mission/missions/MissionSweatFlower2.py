@@ -5,6 +5,6 @@ META={
         'en_US':'Collect Sweat Flower 2'
     }
 }
-class MissionSweatFlower2(MissionJustCollect):
+class MissionMain(MissionJustCollect):
     def __init__(self):
         super().__init__("SweatFlowerV2P120230507180640i0", "MissionSweatFlower2")

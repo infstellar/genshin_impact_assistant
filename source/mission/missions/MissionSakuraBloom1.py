@@ -8,7 +8,7 @@ META={
 }
 
 
-class MissionSakuraBloom1(MissionExecutor):
+class MissionMain(MissionExecutor):
     """13 SakuraBloom
 
     Args:
@@ -83,6 +83,6 @@ class MissionSakuraBloom1(MissionExecutor):
         # self.collect(MODE="AUTO",pickup_points=[[71, -2205],[65,-2230]])
         
 if __name__ == '__main__':
-    mission = MissionSakuraBloom1()
+    mission = MissionMain()
     mission.start()
     mission.continue_threading()

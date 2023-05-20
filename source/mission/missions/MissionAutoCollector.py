@@ -19,7 +19,7 @@ SUCC_RATE_WEIGHTING = 6
 COLLECTION = 0
 ENEMY = 1
 MINERAL = 2
-class MissionAutoCollector(MissionExecutor):
+class MissionMain(MissionExecutor):
     
     def sort_by_distance_and_succrate(self, x):
         distance = euclidean_distance(x["position"], self.current_position)
@@ -175,7 +175,7 @@ class MissionAutoCollector(MissionExecutor):
         # self.collect(MODE="AUTO",pickup_points=[[71, -2205],[65,-2230]])
         
 if __name__ == '__main__':
-    mission = MissionAutoCollector()
+    mission = MissionMain()
     mission.start()
     mission.continue_threading()
 
