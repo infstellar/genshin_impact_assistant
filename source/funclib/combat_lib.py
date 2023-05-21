@@ -476,6 +476,8 @@ def generate_teamfile_automatic():
             team_file[ordinal_numeral]["priority"] = POSITION2PRIORITY[team_file[ordinal_numeral]["position"]]+curr_name_list.index(name)
             team_file[ordinal_numeral]["name"] = name
             team_file[ordinal_numeral]["n"] = curr_name_list.index(name)+1
+            if 'idle' == team_file[ordinal_numeral]["trigger"]:
+                team_file[ordinal_numeral]["priority"] = 4000
         else:
             raise CharacterNameNotInCharacterParametersError(name)
     return team_file
