@@ -55,7 +55,7 @@ class MissionPage(AdvancePage):
                         ebd = iii['enabled']
             if ebd:ebd=['enabled']
             pin.put_checkbox(name=f"CHECKBOX_{mission_name}",options=[{'label':t2t('Enable'),'value':'enabled'}],scope=mission_name,value=ebd)
-            pin.put_input(name=f"PRIORITY_{mission_name}",label="Priority",scope=mission_name,type=input.NUMBER,value=pv)
+            pin.put_input(name=f"PRIORITY_{mission_name}",label=t2t("Priority"),scope=mission_name,type=input.NUMBER,value=pv)
     
     def _get_all_mission_info(self):
         mission_info = []
