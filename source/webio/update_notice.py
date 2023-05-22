@@ -15,6 +15,9 @@ def upd_message():
         ret_message+=f"config设置已重置，请重新设置config。\n"\
                         "tactic, collector等设置可以继续使用。\n"\
                         "注意：队伍设置现在默认为自适应，如果需要使用你自己的设置，请将AdaptiveTeamSetup(自适应队伍设置)设置为false。"
+    if version_num < 933:
+        ret_message+=f"升级自定义任务的UI界面\n\
+                       提升自定义任务采集成功率"
     
     x=load_json()
     x["Version"]=GIA_VERSION
