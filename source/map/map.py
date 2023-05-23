@@ -3,12 +3,16 @@ from source.ui.ui import ui_control
 import source.ui.page as UIPage
 from source.interaction.interaction_core import itt
 from source.manager import asset
-from source.map.data.teleporter import DICT_TELEPORTER
+from source.util import *
+if GLOBAL_LANG == 'zh_CN':
+    from source.map.data.teleporter_zh_CN import DICT_TELEPORTER
+elif GLOBAL_LANG == 'en_US':
+    from source.map.data.teleporter_en_US import DICT_TELEPORTER
 from source.map.detection.bigmap import BigMap
 from source.map.detection.minimap import MiniMap
 from source.map.extractor.convert import MapConverter
 from source.map.position.position import *
-from source.util import *
+
 import threading
 
 REGION_TEYVAT = [

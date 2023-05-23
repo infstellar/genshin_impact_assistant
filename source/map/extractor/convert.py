@@ -34,6 +34,7 @@ class MapConverter:
     TP_Statue = 'Statue'
     TP_Teleporter = 'Teleporter'
     TP_Domain = 'Domain'
+    TP_Instance = 'Instance'
 
     @classmethod
     def convert_REGION_to_LAYER(cls, region: str) -> str:
