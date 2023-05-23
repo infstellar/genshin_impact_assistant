@@ -3,7 +3,8 @@ META={
     'name':{
         'zh_CN':'采集清心1',
         'en_US':'Collect Qing xin 1'
-    }
+    },
+    'author':"GIA"
 }
 
 class MissionMain(MissionJustCollect):

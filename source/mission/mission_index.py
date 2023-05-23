@@ -80,6 +80,6 @@ if __name__ == '__main__':
     META['MissionGlazeLily'] = missions.MissionGlazeLily.META
     import missions.MissionQingXin1
     META['MissionQingXin1'] = missions.MissionQingXin1.META
-    with open('M:\ProgramData\GIA\genshin_impact_assistant\missions\mission_meta.py', 'w', encoding='utf-8') as f:
+    with open(r'M:\ProgramData\GIA\genshin_impact_assistant\missions\mission_meta.py', 'w', encoding='utf-8') as f:
         f.write(f'MISSION_META = {str(META)}')
     print('index end')

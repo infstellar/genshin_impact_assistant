@@ -12,7 +12,8 @@ META={
     'name':{
         'zh_CN':'通用自动采集',
         'en_US':'General Auto Collect'
-    }
+    },
+    'author':"GIA",
 }
 
 SUCC_RATE_WEIGHTING = 6

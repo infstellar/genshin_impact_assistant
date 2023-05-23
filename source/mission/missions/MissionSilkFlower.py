@@ -3,7 +3,8 @@ META={
     'name':{
         'zh_CN':'采集霓裳花1',
         'en_US':'Collect 霓裳花1'
-    }
+    },
+    'author':"GIA"
 }
 
 class MissionMain(MissionJustCollect):
