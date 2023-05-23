@@ -254,6 +254,18 @@
         "vision":"Hydro",
         "trigger":"e_ready",
         "position": "Support"
+    },
+    "Lisa":{
+        "E_short_cd_time": 1,
+        "E_long_cd_time": 16,
+        "Elast_time": 0,
+        "Epress_time": 0,
+        "Qlast_time": 15,
+        "Qcd_time": 20,
+        "tactic_group": "e?e~:none;q?q:none",
+        "vision":"Electro",
+        "trigger":"e_ready",
+        "position": "Support"
     }
     
 }
