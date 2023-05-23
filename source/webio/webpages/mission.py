@@ -37,11 +37,22 @@ class MissionPage(AdvancePage):
         j = load_json('mission_settings.json', f"{CONFIG_PATH}\\mission")
         for mission_name in self.missions:
             output.clear(mission_name)
+            mauthor = None
+            mnote = None
+            mtime = None
             if mission_name in MISSION_META:
                 if GLOBAL_LANG in MISSION_META[mission_name]['name']:
                     mission_show_name = MISSION_META[mission_name]['name'][GLOBAL_LANG]
                 else:
                     mission_show_name = mission_name
+                if 'author' in MISSION_META[mission_name]:
+                    mauthor = MISSION_META[mission_name]['author']
+                if 'note' in MISSION_META[mission_name]:
+                    mnote = MISSION_META[mission_name]['note']
+                if 'time' in MISSION_META[mission_name]:
+                    mtime = MISSION_META[mission_name]['time']
+                
+                
             else:
                 mission_show_name = mission_name
             output.put_text(mission_show_name, scope=mission_name)
@@ -56,6 +67,13 @@ class MissionPage(AdvancePage):
             if ebd:ebd=['enabled']
             pin.put_checkbox(name=f"CHECKBOX_{mission_name}",options=[{'label':t2t('Enable'),'value':'enabled'}],scope=mission_name,value=ebd)
             pin.put_input(name=f"PRIORITY_{mission_name}",label=t2t("Priority"),scope=mission_name,type=input.NUMBER,value=pv)
+            if mauthor!=None:
+                output.put_text(t2t('Author: ')+mauthor, scope=mission_name)
+            if mnote!=None:
+                output.put_text(t2t('Note: ')+mnote, scope=mission_name)
+            if mtime!=None:
+                output.put_text(t2t('Time: ')+mtime, scope=mission_name)
+
     
     def _get_all_mission_info(self):
         mission_info = []
