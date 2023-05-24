@@ -1,39 +1,23 @@
 from source.util import *
 from source.interaction.interaction_template import InteractionTemplate
 from common import vkcode, static_lib
-import win32api, win32con, pyautogui
+import win32api, win32con, pyautogui, pydirectinput
 
 class InteractionNormal(InteractionTemplate):
-    
+    isBorderlessWindow = GIAconfig.General_BorderlessWindow
     def __init__(self):
-        self.WM_MOUSEMOVE = 0x0200
-        self.WM_LBUTTONDOWN = 0x0201
-        self.WM_LBUTTONUP = 0x202
-        self.WM_MOUSEWHEEL = 0x020A
-        self.WM_RBUTTONDOWN = 0x0204
-        self.WM_RBUTTONDBLCLK = 0x0206
-        self.WM_RBUTTONUP = 0x0205
-        self.WM_KEYDOWN = 0x100
-        self.WM_KEYUP = 0x101
-        self.GetDC = ctypes.windll.user32.GetDC
-        self.CreateCompatibleDC = ctypes.windll.gdi32.CreateCompatibleDC
-        self.GetClientRect = ctypes.windll.user32.GetClientRect
-        self.CreateCompatibleBitmap = ctypes.windll.gdi32.CreateCompatibleBitmap
-        self.SelectObject = ctypes.windll.gdi32.SelectObject
-        self.BitBlt = ctypes.windll.gdi32.BitBlt
-        self.SRCCOPY = 0x00CC0020
-        self.GetBitmapBits = ctypes.windll.gdi32.GetBitmapBits
-        self.DeleteObject = ctypes.windll.gdi32.DeleteObject
-        self.ReleaseDC = ctypes.windll.user32.ReleaseDC
-        self.VK_CODE = vkcode.VK_CODE
-        self.PostMessageW = ctypes.windll.user32.PostMessageW
-        self.MapVirtualKeyW = ctypes.windll.user32.MapVirtualKeyW
-        self.VkKeyScanA = ctypes.windll.user32.VkKeyScanA
-        self.WHEEL_DELTA = 120
-        self.DEFAULT_DELAY_TIME = 0.05
         self.DEBUG_MODE = False
         self.CONSOLE_ONLY = False
-        
+    
+    def _fix_xy(self,x,y):
+        wx, wy, w, h = win32gui.GetWindowRect(static_lib.HANDLE)
+        x += wx
+        if self.isBorderlessWindow:
+            y += wy
+        else:
+            y = y + wy + 26
+        return x,y
+      
     def left_click(self):
         if not self.CONSOLE_ONLY:
             pyautogui.leftClick()
@@ -88,12 +72,13 @@ class InteractionNormal(InteractionTemplate):
                 y += wy
             else:
                 y = y + wy + 26
-                
-            win32api.SetCursorPos((x, y))
+            pydirectinput.moveTo(x,y) 
+            # win32api.SetCursorPos((x, y))
             
 if __name__ == '__main__':
     ittN = InteractionNormal()
-    while 1:
-        time.sleep(0.5)
-        ittN.left_click()
+    ittN.move_to(100,100)
+    # while 1:
+    #     time.sleep(0.5)
+    #     ittN.left_click()
     

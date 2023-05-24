@@ -4,7 +4,7 @@ from common import vkcode, static_lib
 import win32api, win32con, pyautogui
 
 class InteractionNormal(InteractionTemplate):
-    
+
     def __init__(self):
         self.WM_MOUSEMOVE = 0x0200
         self.WM_LBUTTONDOWN = 0x0201
