@@ -23,6 +23,7 @@ pickle
 traceback
 
 DEBUG_MODE = GIAconfig.General_DEBUG
+DEMO_MODE = True
 INTERACTION_MODE = GIAconfig.General_InteractionMode
 IS_DEVICE_PC = True
 
@@ -559,6 +560,7 @@ def get_circle_points(x,y,  show_res = False):
                 turtle.dot(2)
             points.append((px, py))
     return points
+
 
 
 if __name__ == '__main__':

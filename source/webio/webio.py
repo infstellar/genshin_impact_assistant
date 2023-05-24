@@ -35,6 +35,8 @@ def main():
         add_logger_to_GUI(source.webio.log_handler.webio_poster)
         first_run = True
     logger.info(t2t("webio启动完成"))
+    if DEMO_MODE:
+        logger.demo(f"DEMO START!")
 
 
 '''    handler = log_handler.WebioHandler()
