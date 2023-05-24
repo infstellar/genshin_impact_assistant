@@ -7,6 +7,8 @@ from pydantic import BaseModel
 from source.device.alas.config_utils import *
 from source.map.extractor.convert import MapConverter
 
+from source.en_tools.poi_json_api import zh2en
+
 
 class PointItemModel(BaseModel):
     count: int
@@ -52,7 +54,7 @@ class PointInfoModel(BaseModel):
         if '神像' in tag:
             return MapConverter.TP_Statue
         if tag == '副本':
-            return MapConverter.TP_Domain
+            return MapConverter.TP_Instance
         if tag == '秘境':
             return MapConverter.TP_Domain
         return None
@@ -97,9 +99,10 @@ class ItemModel(BaseModel):
     itemId: int
     name: str
     sortIndex: int
-    specialFlag: int
+    # specialFlag: int
     typeIdList: t.List[int]
     version: int
+    
 
 
 class AreaModel(BaseModel):
@@ -179,9 +182,10 @@ class PoiJsonApi:
         19: MapConverter.REGION_Sumeru,
         21: MapConverter.REGION_Sumeru,
         22: MapConverter.REGION_Sumeru,
+        23: MapConverter.REGION_Sumeru,
     }
 
-    def iter_teleporter(self):
+    def iter_teleporter(self, lang='zh_CN'):
         for id_, row in self.data.items():
             if row.first_item is None:
                 continue
@@ -190,20 +194,22 @@ class PoiJsonApi:
             region = self.DICT_AREA_ID.get(area_id, area_id)
             layer = MapConverter.convert_REGION_to_LAYER(region)
             position = MapConverter.convert_kongying_to_GIMAP(row.position_tuple, layer=layer).round(3)
-
+            if lang=='en_US':
+                name = zh2en(row.teleporter_name)
+            
             tp = TeleporterModel(
                 id=row.id,
                 region=region,
                 tp=row.teleporter,
                 item_id=row.first_item.itemId,
-                name=row.teleporter_name,
+                name=name,
                 position=tuple(position),
             )
             yield tp
 
-    def save_teleporter(self):
+    def save_teleporter(self,lang='zh_CN'):
         from source.device.alas.map_grids import SelectedGrids
-        tp = SelectedGrids(list(self.iter_teleporter()))
+        tp = SelectedGrids(list(self.iter_teleporter(lang=lang)))
         tp = tp.sort('region', 'item_id', 'name', 'id')
 
         from source.device.alas.code_generator import CodeGenerator
@@ -214,9 +220,11 @@ class PoiJsonApi:
         with gen.Dict('DICT_TELEPORTER'):
             for row in tp:
                 gen.DictItem(row.id, row)
-        gen.write('./source/map/data/teleporter.py')
+        gen.write(f'./source/map/data/teleporter_{lang}.py')
 
 
 if __name__ == '__main__':
+    lang='en_US'
     self = PoiJsonApi()
-    self.save_teleporter()
+    self.save_teleporter(lang=lang)
+    

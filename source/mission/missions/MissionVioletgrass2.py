@@ -3,7 +3,8 @@ META={
     'name':{
         'zh_CN':'采集琉璃袋2',
         'en_US':'Collect Violetgrass 2'
-    }
+    },
+    'author':"GIA"
 }
 class MissionMain(MissionJustCollect):
     def __init__(self):

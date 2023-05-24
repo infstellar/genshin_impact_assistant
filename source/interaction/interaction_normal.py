@@ -129,3 +129,10 @@ class InteractionNormal(InteractionTemplate):
                 y = y + wy + 26
                 
             win32api.SetCursorPos((x, y))
+            
+if __name__ == '__main__':
+    ittN = InteractionNormal()
+    while 1:
+        time.sleep(0.5)
+        ittN.left_click()
+    

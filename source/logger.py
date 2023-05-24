@@ -20,7 +20,11 @@ def warning_once(self, message):
         self.warning(message)
         warned_dict[message]=True
 
+def demo(self, message):
+    self.info(f"DEMO: {message}")
+
 logger.warning_once = types.MethodType(warning_once, logger)
+logger.demo = types.MethodType(demo, logger)
 
 # configure loguru
 logger.remove(handler_id=None)

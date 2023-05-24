@@ -358,7 +358,7 @@ def is_character_healthy():
         target_col = [35,215,150]
         return color_similar(col,target_col,threshold=20)
 
-def get_characters_name(max_retry = 25):
+def get_characters_name(max_retry = 50):
     retry_times = 0
     for retry_times in range(max_retry):
         cap = itt.capture(jpgmode=0)
@@ -378,7 +378,6 @@ def get_characters_name(max_retry = 25):
                 if retry_times<max_retry-1:
                     logger.warning(f"get characters name fail, retry {retry_times}")
                     itt.move_to(200,0,relative=True)
-                    itt.delay(0.2)
                     break
                 else:
                     ret_list.append(None)

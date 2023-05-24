@@ -3,7 +3,8 @@ META={
     'name':{
         'zh_CN':'采集晶蝶',
         'en_US':'Collect Crystalfly'
-    }
+    },
+    'author':"GIA",
 }
 class MissionMain(MissionExecutor):
     def __init__(self):

@@ -3,7 +3,8 @@ META={
     'name':{
         'zh_CN':'采集绝云椒椒',
         'en_US':'Collect Jueyun Chili'
-    }
+    },
+    'author':"GIA",
 }
 class MissionMain(MissionJustCollectGroup):
     def __init__(self):

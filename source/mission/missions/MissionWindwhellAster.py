@@ -3,7 +3,9 @@ META={
     'name':{
         'zh_CN':'采集风车菊',
         'en_US':'Collect Windwhell Aster'
-    }
+    },
+    'author':"GIA",
+    'time':'UTC+08 2023-05-15'
 }
 class MissionMain(MissionJustCollectGroup):
     def __init__(self):

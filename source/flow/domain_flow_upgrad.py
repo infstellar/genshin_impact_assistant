@@ -172,6 +172,7 @@ class FindingTree(FlowTemplate):
         if self.upper.lockOnFlag <= 5:
             is_tree = self.align_to_tree()
             self.upper.ahead_timer.reset()
+            direc = True
             if not is_tree:
                 movement.view_to_angle_domain(-90, self.upper.checkup_stop_func)
 
@@ -180,9 +181,9 @@ class FindingTree(FlowTemplate):
                         direc = not direc
                         self.upper.move_timer.reset()
                     if direc:
-                        movement.move(movement.LEFT, distance=4)
+                        movement.move(movement.LEFT, distance=10)
                     else:
-                        movement.move(movement.RIGHT, distance=4)
+                        movement.move(movement.RIGHT, distance=10)
 
                 else:  # maybe can't look at tree
                     logger.debug('can not find tree. moving back.')
@@ -264,6 +265,11 @@ class DomainFlowController(FlowController):
         self.flow_connector.reset()
         self.current_flow_id = ST.INIT_MOVETO_CHALLENGE
         self.reset_err_code()
+
+if __name__ == '__main__':
+    dfc = DomainFlowController()
+    dfc.set_current_flow_id(ST.INIT_FINGING_TREE)
+    dfc.start()
 
 
     

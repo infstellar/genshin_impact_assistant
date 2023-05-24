@@ -1,10 +1,13 @@
 from source.mission.mission_template import MissionExecutor, ERR_PASS, ERR_FAIL
 from source.interaction.interaction_core import itt
+from source.util import *
 META={
     'name':{
         'zh_CN':'采集绯樱绣球1',
         'en_US':'Collect Sakura Bloom 1'
-    }
+    },
+    'author':"GIA",
+    'note':t2t("Need Lisa")
 }
 
 

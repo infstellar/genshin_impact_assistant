@@ -1,7 +1,7 @@
 from typing import TextIO
 
 from source.webio import manager
-
+from source.util import DEMO_MODE
 
 def ansl_code2col(ansl_code):
     if ansl_code == "0":
@@ -24,7 +24,9 @@ def ansl_code2col(ansl_code):
     return "NO_COL"
 
 def webio_poster(record:str):
-    
+    if DEMO_MODE:
+        if "DEMO" not in record:
+            return
     record_list = record.split("\x1b")
     color = "black"
     for text in record_list:
