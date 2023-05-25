@@ -3,6 +3,8 @@ from source.util import *
 from source.common import timer_module
 import numpy as np
 from source.common import static_lib
+from source.util import np
+import pyautogui
 
 
 
@@ -166,6 +168,16 @@ class WindowsCapture(Capture):
         # 返回截图数据为numpy.ndarray
         ret = np.frombuffer(buffer, dtype=np.uint8).reshape(height, width, 4)
         return ret
+    
+class CloudCapture(Capture):
+    def __init__(self):
+        super().__init__()
+    
+    def _get_capture(self) -> np.ndarray:
+        
+        wx, wy, w, h = win32gui.GetWindowRect(static_lib.HANDLE)
+        pyautogui.screenshot(region=[0,0,100,100])
+    
     
 class EmulatorCapture(Capture):
     def __init__(self):
