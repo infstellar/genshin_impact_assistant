@@ -3,16 +3,7 @@ from source.util import *
 
 # save_json(load_json(json_name="icon.json", default_path="assets\\POI_JSON_API"),json_name="icon.json", default_path="assets\\POI_JSON_API")
 LANG = 'en_US'
-EN2ZH = load_json('en_US.json',r"assets/POI_JSON_API/LANGUAGE")
-
-def en2zh(x):
-    if LANG == 'en_US':
-        if x in EN2ZH:
-            return EN2ZH[x]
-        else:
-            return x
-    else:
-        return x
+from source.en_tools.poi_json_api import zh2en
 
 def replace_str(d):
     if LANG == 'en_US':
@@ -25,15 +16,15 @@ def replace_str(d):
                         if isinstance(i, dict):
                             replace_str(i)
                         elif isinstance(i, str):
-                            v[v.index(i)] = en2zh(v[v.index(i)])
+                            v[v.index(i)] = zh2en(v[v.index(i)])
                 elif isinstance(v, str):
-                    d[k] = en2zh(d[k])
+                    d[k] = zh2en(d[k])
         elif isinstance(d,list):
             for i in d:
                 if isinstance(i, dict):
                     replace_str(i)
                 elif isinstance(i, str):
-                    d[d.index(i)] = en2zh(d[d.index(i)])
+                    d[d.index(i)] = zh2en(d[d.index(i)])
         return d
     else:
         return d
@@ -52,9 +43,9 @@ def create_indexes():
         for i in j:
             s.setdefault(i["markerTitle"], []).append(str(ii))
             s[i["markerTitle"]] = list(set(s[i["markerTitle"]]))
-            if en2zh(i["markerTitle"]) != i["markerTitle"]:
-                s.setdefault(en2zh(i["markerTitle"]), []).append(str(ii))
-            s[en2zh(i["markerTitle"])] = list(set(s[en2zh(i["markerTitle"])]))
+            if zh2en(i["markerTitle"]) != i["markerTitle"]:
+                s.setdefault(zh2en(i["markerTitle"]), []).append(str(ii))
+            s[zh2en(i["markerTitle"])] = list(set(s[zh2en(i["markerTitle"])]))
         print(s)
     # replace_str(s)
     save_json(s, "ID_INDEX.json", f"assets\\POI_JSON_API\\{LANG}")
@@ -87,7 +78,7 @@ def get_all_position():
             rl.append(list(map(float,i['position'].split(',') )))
     save_json(rl, "all_position.json", f"assets\\POI_JSON_API", sort_keys=False)
 create_refreshTime()
-# reshape_json()
+reshape_json()
 create_indexes()
 create_name()
 get_all_position()
