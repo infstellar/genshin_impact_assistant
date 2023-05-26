@@ -10,16 +10,16 @@ from source.common.timer_module import AdvanceTimer
 from source.controller.combat_controller import CombatController
 from source.map.map import genshin_map
 from source.exceptions.mission import *
+from source.mission.cvars import *
 
 class MissionError(Exception):pass
 
-ERR_FAIL = "FAIL"
-
-EXCEPTION_RECOVER = 'recover'
-EXCEPTION_SKIP = 'skip'
-EXCEPTION_RAISE = 'raise'
-
 class MissionExecutor(BaseThreading):
+    """Mission执行器的内部实现.
+
+    Args:
+        BaseThreading (_type_): _description_
+    """
     def __init__(self, is_CFCF=False, is_TMCF=False, is_PUO=False, is_CCT=False):
         super().__init__()
         self.is_CFCF=is_CFCF
@@ -214,6 +214,7 @@ class MissionExecutor(BaseThreading):
         self.CCT.pause_threading()
     
     def pickup_once(self):
+        self._init_sub_threading("PUO")
         self.PUO.pickup_recognize()
     
     def collect(self, MODE = None,
@@ -286,19 +287,19 @@ class MissionExecutor(BaseThreading):
     def reg_exception_low_hp(self, state=True):
         self.exception_list["LowHP"] = state
     
-    def reg_default_arrival_mode(self, state=True):
+    def set_default_arrival_mode(self, state=True):
         self.default_precise_arrive = state
     
     def reg_fight_if_needed(self, state=True):
         pass
     
-    def reg_raise_exception(self, state=True):
+    def set_raise_exception(self, state=True):
         self.raise_exception_flag = state
     
     def set_exception_mode(self, mode):
         self.handle_exception_mode = mode
     
-    def tmf_handle_stuck_then_skip(self,k) -> bool:
+    def handle_tmf_stuck_then_skip(self,k) -> bool:
         if k == ERR_STUCK:
             return True
         return False
@@ -309,13 +310,13 @@ class MissionExecutor(BaseThreading):
             return True
         return False
     
-    def tmf_handle_stuck_then_raise(self,k) -> bool:
+    def handle_tmf_stuck_then_raise(self,k) -> bool:
         if k == ERR_STUCK:
             raise TeyvatMoveError('Move Stuck')
             return True
         return False
     
-    def col_handle_timeout_then_recover(self,k) -> bool:
+    def handle_col_timeout_then_recover(self,k) -> bool:
         pass
     
     def switch_character_to(self, name:str):

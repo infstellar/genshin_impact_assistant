@@ -12,7 +12,7 @@ class ReliableHelper_P2966N4774(CommissionTemplate, Talk):
         Talk.__init__(self)
     
     def exec_mission(self):
-        self.reg_default_arrival_mode(True)
+        self.set_default_arrival_mode(True)
         self.reg_fight_if_needed(True)
         self.move_along("ReliableHelper20230415184809i0")
         self.talk_with_npc()
