@@ -39,6 +39,7 @@ class AimOperator(BaseThreading):
         self.kdwe_timer = Timer()
         self.circle_search_timer = AdvanceTimer(4,count=3).start() # call 3 times and continue 4 sec.
         self.keep_distance_timer = AdvanceTimer(3,count=3).start()
+        self.aim_timeout_retry_timer = AdvanceTimer(6).start()
         self.corr_rate = 1
         self.sco_blocking_request = ThreadBlockingRequest()
 
@@ -86,6 +87,7 @@ class AimOperator(BaseThreading):
                         self.enemy_flag = True
                     else: # 没找到，根据红色箭头移动寻找
                         if self.checkup_stop_func():continue
+                        if not self.aim_timeout_retry_timer.reached(): continue # 超时后6秒内不寻找
                         self.sco_blocking_request.send_request('_moving_find_enemy') # 向SCO申请暂停Tactic执行
                         if True: # set to False when debug this module
                             print(self.sco_blocking_request.waiting_until_reply(stop_func=self.checkup_stop_func, timeout=60))
@@ -239,6 +241,7 @@ class AimOperator(BaseThreading):
             if move_timer.reached():
                 itt.key_up('w')
                 combat_lib.CSDL.unfreeze_state()
+                self.aim_timeout_retry_timer.reset()
                 logger.debug(f"_moving_find_enemy timeout")
                 return False
             if combat_lib.combat_statement_detection()[0]:
