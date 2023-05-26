@@ -1,5 +1,5 @@
 {
-    "Albedo":{
+    "Albedo": {
         "E_long_cd_time": 0,
         "E_short_cd_time": 0,
         "Elast_time": 0,
@@ -7,9 +7,9 @@
         "Qcd_time": 0,
         "Qlast_time": 0,
         "vision": "Geo",
-        "position":"Support",
-        "trigger":"e_ready",
-        "tactic_group":"e?e:none;q?q:none"
+        "position": "Support",
+        "trigger": "e_ready",
+        "tactic_group": "e?e:none;q?q:none"
     },
     "Bennett": {
         "E_long_cd_time": 10,
@@ -19,8 +19,8 @@
         "Qlast_time": 12,
         "Qcd_time": 15,
         "position": "Support",
-        "vision":"Pyro",
-        "trigger":"e_ready",
+        "vision": "Pyro",
+        "trigger": "e_ready",
         "tactic_group": "e?e~:none;q?q:none"
     },
     "Ningguang": {
@@ -31,10 +31,9 @@
         "Qlast_time": 0,
         "Qcd_time": 12,
         "position": "Main",
-        "vision":"Geo",
-        "trigger":"idle",
+        "vision": "Geo",
+        "trigger": "idle",
         "tactic_group": "e?e.500:none;q?q:none;a,700,a,500,a~"
-        
     },
     "Yoimiya": {
         "E_long_cd_time": 0,
@@ -44,10 +43,9 @@
         "Qlast_time": 10,
         "Qcd_time": 12,
         "position": "Main",
-        "vision":"Pyro",
-        "trigger":"e_ready",
+        "vision": "Pyro",
+        "trigger": "e_ready",
         "tactic_group": "e?e:none;#@e?a:none;"
-        
     },
     "Yun Jin": {
         "E_long_cd_time": 10,
@@ -57,10 +55,9 @@
         "Qlast_time": 0,
         "Qcd_time": 12,
         "position": "Support",
-        "vision":"Geo",
-        "trigger":"e_ready",
+        "vision": "Geo",
+        "trigger": "e_ready",
         "tactic_group": "e?e~:none;q?q:none"
-        
     },
     "Zhongli": {
         "E_long_cd_time": 12,
@@ -71,10 +68,9 @@
         "Qlast_time": 0,
         "Qcd_time": 12,
         "position": "Shield",
-        "vision":"Geo",
-        "trigger":"e_ready",
+        "vision": "Geo",
+        "trigger": "e_ready",
         "tactic_group": "e?e~:none;q?q:none"
-        
     },
     "Ganyu": {
         "E_long_cd_time": 10,
@@ -84,10 +80,9 @@
         "Qlast_time": 15,
         "Qcd_time": 15,
         "position": "Support",
-        "vision":"Cryo",
-        "trigger":"e_ready,q_ready",
+        "vision": "Cryo",
+        "trigger": "e_ready,q_ready",
         "tactic_group": "e?e:none;q?q:none;"
-        
     },
     "Yelan": {
         "E_long_cd_time": 0,
@@ -97,10 +92,9 @@
         "Qlast_time": 15,
         "Qcd_time": 18,
         "position": "Support",
-        "vision":"Hydro",
-        "trigger":"e_ready",
+        "vision": "Hydro",
+        "trigger": "e_ready",
         "tactic_group": "e?e.e:none;q?q:none;#@q?a:none;"
-        
     },
     "Kamisato Ayaka": {
         "E_short_cd_time": 10,
@@ -110,10 +104,9 @@
         "tactic_group": "e?e:none;q?q:sp.a~;",
         "Qlast_time": 5,
         "Qcd_time": 20,
-        "vision":"Cryo",
-        "trigger":"e_ready",
+        "vision": "Cryo",
+        "trigger": "e_ready",
         "position": "Main"
-    
     },
     "Diona": {
         "E_short_cd_time": 6,
@@ -123,10 +116,9 @@
         "tactic_group": "e?e~:none;e?e~:none;q?q:none;",
         "Qlast_time": 12,
         "Qcd_time": 20,
-        "vision":"Cryo",
-        "trigger":"e_ready",
+        "vision": "Cryo",
+        "trigger": "e_ready",
         "position": "Shield"
-
     },
     "Xiangling": {
         "E_short_cd_time": 12,
@@ -136,10 +128,9 @@
         "tactic_group": "e?e:none;q?q:none;",
         "Qlast_time": 10,
         "Qcd_time": 20,
-        "vision":"Pyro",
-        "trigger":"e_ready,q_ready",
+        "vision": "Pyro",
+        "trigger": "e_ready,q_ready",
         "position": "Support"
-        
     },
     "Shenhe": {
         "E_short_cd_time": 10,
@@ -149,10 +140,9 @@
         "tactic_group": "e?e:none;q?q:none;",
         "Qlast_time": 12,
         "Qcd_time": 20,
-        "vision":"Cryo",
-        "trigger":"e_ready",
+        "vision": "Cryo",
+        "trigger": "e_ready",
         "position": "Support"
-        
     },
     "Kaedehara Kazuha": {
         "E_short_cd_time": 6,
@@ -162,10 +152,9 @@
         "tactic_group": "e?e~.a3:none;q?q:none;",
         "Qlast_time": 8,
         "Qcd_time": 15,
-        "vision":"Anemo",
-        "trigger":"e_ready",
+        "vision": "Anemo",
+        "trigger": "e_ready",
         "position": "Main"
-        
     },
     "Raiden Shogun": {
         "E_short_cd_time": 10,
@@ -175,10 +164,9 @@
         "tactic_group": "e?e:none;q?q:none;",
         "Qlast_time": 7,
         "Qcd_time": 18,
-        "vision":"Electro",
-        "trigger":"e_ready",
+        "vision": "Electro",
+        "trigger": "e_ready",
         "position": "Support"
-        
     },
     "Hu Tao": {
         "E_short_cd_time": 16,
@@ -188,11 +176,10 @@
         "tactic_group": "e?e:none;#@e?a~.j:none;q?q:none",
         "Qlast_time": 0,
         "Qcd_time": 15,
-        "vision":"Pyro",
-        "trigger":"e_ready",
+        "vision": "Pyro",
+        "trigger": "e_ready",
         "position": "Main",
         "long_attack_time": 0.9
-        
     },
     "Mona": {
         "E_short_cd_time": 12,
@@ -202,12 +189,11 @@
         "tactic_group": "e?e:none;q?q:none",
         "Qlast_time": 0,
         "Qcd_time": 15,
-        "vision":"Hydro",
-        "trigger":"e_ready",
+        "vision": "Hydro",
+        "trigger": "e_ready",
         "position": "Support"
-        
     },
-    "Qiqi":{
+    "Qiqi": {
         "E_short_cd_time": 30,
         "E_long_cd_time": 0,
         "Elast_time": 15,
@@ -215,11 +201,11 @@
         "Qlast_time": 15,
         "Qcd_time": 20,
         "tactic_group": "e?e:none;q?q:none",
-        "vision":"Cryo",
-        "trigger":"e_ready",
+        "vision": "Cryo",
+        "trigger": "e_ready",
         "position": "Recovery"
     },
-    "Keqing":{
+    "Keqing": {
         "E_short_cd_time": 7.5,
         "E_long_cd_time": 0,
         "Elast_time": 0,
@@ -227,11 +213,11 @@
         "Qlast_time": 0,
         "Qcd_time": 12,
         "tactic_group": "e?e:none;q?q:none",
-        "vision":"Electro",
-        "trigger":"e_ready",
+        "vision": "Electro",
+        "trigger": "e_ready",
         "position": "Support"
     },
-    "Sangonomiya Kokomi":{
+    "Sangonomiya Kokomi": {
         "E_short_cd_time": 20,
         "E_long_cd_time": 0,
         "Elast_time": 12,
@@ -239,11 +225,11 @@
         "Qlast_time": 10,
         "Qcd_time": 18,
         "tactic_group": "e?e:none;q?q:none",
-        "vision":"Hydro",
-        "trigger":"e_ready",
+        "vision": "Hydro",
+        "trigger": "e_ready",
         "position": "Recovery"
     },
-    "Xingqiu":{
+    "Xingqiu": {
         "E_short_cd_time": 21,
         "E_long_cd_time": 0,
         "Elast_time": 15,
@@ -251,11 +237,11 @@
         "Qlast_time": 15,
         "Qcd_time": 20,
         "tactic_group": "e?e:none;q?q:none",
-        "vision":"Hydro",
-        "trigger":"e_ready",
+        "vision": "Hydro",
+        "trigger": "e_ready",
         "position": "Support"
     },
-    "Lisa":{
+    "Lisa": {
         "E_short_cd_time": 1,
         "E_long_cd_time": 16,
         "Elast_time": 0,
@@ -263,9 +249,524 @@
         "Qlast_time": 15,
         "Qcd_time": 20,
         "tactic_group": "e?e~:none;q?q:none",
-        "vision":"Electro",
-        "trigger":"e_ready",
+        "vision": "Electro",
+        "trigger": "e_ready",
         "position": "Support"
+    },
+    "Jean": {
+        "E_short_cd_time": 6,
+        "E_long_cd_time": 0,
+        "Elast_time": 0,
+        "Epress_time": 0,
+        "Qcd_time": 20,
+        "Qlast_time": 0,
+        "tactic_group": "e?e:none;q?q:none;",
+        "vision": "Anemo",
+        "trigger": "e_ready",
+        "position": "Normal"
+    },
+    "Amber": {
+        "E_short_cd_time": 15,
+        "E_long_cd_time": 0,
+        "Elast_time": 8,
+        "Epress_time": 0,
+        "Qcd_time": 12,
+        "Qlast_time": 2,
+        "tactic_group": "e?e:none;q?q:none;",
+        "vision": "Pyro",
+        "trigger": "e_ready",
+        "position": "Normal"
+    },
+    "Kaeya": {
+        "E_short_cd_time": 6,
+        "E_long_cd_time": 0,
+        "Elast_time": 0,
+        "Epress_time": 0,
+        "Qcd_time": 15,
+        "Qlast_time": 8,
+        "tactic_group": "e?e:none;q?q:none;",
+        "vision": "Cryo",
+        "trigger": "e_ready",
+        "position": "Normal"
+    },
+    "Venti": {
+        "E_short_cd_time": 6,
+        "E_long_cd_time": 15,
+        "Elast_time": 0,
+        "Epress_time": 0,
+        "Qcd_time": 15,
+        "Qlast_time": 8,
+        "tactic_group": "e?e:none;q?q:none;",
+        "vision": "Anemo",
+        "trigger": "e_ready",
+        "position": "Normal"
+    },
+    "Razor": {
+        "E_short_cd_time": 6,
+        "E_long_cd_time": 10,
+        "Elast_time": 0,
+        "Epress_time": 0,
+        "Qcd_time": 20,
+        "Qlast_time": 15,
+        "tactic_group": "e?e:none;q?q:none;",
+        "vision": "Electro",
+        "trigger": "e_ready",
+        "position": "Normal"
+    },
+    "Noelle": {
+        "E_short_cd_time": 24,
+        "E_long_cd_time": 0,
+        "Elast_time": 12,
+        "Epress_time": 0,
+        "Qcd_time": 15,
+        "Qlast_time": 15,
+        "tactic_group": "e?e:none;q?q:none;",
+        "vision": "Geo",
+        "trigger": "e_ready",
+        "position": "Shield"
+    },
+    "Fischl": {
+        "E_short_cd_time": 25,
+        "E_long_cd_time": 0,
+        "Elast_time": 10,
+        "Epress_time": 0,
+        "Qcd_time": 15,
+        "Qlast_time": 0,
+        "tactic_group": "e?e:none;q?q:none;",
+        "vision": "Electro",
+        "trigger": "e_ready",
+        "position": "Normal"
+    },
+    "Diluc": {
+        "E_short_cd_time": 10,
+        "E_long_cd_time": 0,
+        "Elast_time": 0,
+        "Epress_time": 0,
+        "Qcd_time": 12,
+        "Qlast_time": 8,
+        "tactic_group": "e?e.e:none;q?q:none;",
+        "vision": "Pyro",
+        "trigger": "e_ready",
+        "position": "Normal"
+    },
+    "Klee": {
+        "E_short_cd_time": 20,
+        "E_long_cd_time": 0,
+        "Elast_time": 17,
+        "Epress_time": 0,
+        "Qcd_time": 15,
+        "Qlast_time": 10,
+        "tactic_group": "e?e:none;q?q:none;",
+        "vision": "Pyro",
+        "trigger": "e_ready",
+        "position": "Normal"
+    },
+    "Barbara": {
+        "E_short_cd_time": 32,
+        "E_long_cd_time": 0,
+        "Elast_time": 15,
+        "Epress_time": 0,
+        "Qcd_time": 20,
+        "Qlast_time": 0,
+        "tactic_group": "e?e:none;q?q:none;",
+        "vision": "Hydro",
+        "trigger": "e_ready",
+        "position": "Normal"
+    },
+    "Sucrose": {
+        "E_short_cd_time": 15,
+        "E_long_cd_time": 0,
+        "Elast_time": 0,
+        "Epress_time": 0,
+        "Qcd_time": 20,
+        "Qlast_time": 6,
+        "tactic_group": "e?e:none;q?q:none;",
+        "vision": "Anemo",
+        "trigger": "e_ready",
+        "position": "Normal"
+    },
+    "Rosaria": {
+        "E_short_cd_time": 6,
+        "E_long_cd_time": 0,
+        "Elast_time": 0,
+        "Epress_time": 0,
+        "Qcd_time": 15,
+        "Qlast_time": 8,
+        "tactic_group": "e?e:none;q?q:none;",
+        "vision": "Cryo",
+        "trigger": "e_ready",
+        "position": "Normal"
+    },
+    "Eula": {
+        "E_short_cd_time": 4,
+        "E_long_cd_time": 10,
+        "Elast_time": 18,
+        "Epress_time": 0,
+        "Qcd_time": 20,
+        "Qlast_time": 7,
+        "tactic_group": "e?e:none;q?q:none;",
+        "vision": "Cryo",
+        "trigger": "e_ready",
+        "position": "Normal"
+    },
+    "Mika": {
+        "E_short_cd_time": 15,
+        "E_long_cd_time": 0,
+        "Elast_time": 12,
+        "Epress_time": 0,
+        "Qcd_time": 18,
+        "Qlast_time": 15,
+        "tactic_group": "e?e:none;q?q:none;",
+        "vision": "Cryo",
+        "trigger": "e_ready",
+        "position": "Normal"
+    },
+    "Chongyun": {
+        "E_short_cd_time": 15,
+        "E_long_cd_time": 0,
+        "Elast_time": 10,
+        "Epress_time": 0,
+        "Qcd_time": 12,
+        "Qlast_time": 0,
+        "tactic_group": "e?e:none;q?q:none;",
+        "vision": "Cryo",
+        "trigger": "e_ready",
+        "position": "Normal"
+    },
+    "Beidou": {
+        "E_short_cd_time": 7.5,
+        "E_long_cd_time": 0,
+        "Elast_time": 0,
+        "Epress_time": 0,
+        "Qcd_time": 20,
+        "Qlast_time": 15,
+        "tactic_group": "e?e:none;q?q:none;",
+        "vision": "Electro",
+        "trigger": "e_ready",
+        "position": "Normal"
+    },
+    "Xinyan": {
+        "E_short_cd_time": 18,
+        "E_long_cd_time": 0,
+        "Elast_time": 12,
+        "Epress_time": 0,
+        "Qcd_time": 15,
+        "Qlast_time": 2,
+        "tactic_group": "e?e:none;q?q:none;",
+        "vision": "Pyro",
+        "trigger": "e_ready",
+        "position": "Normal"
+    },
+    "Xiao": {
+        "E_short_cd_time": 10,
+        "E_long_cd_time": 0,
+        "Elast_time": 0,
+        "Epress_time": 0,
+        "Qcd_time": 18,
+        "Qlast_time": 15,
+        "tactic_group": "e?e.e:none;q?q:none;",
+        "vision": "Anemo",
+        "trigger": "e_ready",
+        "position": "Normal"
+    },
+    "Yanfei": {
+        "E_short_cd_time": 9,
+        "E_long_cd_time": 0,
+        "Elast_time": 0,
+        "Epress_time": 0,
+        "Qcd_time": 20,
+        "Qlast_time": 15,
+        "tactic_group": "e?e:none;q?q:none;",
+        "vision": "Pyro",
+        "trigger": "e_ready",
+        "position": "Normal"
+    },
+    "Baizhu": {
+        "E_short_cd_time": 10,
+        "E_long_cd_time": 0,
+        "Elast_time": 0,
+        "Epress_time": 0,
+        "Qcd_time": 20,
+        "Qlast_time": 12,
+        "tactic_group": "e?e:none;q?q:none;",
+        "vision": "Dendro",
+        "trigger": "e_ready",
+        "position": "Shield"
+    },
+    "Yaoyao": {
+        "E_short_cd_time": 15,
+        "E_long_cd_time": 0,
+        "Elast_time": 10,
+        "Epress_time": 0,
+        "Qcd_time": 20,
+        "Qlast_time": 5,
+        "tactic_group": "e?e:none;q?q:none;",
+        "vision": "Dendro",
+        "trigger": "e_ready",
+        "position": "Normal"
+    },
+    "Kamisato Ayato": {
+        "E_short_cd_time": 12,
+        "E_long_cd_time": 0,
+        "Elast_time": 6,
+        "Epress_time": 0,
+        "Qcd_time": 20,
+        "Qlast_time": 18,
+        "tactic_group": "e?e:none;q?q:none;",
+        "vision": "Hydro",
+        "trigger": "e_ready",
+        "position": "Normal"
+    },
+    "Thoma": {
+        "E_short_cd_time": 15,
+        "E_long_cd_time": 0,
+        "Elast_time": 8,
+        "Epress_time": 0,
+        "Qcd_time": 20,
+        "Qlast_time": 8,
+        "tactic_group": "e?e:none;q?q:none;",
+        "vision": "Pyro",
+        "trigger": "e_ready",
+        "position": "Shield"
+    },
+    "Sayu": {
+        "E_short_cd_time": 6,
+        "E_long_cd_time": 0,
+        "Elast_time": 10,
+        "Epress_time": 0,
+        "Qcd_time": 20,
+        "Qlast_time": 12,
+        "tactic_group": "e?e:none;q?q:none;",
+        "vision": "Anemo",
+        "trigger": "e_ready",
+        "position": "Normal"
+    },
+    "Yae Miko": {
+        "E_short_cd_time": 4,
+        "E_long_cd_time": 0,
+        "Elast_time": 14,
+        "Epress_time": 0,
+        "Qcd_time": 22,
+        "Qlast_time": 0,
+        "tactic_group": "e?e:none;q?q:none;",
+        "vision": "Electro",
+        "trigger": "e_ready",
+        "position": "Normal"
+    },
+    "Arataki Itto": {
+        "E_short_cd_time": 10,
+        "E_long_cd_time": 0,
+        "Elast_time": 6,
+        "Epress_time": 0,
+        "Qcd_time": 18,
+        "Qlast_time": 11,
+        "tactic_group": "e?e:none;q?q:none;",
+        "vision": "Geo",
+        "trigger": "e_ready",
+        "position": "Normal"
+    },
+    "Kuki Shinobu": {
+        "E_short_cd_time": 15,
+        "E_long_cd_time": 0,
+        "Elast_time": 12,
+        "Epress_time": 0,
+        "Qcd_time": 15,
+        "Qlast_time": 2,
+        "tactic_group": "e?e:none;q?q:none;",
+        "vision": "Electro",
+        "trigger": "e_ready",
+        "position": "Normal"
+    },
+    "Gorou": {
+        "E_short_cd_time": 10,
+        "E_long_cd_time": 0,
+        "Elast_time": 10,
+        "Epress_time": 0,
+        "Qcd_time": 20,
+        "Qlast_time": 9,
+        "tactic_group": "e?e:none;q?q:none;",
+        "vision": "Geo",
+        "trigger": "e_ready",
+        "position": "Normal"
+    },
+    "Kujou Sara": {
+        "E_short_cd_time": 10,
+        "E_long_cd_time": 0,
+        "Elast_time": 6,
+        "Epress_time": 0,
+        "Qcd_time": 20,
+        "Qlast_time": 0,
+        "tactic_group": "e?e:none;q?q:none;",
+        "vision": "Electro",
+        "trigger": "e_ready",
+        "position": "Normal"
+    },
+    "Shikanoin Heizou": {
+        "E_short_cd_time": 10,
+        "E_long_cd_time": 0,
+        "Elast_time": 0,
+        "Epress_time": 0,
+        "Qcd_time": 12,
+        "Qlast_time": 0,
+        "tactic_group": "e?e:none;q?q:none;",
+        "vision": "Electro",
+        "trigger": "e_ready",
+        "position": "Normal"
+    },
+    "Cyno": {
+        "E_short_cd_time": 7.5,
+        "E_long_cd_time": 0,
+        "Elast_time": 0,
+        "Epress_time": 0,
+        "Qcd_time": 20,
+        "Qlast_time": 10,
+        "tactic_group": "e?e:none;q?q:none;",
+        "vision": "Electro",
+        "trigger": "e_ready",
+        "position": "Normal"
+    },
+    "Tighnari": {
+        "E_short_cd_time": 12,
+        "E_long_cd_time": 0,
+        "Elast_time": 0,
+        "Epress_time": 0,
+        "Qcd_time": 12,
+        "Qlast_time": 0,
+        "tactic_group": "e?e:none;q?q:none;",
+        "vision": "Dendro",
+        "trigger": "e_ready",
+        "position": "Normal"
+    },
+    "Collei": {
+        "E_short_cd_time": 12,
+        "E_long_cd_time": 0,
+        "Elast_time": 0,
+        "Epress_time": 0,
+        "Qcd_time": 15,
+        "Qlast_time": 6,
+        "tactic_group": "e?e:none;q?q:none;",
+        "vision": "Dendro",
+        "trigger": "e_ready",
+        "position": "Normal"
+    },
+    "Alhaitham": {
+        "E_short_cd_time": 18,
+        "E_long_cd_time": 0,
+        "Elast_time": 0,
+        "Epress_time": 0,
+        "Qcd_time": 18,
+        "Qlast_time": 0,
+        "tactic_group": "e?e:none;q?q:none;",
+        "vision": "Dendro",
+        "trigger": "e_ready",
+        "position": "Normal"
+    },
+    "Dehya": {
+        "E_short_cd_time": 20,
+        "E_long_cd_time": 0,
+        "Elast_time": 12,
+        "Epress_time": 0,
+        "Qcd_time": 18,
+        "Qlast_time": 4,
+        "tactic_group": "e?e:none;q?q:none;",
+        "vision": "Pyro",
+        "trigger": "e_ready",
+        "position": "Normal"
+    },
+    "Nilou": {
+        "E_short_cd_time": 18,
+        "E_long_cd_time": 0,
+        "Elast_time": 12,
+        "Epress_time": 0,
+        "Qcd_time": 18,
+        "Qlast_time": 0,
+        "tactic_group": "e?e.e:none;q?q:none;",
+        "vision": "Hydro",
+        "trigger": "e_ready",
+        "position": "Normal"
+    },
+    "Candace": {
+        "E_short_cd_time": 6,
+        "E_long_cd_time": 9,
+        "Elast_time": 0,
+        "Epress_time": 0,
+        "Qcd_time": 15,
+        "Qlast_time": 9,
+        "tactic_group": "e?e:none;q?q:none;",
+        "vision": "Hydro",
+        "trigger": "e_ready",
+        "position": "Normal"
+    },
+    "Layla": {
+        "E_short_cd_time": 12,
+        "E_long_cd_time": 0,
+        "Elast_time": 12,
+        "Epress_time": 0,
+        "Qcd_time": 12,
+        "Qlast_time": 12,
+        "tactic_group": "e?e:none;q?q:none;",
+        "vision": "Cryo",
+        "trigger": "e_ready",
+        "position": "Shield"
+    },
+    "Faruzan": {
+        "E_short_cd_time": 6,
+        "E_long_cd_time": 0,
+        "Elast_time": 18,
+        "Epress_time": 0,
+        "Qcd_time": 20,
+        "Qlast_time": 12,
+        "tactic_group": "e?e:none;q?q:none;",
+        "vision": "Anemo",
+        "trigger": "e_ready",
+        "position": "Normal"
+    },
+    "Kaveh": {
+        "E_short_cd_time": 6,
+        "E_long_cd_time": 0,
+        "Elast_time": 0,
+        "Epress_time": 0,
+        "Qcd_time": 20,
+        "Qlast_time": 12,
+        "tactic_group": "e?e:none;q?q:none;",
+        "vision": "Dendro",
+        "trigger": "e_ready",
+        "position": "Normal"
+    },
+    "Nahida": {
+        "E_short_cd_time": 5,
+        "E_long_cd_time": 6,
+        "Elast_time": 25,
+        "Epress_time": 0,
+        "Qcd_time": 13.5,
+        "Qlast_time": 15,
+        "tactic_group": "e?e:none;q?q:none;",
+        "vision": "Dendro",
+        "trigger": "e_ready",
+        "position": "Normal"
+    },
+    "Tartaglia": {
+        "E_short_cd_time": 1,
+        "E_long_cd_time": 0,
+        "Elast_time": 30,
+        "Epress_time": 0,
+        "Qcd_time": 15,
+        "Qlast_time": 0,
+        "tactic_group": "e?e:none;q?q:none;",
+        "vision": "Hydro",
+        "trigger": "e_ready",
+        "position": "Normal"
+    },
+    "Wanderer": {
+        "E_short_cd_time": 6,
+        "E_long_cd_time": 0,
+        "Elast_time": 0,
+        "Epress_time": 0,
+        "Qcd_time": 15,
+        "Qlast_time": 0,
+        "tactic_group": "e?e:none;q?q:none;",
+        "vision": "Anemo",
+        "trigger": "e_ready",
+        "position": "Normal"
     }
-    
 }
