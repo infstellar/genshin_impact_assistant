@@ -51,8 +51,8 @@ class MissionMain(MissionExecutor):
     def exec_mission(self):
         self.switch_character_to("Lisa")
         # 每一个list是连续的。如果其中有一次执行寄了，就必须退出所有list。
-        self._reg_exception_chara_died()
-        self._reg_exception_low_hp()
+        self.reg_exception_chara_died()
+        self.reg_exception_low_hp()
         for i in self.sakura1:
             r = self.move_along(i, is_precise_arrival=True)
             if r == ERR_FAIL:
@@ -79,7 +79,7 @@ class MissionMain(MissionExecutor):
             itt.delay(2)
             self.pickup_once()     
             itt.delay(0.5)
-        self._reg_exception_chara_died(False)
+        self.reg_exception_chara_died(False)
         self._reg_exception_found_enemy(False)
 
         # self.stop_pickup()

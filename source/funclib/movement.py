@@ -6,21 +6,10 @@ from source.map.map import genshin_map
 from source.manager import asset
 from source.common.timer_module import Timer
 from source.assets.movement import *
+from source.funclib.cvars import *
 
 itt = itt
-AHEAD = 0
-LEFT = 1
-RIGHT = 2
-BACK = 3
-CORRECT_DEGREE = GIAconfig.General_CorrDegree
-HORIZONTAL = 1
-VERTICALLY = 2
-VERTICALLY_AND_HORIZONTAL = 3
 
-CLIMBING = "CLIMBING"
-SWIMMING = "SWIMMING"
-WALKING = "WALKING"
-FLYING = "FLYING"
 
 # >0:right; <0:left
 def move(direction, distance=1):
