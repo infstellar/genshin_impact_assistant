@@ -260,10 +260,15 @@ class TacticOperator(BaseThreading):
 
         self.chara_waiting()
         logger.debug('do_use_longe')
-        # self.itt.key_press('s')
+        if self.character.name == 'Zhongli': # 钟离总是放盾把视野挡住了
+            self.itt.key_press('s')
+            itt.delay(0.1)
         self.itt.key_down('e')
         self.itt.delay(self.character.Epress_time)
         self.itt.key_up('e')
+        # if self.character.name == 'Zhongli':
+        #     itt.delay(0.3)
+        #     self.itt.key_press('w')
         if self.checkup_stop_func():
             return 0
         if self.pause_tactic_flag:

@@ -598,9 +598,10 @@ class InteractionBGD:
         """左键点击
         
         """
+        
+        self.operation_lock.acquire()
         if DEMO_MODE:
             logger.demo(t2t("左键点击"))
-        self.operation_lock.acquire()
         # print('lock!')
         self.itt_exec.left_click()
         self.operation_lock.release()
@@ -612,9 +613,10 @@ class InteractionBGD:
         """左键按下
 
         """
+        
+        self.operation_lock.acquire()
         if DEMO_MODE:
             logger.demo(t2t("左键按下"))
-        self.operation_lock.acquire()
         # print('lock!')
         self.itt_exec.left_down()
         self.operation_lock.release()
@@ -626,9 +628,10 @@ class InteractionBGD:
         """左键抬起
 
         """
+        
+        self.operation_lock.acquire()
         if DEMO_MODE:
             logger.demo(t2t("左键抬起"))
-        self.operation_lock.acquire()
         # print('lock!')
         self.itt_exec.left_up()
         self.operation_lock.release()
@@ -643,9 +646,10 @@ class InteractionBGD:
         Args:
             dt (float, optional): 间隔时间. Defaults to 0.05.
         """
+        
+        self.operation_lock.acquire()
         if DEMO_MODE:
             logger.demo(t2t("左键双击"))
-        self.operation_lock.acquire()
         # print('lock!')
         self.itt_exec.left_double_click(dt=dt)
         self.operation_lock.release()
@@ -657,9 +661,10 @@ class InteractionBGD:
         """右键单击
 
         """
+        
+        self.operation_lock.acquire()
         if DEMO_MODE:
             logger.demo(t2t("右键单击"))
-        self.operation_lock.acquire()
         # print('lock!')
         self.itt_exec.right_click()
         self.operation_lock.release()
@@ -672,9 +677,10 @@ class InteractionBGD:
     def middle_click(self):
         """点击鼠标中键
         """
+        
+        self.operation_lock.acquire()
         if DEMO_MODE:
             logger.demo(t2t("点击鼠标中键"))
-        self.operation_lock.acquire()
         # print('lock!')
         self.itt_exec.middle_click()
         self.operation_lock.release()
@@ -686,9 +692,10 @@ class InteractionBGD:
         Args:
             key (str): 按键代号。查阅vkCode.py
         """
+        
+        self.operation_lock.acquire()
         if DEMO_MODE:
             logger.demo(t2t("按下按键: ")+str(key))
-        self.operation_lock.acquire()
         # print('lock!')
         if key == 'w':
             static_lib.W_KEYDOWN = True
@@ -707,9 +714,10 @@ class InteractionBGD:
         Args:
             key (str): 按键代号。查阅vkCode.py
         """
+        
+        self.operation_lock.acquire()
         if DEMO_MODE:
             logger.demo(t2t("松开按键: ")+str(key))
-        self.operation_lock.acquire()
         # print('lock!')
         if key == 'w':
             static_lib.W_KEYDOWN = False
@@ -727,9 +735,10 @@ class InteractionBGD:
         Args:
             key (str): 按键代号。查阅vkCode.py
         """
+        
+        self.operation_lock.acquire()
         if DEMO_MODE:
             logger.demo(t2t("点击按键: ")+str(key))
-        self.operation_lock.acquire()
         # print('lock!')
         self.itt_exec.key_press(key)
         self.key_status[key]=False
@@ -746,9 +755,10 @@ class InteractionBGD:
             y (int): 纵坐标
             relative (bool): 是否为相对移动。
         """
-        if DEMO_MODE:
-            logger.demo(t2t("移动鼠标到坐标: ")+f"{x},{y}")
+        
         self.operation_lock.acquire()
+        if DEMO_MODE:
+            logger.demo(t2t("移动鼠标到坐标: ")+f"{round(x,0)},{round(y,0)}")
         # print('lock!')
         self.itt_exec.move_to(int(x), int(y), relative=relative, isBorderlessWindow=self.isBorderlessWindow)
         self.operation_lock.release()
@@ -759,9 +769,11 @@ class InteractionBGD:
 
     @before_operation()
     def move_and_click(self, position, type='left', delay = 0.3):
+        
         self.operation_lock.acquire()
         # print('lock!')
-        
+        if DEMO_MODE:
+            logger.demo(t2t("移动鼠标到坐标: ")+f"{round(position[0],0)},{round(position[1],0)} 并点击")
         x = int(position[0])
         y = int(position[1])
         
