@@ -584,6 +584,10 @@ class ConfigPage(AdvancePage):
 class SettingPage(ConfigPage):
     def __init__(self):
         super().__init__(config_file_name = CONFIGNAME_GENERAL)
+        self.domain_name = load_json(f"Domain_Names_{GLOBAL_LANG}.json", fr"{ASSETS_PATH}/domain_names")
+        self.input_verify={
+            "domain_name":self.domain_name
+        }
 
     def _load(self):
         self.last_file = None

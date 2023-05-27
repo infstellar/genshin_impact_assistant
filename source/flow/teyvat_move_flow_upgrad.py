@@ -14,12 +14,9 @@ from source.flow import flow_code as FC
 from source.ui.ui import ui_control
 import source.ui.page as UIPage
 from source.dev_tool.tianli_navigator import TianliNavigator
+from source.flow.cvars import *
 
 
-IN_MOVE = movement.WALKING
-IN_FLY = movement.FLYING
-IN_WATER = movement.SWIMMING
-IN_CLIMB = movement.CLIMBING
 
 class TeyvatMoveFlowConnector(FlowConnector):
     def __init__(self):
@@ -54,7 +51,7 @@ class TeyvatMoveFlowConnector(FlowConnector):
         self.priority_waypoints_array = np.array(self.priority_waypoints_array)
     
     def reset(self):
-        self.stop_rule = 0
+        self.stop_rule = STOP_RULE_ARRIVE
         self.target_posi = [0, 0]
         self.reaction_to_enemy = 'RUN'
         self.MODE = "PATH"
@@ -296,7 +293,7 @@ class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon, Navigation):
         #         self._set_nfid(ST.END_TEYVAT_MOVE_STUCK)
         #         self._next_rfc()
         
-        if self.upper.stop_rule == 0:
+        if self.upper.stop_rule == STOP_RULE_ARRIVE:
             if self.upper.is_precise_arrival:
                 threshold=1
             else:
@@ -306,7 +303,7 @@ class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon, Navigation):
                 itt.key_up('w')
                 self._set_nfid(ST.END_TEYVAT_MOVE_PASS)
                 self._next_rfc()
-        elif self.upper.stop_rule == 1:
+        elif self.upper.stop_rule == STOP_RULE_F:
             if self.upper.stop_offset is None:
                 threshold = 25
             else:

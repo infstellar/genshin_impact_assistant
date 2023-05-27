@@ -12,12 +12,12 @@ class ReliableHelper_P2966N4774(CommissionTemplate, Talk):
         Talk.__init__(self)
     
     def exec_mission(self):
-        self._reg_default_arrival_mode(True)
-        self._reg_fight_if_needed(True)
+        self.set_default_arrival_mode(True)
+        self.reg_fight_if_needed(True)
         self.move_along("ReliableHelper20230415184809i0")
         self.talk_with_npc()
         self.talk_skip(self.checkup_stop_func)
-        self._reg_fight_if_needed(False)
+        self.reg_fight_if_needed(False)
         self.move_straight(["ReliableHelper20230415184946i1","end_position"], is_precise_arrival=False)
         self.collect(is_combat=True)
         self.move_straight(["ReliableHelper20230415185053i2","end_position"])

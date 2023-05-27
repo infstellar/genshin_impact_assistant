@@ -44,6 +44,7 @@ class Map(MiniMap, BigMap, MapConverter):
         self.small_map_init_flag = False
         self.lock = threading.Lock()
         self.check_bigmap_timer = timer_module.Timer(5)
+        self.init_timer = timer_module.AdvanceTimer(5)
 
     def _upd_smallmap(self) -> None:
         # self.lock.acquire()
@@ -116,11 +117,14 @@ class Map(MiniMap, BigMap, MapConverter):
     
     def reinit_smallmap(self) -> None:
         if ui_control.verify_page(UIPage.page_main):
-            ui_control.ui_goto(UIPage.page_bigmap)
-            logger.info(f"init_position:{self.get_bigmap_posi().gimap}")
-            self.init_position(tuple(map(int, list(self.get_bigmap_posi().gimap))))
-            ui_control.ui_goto(UIPage.page_main)
-            self.small_map_init_flag = True
+            if self.init_timer.reached_and_reset():
+                ui_control.ui_goto(UIPage.page_bigmap)
+                logger.info(f"init_position:{self.get_bigmap_posi().gimap}")
+                self.init_position(tuple(map(int, list(self.get_bigmap_posi().gimap))))
+                ui_control.ui_goto(UIPage.page_main)
+                self.small_map_init_flag = True
+            else:
+                logger.info(f"init too fast, skip")
 
     def get_smallmap_from_teleporter(self, area=None):
         if area == None:

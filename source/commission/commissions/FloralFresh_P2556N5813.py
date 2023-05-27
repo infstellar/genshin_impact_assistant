@@ -13,7 +13,7 @@ class FloralFresh_P2556N5813(CommissionTemplate, Talk):
         Talk.__init__(self)
         
     def exec_mission(self):
-        self._reg_default_arrival_mode(True)
+        self.set_default_arrival_mode(True)
         self.move_along("FloralFresh20230416160023i0")
         self.talk_with_npc()
         self.talk_skip(self.checkup_stop_func)

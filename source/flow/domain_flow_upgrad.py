@@ -204,6 +204,7 @@ class MoveToTree(FlowTemplate):
 
     def state_before(self):
         itt.key_down('w')
+        self.upper.while_sleep = 0.1
         self._next_rfc()
 
     def state_in(self):
@@ -213,12 +214,10 @@ class MoveToTree(FlowTemplate):
             self.upper.ahead_timer.reset()
 
         movement.view_to_angle_domain(-90, self.upper.checkup_stop_func)
-        if generic_lib.f_recognition(itt):
+        if generic_lib.f_recognition():
+            itt.key_up('w')
+            self.upper.while_sleep = 0.2
             self._next_rfc()
-
-    def state_after(self):
-        itt.key_up('w')
-        self._next_rfc()
 
 class AttainReward(FlowTemplate):
     def __init__(self, upper:DomainFlowConnector):

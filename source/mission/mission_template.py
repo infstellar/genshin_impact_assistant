@@ -10,16 +10,16 @@ from source.common.timer_module import AdvanceTimer
 from source.controller.combat_controller import CombatController
 from source.map.map import genshin_map
 from source.exceptions.mission import *
+from source.mission.cvars import *
 
 class MissionError(Exception):pass
 
-ERR_FAIL = "FAIL"
-
-EXCEPTION_RECOVER = 'recover'
-EXCEPTION_SKIP = 'skip'
-EXCEPTION_RAISE = 'raise'
-
 class MissionExecutor(BaseThreading):
+    """Mission执行器的内部实现.
+
+    Args:
+        BaseThreading (_type_): _description_
+    """
     def __init__(self, is_CFCF=False, is_TMCF=False, is_PUO=False, is_CCT=False):
         super().__init__()
         self.is_CFCF=is_CFCF
@@ -214,6 +214,7 @@ class MissionExecutor(BaseThreading):
         self.CCT.pause_threading()
     
     def pickup_once(self):
+        self._init_sub_threading("PUO")
         self.PUO.pickup_recognize()
     
     def collect(self, MODE = None,
@@ -244,15 +245,6 @@ class MissionExecutor(BaseThreading):
         return self._handle_exception()
     
     def circle_search(self, center_posi, stop_rule='F'):
-        """进入一个循环，以中心坐标为圆心向外移动搜索。当符合stop_rule时退出。
-
-        Args:
-            center_posi (_type_): 中心坐标
-            stop_rule (str, optional): 停止条件. Defaults to 'F'.
-
-        Returns:
-            _type_: _description_
-        """
         points = get_circle_points(center_posi[0],center_posi[1])
         itt.key_down('w')
         jil = movement.JumpInLoop(8)
@@ -289,25 +281,25 @@ class MissionExecutor(BaseThreading):
     def _reg_exception_found_enemy(self, state=True):
         self.exception_list["FoundEnemy"] = state
 
-    def _reg_exception_chara_died(self, state=True):
+    def reg_exception_chara_died(self, state=True):
         self.exception_list["CharaDied"] = state
         
-    def _reg_exception_low_hp(self, state=True):
+    def reg_exception_low_hp(self, state=True):
         self.exception_list["LowHP"] = state
     
-    def _reg_default_arrival_mode(self, state=True):
+    def set_default_arrival_mode(self, state=True):
         self.default_precise_arrive = state
     
-    def _reg_fight_if_needed(self, state=True):
+    def reg_fight_if_needed(self, state=True):
         pass
     
-    def _reg_raise_exception(self, state=True):
+    def set_raise_exception(self, state=True):
         self.raise_exception_flag = state
     
-    def _set_exception_mode(self, mode):
+    def set_exception_mode(self, mode):
         self.handle_exception_mode = mode
     
-    def _tmf_handle_stuck_then_skip(self,k) -> bool:
+    def handle_tmf_stuck_then_skip(self,k) -> bool:
         if k == ERR_STUCK:
             return True
         return False
@@ -318,13 +310,13 @@ class MissionExecutor(BaseThreading):
             return True
         return False
     
-    def _tmf_handle_stuck_then_raise(self,k) -> bool:
+    def handle_tmf_stuck_then_raise(self,k) -> bool:
         if k == ERR_STUCK:
             raise TeyvatMoveError('Move Stuck')
             return True
         return False
     
-    def _col_handle_timeout_then_recover(self,k) -> bool:
+    def handle_col_timeout_then_recover(self,k) -> bool:
         pass
     
     def switch_character_to(self, name:str):
