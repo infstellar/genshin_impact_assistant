@@ -47,6 +47,7 @@ class MissionExecutor(BaseThreading):
         self.fight_if_needed = False
         self.raise_exception_flag = False
         self.handle_exception_mode = EXCEPTION_RECOVER
+        self.puo_crazy_f_mode = False
         self.itt = itt
 
     def _init_sub_threading(self, feat_name=""):
@@ -298,6 +299,13 @@ class MissionExecutor(BaseThreading):
     
     def set_exception_mode(self, mode):
         self.handle_exception_mode = mode
+    
+    def set_puo_crazy_f(self, mode) -> None:
+        self._init_sub_threading("PUO")
+        self.PUO.crazy_f = mode
+        self._init_sub_threading("TMCF")
+        self.TMCF.flow_connector.PUO.crazy_f = mode
+        self.puo_crazy_f_mode = mode
     
     def handle_tmf_stuck_then_skip(self,k) -> bool:
         if k == ERR_STUCK:

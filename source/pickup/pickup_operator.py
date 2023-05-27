@@ -38,6 +38,7 @@ class PickupOperator(BaseThreading):
         self.last_err_code = " "
         self.search_mode = SEARCH_MODE_PICKUP
         self.last_search_times = 2
+        self.crazy_f = False
         
     def continue_threading(self):
         if self.pause_threading_flag != False:
@@ -179,6 +180,11 @@ class PickupOperator(BaseThreading):
                         self.pickup_fail_timeout.reset()
                         self.last_search_times = 2
                         self.itt.key_press('f')
+                        if self.crazy_f:
+                            logger.info(f"crazy f start")
+                            for i in range(25):
+                                itt.key_press('f')
+                                time.sleep(0.05)
                         # self.itt.delay(0)
                         self.pickup_item_list.append(text)
                         logger.info(t2t('pickup: ') + str(text))

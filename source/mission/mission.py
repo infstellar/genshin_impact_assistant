@@ -218,7 +218,7 @@ class Mission(MissionExecutor):
         return super().set_raise_exception(state)
     
     def set_exception_mode(self, mode):
-        """设置阻塞式任务遇到异常时的处理方式.
+        """设置阻塞式任务遇到异常时的默认处理方式.
 
         Args:
             mode (_type_): 异常处理模式.可选:
@@ -233,6 +233,19 @@ class Mission(MissionExecutor):
             _type_: _description_
         """
         return super().set_exception_mode(mode)
+    
+    def set_puo_crazy_f(self, mode):
+        """设置是否启用疯狂按f模式.启用后,puo将会在按下f拾取后不停按f若干次.
+        通常用于拾取调查类采集点.
+
+        Args:
+            mode (bool): mode. True|False.
+
+        Returns:
+            _type_: _description_
+        """
+        return super().set_puo_crazy_f(mode)
+        
     
     def handle_tmf_stuck_then_skip(self, k) -> bool:
         """传入TMF的错误码，如果出错则跳过。
