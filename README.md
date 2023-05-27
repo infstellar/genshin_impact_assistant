@@ -30,7 +30,7 @@ To没用过github的小伙伴: 描述文档中的蓝色文字是链接,可以打
 
 ## Demo Video 演示视频
 
-<https://www.youtube.com/watch?v=ZieBDx6Go4A> v0.2.0的演示视频，可能部分过期  
+<https://www.bilibili.com/video/BV1ps4y1T71A> v0.8.3 演示视频.  
 <https://www.youtube.com/watch?v=ZieBDx6Go4A> v0.2.0 demo video, may be partially out of date.
 
 ## Main features 主要功能
