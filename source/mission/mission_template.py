@@ -308,6 +308,8 @@ class MissionExecutor(BaseThreading):
         self.PUO.crazy_f = mode
         self._init_sub_threading("TMCF")
         self.TMCF.flow_connector.PUO.crazy_f = mode
+        self._init_sub_threading("CFCF")
+        self.CFCF.flow_connector.puo.crazy_f = mode
         self.puo_crazy_f_mode = mode
     
     def handle_tmf_stuck_then_skip(self,k) -> bool:
@@ -342,15 +344,14 @@ class MissionExecutor(BaseThreading):
             if not r:
                 raise CharacterNotFound(f"Character {name} Not Found")
     
+    def is_combat_end(self) -> bool:
+        return combat_lib.CSDL.get_combat_state()
+    
     def use_f(self):
         self.itt.key_press('f')        
     
     def start_thread(self):
         pass
-        # if self.is_CFCF: self.CFCF.start()
-        # if self.is_TMCF: self.TMCF.start()
-        # if self.is_PUO: self.PUO.start()
-        # if self.is_CCT: self.CCT.start()
     
     def loop(self):
         self.start_thread()

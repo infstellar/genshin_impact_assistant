@@ -50,8 +50,7 @@ class CommissionTemplate(MissionExecutor, Talk):
                     return False
             else:
                 self._commission_end_timer.reset()
-                
-    
+
     def is_in_commission(self):
         return itt.get_img_existence(asset.IconCommissionCommissionIcon)
 

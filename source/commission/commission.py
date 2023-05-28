@@ -19,7 +19,7 @@ class Commission(CommissionTemplate):
         
     def talk_skip(self, stop_func=None):
         """跳过对话,直到回到大世界.
-        如果有选项,会自动点击第一个选项.
+        如果有选项,会自动点击最下面的选项.
 
         Args:
             stop_func (_type_, optional): _description_. Defaults to None.
@@ -88,4 +88,5 @@ class Commission(CommissionTemplate):
             bool: 是否成功.
         """
         return super().exit_talk()
+    
     

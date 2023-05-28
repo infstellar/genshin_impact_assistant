@@ -322,3 +322,11 @@ class Mission(MissionExecutor):
             _type_: _description_
         """
         return super().use_f()
+    
+    def is_combat_end(self) -> bool:
+        """战斗是否结束.你可以在while循环中判断它.
+
+        Returns:
+            bool: _description_
+        """
+        return super().is_combat_end()
