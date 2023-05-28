@@ -1,22 +1,14 @@
-from source.commission.commission_template import CommissionTemplate
-from source.talk.talk import Talk
-from source.commission.assets import *
+from source.commission.commission import *
 
-
-meta = {
-    "type":"FloralFresh",
-    "position":[2556,-5813]
-}
-class FloralFresh_P2556N5813(CommissionTemplate, Talk):
+class FloralFresh_P2556N5813(CommissionTemplate):
     def __init__(self):
-        CommissionTemplate.__init__(self, meta["type"], meta["position"], is_CFCF=True, is_TMCF=True)
-        Talk.__init__(self)
+        CommissionTemplate.__init__(self, "FloralFresh", [2556,-5813], is_CFCF=True, is_TMCF=True)
         
     def exec_mission(self):
         self.set_default_arrival_mode(True)
         self.move_along("FloralFresh20230416160023i0")
         self.talk_with_npc()
-        self.talk_skip(self.checkup_stop_func)
+        self.talk_skip()
         self.move_along("FloralFresh20230416160216i2")
         self.itt.key_press('f')
         self.move_along("FloralFresh20230416160340i3")
@@ -28,7 +20,7 @@ class FloralFresh_P2556N5813(CommissionTemplate, Talk):
         self.itt.delay(1)
         self.move_along("FloralFresh20230416160023i0")
         self.talk_with_npc()
-        self.talk_skip(self.checkup_stop_func)
+        self.talk_skip()
         
 if __name__ == '__main__':
     execc = FloralFresh_P2556N5813()

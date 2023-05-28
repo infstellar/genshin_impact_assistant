@@ -1,20 +1,13 @@
-from source.commission.commission_template import CommissionTemplate
-from source.talk.talk import Talk
-from source.manager import asset
+from source.commission.commission import *
 
-AskDirectly = asset.TextTemplate({"zh_CN":"直接问吧","en_US":""})
-Librarian = asset.TextTemplate({"zh_CN":"图书管理员","en_US":"Librarian"})
-CavalryCaptain = asset.TextTemplate({"zh_CN":"骑兵队长","en_US":"Cavalry Captain"})
-Outrider = asset.TextTemplate({"zh_CN":"侦察骑士","en_US":"Outrider"})
+AskDirectly = Text(zh="直接问吧",en="Ask Directly")
+Librarian = Text(zh="图书管理员",en="Librarian")
+CavalryCaptain = Text(zh="骑兵队长",en="Cavalry Captain")
+Outrider = Text(zh="侦察骑士",en="Outrider")
 
-meta = {
-    "type":"BasicKnowledgeOfTheKnights",
-    "position":[2682,-5673]
-}
-class BasicKnowledgeOfTheKnights_P2682N5673(CommissionTemplate, Talk):
+class BasicKnowledgeOfTheKnights_P2682N5673(Commission):
     def __init__(self):
-        CommissionTemplate.__init__(self, meta["type"], meta["position"], is_CFCF=True, is_TMCF=True)
-        Talk.__init__(self)
+        super().__init__("BasicKnowledgeOfTheKnights", [2682,-5673], is_CFCF=True, is_TMCF=True)
         
     def exec_mission(self):
         self.move_along("BasicKnowledgeOfTheKnights20230409115353i0")
@@ -28,7 +21,7 @@ class BasicKnowledgeOfTheKnights_P2682N5673(CommissionTemplate, Talk):
         self.talk_switch(CavalryCaptain)
         self.talk_until_switch()
         self.talk_switch(Outrider)
-        self.talk_skip(self.checkup_stop_func)
+        self.talk_skip()
         self.is_commission_succ=True
         
 if __name__ == '__main__':

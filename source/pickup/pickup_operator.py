@@ -159,18 +159,21 @@ class PickupOperator(BaseThreading):
             ret = self.itt.get_img_position(asset.IconGeneralFButton)
             if ret == False:
                 return 0
-            y1 = asset.IconGeneralFButton.cap_posi[1]
-            x1 = asset.IconGeneralFButton.cap_posi[0]
+            
             itt.freeze_key('w', operate='up')
             time.sleep(0.1)
+
+            y1 = asset.IconGeneralFButton.cap_posi[1]
+            x1 = asset.IconGeneralFButton.cap_posi[0]
             cap = self.itt.capture()
             cap = crop(cap, [x1 + ret[0] + 53, y1 + ret[1] - 20, x1 + ret[0] + 361,  y1 + ret[1] + 54])
+            
             if itt.similar_img(cap[:,:,:3], IconGeneralTalkBubble.image)>0.99:
                 logger.info(f"pickup recognize: talk bubble; skip")
                 return False
             # img_manager.qshow(cap)
-            cap = self.itt.png2jpg(cap, channel='ui', alpha_num=160)
             # img = extract_white_letters(cap)
+            cap = self.itt.png2jpg(cap, channel='ui', alpha_num=160)
             res = ocr.get_all_texts(cap)
             if len(res) != 0:
                 for text in res:

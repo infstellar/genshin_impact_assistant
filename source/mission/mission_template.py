@@ -182,6 +182,9 @@ class MissionExecutor(BaseThreading):
         elif isinstance(position[0], str):
             path_dict = self.get_path_file(position[0])
             p = path_dict[position[1]]
+        elif isinstance(position[0], dict):
+            path_dict = position[0]
+            p = path_dict[position[1]]
         if is_precise_arrival is None:
             is_precise_arrival = self.default_precise_arrive
         r = self.move(MODE="AUTO", target_posi=p, is_tp = is_tp, is_precise_arrival=is_precise_arrival, stop_rule=stop_rule)
@@ -338,8 +341,10 @@ class MissionExecutor(BaseThreading):
             r = combat_lib.set_party_setup(name)
             if not r:
                 raise CharacterNotFound(f"Character {name} Not Found")
-            
-        
+    
+    def use_f(self):
+        self.itt.key_press('f')        
+    
     def start_thread(self):
         pass
         # if self.is_CFCF: self.CFCF.start()
