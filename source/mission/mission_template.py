@@ -47,6 +47,7 @@ class MissionExecutor(BaseThreading):
         self.fight_if_needed = False
         self.raise_exception_flag = False
         self.handle_exception_mode = EXCEPTION_RECOVER
+        self.puo_crazy_f_mode = False
         self.itt = itt
 
     def _init_sub_threading(self, feat_name=""):
@@ -181,6 +182,9 @@ class MissionExecutor(BaseThreading):
         elif isinstance(position[0], str):
             path_dict = self.get_path_file(position[0])
             p = path_dict[position[1]]
+        elif isinstance(position[0], dict):
+            path_dict = position[0]
+            p = path_dict[position[1]]
         if is_precise_arrival is None:
             is_precise_arrival = self.default_precise_arrive
         r = self.move(MODE="AUTO", target_posi=p, is_tp = is_tp, is_precise_arrival=is_precise_arrival, stop_rule=stop_rule)
@@ -299,6 +303,15 @@ class MissionExecutor(BaseThreading):
     def set_exception_mode(self, mode):
         self.handle_exception_mode = mode
     
+    def set_puo_crazy_f(self, mode) -> None:
+        self._init_sub_threading("PUO")
+        self.PUO.crazy_f = mode
+        self._init_sub_threading("TMCF")
+        self.TMCF.flow_connector.PUO.crazy_f = mode
+        self._init_sub_threading("CFCF")
+        self.CFCF.flow_connector.puo.crazy_f = mode
+        self.puo_crazy_f_mode = mode
+    
     def handle_tmf_stuck_then_skip(self,k) -> bool:
         if k == ERR_STUCK:
             return True
@@ -330,14 +343,15 @@ class MissionExecutor(BaseThreading):
             r = combat_lib.set_party_setup(name)
             if not r:
                 raise CharacterNotFound(f"Character {name} Not Found")
-            
-        
+    
+    def is_combat_end(self) -> bool:
+        return combat_lib.CSDL.get_combat_state()
+    
+    def use_f(self):
+        self.itt.key_press('f')        
+    
     def start_thread(self):
         pass
-        # if self.is_CFCF: self.CFCF.start()
-        # if self.is_TMCF: self.TMCF.start()
-        # if self.is_PUO: self.PUO.start()
-        # if self.is_CCT: self.CCT.start()
     
     def loop(self):
         self.start_thread()

@@ -38,6 +38,7 @@ class PickupOperator(BaseThreading):
         self.last_err_code = " "
         self.search_mode = SEARCH_MODE_PICKUP
         self.last_search_times = 2
+        self.crazy_f = False
         
     def continue_threading(self):
         if self.pause_threading_flag != False:
@@ -158,18 +159,21 @@ class PickupOperator(BaseThreading):
             ret = self.itt.get_img_position(asset.IconGeneralFButton)
             if ret == False:
                 return 0
-            y1 = asset.IconGeneralFButton.cap_posi[1]
-            x1 = asset.IconGeneralFButton.cap_posi[0]
+            
             itt.freeze_key('w', operate='up')
             time.sleep(0.1)
+
+            y1 = asset.IconGeneralFButton.cap_posi[1]
+            x1 = asset.IconGeneralFButton.cap_posi[0]
             cap = self.itt.capture()
             cap = crop(cap, [x1 + ret[0] + 53, y1 + ret[1] - 20, x1 + ret[0] + 361,  y1 + ret[1] + 54])
+            
             if itt.similar_img(cap[:,:,:3], IconGeneralTalkBubble.image)>0.99:
                 logger.info(f"pickup recognize: talk bubble; skip")
                 return False
             # img_manager.qshow(cap)
-            cap = self.itt.png2jpg(cap, channel='ui', alpha_num=160)
             # img = extract_white_letters(cap)
+            cap = self.itt.png2jpg(cap, channel='ui', alpha_num=160)
             res = ocr.get_all_texts(cap)
             if len(res) != 0:
                 for text in res:
@@ -179,6 +183,11 @@ class PickupOperator(BaseThreading):
                         self.pickup_fail_timeout.reset()
                         self.last_search_times = 2
                         self.itt.key_press('f')
+                        if self.crazy_f:
+                            logger.info(f"crazy f start")
+                            for i in range(25):
+                                itt.key_press('f')
+                                time.sleep(0.05)
                         # self.itt.delay(0)
                         self.pickup_item_list.append(text)
                         logger.info(t2t('pickup: ') + str(text))

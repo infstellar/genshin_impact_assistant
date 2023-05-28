@@ -7,6 +7,7 @@ from source.ui.ui import ui_control
 from source.ui import page as UIPage
 from source.api.pdocr_complete import ocr
 from source.common.timer_module import AdvanceTimer
+from source.pickup.util import get_all_colls_name, pickup_specific_item
 
 class Talk():
     def __init__(self) -> None:
@@ -26,7 +27,7 @@ class Talk():
             # itt.move_to(-120,0,relative=True)
             if itt.get_img_existence(asset.IconUIEmergencyFood): return True
             
-    def talk_switch(self, textobj:asset.TextTemplate):
+    def talk_switch(self, textobj:asset.Text):
         cap = itt.capture(posi=AreaTalkSelects.position, jpgmode=0)
         cap = recorp(cap,area=AreaTalkSelects.position)
         posi = ocr.get_text_position(cap, textobj.text)
@@ -63,17 +64,28 @@ class Talk():
         self._delay6()
         if f_recognition():return True
         return False
-     
-    def talk_with_npc(self,npc_name = None):
+    
+    def talk_with_npc(self, npc_name:asset.Text = None) -> bool:
         if ui_control.verify_page(UIPage.page_main):
-            if self.find_npc():
-                itt.key_press('f')
-                return True
+            for move_key in ['w','a','s','d']:
+                itt.key_press(move_key)
+                itt.delay("2animation")
+                if not f_recognition(): continue
+                if npc_name is None:
+                    itt.key_press('f')
+                    return True
+                npc_names = get_all_colls_name()
+                flag1 = False
+                for i in npc_names:
+                    if npc_name.text in i: flag1 = True
+                if flag1:
+                    pickup_specific_item(npc_name.text)
+                    return True
             return False
         else:
-            return True
+            return False
     
-    def exit_talk(self):
+    def exit_talk(self) -> bool:
         esc_timer = AdvanceTimer(2).start()
         while 1:
             if ui_control.verify_page(UIPage.page_main): return True
@@ -81,10 +93,14 @@ class Talk():
             if esc_timer.reached_and_reset():
                 itt.key_press('esc')
             itt.delay(0.2)
+        return False
     
 if __name__ == '__main__':
     t = Talk()
     # t.talk_with_npc()
     # t.talk_until_switch()
     # t.talk_switch(Expedition)
+    
+    print(t.talk_with_npc(asset.Text(zh="Flora", en="Flora")))
+    
     t.exit_talk()
