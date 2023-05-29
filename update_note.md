@@ -1,11 +1,13 @@
 ## TODO：
+- TMF没landing
+- talk加日志
+- TMF加migration
+- commission set time
+- commission的CSDL end好像有点问题
+- 测试优化的复活功能
 - 传送点识别区域还是不够大
-- domain 退出 识别错误
 - combat sco shield与复活不兼容 考虑加入usd。
-- 自动战斗main的优先级调高
 - commission 执行完就是成功
-- thread init
-- mission init加满
 - TMF超过6s没检测到ui就退出
 - bp>100记录
 - webui list的显示要改改
@@ -13,13 +15,17 @@
 - 自动战斗的e技能释放有延迟，可能是计时器问题
 - 秘境开局会点两下 原神动画问题
 - 自动战斗boss血条不动
-- 检测。。。按钮识别是采集物还是人
 - ocr在角色名字时试试用in
 - BigPudgyProblem需要对话
 - combat lib识别受ui限制
 
 ## Done：
+- 检测。。。按钮识别是采集物还是人
 - time dilation rate
+- domain 退出 识别错误
+- 自动战斗main的优先级调高
+- thread init
+- mission init加满
 - i18n
 - 支持无须弥人
 - aim operator move to enemy按空格
