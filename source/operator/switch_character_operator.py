@@ -9,6 +9,8 @@ from source.manager import asset
 from source.operator.aim_operator import AimOperator
 from source.api.pdocr_complete import ocr
 from source.funclib import movement
+from source.ui.ui import ui_control
+from source.ui import page as UIPage
 
 
 SHIELD = 'Shield'
@@ -88,6 +90,9 @@ class SwitchCharacterOperator(BaseThreading):
             
         """
         if itt.get_img_existence(asset.IconCombatCharacterDied, is_log=True):
+            aopf = self.aim_operator.pause_threading_flag
+            if not aopf:
+                self.aim_operator.pause_threading()
             succ_flag_1 = False
             print(self.died_character)
             for i in range(10):
@@ -95,6 +100,7 @@ class SwitchCharacterOperator(BaseThreading):
                     break
                 time.sleep(0.15)
                 if self.checkup_stop_func(): # break
+                    if not aopf: self.aim_operator.continue_threading()
                     return True
                 r = itt.appear_then_click(asset.ButtonFoodEgg, is_log=True)
                 if r:
@@ -104,23 +110,31 @@ class SwitchCharacterOperator(BaseThreading):
                 logger.info("reborn failed")
                 self.reborn_timer.reset()
                 self.died_character.append(x)
-                itt.key_press('esc')
+                if not (ui_control.verify_page(UIPage.page_main) or ui_control.verify_page(UIPage.page_domain)):
+                    itt.key_press('esc')
+                if not aopf: self.aim_operator.continue_threading()
                 return False # failed
                   
-            for i in range(3):
+            for i in range(10):
                 time.sleep(0.15)
                 ret_check_and_reborn_2 = itt.appear_then_click(asset.ButtonGeneralConfirm, is_log=True)
                 print(f"ret_check_and_reborn_2 {ret_check_and_reborn_2}")
-                if ret_check_and_reborn_2:
+                if ret_check_and_reborn_2: itt.delay('animation')
+                if ui_control.verify_page(UIPage.page_main) or ui_control.verify_page(UIPage.page_domain):
                     self.reborn_timer.reset()
                     self.died_character = [] # clean list
                     time.sleep(0.3) # 防止重复检测
+                    if not aopf: self.aim_operator.continue_threading()
                     return True # reborn succ
+            
             self.reborn_timer.reset()
-            itt.key_press('esc')
+            if not (ui_control.verify_page(UIPage.page_main) or ui_control.verify_page(UIPage.page_domain)):
+                itt.key_press('esc')
             time.sleep(0.3) # 防止重复检测
             self.died_character.append(x)
-            itt.key_press('esc')
+            if not (ui_control.verify_page(UIPage.page_main) or ui_control.verify_page(UIPage.page_domain)):
+                itt.key_press('esc')
+            if not aopf: self.aim_operator.continue_threading()
             return False # failed
         else:
             return True
@@ -187,6 +201,7 @@ class SwitchCharacterOperator(BaseThreading):
                 if combat_lib.get_current_chara_num(self.checkup_stop_func, max_times = 5) == x:
                     switch_succ_num += 2
             r = self._check_and_reborn(x)
+            
             if not r: # if r == False
                 return False
             if i > 10:
