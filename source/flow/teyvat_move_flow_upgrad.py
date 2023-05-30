@@ -604,6 +604,9 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
         self.next_flow_id = self.flow_id
         # movement.move_to_position(posi=self.upper.path_dict["end_position"], offset=1,delay=0.01)
         logger.info("path end")
+        if self.motion_state == IN_FLY:
+            logger.info(f"landing")
+            itt.left_click()
         self._set_nfid(ST.END_TEYVAT_MOVE_PASS)
         self.upper.while_sleep = 0.2
         self._next_rfc()

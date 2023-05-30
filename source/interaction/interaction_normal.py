@@ -1,7 +1,8 @@
 from source.util import *
 from source.interaction.interaction_template import InteractionTemplate
 from common import vkcode, static_lib
-import win32api, win32con, pyautogui
+import win32api, win32con
+import pyautogui
 
 class InteractionNormal(InteractionTemplate):
 
