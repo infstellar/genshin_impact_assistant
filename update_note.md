@@ -1,5 +1,5 @@
 ## TODO：
-- TMF没landing
+- eng ocr opt
 - talk加日志
 - TMF加migration
 - commission set time
@@ -20,6 +20,7 @@
 - combat lib识别受ui限制
 
 ## Done：
+- TMF没landing
 - 检测。。。按钮识别是采集物还是人
 - time dilation rate
 - domain 退出 识别错误

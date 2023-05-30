@@ -180,36 +180,43 @@ class SwitchCharacterOperator(BaseThreading):
         """_summary_
 
         Args:
-            x (int): _description_
+            x (int): chara id(1~4)
 
         Returns:
             bool: True: 切换成功; False: 切换失败
         """
         # itt.middle_click()
         t = self.switch_timer.get_diff_time()
-        combat_lib.chara_waiting(self.checkup_stop_func)
+        combat_lib.chara_waiting(self.checkup_stop_func) # 检测异常情况并处理
         logger.debug('try switching to ' + str(x))
-        switch_succ_num = 0
-        switch_target_num = 2
+        switch_succ_num = 0 # 切换成功计数
+        switch_target_num = 2 # 目标次数
         for i in range(60):
             pt = time.time()
             if self.checkup_stop_func(): return False
-            combat_lib.unconventionality_situation_detection()
+            combat_lib.unconventionality_situation_detection() # 处理USD
             itt.key_press(str(x))
+            
+            # 如果切换成功, 快速+2
             if combat_lib.get_current_chara_num(self.checkup_stop_func, max_times = 5) == x:
                 itt.delay(0.1, comment='quick switch delay')
                 if combat_lib.get_current_chara_num(self.checkup_stop_func, max_times = 5) == x:
                     switch_succ_num += 2
-            r = self._check_and_reborn(x)
+                    
+            # 检查并复活角色
+            if i >= 3:
+                r = self._check_and_reborn(x)
             
             if not r: # if r == False
                 return False
+            
+            # 可能卡住,跳一跳
             if i > 10:
                 if i == 11:
                     movement.jump_timer_reset()
                 movement.jump_in_loop(jump_dt=3)
                 if i > 45:
-                    movement.move(i, distance=3)
+                    movement.move([movement.AHEAD,movement.LEFT,movement.RIGHT,movement.BACK][i], distance=3)
             if i > 55:
                 logger.warning('角色切换失败')
             logger.trace(f"sco loop cost: {time.time()-pt}")
