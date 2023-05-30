@@ -190,7 +190,7 @@ class MissionExecutor(BaseThreading):
         r = self.move(MODE="AUTO", target_posi=p, is_tp = is_tp, is_precise_arrival=is_precise_arrival, stop_rule=stop_rule)
         return r
         
-    def move_along(self, path, is_tp = None, is_precise_arrival=None):
+    def move_along(self, path, is_tp = None, is_precise_arrival=None, stop_rule = None):
         if isinstance(path,str):
             path_dict = self.get_path_file(path)
         elif isinstance(path,dict):
@@ -205,7 +205,7 @@ class MissionExecutor(BaseThreading):
                 is_reinit = False
         if is_precise_arrival is None:
             is_precise_arrival = self.default_precise_arrive
-        r = self.move(MODE="PATH", path_dict = path_dict, is_tp = is_tp, is_reinit=is_reinit, is_precise_arrival=is_precise_arrival)
+        r = self.move(MODE="PATH", path_dict = path_dict, is_tp = is_tp, is_reinit=is_reinit, is_precise_arrival=is_precise_arrival, stop_rule=stop_rule)
         self.last_move_along_position = path_dict["end_position"]
         return r
     

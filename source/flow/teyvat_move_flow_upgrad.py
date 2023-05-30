@@ -1,7 +1,6 @@
 from source.util import *
-from source.common import timer_module, static_lib
+from source.common import timer_module
 from source.funclib import generic_lib, movement
-from source.manager import scene_manager, asset
 from source.interaction.interaction_core import itt
 from source.pickup.pickup_operator import PickupOperator
 from funclib.err_code_lib import ERR_PASS, ERR_STUCK
@@ -14,6 +13,7 @@ from source.flow import flow_code as FC
 from source.ui.ui import ui_control
 import source.ui.page as UIPage
 from source.dev_tool.tianli_navigator import TianliNavigator
+from source.funclib import combat_lib
 from source.flow.cvars import *
 
 
@@ -313,6 +313,17 @@ class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon, Navigation):
                     self._set_nfid(ST.END_TEYVAT_MOVE_PASS)
                     self._next_rfc()
                     logger.info(t2t("已到达F附近，本次导航结束。"))
+                    itt.key_up('w')
+        elif self.upper.stop_rule == STOP_RULE_COMBAT:
+            if self.upper.stop_offset is None:
+                threshold = 25
+            else:
+                threshold = self.upper.stop_offset
+            if euclidean_distance(self.upper.target_posi, genshin_map.get_position())<=threshold:
+                if combat_lib.CSDL.get_combat_state():
+                    self._set_nfid(ST.END_TEYVAT_MOVE_PASS)
+                    self._next_rfc()
+                    logger.info(t2t("准备打架，本次导航结束。"))
                     itt.key_up('w')
     def state_after(self):
         self.upper.while_sleep = 1

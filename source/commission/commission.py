@@ -2,6 +2,7 @@ from source.commission.commission_template import CommissionTemplate
 from source.manager.asset import Text
 from source.commission.assets import *
 from source.commission.util import *
+from source.flow.cvars import *
 
 class Commission(CommissionTemplate):
     """
