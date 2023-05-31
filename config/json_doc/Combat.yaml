@@ -4,8 +4,10 @@ name:
   special_index: $INPUT_VERIFY$#character_name
 position:
   select_items:
+  - Main
   - Normal
   - Shield
+  - Recovery
   - ''
 vision:
   select_items:
