@@ -154,10 +154,11 @@ class MissionExecutor(BaseThreading):
         self._init_sub_threading("TMCF")
         self._detect_fight_if_needed()
         puo_start_flag = False
-        if not self.PUO.pause_threading_flag:
-            logger.debug(f"in tmf, pause puo.")
-            puo_start_flag = True
-            self.PUO.pause_threading()
+        if self.PUO_initialized:
+            if not self.PUO.pause_threading_flag:
+                logger.debug(f"in tmf, pause puo.")
+                puo_start_flag = True
+                self.PUO.pause_threading()
         
         self.TMCF.reset()
         self.TMCF.set_parameter(MODE=MODE,stop_rule=stop_rule,target_posi=target_posi,path_dict=path_dict,to_next_posi_offset=to_next_posi_offset,special_keys_posi_offset=special_keys_posi_offset,reaction_to_enemy=reaction_to_enemy,is_tp=is_tp,is_reinit=is_reinit,is_precise_arrival=is_precise_arrival,stop_offset=stop_offset,is_auto_pickup=puo_start_flag)
@@ -172,8 +173,9 @@ class MissionExecutor(BaseThreading):
         if self.TMCF.get_and_reset_err_code() != ERR_PASS:
             self.exception_flag = True
         
-        if puo_start_flag:
-            self.PUO.continue_threading()
+        if self.PUO_initialized:
+            if puo_start_flag:
+                self.PUO.continue_threading()
         return self._handle_exception()
         
     def move_straight(self, position, is_tp = False, is_precise_arrival=None, stop_rule=None):
