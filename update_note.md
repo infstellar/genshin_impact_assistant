@@ -1,6 +1,5 @@
 ## TODO：
-- eng ocr opt
-- talk加日志
+
 - TMF加migration
 - commission set time
 - commission的CSDL end好像有点问题
@@ -20,6 +19,8 @@
 - combat lib识别受ui限制
 
 ## Done：
+- talk加日志
+- eng ocr opt
 - TMF没landing
 - 检测。。。按钮识别是采集物还是人
 - time dilation rate

@@ -83,7 +83,7 @@ class Commission(CommissionTemplate):
         return super().talk_with_options(options)
     
     def exit_talk(self) -> bool:
-        """退出对话, 直到返回主界面.
+        """退出对话和其他任何窗口, 直到返回主界面.
 
         Returns:
             bool: 是否成功.
