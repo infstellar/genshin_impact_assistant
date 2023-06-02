@@ -10,12 +10,14 @@ def generate_mission_index():
         for file in files:
             if file[file.index('.'):]==".py":
                 mission_list.append(file.replace('.py',''))
-    for root, dirs, files in os.walk(os.path.join(ROOT_PATH,"missions")):
-        for file in files:
+    # Only fetch files in the root directory of the missions folder
+    # Do not fetch files in subdirectories
+    for file in os.listdir(os.path.join(ROOT_PATH,"missions")):
+        if os.path.isfile(os.path.join(ROOT_PATH,"missions", file)):
             if file[file.index('.'):]==".py":
                 if file[:file.index('.')] not in ['mission_index', 'mission_meta']:
                     extra_mission_list.append(file.replace('.py',''))
-    
+
     with open(os.path.join(ROOT_PATH,"missions\\mission_index.py"), "w") as f:
         f.write("\"\"\"This file is generated automatically. Do not manually modify it.\"\"\"\n")
         f.write(f"import os, sys\n")
