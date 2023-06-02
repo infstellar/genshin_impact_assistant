@@ -87,13 +87,13 @@ class MissionDownloadPage(AdvancePage):
         self._create_default_settings()
         self.local_mission_names, self.enable_mission_names, self.disable_mission_names = self._read_local_mission_names()
         self.local_mission_meta = self._read_local_mission_meta()
-        self.mission_update_status = {mission_name: "Unknown" for mission_name in self.local_mission_names}
+        self.mission_update_status = {mission_name: t2t("Unknown") for mission_name in self.local_mission_names}
 
         self.available_missions_display = [] # Missions to be displayed in the table. Depend on the filter settings.
         self.tags = [] # Tags to be displayed in the tag filter. From available_missions.
         self.hidden_number = 0 # Number of missions that are hidden by the filter settings.
 
-        self.order_options = ["newest first", "oldest first", "a-z", "z-a", "internal order"] # The order options for the table. Used in the order filter.
+        self.order_options = [t2t("newest first"), t2t("oldest first"), t2t("a-z"), t2t("z-a"), t2t("internal order")] # The order options for the table. Used in the order filter.
         self.error_occured = False # Whether an error occured during the process. Used in _apply_and_save.
 
     """
@@ -138,7 +138,7 @@ class MissionDownloadPage(AdvancePage):
             pin.put_select(name = "SELECT_INDEX_URL", label=t2t("Load index from:"), options=self.INDEX_SOURCE_OPTIONS, value=self.INDEX_SOURCE_OPTIONS[0]) # type: ignore
 
     def _render_installed_board(self):
-        self.mission_update_status = {mission_name: "Unknown" for mission_name in self.local_mission_names}
+        self.mission_update_status = {mission_name: t2t("Unknown") for mission_name in self.local_mission_names}
 
         with output.use_scope("missiondownload-installed-board", clear=True):
             output.put_grid([
@@ -156,8 +156,8 @@ class MissionDownloadPage(AdvancePage):
         # Convert local_mission_meta to table
         table = []
         header = ["Enabled", "ID", "Mission", "Tags", "Author", "Description", "Last Update Time", "Update"]
-        header = [output.put_text(_) for _ in header]
-        header = header + [output.put_text("Delete").style("color: red")]
+        header = [output.put_text(t2t(_)) for _ in header]
+        header = header + [output.put_text(t2t("Delete")).style("color: red")]
         table.append(header)
         for mission_name in self.local_mission_names:
             entry = self.local_mission_meta[mission_name]
@@ -167,8 +167,8 @@ class MissionDownloadPage(AdvancePage):
             ID = entry["name"]
             Mission = entry["title"]
             entry_tags = entry["tags"]
-            if "installed" in entry["tags"]:
-                entry_tags.remove("installed")
+            if t2t("installed") in entry["tags"]:
+                entry_tags.remove(t2t("installed"))
             Tags = ", ".join(entry_tags)
             Author = entry["author"]
             Description = entry["description"]
@@ -179,12 +179,12 @@ class MissionDownloadPage(AdvancePage):
             text_entry = [output.put_text(_) for _ in text_entry]
 
             Update = self.mission_update_status[mission_name]
-            if Update == "Update available":
+            if Update == t2t("Update available"):
                 Update = pin.put_checkbox(label="", name=f"UPDATE_{mission_name}", options=[t2t("Update")], value=[], inline=True).style("text-align: left; color:blue")
-            elif Update == "No update available":
+            elif Update == t2t("No update available"):
                 Update = output.put_text("/")
-            elif Update == "Unknown":
-                Update = output.put_text("Unknown").style("color: gray")
+            elif Update == t2t("Unknown"):
+                Update = output.put_text(t2t("Unknown")).style("color: gray")
             else:
                 Update = output.put_text(Update).style("color: red")
             
@@ -200,10 +200,10 @@ class MissionDownloadPage(AdvancePage):
             if len(self.available_missions["tags"]) == 0:
                 output.put_markdown(t2t("Please load the mission index first."))
             else:
-                tagset = ["installed"] + list(self.available_missions["tags"].keys())
+                tagset = [t2t("installed")] + list(self.available_missions["tags"].keys())
                 output.put_row([
-                    pin.put_checkbox(name = "CHECKBOX_HIDE_TAGS", options=tagset, value=["installed"], inline=True, label=t2t("Hide tags:")), # type: ignore
-                    pin.put_radio(name = "RADIO_SORT_BY", options=self.order_options, value="newest first", inline=True, label=t2t("Order:")) # type: ignore
+                    pin.put_checkbox(name = "CHECKBOX_HIDE_TAGS", options=tagset, value=[t2t("installed")], inline=True, label=t2t("Hide tags:")), # type: ignore
+                    pin.put_radio(name = "RADIO_SORT_BY", options=self.order_options, value=self.order_options[0], inline=True, label=t2t("Order:")) # type: ignore
                 ])
                 pin.put_input(name="INPUT_FILTER", label="Search:", type="text", value="")
                 output.put_scope("missiondownload-available-table")
@@ -232,7 +232,7 @@ class MissionDownloadPage(AdvancePage):
         
         table = []
         header = ["ID", "Mission", "Tags", "Author", "Description", "Last Update Time", "Action"]
-        header = [output.put_text(_) for _ in header]
+        header = [output.put_text(t2t(_)) for _ in header]
         table.append(header)
 
         for entry in available_missions_display:
@@ -247,8 +247,8 @@ class MissionDownloadPage(AdvancePage):
             text_entry = [ID, Mission, Tags, Author, Description, Last_Update_Time]
             text_entry = [output.put_text(_) for _ in text_entry]
 
-            if "installed" in entry_tags:
-                Action = output.put_text("Installed").style("color: gray")
+            if t2t("installed") in entry_tags:
+                Action = output.put_text(t2t("Installed")).style("color: gray")
             else:
                 Action = output.put_button(label=t2t("Install"), color="primary", onclick=partial(onclick_install, mission_name))
             
@@ -260,7 +260,7 @@ class MissionDownloadPage(AdvancePage):
             output.put_table(table)
 
     def _render_progress_popup(self):
-        output.popup('Apply and Save', [
+        output.popup(t2t('Apply and Save'), [
             output.put_markdown(t2t('Please wait for the progress to finish.')),
             output.put_processbar(name="PROGRESS_APPLY_AND_SAVE", label=t2t('Update Progress'), auto_close=False),
             output.put_text("\n"),
@@ -274,7 +274,7 @@ class MissionDownloadPage(AdvancePage):
             delete_backup = True if pin.pin["CHECKBOX_DELETE_BACKUP_CONFIRM"] ==  [delete_backup_message] else False
             self._apply_and_save(disable_list, update_list, disable_all, delete_list, delete_backup)
         
-        output.popup('Delete Confirm', [
+        output.popup(t2t('Delete Confirm'), [
             output.put_markdown(t2t('Are you sure you want to delete the selected missions?')),
             output.put_markdown(t2t('Notice: This action **cannot** be undone!')),
             pin.put_checkbox(name="CHECKBOX_DELETE_BACKUP_CONFIRM", options=[delete_backup_message], inline=True).style("color: red"),
@@ -574,20 +574,20 @@ class MissionDownloadPage(AdvancePage):
 
         for i, mission_name in enumerate(process_mission_names):
             if mission_name not in self.available_missions_dict:
-                update_status[mission_name] = "Not available on remote"
+                update_status[mission_name] = t2t("Not available on remote")
                 continue
             if mission_name not in self.local_mission_meta:
-                update_status[mission_name] = "No meta data in local"
+                update_status[mission_name] = t2t("No meta data in local")
                 continue
             if not self.local_mission_meta[mission_name]["last_update"] or not self.available_missions_dict[mission_name]["last_update"]:
-                update_status[mission_name] = "No last update info"
+                update_status[mission_name] = t2t("No last update info")
                 continue
             remote_last_update = datetime.strptime(self.available_missions_dict[mission_name]["last_update"], "%Y-%m-%d %H:%M:%S")
             local_last_update = datetime.strptime(self.local_mission_meta[mission_name]["last_update"], "%Y-%m-%d %H:%M:%S")
             if remote_last_update > local_last_update:
-                update_status[mission_name] = "Update available"
+                update_status[mission_name] = t2t("Update available")
             else:
-                update_status[mission_name] = "No update available"
+                update_status[mission_name] = t2t("No update available")
         
         return update_status
 
@@ -650,9 +650,9 @@ class MissionDownloadPage(AdvancePage):
             mission_tags = mission.get("tags", [])
 
             # Examines if the mission is installed
-            if "installed" not in mission_tags:
+            if t2t("installed") not in mission_tags:
                 existing = name in self.local_mission_names
-                mission_tags = mission_tags + ["installed"] if existing else mission_tags
+                mission_tags = mission_tags + [t2t("installed")] if existing else mission_tags
                 mission["tags"] = mission_tags
 
             if len([x for x in mission_tags if x in tags_to_hide]) > 0:
