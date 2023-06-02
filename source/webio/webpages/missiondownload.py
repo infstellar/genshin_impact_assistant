@@ -265,7 +265,7 @@ class MissionDownloadPage(AdvancePage):
             output.put_processbar(name="PROGRESS_APPLY_AND_SAVE", label=t2t('Update Progress'), auto_close=False),
             output.put_text("\n"),
             output.put_scope("POPUP_CLOSE")
-        ])
+        ], implicit_close = False)
 
     def _render_delete_confirm_popup(self, disable_list, update_list, disable_all, delete_list):
         delete_backup_message = t2t("Delete all backup files for this mission as well")
@@ -285,7 +285,7 @@ class MissionDownloadPage(AdvancePage):
                 output.put_button(label=t2t("Cancel"), color="primary", onclick=output.close_popup),
                 None
             ], size='20% 30% 30% 20%')
-        ])
+        ], implicit_close = False)
 
     def _event_thread(self):
         time.sleep(0.1)
