@@ -66,7 +66,7 @@ class MissionDownloadPage(AdvancePage):
             "Gitee": ""
         }
         self.INDEX_SOURCE_OPTIONS = [key+":  "+value for key, value in self.INDEX_SOURCE.items()]
-        self.INDEX_SOURCE_SELECT = "Github (ghproxy.com)"
+        self.INDEX_SOURCE_SELECT = "Github (Direct)"
         self.INDEX_URL = self.INDEX_SOURCE[self.INDEX_SOURCE_SELECT]
         self.requests_headers = {"Cache-Control": "no-cache", "Pragma": "no-cache"}
 
