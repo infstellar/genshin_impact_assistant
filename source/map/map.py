@@ -40,8 +40,8 @@ class Map(MiniMap, BigMap, MapConverter):
         self.BIGMAP_MOVE_MAX = 130  # 最大移动力度
         self.TP_RANGE = 350  # 在该像素范围内可tp
         self.MINIMAP_UPDATE_LIMIT = 0.1  # minimap更新最短时间
-        self.MINIMAP_ERROR_BASE_LIMIT = 10 # minimap基本更新误差
-        self.METER_PER_SECOND = 10 # 移动速度，m/s
+        self.MINIMAP_ERROR_BASE_LIMIT = 20 # minimap基本更新误差
+        self.METER_PER_SECOND = 10+5 # 移动速度，m/s
 
         self.smallmap_upd_timer = timer_module.Timer(10)
         self.small_map_init_flag = False
@@ -56,7 +56,7 @@ class Map(MiniMap, BigMap, MapConverter):
         # self.lock.acquire()
         if itt.get_img_existence(asset.IconUIEmergencyFood, is_log=False):
             self.update_position(itt.capture(jpgmode=0))
-            self.smallmap_upd_timer.reset()
+            # self.smallmap_upd_timer.reset()
         # self.lock.release()
 
     def _upd_bigmap(self) -> None:
@@ -117,15 +117,16 @@ class Map(MiniMap, BigMap, MapConverter):
         self._upd_smallmap()
         if is_verify_position:
             if self.smallmap_upd_timer.get_diff_time() <= 8:
-                if euclidean_distance(self.last_valid_position,self.convert_GIMAP_to_cvAutoTrack(self.position)) \
-                    >= \
-                    self.MINIMAP_UPDATE_LIMIT + self.smallmap_upd_timer.get_diff_time()*self.METER_PER_SECOND:
-                    
-                    logger.warning(f"migration of position over limit, give up position")
+                last_dist = euclidean_distance(self.last_valid_position,self.convert_GIMAP_to_cvAutoTrack(self.position))
+                error_limit = self.MINIMAP_ERROR_BASE_LIMIT + self.smallmap_upd_timer.get_diff_time()*self.METER_PER_SECOND
+                if last_dist > error_limit:
+                    logger.warning(f"migration of position {round(last_dist,2)} over limit {round(error_limit,2)}, give up position")
                     return self.last_valid_position
             
-            self.smallmap_upd_timer.reset()
-        return self.convert_GIMAP_to_cvAutoTrack(self.position)
+        self.smallmap_upd_timer.reset()
+        r_posi = self.convert_GIMAP_to_cvAutoTrack(self.position)
+        self.last_valid_position = r_posi
+        return r_posi
 
     def is_similarity_qualified(self, offset_rate=1):
         return self.position_similarity>=0.4*offset_rate and self.position_similarity_local>=0.05*offset_rate
@@ -139,7 +140,7 @@ class Map(MiniMap, BigMap, MapConverter):
                 ui_control.ui_goto(UIPage.page_main)
                 self.small_map_init_flag = True
                 self.last_valid_position = self.convert_GIMAP_to_cvAutoTrack(self.position)
-                self.smallmap_upd_timer
+                self.smallmap_upd_timer.reset()
             else:
                 logger.info(f"init too fast, skip")
 

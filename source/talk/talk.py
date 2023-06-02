@@ -95,7 +95,8 @@ class Talk():
                     pickup_specific_item(npc_name.text)
                     logger.info("Talk with npc succ.")
                     return True
-            logger.warning(f"Cannot find NPC: {npc_name.text}")
+            if npc_name != None:
+                logger.warning(f"Cannot find NPC: {npc_name.text}")
             return False
         else:
             logger.warning(f"Cannot find any NPC")
