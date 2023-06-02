@@ -662,7 +662,7 @@ class MissionDownloadPage(AdvancePage):
             if filter_text and filter_text.strip():
                 search_field = ["name", "title", "tags", "author", "description"]
                 search_content = " ".join([str(mission.get(x, "")) for x in search_field])
-                if filter_text.lower() not in search_content:
+                if filter_text.lower() not in search_content.lower():
                     hidden_number += 1
                     continue
             available_missions_display.append(mission)
