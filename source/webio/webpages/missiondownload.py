@@ -82,24 +82,27 @@ class MissionDownloadPage(AdvancePage):
         self.mission_update_status = {}
 
         self.available_missions = {"missions": [], "tags": {}}
-        self.available_missions_dict = {}
+        self.available_missions_dict = {} # The same as available_missions, but in dict format.
 
         self._create_default_settings()
         self.local_mission_names, self.enable_mission_names, self.disable_mission_names = self._read_local_mission_names()
         self.local_mission_meta = self._read_local_mission_meta()
         self.mission_update_status = {mission_name: "Unknown" for mission_name in self.local_mission_names}
 
-        self.available_missions_display = []
-        self.tags = []
-        self.hidden_number = 0
+        self.available_missions_display = [] # Missions to be displayed in the table. Depend on the filter settings.
+        self.tags = [] # Tags to be displayed in the tag filter. From available_missions.
+        self.hidden_number = 0 # Number of missions that are hidden by the filter settings.
 
-        self.order_options = ["newest first", "oldest first", "a-z", "z-a", "internal order"]
-        self.error_occured = False
+        self.order_options = ["newest first", "oldest first", "a-z", "z-a", "internal order"] # The order options for the table. Used in the order filter.
+        self.error_occured = False # Whether an error occured during the process. Used in _apply_and_save.
 
     """
     The following methods are used to produce the UI.
     """
     def _load(self):
+        """
+        The entrance of the render process. Load the page.
+        """
         with output.use_scope(self.main_scope):
             output.put_text("")
             output.put_scope("missiondownload-upload-board").style('border: 1px solid #0099FF; border-radius: 5px; padding: 10px; text-align: center;')
@@ -209,7 +212,7 @@ class MissionDownloadPage(AdvancePage):
     def _refresh_available_board(self):
         output.toast(t2t("Downloading mission index..."), color="info")
         self._refresh_available_missions()
-        # Reset the Filter
+        # Reset the Filter by rendering the board again
         self._render_available_board()
         output.toast(t2t("Finished downloading mission index"), color="success")
 
@@ -319,6 +322,7 @@ class MissionDownloadPage(AdvancePage):
             List: The mission names.
         """
         # Mission file should be .py stored in LOCAL_MISSION_FOLDER and DISABLE_MISSION_FOLDER
+        # Files in subfolder will be ignored.
         enable_missions = []
         disable_missions = []
         for f in os.listdir(self.LOCAL_MISSION_FOLDER):
@@ -361,6 +365,9 @@ class MissionDownloadPage(AdvancePage):
         return j
 
     def _convert_url_to_download_link(self, url):
+        """
+        Convert the url to download link, depends on the INDEX_SOURCE_SELECT.
+        """
         url = url.replace("/blob/", "/raw/")
         if self.INDEX_SOURCE_SELECT == "Github (Direct)":
             return url
@@ -370,7 +377,7 @@ class MissionDownloadPage(AdvancePage):
 
     def _refresh_available_missions(self):
         """
-        Refresh the list of available missions.
+        Download the mission index and refresh the available_missions and available_missions_dict.
         """
         # TODO: 是否要用多线程？
         url = self.INDEX_URL
@@ -484,6 +491,8 @@ class MissionDownloadPage(AdvancePage):
             disable_list (List): A list containg the mission names to be disabled.
             update_list (List): A list containg the mission names to be updated.
             disable_all (Boolean): Disable all missions if True.
+            delete_list (List): A list containg the mission names to be deleted.
+            delete_backup (Boolean): Delete the backup folder of mission if True.
         """
         self.error_occured = False
 
@@ -609,10 +618,11 @@ class MissionDownloadPage(AdvancePage):
     def _get_available_missions_display(self, hide_tags, sort_column=0, filter_text=""):
         """
         Get the list of available missions to display according to the filter.
+        The format of available_missions_display is the same as available_missions["missions"].
 
         Args:
             hide_tags (List): The list of tags to hide.
-            sort_column (int): The ordering to sort by.
+            sort_column (int): The ordering to sort by. Defaults to 0.
             filter_text (str, optional): The text to filter by. Defaults to "".
 
         Returns:
@@ -639,6 +649,7 @@ class MissionDownloadPage(AdvancePage):
 
             mission_tags = mission.get("tags", [])
 
+            # Examines if the mission is installed
             if "installed" not in mission_tags:
                 existing = name in self.local_mission_names
                 mission_tags = mission_tags + ["installed"] if existing else mission_tags
@@ -660,7 +671,7 @@ class MissionDownloadPage(AdvancePage):
 
 
     """
-    The following functions are for the test.
+    The following functions are for testing purposes only.
     """
     def _test_function(self):
         with output.use_scope(self.main_scope):
