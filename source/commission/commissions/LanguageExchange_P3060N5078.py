@@ -20,6 +20,7 @@ class LanguageExchange_P3060N5078(CommissionTemplate):
         self.move_straight(["LanguageExchange20230414230452i3","end_position"], is_precise_arrival=True)
         self.talk_with_npc()
         self.talk_skip()
+        self.commission_succ()
         
 if __name__ == '__main__':
     execc = LanguageExchange_P3060N5078()

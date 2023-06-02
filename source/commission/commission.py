@@ -1,4 +1,4 @@
-from source.commission.commission_template import CommissionTemplate
+from source.commission.commission_template import CommissionTemplate, LanguageError
 from source.manager.asset import Text
 from source.commission.assets import *
 from source.commission.util import *
@@ -9,15 +9,23 @@ class Commission(CommissionTemplate):
     每日委托模板类.
     大部分方法与自定义任务一致,添加了对话模块.
     """
-    def __init__(self, commission_type:str, commission_position:list, is_CFCF=True, is_PUO=True, is_TMCF=True, is_CCT=False):
+    def __init__(self, commission_type:str, commission_position:list, is_CFCF=True, is_PUO=True, is_TMCF=True, is_CCT=False, supported_lang = 'zh_CN en_US'):
         """初始化委托.
 
         Args:
             commission_type (str): 委托名.英文名.
             commission_position (list): 委托的坐标.天理坐标格式.
         """
+        if GLOBAL_LANG not in supported_lang:
+            logger.error(t2t("不支持的语言:")+str(GLOBAL_LANG))
+            raise LanguageError
         super().__init__(commission_type, commission_position, is_CFCF, is_PUO, is_TMCF, is_CCT)
-        
+    
+    def commission_succ(self):
+        """委托执行成功时调用。
+        """
+        super().commission_succ()
+     
     def talk_skip(self, stop_func=None):
         """跳过对话,直到回到大世界.
         如果有选项,会自动点击最下面的选项.

@@ -1,6 +1,5 @@
 ## TODO：
-
-- TMF加migration
+- generate pot: use "path"
 - commission set time
 - commission的CSDL end好像有点问题
 - 测试优化的复活功能
@@ -19,6 +18,7 @@
 - combat lib识别受ui限制
 
 ## Done：
+- TMF加migration
 - talk加日志
 - eng ocr opt
 - TMF没landing

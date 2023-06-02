@@ -15,7 +15,7 @@ class TheUnnoticedGuy_P2568N5889(Commission):
         self.handle_tmf_stuck_then_raise(r)
         self.talk_with_npc()
         self.talk_skip()
-        self.is_commission_succ=True
+        self.commission_succ()
     
 if __name__ == '__main__':
     execc = TheUnnoticedGuy_P2568N5889()

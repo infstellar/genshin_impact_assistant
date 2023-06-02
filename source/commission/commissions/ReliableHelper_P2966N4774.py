@@ -16,6 +16,7 @@ class ReliableHelper_P2966N4774(Commission):
         self.move_straight(["ReliableHelper20230415185053i2","end_position"])
         self.talk_with_npc()
         self.talk_skip()
+        self.commission_succ()
         
 if __name__ == '__main__':
     execc = ReliableHelper_P2966N4774()

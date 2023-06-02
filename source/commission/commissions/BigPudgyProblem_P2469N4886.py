@@ -14,7 +14,7 @@ class BigPudgyProblem_P2469N4886(CommissionTemplate):
         # self.switch_character_to("Sucrose")
         # self.itt.key_press('e')
         # self.collect(is_combat=True)
-        self.is_commission_succ=True
+        self.commission_succ()
 
 if __name__ == '__main__':
     execc = BigPudgyProblem_P2469N4886()
