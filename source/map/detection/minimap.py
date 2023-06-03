@@ -5,7 +5,9 @@ from cached_property import cached_property
 from source.map.detection.resource import MiniMapResource
 from source.map.detection.utils import *
 from source.map.extractor.convert import MapConverter
-from source.util import logger
+from source.funclib.small_map import jwa_3, posi_map
+from source.util import logger, GIAconfig
+from source.interaction.interaction_core import itt
 
 
 class MiniMap(MiniMapResource):
@@ -133,6 +135,7 @@ class MiniMap(MiniMapResource):
         self.position_similarity_local = round(best_local_sim, 5)
         self.position = tuple(np.round(best_loca, 1))
         self.scene = best_scene
+        # logger.trace(f'P:({float2str(self.position[0], 4)}, {float2str(self.position[1], 4)}) ')
         return self.position
 
     def update_direction(self, image):
@@ -246,90 +249,93 @@ class MiniMap(MiniMapResource):
         return image
 
     def _predict_rotation(self, image):
-        d = self.MINIMAP_RADIUS * 2
-        # Upscale image and apply Gaussian filter for smother results
-        scale = 2
-        image = cv2.GaussianBlur(image, (3, 3), 0)
-        # Expand circle into rectangle
-        remap = cv2.remap(image, *self.RotationRemapData, cv2.INTER_LINEAR)[d * 1 // 10:d * 5 // 10].astype(np.float32)
-        remap = cv2.resize(remap, None, fx=scale, fy=scale, interpolation=cv2.INTER_LINEAR)
-        # Find derivative
-        gradx = cv2.Scharr(remap, cv2.CV_32F, 1, 0)
-        # plt.imshow(gradx)
-        # plt.show()
+        if not GIAconfig.General_UsingAlphaChannel:
+            d = self.MINIMAP_RADIUS * 2
+            # Upscale image and apply Gaussian filter for smother results
+            scale = 2
+            image = cv2.GaussianBlur(image, (3, 3), 0)
+            # Expand circle into rectangle
+            remap = cv2.remap(image, *self.RotationRemapData, cv2.INTER_LINEAR)[d * 1 // 10:d * 5 // 10].astype(np.float32)
+            remap = cv2.resize(remap, None, fx=scale, fy=scale, interpolation=cv2.INTER_LINEAR)
+            # Find derivative
+            gradx = cv2.Scharr(remap, cv2.CV_32F, 1, 0)
+            # plt.imshow(gradx)
+            # plt.show()
 
-        # Magic parameters for scipy.find_peaks
-        para = {
-            # 'height': (50, 800),
-            'height': 50,
-            # 'prominence': (0, 400),
-            # 'width': (0, d * scale / 20),
-            # 'distance': d * scale / 18,
-            'wlen': d * scale,
-        }
-        # plt.plot(gradx[d * 3 // 10])
-        # plt.show()
+            # Magic parameters for scipy.find_peaks
+            para = {
+                # 'height': (50, 800),
+                'height': 50,
+                # 'prominence': (0, 400),
+                # 'width': (0, d * scale / 20),
+                # 'distance': d * scale / 18,
+                'wlen': d * scale,
+            }
+            # plt.plot(gradx[d * 3 // 10])
+            # plt.show()
 
-        # `l` for the left of sight area, derivative is positive
-        # `r` for the right of sight area, derivative is negative
-        l = np.bincount(signal.find_peaks(gradx.ravel(), **para)[0] % (d * scale), minlength=d * scale)
-        r = np.bincount(signal.find_peaks(-gradx.ravel(), **para)[0] % (d * scale), minlength=d * scale)
-        l, r = np.maximum(l - r, 0), np.maximum(r - l, 0)
-        # plt.plot(l)
-        # plt.plot(np.roll(r, -d * scale // 4))
-        # plt.show()
+            # `l` for the left of sight area, derivative is positive
+            # `r` for the right of sight area, derivative is negative
+            l = np.bincount(signal.find_peaks(gradx.ravel(), **para)[0] % (d * scale), minlength=d * scale)
+            r = np.bincount(signal.find_peaks(-gradx.ravel(), **para)[0] % (d * scale), minlength=d * scale)
+            l, r = np.maximum(l - r, 0), np.maximum(r - l, 0)
+            # plt.plot(l)
+            # plt.plot(np.roll(r, -d * scale // 4))
+            # plt.show()
 
-        conv0 = []
-        kernel = 2 * scale
-        for offset in range(-kernel + 1, kernel):
-            result = l * convolve(np.roll(r, -d * scale // 4 + offset), kernel=3 * scale)
-            minus = l * convolve(np.roll(r, offset), kernel=10 * scale) // 5
-            # if offset == 0:
-            #     plt.plot(result)
-            #     plt.plot(-minus)
-            #     plt.show()
-            result -= minus
-            result = convolve(result, kernel=3 * scale)
-            conv0 += [result]
-        # plt.figure(figsize=(20, 16))
-        # for row in conv0:
-        #     plt.plot(row)
-        # plt.show()
+            conv0 = []
+            kernel = 2 * scale
+            for offset in range(-kernel + 1, kernel):
+                result = l * convolve(np.roll(r, -d * scale // 4 + offset), kernel=3 * scale)
+                minus = l * convolve(np.roll(r, offset), kernel=10 * scale) // 5
+                # if offset == 0:
+                #     plt.plot(result)
+                #     plt.plot(-minus)
+                #     plt.show()
+                result -= minus
+                result = convolve(result, kernel=3 * scale)
+                conv0 += [result]
+            # plt.figure(figsize=(20, 16))
+            # for row in conv0:
+            #     plt.plot(row)
+            # plt.show()
 
-        conv0 = np.array(conv0)
-        conv0[conv0 < 1] = 1
-        maximum = np.max(conv0, axis=0)
-        if peak_confidence(maximum) > 0.3:
-            # Good match
-            result = maximum
+            conv0 = np.array(conv0)
+            conv0[conv0 < 1] = 1
+            maximum = np.max(conv0, axis=0)
+            if peak_confidence(maximum) > 0.3:
+                # Good match
+                result = maximum
+            else:
+                # Convolve again to reduce noice
+                average = np.mean(conv0, axis=0)
+                minimum = np.min(conv0, axis=0)
+                result = convolve(maximum * average * minimum, 2 * scale)
+            # plt.plot(maximum)
+            # plt.plot(result)
+            # plt.show()
+
+            # Convert match point to degree
+            self.degree = np.argmax(result) / (d * scale) * 2 * np.pi + np.pi / 4
+            degree = np.argmax(result) / (d * scale) * 360 + 135
+            degree = int(degree % 360)
+            self.rotation = degree
+
+            # Calculate confidence
+            self.rotation_confidence = round(peak_confidence(result), 3)
+
+            # Convert
+            if degree > 180:
+                degree = 360 - degree
+            else:
+                degree = -degree
+            self.rotation = degree
+
+            # Calculate confidence
+            self.rotation_confidence = round(peak_confidence(result), 3)
+            return degree
         else:
-            # Convolve again to reduce noice
-            average = np.mean(conv0, axis=0)
-            minimum = np.min(conv0, axis=0)
-            result = convolve(maximum * average * minimum, 2 * scale)
-        # plt.plot(maximum)
-        # plt.plot(result)
-        # plt.show()
-
-        # Convert match point to degree
-        self.degree = np.argmax(result) / (d * scale) * 2 * np.pi + np.pi / 4
-        degree = np.argmax(result) / (d * scale) * 360 + 135
-        degree = int(degree % 360)
-        self.rotation = degree
-
-        # Calculate confidence
-        self.rotation_confidence = round(peak_confidence(result), 3)
-
-        # Convert
-        if degree > 180:
-            degree = 360 - degree
-        else:
-            degree = -degree
-        self.rotation = degree
-
-        # Calculate confidence
-        self.rotation_confidence = round(peak_confidence(result), 3)
-        return degree
+            return jwa_3(itt.capture(posi=posi_map))
 
     def update_rotation(self, image, layer=MapConverter.LAYER_Teyvat, update_position=True):
         # minimap = self._get_minimap(image, radius=self.MINIMAP_RADIUS)
@@ -430,24 +436,23 @@ class MiniMap(MiniMapResource):
 #         minimap.update_minimap(device.image)
 
 
-# if __name__ == '__main__':
-#     """
-#     MiniMap windows窗口监听测试
-#     """
-#     from source.interaction.capture import WindowsCapture
-#     import time
-#     device = WindowsCapture(ignore_shape=True)
-#     minimap = MiniMap(MiniMap.DETECT_Desktop_1080p)
-#     # 从璃月港传送点出发，初始坐标大概大概50px以内就行
-#     # 坐标位置是 GIMAP 的图片坐标
-#     minimap.init_position((4580, 3046))
-#     # 你可以移动人物，GIA会持续监听小地图位置和角色朝向
-#     while 1:
-#         image = device.capture()
-#         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-#         if image.shape != (1080, 1920, 3):
-#             time.sleep(0.3)
-#             continue
-#
-#         minimap.update_minimap(image)
-#         time.sleep(0.3)
+if __name__ == '__main__':
+    """
+    MiniMap windows窗口监听测试
+    """
+    from source.interaction.capture import WindowsCapture
+    import time
+    device = WindowsCapture()
+    minimap = MiniMap(MiniMap.DETECT_Desktop_1080p)
+    # 坐标位置是 GIMAP 的图片坐标
+    minimap.init_position((5469, 973))
+    # 你可以移动人物，GIA会持续监听小地图位置和角色朝向
+    while 1:
+        image = itt.capture(jpgmode=0)
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        # if image.shape != (1080, 1920, 3):
+        #     time.sleep(0.3)
+        #     continue
+
+        minimap.update_minimap(image)
+        time.sleep(0.3)
