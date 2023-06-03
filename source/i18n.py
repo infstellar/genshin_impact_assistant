@@ -1,4 +1,13 @@
-"""i18n module for GIA."""
+# coding:utf-8
+
+
+# i18n module for GIA.
+
+# Usage:
+#     1. run `translation/generate_pot.py`
+#     2. edit `translation\locale\zh_CN\LC_MESSAGES\xx.po` in PoEdit or other software (need to apply `.pot` file in PoEdit)
+#     3. save `.po` file. the `.mo` file will be generate when GIA start.
+
 
 import gettext, os, json, locale
 from source.path_lib import *
