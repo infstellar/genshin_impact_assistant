@@ -365,15 +365,16 @@ def get_characters_name(max_retry = 50):
         # img = extract_white_letters(cap)
         img = cap
         ret_list = []
-        for i in [asset.AreaCombatCharacterName1,asset.AreaCombatCharacterName2,asset.AreaCombatCharacterName3,asset.AreaCombatCharacterName4]:
+        for name_area in [asset.AreaCombatCharacterName1,asset.AreaCombatCharacterName2,asset.AreaCombatCharacterName3,asset.AreaCombatCharacterName4]:
             img2 = img.copy()
-            img3 = crop(img2,i.position)
+            img3 = crop(img2,name_area.position)
             texts = ocr.get_all_texts(img3)
             succ=False
             for t in texts:
                 if translate_character_auto(t) != None:
                     ret_list.append(translate_character_auto(t))
                     succ=True
+                    break
             if not succ:
                 if retry_times<max_retry-1:
                     logger.warning(f"get characters name fail, retry {retry_times}")

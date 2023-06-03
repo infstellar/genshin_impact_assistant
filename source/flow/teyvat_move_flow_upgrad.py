@@ -1,7 +1,6 @@
 from source.util import *
-from source.common import timer_module, static_lib
+from source.common import timer_module
 from source.funclib import generic_lib, movement
-from source.manager import scene_manager, asset
 from source.interaction.interaction_core import itt
 from source.pickup.pickup_operator import PickupOperator
 from funclib.err_code_lib import ERR_PASS, ERR_STUCK
@@ -14,6 +13,7 @@ from source.flow import flow_code as FC
 from source.ui.ui import ui_control
 import source.ui.page as UIPage
 from source.dev_tool.tianli_navigator import TianliNavigator
+from source.funclib import combat_lib
 from source.flow.cvars import *
 
 
@@ -146,6 +146,43 @@ class TeyvatMoveCommon():
                 logger.info(f"position duplication, press w")
                 itt.key_press('w')
 
+    def detect_stop_rule(self, stop_rule, is_precise_arrival, target_posi, stop_offset):
+        if stop_rule == STOP_RULE_ARRIVE:
+            if is_precise_arrival:
+                threshold=1
+            else:
+                threshold=6
+            if euclidean_distance(target_posi, genshin_map.get_position())<=threshold:
+                logger.info(t2t("已到达目的地附近，本次导航结束。"))
+                itt.key_up('w')
+                return True
+        elif stop_rule == STOP_RULE_F:
+            if stop_offset is None:
+                threshold = 25
+            else:
+                threshold = stop_offset
+            if euclidean_distance(target_posi, genshin_map.get_position())<=threshold:
+                if generic_lib.f_recognition():
+                    itt.key_up('w')
+                    itt.delay('2animation')
+                    if generic_lib.f_recognition():
+                        logger.info(t2t("已到达F附近，本次导航结束。"))
+                        return True
+                    else:
+                        logger.info(f"fake f")
+                        itt.key_down('w')
+        elif stop_rule == STOP_RULE_COMBAT:
+            if stop_offset is None:
+                threshold = 25
+            else:
+                threshold = stop_offset
+            if euclidean_distance(target_posi, genshin_map.get_position())<=threshold:
+                if combat_lib.CSDL.get_combat_state():
+                    logger.info(t2t("准备打架，本次导航结束。"))
+                    itt.key_up('w')
+                    return True
+        return False
+    
 class Navigation(TianliNavigator):
     def __init__(self, start, end) -> None:
         super().__init__()
@@ -242,7 +279,7 @@ class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon, Navigation):
         self.auto_move_timeout.reset()
         self.history_position_timer.reset()
         self.history_position = []
-        self.upper.while_sleep = 0
+        self.upper.while_sleep = 0.05
         self.in_flag = False
         self.current_posi = genshin_map.get_position()
         if self.upper.is_tianli_navigation:
@@ -283,6 +320,10 @@ class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon, Navigation):
             itt.key_down('w')
             self.in_flag = True
         
+        r = self.detect_stop_rule(self.upper.stop_rule, self.upper.is_precise_arrival, self.upper.target_posi, self.upper.stop_offset)
+        if r:
+            self._next_rfc()
+        
         self.auto_w(self.current_posi)
         
         # if len(genshin_map.history_posi) >= 29:
@@ -293,27 +334,8 @@ class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon, Navigation):
         #         self._set_nfid(ST.END_TEYVAT_MOVE_STUCK)
         #         self._next_rfc()
         
-        if self.upper.stop_rule == STOP_RULE_ARRIVE:
-            if self.upper.is_precise_arrival:
-                threshold=1
-            else:
-                threshold=6
-            if euclidean_distance(self.upper.target_posi, genshin_map.get_position())<=threshold:
-                logger.info(t2t("已到达目的地附近，本次导航结束。"))
-                itt.key_up('w')
-                self._set_nfid(ST.END_TEYVAT_MOVE_PASS)
-                self._next_rfc()
-        elif self.upper.stop_rule == STOP_RULE_F:
-            if self.upper.stop_offset is None:
-                threshold = 25
-            else:
-                threshold = self.upper.stop_offset
-            if euclidean_distance(self.upper.target_posi, genshin_map.get_position())<=threshold:
-                if generic_lib.f_recognition():
-                    self._set_nfid(ST.END_TEYVAT_MOVE_PASS)
-                    self._next_rfc()
-                    logger.info(t2t("已到达F附近，本次导航结束。"))
-                    itt.key_up('w')
+        
+        
     def state_after(self):
         self.upper.while_sleep = 1
         self.switch_motion_state(jump=False)
@@ -566,6 +588,10 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
             self._set_nfid(ST.END_TEYVAT_MOVE_STUCK)
             self._set_rfc(FC.END)
         
+        r = self.detect_stop_rule(self.upper.stop_rule, self.upper.is_precise_arrival, self.upper.path_dict["end_position"], self.upper.stop_offset)
+        if r:
+            self._next_rfc()
+        
         # 输出日志
         logger.debug(f"next break position distance: {euclidean_distance(target_posi, curr_posi)}")
         self.in_pt.output_log(mess='TMF Path Performance:')
@@ -593,6 +619,9 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
         self.next_flow_id = self.flow_id
         # movement.move_to_position(posi=self.upper.path_dict["end_position"], offset=1,delay=0.01)
         logger.info("path end")
+        if self.motion_state == IN_FLY:
+            logger.info(f"landing")
+            itt.left_click()
         self._set_nfid(ST.END_TEYVAT_MOVE_PASS)
         self.upper.while_sleep = 0.2
         self._next_rfc()

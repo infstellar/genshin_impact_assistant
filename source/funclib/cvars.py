@@ -1,9 +1,10 @@
 from source.util import *
 
-AHEAD = 0
-LEFT = 1
-RIGHT = 2
-BACK = 3
+AHEAD = 'W'
+LEFT = "A"
+BACK = "S"
+RIGHT = "D"
+
 CORRECT_DEGREE = GIAconfig.General_CorrDegree
 HORIZONTAL = 1
 VERTICALLY = 2

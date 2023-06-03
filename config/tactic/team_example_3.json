@@ -12,7 +12,8 @@
         "trigger": "e_ready",
         "Qlast_time": 10,
         "Qcd_time": 12,
-        "autofill": false
+        "autofill": false,
+        "vision": "Hydro"
     },
     "second": {
         "name": "Zhongli",
@@ -27,7 +28,8 @@
         "trigger": "e_ready",
         "Qlast_time": 0,
         "Qcd_time": 12,
-        "autofill": false
+        "autofill": false,
+        "vision": "Geo"
     },
     "third": {
         "name": "Bennett",
@@ -42,7 +44,8 @@
         "trigger": "e_ready",
         "Qlast_time": 0,
         "Qcd_time": 12,
-        "autofill": false
+        "autofill": false,
+        "vision": "Pyro"
     },
     "forth": {
         "name": "Nahida",
@@ -57,6 +60,7 @@
         "trigger": "e_ready",
         "Qlast_time": 0,
         "Qcd_time": 14,
-        "autofill": false
+        "autofill": false,
+        "vision": "Dendro"
     }
 }

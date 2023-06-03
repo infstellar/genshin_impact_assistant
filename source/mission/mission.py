@@ -1,5 +1,6 @@
 from source.mission.mission_template import MissionExecutor
 from source.mission.cvars import *
+from source.flow.cvars import *
 
 """
 这里是Mission的标准类.编写你的mission时,请继承该类.
@@ -50,7 +51,11 @@ class Mission(MissionExecutor):
             
             is_precise_arrival (_type_, optional): 是否精确到达目的地(误差小于1m). Defaults to None.
             
-            stop_rule (_type_, optional): 停止条件.可选STOP_RULE_ARRIVE(到达后停止)或STOP_RULE_F(在目的地附近看到f后停止)。 Defaults to None.
+            stop_rule (_type_, optional): 停止条件. 可选:
+                STOP_RULE_ARRIVE: 到达后停止
+                STOP_RULE_F: 在目的地附近看到f后停止.
+                STOP_RULE_COMBAT: 发现敌人或进入战斗后停止。
+            Defaults to None.
 
         注: 在某些Mission中,TLPP_DICT可能会是字符串.这是旧版本所使用的存储TLPP文件的方法,现已弃用. 目前所有的TLPP文件与Mission放在同一个py文件中.
         

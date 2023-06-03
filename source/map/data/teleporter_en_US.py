@@ -183,7 +183,7 @@ DICT_TELEPORTER = {
     6294: TeleporterModel(id=6294, region='Mondstadt', tp='Teleporter', item_id=51, name='Stormbearer Mountains', position=(6063.692, 318.981)),
     6278: TeleporterModel(id=6278, region='Mondstadt', tp='Teleporter', item_id=51, name="Stormterror's Lair", position=(4578.417, 249.452)),
     6279: TeleporterModel(id=6279, region='Mondstadt', tp='Teleporter', item_id=51, name="Stormterror's Lair", position=(4858.69, 353.26)),
-    6280: TeleporterModel(id=6280, region='Mondstadt', tp='Teleporter', item_id=51, name="Stormterror's Lair", position=(4697.584, 457.263)),
+    # 6280: TeleporterModel(id=6280, region='Mondstadt', tp='Teleporter', item_id=51, name="Stormterror's Lair", position=(4697.584, 457.263)),
     6281: TeleporterModel(id=6281, region='Mondstadt', tp='Teleporter', item_id=51, name="Stormterror's Lair", position=(4522.53, 513.251)),
     6283: TeleporterModel(id=6283, region='Mondstadt', tp='Teleporter', item_id=51, name='Windwail Highland', position=(5090.461, 736.847)),
     6284: TeleporterModel(id=6284, region='Mondstadt', tp='Teleporter', item_id=51, name='Windwail Highland', position=(5199.755, 827.165)),

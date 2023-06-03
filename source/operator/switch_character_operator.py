@@ -9,6 +9,8 @@ from source.manager import asset
 from source.operator.aim_operator import AimOperator
 from source.api.pdocr_complete import ocr
 from source.funclib import movement
+from source.ui.ui import ui_control
+from source.ui import page as UIPage
 
 
 SHIELD = 'Shield'
@@ -88,6 +90,9 @@ class SwitchCharacterOperator(BaseThreading):
             
         """
         if itt.get_img_existence(asset.IconCombatCharacterDied, is_log=True):
+            aopf = self.aim_operator.pause_threading_flag
+            if not aopf:
+                self.aim_operator.pause_threading()
             succ_flag_1 = False
             print(self.died_character)
             for i in range(10):
@@ -95,6 +100,7 @@ class SwitchCharacterOperator(BaseThreading):
                     break
                 time.sleep(0.15)
                 if self.checkup_stop_func(): # break
+                    if not aopf: self.aim_operator.continue_threading()
                     return True
                 r = itt.appear_then_click(asset.ButtonFoodEgg, is_log=True)
                 if r:
@@ -104,23 +110,31 @@ class SwitchCharacterOperator(BaseThreading):
                 logger.info("reborn failed")
                 self.reborn_timer.reset()
                 self.died_character.append(x)
-                itt.key_press('esc')
+                if not (ui_control.verify_page(UIPage.page_main) or ui_control.verify_page(UIPage.page_domain)):
+                    itt.key_press('esc')
+                if not aopf: self.aim_operator.continue_threading()
                 return False # failed
                   
-            for i in range(3):
+            for i in range(10):
                 time.sleep(0.15)
                 ret_check_and_reborn_2 = itt.appear_then_click(asset.ButtonGeneralConfirm, is_log=True)
                 print(f"ret_check_and_reborn_2 {ret_check_and_reborn_2}")
-                if ret_check_and_reborn_2:
+                if ret_check_and_reborn_2: itt.delay('animation')
+                if ui_control.verify_page(UIPage.page_main) or ui_control.verify_page(UIPage.page_domain):
                     self.reborn_timer.reset()
                     self.died_character = [] # clean list
                     time.sleep(0.3) # 防止重复检测
+                    if not aopf: self.aim_operator.continue_threading()
                     return True # reborn succ
+            
             self.reborn_timer.reset()
-            itt.key_press('esc')
+            if not (ui_control.verify_page(UIPage.page_main) or ui_control.verify_page(UIPage.page_domain)):
+                itt.key_press('esc')
             time.sleep(0.3) # 防止重复检测
             self.died_character.append(x)
-            itt.key_press('esc')
+            if not (ui_control.verify_page(UIPage.page_main) or ui_control.verify_page(UIPage.page_domain)):
+                itt.key_press('esc')
+            if not aopf: self.aim_operator.continue_threading()
             return False # failed
         else:
             return True
@@ -166,35 +180,43 @@ class SwitchCharacterOperator(BaseThreading):
         """_summary_
 
         Args:
-            x (int): _description_
+            x (int): chara id(1~4)
 
         Returns:
             bool: True: 切换成功; False: 切换失败
         """
         # itt.middle_click()
         t = self.switch_timer.get_diff_time()
-        combat_lib.chara_waiting(self.checkup_stop_func)
+        combat_lib.chara_waiting(self.checkup_stop_func) # 检测异常情况并处理
         logger.debug('try switching to ' + str(x))
-        switch_succ_num = 0
-        switch_target_num = 2
+        switch_succ_num = 0 # 切换成功计数
+        switch_target_num = 2 # 目标次数
         for i in range(60):
             pt = time.time()
             if self.checkup_stop_func(): return False
-            combat_lib.unconventionality_situation_detection()
+            combat_lib.unconventionality_situation_detection() # 处理USD
             itt.key_press(str(x))
+            
+            # 如果切换成功, 快速+2
             if combat_lib.get_current_chara_num(self.checkup_stop_func, max_times = 5) == x:
                 itt.delay(0.1, comment='quick switch delay')
                 if combat_lib.get_current_chara_num(self.checkup_stop_func, max_times = 5) == x:
                     switch_succ_num += 2
+                    
+            # 检查并复活角色
+
             r = self._check_and_reborn(x)
+            
             if not r: # if r == False
                 return False
+            
+            # 可能卡住,跳一跳
             if i > 10:
                 if i == 11:
                     movement.jump_timer_reset()
                 movement.jump_in_loop(jump_dt=3)
                 if i > 45:
-                    movement.move(i, distance=3)
+                    movement.move([movement.AHEAD,movement.LEFT,movement.RIGHT,movement.BACK][i], distance=3)
             if i > 55:
                 logger.warning('角色切换失败')
             logger.trace(f"sco loop cost: {time.time()-pt}")

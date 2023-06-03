@@ -14,12 +14,15 @@ class Talk():
         pass
     
     def _delay6(self):
+        logger.debug(f"Talk: delay 0.6")
         itt.delay(0.6)
     
     def talk_wait(self, x):
+        logger.debug(f"Talk: wait {x}")
         itt.delay(x)
     
     def talk_skip(self, stop_func):
+        logger.info(f"Talk: Skip")
         while 1:
             time.sleep(0.1)
             if stop_func():return
@@ -27,14 +30,20 @@ class Talk():
             # itt.move_to(-120,0,relative=True)
             if itt.get_img_existence(asset.IconUIEmergencyFood): return True
             
-    def talk_switch(self, textobj:asset.Text):
+    def talk_switch(self, textobj:asset.Text) -> bool:
+        logger.info(f"Talk: Switch: {textobj.text}")
         cap = itt.capture(posi=AreaTalkSelects.position, jpgmode=0)
         cap = recorp(cap,area=AreaTalkSelects.position)
         posi = ocr.get_text_position(cap, textobj.text)
         if posi != -1:
             itt.move_and_click(posi)
+            return True
+        else:
+            logger.warning(f"Cannot Find Text: {textobj.text}")
+            return False
     
     def talk_until_switch(self, stop_func=lambda:False):
+        logger.info(f"Talk: Until Switch")
         while 1:
             time.sleep(0.1)
             if stop_func():return
@@ -50,6 +59,7 @@ class Talk():
             itt.appear_then_click(text_obj)
     
     def find_npc(self):
+        logger.info(f"Finding NPC")
         if f_recognition():return True
         itt.key_press('w')
         self._delay6()
@@ -63,6 +73,7 @@ class Talk():
         itt.key_press('d')
         self._delay6()
         if f_recognition():return True
+        logger.warning(f"Find NPC Fail")
         return False
     
     def talk_with_npc(self, npc_name:asset.Text = None) -> bool:
@@ -73,19 +84,26 @@ class Talk():
                 if not f_recognition(): continue
                 if npc_name is None:
                     itt.key_press('f')
+                    logger.info("Talk with npc succ.")
                     return True
+                logger.info(f"Talk: with NPC: {npc_name.text}")
                 npc_names = get_all_colls_name()
                 flag1 = False
                 for i in npc_names:
                     if npc_name.text in i: flag1 = True
                 if flag1:
                     pickup_specific_item(npc_name.text)
+                    logger.info("Talk with npc succ.")
                     return True
+            if npc_name != None:
+                logger.warning(f"Cannot find NPC: {npc_name.text}")
             return False
         else:
+            logger.warning(f"Cannot find any NPC")
             return False
     
     def exit_talk(self) -> bool:
+        logger.info(f"Talk: Exit")
         esc_timer = AdvanceTimer(2).start()
         while 1:
             if ui_control.verify_page(UIPage.page_main): return True

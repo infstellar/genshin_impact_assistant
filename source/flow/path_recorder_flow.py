@@ -50,6 +50,7 @@ class PathRecorderCore(FlowTemplate):
         self.position_migration_times = 0
         self.position_migration_timer = Timer()
         self.used_collection_position = []
+        self.ENFORCE_FIX_LIMIT = 6
         # self.all_position = []
 
     def _add_posi_to_dict(self, posi:list):
@@ -179,23 +180,26 @@ class PathRecorderCore(FlowTemplate):
         curr_direction = tracker.get_direction()
         # 修正坐标偏移过大问题
         migration_flag = False
+        
         if len(self.upper.collection_path_dict["position_list"])>0:
             last_position = self.upper.collection_path_dict["position_list"][-1]["position"]
             if self.position_migration_times == 0:
                 migration_offset = 10
             else:
-                migration_offset = 10+min(4,self.position_migration_timer.get_diff_time())*10 # 考虑时间与距离关系，*6不一定准确，Max=10+10*4=50
+                migration_offset = 10+min(self.ENFORCE_FIX_LIMIT,self.position_migration_timer.get_diff_time())*10 # 考虑时间与距离关系，*6不一定准确，Max=10+10*ENFORCE_FIX_LIMIT
             if euclidean_distance(curr_posi, last_position)>=migration_offset:
                 migration_flag = True # 偏移过大
+                logger.warning(f"坐标偏移过大: offset: {round(migration_offset,2)} current: {round(euclidean_distance(curr_posi, last_position),2)} time: {round(self.position_migration_timer.get_diff_time(),2)}")
                 if self.position_migration_times >= 2:
-                    if self.position_migration_timer.get_diff_time()>=4: # 偏移超过4s，强制修正
-                        logger.warning(f"Position migration>28 within 4, reset position {last_position} -> {curr_posi}")
+                    if self.position_migration_timer.get_diff_time()>=self.ENFORCE_FIX_LIMIT: # 偏移超过ENFORCE_FIX_LIMIT，强制修正
+                        logger.warning(f"Position migration>28 within {self.ENFORCE_FIX_LIMIT}, reset position {last_position} -> {curr_posi}")
                         self.position_migration_times = 0
                         migration_flag = False # 强制修正坐标
                 if self.position_migration_times == 0:
                     self.position_migration_timer.reset() # 重置计时器
                 self.position_migration_times += 1
         if migration_flag:return super().state_in()
+        self.position_migration_timer.reset()
         
         # 添加position用于记录motion
         if len(all_posi)>10:

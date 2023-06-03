@@ -60,6 +60,7 @@ class PaddleOcrFastDeploy():
         pt2=time.time()
         self.model = fastdeploy.vision.ocr.PPOCRv3(self.det_model,None,self.rec_model)
         logger.info(f"created PPOCRv3. cost {round(time.time()-pt2,2)}")
+        self.lang = lang
     
     def analyze(self, img:np.ndarray):
         if False:
@@ -80,10 +81,16 @@ class PaddleOcrFastDeploy():
                 text = text.replace(i, self.REPLACE_DICT[i])
         return text
 
+    def _preprocessing_str(self, x:str):
+        if self.lang == 'en_US':
+            x = x.replace(' ', '')
+            x.lower()
+        return x
+    
     def find_text(self,res,text,mode=CONTAIN_MATCHING,text_process=lambda x:x):
         ret_indexes = []
-
-        if mode == SHAPE_MATCHING:
+        text = self._preprocessing_str(text)
+        if mode == SHAPE_MATCHING: # for zh_CN, Not in use because low accuracy
             max_rate = 0
             max_result = None
             for i in range(len(res.text)):
@@ -96,6 +103,7 @@ class PaddleOcrFastDeploy():
 
         for i in range(len(res.text)):
             res_text = self._replace_texts(text_process(res.text[i]))
+            res_text = self._preprocessing_str(res_text)
             if mode == CONTAIN_MATCHING:
                 if text in res_text:
                     ret_indexes.append(i)

@@ -188,7 +188,7 @@ DICT_TELEPORTER = {
     6288: TeleporterModel(id=6288, region='Mondstadt', tp='Teleporter', item_id=51, name='达达乌帕谷', position=(5913.964, 1389.94)),
     6278: TeleporterModel(id=6278, region='Mondstadt', tp='Teleporter', item_id=51, name='风龙废墟', position=(4578.417, 249.452)),
     6279: TeleporterModel(id=6279, region='Mondstadt', tp='Teleporter', item_id=51, name='风龙废墟', position=(4858.69, 353.26)),
-    6280: TeleporterModel(id=6280, region='Mondstadt', tp='Teleporter', item_id=51, name='风龙废墟', position=(4697.584, 457.263)),
+    # 6280: TeleporterModel(id=6280, region='Mondstadt', tp='Teleporter', item_id=51, name='风龙废墟', position=(4697.584, 457.263)),
     6281: TeleporterModel(id=6281, region='Mondstadt', tp='Teleporter', item_id=51, name='风龙废墟', position=(4522.53, 513.251)),
     6559: TeleporterModel(id=6559, region='Mondstadt', tp='Domain', item_id=52, name='仲夏庭园', position=(6008.354, 586.482)),
     6560: TeleporterModel(id=6560, region='Mondstadt', tp='Domain', item_id=52, name='塞西莉亚苗圃', position=(4976.383, 766.869)),

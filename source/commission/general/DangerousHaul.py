@@ -59,7 +59,7 @@ class DangerousHaulGeneral(CommissionTemplate):
             if not combat_lib.CSDL.get_combat_state():
                 self.stop_combat()
                 break
-        self.is_commission_succ=True
+        self.commission_succ()
         # self.pause_threading()
         
 if __name__ == '__main__':
