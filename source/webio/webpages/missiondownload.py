@@ -135,7 +135,9 @@ class MissionDownloadPage(AdvancePage):
 
     def _render_setting_board(self):
         with output.use_scope("missiondownload-setting-board"):
-            pin.put_select(name = "SELECT_INDEX_URL", label=t2t("Load index from:"), options=self.INDEX_SOURCE_OPTIONS, value=self.INDEX_SOURCE_OPTIONS[0]) # type: ignore
+            pin.put_select(name = "SELECT_INDEX_URL", label=t2t("Load index from:"),
+                           options=self.INDEX_SOURCE_OPTIONS, value=self.INDEX_SOURCE_OPTIONS[0], # type: ignore
+                           help_text=t2t("If error occurs, please check first whether this option is set correctly."))
 
     def _render_installed_board(self):
         self.mission_update_status = {mission_name: t2t("Unknown") for mission_name in self.local_mission_names}
@@ -155,8 +157,8 @@ class MissionDownloadPage(AdvancePage):
     def _render_installed_table(self):
         # Convert local_mission_meta to table
         table = []
-        header = ["Enabled", "ID", "Mission", "Tags", "Author", "Description", "Last Update Time", "Update"]
-        header = [output.put_text(t2t(_)) for _ in header]
+        header = [t2t("Enabled"), t2t("ID"), t2t("Mission"), t2t("Tags"), t2t("Author"), t2t("Description"), t2t("Last Update Time"), t2t("Update")]
+        header = [output.put_text(_) for _ in header]
         header = header + [output.put_text(t2t("Delete")).style("color: red")]
         table.append(header)
         for mission_name in self.local_mission_names:
@@ -205,7 +207,7 @@ class MissionDownloadPage(AdvancePage):
                     pin.put_checkbox(name = "CHECKBOX_HIDE_TAGS", options=tagset, value=[t2t("installed")], inline=True, label=t2t("Hide tags:")), # type: ignore
                     pin.put_radio(name = "RADIO_SORT_BY", options=self.order_options, value=self.order_options[0], inline=True, label=t2t("Order:")) # type: ignore
                 ])
-                pin.put_input(name="INPUT_FILTER", label="Search:", type="text", value="")
+                pin.put_input(name="INPUT_FILTER", label=t2t("Search:"), type="text", value="")
                 output.put_scope("missiondownload-available-table")
                 self._render_available_table()
     
@@ -231,8 +233,8 @@ class MissionDownloadPage(AdvancePage):
         available_missions_display, hidden_number = self._get_available_missions_display(hide_tags, sort_by, filter_text)
         
         table = []
-        header = ["ID", "Mission", "Tags", "Author", "Description", "Last Update Time", "Action"]
-        header = [output.put_text(t2t(_)) for _ in header]
+        header = [t2t("ID"), t2t("Mission"), t2t("Tag"), t2t("Author"), t2t("Description"), t2t("Last Update Time"), t2t("Action")]
+        header = [output.put_text(_) for _ in header]
         table.append(header)
 
         for entry in available_missions_display:
@@ -256,7 +258,7 @@ class MissionDownloadPage(AdvancePage):
         
         with output.use_scope("missiondownload-available-table", clear=True):
             if hidden_number > 0:
-                output.put_text(t2t(f"{hidden_number} missions are hidden."))
+                output.put_text(f"{hidden_number} "+t2t("missions are hidden."))
             output.put_table(table)
 
     def _render_progress_popup(self):

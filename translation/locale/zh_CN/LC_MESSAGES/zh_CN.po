@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2023-05-22 22:01+0800\n"
-"PO-Revision-Date: 2023-05-22 22:31+0800\n"
+"POT-Creation-Date: 2023-06-03 22:42+0800\n"
+"PO-Revision-Date: 2023-06-03 22:53+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: pygettext.py 1.5\n"
-"X-Generator: Poedit 3.2\n"
+"X-Generator: Poedit 3.3.1\n"
 
 #: genshin_assistant.py:26
 msgid "正在初始化，请稍后"
@@ -48,7 +48,7 @@ msgstr "正在创建OCR对象"
 msgid "导入paddleocr时错误; err code: 001"
 msgstr ""
 
-#: source\api\pdocr_api.py:200
+#: source\api\pdocr_api.py:208
 msgid "ocr device: "
 msgstr "OCR 运行设备："
 
@@ -63,6 +63,10 @@ msgstr ""
 #: source\api\yolox_api.py:534
 msgid "Created yolox obj."
 msgstr "YOLOX对象已创建"
+
+#: source\commission\commission.py:20
+msgid "不支持的语言:"
+msgstr ""
 
 #: source\common\flow_state.py:99
 msgid "空闲"
@@ -170,13 +174,13 @@ msgstr ""
 
 #: source\controller\teyvat_move_controller.py:143
 #: source\controller\teyvat_move_controller_upgrad.py:138
-#: source\flow\teyvat_move_flow_upgrad.py:305
+#: source\flow\teyvat_move_flow_upgrad.py:156
 msgid "已到达目的地附近，本次导航结束。"
 msgstr ""
 
 #: source\controller\teyvat_move_controller.py:149
 #: source\controller\teyvat_move_controller_upgrad.py:144
-#: source\flow\teyvat_move_flow_upgrad.py:318
+#: source\flow\teyvat_move_flow_upgrad.py:169
 msgid "已到达F附近，本次导航结束。"
 msgstr ""
 
@@ -245,23 +249,27 @@ msgstr ""
 msgid "正在激活石化古树"
 msgstr ""
 
-#: source\flow\path_recorder_flow.py:68
+#: source\flow\path_recorder_flow.py:69
 msgid "position added:"
 msgstr "坐标已添加："
 
-#: source\flow\path_recorder_flow.py:115
+#: source\flow\path_recorder_flow.py:116
 msgid "ready to start recording"
 msgstr "准备开始记录"
 
-#: source\flow\path_recorder_flow.py:118
+#: source\flow\path_recorder_flow.py:119
 msgid "ready to stop recording"
 msgstr "准备停止记录"
 
-#: source\flow\path_recorder_flow.py:231
+#: source\flow\path_recorder_flow.py:235
 msgid "start recording"
 msgstr "开始记录"
 
-#: source\flow\teyvat_move_flow_upgrad.py:180
+#: source\flow\teyvat_move_flow_upgrad.py:181
+msgid "准备打架，本次导航结束。"
+msgstr ""
+
+#: source\flow\teyvat_move_flow_upgrad.py:214
 msgid "不在服务区"
 msgstr ""
 
@@ -275,16 +283,16 @@ msgstr "处于地图边界，is_chara_busy 函数启用模糊匹配。"
 msgid "获得当前角色编号失败"
 msgstr ""
 
-#: source\funclib\combat_lib.py:503
+#: source\funclib\combat_lib.py:504
 msgid ""
 "The strategy file for the current teaming is not found in the tactic folder: "
 msgstr "在tactic文件夹中没有找到当前组队的tactic文件"
 
-#: source\funclib\combat_lib.py:555
+#: source\funclib\combat_lib.py:556
 msgid "请将配对文件中的tastic_group更名为tactic_group. 已自动识别。"
 msgstr ""
 
-#: source\funclib\combat_lib.py:574
+#: source\funclib\combat_lib.py:575
 msgid "Character Key Empty Error"
 msgstr ""
 
@@ -313,31 +321,31 @@ msgstr ""
 msgid "将在0.2秒后再次尝试获取UI界面"
 msgstr ""
 
-#: source\interaction\capture.py:66
+#: source\interaction\capture.py:68
 msgid "Fail to get capture: "
 msgstr "截图失败"
 
-#: source\interaction\capture.py:68
+#: source\interaction\capture.py:70
 msgid " waiting 2 sec."
 msgstr "等待2秒"
 
-#: source\interaction\capture.py:69
+#: source\interaction\capture.py:71
 msgid "请确认原神窗口没有最小化，原神启动器关闭，原神分辨率为1080p"
 msgstr ""
 
-#: source\interaction\capture.py:110
+#: source\interaction\capture.py:112
 msgid "research handle: "
 msgstr "重新搜索句柄"
 
-#: source\interaction\capture.py:116
+#: source\interaction\capture.py:118
 msgid "research monitor: "
 msgstr ""
 
-#: source\interaction\capture.py:124
+#: source\interaction\capture.py:126
 msgid "multiple monitor detected: "
 msgstr ""
 
-#: source\interaction\capture.py:145
+#: source\interaction\capture.py:147
 msgid ""
 "You seem to have monitor scaling set? It is automatically recognized and "
 "this does not affect usage."
@@ -351,51 +359,100 @@ msgstr ""
 msgid "appear then click fail"
 msgstr "appear then click失败"
 
-#: source\pickup\pickup_operator.py:54
+#: source\interaction\interaction_core.py:604
+msgid "左键点击"
+msgstr ""
+
+#: source\interaction\interaction_core.py:619
+msgid "左键按下"
+msgstr ""
+
+#: source\interaction\interaction_core.py:634
+msgid "左键抬起"
+msgstr ""
+
+#: source\interaction\interaction_core.py:652
+msgid "左键双击"
+msgstr ""
+
+#: source\interaction\interaction_core.py:667
+msgid "右键单击"
+msgstr ""
+
+#: source\interaction\interaction_core.py:683
+msgid "点击鼠标中键"
+msgstr ""
+
+#: source\interaction\interaction_core.py:698
+msgid "按下按键: "
+msgstr ""
+
+#: source\interaction\interaction_core.py:720
+msgid "松开按键: "
+msgstr ""
+
+#: source\interaction\interaction_core.py:741
+msgid "点击按键: "
+msgstr ""
+
+#: source\interaction\interaction_core.py:761
+#: source\interaction\interaction_core.py:776
+msgid "移动鼠标到坐标: "
+msgstr ""
+
+#: source\mission\missions\MissionSakuraBloom1.py:10
+msgid "Need Lisa"
+msgstr ""
+
+#: source\mission\missions\MissionVioletgrass1.py:9
+msgid "Not Recommand"
+msgstr ""
+
+#: source\pickup\pickup_operator.py:55
 msgid "正在设置时间为夜晚"
 msgstr ""
 
-#: source\pickup\pickup_operator.py:81
+#: source\pickup\pickup_operator.py:82
 msgid "停止自动拾取"
 msgstr ""
 
-#: source\pickup\pickup_operator.py:118
+#: source\pickup\pickup_operator.py:119
 msgid "PICKUP_TIMEOUT_001"
 msgstr ""
 
-#: source\pickup\pickup_operator.py:120 source\pickup\pickup_operator.py:126
+#: source\pickup\pickup_operator.py:121 source\pickup\pickup_operator.py:127
 msgid "停止拾取"
 msgstr ""
 
-#: source\pickup\pickup_operator.py:124
+#: source\pickup\pickup_operator.py:125
 msgid "PICKUP_TIMEOUT_002"
 msgstr ""
 
-#: source\pickup\pickup_operator.py:133
+#: source\pickup\pickup_operator.py:134
 msgid "已找到物品且无法找到下一个物品，停止拾取"
 msgstr ""
 
-#: source\pickup\pickup_operator.py:184
+#: source\pickup\pickup_operator.py:193
 msgid "pickup: "
 msgstr "拾取到："
 
-#: source\pickup\pickup_operator.py:186
+#: source\pickup\pickup_operator.py:195
 msgid "已找到："
 msgstr ""
 
-#: source\task\domain_task.py:73
+#: source\task\domain_task.py:74
 msgid "找不到秘境名称，放弃选择。"
 msgstr ""
 
-#: source\task\domain_task.py:97
+#: source\task\domain_task.py:98
 msgid "开始下一次秘境"
 msgstr ""
 
-#: source\task\domain_task.py:109
+#: source\task\domain_task.py:110
 msgid "次数结束。退出秘境"
 msgstr ""
 
-#: source\task\domain_task.py:128
+#: source\task\domain_task.py:129
 msgid "Unknown UI page"
 msgstr "未知的UI页面"
 
@@ -449,7 +506,11 @@ msgstr "自动采集设置"
 
 #: source\webio\page.py:49
 msgid "MissionPage"
-msgstr "自定义任务"
+msgstr "自定义任务设置"
+
+#: source\webio\page.py:50
+msgid "MissionDownloadPage"
+msgstr "自定义任务下载"
 
 #: source\webio\pages.py:47 source\webio\pages.py:50 source\webio\pages.py:294
 msgid "未找到会话，可能由于窗口关闭。请刷新页面重试。"
@@ -487,7 +548,8 @@ msgstr "领取日常奖励"
 msgid "Ley Line Outcrop"
 msgstr "地脉衍出"
 
-#: source\webio\pages.py:125
+#: source\webio\pages.py:125 source\webio\webpages\missiondownload.py:160
+#: source\webio\webpages\missiondownload.py:236
 msgid "Mission"
 msgstr "自定义任务"
 
@@ -551,8 +613,8 @@ msgstr "局域网IP"
 msgid "WAN IP"
 msgstr "以太网IP"
 
-#: source\webio\pages.py:255 source\webio\pages.py:592
-#: source\webio\pages.py:666 source\webio\pages.py:705
+#: source\webio\pages.py:255 source\webio\pages.py:596
+#: source\webio\pages.py:670 source\webio\pages.py:709
 msgid "## config:"
 msgstr "## 设置："
 
@@ -592,19 +654,19 @@ msgstr "自动采集设置"
 msgid "LeyLineOutcrop.json"
 msgstr "地脉衍出"
 
-#: source\webio\pages.py:315 source\webio\pages.py:821
+#: source\webio\pages.py:315 source\webio\pages.py:825
 msgid "Verified!"
 msgstr "验证通过！"
 
-#: source\webio\pages.py:324 source\webio\pages.py:830
+#: source\webio\pages.py:324 source\webio\pages.py:834
 msgid "Waiting..."
 msgstr "等待中..."
 
-#: source\webio\pages.py:329 source\webio\pages.py:835
+#: source\webio\pages.py:329 source\webio\pages.py:839
 msgid "You may want to enter: "
 msgstr "你可能想输入："
 
-#: source\webio\pages.py:334 source\webio\pages.py:840
+#: source\webio\pages.py:334 source\webio\pages.py:844
 msgid "Not a valid name"
 msgstr "不是一个有效的名称"
 
@@ -624,27 +686,27 @@ msgstr "否"
 msgid "Yes"
 msgstr "是"
 
-#: source\webio\pages.py:656
+#: source\webio\pages.py:660
 msgid "# Add team"
 msgstr "# 增加队伍"
 
-#: source\webio\pages.py:660
+#: source\webio\pages.py:664
 msgid "Add team"
 msgstr "增加队伍"
 
-#: source\webio\pages.py:662
+#: source\webio\pages.py:666
 msgid "自动填充"
 msgstr ""
 
-#: source\webio\pages.py:766
+#: source\webio\pages.py:770
 msgid "Add to blacklist"
 msgstr "添加到黑名单"
 
-#: source\webio\pages.py:774
+#: source\webio\pages.py:778
 msgid "展开/收起"
 msgstr ""
 
-#: source\webio\pages.py:809
+#: source\webio\pages.py:813
 msgid "clean list"
 msgstr "清空列表"
 
@@ -652,39 +714,51 @@ msgstr "清空列表"
 msgid "GIA 已升级到"
 msgstr ""
 
-#: source\webio\webio.py:37
+#: source\webio\webio.py:39
 msgid "webio启动完成"
 msgstr ""
 
-#: source\webio\webpages\mission.py:57
+#: source\webio\webpages\mission.py:68
 msgid "Enable"
 msgstr "启用"
 
-#: source\webio\webpages\mission.py:58
+#: source\webio\webpages\mission.py:69
 msgid "Priority"
 msgstr "优先级"
 
-#: source\webio\webpages\mission.py:79
+#: source\webio\webpages\mission.py:71
+msgid "Author: "
+msgstr ""
+
+#: source\webio\webpages\mission.py:73
+msgid "Note: "
+msgstr ""
+
+#: source\webio\webpages\mission.py:75
+msgid "Time: "
+msgstr ""
+
+#: source\webio\webpages\mission.py:97
 msgid "Rebuild Progress"
 msgstr ""
 
-#: source\webio\webpages\mission.py:93
+#: source\webio\webpages\mission.py:111
 msgid "Compile Fail, please see the console and ask for help."
 msgstr "编译失败,请查看控制台的日志信息并寻求帮助."
 
-#: source\webio\webpages\mission.py:96
+#: source\webio\webpages\mission.py:114
 msgid "Compile success, please restart GIA program."
 msgstr "编译成功,请重启GIA以应用更改."
 
-#: source\webio\webpages\mission.py:112
+#: source\webio\webpages\mission.py:130
 msgid "Compile Missions"
 msgstr "编译自定义任务"
 
-#: source\webio\webpages\mission.py:114
+#: source\webio\webpages\mission.py:132
 msgid "Save Changes"
 msgstr "保存更改"
 
-#: source\webio\webpages\mission.py:115
+#: source\webio\webpages\mission.py:133
 msgid ""
 "If no mission is displayed here or if you have modified any mission in the "
 "missions folder, click on the Compile Missions button."
@@ -692,11 +766,243 @@ msgstr ""
 "如果这里没有任何自定义任务或你修改了missions文件夹下的自定义任务,请点击编译自"
 "定义任务按钮."
 
-#: source\webio\webpages\mission.py:116
+#: source\webio\webpages\mission.py:134
 msgid ""
 "The order of execution decreases from smallest to largest, with 0 being the "
 "highest priority."
 msgstr "执行顺序从小到大递减，0为最高优先级。"
+
+#: source\webio\webpages\missiondownload.py:90
+#: source\webio\webpages\missiondownload.py:143
+#: source\webio\webpages\missiondownload.py:188
+#: source\webio\webpages\missiondownload.py:189
+msgid "Unknown"
+msgstr "未知"
+
+#: source\webio\webpages\missiondownload.py:96
+msgid "a-z"
+msgstr ""
+
+#: source\webio\webpages\missiondownload.py:96
+msgid "internal order"
+msgstr "默认顺序"
+
+#: source\webio\webpages\missiondownload.py:96
+msgid "newest first"
+msgstr "最新更新"
+
+#: source\webio\webpages\missiondownload.py:96
+msgid "oldest first"
+msgstr "最早更新"
+
+#: source\webio\webpages\missiondownload.py:96
+msgid "z-a"
+msgstr ""
+
+#: source\webio\webpages\missiondownload.py:112
+#: source\webio\webpages\missiondownload.py:253
+msgid "Installed"
+msgstr "已安装"
+
+#: source\webio\webpages\missiondownload.py:113
+msgid "Available"
+msgstr "可用"
+
+#: source\webio\webpages\missiondownload.py:134
+msgid "Upload and share your custom missions! (Custom Mission Document)"
+msgstr "上传并分享你的自定义任务！  &  《自定义任务文档》"
+
+#: source\webio\webpages\missiondownload.py:138
+msgid "Load index from:"
+msgstr "自定义任务远程仓库："
+
+#: source\webio\webpages\missiondownload.py:140
+msgid ""
+"If error occurs, please check first whether this option is set correctly."
+msgstr "若出现问题，请首先检查本选项是否设置正确。"
+
+#: source\webio\webpages\missiondownload.py:148
+msgid "Disable all missions"
+msgstr "禁用全部自定义任务"
+
+#: source\webio\webpages\missiondownload.py:149
+msgid "Check for Updates"
+msgstr "检测更新"
+
+#: source\webio\webpages\missiondownload.py:150
+#: source\webio\webpages\missiondownload.py:265
+msgid "Apply and Save"
+msgstr "应用并保存"
+
+#: source\webio\webpages\missiondownload.py:160
+msgid "Enabled"
+msgstr "启用"
+
+#: source\webio\webpages\missiondownload.py:160
+msgid "Tags"
+msgstr "标签"
+
+#: source\webio\webpages\missiondownload.py:160
+#: source\webio\webpages\missiondownload.py:185
+#: source\webio\webpages\missiondownload.py:554
+msgid "Update"
+msgstr "更新"
+
+#: source\webio\webpages\missiondownload.py:160
+#: source\webio\webpages\missiondownload.py:236
+msgid "Author"
+msgstr "作者"
+
+#: source\webio\webpages\missiondownload.py:160
+#: source\webio\webpages\missiondownload.py:236
+msgid "Description"
+msgstr "描述"
+
+#: source\webio\webpages\missiondownload.py:160
+#: source\webio\webpages\missiondownload.py:236
+msgid "ID"
+msgstr ""
+
+#: source\webio\webpages\missiondownload.py:160
+#: source\webio\webpages\missiondownload.py:236
+msgid "Last Update Time"
+msgstr "最后更新时间"
+
+#: source\webio\webpages\missiondownload.py:162
+msgid "Delete"
+msgstr "删除"
+
+#: source\webio\webpages\missiondownload.py:172
+#: source\webio\webpages\missiondownload.py:173
+#: source\webio\webpages\missiondownload.py:205
+#: source\webio\webpages\missiondownload.py:207
+#: source\webio\webpages\missiondownload.py:252
+#: source\webio\webpages\missiondownload.py:655
+#: source\webio\webpages\missiondownload.py:657
+msgid "installed"
+msgstr "已安装"
+
+#: source\webio\webpages\missiondownload.py:184
+#: source\webio\webpages\missiondownload.py:590
+msgid "Update available"
+msgstr ""
+
+#: source\webio\webpages\missiondownload.py:186
+#: source\webio\webpages\missiondownload.py:592
+msgid "No update available"
+msgstr ""
+
+#: source\webio\webpages\missiondownload.py:201
+msgid "Load/refresh mission index from remote"
+msgstr "从远程仓库加载/刷新自定义任务列表"
+
+#: source\webio\webpages\missiondownload.py:203
+msgid "Please load the mission index first."
+msgstr "请先加载自定义任务列表。"
+
+#: source\webio\webpages\missiondownload.py:207
+msgid "Hide tags:"
+msgstr "隐藏标签："
+
+#: source\webio\webpages\missiondownload.py:208
+msgid "Order:"
+msgstr "排序方式："
+
+#: source\webio\webpages\missiondownload.py:210
+msgid "Search:"
+msgstr "搜索："
+
+#: source\webio\webpages\missiondownload.py:215
+msgid "Downloading mission index..."
+msgstr "正在下载自定义任务列表..."
+
+#: source\webio\webpages\missiondownload.py:219
+msgid "Finished downloading mission index"
+msgstr "下载自定义任务列表完成"
+
+#: source\webio\webpages\missiondownload.py:223
+msgid "Installing mission..."
+msgstr "安装自定义任务中..."
+
+#: source\webio\webpages\missiondownload.py:227
+msgid "Mission installed"
+msgstr "自定义任务已安装"
+
+#: source\webio\webpages\missiondownload.py:236
+msgid "Action"
+msgstr "操作"
+
+#: source\webio\webpages\missiondownload.py:236
+msgid "Tag"
+msgstr "标签"
+
+#: source\webio\webpages\missiondownload.py:255
+msgid "Install"
+msgstr "安装"
+
+#: source\webio\webpages\missiondownload.py:261
+msgid "missions are hidden."
+msgstr "个自定义任务已隐藏。"
+
+#: source\webio\webpages\missiondownload.py:266
+msgid "Please wait for the progress to finish."
+msgstr "请等待进度完成。"
+
+#: source\webio\webpages\missiondownload.py:267
+msgid "Update Progress"
+msgstr "更新进度"
+
+#: source\webio\webpages\missiondownload.py:273
+msgid "Delete all backup files for this mission as well"
+msgstr "同时删除该自定义任务的所有备份文件"
+
+#: source\webio\webpages\missiondownload.py:279
+msgid "Delete Confirm"
+msgstr "删除确认"
+
+#: source\webio\webpages\missiondownload.py:280
+msgid "Are you sure you want to delete the selected missions?"
+msgstr "你确定要删除选定的自定义任务吗？"
+
+#: source\webio\webpages\missiondownload.py:281
+msgid "Notice: This action **cannot** be undone!"
+msgstr "注意： 该操作**不能**被撤销!"
+
+#: source\webio\webpages\missiondownload.py:286
+msgid "Confirm"
+msgstr "确认"
+
+#: source\webio\webpages\missiondownload.py:287
+msgid "Cancel"
+msgstr "取消"
+
+#: source\webio\webpages\missiondownload.py:541
+msgid "Finished! Please compile the missions in the Mission page"
+msgstr "保存成功！请在“自定义任务设置”页面进行编译"
+
+#: source\webio\webpages\missiondownload.py:543
+msgid "Something went wrong! Please try again"
+msgstr "出错了! 请再试一次"
+
+#: source\webio\webpages\missiondownload.py:579
+msgid "Not available on remote"
+msgstr "未在远程仓库中找到"
+
+#: source\webio\webpages\missiondownload.py:582
+msgid "No meta data in local"
+msgstr "未在本地找到META信息"
+
+#: source\webio\webpages\missiondownload.py:585
+msgid "No last update info"
+msgstr "无最后更新事件信息"
+
+#: source\webio\webpages\missiondownload.py:597
+msgid "Checking updates..."
+msgstr "检查更新中..."
+
+#: source\webio\webpages\missiondownload.py:600
+msgid "Finished checking updates"
+msgstr "检查更新完成"
 
 #~ msgid "Mission Group"
 #~ msgstr "Mission组"
