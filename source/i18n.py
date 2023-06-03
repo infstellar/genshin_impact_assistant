@@ -1,4 +1,13 @@
-"""i18n module for GIA."""
+# coding:utf-8
+
+
+# i18n module for GIA.
+
+# Usage:
+#     1. run `translation/generate_pot.py`
+#     2. edit `translation\locale\zh_CN\LC_MESSAGES\xx.po` in PoEdit or other software (need to apply `.pot` file in PoEdit)
+#     3. save `.po` file. the `.mo` file will be generate when GIA start.
+
 
 import gettext, os, json, locale
 from source.path_lib import *
@@ -29,8 +38,8 @@ if GLOBAL_LANG == "$locale$":
 # create .mo files
 po_file_path = os.path.join(ROOT_PATH, r'translation/locale', GLOBAL_LANG, 'LC_MESSAGES', f'{GLOBAL_LANG}.po')
 mo_file_path = os.path.splitext(po_file_path)[0] + '.mo'
-print(fr"python {ROOT_PATH}/source/msgfmt.py -o {mo_file_path} {po_file_path}")
-os.system(fr"python {ROOT_PATH}/source/msgfmt.py -o {mo_file_path} {po_file_path}")
+print(fr'python "{ROOT_PATH}/source/msgfmt.py" -o "{mo_file_path}" "{po_file_path}"')
+os.system(fr'python "{ROOT_PATH}/source/msgfmt.py" -o "{mo_file_path}" "{po_file_path}"')
 
 l10n = gettext.translation(GLOBAL_LANG, localedir=os.path.join(ROOT_PATH, r"translation/locale"), languages=[GLOBAL_LANG])
 l10n.install()

@@ -22,7 +22,7 @@ class BasicKnowledgeOfTheKnights_P2682N5673(Commission):
         self.talk_until_switch()
         self.talk_switch(Outrider)
         self.talk_skip()
-        self.is_commission_succ=True
+        self.commission_succ()
         
 if __name__ == '__main__':
     execc = BasicKnowledgeOfTheKnights_P2682N5673()

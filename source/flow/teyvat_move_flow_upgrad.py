@@ -588,7 +588,7 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
             self._set_nfid(ST.END_TEYVAT_MOVE_STUCK)
             self._set_rfc(FC.END)
         
-        r = self.detect_stop_rule(self.upper.stop_rule, self.upper.is_precise_arrival, self.upper.target_posi, self.upper.stop_offset)
+        r = self.detect_stop_rule(self.upper.stop_rule, self.upper.is_precise_arrival, self.upper.path_dict["end_position"], self.upper.stop_offset)
         if r:
             self._next_rfc()
         

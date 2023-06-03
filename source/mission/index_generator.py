@@ -44,13 +44,13 @@ def generate_mission_index():
             f.write(f"    META['{i}'] = missions.{i}.META\n")
         path_meta = os.path.join(ROOT_PATH,'missions\\mission_meta.py')
         path_index = os.path.join(ROOT_PATH,'missions\\mission_index.py')
-        f.write(f"    with open(r'{path_meta}', 'w', encoding='utf-8') as f:\n")
+        f.write(f"    with open(r'\"{path_meta}\"', 'w', encoding='utf-8') as f:\n")
         f.write("        f.write(f'MISSION_META = {str(META)}')\n")
         f.write(f"    print('index end')\n")
 
 
     print(f"sys: python {path_index} start")
-    os.system(f"python {path_index}")
+    os.system(f"python \"{path_index}\"")
     print(f"sys: python {path_index} end")
     
 if __name__ == '__main__':

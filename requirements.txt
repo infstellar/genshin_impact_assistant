@@ -1,9 +1,9 @@
 # TODO: Update with exact module version
 numpy
-torch
+torch==2.0.0
 loguru
 tqdm
-torchvision
+torchvision==0.15.1
 tabulate
 
 # verified versions
@@ -26,10 +26,10 @@ keyboard
 scipy
 py7zr
 
-PyAutoGUI
+PyAutoGUI==0.9.53
 PyQt5
 pywebio
-pydirectinput
+pydirectinput==1.0.4
 
 # pycocotools NO PYCOCOTOOLS WHEN AUTOINSTALL!
 
@@ -40,8 +40,7 @@ lxml==4.6.3
 pydantic
 gimap==3.4.5
 pyyaml
-pynput
 
-fastdeploy-python
+fastdeploy-python==1.0.4
 json5
 sortedcontainers

@@ -204,8 +204,8 @@ class SwitchCharacterOperator(BaseThreading):
                     switch_succ_num += 2
                     
             # 检查并复活角色
-            if i >= 3:
-                r = self._check_and_reborn(x)
+
+            r = self._check_and_reborn(x)
             
             if not r: # if r == False
                 return False

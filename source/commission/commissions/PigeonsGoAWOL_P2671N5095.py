@@ -17,6 +17,7 @@ class PigeonsGoAWOL_P2671N5095(Commission):
         self.talk_until_switch()
         self.talk_switch(RegardingThesePigeons)
         self.talk_skip()
+        self.commission_succ()
         
 if __name__ == '__main__':
     execc = PigeonsGoAWOL_P2671N5095()

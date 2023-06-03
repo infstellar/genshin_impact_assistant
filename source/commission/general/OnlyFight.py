@@ -12,6 +12,6 @@ class FightOnlyGeneral(CommissionTemplate):
         self.circle_search(self.commission_position, stop_rule="Combat")
         r = self.collect(is_combat=True, is_activate_pickup=self.is_pickup_spoils)
         if r == ERR_FAIL:return
-        self.is_commission_succ = True
+        self.commission_succ()
 
         

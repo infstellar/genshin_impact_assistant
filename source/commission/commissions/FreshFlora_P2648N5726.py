@@ -28,7 +28,7 @@ class FreshFlora_P2648N5726(CommissionTemplate):
         self.move_along(TLPP_GO_TO_FLORA)
         self.talk_with_npc(Text(en="Flora"))
         self.talk_skip()
-        
+        self.commission_succ()
 if __name__ == '__main__':
     execc = FreshFlora_P2648N5726()
     execc.start()

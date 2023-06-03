@@ -6,6 +6,8 @@ from source.manager import asset
 from source.common.timer_module import AdvanceTimer
 from source.talk.talk import Talk
 
+class LanguageError(Exception):pass
+
 class CommissionTemplate(MissionExecutor, Talk):
     def __init__(self, commission_type, commission_position,is_CFCF=True,is_PUO=True,is_TMCF=True,is_CCT=False):
         MissionExecutor.__init__(self, is_CFCF=is_CFCF,is_PUO=is_PUO,is_TMCF=is_TMCF,is_CCT=is_CCT)
@@ -54,3 +56,5 @@ class CommissionTemplate(MissionExecutor, Talk):
     def is_in_commission(self):
         return itt.get_img_existence(asset.IconCommissionCommissionIcon)
 
+    def commission_succ(self):
+        self.is_commission_succ=True

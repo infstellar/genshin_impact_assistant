@@ -1,13 +1,9 @@
 ## TODO：
-- eng ocr opt
-- talk加日志
-- TMF加migration
 - commission set time
+- commission retry max: 2
 - commission的CSDL end好像有点问题
-- 测试优化的复活功能
 - 传送点识别区域还是不够大
 - combat sco shield与复活不兼容 考虑加入usd。
-- commission 执行完就是成功
 - TMF超过6s没检测到ui就退出
 - bp>100记录
 - webui list的显示要改改
@@ -20,6 +16,12 @@
 - combat lib识别受ui限制
 
 ## Done：
+- commission 执行完就是成功
+- 测试优化的复活功能
+- generate pot: use "path"
+- TMF加migration
+- talk加日志
+- eng ocr opt
 - TMF没landing
 - 检测。。。按钮识别是采集物还是人
 - time dilation rate

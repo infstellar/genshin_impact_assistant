@@ -58,7 +58,7 @@ class IncreasingDangerGeneral(CommissionTemplate):
             if self.is_commission_complete():
                 self.stop_combat()
                 break
-        self.is_commission_succ=True
+        self.commission_succ()
         # self.pause_threading()
         
 if __name__ == '__main__':
