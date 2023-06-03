@@ -457,7 +457,8 @@ def generate_teamfile_automatic():
         "Main":2000,
         "Shield":1000,
         "Recovery":1500,
-        "Support":3000
+        "Support":3000,
+        "Normal":3000
         
     }
     INDEX2ORDINAL_NUMERAL = {
