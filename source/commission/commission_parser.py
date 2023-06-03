@@ -75,6 +75,13 @@ class CommissionParser():
         return self.commission_dicts
     
     def _set_and_save_and_load_commission_dicts(self) -> bool:
+        """扫描/加载委托(如果有未完成的委托)
+        
+        写的很烂,不过既然能用就先这样吧.
+
+        Returns:
+            bool: 是否可以继续执行
+        """
         g4t = FileTimer("daily_commission")
         if g4t.get_diff_time()>=3600:
             logger.info(f"new genshin day, traverse mondstant commissions")
@@ -91,6 +98,7 @@ class CommissionParser():
             self.traverse_mondstant()
             save_json(self.commission_dicts, json_name="commission_dict.json", default_path=rf"{CONFIG_PATH}\commission")
             return True
+        
     def _detect_commission_type(self)->str:
         img = itt.capture(jpgmode=0)
         img_choose = crop(img.copy(), asset.AreaBigmapChoose.position)
