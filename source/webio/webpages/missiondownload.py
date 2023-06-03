@@ -48,12 +48,8 @@ Sturcture of index.json (used for available_missions):
 }
 """
 # TODO 待做
-# TODO: 本地化、翻译
-# TODO: index里要有last updated time，create time等，通过workflow生成。
-
-# TODO 讨论
-# TODO: 编译任务按钮是否放在本页？
-# TODO: 改为任务都放到了missions根目录
+# TODO: index里要有last updated time，create time等，通过workflow从.py文件生成。上传者不修改index。
+# TODO: Apply and Save 和 Install后自动编译
 
 class MissionDownloadPage(AdvancePage):
     def __init__(self) -> None:
@@ -68,6 +64,7 @@ class MissionDownloadPage(AdvancePage):
         self.INDEX_SOURCE_OPTIONS = [key+":  "+value for key, value in self.INDEX_SOURCE.items()]
         self.INDEX_SOURCE_SELECT = "Github (Direct)"
         self.INDEX_URL = self.INDEX_SOURCE[self.INDEX_SOURCE_SELECT]
+        self.INDEX_URL = self.INDEX_URL.replace("index.json", "index_"+GLOBAL_LANG+".json") if GLOBAL_LANG in ["zh_CN", "en_US"] else self.INDEX_URL
         self.requests_headers = {"Cache-Control": "no-cache", "Pragma": "no-cache"}
 
         self.LOCAL_MISSION_FOLDER = f"{ROOT_PATH}\\missions"
@@ -300,6 +297,7 @@ class MissionDownloadPage(AdvancePage):
         # option like: Github (Direct):  https://raw.githubusercontent.com/moulai/GIA-Missions/main/index.json
         self.INDEX_SOURCE_SELECT = option_select.split(":  ")[0]
         self.INDEX_URL = option_select.split(":  ")[1]
+        self.INDEX_URL = self.INDEX_URL.replace("index.json", "index_"+GLOBAL_LANG+".json") if GLOBAL_LANG in ["zh_CN", "en_US"] else self.INDEX_URL
 
     def _create_folder_if_not_exist(self, folder):
         if not os.path.exists(folder):
@@ -381,7 +379,7 @@ class MissionDownloadPage(AdvancePage):
         """
         Download the mission index and refresh the available_missions and available_missions_dict.
         """
-        # TODO: 是否要用多线程？
+        # NOTE: Multi thread may be needed here.
         url = self.INDEX_URL
         try:
             r = requests.get(url, headers=self.requests_headers)
@@ -516,7 +514,7 @@ class MissionDownloadPage(AdvancePage):
             if mission_name in update_list:
                 try:
                     if mission_name in self.available_missions_dict:
-                        # TODO: 是否要用多线程？
+                        # NOTE: Multi thread may be needed here.
                         self._download_mission(self.available_missions_dict[mission_name])
                     else:
                         self.error_occured = True
