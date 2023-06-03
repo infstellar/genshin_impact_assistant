@@ -159,8 +159,8 @@ class Map(MiniMap, BigMap, MapConverter):
                 
                 # logger.info(f"init_position:{tper.position}")
                 self.init_position(tper.position)
-                self.get_position()
-                d = euclidean_distance(self.get_position(), self.convert_GIMAP_to_cvAutoTrack(tper.position))
+                self.get_position(is_verify_position=False)
+                d = euclidean_distance(self.get_position(is_verify_position=False), self.convert_GIMAP_to_cvAutoTrack(tper.position))
                 if d<=md:
                     if tper in added:
                         continue
