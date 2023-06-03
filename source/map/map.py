@@ -55,7 +55,7 @@ class Map(MiniMap, BigMap, MapConverter):
     def _upd_smallmap(self) -> None:
         # self.lock.acquire()
         if itt.get_img_existence(asset.IconUIEmergencyFood, is_log=False):
-            self.update_position(itt.capture(jpgmode=0))
+            self.update_position(itt.capture())
             # self.smallmap_upd_timer.reset()
         # self.lock.release()
 

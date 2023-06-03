@@ -8,9 +8,11 @@ from source.map.extractor.convert import MapConverter
 from source.funclib.small_map import jwa_3, posi_map
 from source.util import logger, GIAconfig
 from source.interaction.interaction_core import itt
-
+ONE_CHANNEL = 1
+THREE_CHANNEL = 3
 
 class MiniMap(MiniMapResource):
+    COLOR_CHANNEL = THREE_CHANNEL
     def init_position(self, position: t.Tuple[int, int]):
         # logger.info(f"init_position:{position}")
         self.position = position
@@ -58,8 +60,11 @@ class MiniMap(MiniMapResource):
         search_area = area_offset((0, 0, *search_size), offset=(-search_size // 2).astype(np.int64))
         search_area = area_offset(search_area, offset=np.multiply(search_position, self.POSITION_SEARCH_SCALE))
         search_area = np.array(search_area).astype(np.int64)
-        search_image = crop(self.GIMAP, search_area)
-
+        if self.COLOR_CHANNEL == ONE_CHANNEL:
+            search_image = crop(self.GIMAP, search_area)
+        elif self.COLOR_CHANNEL == THREE_CHANNEL:
+            search_image = crop(self.TChannelGIMAP, search_area)
+        
         result = cv2.matchTemplate(search_image, local, cv2.TM_CCOEFF_NORMED)
         _, sim, _, loca = cv2.minMaxLoc(result)
         # result[result <= 0] = 0
@@ -105,7 +110,7 @@ class MiniMap(MiniMapResource):
             dic['city'] = self.POSITION_SCALE_DICT['city']
         return dic
 
-    def update_position(self, image):
+    def update_position(self, origin_image):
         """
         Get position on GIMAP, costs about 1.41ms.
 
@@ -114,9 +119,16 @@ class MiniMap(MiniMapResource):
         - position
         - position_scene
         """
+        if origin_image.shape[2]==4:
+            image = itt.png2jpg(origin_image, channel='bg', alpha_num=252)
+        else:
+            image = origin_image
         image = self._get_minimap(image, self.MINIMAP_POSITION_RADIUS)
-        image = rgb2luma(image)
-        image &= self._minimap_mask
+        if self.COLOR_CHANNEL == ONE_CHANNEL:
+            image = rgb2luma(image)
+            image &= self._minimap_mask
+        else:
+            image &= np.expand_dims(self._minimap_mask,axis=2).repeat(3,axis=2)
 
         best_sim = -1.
         best_local_sim = -1.
@@ -146,6 +158,8 @@ class MiniMap(MiniMapResource):
         - direction_similarity
         - direction
         """
+        if image.shape[2]==4:
+            image = image[:,:,:3]
         image = self._get_minimap(image, self.DIRECTION_RADIUS)
 
         image = color_similarity_2d(image, color=(0, 229, 255))
@@ -338,6 +352,8 @@ class MiniMap(MiniMapResource):
             return jwa_3(itt.capture(posi=posi_map))
 
     def update_rotation(self, image, layer=MapConverter.LAYER_Teyvat, update_position=True):
+        if image.shape[2]==4:
+            image = image[:,:,:3]
         # minimap = self._get_minimap(image, radius=self.MINIMAP_RADIUS)
         # minimap = rgb2luma(minimap)
         if layer == MapConverter.LAYER_Domain:
@@ -445,11 +461,11 @@ if __name__ == '__main__':
     device = WindowsCapture()
     minimap = MiniMap(MiniMap.DETECT_Desktop_1080p)
     # 坐标位置是 GIMAP 的图片坐标
-    minimap.init_position((5469, 973))
+    minimap.init_position((5454,758))
     # 你可以移动人物，GIA会持续监听小地图位置和角色朝向
     while 1:
-        image = itt.capture(jpgmode=0)
-        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        image = itt.capture()
+        image = cv2.cvtColor(image, cv2.COLOR_BGRA2RGBA)
         # if image.shape != (1080, 1920, 3):
         #     time.sleep(0.3)
         #     continue
