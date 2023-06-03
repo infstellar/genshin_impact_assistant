@@ -4,7 +4,10 @@ META={
         'zh_CN':'采集清心1',
         'en_US':'Collect Qing xin 1'
     },
-    'author':"GIA"
+    'author':"GIA",
+    'tags':["采集"],
+    'description':"无妄坡附近采集约5个清心。",
+    'note': ""
 }
 
 class MissionMain(MissionJustCollect):

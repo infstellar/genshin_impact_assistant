@@ -4,7 +4,16 @@ META={
         'zh_CN':'采集琉璃百合',
         'en_US':'Collect Glaze Lily'
     },
-    'author':"GIA"
+    'author':"GIA",
+    'tags':{
+        'zh_CN':["采集"],
+        'en_US':["Collect"]
+    },
+    'description': {
+        'zh_CN':"采集约10个琉璃百合。",
+        'en_US':"Collect about 10 Glaze Lily."
+    },
+    'note': ""
 }
 class MissionMain(MissionJustCollectGroup):
     def __init__(self):
