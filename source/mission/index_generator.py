@@ -32,26 +32,6 @@ def generate_mission_index():
             f.write(f"    if mission_name == '{i}':\n")
             f.write(f"        import missions.{i}\n")
             f.write(f"        return missions.{i}.MissionMain()\n")
-        f.write("META = {}\n")
-        f.write("if __name__ == '__main__':\n")
-        f.write(f"    from source.funclib import combat_lib\n")
-        f.write(f"    combat_lib.CSDL.stop_threading()\n")
-        for i in mission_list:
-            f.write(f"    import source.mission.missions.{i}\n")
-            f.write(f"    META['{i}'] = source.mission.missions.{i}.META\n")
-        for i in extra_mission_list:
-            f.write(f"    import missions.{i}\n")
-            f.write(f"    META['{i}'] = missions.{i}.META\n")
-        path_meta = os.path.join(ROOT_PATH,'missions\\mission_meta.py')
-        path_index = os.path.join(ROOT_PATH,'missions\\mission_index.py')
-        f.write(f"    with open(r'\"{path_meta}\"', 'w', encoding='utf-8') as f:\n")
-        f.write("        f.write(f'MISSION_META = {str(META)}')\n")
-        f.write(f"    print('index end')\n")
-
-
-    print(f"sys: python {path_index} start")
-    os.system(f"python \"{path_index}\"")
-    print(f"sys: python {path_index} end")
     
 if __name__ == '__main__':
     generate_mission_index()

@@ -1,5 +1,5 @@
 """This file is generated automatically. Do not manually modify it."""
-MISSION_INDEX = ['MissionAutoCollector', 'MissionCecilia', 'MissionCrystalfly', 'MissionJueyunChili', 'MissionQingXin2', 'MissionSakuraBloom1', 'MissionSilkFlower', 'MissionSweatFlower1', 'MissionSweatFlower2', 'MissionVioletgrass1', 'MissionVioletgrass2', 'MissionVioletgrass3', 'MissionWindwhellAster']
+MISSION_INDEX = ['MissionAutoCollector', 'MissionCecilia', 'MissionCrystalfly', 'MissionJueyunChili', 'MissionQingXin2', 'MissionSakuraBloom1', 'MissionSilkFlower', 'MissionSweatFlower1', 'MissionSweatFlower2', 'MissionVioletgrass1', 'MissionVioletgrass2', 'MissionVioletgrass3', 'MissionWindwhellAster', 'MissionGlazeLily', 'MissionQingXin1']
 def get_mission_object(mission_name:str):
     if mission_name == 'MissionAutoCollector':
         import source.mission.missions.MissionAutoCollector
@@ -46,40 +46,3 @@ def get_mission_object(mission_name:str):
     if mission_name == 'MissionQingXin1':
         import missions.MissionQingXin1
         return missions.MissionQingXin1.MissionMain()
-META = {}
-if __name__ == '__main__':
-    from source.funclib import combat_lib
-    combat_lib.CSDL.stop_threading()
-    import source.mission.missions.MissionAutoCollector
-    META['MissionAutoCollector'] = source.mission.missions.MissionAutoCollector.META
-    import source.mission.missions.MissionCecilia
-    META['MissionCecilia'] = source.mission.missions.MissionCecilia.META
-    import source.mission.missions.MissionCrystalfly
-    META['MissionCrystalfly'] = source.mission.missions.MissionCrystalfly.META
-    import source.mission.missions.MissionJueyunChili
-    META['MissionJueyunChili'] = source.mission.missions.MissionJueyunChili.META
-    import source.mission.missions.MissionQingXin2
-    META['MissionQingXin2'] = source.mission.missions.MissionQingXin2.META
-    import source.mission.missions.MissionSakuraBloom1
-    META['MissionSakuraBloom1'] = source.mission.missions.MissionSakuraBloom1.META
-    import source.mission.missions.MissionSilkFlower
-    META['MissionSilkFlower'] = source.mission.missions.MissionSilkFlower.META
-    import source.mission.missions.MissionSweatFlower1
-    META['MissionSweatFlower1'] = source.mission.missions.MissionSweatFlower1.META
-    import source.mission.missions.MissionSweatFlower2
-    META['MissionSweatFlower2'] = source.mission.missions.MissionSweatFlower2.META
-    import source.mission.missions.MissionVioletgrass1
-    META['MissionVioletgrass1'] = source.mission.missions.MissionVioletgrass1.META
-    import source.mission.missions.MissionVioletgrass2
-    META['MissionVioletgrass2'] = source.mission.missions.MissionVioletgrass2.META
-    import source.mission.missions.MissionVioletgrass3
-    META['MissionVioletgrass3'] = source.mission.missions.MissionVioletgrass3.META
-    import source.mission.missions.MissionWindwhellAster
-    META['MissionWindwhellAster'] = source.mission.missions.MissionWindwhellAster.META
-    import missions.MissionGlazeLily
-    META['MissionGlazeLily'] = missions.MissionGlazeLily.META
-    import missions.MissionQingXin1
-    META['MissionQingXin1'] = missions.MissionQingXin1.META
-    with open(r'M:\ProgramData\GIA\genshin_impact_assistant\missions\mission_meta.py', 'w', encoding='utf-8') as f:
-        f.write(f'MISSION_META = {str(META)}')
-    print('index end')
