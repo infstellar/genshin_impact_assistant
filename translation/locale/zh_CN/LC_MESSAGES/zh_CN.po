@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2023-06-04 11:33+0800\n"
-"PO-Revision-Date: 2023-06-04 11:37+0800\n"
+"POT-Creation-Date: 2023-06-04 19:40+0800\n"
+"PO-Revision-Date: 2023-06-04 19:41+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -66,6 +66,18 @@ msgstr "YOLOX对象已创建"
 
 #: source\commission\commission.py:20
 msgid "不支持的语言:"
+msgstr ""
+
+#: source\commission\commission_executor.py:36
+msgid "Commission(s) Failed, Commission Task end."
+msgstr ""
+
+#: source\commission\commission_executor.py:39
+msgid "Cannot find any commissions, Commission Task end."
+msgstr ""
+
+#: source\commission\commission_executor.py:42
+msgid "Number of executions exceeding the limit, Commission Task end."
 msgstr ""
 
 #: source\common\flow_state.py:99
@@ -544,8 +556,8 @@ msgstr "领取日常奖励"
 msgid "Ley Line Outcrop"
 msgstr "地脉衍出"
 
-#: source\webio\pages.py:125 source\webio\webpages\missiondownload.py:159
-#: source\webio\webpages\missiondownload.py:235
+#: source\webio\pages.py:125 source\webio\webpages\missiondownload.py:160
+#: source\webio\webpages\missiondownload.py:239
 msgid "Mission"
 msgstr "自定义任务"
 
@@ -743,7 +755,7 @@ msgid "Note: "
 msgstr "注释: "
 
 #: source\webio\webpages\mission.py:120
-#: source\webio\webpages\missiondownload.py:267
+#: source\webio\webpages\missiondownload.py:273
 msgid "Rebuild Progress"
 msgstr "重构进度"
 
@@ -783,243 +795,243 @@ msgid ""
 "page."
 msgstr "如果你想添加更多自定义任务，请到自定义任务下载页面。"
 
-#: source\webio\webpages\missiondownload.py:89
-#: source\webio\webpages\missiondownload.py:142
-#: source\webio\webpages\missiondownload.py:187
+#: source\webio\webpages\missiondownload.py:90
+#: source\webio\webpages\missiondownload.py:143
 #: source\webio\webpages\missiondownload.py:188
+#: source\webio\webpages\missiondownload.py:189
 msgid "Unknown"
 msgstr "未知"
 
-#: source\webio\webpages\missiondownload.py:95
+#: source\webio\webpages\missiondownload.py:96
 msgid "a-z"
 msgstr "a-z"
 
-#: source\webio\webpages\missiondownload.py:95
+#: source\webio\webpages\missiondownload.py:96
 msgid "internal order"
 msgstr "默认顺序"
 
-#: source\webio\webpages\missiondownload.py:95
+#: source\webio\webpages\missiondownload.py:96
 msgid "newest first"
 msgstr "最新更新"
 
-#: source\webio\webpages\missiondownload.py:95
+#: source\webio\webpages\missiondownload.py:96
 msgid "oldest first"
 msgstr "最早更新"
 
-#: source\webio\webpages\missiondownload.py:95
+#: source\webio\webpages\missiondownload.py:96
 msgid "z-a"
 msgstr "z-a"
 
-#: source\webio\webpages\missiondownload.py:111
-#: source\webio\webpages\missiondownload.py:252
+#: source\webio\webpages\missiondownload.py:112
+#: source\webio\webpages\missiondownload.py:256
 msgid "Installed"
 msgstr "已安装"
 
-#: source\webio\webpages\missiondownload.py:112
+#: source\webio\webpages\missiondownload.py:113
 msgid "Available"
 msgstr "可用"
 
-#: source\webio\webpages\missiondownload.py:133
+#: source\webio\webpages\missiondownload.py:134
 msgid "Upload and share your custom missions! (Custom Mission Document)"
 msgstr "上传并分享你的自定义任务！  &  《自定义任务文档》"
 
-#: source\webio\webpages\missiondownload.py:137
+#: source\webio\webpages\missiondownload.py:138
 msgid "Load index from:"
 msgstr "自定义任务远程仓库："
 
-#: source\webio\webpages\missiondownload.py:139
+#: source\webio\webpages\missiondownload.py:140
 msgid ""
 "If error occurs, please check first whether this option is set correctly."
 msgstr "若出现问题，请首先检查本选项是否设置正确。"
 
-#: source\webio\webpages\missiondownload.py:147
+#: source\webio\webpages\missiondownload.py:148
 msgid "Disable all missions"
 msgstr "禁用全部自定义任务"
 
-#: source\webio\webpages\missiondownload.py:148
+#: source\webio\webpages\missiondownload.py:149
 msgid "Check for Updates"
 msgstr "检测更新"
 
-#: source\webio\webpages\missiondownload.py:149
-#: source\webio\webpages\missiondownload.py:264
+#: source\webio\webpages\missiondownload.py:150
+#: source\webio\webpages\missiondownload.py:269
 msgid "Apply and Save"
 msgstr "应用并保存"
 
-#: source\webio\webpages\missiondownload.py:159
+#: source\webio\webpages\missiondownload.py:160
 msgid "Enabled"
 msgstr "启用"
 
-#: source\webio\webpages\missiondownload.py:159
+#: source\webio\webpages\missiondownload.py:160
 msgid "Tags"
 msgstr "标签"
 
-#: source\webio\webpages\missiondownload.py:159
-#: source\webio\webpages\missiondownload.py:184
-#: source\webio\webpages\missiondownload.py:576
+#: source\webio\webpages\missiondownload.py:160
+#: source\webio\webpages\missiondownload.py:185
+#: source\webio\webpages\missiondownload.py:583
 msgid "Update"
 msgstr "更新"
 
-#: source\webio\webpages\missiondownload.py:159
-#: source\webio\webpages\missiondownload.py:235
+#: source\webio\webpages\missiondownload.py:160
+#: source\webio\webpages\missiondownload.py:239
 msgid "Author"
 msgstr "作者"
 
-#: source\webio\webpages\missiondownload.py:159
-#: source\webio\webpages\missiondownload.py:235
+#: source\webio\webpages\missiondownload.py:160
+#: source\webio\webpages\missiondownload.py:239
 msgid "Description"
 msgstr "描述"
 
-#: source\webio\webpages\missiondownload.py:159
-#: source\webio\webpages\missiondownload.py:235
+#: source\webio\webpages\missiondownload.py:160
+#: source\webio\webpages\missiondownload.py:239
 msgid "ID"
 msgstr "ID"
 
-#: source\webio\webpages\missiondownload.py:159
-#: source\webio\webpages\missiondownload.py:235
+#: source\webio\webpages\missiondownload.py:160
+#: source\webio\webpages\missiondownload.py:239
 msgid "Last Update Time"
 msgstr "最后更新时间"
 
-#: source\webio\webpages\missiondownload.py:161
+#: source\webio\webpages\missiondownload.py:162
 msgid "Delete"
 msgstr "删除"
 
-#: source\webio\webpages\missiondownload.py:171
 #: source\webio\webpages\missiondownload.py:172
-#: source\webio\webpages\missiondownload.py:204
-#: source\webio\webpages\missiondownload.py:206
-#: source\webio\webpages\missiondownload.py:251
-#: source\webio\webpages\missiondownload.py:677
-#: source\webio\webpages\missiondownload.py:679
+#: source\webio\webpages\missiondownload.py:173
+#: source\webio\webpages\missiondownload.py:207
+#: source\webio\webpages\missiondownload.py:209
+#: source\webio\webpages\missiondownload.py:255
+#: source\webio\webpages\missiondownload.py:684
+#: source\webio\webpages\missiondownload.py:686
 msgid "installed"
 msgstr "已安装"
 
-#: source\webio\webpages\missiondownload.py:183
-#: source\webio\webpages\missiondownload.py:612
+#: source\webio\webpages\missiondownload.py:184
+#: source\webio\webpages\missiondownload.py:619
 msgid "Update available"
 msgstr "可用更新"
 
-#: source\webio\webpages\missiondownload.py:185
-#: source\webio\webpages\missiondownload.py:614
+#: source\webio\webpages\missiondownload.py:186
+#: source\webio\webpages\missiondownload.py:621
 msgid "No update available"
 msgstr "没有可用的更新"
 
-#: source\webio\webpages\missiondownload.py:200
+#: source\webio\webpages\missiondownload.py:203
 msgid "Load/refresh mission index from remote"
 msgstr "从远程仓库加载/刷新自定义任务列表"
 
-#: source\webio\webpages\missiondownload.py:202
+#: source\webio\webpages\missiondownload.py:205
 msgid "Please load the mission index first."
 msgstr "请先加载自定义任务列表。"
 
-#: source\webio\webpages\missiondownload.py:206
+#: source\webio\webpages\missiondownload.py:209
 msgid "Hide tags:"
 msgstr "隐藏标签："
 
-#: source\webio\webpages\missiondownload.py:207
+#: source\webio\webpages\missiondownload.py:210
 msgid "Order:"
 msgstr "排序方式："
 
-#: source\webio\webpages\missiondownload.py:209
+#: source\webio\webpages\missiondownload.py:212
 msgid "Search:"
 msgstr "搜索："
 
-#: source\webio\webpages\missiondownload.py:214
+#: source\webio\webpages\missiondownload.py:217
 msgid "Downloading mission index..."
 msgstr "正在下载自定义任务列表..."
 
-#: source\webio\webpages\missiondownload.py:218
+#: source\webio\webpages\missiondownload.py:221
 msgid "Finished downloading mission index"
 msgstr "下载自定义任务列表完成"
 
-#: source\webio\webpages\missiondownload.py:222
+#: source\webio\webpages\missiondownload.py:225
 msgid "Installing mission..."
 msgstr "安装自定义任务中..."
 
-#: source\webio\webpages\missiondownload.py:226
-msgid "Mission installed, please apply and save."
-msgstr "自定义任务已安装，请应用并保存。"
+#: source\webio\webpages\missiondownload.py:230
+msgid "Mission installed"
+msgstr "自定义任务已安装"
 
-#: source\webio\webpages\missiondownload.py:235
+#: source\webio\webpages\missiondownload.py:239
 msgid "Action"
 msgstr "操作"
 
-#: source\webio\webpages\missiondownload.py:235
+#: source\webio\webpages\missiondownload.py:239
 msgid "Tag"
 msgstr "标签"
 
-#: source\webio\webpages\missiondownload.py:254
+#: source\webio\webpages\missiondownload.py:258
 msgid "Install"
 msgstr "安装"
 
-#: source\webio\webpages\missiondownload.py:260
+#: source\webio\webpages\missiondownload.py:265
 msgid "missions are hidden."
 msgstr "个自定义任务已隐藏。"
 
-#: source\webio\webpages\missiondownload.py:265
+#: source\webio\webpages\missiondownload.py:270
 msgid "Please wait for the progress to finish."
 msgstr "请等待进度完成。"
 
-#: source\webio\webpages\missiondownload.py:266
-msgid "Update Progress"
-msgstr "更新进度"
+#: source\webio\webpages\missiondownload.py:271
+msgid "Save Progress"
+msgstr "保存进度"
 
-#: source\webio\webpages\missiondownload.py:273
+#: source\webio\webpages\missiondownload.py:280
 msgid "Delete all backup files for this mission as well"
 msgstr "同时删除该自定义任务的所有备份文件"
 
-#: source\webio\webpages\missiondownload.py:279
+#: source\webio\webpages\missiondownload.py:286
 msgid "Delete Confirm"
 msgstr "删除确认"
 
-#: source\webio\webpages\missiondownload.py:280
+#: source\webio\webpages\missiondownload.py:287
 msgid "Are you sure you want to delete the selected missions?"
 msgstr "你确定要删除选定的自定义任务吗？"
 
-#: source\webio\webpages\missiondownload.py:281
+#: source\webio\webpages\missiondownload.py:288
 msgid "Notice: This action **cannot** be undone!"
 msgstr "注意： 该操作**不能**被撤销!"
 
-#: source\webio\webpages\missiondownload.py:286
+#: source\webio\webpages\missiondownload.py:293
 msgid "Confirm"
 msgstr "确认"
 
-#: source\webio\webpages\missiondownload.py:287
+#: source\webio\webpages\missiondownload.py:294
 msgid "Cancel"
 msgstr "取消"
 
-#: source\webio\webpages\missiondownload.py:563
+#: source\webio\webpages\missiondownload.py:570
 msgid "Finished!"
 msgstr "完成!"
 
-#: source\webio\webpages\missiondownload.py:565
+#: source\webio\webpages\missiondownload.py:572
 msgid "Something went wrong! Please try again"
 msgstr "出错了! 请再试一次"
 
-#: source\webio\webpages\missiondownload.py:601
+#: source\webio\webpages\missiondownload.py:608
 msgid "Not available on remote"
 msgstr "未在远程仓库中找到"
 
-#: source\webio\webpages\missiondownload.py:604
+#: source\webio\webpages\missiondownload.py:611
 msgid "No meta data in local"
 msgstr "未在本地找到META信息"
 
-#: source\webio\webpages\missiondownload.py:607
+#: source\webio\webpages\missiondownload.py:614
 msgid "No last update info"
 msgstr "无最后更新事件信息"
 
-#: source\webio\webpages\missiondownload.py:619
+#: source\webio\webpages\missiondownload.py:626
 msgid "Checking updates..."
 msgstr "检查更新中..."
 
-#: source\webio\webpages\missiondownload.py:622
+#: source\webio\webpages\missiondownload.py:629
 msgid "Finished checking updates"
 msgstr "检查更新完成"
 
+#~ msgid "Mission installed, please apply and save."
+#~ msgstr "自定义任务已安装，请应用并保存。"
+
 #~ msgid "Compile success, please restart GIA program."
 #~ msgstr "编译成功,请重启GIA以应用更改."
-
-#~ msgid "Mission installed"
-#~ msgstr "自定义任务已安装"
 
 #~ msgid "Finished! Please compile the missions in the Mission page"
 #~ msgstr "保存成功！请在“自定义任务设置”页面进行编译"

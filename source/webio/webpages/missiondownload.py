@@ -53,6 +53,7 @@ Sturcture of index.json (used for available_missions):
 # TODO: Apply and Save 和 Install后自动编译
 
 class MissionDownloadPage(AdvancePage):
+    NAME_PROCESSBAR_ApplyAndSave = "PROCESSBAR_ApplyAndSave"
     NAME_PROCESSBAR_MissionRebuild = 'PROCESSBAR_MissionRebuild'
     def __init__(self) -> None:
         super().__init__()
@@ -192,6 +193,8 @@ class MissionDownloadPage(AdvancePage):
             Delete = pin.put_checkbox(label="", name=f"DELETE_{mission_name}", options=[""], value=[], inline=True).style("text-align: center")
             
             table += [[Enabled_Checkbox]+text_entry+[Update, Delete]]
+
+        output.clear_scope("missiondownload-installed-table")
         with output.use_scope("missiondownload-installed-table", clear=True):
             output.put_table(table)
     
@@ -224,7 +227,7 @@ class MissionDownloadPage(AdvancePage):
             self._render_installed_board()
             self._render_available_table()
             generate_mission_index()
-            output.toast(t2t("Mission installed, please apply and save."), color="success")
+            output.toast(t2t("Mission installed"), color="success")
         
         hide_tags = list(pin.pin["CHECKBOX_HIDE_TAGS"])
         sort_by = self.order_options.index(str(pin.pin["RADIO_SORT_BY"]))
@@ -256,6 +259,7 @@ class MissionDownloadPage(AdvancePage):
             
             table += [text_entry+[Action]]
         
+        output.clear_scope("missiondownload-available-table")
         with output.use_scope("missiondownload-available-table", clear=True):
             if hidden_number > 0:
                 output.put_text(f"{hidden_number} "+t2t("missions are hidden."))
@@ -264,8 +268,10 @@ class MissionDownloadPage(AdvancePage):
     def _render_progress_popup(self):
         output.popup(t2t('Apply and Save'), [
             output.put_markdown(t2t('Please wait for the progress to finish.')),
-            output.put_processbar(name="PROGRESS_APPLY_AND_SAVE", label=t2t('Update Progress'), auto_close=False),
-            output.put_processbar(name=self.NAME_PROCESSBAR_MissionRebuild, label=t2t('Rebuild Progress'), auto_close=False),
+            output.put_text(t2t('Save Progress'), inline=True).style("font-size: 0.5em; color: grey;"),
+            output.put_processbar(name=self.NAME_PROCESSBAR_ApplyAndSave, auto_close=False),
+            output.put_text(t2t('Rebuild Progress'), inline=True).style("font-size: 0.5em; color: grey;"),
+            output.put_processbar(name=self.NAME_PROCESSBAR_MissionRebuild, auto_close=False),
             output.put_text("\n"),
             output.put_scope("POPUP_CLOSE")
         ], implicit_close = False)
@@ -488,7 +494,7 @@ class MissionDownloadPage(AdvancePage):
                     if os.path.exists(backup_folder):
                         shutil.rmtree(backup_folder)
         self.local_mission_names, self.enable_mission_names, self.disable_mission_names = self._read_local_mission_names()
-        output.set_processbar("PROGRESS_APPLY_AND_SAVE", 0.1)
+        output.set_processbar(self.NAME_PROCESSBAR_ApplyAndSave, 0.1)
 
     def _apply_and_save(self, disable_list, update_list, disable_all, delete_list, delete_backup):
         """
@@ -504,8 +510,6 @@ class MissionDownloadPage(AdvancePage):
         self.error_occured = False
 
         self._render_progress_popup()
-
-        self._refresh_available_missions()
         
         # Prioirity: Delete, Update, Disable
 
@@ -515,10 +519,14 @@ class MissionDownloadPage(AdvancePage):
         # Handle Update
         update_list = set(update_list)
         job_count = len(update_list)
-        i_count = 1
-
-        for i, mission_name in enumerate(self.local_mission_names):
-            if mission_name in update_list:
+        i_count = 0
+        if len(update_list) > 0:
+            self._refresh_available_missions()
+            for mission_name in update_list:
+                i_count += 1
+                output.set_processbar(self.NAME_PROCESSBAR_ApplyAndSave, min(0.1+i_count/job_count*0.8, 0.9))
+                if mission_name not in self.local_mission_names:
+                    continue
                 try:
                     if mission_name in self.available_missions_dict:
                         # NOTE: Multi thread may be needed here.
@@ -531,15 +539,13 @@ class MissionDownloadPage(AdvancePage):
                     self.error_occured = True
                     logger.error(f"Error getting updates for {mission_name}: {Exception}")
                     output.toast(f"Error getting updates for {mission_name}", duration = 5, color="error")
-                output.set_processbar("PROGRESS_APPLY_AND_SAVE", min(0.1+i_count/job_count*0.8, 0.9))
-                i_count += 1
         
         # Handle Disable
         if disable_all:
             disable_list = self.local_mission_names
         self._apply_disable(disable_list)
 
-        output.set_processbar("PROGRESS_APPLY_AND_SAVE", 1)
+        output.set_processbar(self.NAME_PROCESSBAR_ApplyAndSave, 1)
         self._render_installed_board()
         self._render_available_board()
         
