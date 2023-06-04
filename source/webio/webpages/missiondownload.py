@@ -60,7 +60,7 @@ class MissionDownloadPage(AdvancePage):
         self.INDEX_SOURCE = {
             "Github (Direct)": "https://raw.githubusercontent.com/moulai/GIA-Missions/main/index.json",
             "Github (ghproxy.com)": "https://ghproxy.com/https://raw.githubusercontent.com/moulai/GIA-Missions/main/index.json",
-            "Gitee": ""
+            "Github (ghrpoxy.net)": "https://ghproxy.net/https://raw.githubusercontent.com/moulai/GIA-Missions/main/index.json"
         }
         self.INDEX_SOURCE_OPTIONS = [key+":  "+value for key, value in self.INDEX_SOURCE.items()]
         self.INDEX_SOURCE_SELECT = "Github (Direct)"
@@ -369,11 +369,14 @@ class MissionDownloadPage(AdvancePage):
         """
         Convert the url to download link, depends on the INDEX_SOURCE_SELECT.
         """
-        url = url.replace("/blob/", "/raw/")
+        if self.INDEX_SOURCE_SELECT not in ["Github (ghproxy.net)"]:
+            url = url.replace("/blob/", "/raw/")
         if self.INDEX_SOURCE_SELECT == "Github (Direct)":
             return url
         elif self.INDEX_SOURCE_SELECT == "Github (ghproxy.com)":
-            return "https://ghproxy.com/"+url
+            return "https://ghproxy.com/" + url
+        elif self.INDEX_SOURCE_SELECT == "Github (ghproxy.net)":
+            return "https://ghproxy.net/" + url
         return url
 
     def _refresh_available_missions(self):
