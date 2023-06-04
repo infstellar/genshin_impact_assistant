@@ -62,10 +62,10 @@ class MissionPage(AdvancePage):
             mnote = None
             mtime = None
             if mission_name in self.MISSION_META:
-                if GLOBAL_LANG in self.MISSION_META[mission_name]['name']:
-                    mission_show_name = self.MISSION_META[mission_name]['name'][GLOBAL_LANG]
+                if GLOBAL_LANG in self.MISSION_META[mission_name]['title']:
+                    mission_show_name = self.MISSION_META[mission_name]['title'][GLOBAL_LANG]
                 else:
-                    mission_show_name = mission_name
+                    mission_show_name = self.MISSION_META[mission_name]['title']
                 if 'author' in self.MISSION_META[mission_name]:
                     mauthor = self.MISSION_META[mission_name]['author']
                 if 'note' in self.MISSION_META[mission_name]:
@@ -158,7 +158,7 @@ class MissionPage(AdvancePage):
                         output.put_button(label=t2t('Save Changes'), onclick=self._onclick_save_missions)],scope=self.main_scope)
         output.put_text(t2t('If no mission is displayed here or if you have modified any mission in the missions folder, click on the Compile Missions button.'),scope=self.main_scope)
         output.put_text(t2t('The order of execution decreases from smallest to largest, with 0 being the highest priority.'),scope=self.main_scope)
-        output.put_text(t2t('If you would like to add more missions, please go to the MissionsDownload page'),scope=self.main_scope)
+        output.put_text(t2t('If you would like to add more missions, please go to the MissionsDownload page.'),scope=self.main_scope)
         output.put_scope(name='SCOPE_PROCESSBAR',scope=self.main_scope)
         output.put_scope(name='SCOPE_GRID',scope=self.main_scope)
         

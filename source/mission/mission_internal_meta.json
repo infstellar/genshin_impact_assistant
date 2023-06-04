@@ -1,21 +1,21 @@
 {
   "MissionAutoCollector": {
     "author": "GIA",
-    "name": {
+    "title": {
       "en_US": "General Auto Collect",
       "zh_CN": "通用自动采集"
     }
   },
   "MissionQingXin2": {
     "author": "GIA",
-    "name": {
+    "title": {
       "en_US": "Collect Qing xin 2",
       "zh_CN": "采集清心2"
     }
   },
   "MissionSakuraBloom1": {
     "author": "GIA",
-    "name": {
+    "title": {
       "en_US": "Collect Sakura Bloom 1",
       "zh_CN": "采集绯樱绣球1"
     },
@@ -23,14 +23,14 @@
   },
   "MissionSweatFlower2": {
     "author": "GIA",
-    "name": {
+    "title": {
       "en_US": "Collect Sweat Flower 2",
       "zh_CN": "采集甜甜花2"
     }
   },
   "MissionVioletgrass2": {
     "author": "GIA",
-    "name": {
+    "title": {
       "en_US": "Collect Violetgrass 2",
       "zh_CN": "采集琉璃袋2"
     }

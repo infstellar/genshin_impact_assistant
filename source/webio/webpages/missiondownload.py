@@ -223,7 +223,7 @@ class MissionDownloadPage(AdvancePage):
             self._download_mission(self.available_missions_dict[mission_name])
             self._render_installed_board()
             self._render_available_table()
-            output.toast(t2t("Mission installed"), color="success")
+            output.toast(t2t("Mission installed, please apply and save."), color="success")
         
         hide_tags = list(pin.pin["CHECKBOX_HIDE_TAGS"])
         sort_by = self.order_options.index(str(pin.pin["RADIO_SORT_BY"]))
