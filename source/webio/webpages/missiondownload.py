@@ -49,7 +49,6 @@ Sturcture of index.json (used for available_missions):
 }
 """
 # TODO 待做
-# TODO: index里要有last updated time，create time等，通过workflow从.py文件生成。上传者不修改index。
 # TODO: Apply and Save 和 Install后自动编译
 
 class MissionDownloadPage(AdvancePage):
@@ -58,9 +57,9 @@ class MissionDownloadPage(AdvancePage):
         self.REMOTE_REPO = "https://github.com/GenshinImpactAssistant/GIA-Missions"
         
         self.INDEX_SOURCE = {
-            "Github (Direct)": "https://raw.githubusercontent.com/moulai/GIA-Missions/main/index.json",
-            "Github (ghproxy.com)": "https://ghproxy.com/https://raw.githubusercontent.com/moulai/GIA-Missions/main/index.json",
-            "Github (ghrpoxy.net)": "https://ghproxy.net/https://raw.githubusercontent.com/moulai/GIA-Missions/main/index.json"
+            "Github (Direct)": "https://raw.githubusercontent.com/GenshinImpactAssistant/GIA-Missions/main/index.json",
+            "Github (ghproxy.com)": "https://ghproxy.com/https://raw.githubusercontent.com/GenshinImpactAssistant/GIA-Missions/main/index.json",
+            "Github (ghrpoxy.net)": "https://ghproxy.net/https://raw.githubusercontent.com/GenshinImpactAssistant/GIA-Missions/main/index.json"
         }
         self.INDEX_SOURCE_OPTIONS = [key+":  "+value for key, value in self.INDEX_SOURCE.items()]
         self.INDEX_SOURCE_SELECT = "Github (Direct)"
@@ -295,7 +294,7 @@ class MissionDownloadPage(AdvancePage):
     The following methods are used to process the data.
     """
     def _on_select_index_url(self, option_select):
-        # option like: Github (Direct):  https://raw.githubusercontent.com/moulai/GIA-Missions/main/index.json
+        # option like: Github (Direct):  https://raw.githubusercontent.com/GenshinImpactAssistant/GIA-Missions/main/index.json
         self.INDEX_SOURCE_SELECT = option_select.split(":  ")[0]
         self.INDEX_URL = option_select.split(":  ")[1]
         self.INDEX_URL = self.INDEX_URL.replace("index.json", "index_"+GLOBAL_LANG+".json") if GLOBAL_LANG in ["zh_CN", "en_US"] else self.INDEX_URL
