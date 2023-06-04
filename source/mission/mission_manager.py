@@ -1,10 +1,11 @@
 from source.util import *
-
 from source.common.base_threading import AdvanceThreading
-try:
-    from missions.mission_index import get_mission_object
-except:
-    from source.mission.mission_index import get_mission_object
+
+from source.mission.index_generator import generate_mission_index
+generate_mission_index()
+logger.debug(f"generate mission index succ")
+import missions.mission_index
+    
 
 class MissionManager(AdvanceThreading):
     def __init__(self):
@@ -15,7 +16,7 @@ class MissionManager(AdvanceThreading):
         self.missions_list = mission_list
 
     def exec_mission(self, mission_name):
-        mission = get_mission_object(mission_name)
+        mission = missions.mission_index .get_mission_object(mission_name)
         self._add_sub_threading(mission, start=False)
         self.blocking_startup(mission)
         mission.stop_threading()
