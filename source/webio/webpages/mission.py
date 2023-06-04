@@ -66,12 +66,13 @@ class MissionPage(AdvancePage):
                     mauthor = self.MISSION_META[mission_name]['author']
                 if 'note' in self.MISSION_META[mission_name]:
                     mnote = self.MISSION_META[mission_name]['note']
-                if 'time' in self.MISSION_META[mission_name]:
-                    mtime = self.MISSION_META[mission_name]['time']
-                
-                
+                if 'last_update' in self.MISSION_META[mission_name]:
+                    mtime = f"UTC {self.MISSION_META[mission_name]['last_update']}"
             else:
                 mission_show_name = mission_name
+            
+            curr_mission_meta = self.MISSION_META[mission_name]
+            
             output.put_text(mission_show_name, scope=mission_name)
             pv = 999
             ebd = False
@@ -86,10 +87,15 @@ class MissionPage(AdvancePage):
             pin.put_input(name=f"PRIORITY_{mission_name}",label=t2t("Priority"),scope=mission_name,type=input.NUMBER,value=pv)
             if mauthor!=None:
                 output.put_text(t2t('Author: ')+mauthor, scope=mission_name)
-            if mnote!=None:
-                output.put_text(t2t('Note: ')+mnote, scope=mission_name)
+            if 'description' in curr_mission_meta:
+                output.put_text(t2t('Description: ')+curr_mission_meta['description'], scope=mission_name)
+            if 'tags' in curr_mission_meta:
+                output.put_text(t2t('Tags: ')+" ".join(str(t) for t in curr_mission_meta['tags']), scope=mission_name)
             if mtime!=None:
                 output.put_text(t2t('Time: ')+mtime, scope=mission_name)
+            if mnote!=None:
+                output.put_text(t2t('Note: ')+mnote, scope=mission_name)
+            
 
     
     def _get_all_mission_info(self):
