@@ -2,13 +2,9 @@ from source.util import *
 from source.common.base_threading import AdvanceThreading
 
 from source.mission.index_generator import generate_mission_index
-try:
-    import missions.mission_index 
-    logger.debug(f"load custom mission index succ")
-except:
-    generate_mission_index()
-    logger.debug(f"generate mission index succ")
-    import missions.mission_index
+generate_mission_index()
+logger.debug(f"generate mission index succ")
+import missions.mission_index
     
 
 class MissionManager(AdvanceThreading):
