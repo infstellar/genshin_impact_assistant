@@ -1,4 +1,5 @@
 from source.util import *
+import importlib
 
 """
 生成mission index，提供导入。
@@ -32,6 +33,10 @@ def generate_mission_index():
             f.write(f"    if mission_name == '{i}':\n")
             f.write(f"        import missions.{i}\n")
             f.write(f"        return missions.{i}.MissionMain()\n")
+    
+    import missions.mission_index
+    importlib.reload(missions.mission_index)
+
     
 if __name__ == '__main__':
     generate_mission_index()

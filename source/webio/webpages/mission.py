@@ -4,25 +4,37 @@ from source.webio.advance_page import AdvancePage
 from source.config.cvars import *
 import threading
 
+from source.mission.index_generator import generate_mission_index
 try:
-    from missions.mission_index import MISSION_INDEX
+    import missions.mission_index 
     logger.debug(f"load custom mission index succ")
 except:
-    from source.mission.mission_index import MISSION_INDEX
-from source.mission.index_generator import generate_mission_index
+    generate_mission_index()
+    logger.debug(f"generate mission index succ")
+    import missions.mission_index
 
-MISSION_META = load_json('mission_internal_meta.json', fr"{ROOT_PATH}/source/mission")
-if os.path.exists(fr"{ROOT_PATH}/config/missiondownload/missiondownload_meta.json"):
-    MISSION_META.update(load_json('missiondownload_meta.json', fr"{ROOT_PATH}/config/missiondownload"))
+
+
+
 
 class MissionPage(AdvancePage):
+    MISSION_INDEX = missions.mission_index.MISSION_INDEX
+    MISSION_META = load_json('mission_internal_meta.json', fr"{ROOT_PATH}/source/mission")
     NAME_PROCESSBAR_MissionRebuild = 'PROCESSBAR_MissionRebuild'
     def __init__(self) -> None:
         super().__init__()
-        self.missions = MISSION_INDEX
+        self.missions = self.MISSION_INDEX
         self._create_default_settings()
         self.process_i = 1
         self.process_flag = False
+        
+    
+    def _refresh(self):
+        self.MISSION_INDEX = missions.mission_index.MISSION_INDEX
+        self.MISSION_META = load_json('mission_internal_meta.json', fr"{ROOT_PATH}/source/mission")
+        if os.path.exists(fr"{ROOT_PATH}/config/missiondownload/missiondownload_meta.json"):
+            self.MISSION_META.update(load_json('missiondownload_meta.json', fr"{ROOT_PATH}/config/missiondownload"))
+        self.missions = self.MISSION_INDEX
     
     def _create_default_settings(self):
         j = load_json('mission_settings.json', f"{CONFIG_PATH}\\mission", auto_create=True)
@@ -33,23 +45,33 @@ class MissionPage(AdvancePage):
         save_json(j, 'mission_group.json', f"{CONFIG_PATH}\\mission")
     
     def _render_scopes(self):
+        
+        # put missions grid
+        output.clear_scope('SCOPE_GRID')
+        grid_content = []
+        for i in range(len(self.missions)):
+            if i%3==0:
+                grid_content.append([])
+            grid_content[i//3].append(output.put_scope(f"{self.missions[i]}").style('border: 1px solid #ccc; border-radius: 16px'))
+        output.put_grid(content=grid_content, scope='SCOPE_GRID')
+        
         j = load_json('mission_settings.json', f"{CONFIG_PATH}\\mission")
         for mission_name in self.missions:
             output.clear(mission_name)
             mauthor = None
             mnote = None
             mtime = None
-            if mission_name in MISSION_META:
-                if GLOBAL_LANG in MISSION_META[mission_name]['name']:
-                    mission_show_name = MISSION_META[mission_name]['name'][GLOBAL_LANG]
+            if mission_name in self.MISSION_META:
+                if GLOBAL_LANG in self.MISSION_META[mission_name]['name']:
+                    mission_show_name = self.MISSION_META[mission_name]['name'][GLOBAL_LANG]
                 else:
                     mission_show_name = mission_name
-                if 'author' in MISSION_META[mission_name]:
-                    mauthor = MISSION_META[mission_name]['author']
-                if 'note' in MISSION_META[mission_name]:
-                    mnote = MISSION_META[mission_name]['note']
-                if 'time' in MISSION_META[mission_name]:
-                    mtime = MISSION_META[mission_name]['time']
+                if 'author' in self.MISSION_META[mission_name]:
+                    mauthor = self.MISSION_META[mission_name]['author']
+                if 'note' in self.MISSION_META[mission_name]:
+                    mnote = self.MISSION_META[mission_name]['note']
+                if 'time' in self.MISSION_META[mission_name]:
+                    mtime = self.MISSION_META[mission_name]['time']
                 
                 
             else:
@@ -94,6 +116,7 @@ class MissionPage(AdvancePage):
     
     def _onclick_rebuild_missions(self):
         output.put_processbar(name=self.NAME_PROCESSBAR_MissionRebuild,label=t2t('Rebuild Progress'), auto_close=False, scope='SCOPE_PROCESSBAR')
+        # print(missions.mission_index.self.MISSION_INDEX)
         t = threading.Thread(target = generate_mission_index)
         t.start()
         for i in range(1,400-1):
@@ -110,7 +133,10 @@ class MissionPage(AdvancePage):
             output.popup(t2t("Compile Fail, please see the console and ask for help."))
         else:
             output.set_processbar(self.NAME_PROCESSBAR_MissionRebuild, 1)
-            output.popup(t2t("Compile success, please restart GIA program."))
+            # print(missions.mission_index.MISSION_INDEX)
+            self._refresh()
+            self._render_scopes()
+            output.popup(t2t("Compile Success!"))
 
     def _onclick_add_missions(self):
         pass
@@ -126,20 +152,15 @@ class MissionPage(AdvancePage):
     
     def _load(self):
         # put buttons
+        self._refresh()
         output.put_row([output.put_button(label=t2t('Compile Missions'), onclick=self._onclick_rebuild_missions),
                         # output.put_button(label=t2t('Add Mission'), onclick=self._onclick_add_missions),
                         output.put_button(label=t2t('Save Changes'), onclick=self._onclick_save_missions)],scope=self.main_scope)
         output.put_text(t2t('If no mission is displayed here or if you have modified any mission in the missions folder, click on the Compile Missions button.'),scope=self.main_scope)
         output.put_text(t2t('The order of execution decreases from smallest to largest, with 0 being the highest priority.'),scope=self.main_scope)
+        output.put_text(t2t('If you would like to add more missions, please go to the MissionsDownload page'),scope=self.main_scope)
         output.put_scope(name='SCOPE_PROCESSBAR',scope=self.main_scope)
-        
-        # put missions grid
-        grid_content = []
-        for i in range(len(self.missions)):
-            if i%3==0:
-                grid_content.append([])
-            grid_content[i//3].append(output.put_scope(f"{self.missions[i]}").style('border: 1px solid #ccc; border-radius: 16px'))
-        output.put_grid(content=grid_content, scope=self.main_scope)
+        output.put_scope(name='SCOPE_GRID',scope=self.main_scope)
         
         self._render_scopes()
     

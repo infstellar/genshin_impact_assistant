@@ -8,6 +8,7 @@ from source.config.cvars import *
 import threading
 import requests
 import pytz
+from source.mission.index_generator import generate_mission_index
 
 """
 Structure of missiondoanload_meta.json (used for local_mission_meta):
@@ -52,6 +53,7 @@ Sturcture of index.json (used for available_missions):
 # TODO: Apply and Save 和 Install后自动编译
 
 class MissionDownloadPage(AdvancePage):
+    NAME_PROCESSBAR_MissionRebuild = 'PROCESSBAR_MissionRebuild'
     def __init__(self) -> None:
         super().__init__()
         self.REMOTE_REPO = "https://github.com/GenshinImpactAssistant/GIA-Missions"
@@ -262,6 +264,7 @@ class MissionDownloadPage(AdvancePage):
         output.popup(t2t('Apply and Save'), [
             output.put_markdown(t2t('Please wait for the progress to finish.')),
             output.put_processbar(name="PROGRESS_APPLY_AND_SAVE", label=t2t('Update Progress'), auto_close=False),
+            output.put_processbar(name=self.NAME_PROCESSBAR_MissionRebuild, label=t2t('Rebuild Progress'), auto_close=False),
             output.put_text("\n"),
             output.put_scope("POPUP_CLOSE")
         ], implicit_close = False)
@@ -538,8 +541,26 @@ class MissionDownloadPage(AdvancePage):
         output.set_processbar("PROGRESS_APPLY_AND_SAVE", 1)
         self._render_installed_board()
         self._render_available_board()
+        
+        t = threading.Thread(target = generate_mission_index)
+        t.start()
+        for i in range(1,400-1):
+            time.sleep(0.1)
+            output.set_processbar(self.NAME_PROCESSBAR_MissionRebuild, i/400)
+            if not t.is_alive():
+                break
+        for i in range(60):
+            if not t.is_alive():
+                break
+            time.sleep(1)
+        if t.is_alive():
+            output.set_processbar(self.NAME_PROCESSBAR_MissionRebuild, 0)
+            self.error_occured = True
+        else:
+            output.set_processbar(self.NAME_PROCESSBAR_MissionRebuild, 1)
+        
         if not self.error_occured:
-            output.put_button(t2t("Finished! Please compile the missions in the Mission page"), color="success", onclick=lambda :output.close_popup(), scope="POPUP_CLOSE")
+            output.put_button(t2t("Finished!"), color="success", onclick=lambda :output.close_popup(), scope="POPUP_CLOSE")
         else:
             output.put_button(t2t("Something went wrong! Please try again"), color="danger", onclick=lambda :output.close_popup(), scope="POPUP_CLOSE")
     
