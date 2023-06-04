@@ -7,6 +7,7 @@ from source.webio.advance_page import AdvancePage
 from source.config.cvars import *
 import threading
 import requests
+import pytz
 
 """
 Structure of missiondoanload_meta.json (used for local_mission_meta):
@@ -441,7 +442,7 @@ class MissionDownloadPage(AdvancePage):
 
                 # Update the mission meta
                 j = load_json("missiondownload_meta.json", self.MISSION_DOWNLOAD_CONFIG_FOLDER)
-                mission_meta["download_time"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                mission_meta["download_time"] = datetime.now(pytz.utc).strftime("%Y-%m-%d %H:%M:%S")
                 j[name] = mission_meta
                 save_json(j, "missiondownload_meta.json", self.MISSION_DOWNLOAD_CONFIG_FOLDER)
                 self.local_mission_meta = self._read_local_mission_meta()
