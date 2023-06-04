@@ -62,7 +62,10 @@ class CommissionParser():
                     itt.delay("animation")
                     com_type = self._detect_commission_type()
                     itt.delay("animation")
-                    itt.key_press('esc')
+                    while not ui_control.verify_page(UIPages.page_bigmap):
+                        itt.key_press('esc')
+                        itt.delay("2animation")
+                        itt.delay("animation")
                     if com_type is None:
                         continue
                     else:
