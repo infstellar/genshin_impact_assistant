@@ -9,12 +9,11 @@ try:
     logger.debug(f"load custom mission index succ")
 except:
     from source.mission.mission_index import MISSION_INDEX
-try:
-    from missions.mission_meta import MISSION_META
-    logger.debug(f"load custom mission meta succ")
-except:
-    from source.mission.mission_meta import MISSION_META
 from source.mission.index_generator import generate_mission_index
+
+MISSION_META = load_json('mission_internal_meta.json', fr"{ROOT_PATH}/source/mission")
+if os.path.exists(fr"{ROOT_PATH}/config/missiondownload/missiondownload_meta.json"):
+    MISSION_META.update(load_json('missiondownload_meta.json', fr"{ROOT_PATH}/config/missiondownload"))
 
 class MissionPage(AdvancePage):
     NAME_PROCESSBAR_MissionRebuild = 'PROCESSBAR_MissionRebuild'
