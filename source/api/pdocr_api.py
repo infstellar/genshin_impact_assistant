@@ -73,7 +73,8 @@ class PaddleOcrFastDeploy():
     REPLACE_DICT = {
             "惊垫":"惊蛰",
             "烟排":"烟绯",
-            "花染":"椛染"
+            "花染":"椛染",
+            "纳西姐":"纳西妲"
         }
     def _replace_texts(self, text:str):
         for i in self.REPLACE_DICT:
