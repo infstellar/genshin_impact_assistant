@@ -6,41 +6,6 @@
       "zh_CN": "通用自动采集"
     }
   },
-  "MissionCecilia": {
-    "author": "GIA",
-    "name": {
-      "en_US": "Collect Cecilia",
-      "zh_CN": "采集塞西莉亚花"
-    }
-  },
-  "MissionCrystalfly": {
-    "author": "GIA",
-    "name": {
-      "en_US": "Collect Crystalfly",
-      "zh_CN": "采集晶蝶"
-    }
-  },
-  "MissionGlazeLily": {
-    "author": "GIA",
-    "name": {
-      "en_US": "Collect Glaze Lily",
-      "zh_CN": "采集琉璃百合"
-    }
-  },
-  "MissionJueyunChili": {
-    "author": "GIA",
-    "name": {
-      "en_US": "Collect Jueyun Chili",
-      "zh_CN": "采集绝云椒椒"
-    }
-  },
-  "MissionQingXin1": {
-    "author": "GIA",
-    "name": {
-      "en_US": "Collect Qing xin 1",
-      "zh_CN": "采集清心1"
-    }
-  },
   "MissionQingXin2": {
     "author": "GIA",
     "name": {
@@ -56,20 +21,6 @@
     },
     "note": "Need Lisa"
   },
-  "MissionSilkFlower": {
-    "author": "GIA",
-    "name": {
-      "en_US": "Collect 霓裳花1",
-      "zh_CN": "采集霓裳花1"
-    }
-  },
-  "MissionSweatFlower1": {
-    "author": "GIA",
-    "name": {
-      "en_US": "Collect Sweat Flower 1",
-      "zh_CN": "采集甜甜花1"
-    }
-  },
   "MissionSweatFlower2": {
     "author": "GIA",
     "name": {
@@ -77,34 +28,11 @@
       "zh_CN": "采集甜甜花2"
     }
   },
-  "MissionVioletgrass1": {
-    "author": "GIA",
-    "name": {
-      "en_US": "Collect Violetgrass 1",
-      "zh_CN": "采集琉璃袋1"
-    },
-    "note": "Not Recommand"
-  },
   "MissionVioletgrass2": {
     "author": "GIA",
     "name": {
       "en_US": "Collect Violetgrass 2",
       "zh_CN": "采集琉璃袋2"
     }
-  },
-  "MissionVioletgrass3": {
-    "author": "GIA",
-    "name": {
-      "en_US": "Collect Violetgrass 3",
-      "zh_CN": "采集琉璃袋3"
-    }
-  },
-  "MissionWindwhellAster": {
-    "author": "GIA",
-    "name": {
-      "en_US": "Collect Windwhell Aster",
-      "zh_CN": "采集风车菊"
-    },
-    "time": "2023-05-15 08:00:00"
   }
 }
