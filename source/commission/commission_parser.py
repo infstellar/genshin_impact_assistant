@@ -36,6 +36,8 @@ class CommissionParser():
         genshin_map.get_bigmap_posi()
         genshin_map._switch_to_area("Mondstadt")
         for posi in self.TRAVERSE_MONDSTADT_POSITION:
+            ui_control.ensure_page(UIPages.page_bigmap)
+            # genshin_map._switch_to_area("Mondstadt")
             genshin_map.get_bigmap_posi()
             genshin_map._move_bigmap(posi.tianli, force_center = True)
             cap_posi = [220,240,1920-200,1080-150]
@@ -62,10 +64,18 @@ class CommissionParser():
                     itt.delay("animation")
                     com_type = self._detect_commission_type()
                     itt.delay("animation")
-                    while not ui_control.verify_page(UIPages.page_bigmap):
+                    while 1:
                         itt.key_press('esc')
                         itt.delay("2animation")
-                        itt.delay("animation")
+                        if ui_control.verify_page(UIPages.page_bigmap):
+                            break
+                        if ui_control.verify_page(UIPages.page_main) or ui_control.verify_page(UIPages.page_esc):
+                            ui_control.ensure_page(UIPages.page_bigmap)
+                            itt.delay("2animation")
+                            genshin_map.get_bigmap_posi()
+                            genshin_map._switch_to_area("Mondstadt")
+                            break
+                        
                     if com_type is None:
                         continue
                     else:
