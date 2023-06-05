@@ -6,6 +6,7 @@ import source.webio.log_handler
 from source.logger import add_logger_to_GUI
 from source.webio.webpages.mission import MissionPage
 from source.webio.webpages.missiondownload import MissionDownloadPage
+from source.webio.webpages.video2path import VideoToPathPage
 
 status = True
 global first_run
@@ -32,6 +33,7 @@ def main():
     webio.manager.reg_page("CollectorSettingPage", CollectorSettingPage())
     webio.manager.reg_page("MissionPage", MissionPage())
     webio.manager.reg_page("MissionDownloadPage", MissionDownloadPage())
+    webio.manager.reg_page("VideoToPathPage", VideoToPathPage())
     webio.manager.load_page('MainPage')
     if not first_run:
         add_logger_to_GUI(source.webio.log_handler.webio_poster)
