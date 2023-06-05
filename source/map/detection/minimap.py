@@ -37,7 +37,7 @@ class MiniMap(MiniMapResource):
         search_area = area_offset((0, 0, *search_size), offset=(-search_size // 2).astype(np.int64))
         search_area = area_offset(search_area, offset=np.multiply(search_position, self.POSITION_SEARCH_SCALE))
         search_area = np.array(search_area).astype(np.int64)
-        search_image = crop(self.GIMAP, search_area)
+        search_image = crop(self.TChannelGIMAP, search_area)
         return search_image
     
     def _predict_position(self, image, scale):

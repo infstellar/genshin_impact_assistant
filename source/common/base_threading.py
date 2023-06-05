@@ -134,7 +134,16 @@ class AdvanceThreading(BaseThreading):
             if threading_obj.pause_threading_flag:
                 break
         return threading_obj.get_last_err_code()
-    
+
+class FunctionThreading(AdvanceThreading):
+    def __init__(self, target, thread_name=None):
+        super().__init__(thread_name)
+        self.target = target
+        self.while_sleep = 0
+        
+    def loop(self):
+        self.target()
+        
 class ThreadBlockingRequest():
     def __init__(self) -> None:
         self.blocking_request_flag = False

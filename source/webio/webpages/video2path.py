@@ -1,5 +1,4 @@
-
-
+from source.common.base_threading import FunctionThreading
 from source.webio.util import *
 from pywebio import *
 from source.webio.advance_page import AdvancePage
@@ -12,6 +11,10 @@ from source.map.map import genshin_map
 from source.flow.path_recorder_flow import PathRecorderController
 from source.common.timer_module import Timer
 CC = CustomCapture()
+import matplotlib.pyplot as plt
+import matplotlib
+
+matplotlib.use('TkAgg')
 
 
 
@@ -42,6 +45,35 @@ class VideoToPathPage(AdvancePage):
             FRAME_TO_START (int, optional): 填写视频播放开始帧，控制台会输出 frame:xxx来提示当前帧. Defaults to 0.
         """
         self.pt = Timer()
+        self.video_t = None
+        self.play_video_flag = False
+        
+    
+    def _onclick_load_video(self):
+        self._load_video()
+        
+    def _onclick_play_video(self):
+        self._play_video()
+    
+    def _onclick_cancel_video(self):
+        self._cancel_video()
+        
+    def _onclick_analyze_position(self):
+        self.analyze_position()
+    
+    def _onclick_show_result(self):
+        index = int(pin.pin[self.INPUT_INIT_POSITION_ID])
+        img = cv2.cvtColor(genshin_map.get_img_near_posi(itt.capture(), self.analysis_result[index].position), cv2.COLOR_BGR2RGB)
+        plt.imshow(img)    
+        plt.show()
+
+    
+    def _onclick_confirm_result(self):
+        index = int(pin.pin[self.INPUT_INIT_POSITION_ID])
+        genshin_map.init_position(self.analysis_result[index].position)
+        logger.info(f"init position set to {self.analysis_result[index].position}")
+        logger.info(f"continue.")
+        self.play_video_flag = True
     
     def _load(self):
         # put buttons
@@ -53,15 +85,21 @@ class VideoToPathPage(AdvancePage):
             output.put_row(
                 [
                     output.put_column([
-                        output.put_button('123', onclick=lambda x:1)
+                        output.put_button(t2t('load/reload video'), onclick=self._onclick_load_video),
+                        output.put_button(t2t('play video'), onclick=self._onclick_play_video),
+                        output.put_button(t2t('cancel video'), onclick=self._onclick_cancel_video),
+                        output.put_button(t2t('analyze position'), onclick=self._onclick_analyze_position),
+                        output.put_button(t2t('show result'), onclick=self._onclick_show_result),
+                        output.put_button(t2t('confirm result'), onclick=self._onclick_confirm_result),
                     ]),
                     output.put_column([
-                        pin.put_input(self.INPUT_PATH_FILE_HEAD_NAME, label=t2t("")),
-                        pin.put_input(self.INPUT_IS_PICKUP_MODE, label=t2t("")),
-                        pin.put_input(self.INPUT_COLL_NAME, label=t2t("")),
-                        pin.put_input(self.INPUT_FRAME_TO_START, label=t2t("")),
-                        pin.put_input(self.INPUT_VIDEO_PATH, label=t2t("")),
-                        pin.put_input(self.INPUT_COLL_AREA, label=t2t(""))
+                        pin.put_input(self.INPUT_VIDEO_PATH, label=t2t("video path")),
+                        pin.put_input(self.INPUT_PATH_FILE_HEAD_NAME, label=t2t("file head name")),
+                        pin.put_input(self.INPUT_IS_PICKUP_MODE, label=t2t("is pickup mode"), ),
+                        pin.put_input(self.INPUT_COLL_NAME, label=t2t("collection name")),
+                        pin.put_input(self.INPUT_FRAME_TO_START, label=t2t("frame to start"), type=input.NUMBER, value=0),
+                        pin.put_input(self.INPUT_INIT_POSITION_ID, label=t2t("init position id")),
+                        pin.put_input(self.INPUT_COLL_AREA, label=t2t("collect area"), value='Liyue|Mondstadt|Inazuma')
                     ])
                 ]
             )
@@ -72,10 +110,11 @@ class VideoToPathPage(AdvancePage):
     
          
     def _load_video(self):
+        self.PRF = PathRecorderController()
         self.PRF.flow_connector.path_name = pin.pin[self.INPUT_PATH_FILE_HEAD_NAME]
         self.PRF.flow_connector.is_pickup_mode = bool(pin.pin[self.INPUT_IS_PICKUP_MODE])
         self.PRF.flow_connector.coll_name = pin.pin[self.INPUT_PATH_FILE_HEAD_NAME]
-        self.frame_index = pin.pin[self.INPUT_PATH_FILE_HEAD_NAME]
+        self.frame_index = int(pin.pin[self.INPUT_FRAME_TO_START])
         self.target_fps = 30
         
         self.fcap = cv2.VideoCapture(pin.pin[self.INPUT_VIDEO_PATH])
@@ -91,38 +130,37 @@ class VideoToPathPage(AdvancePage):
         genshin_map.small_map_init_flag = True
         logger.info(f"Load over.")
         logger.info(f"ready to start.")
-        self.PRF = PathRecorderController()
         return CC.capture()
     
+    def _play_video(self):
+        self.play_video_flag = True
+        # self.video_t = FunctionThreading(self.run_once)
+        # self.video_t.start()
+    
+    def _cancel_video(self):
+        self.play_video_flag = False
+        # self.video_t.stop_threading()
+    
     def analyze_position(self):
+        self.play_video_flag = False
         if not ui_control.verify_page(UIPage.page_main):
             logger.error(f"不在主界面/画质过低/错误的视频大小/不完整的录屏")
         else:
-            rlist, rd = genshin_map.get_smallmap_from_teleporter(area=self.COLL_AREA)
+            self.analysis_result, rdistance = genshin_map.get_smallmap_from_teleporter(area=pin.pin[self.INPUT_COLL_AREA].split('|'))
             iii=0
-            for tper in rlist:
-                logger.info(f"id {iii} position {tper.position} {tper.name} {tper.region}, d={rd[iii]}")
+            for tper in self.analysis_result:
+                logger.info(f"id {iii} position {tper.position} {tper.name} {tper.region}, d={rdistance[iii]}")
                 iii+=1
-            while 1:
-                iii = pin.pin[self.INPUT_INIT_POSITION_ID]
-                if iii == '':
-                    break
-                else:
-                    iii = int(iii)
-                cv2.imshow(f'tper{iii}', genshin_map.get_img_near_posi(itt.capture(), rlist[iii].position))
-                cv2.waitKey(1)
-                genshin_map.init_position(rlist[iii].position)
-            logger.info(f"press any key to continue.")
-            cv2.waitKey(0)
-    
+                
     def pause_video(self):
-        cv2.waitKey(0)
+        self.play_video_flag = False
         logger.info(f"press any key to continue.")
     
     def start_stop_prc(self):
-        cv2.waitKey(0)
+        
         self.PRF.pc._start_stop_recording()
         logger.info(f"Path Recorder has been started.")
+        self.play_video_flag = False
         logger.info(f"press any key to continue.")
     
     def set_init_position(self):
@@ -153,6 +191,8 @@ class VideoToPathPage(AdvancePage):
         self.pt.reset()
         if k & 0xFF == ord('a'):
             self.analyze_position()
+        elif k & 0xFF == ord(' '):
+            cv2.waitKey(0)
         elif k & 0xFF == ord('b'):
             self.set_init_position()
         elif k & 0xFF == ord('.'):
@@ -171,7 +211,7 @@ class VideoToPathPage(AdvancePage):
         self.frame_index+=1
         self.PRF.loop()
         if self.frame_index%120==0:
-            logger.info(f"frame: {i}")
+            logger.info(f"frame: {self.frame_index}")
 
     def _load_modules(self):
         from source.funclib.combat_lib import CSDL
@@ -180,6 +220,10 @@ class VideoToPathPage(AdvancePage):
         itt.capture_obj = CC
 
     def _event_thread(self):
-        time.sleep(0.1)
+        while 1:
+            if self.play_video_flag:
+                self.run_once()
+            else:
+                time.sleep(0.1)
 
     
