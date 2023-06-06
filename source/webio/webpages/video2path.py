@@ -29,6 +29,7 @@ class VideoToPathPage(AdvancePage):
     SCOPE_PREVIEW_IMG = 'PREVIEW_IMG'
     SCOPE_LOG = 'log_scope'
     SCOPE_LOG_AREA = 'LogArea'
+    SCOPE_PR_STATE = "PR_STATE"
     
     def __init__(self) -> None:
         super().__init__()
@@ -48,9 +49,13 @@ class VideoToPathPage(AdvancePage):
         self.pause_video_flag = False
         self.prc_flag = False
         self.first_enter_flag = True
+        self.start_stop_prc_flag = False
     
     def _onclick_load_video(self):
-        self._load_video()
+        if self._validate_file_path(pin.pin[self.INPUT_VIDEO_PATH]):
+            self._load_video()
+        else:
+            output.popup(t2t("Path does not exist!"))
         
     def _onclick_play_video(self):
         self._play_video()
@@ -59,6 +64,7 @@ class VideoToPathPage(AdvancePage):
         self._cancel_video()
         
     def _onclick_analyze_position(self):
+        self._show_log(t2t("Please waiting..."))
         self.analyze_position()
     
     def _onclick_show_result(self):
@@ -68,23 +74,29 @@ class VideoToPathPage(AdvancePage):
         output.clear_scope(self.SCOPE_PREVIEW_IMG)
         output.put_image(Image.fromarray(cv2.cvtColor(img, cv2.COLOR_BGR2RGB)).convert('RGB'), title='preview', scope=self.SCOPE_PREVIEW_IMG)
     
-    def _pause_video(self):
+    def _pause_video(self, print_log = True):
         self.pause_video_flag = True
-        self._show_log(t2t('press any key in GIA PathToVideo window to continue.'))
+        if print_log:
+            self._show_log(t2t('press any key in GIA PathToVideo window to continue.'))
     
     def _onclick_confirm_result(self):
         index = int(pin.pin[self.INPUT_INIT_POSITION_ID])
         genshin_map.init_position(self.analysis_result[index].position)
-        logger.info(f"init position set to {self.analysis_result[index].position}")
+        self._show_log(f"init position set to {self.analysis_result[index].position}")
         self._pause_video()
     
     def _onclick_start_stop_prc(self):
         if not self.prc_flag:
-            output.toast(t2t("PRC start!"))
+            output.toast(t2t("Path Recorder start!"))
         else:
-            output.toast(t2t("PRC stop!"))
+            output.toast(t2t("Path Recorder stop!"))
         self.prc_flag = not self.prc_flag
         self.start_stop_prc()
+    
+    def _validate_file_path(self, x):
+        return os.path.exists(x)
+
+            
     
     def _load(self):
         # put buttons
@@ -93,20 +105,34 @@ class VideoToPathPage(AdvancePage):
         logger.warning(t2t("DEV MODE ENABLED."))
         
         with output.use_scope(self.main_scope):
-            output.put_text(t2t(
-                "食用教程：\n"
-                "1. 输入视频路径"
-                "2. 加载视频"
-                "3. 加载完成后点击播放视频"
-                "4. 等待视频播放到你要开始记录的位置时，(暂停)点击分析坐标按钮"
-                "5. 等待分析完成，日志区显示可能的坐标id，坐标位置，区域，名称，匹配度， 选择你认为可能的坐标输入初始化坐标输入框"
-                "6. 点击预览初始坐标按钮，将显示该坐标的区域预览图"
-                "7. 重复5-6步骤，确认无误后，点击确认初始坐标按钮"
-                "8. 点击启停路径记录器按钮，开始记录"
-                "9. 等待视频播放到你要结束记录的位置时， 点击启停路径记录器按钮，停止记录"
-                "10. 重复4-9步骤，直到完成。"
-                "11. TLPP文件将储存在dev/tlpp目录下"
-                ))
+            output.put_collapse(
+                title=t2t("Tutorial"),
+                content=[output.put_markdown(t2t(
+                "## 食用教程：\n"
+                "1. 输入视频路径\n"
+                "2. 加载视频\n"
+                "3. 加载完成后点击播放视频\n"
+                "4. 等待视频播放到你要开始记录的位置时，(暂停)点击分析坐标按钮\n"
+                "5. 等待分析完成，日志区将显示可能的坐标id，坐标位置，区域，名称，匹配度， 选择你认为可能的**坐标id**输入初始化坐标输入框\n"
+                "6. 点击预览初始坐标按钮，将显示该坐标的区域预览图\n"
+                "7. 重复5-6步骤，确认无误后，点击确认初始坐标按钮\n"
+                "8. 点击启停路径记录器按钮，开始记录\n"
+                "9. 等待视频播放到你要结束记录的位置时， 点击启停路径记录器按钮，停止记录\n"
+                "10. 重复4-9步骤，直到完成。\n"
+                "11. TLPP文件将储存在dev/tlpp目录下\n"
+                "## 快捷键\n"
+                "快捷键只能在GIA VideoToPath窗口使用\n"
+                "|快捷键|用法|\n"
+                "|----|----|\n"
+                "| 空格 | 暂停/播放 |\n"
+                "| `,` | 减小播放速度,记录路径时必须为现实速度 |\n"
+                "| `.` | 增大播放速度,记录路径时必须为现实速度 |\n"
+                "| `[` | 启动/停止记录 |\n"
+                "| `a` | 分析初始坐标 |\n"
+
+                ))]
+                )
+            
             output.put_row(
                 [
                     output.put_scope(name=self.SCOPE_PREVIEW_IMG),
@@ -118,12 +144,12 @@ class VideoToPathPage(AdvancePage):
                 [
                     output.put_column([
                         output.put_button(t2t('load/reload video'), onclick=self._onclick_load_video),
-                        output.put_button(t2t('play video'), onclick=self._onclick_play_video),
-                        output.put_button(t2t('cancel video'), onclick=self._onclick_cancel_video),
-                        output.put_button(t2t('analyze position'), onclick=self._onclick_analyze_position),
-                        output.put_button(t2t('show result'), onclick=self._onclick_show_result),
-                        output.put_button(t2t('confirm result'), onclick=self._onclick_confirm_result),
-                        output.put_button(t2t('start/stop path recorder'), onclick=self._onclick_start_stop_prc)
+                        output.put_button(t2t('Play video'), onclick=self._onclick_play_video),
+                        output.put_button(t2t('Analyze init position'), onclick=self._onclick_analyze_position),
+                        output.put_button(t2t('Preview init position'), onclick=self._onclick_show_result),
+                        output.put_button(t2t('Confirm init position'), onclick=self._onclick_confirm_result),
+                        output.put_button(t2t('Start/Stop path recorder'), onclick=self._onclick_start_stop_prc),
+                        output.put_button(t2t('Cancel video'), onclick=self._onclick_cancel_video)
                     ], size='auto'),
                     output.put_column([
                         pin.put_input(self.INPUT_VIDEO_PATH, label=t2t("video path")),
@@ -183,24 +209,24 @@ class VideoToPathPage(AdvancePage):
         # self.video_t.stop_threading()
     
     def analyze_position(self):
-        self._pause_video()
+        self._pause_video(print_log=False)
         if not ui_control.verify_page(UIPage.page_main):
             self._show_log(t2t("不在主界面/画质过低/错误的视频大小/不完整的录屏"))
             logger.error(f"不在主界面/画质过低/错误的视频大小/不完整的录屏")
         else:
             self.analysis_result, rdistance = genshin_map.get_smallmap_from_teleporter(area=pin.pin[self.INPUT_COLL_AREA].split('|'))
             iii=0
+            self._show_log(t2t("Analysis completion: "))
             for tper in self.analysis_result:
-                self._show_log(f"id {iii} position {tper.position} {tper.name} {tper.region}, d={round(rdistance[iii],2)}")
+                self._show_log(f"ID {iii} position {tper.position} {tper.name} {tper.region}, d={round(rdistance[iii],2)}")
                 iii+=1
+            self._show_log(t2t("Please enter the possible ID into `init position id`, then press `Preview init position` button or `Confirm init position` button."))
                 
     def pause_video(self):
         self._pause_video()
     
     def start_stop_prc(self):
-        self.PRF.pc._start_stop_recording()
-        logger.info(f"Path Recorder has been started.")
-        self._pause_video()
+        self.start_stop_prc_flag = True
     
     def set_init_position(self):
         pass
@@ -233,7 +259,7 @@ class VideoToPathPage(AdvancePage):
             k = cv2.waitKey(int((-dt)*1000))
         else:
             if self.frame_index%20==0:
-                logger.info(f"fps low:{round(1/(dt+(1/self.target_fps)),2)}")
+                self._show_log(f"FPS low:{round(1/(dt+(1/self.target_fps)),2)}")
             k = cv2.waitKey(1)
         self.pt.reset()
         if k & 0xFF == ord('a'):
@@ -244,21 +270,27 @@ class VideoToPathPage(AdvancePage):
             self.set_init_position()
         elif k & 0xFF == ord('.'):
             fps+=5
-            logger.info(f"fps set as {fps}")
+            self._show_log(f"fps set as {fps}")
         elif k & 0xFF == ord(','):
             fps-=5
             if fps <= 0:
                 fps = 1
-            logger.info(f"fps set as {fps}")
+            self._show_log(f"fps set as {fps}")
         elif k & 0xFF == ord(']'):
             self.PRF.pc._start_stop_recording()
-            logger.info(f"press any key to continue.")
+            self._show_log(f"press any key to continue.")
             cv2.waitKey(0)
             
         self.frame_index+=1
+        if self.start_stop_prc_flag:
+            self.PRF.pc._start_stop_recording()
+            self.PRF.loop()
+            self._show_log(f"press any key to continue.")
+            cv2.waitKey(0)
+            self.start_stop_prc_flag = False
         self.PRF.loop()
         if self.frame_index%120==0:
-            logger.info(f"frame: {self.frame_index}")
+            self._show_log(f"frame: {self.frame_index}")
 
     def _load_modules(self):
         from source.funclib.combat_lib import CSDL

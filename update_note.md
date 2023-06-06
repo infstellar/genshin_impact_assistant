@@ -1,5 +1,6 @@
 ## TODO：
 - commission set time
+- chara name 使用新方法
 - commission retry max: 2
 - commission的CSDL end好像有点问题
 - 传送点识别区域还是不够大
