@@ -635,6 +635,16 @@
       "zhCN": "八重神子"
     },
     {
+      "en": "Yae",
+      "ja": "八重神子",
+      "pronunciationJa": "やえみこ",
+      "tags": [
+        "inazuma",
+        "character-main"
+      ],
+      "zhCN": "八重神子"
+    },
+    {
       "en": "Arataki Itto",
       "ja": "荒瀧一斗",
       "pronunciationJa": "あらたきいっと",
@@ -645,7 +655,27 @@
       "zhCN": "荒泷一斗"
     },
     {
+      "en": "Arataki",
+      "ja": "荒瀧一斗",
+      "pronunciationJa": "あらたきいっと",
+      "tags": [
+        "inazuma",
+        "character-main"
+      ],
+      "zhCN": "荒泷一斗"
+    },
+    {
       "en": "Kuki Shinobu",
+      "ja": "久岐忍",
+      "pronunciationJa": "くきしのぶ",
+      "tags": [
+        "inazuma",
+        "character-main"
+      ],
+      "zhCN": "久岐忍"
+    },
+    {
+      "en": "Shinobu",
       "ja": "久岐忍",
       "pronunciationJa": "くきしのぶ",
       "tags": [
