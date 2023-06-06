@@ -11,10 +11,6 @@ from source.map.map import genshin_map
 from source.flow.path_recorder_flow import PathRecorderController
 from source.common.timer_module import Timer
 CC = CustomCapture()
-import matplotlib.pyplot as plt
-import matplotlib
-
-matplotlib.use('TkAgg')
 
 
 
@@ -29,8 +25,10 @@ class VideoToPathPage(AdvancePage):
     INPUT_VIDEO_PATH = 'VIDEO_PATH'
     INPUT_COLL_AREA = 'COLL_AREA'
     INPUT_INIT_POSITION_ID = 'INIT_POSITION_ID'
-    
-    
+    INPUT_VIDEO_SIZE = 'VIDEO_SIZE'
+    SCOPE_PREVIEW_IMG = 'PREVIEW_IMG'
+    SCOPE_LOG = 'log_scope'
+    SCOPE_LOG_AREA = 'LogArea'
     
     def __init__(self) -> None:
         super().__init__()
@@ -47,7 +45,9 @@ class VideoToPathPage(AdvancePage):
         self.pt = Timer()
         self.video_t = None
         self.play_video_flag = False
-        
+        self.pause_video_flag = False
+        self.prc_flag = False
+        self.first_enter_flag = True
     
     def _onclick_load_video(self):
         self._load_video()
@@ -64,16 +64,27 @@ class VideoToPathPage(AdvancePage):
     def _onclick_show_result(self):
         index = int(pin.pin[self.INPUT_INIT_POSITION_ID])
         img = cv2.cvtColor(genshin_map.get_img_near_posi(itt.capture(), self.analysis_result[index].position), cv2.COLOR_BGR2RGB)
-        plt.imshow(img)    
-        plt.show()
-
+        
+        output.clear_scope(self.SCOPE_PREVIEW_IMG)
+        output.put_image(Image.fromarray(cv2.cvtColor(img, cv2.COLOR_BGR2RGB)).convert('RGB'), title='preview', scope=self.SCOPE_PREVIEW_IMG)
+    
+    def _pause_video(self):
+        self.pause_video_flag = True
+        self._show_log(t2t('press any key in GIA PathToVideo window to continue.'))
     
     def _onclick_confirm_result(self):
         index = int(pin.pin[self.INPUT_INIT_POSITION_ID])
         genshin_map.init_position(self.analysis_result[index].position)
         logger.info(f"init position set to {self.analysis_result[index].position}")
-        logger.info(f"continue.")
-        self.play_video_flag = True
+        self._pause_video()
+    
+    def _onclick_start_stop_prc(self):
+        if not self.prc_flag:
+            output.toast(t2t("PRC start!"))
+        else:
+            output.toast(t2t("PRC stop!"))
+        self.prc_flag = not self.prc_flag
+        self.start_stop_prc()
     
     def _load(self):
         # put buttons
@@ -82,6 +93,27 @@ class VideoToPathPage(AdvancePage):
         logger.warning(t2t("DEV MODE ENABLED."))
         
         with output.use_scope(self.main_scope):
+            output.put_text(t2t(
+                "食用教程：\n"
+                "1. 输入视频路径"
+                "2. 加载视频"
+                "3. 加载完成后点击播放视频"
+                "4. 等待视频播放到你要开始记录的位置时，(暂停)点击分析坐标按钮"
+                "5. 等待分析完成，日志区显示可能的坐标id，坐标位置，区域，名称，匹配度， 选择你认为可能的坐标输入初始化坐标输入框"
+                "6. 点击预览初始坐标按钮，将显示该坐标的区域预览图"
+                "7. 重复5-6步骤，确认无误后，点击确认初始坐标按钮"
+                "8. 点击启停路径记录器按钮，开始记录"
+                "9. 等待视频播放到你要结束记录的位置时， 点击启停路径记录器按钮，停止记录"
+                "10. 重复4-9步骤，直到完成。"
+                "11. TLPP文件将储存在dev/tlpp目录下"
+                ))
+            output.put_row(
+                [
+                    output.put_scope(name=self.SCOPE_PREVIEW_IMG),
+                    output.put_scope(name=self.SCOPE_LOG)
+                ], size='auto'
+            )
+            
             output.put_row(
                 [
                     output.put_column([
@@ -91,23 +123,27 @@ class VideoToPathPage(AdvancePage):
                         output.put_button(t2t('analyze position'), onclick=self._onclick_analyze_position),
                         output.put_button(t2t('show result'), onclick=self._onclick_show_result),
                         output.put_button(t2t('confirm result'), onclick=self._onclick_confirm_result),
-                    ]),
+                        output.put_button(t2t('start/stop path recorder'), onclick=self._onclick_start_stop_prc)
+                    ], size='auto'),
                     output.put_column([
                         pin.put_input(self.INPUT_VIDEO_PATH, label=t2t("video path")),
+                        pin.put_input(self.INPUT_INIT_POSITION_ID, label=t2t("init position id")),
                         pin.put_input(self.INPUT_PATH_FILE_HEAD_NAME, label=t2t("file head name")),
                         pin.put_input(self.INPUT_IS_PICKUP_MODE, label=t2t("is pickup mode"), ),
                         pin.put_input(self.INPUT_COLL_NAME, label=t2t("collection name")),
                         pin.put_input(self.INPUT_FRAME_TO_START, label=t2t("frame to start"), type=input.NUMBER, value=0),
-                        pin.put_input(self.INPUT_INIT_POSITION_ID, label=t2t("init position id")),
-                        pin.put_input(self.INPUT_COLL_AREA, label=t2t("collect area"), value='Liyue|Mondstadt|Inazuma')
-                    ])
+                        pin.put_input(self.INPUT_COLL_AREA, label=t2t("collect area"), value='Liyue|Mondstadt|Inazuma'),
+                        pin.put_input(self.INPUT_VIDEO_SIZE, label=t2t("video size"), value='1280x720')
+                    ], size='auto')
                 ]
             )
             
-            
+        output.put_scrollable(output.put_scope(self.SCOPE_LOG_AREA), height=200, keep_bottom=True, scope=self.SCOPE_LOG)   
 
     
-    
+    def _show_log(self,x):
+        output.put_text(x, scope=self.SCOPE_LOG_AREA)
+        logger.info(x)
          
     def _load_video(self):
         self.PRF = PathRecorderController()
@@ -124,16 +160,21 @@ class VideoToPathPage(AdvancePage):
         except Exception as e:
             logger.exception(e)
         if not success:
+            self._show_log(t2t("Video is not available"))
             logger.error(f"Video is not available")
         CC.set_cap(frame)
         genshin_map.init_position(tuple(genshin_map.convert_cvAutoTrack_to_GIMAP([1170.8503, -3181.4194])))
         genshin_map.small_map_init_flag = True
-        logger.info(f"Load over.")
-        logger.info(f"ready to start.")
+        self._show_log(t2t("Load over."))
+        self._show_log(t2t("ready to start."))
+        
+        # cv2.imshow('GIA VideoToPath',frame)
+        
         return CC.capture()
     
     def _play_video(self):
         self.play_video_flag = True
+        
         # self.video_t = FunctionThreading(self.run_once)
         # self.video_t.start()
     
@@ -142,26 +183,24 @@ class VideoToPathPage(AdvancePage):
         # self.video_t.stop_threading()
     
     def analyze_position(self):
-        self.play_video_flag = False
+        self._pause_video()
         if not ui_control.verify_page(UIPage.page_main):
+            self._show_log(t2t("不在主界面/画质过低/错误的视频大小/不完整的录屏"))
             logger.error(f"不在主界面/画质过低/错误的视频大小/不完整的录屏")
         else:
             self.analysis_result, rdistance = genshin_map.get_smallmap_from_teleporter(area=pin.pin[self.INPUT_COLL_AREA].split('|'))
             iii=0
             for tper in self.analysis_result:
-                logger.info(f"id {iii} position {tper.position} {tper.name} {tper.region}, d={rdistance[iii]}")
+                self._show_log(f"id {iii} position {tper.position} {tper.name} {tper.region}, d={round(rdistance[iii],2)}")
                 iii+=1
                 
     def pause_video(self):
-        self.play_video_flag = False
-        logger.info(f"press any key to continue.")
+        self._pause_video()
     
     def start_stop_prc(self):
-        
         self.PRF.pc._start_stop_recording()
         logger.info(f"Path Recorder has been started.")
-        self.play_video_flag = False
-        logger.info(f"press any key to continue.")
+        self._pause_video()
     
     def set_init_position(self):
         pass
@@ -173,6 +212,14 @@ class VideoToPathPage(AdvancePage):
         # cv2.waitKey(0)
     
     def run_once(self):
+        if self.first_enter_flag:
+            cv2.namedWindow('GIA VideoToPath', cv2.WINDOW_NORMAL | cv2.WINDOW_FREERATIO)
+            width, height = pin.pin[self.INPUT_VIDEO_SIZE].split('x')
+            cv2.resizeWindow("GIA VideoToPath", int(width), int(height))
+            self.first_enter_flag = False
+        if self.pause_video_flag:
+            cv2.waitKey(0)
+            self.pause_video_flag = False
         success, frame = self.fcap.read()
         CC.set_cap(frame)
         # do something in here
