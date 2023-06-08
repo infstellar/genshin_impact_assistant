@@ -58,11 +58,11 @@ class MainPage(AdvancePage):
                     f'color: black; font_size: 20px')
                 self.log_list_lock.release()
                 listening.call_you_import_module()
-            if pin.pin["MissionSelect"] != self.ui_mission_select:
-                self.ui_mission_select = pin.pin["MissionSelect"]
-                output.clear_scope("SCOPEMissionIntroduction")
-                if self.ui_mission_select is None:
-                    continue
+            # if pin.pin["MissionSelect"] != self.ui_mission_select:
+            #     self.ui_mission_select = pin.pin["MissionSelect"]
+            #     output.clear_scope("SCOPEMissionIntroduction")
+            #     if self.ui_mission_select is None:
+            #         continue
                 # output.put_text(self._get_mission_groups_dict()["introduction"][GLOBAL_LANG],scope="SCOPEMissionIntroduction")
             
             self.log_list_lock.acquire()
@@ -194,11 +194,11 @@ class MainPage(AdvancePage):
         # listening.MISSION_MANAGER.set_mission_list(list(pin.pin["MissionSelect"]))
         listening.TASK_MANAGER.set_tasklist(pin.pin["task_list"])
         listening.TASK_MANAGER.start_stop_tasklist()
-        if pin.pin["MissionSelect"] != None and pin.pin["MissionSelect"] != "":
-            cj = load_json()
-            cj["MissionGroup"] = pin.pin["MissionSelect"]
-            save_json(cj)
-            GIAconfig.update()
+        # if pin.pin["MissionSelect"] != None and pin.pin["MissionSelect"] != "":
+        #     cj = load_json()
+        #     cj["MissionGroup"] = pin.pin["MissionSelect"]
+        #     save_json(cj)
+        #     GIAconfig.update()
 
         time.sleep(0.2)
         output.clear('Button_StartStop')
