@@ -30,6 +30,8 @@ class VideoToPathPage(AdvancePage):
     SCOPE_LOG = 'log_scope'
     SCOPE_LOG_AREA = 'LogArea'
     SCOPE_PR_STATE = "PR_STATE"
+    SCOPE_FPS_STATE = "FPS_STATE"
+    PROCESSBAR_VIDEO = "PROCESSBAR_VIDEO"
     
     def __init__(self) -> None:
         super().__init__()
@@ -140,6 +142,15 @@ class VideoToPathPage(AdvancePage):
                 ], size='auto'
             )
             
+            output.put_processbar(self.PROCESSBAR_VIDEO, init=0)
+            
+            output.put_row(
+                [
+                    output.put_scope(name=self.SCOPE_FPS_STATE),
+                    output.put_scope(name=self.SCOPE_PR_STATE)
+                ], size='auto'
+            )
+            
             output.put_row(
                 [
                     output.put_column([
@@ -181,6 +192,7 @@ class VideoToPathPage(AdvancePage):
         
         self.fcap = cv2.VideoCapture(pin.pin[self.INPUT_VIDEO_PATH])
         self.fcap.set(cv2.CAP_PROP_POS_FRAMES, pin.pin[self.INPUT_FRAME_TO_START])
+        self.total_frames = self.fcap.get(cv2.CAP_PROP_FRAME_COUNT)
         try:
             success, frame = self.fcap.read()
         except Exception as e:
@@ -248,12 +260,21 @@ class VideoToPathPage(AdvancePage):
             self.pause_video_flag = False
         success, frame = self.fcap.read()
         CC.set_cap(frame)
+        if self.frame_index%10==0:
+            pass
         # do something in here
         cv2.imshow('GIA VideoToPath',frame)
         # print()
         if ui_control.verify_page(UIPage.page_main):
             pass
         dt = self.pt.get_diff_time()-(1/self.target_fps)
+        t = (dt+(1/self.target_fps))
+        if abs(t)<=0.01:
+            t=self.target_fps
+        curr_fps = round(1/t,2)
+        if self.frame_index%12==0:
+            output.clear_scope(self.SCOPE_FPS_STATE)
+            output.put_text(f"FPS: {min(curr_fps, self.target_fps)}", scope=self.SCOPE_FPS_STATE)
         if dt<-0.001:
             # time.sleep(-dt)
             k = cv2.waitKey(int((-dt)*1000))
@@ -288,9 +309,18 @@ class VideoToPathPage(AdvancePage):
             self._show_log(f"press any key to continue.")
             cv2.waitKey(0)
             self.start_stop_prc_flag = False
+        if self.frame_index%61==0:
+            output.clear_scope(self.SCOPE_PR_STATE)
+            if str(self.PRF.pc.rfc) == '2':
+                pr_state = 'Running'
+            else:
+                pr_state = 'Idle'
+            output.put_text(f"{t2t('Path Recorder')}: {pr_state}", scope=self.SCOPE_PR_STATE)
         self.PRF.loop()
         if self.frame_index%120==0:
             self._show_log(f"frame: {self.frame_index}")
+        if self.frame_index%11==0:
+            output.set_processbar(self.PROCESSBAR_VIDEO, self.frame_index/self.total_frames)
 
     def _load_modules(self):
         from source.funclib.combat_lib import CSDL
