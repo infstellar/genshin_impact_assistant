@@ -63,7 +63,8 @@ class VideoToPathPage(AdvancePage):
         self._play_video()
     
     def _onclick_cancel_video(self):
-        self._cancel_video()
+        self._show_log('还没写')
+        # self._cancel_video()
         
     def _onclick_analyze_position(self):
         self._show_log(t2t("Please waiting..."))
@@ -131,6 +132,8 @@ class VideoToPathPage(AdvancePage):
                 "| `.` | 增大播放速度,记录路径时必须为现实速度 |\n"
                 "| `[` | 启动/停止记录 |\n"
                 "| `a` | 分析初始坐标 |\n"
+                "## 注意\n"
+                "**必须在加载视频前填写所有参数！(除初始坐标id外)**\n"
 
                 ))]
                 )
@@ -163,14 +166,14 @@ class VideoToPathPage(AdvancePage):
                         output.put_button(t2t('Cancel video'), onclick=self._onclick_cancel_video)
                     ], size='auto'),
                     output.put_column([
-                        pin.put_input(self.INPUT_VIDEO_PATH, label=t2t("video path")),
+                        pin.put_input(self.INPUT_VIDEO_PATH, label=t2t("Video path")),
                         pin.put_input(self.INPUT_INIT_POSITION_ID, label=t2t("init position id")),
-                        pin.put_input(self.INPUT_PATH_FILE_HEAD_NAME, label=t2t("file head name")),
-                        pin.put_input(self.INPUT_IS_PICKUP_MODE, label=t2t("is pickup mode"), ),
-                        pin.put_input(self.INPUT_COLL_NAME, label=t2t("collection name")),
-                        pin.put_input(self.INPUT_FRAME_TO_START, label=t2t("frame to start"), type=input.NUMBER, value=0),
-                        pin.put_input(self.INPUT_COLL_AREA, label=t2t("collect area"), value='Liyue|Mondstadt|Inazuma'),
-                        pin.put_input(self.INPUT_VIDEO_SIZE, label=t2t("video size"), value='1280x720')
+                        pin.put_input(self.INPUT_PATH_FILE_HEAD_NAME, label=t2t("File head name")),
+                        pin.put_select(self.INPUT_IS_PICKUP_MODE,[{"label": 'True', "value": True}, {"label": 'False', "value": False}], value=True,label=t2t('is pickup mode')),
+                        pin.put_input(self.INPUT_COLL_NAME, label=t2t("Collection name")),
+                        pin.put_input(self.INPUT_FRAME_TO_START, label=t2t("Frame to start"), type=input.NUMBER, value=0),
+                        pin.put_input(self.INPUT_COLL_AREA, label=t2t("Collect area"), value='Liyue|Mondstadt|Inazuma'),
+                        pin.put_input(self.INPUT_VIDEO_SIZE, label=t2t("Video size"), value='1280x720')
                     ], size='auto')
                 ]
             )
