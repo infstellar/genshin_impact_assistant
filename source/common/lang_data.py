@@ -3,6 +3,7 @@ from source.util import *
 # with open(f"{ROOT_PATH}\\assets\\LangData\\characters.json5", "r", encoding="utf-8") as f:
 #     characters = json5.load(f)
 characters = load_json("characters_name.json", f"{ROOT_PATH}\\assets\\characters_data")
+characters_name_dict = load_json("characters_name_dict.json", f"{ROOT_PATH}\\assets\\characters_data")
 def get_all_characters_name():
     ret_list = []
     for item in characters:
@@ -15,27 +16,25 @@ def get_all_characters_name():
     return ret_list
 
 # 定义一个函数，根据内容和语言输出英文翻译
-def translate_character(content, language:str = GLOBAL_LANG):
-    language = language.replace("zh_CN",'zhCN')
-    language = language.replace("en_US",'en')
-    # 遍历data中的每个字典
-    for item in characters:
-        # 如果字典中有对应的语言键值，并且值等于内容
-        if language in item and item[language] == content:
-            # 返回字典中的英文键值
-            return item["en"]
-        if language in item and item["en"] == content:
-            # 返回字典中的英文键值
-            return item["en"]
-    # 如果没有找到匹配的内容，返回None
-    return None
+# def translate_character(content, language:str = GLOBAL_LANG):
+#     language = language.replace("zh_CN",'zhCN')
+#     language = language.replace("en_US",'en')
+#     # 遍历data中的每个字典
+#     for item in characters:
+#         # 如果字典中有对应的语言键值，并且值等于内容
+#         if language in item and item[language] == content:
+#             # 返回字典中的英文键值
+#             return item["en"]
+#         if language in item and item["en"] == content:
+#             # 返回字典中的英文键值
+#             return item["en"]
+#     # 如果没有找到匹配的内容，返回None
+#     return None
 
 def translate_character_auto(content):
-    for item in characters:
-        for language in ['en','ja','zhCN']:
-            if language in item and item[language] == content:
-                # 返回字典中的英文键值
-                return item["en"]
+    for item in characters_name_dict:
+        if content in item['alias']+[item['standard_name']]:
+            return item['standard_name']
     # 如果没有找到匹配的内容，返回None
     return None
 
@@ -52,4 +51,4 @@ def query_character(name:str):
     return False
 
 if __name__ == '__main__':
-    print(translate_character_auto("宵宫"))
+    print(translate_character_auto("Kazuha"))

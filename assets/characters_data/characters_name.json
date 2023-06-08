@@ -510,16 +510,6 @@
       "zhCN": "枫原万叶"
     },
     {
-      "en": "Kaedehara",
-      "ja": "楓原万葉",
-      "pronunciationJa": "かえではらかずは",
-      "tags": [
-        "inazuma",
-        "character-main"
-      ],
-      "zhCN": "枫原万叶"
-    },
-    {
       "en": "Yoimiya",
       "ja": "宵宮",
       "pronunciationJa": "よいみや",
@@ -553,40 +543,7 @@
       "zhCN": "神里绫华"
     },
     {
-      "en": "Ayaka",
-      "ja": "神里綾華",
-      "pronunciationJa": "かみさとあやか",
-      "tags": [
-        "inazuma",
-        "character-main"
-      ],
-      "variants": {
-        "ja": [
-          "神里綾香"
-        ],
-        "zhCN": [
-          "神里凌华"
-        ]
-      },
-      "zhCN": "神里绫华"
-    },
-    {
       "en": "Kamisato Ayato",
-      "ja": "神里綾人",
-      "pronunciationJa": "かみさとあやと",
-      "tags": [
-        "inazuma",
-        "character-main"
-      ],
-      "variants": {
-        "zhCN": [
-          "神里凌人"
-        ]
-      },
-      "zhCN": "神里绫人"
-    },
-    {
-      "en": "Ayato",
       "ja": "神里綾人",
       "pronunciationJa": "かみさとあやと",
       "tags": [
@@ -635,27 +592,7 @@
       "zhCN": "八重神子"
     },
     {
-      "en": "Yae",
-      "ja": "八重神子",
-      "pronunciationJa": "やえみこ",
-      "tags": [
-        "inazuma",
-        "character-main"
-      ],
-      "zhCN": "八重神子"
-    },
-    {
       "en": "Arataki Itto",
-      "ja": "荒瀧一斗",
-      "pronunciationJa": "あらたきいっと",
-      "tags": [
-        "inazuma",
-        "character-main"
-      ],
-      "zhCN": "荒泷一斗"
-    },
-    {
-      "en": "Arataki",
       "ja": "荒瀧一斗",
       "pronunciationJa": "あらたきいっと",
       "tags": [
@@ -675,16 +612,6 @@
       "zhCN": "久岐忍"
     },
     {
-      "en": "Shinobu",
-      "ja": "久岐忍",
-      "pronunciationJa": "くきしのぶ",
-      "tags": [
-        "inazuma",
-        "character-main"
-      ],
-      "zhCN": "久岐忍"
-    },
-    {
       "en": "Gorou",
       "ja": "ゴロー",
       "tags": [
@@ -695,16 +622,6 @@
     },
     {
       "en": "Sangonomiya Kokomi",
-      "ja": "珊瑚宮心海",
-      "pronunciationJa": "さんごのみやここみ",
-      "tags": [
-        "inazuma",
-        "character-main"
-      ],
-      "zhCN": "珊瑚宫心海"
-    },
-    {
-      "en": "Kokomi",
       "ja": "珊瑚宮心海",
       "pronunciationJa": "さんごのみやここみ",
       "tags": [
@@ -739,27 +656,7 @@
       "zhCN": "鹿野院平藏"
     },
     {
-      "en": "Heizou",
-      "ja": "鹿野院平蔵",
-      "pronunciationJa": "しかのいんへいぞう",
-      "tags": [
-        "inazuma",
-        "character-main"
-      ],
-      "zhCN": "鹿野院平藏"
-    },
-    {
       "en": "Raiden Shogun",
-      "ja": "雷電将軍",
-      "pronunciationJa": "らいでんしょうぐん",
-      "tags": [
-        "inazuma",
-        "character-main"
-      ],
-      "zhCN": "雷电将军"
-    },
-    {
-      "en": "Raiden",
       "ja": "雷電将軍",
       "pronunciationJa": "らいでんしょうぐん",
       "tags": [
