@@ -28,7 +28,7 @@ class CommissionExecutor(TaskTemplate, CommissionParser):
                 if co.pause_threading_flag: break
             self._clean_sub_threading()
             if co.is_commission_succ:
-                j = load_json(json_name="commission_dict.json", default_path=rf"{CONFIG_PATH}\commission")
+                j = load_json(json_name="commission_dict.json", folder_path=rf"{CONFIG_PATH}\commission")
                 j[self.commission_dicts.index(i)]["done"]=True
                 save_json(j ,json_name="commission_dict.json", default_path=rf"{CONFIG_PATH}\commission")
         r = self._set_and_save_and_load_commission_dicts()

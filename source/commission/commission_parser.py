@@ -103,7 +103,7 @@ class CommissionParser():
             g4t.reset()
             return True
         else:
-            self.commission_dicts = load_json(json_name="commission_dict.json", default_path=rf"{CONFIG_PATH}\commission")
+            self.commission_dicts = load_json(json_name="commission_dict.json", folder_path=rf"{CONFIG_PATH}\commission")
             for i in self.commission_dicts:
                 if i["done"] != True:
                     return False

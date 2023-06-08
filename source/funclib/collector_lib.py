@@ -2,7 +2,7 @@ from typing import Union
 from source.util import *
 
 def add_to_blacklist(key:str, id: Union[int,list]) -> None:
-    blacklist = load_json(json_name="collection_blacklist.json", default_path="config\\auto_collector")
+    blacklist = load_json(json_name="collection_blacklist.json", folder_path="config\\auto_collector")
     if isinstance(id, int):
         id = [id]
     for i in id:
@@ -12,7 +12,7 @@ def add_to_blacklist(key:str, id: Union[int,list]) -> None:
 def add_to_collected(key:str, id: Union[int,list]) -> None:
     if isinstance(id, int):
         id = [id]
-    collectedlist = load_json(json_name="collected.json", default_path="config\\auto_collector")
+    collectedlist = load_json(json_name="collected.json", folder_path="config\\auto_collector")
     for i in id:
         collectedlist[key].append(i)
     save_json(collectedlist, json_name="collected.json", default_path="config\\auto_collector")    

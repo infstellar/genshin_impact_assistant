@@ -34,8 +34,8 @@ class CollectorFlow(BaseThreading):
             self.collector_type = COLLECTION
         elif GIAconfig.Collector_CollectionType == "ENEMY":
             self.collector_type = ENEMY
-        self.collector_blacklist_id = load_json("collection_blacklist.json", default_path="config\\auto_collector")
-        self.collected_id = load_json("collected.json", default_path="config\\auto_collector")
+        self.collector_blacklist_id = load_json("collection_blacklist.json", folder_path="config\\auto_collector")
+        self.collected_id = load_json("collected.json", folder_path="config\\auto_collector")
         self.shielded_id = []
         self.collection_id = 0
         try:
@@ -52,7 +52,7 @@ class CollectorFlow(BaseThreading):
 
         if not os.path.exists(os.path.join(ROOT_PATH, "config\\auto_collector", "collection_log.json")):
             save_json({}, os.path.join(ROOT_PATH, "config\\auto_collector", "collection_log.json"))
-        self.collection_log = load_json("collection_log.json", default_path="config\\auto_collector")
+        self.collection_log = load_json("collection_log.json", folder_path="config\\auto_collector")
         
         self.collector_posi_dict = None
         self.current_state = ST.INIT_MOVETO_COLLECTOR
