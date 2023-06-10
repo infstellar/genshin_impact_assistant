@@ -2,16 +2,15 @@
   "BorderlessWindow": false,
   "UsingAlphaChannel": true,
   "DEBUG": false,
-  "CorrDegree": 0.95,
+  "Lang":"$locale$",
   "DevicePaddle": "cpu",
   "DeviceTorch": "auto",
   "CheckImport": false,
-  "Lang":"$locale$",
   "CloudGenshin": false,
   "CaptureMode":"fast",
+  "CorrDegree": 0.95,
   "DeterminingStrictWeight":0.9,
   "InteractionMode": "Desktop",
   "Python32Path": "",
-  "MissionGroup":"AutoCollectorMission.json",
   "Version":"v0.7.3.900"
 }

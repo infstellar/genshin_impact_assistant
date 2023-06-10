@@ -19,8 +19,7 @@ class AdvancePage(Page):
                 output.put_markdown(t2t('# GIA DEBUG') + f" {GIA_VERSION}"),
             else:
                 output.put_markdown(t2t('# GIA GUI') + f" {GIA_VERSION}"),
-            # document
-            output.put_link(t2t('View Document'), url='https://genshinimpactassistant.github.io/GIA-Document', new_window = True).style('font-size: 25px')
+            
             # 页面切换按钮
             output.put_buttons(self._value_list2buttons_type(list(manager.page_dict)), onclick=webio.manager.load_page, scope=self.main_scope)
             super()._on_load()
