@@ -1,6 +1,7 @@
 import shutil, os
-path1 = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-path2 = os.path.abspath(r"../GIA_Launcher_Download_Lib")
+path1 = os.path.abspath(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+print(path1)
+path2 = os.path.abspath(os.path.join(path1,r"../GIA_Launcher_Download_Lib"))
 
 def verify_path(root):
     if not os.path.exists(root):
