@@ -16,7 +16,7 @@ def copy_from_to(rootpath):
             continue
         for f in files:
             if f not in [".gitmodules", ".git"]:
-                print(f"{f} has been copied.\n from {os.path.join(root, f)}\n to {os.path.join(root.replace(path1, path2), f)}")
+                # print(f"{f} has been copied.\n from {os.path.join(root, f)}\n to {os.path.join(root.replace(path1, path2), f)}")
                 verify_path(root.replace(path1, path2))
                 shutil.copy(os.path.join(root, f), os.path.join(root.replace(path1, path2), f))
                 times+=1
