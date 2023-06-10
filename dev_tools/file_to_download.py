@@ -14,6 +14,8 @@ def copy_from_to(rootpath):
     for root, dirs, files in os.walk(rootpath):
         if ".git" in root:
             continue
+        if ".github" in root:
+            continue
         for f in files:
             if f not in [".gitmodules", ".git"]:
                 # print(f"{f} has been copied.\n from {os.path.join(root, f)}\n to {os.path.join(root.replace(path1, path2), f)}")
