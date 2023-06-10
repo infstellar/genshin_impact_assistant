@@ -1,20 +1,20 @@
+# coding:utf-8
 """This file is generated automatically. Do not manually modify it."""
 class GeneratedConfig:
    General_BorderlessWindow = False
    General_UsingAlphaChannel = True
    General_DEBUG = False
-   General_CorrDegree = 0.95
+   General_Lang = '$locale$'
    General_DevicePaddle = 'cpu'
    General_DeviceTorch = 'auto'
    General_CheckImport = False
-   General_Lang = '$locale$'
    General_CloudGenshin = False
    General_CaptureMode = 'fast'
+   General_CorrDegree = 0.95
    General_DeterminingStrictWeight = 0.9
    General_InteractionMode = 'Desktop'
    General_Python32Path = ''
-   General_MissionGroup = 'AutoCollectorMission.json'
-   General_Version = 'v0.7.2.779'
+   General_Version = 'v0.7.3.900'
    Collector_CollectionName = '史莱姆'
    Collector_CollectionType = 'ENEMY'
    Collector_CollectionArea = 'ALL'

@@ -10,7 +10,8 @@ from source.config.util import *
 commission_list = []
 commission_dict = {}
 
-with open(os.path.join(ROOT_PATH,r"source/config/config_generated.py"), "w") as f:
+with open(os.path.join(ROOT_PATH,r"source/config/config_generated.py"), "w", encoding='utf-8') as f:
+    f.write(f'# coding:utf-8\n')
     f.write("\"\"\"This file is generated automatically. Do not manually modify it.\"\"\"\n")
     f.write("class GeneratedConfig:\n")
     for jsonname in CONFIG_FILE_NAMES:

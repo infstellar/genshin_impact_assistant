@@ -99,7 +99,11 @@ class MainPage(AdvancePage):
         # 标题
         # 获得链接按钮
         with output.use_scope(self.main_scope):
-            output.put_button(label=t2t("Get IP address"), onclick=self.on_click_ip_address, scope=self.main_scope)
+            output.put_row([
+                output.put_button(label=t2t("Get IP address"), onclick=self.on_click_ip_address, scope=self.main_scope),
+                output.put_link(t2t('View Document'), url='https://genshinimpactassistant.github.io/GIA-Document', new_window = True).style('font-size: 20px')
+            ])
+            
 
             task_options = [
                     {
