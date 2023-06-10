@@ -16,7 +16,7 @@ class MissionManager(AdvanceThreading):
         self.missions_list = mission_list
 
     def exec_mission(self, mission_name):
-        mission = missions.mission_index .get_mission_object(mission_name)
+        mission = missions.mission_index.get_mission_object(mission_name)
         self._add_sub_threading(mission, start=False)
         self.blocking_startup(mission)
         mission.stop_threading()
