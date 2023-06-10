@@ -12,7 +12,7 @@ ONE_CHANNEL = 1
 THREE_CHANNEL = 3
 
 class MiniMap(MiniMapResource):
-    COLOR_CHANNEL = THREE_CHANNEL
+
     def init_position(self, position: t.Tuple[int, int]):
         # logger.info(f"init_position:{position}")
         self.position = position
@@ -40,7 +40,7 @@ class MiniMap(MiniMapResource):
         search_image = crop(self.TChannelGIMAP, search_area)
         return search_image
     
-    def _predict_position(self, image, scale):
+    def _predict_position(self, image, scale, channel=ONE_CHANNEL):
         """
         Args:
             image:
@@ -60,9 +60,9 @@ class MiniMap(MiniMapResource):
         search_area = area_offset((0, 0, *search_size), offset=(-search_size // 2).astype(np.int64))
         search_area = area_offset(search_area, offset=np.multiply(search_position, self.POSITION_SEARCH_SCALE))
         search_area = np.array(search_area).astype(np.int64)
-        if self.COLOR_CHANNEL == ONE_CHANNEL:
+        if channel == ONE_CHANNEL:
             search_image = crop(self.GIMAP, search_area)
-        elif self.COLOR_CHANNEL == THREE_CHANNEL:
+        elif channel == THREE_CHANNEL:
             search_image = crop(self.TChannelGIMAP, search_area)
         
         result = cv2.matchTemplate(search_image, local, cv2.TM_CCOEFF_NORMED)
@@ -124,29 +124,39 @@ class MiniMap(MiniMapResource):
         else:
             image = origin_image
         image = self._get_minimap(image, self.MINIMAP_POSITION_RADIUS)
-        if self.COLOR_CHANNEL == ONE_CHANNEL:
-            image = rgb2luma(image)
-            image &= self._minimap_mask
-        else:
-            image &= np.expand_dims(self._minimap_mask,axis=2).repeat(3,axis=2)
+        
+        image_one = image.copy()
+        image_one = rgb2luma(image)
+        image_one &= self._minimap_mask
+
+        image_three = image.copy()
+        image_three &= np.expand_dims(self._minimap_mask,axis=2).repeat(3,axis=2)
 
         best_sim = -1.
         best_local_sim = -1.
         best_loca = (0, 0)
         best_scene = 'wild'
         for scene, scale in self._position_scale_dict.items():
-            similarity, local_sim, location = self._predict_position(image, scale)
+            if scene == 'wild':
+                inp_img = image_one
+                channel = ONE_CHANNEL
+            else:
+                inp_img = image_three
+                channel = THREE_CHANNEL
+            similarity, local_sim, location = self._predict_position(inp_img, scale, channel=channel)
             # print(scene, scale, similarity, location)
             if similarity > best_sim:
                 best_sim = similarity
                 best_local_sim = local_sim
                 best_loca = location
                 best_scene = scene
+                best_channel = channel
 
         self.position_similarity = round(best_sim, 5)
         self.position_similarity_local = round(best_local_sim, 5)
         self.position = tuple(np.round(best_loca, 1))
         self.scene = best_scene
+        self.channel = best_channel
         # logger.trace(f'P:({float2str(self.position[0], 4)}, {float2str(self.position[1], 4)}) ')
         return self.position
 
@@ -392,13 +402,19 @@ class MiniMap(MiniMapResource):
         self.update_rotation(image, layer=MapConverter.LAYER_Teyvat, update_position=False)
 
         # MiniMap P:(4451.5, 3113.0) (0.184|0.050), S:wild, D:259.5 (0.949), R:180 (0.498)
+
+        self.minimap_print_log()
+        
+    def minimap_print_log(self):
         logger.trace(
             f'MiniMap '
             f'P:({float2str(self.position[0], 4)}, {float2str(self.position[1], 4)}) '
             f'({float2str(self.position_similarity, 3)}|{float2str(self.position_similarity_local, 3)}), '
             f'S:{self.scene}, '
             f'D:{float2str(self.direction, 3)} ({float2str(self.direction_similarity, 3)}), '
+            f'C:{self.channel}, '
             f'R:{self.rotation} ({float2str(self.rotation_confidence)})')
+
 
     def update_minimap_domain(self, image):
         """
@@ -461,7 +477,7 @@ if __name__ == '__main__':
     device = WindowsCapture()
     minimap = MiniMap(MiniMap.DETECT_Desktop_1080p)
     # 坐标位置是 GIMAP 的图片坐标
-    minimap.init_position((5454,758))
+    minimap.init_position(MapConverter.convert_cvAutoTrack_to_GIMAP([1334,-4057]))
     # 你可以移动人物，GIA会持续监听小地图位置和角色朝向
     while 1:
         image = itt.capture()

@@ -41,7 +41,7 @@ class Map(MiniMap, BigMap, MapConverter):
         self.TP_RANGE = 350  # 在该像素范围内可tp
         self.MINIMAP_UPDATE_LIMIT = 0.1  # minimap更新最短时间
         self.MINIMAP_ERROR_BASE_LIMIT = 20 # minimap基本更新误差
-        self.METER_PER_SECOND = 10+5 # 移动速度，m/s
+        self.METER_PER_SECOND = 25 # 移动速度，m/s
 
         self.smallmap_upd_timer = timer_module.Timer(10)
         self.small_map_init_flag = False
@@ -49,6 +49,7 @@ class Map(MiniMap, BigMap, MapConverter):
         self.check_bigmap_timer = timer_module.Timer(5)
         self.init_timer = timer_module.AdvanceTimer(5)
         self.last_valid_position = [0,0]
+        self.history_position_list = []
         
         
 
@@ -105,6 +106,24 @@ class Map(MiniMap, BigMap, MapConverter):
         # print(self.check_bigmap_timer.get_diff_time())
         return curr_posi
     
+    def _is_reset_position(self, curr_posi, threshold=0.8):
+        """如果有threshold％的数据超过150，则返回True。
+
+        Args:
+            curr_posi (_type_): _description_
+            threshold (float, optional): _description_. Defaults to 0.8.
+
+        Returns:
+            _type_: _description_
+        """
+        if len(self.history_position_list) >= 20:
+            over_times = 0
+            for i in self.history_position_list:
+                if euclidean_distance(i, curr_posi) >= 150:
+                    over_times += 1
+            return over_times/20 > threshold
+        return False
+    
     def get_position(self, is_verify_position = True):
         """get current character position
 
@@ -115,17 +134,23 @@ class Map(MiniMap, BigMap, MapConverter):
             self.reinit_smallmap()
             self.small_map_init_flag = True
         self._upd_smallmap()
+        self.history_position_list.append(self.position)
         if is_verify_position:
-            if self.smallmap_upd_timer.get_diff_time() <= 8:
+            if self._is_reset_position(self.position):
+                self.history_position_list = []
+            else:
                 last_dist = euclidean_distance(self.last_valid_position,self.convert_GIMAP_to_cvAutoTrack(self.position))
                 error_limit = self.MINIMAP_ERROR_BASE_LIMIT + self.smallmap_upd_timer.get_diff_time()*self.METER_PER_SECOND
                 if last_dist > error_limit:
                     logger.warning(f"migration of position {round(last_dist,2)} over limit {round(error_limit,2)}, give up position")
+                    self.minimap_print_log()
                     return self.last_valid_position
             
         self.smallmap_upd_timer.reset()
         r_posi = self.convert_GIMAP_to_cvAutoTrack(self.position)
         self.last_valid_position = r_posi
+        if len(self.history_position_list)>20:
+            self.history_position_list.pop(0)
         return r_posi
 
     def is_similarity_qualified(self, offset_rate=1):
