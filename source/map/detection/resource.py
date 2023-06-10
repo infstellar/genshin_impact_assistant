@@ -18,6 +18,13 @@ class MiniMapResource(MiniMapConst):
         file = gimap.get_file('GIMAP_luma_05x.png')
         image = load_image(file)
         return image
+    
+    @cached_property
+    def TChannelGIMAP(self):
+        # About 100ms to load
+        file = gimap.get_file('GIMAP_05x.png')
+        image = load_image(file)
+        return image
 
     @cached_property
     def GIBigmap(self):

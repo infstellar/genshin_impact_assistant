@@ -19,7 +19,7 @@ class TianliNavigator(astar.AStar, MapConverter):
     NAVIGATION_POINTS = {}
     def __init__(self) -> None:
         super().__init__()
-        self.navigation_dict = load_json("tianli_navigation_points_test.json", default_path=fr"{ASSETS_PATH}")
+        self.navigation_dict = load_json("tianli_navigation_points_test.json", folder_path=fr"{ASSETS_PATH}")
         self._build_navigation_points()
         # self.GIMAP_IMG = cv2.cvtColor(self.GIMAP_RAWIMG, cv2.COLOR_BGRA2RGB)
         

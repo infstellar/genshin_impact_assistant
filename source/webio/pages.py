@@ -58,11 +58,11 @@ class MainPage(AdvancePage):
                     f'color: black; font_size: 20px')
                 self.log_list_lock.release()
                 listening.call_you_import_module()
-            if pin.pin["MissionSelect"] != self.ui_mission_select:
-                self.ui_mission_select = pin.pin["MissionSelect"]
-                output.clear_scope("SCOPEMissionIntroduction")
-                if self.ui_mission_select is None:
-                    continue
+            # if pin.pin["MissionSelect"] != self.ui_mission_select:
+            #     self.ui_mission_select = pin.pin["MissionSelect"]
+            #     output.clear_scope("SCOPEMissionIntroduction")
+            #     if self.ui_mission_select is None:
+            #         continue
                 # output.put_text(self._get_mission_groups_dict()["introduction"][GLOBAL_LANG],scope="SCOPEMissionIntroduction")
             
             self.log_list_lock.acquire()
@@ -98,81 +98,81 @@ class MainPage(AdvancePage):
     def _load(self):
         # 标题
         # 获得链接按钮
-        output.put_button(label=t2t("Get IP address"), onclick=self.on_click_ip_address, scope=self.main_scope)
+        with output.use_scope(self.main_scope):
+            output.put_row([
+                output.put_button(label=t2t("Get IP address"), onclick=self.on_click_ip_address, scope=self.main_scope),
+                output.put_link(t2t('View Document'), url='https://genshinimpactassistant.github.io/GIA-Document', new_window = True).style('font-size: 20px')
+            ])
+            
 
-        task_options = [
-                {
-                    "label":t2t("Launch genshin"),
-                    "value":"LaunchGenshinTask"
-                },
-                {
-                    "label":t2t("Domain Task"),
-                    "value":"DomainTask"
-                },
-                {
-                    "label":t2t("Daily Commission"),
-                    "value":"CommissionTask"
-                },
-                {
-                    "label":t2t("Claim Reward"),
-                    "value":"ClaimRewardTask"
-                },
-                {
-                    "label":t2t("Ley Line Outcrop"),
-                    "value":"LeyLineOutcropTask"
-                },
-                {
-                    "label":t2t("Mission"),
-                    "value":"MissionTask"
-                }
-            ]
-        output.put_row([  # 横列
-            output.put_column([  # 左竖列
-                output.put_markdown('## '+t2t("Task List")),
-                output.put_markdown(t2t("Can only be activated from the button")),
-                pin.put_checkbox(name="task_list", options=task_options),
-                output.put_row([output.put_text(t2t('启动/停止Task')), None, output.put_scope('Button_StartStop')],size='40% 10px 60%'),
-                output.put_markdown(t2t('## Statement')),
-                output.put_row([output.put_text(t2t('任务状态')), None, output.put_scope('StateArea')],size='40% 10px 60%'),
-                # output.put_markdown(t2t('## Mission')),  # 左竖列标题
-                # Mission select
-                # output.put_row([  # 5%
-                #     output.put_text(t2t('Mission Group')),
-                #     output.put_column([
-                #         pin.put_select("MissionSelect",self._get_mission_groups_config()),
-                #         output.put_scope("SCOPEMissionIntroduction")
-                #         ])
-                # ]),
-                output.put_markdown(t2t('## Function')),  # 左竖列标题
-                output.put_markdown(t2t("Can only be activated from the hotkey \'[\'")),
-                output.put_row([  # FlowMode
-                    output.put_text(t2t('FlowMode')),
-                    pin.put_select(('FlowMode'), [
-                        {'label': t2t('Idle'), 'value': listening.FLOW_IDLE},
-                        {'label': t2t('AutoCombat'), 'value': listening.FLOW_COMBAT},
-                        # {'label': t2t('AutoDomain'), 'value': listening.FLOW_DOMAIN},
-                        # {'label': t2t('AutoCollector'), 'value': listening.FLOW_COLLECTOR}
-                    ])])
-            ], size='auto'), None,
-            output.put_scope('Log')
+            task_options = [
+                    {
+                        "label":t2t("Launch genshin"),
+                        "value":"LaunchGenshinTask"
+                    },
+                    {
+                        "label":t2t("Domain Task"),
+                        "value":"DomainTask"
+                    },
+                    {
+                        "label":t2t("Daily Commission"),
+                        "value":"CommissionTask"
+                    },
+                    {
+                        "label":t2t("Claim Reward"),
+                        "value":"ClaimRewardTask"
+                    },
+                    {
+                        "label":t2t("Ley Line Outcrop"),
+                        "value":"LeyLineOutcropTask"
+                    },
+                    {
+                        "label":t2t("Mission"),
+                        "value":"MissionTask"
+                    }
+                ]
+            output.put_row([  # 横列
+                output.put_column([  # 左竖列
+                    output.put_markdown('## '+t2t("Task List")),
+                    output.put_markdown(t2t("Can only be activated from the button")),
+                    pin.put_checkbox(name="task_list", options=task_options),
+                    output.put_row([output.put_text(t2t('启动/停止Task')), None, output.put_scope('Button_StartStop')],size='40% 10px 60%'),
+                    
+                    output.put_markdown(t2t('## Statement')),
+                    output.put_row([output.put_text(t2t('任务状态')), None, output.put_scope('StateArea')],size='40% 10px 60%'),
+                    output.put_markdown(t2t('## Semi-automatic Functions')),  # 左竖列标题
+                    output.put_markdown(t2t("Can only be activated from the hotkey \'[\'")),
+                    output.put_text(t2t('Do not enable semi-automatic functions and tasks at the same time')),
+                    output.put_row([  # FlowMode
+                        output.put_text(t2t('Semi-automatic Functions')),
+                        
+                        pin.put_select(('FlowMode'), [
+                            {'label': t2t('Idle'), 'value': listening.FLOW_IDLE},
+                            {'label': t2t('Auto Combat'), 'value': listening.FLOW_COMBAT}
+                        ]),
+                        ],
+                    
+                )
+                ], size='auto'), None,
+                output.put_scope('Log')
 
-        ], scope=self.main_scope, size='40% 10px 60%')
+            ], scope=self.main_scope, size='40% 10px 60%')
 
-        # PickUpButton
-        output.put_button(label=str(listening.FEAT_PICKUP), onclick=self.on_click_pickup, scope='Button_PickUp')
-        # Button_StartStop
-        output.put_button(label=str(listening.startstop_flag), onclick=self.on_click_startstop,
-                          scope='Button_StartStop')
+            # PickUpButton
+            output.put_button(label=str(listening.FEAT_PICKUP), onclick=self.on_click_pickup, scope='Button_PickUp')
+            # Button_StartStop
+            output.put_button(label=str(listening.startstop_flag), onclick=self.on_click_startstop,
+                            scope='Button_StartStop')
 
-        # Log
-        output.put_markdown(t2t('## Log'), scope='Log')
-        output.put_scrollable(output.put_scope('LogArea'), height=600, keep_bottom=True, scope='Log')
-        '''self.main_pin_change_thread = threading.Thread(target=self._main_pin_change_thread, daemon=False)
-        self.main_pin_change_thread.start()'''
+            # Log
+            output.put_markdown(t2t('## Log'), scope='Log')
+            output.put_scrollable(output.put_scope('LogArea'), height=600, keep_bottom=True, scope='Log')
+            '''self.main_pin_change_thread = threading.Thread(target=self._main_pin_change_thread, daemon=False)
+            self.main_pin_change_thread.start()'''
 
-        m = upd_message()
-        if m!="":
-            output.popup(t2t('更新提示'), m)
+            m = upd_message()
+            if m!="":
+                output.popup(t2t('更新提示'), m)
         
     # def _get_mission_groups_config(self):
     #     jsons = load_json_from_folder(f"{CONFIG_PATH}\\mission_groups")
@@ -194,11 +194,11 @@ class MainPage(AdvancePage):
         # listening.MISSION_MANAGER.set_mission_list(list(pin.pin["MissionSelect"]))
         listening.TASK_MANAGER.set_tasklist(pin.pin["task_list"])
         listening.TASK_MANAGER.start_stop_tasklist()
-        if pin.pin["MissionSelect"] != None and pin.pin["MissionSelect"] != "":
-            cj = load_json()
-            cj["MissionGroup"] = pin.pin["MissionSelect"]
-            save_json(cj)
-            GIAconfig.update()
+        # if pin.pin["MissionSelect"] != None and pin.pin["MissionSelect"] != "":
+        #     cj = load_json()
+        #     cj["MissionGroup"] = pin.pin["MissionSelect"]
+        #     save_json(cj)
+        #     GIAconfig.update()
 
         time.sleep(0.2)
         output.clear('Button_StartStop')
@@ -374,7 +374,8 @@ class ConfigPage(AdvancePage):
 
         json.dump(self.get_json(j), open(self.file_name, 'w', encoding='utf8'), ensure_ascii=False, indent=4)
         # output.put_text('saved!', scope='now')
-        output.toast(t2t('saved!'))
+        output.toast(t2t('saved!'), color='success', duration=4)
+        output.toast(t2t('You may need to restart to apply changes.'), duration=4)
         GIAconfig.update()
 
     # 

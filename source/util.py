@@ -28,10 +28,23 @@ INTERACTION_MODE = GIAconfig.General_InteractionMode
 IS_DEVICE_PC = True
 
 # load config file
-def load_json(json_name='General.json', default_path='config\\settings', auto_create = False) -> dict:
+def load_json(json_name='General.json', folder_path='config\\settings', auto_create = False) -> dict:
+    """加载json.
+
+    Args:
+        json_name (str, optional): json文件名.包含后缀. Defaults to 'General.json'.
+        folder_path (str, optional): json文件夹路径. Defaults to 'config\\settings'.
+        auto_create (bool, optional): 是否在导入失败时自动创建json.不推荐使用. Defaults to False.
+
+    Raises:
+        FileNotFoundError: _description_
+
+    Returns:
+        dict: dict/list
+    """
     # if "$lang$" in default_path:
     #     default_path = default_path.replace("$lang$", GLOBAL_LANG)
-    all_path = os.path.join(ROOT_PATH, default_path, json_name)
+    all_path = os.path.join(ROOT_PATH, folder_path, json_name)
     try:
         return json.load(open(all_path, 'r', encoding='utf-8'), object_pairs_hook=OrderedDict)
     except:
@@ -52,26 +65,6 @@ def load_json(json_name='General.json', default_path='config\\settings', auto_cr
 #     logger.error("config文件导入失败，可能由于初次安装。跳过导入。 ERROR_IMPORT_CONFIG_002")
 #     INTERACTION_MODE = INTERACTION_DESKTOP
 # IS_DEVICE_PC = (INTERACTION_MODE == INTERACTION_DESKTOP_BACKGROUND)or(INTERACTION_MODE == INTERACTION_DESKTOP)
-# load config file over
-
-# load translation module
-# def get_local_lang():
-#     import locale
-#     lang = locale.getdefaultlocale()[0]
-#     logger.debug(f"locale: {locale.getdefaultlocale()}")
-#     if lang in ["zh_CN", "zh_SG", "zh_MO", "zh_HK", "zh_TW"]:
-#         return "zh_CN"
-#     else:
-#         return "en_US"
-
-# if GLOBAL_LANG == "$locale$":
-#     GLOBAL_LANG = get_local_lang()
-#     GLOBAL_LANG = "zh_CN"
-logger.info(f"language set as: {GLOBAL_LANG}")
-
-# load translation module over
-
-
 
 # verify path
 if not os.path.exists(ROOT_PATH):
@@ -95,6 +88,14 @@ if not is_admin():
 
 # functions
 def list_text2list(text: str) -> list:
+    """str列表转列表.
+
+    Args:
+        text (str): _description_
+
+    Returns:
+        list: _description_
+    """
     if text is not None:  # 判断是否为空
         try:  # 尝试转换
             rt_list = json.loads(text)
@@ -110,6 +111,14 @@ def list_text2list(text: str) -> list:
     return rt_list
 
 def list2list_text(lst: list) -> str:
+    """列表转str.
+
+    Args:
+        lst (list): _description_
+
+    Returns:
+        str: _description_
+    """
     if lst is not None:  # 判断是否为空
         try:  # 尝试转换
             rt_str = json.dumps(lst, ensure_ascii=False)
@@ -138,12 +147,29 @@ def list2format_list_text(lst: list, inline = False) -> str:
 
 
 def is_json_equal(j1: str, j2: str) -> bool:
+    """_summary_
+
+    Args:
+        j1 (str): _description_
+        j2 (str): _description_
+
+    Returns:
+        bool: _description_
+    """
     try:
         return json.dumps(json.loads(j1), sort_keys=True) == json.dumps(json.loads(j2), sort_keys=True)
     except:
         return False
 
 def is_int(x):
+    """_summary_
+
+    Args:
+        x (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
     try:
         int(x)
     except ValueError:
@@ -152,6 +178,16 @@ def is_int(x):
         return True
 
 def points_angle(p1, p2, coordinate=ANGLE_NORMAL):
+    """计算两点间角度.
+
+    Args:
+        p1 (_type_): _description_
+        p2 (_type_): _description_
+        coordinate (_type_, optional): _description_. Defaults to ANGLE_NORMAL.
+
+    Returns:
+        _type_: _description_
+    """
     # p1: current point
     # p2: target point
     x = p1[0]
@@ -174,19 +210,45 @@ def points_angle(p1, p2, coordinate=ANGLE_NORMAL):
     return degree
 
 def save_json(x, json_name='General.json', default_path='config\\settings', sort_keys=True, auto_create=False):
+    """保存json.
+
+    Args:
+        x (_type_): dict/list对象
+        json_name (str, optional): 同load_json. Defaults to 'General.json'.
+        default_path (str, optional): 同load_json. Defaults to 'config\settings'.
+        sort_keys (bool, optional): 是否自动格式化. Defaults to True.
+        auto_create (bool, optional): _description_. Defaults to False.
+    """
     if not os.path.exists(default_path):
         logger.error(f"CANNOT FIND PATH: {default_path}")
     if sort_keys:
-        json.dump(x, open(os.path.join(default_path, json_name), 'w', encoding='utf-8'), sort_keys=True, indent=2,
-              ensure_ascii=False)
+        json.dump(x, open(os.path.join(default_path, json_name), 'w', encoding='utf-8'), sort_keys=True, indent=2,ensure_ascii=False)
     else:
         json.dump(x, open(os.path.join(default_path, json_name), 'w', encoding='utf-8'),
               ensure_ascii=False)
 
 def euclidean_distance(p1, p2):
+    """计算两点间欧氏距离.
+
+    Args:
+        p1 (_type_): _description_
+        p2 (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
     return math.sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2)
 
 def euclidean_distance_plist(p1, plist) -> np.ndarray:
+    """计算点与一系列点间欧氏距离.
+
+    Args:
+        p1 (_type_): _description_
+        plist (_type_): _description_
+
+    Returns:
+        np.ndarray: p1到plist的距离列表.
+    """
     if not isinstance(p1, np.ndarray):
         p1 = np.array(p1)
     if not isinstance(plist, np.ndarray):
@@ -194,12 +256,40 @@ def euclidean_distance_plist(p1, plist) -> np.ndarray:
     return np.sqrt((p1[0] - plist[:,0]) ** 2 + (p1[1] - plist[:,1]) ** 2)
 
 def manhattan_distance(p1, p2):
+    """计算两点间曼哈顿距离.
+
+    Args:
+        p1 (_type_): _description_
+        p2 (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
     return abs(p1[0]-p2[0]) + abs(p1[1]-p2[1])
 
 def manhattan_distance_plist(p1, p2) -> np.ndarray:
+    """计算点与一系列点间曼哈顿距离.
+
+    Args:
+        p1 (_type_): _description_
+        p2 (_type_): _description_
+
+    Returns:
+        np.ndarray: p1到plist的距离列表.
+    """
     return abs(p1[0]-p2[:,0]) + abs(p1[1]-p2[:,1])
 
 def quick_euclidean_distance_plist(p1, plist, max_points_num = 50)-> np.ndarray:
+    """快速欧氏距离.使用曼哈顿算法快速计算,后计算当前点到距离最近的max_points_num个优先点的欧拉距离
+
+    Args:
+        p1 (_type_): 同euclidean_distance_plist
+        plist (_type_): 同euclidean_distance_plist
+        max_points_num (int, optional): _description_. Defaults to 50.
+
+    Returns:
+        np.ndarray: _description_
+    """
     if not isinstance(p1, np.ndarray):
         p1 = np.array(p1)
     if not isinstance(plist, np.ndarray):
@@ -255,6 +345,8 @@ def is_number(s):
 
 
 def get_active_window_process_name():
+    """_summary_
+    """
     try:
         pid = win32process.GetWindowThreadProcessId(win32gui.GetForegroundWindow())
         return(psutil.Process(pid[-1]).name())
@@ -262,6 +354,16 @@ def get_active_window_process_name():
         pass
 
 def maxmin(x,nmax,nmin):
+    """很好看懂(
+
+    Args:
+        x (_type_): _description_
+        nmax (_type_): _description_
+        nmin (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
     x = min(x, nmax)
     x = max(x, nmin)
     return x
@@ -351,6 +453,14 @@ def image_size(image):
     return shape[1], shape[0]
 
 def convert_text_to_img(text=""):
+    """转换中文到图片.不推荐使用.
+
+    Args:
+        text (str, optional): _description_. Defaults to "".
+
+    Returns:
+        _type_: _description_
+    """
     # 加载一个中文字体文件
     font = ImageFont.truetype("simhei.ttf", 32)
 
@@ -372,6 +482,14 @@ def convert_text_to_img(text=""):
     return img
 
 def replace_text_format(text:str):
+    """中文格式化.
+
+    Args:
+        text (str): _description_
+
+    Returns:
+        _type_: _description_
+    """
     text = text.replace("：",":")
     text = text.replace("！","!")
     text = text.replace("？","?")
@@ -384,6 +502,17 @@ def replace_text_format(text:str):
     return text
 
 def compare_texts(text1, text2, is_show_res = False, ignore_warning = False):
+    """比较两段文字的相似度.不推荐使用.
+
+    Args:
+        text1 (_type_): _description_
+        text2 (_type_): _description_
+        is_show_res (bool, optional): _description_. Defaults to False.
+        ignore_warning (bool, optional): _description_. Defaults to False.
+
+    Returns:
+        _type_: _description_
+    """
     # 读取两个短文本的图片
     
     if not ignore_warning:
@@ -526,6 +655,16 @@ def color_similarity_2d(image, color):
     return cv2.subtract(255, cv2.add(positive, negative))
 
 def circle_mask(img,inner_r, outer_r):
+    """绘制圆形遮罩.
+
+    Args:
+        img (_type_): _description_
+        inner_r (_type_): _description_
+        outer_r (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
     # 指定内半径和外半径
     inner_radius = inner_r
     outer_radius = outer_r
@@ -543,6 +682,16 @@ def circle_mask(img,inner_r, outer_r):
     return masked_img
 
 def get_circle_points(x,y,  show_res = False):
+    """围绕圆心绘制离散点.
+
+    Args:
+        x (_type_): _description_
+        y (_type_): _description_
+        show_res (bool, optional): _description_. Defaults to False.
+
+    Returns:
+        _type_: _description_
+    """
     if show_res:
         import turtle
         turtle.speed(0)

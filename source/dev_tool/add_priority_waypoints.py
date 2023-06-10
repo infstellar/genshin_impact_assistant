@@ -6,7 +6,7 @@ import cv2
 
 global priority_waypoints, priority_waypoints_list, priority_waypoints_array, idnum
 priority_waypoints, priority_waypoints_list, priority_waypoints_array, idnum = None, None, None, None
-priority_waypoints = load_json("priority_waypoints.json", default_path='assets')
+priority_waypoints = load_json("priority_waypoints.json", folder_path='assets')
 itt = big_map.itt
 def load_pw():
     global priority_waypoints, priority_waypoints_list, priority_waypoints_array, idnum

@@ -1,9 +1,9 @@
 # TODO: Update with exact module version
 numpy
-torch==2.0.0
+torch==1.13.1
 loguru
 tqdm
-torchvision==0.15.1
+torchvision==0.14.1
 tabulate
 
 # verified versions
@@ -38,9 +38,9 @@ uiautomator2==2.16.17
 filelock==3.3.0
 lxml==4.6.3
 pydantic
-gimap==3.4.5
+gimap==3.4.6
 pyyaml
 
-fastdeploy-python==1.0.4
+fastdeploy-python
 json5
 sortedcontainers

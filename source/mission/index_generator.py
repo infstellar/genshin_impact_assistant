@@ -1,4 +1,5 @@
 from source.util import *
+import importlib
 
 """
 生成mission index，提供导入。
@@ -10,12 +11,14 @@ def generate_mission_index():
         for file in files:
             if file[file.index('.'):]==".py":
                 mission_list.append(file.replace('.py',''))
-    for root, dirs, files in os.walk(os.path.join(ROOT_PATH,"missions")):
-        for file in files:
+    # Only fetch files in the root directory of the missions folder
+    # Do not fetch files in subdirectories
+    for file in os.listdir(os.path.join(ROOT_PATH,"missions")):
+        if os.path.isfile(os.path.join(ROOT_PATH,"missions", file)):
             if file[file.index('.'):]==".py":
                 if file[:file.index('.')] not in ['mission_index', 'mission_meta']:
                     extra_mission_list.append(file.replace('.py',''))
-    
+
     with open(os.path.join(ROOT_PATH,"missions\\mission_index.py"), "w") as f:
         f.write("\"\"\"This file is generated automatically. Do not manually modify it.\"\"\"\n")
         f.write(f"import os, sys\n")
@@ -30,26 +33,10 @@ def generate_mission_index():
             f.write(f"    if mission_name == '{i}':\n")
             f.write(f"        import missions.{i}\n")
             f.write(f"        return missions.{i}.MissionMain()\n")
-        f.write("META = {}\n")
-        f.write("if __name__ == '__main__':\n")
-        f.write(f"    from source.funclib import combat_lib\n")
-        f.write(f"    combat_lib.CSDL.stop_threading()\n")
-        for i in mission_list:
-            f.write(f"    import source.mission.missions.{i}\n")
-            f.write(f"    META['{i}'] = source.mission.missions.{i}.META\n")
-        for i in extra_mission_list:
-            f.write(f"    import missions.{i}\n")
-            f.write(f"    META['{i}'] = missions.{i}.META\n")
-        path_meta = os.path.join(ROOT_PATH,'missions\\mission_meta.py')
-        path_index = os.path.join(ROOT_PATH,'missions\\mission_index.py')
-        f.write(f"    with open(r'\"{path_meta}\"', 'w', encoding='utf-8') as f:\n")
-        f.write("        f.write(f'MISSION_META = {str(META)}')\n")
-        f.write(f"    print('index end')\n")
+    
+    import missions.mission_index
+    importlib.reload(missions.mission_index)
 
-
-    print(f"sys: python {path_index} start")
-    os.system(f"python \"{path_index}\"")
-    print(f"sys: python {path_index} end")
     
 if __name__ == '__main__':
     generate_mission_index()

@@ -44,7 +44,7 @@ class TeyvatMoveFlowConnector(FlowConnector):
         self.jump_timer = timer_module.Timer()
         self.current_state = ST.INIT_TEYVAT_TELEPORT
         
-        self.priority_waypoints = load_json("priority_waypoints.json", default_path='assets')
+        self.priority_waypoints = load_json("priority_waypoints.json", folder_path='assets')
         self.priority_waypoints_array = []
         for i in self.priority_waypoints:
             self.priority_waypoints_array.append(i["position"])

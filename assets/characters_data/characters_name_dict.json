@@ -1,0 +1,618 @@
+[
+  {
+    "alias": [
+      "空",
+      "空"
+    ],
+    "standard_name": "Aether"
+  },
+  {
+    "alias": [
+      "荧",
+      "蛍"
+    ],
+    "standard_name": "Lumine"
+  },
+  {
+    "alias": [
+      "旅行者",
+      "旅人"
+    ],
+    "standard_name": "Traveler"
+  },
+  {
+    "alias": [
+      "派蒙",
+      "パイモン"
+    ],
+    "standard_name": "Paimon"
+  },
+  {
+    "alias": [
+      "天理的维系者",
+      "天理の調停者"
+    ],
+    "standard_name": "Sustainer of Heavenly Principles"
+  },
+  {
+    "alias": [
+      "凯瑟琳",
+      "キャサリン"
+    ],
+    "standard_name": "Katheryne"
+  },
+  {
+    "alias": [
+      "琴",
+      "ジン"
+    ],
+    "standard_name": "Jean"
+  },
+  {
+    "alias": [
+      "安柏",
+      "アンバー"
+    ],
+    "standard_name": "Amber"
+  },
+  {
+    "alias": [
+      "凯亚",
+      "ガイア"
+    ],
+    "standard_name": "Kaeya"
+  },
+  {
+    "alias": [
+      "丽莎",
+      "リサ・ミンツ"
+    ],
+    "standard_name": "Lisa"
+  },
+  {
+    "alias": [
+      "温迪",
+      "ウェンティ"
+    ],
+    "standard_name": "Venti"
+  },
+  {
+    "alias": [
+      "雷泽",
+      "レザー"
+    ],
+    "standard_name": "Razor"
+  },
+  {
+    "alias": [
+      "班尼特",
+      "ベネット"
+    ],
+    "standard_name": "Bennett"
+  },
+  {
+    "alias": [
+      "诺艾尔",
+      "ノエル"
+    ],
+    "standard_name": "Noelle"
+  },
+  {
+    "alias": [
+      "菲谢尔",
+      "フィッシュル"
+    ],
+    "standard_name": "Fischl"
+  },
+  {
+    "alias": [
+      "迪卢克",
+      "ディルック"
+    ],
+    "standard_name": "Diluc"
+  },
+  {
+    "alias": [
+      "可莉",
+      "クレー"
+    ],
+    "standard_name": "Klee"
+  },
+  {
+    "alias": [
+      "迪奥娜",
+      "ディオナ"
+    ],
+    "standard_name": "Diona"
+  },
+  {
+    "alias": [
+      "芭芭拉",
+      "バーバラ"
+    ],
+    "standard_name": "Barbara"
+  },
+  {
+    "alias": [
+      "砂糖",
+      "スクロース"
+    ],
+    "standard_name": "Sucrose"
+  },
+  {
+    "alias": [
+      "阿贝多",
+      "アルベド"
+    ],
+    "standard_name": "Albedo"
+  },
+  {
+    "alias": [
+      "莫娜",
+      "モナ"
+    ],
+    "standard_name": "Mona"
+  },
+  {
+    "alias": [
+      "罗莎莉亚",
+      "ロサリア"
+    ],
+    "standard_name": "Rosaria"
+  },
+  {
+    "alias": [
+      "优菈",
+      "エウルア"
+    ],
+    "standard_name": "Eula"
+  },
+  {
+    "alias": [
+      "米卡",
+      "ミカ"
+    ],
+    "standard_name": "Mika"
+  },
+  {
+    "alias": [
+      "香菱",
+      "香菱"
+    ],
+    "standard_name": "Xiangling"
+  },
+  {
+    "alias": [
+      "刻晴",
+      "刻晴"
+    ],
+    "standard_name": "Keqing"
+  },
+  {
+    "alias": [
+      "凝光",
+      "凝光"
+    ],
+    "standard_name": "Ningguang"
+  },
+  {
+    "alias": [
+      "七七",
+      "七七"
+    ],
+    "standard_name": "Qiqi"
+  },
+  {
+    "alias": [
+      "行秋",
+      "行秋"
+    ],
+    "standard_name": "Xingqiu"
+  },
+  {
+    "alias": [
+      "重云",
+      "重雲"
+    ],
+    "standard_name": "Chongyun"
+  },
+  {
+    "alias": [
+      "北斗",
+      "北斗"
+    ],
+    "standard_name": "Beidou"
+  },
+  {
+    "alias": [
+      "辛焱",
+      "辛炎"
+    ],
+    "standard_name": "Xinyan"
+  },
+  {
+    "alias": [
+      "钟离",
+      "鍾離"
+    ],
+    "standard_name": "Zhongli"
+  },
+  {
+    "alias": [
+      "魈",
+      "魈"
+    ],
+    "standard_name": "Xiao"
+  },
+  {
+    "alias": [
+      "甘雨",
+      "甘雨"
+    ],
+    "standard_name": "Ganyu"
+  },
+  {
+    "alias": [
+      "胡桃",
+      "胡桃"
+    ],
+    "standard_name": "Hu Tao"
+  },
+  {
+    "alias": [
+      "烟绯",
+      "煙緋"
+    ],
+    "standard_name": "Yanfei"
+  },
+  {
+    "alias": [
+      "白术",
+      "白朮"
+    ],
+    "standard_name": "Baizhu"
+  },
+  {
+    "alias": [
+      "星燕",
+      "星燕"
+    ],
+    "standard_name": "Xingyan"
+  },
+  {
+    "alias": [
+      "云堇",
+      "雲菫"
+    ],
+    "standard_name": "Yun Jin"
+  },
+  {
+    "alias": [
+      "申鹤",
+      "申鶴"
+    ],
+    "standard_name": "Shenhe"
+  },
+  {
+    "alias": [
+      "夜兰",
+      "夜蘭"
+    ],
+    "standard_name": "Yelan"
+  },
+  {
+    "alias": [
+      "瑶瑶",
+      "ヨォーヨ"
+    ],
+    "standard_name": "Yaoyao"
+  },
+  {
+    "alias": [
+      "月桂",
+      "月桂"
+    ],
+    "standard_name": "Yuegui"
+  },
+  {
+    "alias": [
+      "摩拉克斯",
+      "モラクス"
+    ],
+    "standard_name": "Morax"
+  },
+  {
+    "alias": [
+      "岩王帝君",
+      "岩王帝君"
+    ],
+    "standard_name": "Rex Lapis"
+  },
+  {
+    "alias": [
+      "岩神",
+      "岩神"
+    ],
+    "standard_name": "Geo Archon"
+  },
+  {
+    "alias": [
+      "萍姥姥",
+      "ピンばあや"
+    ],
+    "standard_name": "Madame Ping"
+  },
+  {
+    "alias": [
+      "枫原万叶",
+      "楓原万葉",
+      "Kazuha"
+    ],
+    "standard_name": "Kaedehara Kazuha"
+  },
+  {
+    "alias": [
+      "宵宫",
+      "宵宮"
+    ],
+    "standard_name": "Yoimiya"
+  },
+  {
+    "alias": [
+      "神里绫华",
+      "神里綾華",
+      "Ayaka"
+    ],
+    "standard_name": "Kamisato Ayaka"
+  },
+  {
+    "alias": [
+      "神里绫人",
+      "神里綾人",
+      "Ayato"
+    ],
+    "standard_name": "Kamisato Ayato"
+  },
+  {
+    "alias": [
+      "托马",
+      "トーマ"
+    ],
+    "standard_name": "Thoma"
+  },
+  {
+    "alias": [
+      "早柚",
+      "早柚"
+    ],
+    "standard_name": "Sayu"
+  },
+  {
+    "alias": [
+      "八重神子",
+      "八重神子",
+      "Miko"
+    ],
+    "standard_name": "Yae Miko"
+  },
+  {
+    "alias": [
+      "荒泷一斗",
+      "荒瀧一斗",
+      "Itto"
+    ],
+    "standard_name": "Arataki Itto"
+  },
+  {
+    "alias": [
+      "久岐忍",
+      "久岐忍",
+      "Shinobu"
+    ],
+    "standard_name": "Kuki Shinobu"
+  },
+  {
+    "alias": [
+      "五郎",
+      "ゴロー"
+    ],
+    "standard_name": "Gorou"
+  },
+  {
+    "alias": [
+      "珊瑚宫心海",
+      "珊瑚宮心海",
+      "Sangonomiya"
+    ],
+    "standard_name": "Sangonomiya Kokomi"
+  },
+  {
+    "alias": [
+      "九条裟罗",
+      "九条裟羅"
+    ],
+    "standard_name": "Kujou Sara"
+  },
+  {
+    "alias": [
+      "鹿野院平藏",
+      "鹿野院平蔵"
+    ],
+    "standard_name": "Shikanoin Heizou"
+  },
+  {
+    "alias": [
+      "雷电将军",
+      "雷電将軍"
+    ],
+    "standard_name": "Raiden Shogun"
+  },
+  {
+    "alias": [
+      "影",
+      "影"
+    ],
+    "standard_name": "Ei"
+  },
+  {
+    "alias": [
+      "赛诺",
+      "セノ"
+    ],
+    "standard_name": "Cyno"
+  },
+  {
+    "alias": [
+      "提纳里",
+      "ティナリ"
+    ],
+    "standard_name": "Tighnari"
+  },
+  {
+    "alias": [
+      "柯莱",
+      "コレイ"
+    ],
+    "standard_name": "Collei"
+  },
+  {
+    "alias": [
+      "多莉·桑歌玛哈巴依",
+      "ドリー・サングマハベイ"
+    ],
+    "standard_name": "Dori Sangemah Bay"
+  },
+  {
+    "alias": [
+      "多莉",
+      "ドリー"
+    ],
+    "standard_name": "Dori"
+  },
+  {
+    "alias": [
+      "艾尔海森",
+      "アルハイゼン"
+    ],
+    "standard_name": "Alhaitham"
+  },
+  {
+    "alias": [
+      "迪希雅",
+      "ディシア"
+    ],
+    "standard_name": "Dehya"
+  },
+  {
+    "alias": [
+      "妮露",
+      "ニィロウ"
+    ],
+    "standard_name": "Nilou"
+  },
+  {
+    "alias": [
+      "坎蒂丝",
+      "キャンディス"
+    ],
+    "standard_name": "Candace"
+  },
+  {
+    "alias": [
+      "莱依拉",
+      "レイラ"
+    ],
+    "standard_name": "Layla"
+  },
+  {
+    "alias": [
+      "珐露珊",
+      "ファルザン"
+    ],
+    "standard_name": "Faruzan"
+  },
+  {
+    "alias": [
+      "卡维",
+      "カーヴェ"
+    ],
+    "standard_name": "Kaveh"
+  },
+  {
+    "alias": [
+      "纳西妲",
+      "ナヒーダ"
+    ],
+    "standard_name": "Nahida"
+  },
+  {
+    "alias": [
+      "林尼",
+      "リネ"
+    ],
+    "standard_name": "Lyney"
+  },
+  {
+    "alias": [
+      "琳妮特",
+      "リネット"
+    ],
+    "standard_name": "Lynette"
+  },
+  {
+    "alias": [
+      "伊安珊",
+      "イアンサ"
+    ],
+    "standard_name": "Iansan"
+  },
+  {
+    "alias": [
+      "达达利亚",
+      "タルタリヤ"
+    ],
+    "standard_name": "Tartaglia"
+  },
+  {
+    "alias": [
+      "公子",
+      "公子"
+    ],
+    "standard_name": "Childe"
+  },
+  {
+    "alias": [
+      "阿贾克斯",
+      "アヤックス"
+    ],
+    "standard_name": "Ajax"
+  },
+  {
+    "alias": [
+      "斯卡拉姆齐",
+      "スカラマシュ"
+    ],
+    "standard_name": "Scaramouche"
+  },
+  {
+    "alias": [
+      "散兵",
+      "散兵"
+    ],
+    "standard_name": "Balladeer"
+  },
+  {
+    "alias": [
+      "国崩",
+      "国崩"
+    ],
+    "standard_name": "Kunikuzushi"
+  },
+  {
+    "alias": [
+      "流浪者",
+      "放浪者"
+    ],
+    "standard_name": "Wanderer"
+  }
+]

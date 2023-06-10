@@ -1,6 +1,5 @@
 from source.util import *
 from source.manager.img_manager import LOG_WHEN_TRUE, LOG_ALL, LOG_NONE, LOG_WHEN_FALSE, ImgIcon
-from path_lib import ASSETS_IMG, ASSETS_COMMON_IMG
 from source.manager.button_manager import Button
 from source.manager.text_manager import TextTemplate, Text
 from source.manager.posi_manager import PosiTemplate, Area

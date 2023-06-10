@@ -2,6 +2,7 @@ import typing as t
 
 from source.util import logger
 
+CITY_SCALE = 0.5150
 
 class MiniMapConst:
     DETECT_Desktop_1080p = 'Desktop_1080p'
@@ -19,7 +20,7 @@ class MiniMapConst:
         # In wild
         'wild': 1.5571,
         # In city
-        'city': 0.5150,
+        'city': CITY_SCALE,
     }
     # Downscale GIMAP and minimap for faster run
     POSITION_SEARCH_SCALE = 0.5
@@ -81,7 +82,7 @@ class MiniMapConst:
                 # In wild
                 'wild': 1.5571 / 1.2,
                 # In city
-                'city': 0.5150 / 1.2,
+                'city': CITY_SCALE / 1.2,
             }
             self.DIRECTION_RADIUS = int(self.MINIMAP_POSITION_RADIUS / 6)
             self.DIRECTION_ROTATION_SCALE = 1.0 / 1.2
@@ -102,7 +103,7 @@ class MiniMapConst:
                 # In wild
                 'wild': 1.5571 / 1.5,
                 # In city
-                'city': 0.5150 / 1.5,
+                'city': CITY_SCALE / 1.5,
             }
             self.DIRECTION_RADIUS = int(self.MINIMAP_POSITION_RADIUS / 6)
             self.DIRECTION_ROTATION_SCALE = 1.0 / 1.5

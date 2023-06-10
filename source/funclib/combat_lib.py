@@ -457,7 +457,8 @@ def generate_teamfile_automatic():
         "Main":2000,
         "Shield":1000,
         "Recovery":1500,
-        "Support":3000
+        "Support":3000,
+        "Normal":3000
         
     }
     INDEX2ORDINAL_NUMERAL = {
@@ -468,7 +469,7 @@ def generate_teamfile_automatic():
     }
     team_file = {}
     curr_name_list = get_characters_name()
-    chara_para = load_json("characters_parameters.json", default_path=fr"{ASSETS_PATH}/characters_data")
+    chara_para = load_json("characters_parameters.json", folder_path=fr"{ASSETS_PATH}/characters_data")
     for name in curr_name_list:
         if name in chara_para:
             ordinal_numeral = INDEX2ORDINAL_NUMERAL[curr_name_list.index(name)]
@@ -508,9 +509,9 @@ def get_chara_list():
             except CharacterNameNotInCharacterParametersError as e:
                 logger.info(f"CharacterNameNotInCharacterParametersError: {e}")
         else:
-            team = load_json(team_name, default_path=r"config/tactic")    
+            team = load_json(team_name, folder_path=r"config/tactic")    
     else:
-        team = load_json(GIAconfig.Combat_TeamFile, default_path=r"config/tactic")
+        team = load_json(GIAconfig.Combat_TeamFile, folder_path=r"config/tactic")
     names = [team[k]['name'] for k in team]
     logger.info(f"team file set as: {names}")
     

@@ -1,6 +1,5 @@
 from source.interaction.interaction_core import itt
 from source.interaction import interaction_core
-from source.manager import asset
 from source.util import *
 
 itt = itt
@@ -36,14 +35,14 @@ def line2angle(p):
     return res
 
 
-def jwa_3(imsrc):
+def jwa_3(imsrc, alpha_threshold = 503): # 503
     alpha = imsrc[:, :, 3:]
     alpha = 255.0 - alpha
     # alpha = alpha[:360,:286:,:]
     # alpha[:,303:,:]=0
     # qshow(alpha)
     alpha = alpha * 2
-    _, alpha = cv2.threshold(alpha, 503, 0, cv2.THRESH_TOZERO_INV)
+    _, alpha = cv2.threshold(alpha, alpha_threshold, 0, cv2.THRESH_TOZERO_INV)
     _, alpha = cv2.threshold(alpha, 50, 0, cv2.THRESH_TOZERO)
     _, alpha = cv2.threshold(alpha, 50, 255, cv2.THRESH_BINARY)
     # qshow(alpha)
@@ -117,7 +116,7 @@ def jwa_3(imsrc):
         degree -= 360
     # cv2.imshow('123', cv2.drawMarker(alpha, position=(int(p[0]), int(p[1])), color=(255, 0, 255), markerSize=1,
     #                                  markerType=cv2.MARKER_CROSS, thickness=5))
-    # cv2.waitKey(100)
+    # cv2.waitKey(1)
     # print(degree)
     return degree
 
@@ -181,7 +180,8 @@ def teyvat_smallmap_crusade_target_search(itt: interaction_core.InteractionBGD, 
 if __name__ == '__main__':
     # qshow(itt.capture(posi=posi_map))
     while 1:
-        jwa_3(itt.capture(posi=posi_map))
+        r = jwa_3(itt.capture(posi=posi_map))
+        # print(r)
         # teyvat_smallmap_crusade_target_search(itt)
         time.sleep(0.1)
     # cv2.imshow('123', img1)

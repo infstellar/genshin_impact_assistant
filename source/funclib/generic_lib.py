@@ -19,37 +19,37 @@ def f_recognition(mode='button_only'):
     else:
         return False
 
-def points_angle(p1, p2, coordinate=NORMAL):
-    # p1: current point
-    # p2: target point
-    x = p1[0]
-    y = p1[1]
-    tx = p2[0]
-    ty = p2[1]
-    if coordinate == NEGATIVE_Y:
-        y = -y
-        ty = -ty
-    # x=-x
-    # tx=-tx
+# def points_angle(p1, p2, coordinate=NORMAL):
+#     # p1: current point
+#     # p2: target point
+#     x = p1[0]
+#     y = p1[1]
+#     tx = p2[0]
+#     ty = p2[1]
+#     if coordinate == NEGATIVE_Y:
+#         y = -y
+#         ty = -ty
+#     # x=-x
+#     # tx=-tx
     
-    k = (ty - y) / (tx - x)
-    if math.isnan(k):
-        k = 0
-    degree = math.degrees(math.atan(k))
-    if degree < 0:
-        degree += 180
-    # if coordinate == NORMAL:
-    if ty < y:
-        degree += 180
-    # elif coordinate == NEGATIVE_Y:
-    #     if y<ty:
-    #         degree+=180
+#     k = (ty - y) / (tx - x)
+#     if math.isnan(k):
+#         k = 0
+#     degree = math.degrees(math.atan(k))
+#     if degree < 0:
+#         degree += 180
+#     # if coordinate == NORMAL:
+#     if ty < y:
+#         degree += 180
+#     # elif coordinate == NEGATIVE_Y:
+#     #     if y<ty:
+#     #         degree+=180
 
-    degree -= 90
+#     degree -= 90
 
-    if degree > 180:
-        degree -= 360
-    return degree
+#     if degree > 180:
+#         degree -= 360
+#     return degree
 
 def recover_all(stop_func):
     from source.api.pdocr_complete import ocr

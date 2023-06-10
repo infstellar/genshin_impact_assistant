@@ -36,6 +36,8 @@ class CommissionParser():
         genshin_map.get_bigmap_posi()
         genshin_map._switch_to_area("Mondstadt")
         for posi in self.TRAVERSE_MONDSTADT_POSITION:
+            ui_control.ensure_page(UIPages.page_bigmap)
+            # genshin_map._switch_to_area("Mondstadt")
             genshin_map.get_bigmap_posi()
             genshin_map._move_bigmap(posi.tianli, force_center = True)
             cap_posi = [220,240,1920-200,1080-150]
@@ -62,7 +64,18 @@ class CommissionParser():
                     itt.delay("animation")
                     com_type = self._detect_commission_type()
                     itt.delay("animation")
-                    itt.key_press('esc')
+                    while 1:
+                        itt.key_press('esc')
+                        itt.delay("2animation")
+                        if ui_control.verify_page(UIPages.page_bigmap):
+                            break
+                        if ui_control.verify_page(UIPages.page_main) or ui_control.verify_page(UIPages.page_esc):
+                            ui_control.ensure_page(UIPages.page_bigmap)
+                            itt.delay("2animation")
+                            genshin_map.get_bigmap_posi()
+                            genshin_map._switch_to_area("Mondstadt")
+                            break
+                        
                     if com_type is None:
                         continue
                     else:
@@ -75,6 +88,13 @@ class CommissionParser():
         return self.commission_dicts
     
     def _set_and_save_and_load_commission_dicts(self) -> bool:
+        """扫描/加载委托(如果有未完成的委托)
+        
+        写的很烂,不过既然能用就先这样吧.
+
+        Returns:
+            bool: 是否可以继续执行
+        """
         g4t = FileTimer("daily_commission")
         if g4t.get_diff_time()>=3600:
             logger.info(f"new genshin day, traverse mondstant commissions")
@@ -83,7 +103,7 @@ class CommissionParser():
             g4t.reset()
             return True
         else:
-            self.commission_dicts = load_json(json_name="commission_dict.json", default_path=rf"{CONFIG_PATH}\commission")
+            self.commission_dicts = load_json(json_name="commission_dict.json", folder_path=rf"{CONFIG_PATH}\commission")
             for i in self.commission_dicts:
                 if i["done"] != True:
                     return False
@@ -91,6 +111,7 @@ class CommissionParser():
             self.traverse_mondstant()
             save_json(self.commission_dicts, json_name="commission_dict.json", default_path=rf"{CONFIG_PATH}\commission")
             return True
+        
     def _detect_commission_type(self)->str:
         img = itt.capture(jpgmode=0)
         img_choose = crop(img.copy(), asset.AreaBigmapChoose.position)

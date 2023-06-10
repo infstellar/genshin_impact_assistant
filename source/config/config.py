@@ -25,7 +25,7 @@ class GIAConfig(GeneratedConfig):
 
     def load(self):
         for jsonname in CONFIG_FILE_NAMES:
-            j = load_json(json_name=f"{jsonname}.json", default_path=fr"{CONFIG_PATH}/settings")
+            j = load_json(json_name=f"{jsonname}.json", folder_path=fr"{CONFIG_PATH}/settings")
             for k in j:
                 # if f"{jsonname}_{k}" in self.__dict__:
                 self.__setattr__(f"{jsonname}_{k}", j[k], read_only=False)
@@ -34,11 +34,11 @@ class GIAConfig(GeneratedConfig):
 
     def merge(self):
         for jsonname in CONFIG_FILE_NAMES:
-            j_template = load_json(json_name=f"{jsonname}.jsontemplate", default_path=fr"{CONFIG_PATH}/json_template")
+            j_template = load_json(json_name=f"{jsonname}.jsontemplate", folder_path=fr"{CONFIG_PATH}/json_template")
             if not os.path.exists(os.path.join(fr"{CONFIG_PATH}/settings", f"{jsonname}.json")):
                 j_config = {}
             else:
-                j_config = load_json(json_name=f"{jsonname}.json", default_path=fr"{CONFIG_PATH}/settings")
+                j_config = load_json(json_name=f"{jsonname}.json", folder_path=fr"{CONFIG_PATH}/settings")
             j_template.update(j_config)
             # for k in j_template:
             #     if k in j_config:

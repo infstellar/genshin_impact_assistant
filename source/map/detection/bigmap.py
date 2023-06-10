@@ -63,22 +63,22 @@ class BigMap(MiniMapResource):
             f'({float2str(self.bigmap_similarity, 3)}|{float2str(self.bigmap_similarity_local, 3)})'
         )
 
-# if __name__ == '__main__':
-#     bm = BigMap(BigMap.DETECT_Desktop_1080p)
-#     from source.interaction.interaction_core import itt
-#     import time
-#
-#     while 1:
-#         bm.update_bigmap(itt.capture(jpgmode=0))
-#         time.sleep(0.1)
+if __name__ == '__main__':
+    bm = BigMap(BigMap.DETECT_Desktop_1080p)
+    from source.interaction.interaction_core import itt
+    import time
+
+    while 1:
+        bm.update_bigmap(itt.capture(jpgmode=0))
+        time.sleep(0.1)
 
 
 # if __name__ == '__main__':
 #     from source.device.genshin.genshin import Genshin
-#
+
 #     device = Genshin('127.0.0.1:7555')
 #     self = BigMap('Emulator')
-#
+
 #     device.screenshot_interval_set(0.3)
 #     device.disable_stuck_detection()
 #     while 1:

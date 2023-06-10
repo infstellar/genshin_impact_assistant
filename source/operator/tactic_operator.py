@@ -264,7 +264,16 @@ class TacticOperator(BaseThreading):
             self.itt.key_press('s')
             itt.delay(0.1)
         self.itt.key_down('e')
-        self.itt.delay(self.character.Epress_time)
+        itt.delay(0.5)
+        if self.character.name == 'Nahida':
+            pt = time.time()
+            for i in range(20):
+                if time.time() - pt >= self.character.Epress_time:
+                    break
+                itt.move_to(200,0,relative=True)
+                time.sleep(0.01)
+        else:
+            self.itt.delay(self.character.Epress_time)
         self.itt.key_up('e')
         # if self.character.name == 'Zhongli':
         #     itt.delay(0.3)
