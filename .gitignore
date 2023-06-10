@@ -229,7 +229,7 @@ missions/*.py
 missions/disable/*.py
 missions/backup/*.py
 
-dev/tlpp/*
-!dev/tlpp/QXV220230513083258i0.pydict
+dev_assets/tlpp/*
+!dev_assets/tlpp/QXV220230513083258i0.pydict
 requirements2.txt
 config/missiondownload/missiondownload_meta.json

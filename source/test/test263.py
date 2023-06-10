@@ -4735,5 +4735,5 @@ TLPP_FILE = {
   ],
   "time": ""
 }
-with open(fr"{ROOT_PATH}/dev/tlpp/{jsonname}.pyjson", 'w') as f:
+with open(fr"{ROOT_PATH}/dev_assets/tlpp/{jsonname}.pyjson", 'w') as f:
     f.write(str(TLPP_FILE))

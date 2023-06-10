@@ -122,7 +122,7 @@ class VideoToPathPage(AdvancePage):
                 "8. 点击启停路径记录器按钮，开始记录\n"
                 "9. 等待视频播放到你要结束记录的位置时， 点击启停路径记录器按钮，停止记录\n"
                 "10. 重复4-9步骤，直到完成。\n"
-                "11. TLPP文件将储存在dev/tlpp目录下\n"
+                "11. TLPP文件将储存在dev_assets/tlpp目录下\n"
                 "## 快捷键\n"
                 "快捷键只能在GIA VideoToPath窗口使用\n"
                 "|快捷键|用法|\n"
