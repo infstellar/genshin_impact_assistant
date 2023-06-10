@@ -32,10 +32,10 @@ def del_files():
     import shutil
 
     dirPath = os.path.abspath(r"../GIA_Launcher_Download_Lib") # 你要删除的文件夹路径
-    exceptFolder = ".git" # 你要保留的文件夹名称
+    exceptFolder = [".git",".github"] # 你要保留的文件夹名称
 
     for fileName in os.listdir(dirPath):
-        if fileName != exceptFolder:
+        if fileName not in exceptFolder:
             filePath = os.path.join(dirPath, fileName)
             if os.path.isfile(filePath):
                 os.remove(filePath) # 删除文件
