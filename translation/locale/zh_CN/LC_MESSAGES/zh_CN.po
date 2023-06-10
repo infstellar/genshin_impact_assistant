@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2023-06-04 19:40+0800\n"
-"PO-Revision-Date: 2023-06-04 19:41+0800\n"
+"POT-Creation-Date: 2023-06-10 19:15+0800\n"
+"PO-Revision-Date: 2023-06-10 19:24+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -48,7 +48,7 @@ msgstr "正在创建OCR对象"
 msgid "导入paddleocr时错误; err code: 001"
 msgstr ""
 
-#: source\api\pdocr_api.py:208
+#: source\api\pdocr_api.py:209
 msgid "ocr device: "
 msgstr "OCR 运行设备："
 
@@ -70,15 +70,15 @@ msgstr ""
 
 #: source\commission\commission_executor.py:36
 msgid "Commission(s) Failed, Commission Task end."
-msgstr ""
+msgstr "委托失败。委托任务结束。"
 
 #: source\commission\commission_executor.py:39
 msgid "Cannot find any commissions, Commission Task end."
-msgstr ""
+msgstr "无法找到任何委托，委托任务结束。"
 
 #: source\commission\commission_executor.py:42
 msgid "Number of executions exceeding the limit, Commission Task end."
-msgstr ""
+msgstr "超过限制的执行次数，委托任务结束。"
 
 #: source\common\flow_state.py:99
 msgid "空闲"
@@ -414,7 +414,7 @@ msgstr ""
 
 #: source\mission\missions\MissionSakuraBloom1.py:10
 msgid "Need Lisa"
-msgstr ""
+msgstr "需要Lisa"
 
 #: source\pickup\pickup_operator.py:55
 msgid "正在设置时间为夜晚"
@@ -492,9 +492,13 @@ msgstr "任务结束"
 msgid "未知Page, 重新检测"
 msgstr ""
 
-#: source\webio\advance_page.py:17
-msgid "# Config"
-msgstr "# 设置"
+#: source\webio\advance_page.py:19
+msgid "# GIA DEBUG"
+msgstr ""
+
+#: source\webio\advance_page.py:21
+msgid "# GIA GUI"
+msgstr ""
 
 #: source\webio\page.py:45
 msgid "Main"
@@ -532,73 +536,81 @@ msgstr ""
 msgid "在导入完成前，请不要切换页面。"
 msgstr ""
 
-#: source\webio\pages.py:101
+#: source\webio\pages.py:103
 msgid "Get IP address"
 msgstr "获取IP地址"
 
-#: source\webio\pages.py:105
+#: source\webio\pages.py:104
+msgid "View Document"
+msgstr "查看文档"
+
+#: source\webio\pages.py:110
 msgid "Launch genshin"
 msgstr "进入原神"
 
-#: source\webio\pages.py:109
+#: source\webio\pages.py:114
 msgid "Domain Task"
 msgstr "秘境任务"
 
-#: source\webio\pages.py:113
+#: source\webio\pages.py:118
 msgid "Daily Commission"
 msgstr "每日委托"
 
-#: source\webio\pages.py:117
+#: source\webio\pages.py:122
 msgid "Claim Reward"
 msgstr "领取日常奖励"
 
-#: source\webio\pages.py:121
+#: source\webio\pages.py:126
 msgid "Ley Line Outcrop"
 msgstr "地脉衍出"
 
-#: source\webio\pages.py:125 source\webio\webpages\missiondownload.py:160
+#: source\webio\pages.py:130 source\webio\webpages\missiondownload.py:160
 #: source\webio\webpages\missiondownload.py:239
 msgid "Mission"
 msgstr "自定义任务"
 
-#: source\webio\pages.py:131
+#: source\webio\pages.py:136
 msgid "Task List"
 msgstr "任务列表"
 
-#: source\webio\pages.py:132
+#: source\webio\pages.py:137
 msgid "Can only be activated from the button"
 msgstr "只能通过按钮启动"
 
-#: source\webio\pages.py:134
+#: source\webio\pages.py:139
 msgid "启动/停止Task"
 msgstr ""
 
-#: source\webio\pages.py:135
+#: source\webio\pages.py:141
 msgid "## Statement"
 msgstr "## 状态"
 
-#: source\webio\pages.py:136
+#: source\webio\pages.py:142
 msgid "任务状态"
 msgstr ""
 
-#: source\webio\pages.py:146
-msgid "## Function"
-msgstr "## 功能"
+#: source\webio\pages.py:143
+msgid "## Semi-automatic Functions"
+msgstr "## 半自动功能"
 
-#: source\webio\pages.py:147
+#: source\webio\pages.py:144
 msgid "Can only be activated from the hotkey '['"
 msgstr "只能通过快捷键启动（默认为‘['）"
 
-#: source\webio\pages.py:149
-msgid "FlowMode"
-msgstr "流程模式"
+#: source\webio\pages.py:145
+msgid "Do not enable semi-automatic functions and tasks at the same time"
+msgstr "不要同时启用半自动功能和任务"
 
-#: source\webio\pages.py:151
+#: source\webio\pages.py:147
+msgid "Semi-automatic Functions"
+msgstr "半自动功能"
+
+#: source\webio\pages.py:150
 msgid "Idle"
 msgstr "空闲"
 
-#: source\webio\pages.py:152
-msgid "AutoCombat"
+#: source\webio\pages.py:151
+msgid "Auto Combat"
 msgstr "自动战斗"
 
 #: source\webio\pages.py:168
@@ -621,8 +633,8 @@ msgstr "局域网IP"
 msgid "WAN IP"
 msgstr "以太网IP"
 
-#: source\webio\pages.py:255 source\webio\pages.py:596
-#: source\webio\pages.py:670 source\webio\pages.py:709
+#: source\webio\pages.py:255 source\webio\pages.py:597
+#: source\webio\pages.py:671 source\webio\pages.py:710
 msgid "## config:"
 msgstr "## 设置："
 
@@ -662,19 +674,19 @@ msgstr "自动采集设置"
 msgid "LeyLineOutcrop.json"
 msgstr "地脉衍出"
 
-#: source\webio\pages.py:315 source\webio\pages.py:825
+#: source\webio\pages.py:315 source\webio\pages.py:826
 msgid "Verified!"
 msgstr "验证通过！"
 
-#: source\webio\pages.py:324 source\webio\pages.py:834
+#: source\webio\pages.py:324 source\webio\pages.py:835
 msgid "Waiting..."
 msgstr "等待中..."
 
-#: source\webio\pages.py:329 source\webio\pages.py:839
+#: source\webio\pages.py:329 source\webio\pages.py:840
 msgid "You may want to enter: "
 msgstr "你可能想输入："
 
-#: source\webio\pages.py:334 source\webio\pages.py:844
+#: source\webio\pages.py:334 source\webio\pages.py:845
 msgid "Not a valid name"
 msgstr "不是一个有效的名称"
 
@@ -682,39 +694,43 @@ msgstr "不是一个有效的名称"
 msgid "saved!"
 msgstr "保存成功！"
 
-#: source\webio\pages.py:420
+#: source\webio\pages.py:378
+msgid "You may need to restart to apply changes."
+msgstr "你可能需要重启以应用更改。"
+
+#: source\webio\pages.py:421
 msgid "Do you need to save changes?"
 msgstr "你要保存设置吗？"
 
-#: source\webio\pages.py:421
+#: source\webio\pages.py:422
 msgid "No"
 msgstr "否"
 
-#: source\webio\pages.py:421
+#: source\webio\pages.py:422
 msgid "Yes"
 msgstr "是"
 
-#: source\webio\pages.py:660
+#: source\webio\pages.py:661
 msgid "# Add team"
 msgstr "# 增加队伍"
 
-#: source\webio\pages.py:664
+#: source\webio\pages.py:665
 msgid "Add team"
 msgstr "增加队伍"
 
-#: source\webio\pages.py:666
+#: source\webio\pages.py:667
 msgid "自动填充"
 msgstr ""
 
-#: source\webio\pages.py:770
+#: source\webio\pages.py:771
 msgid "Add to blacklist"
 msgstr "添加到黑名单"
 
-#: source\webio\pages.py:778
+#: source\webio\pages.py:779
 msgid "展开/收起"
 msgstr ""
 
-#: source\webio\pages.py:813
+#: source\webio\pages.py:814
 msgid "clean list"
 msgstr "清空列表"
 
@@ -722,7 +738,7 @@ msgstr "清空列表"
 msgid "GIA 已升级到"
 msgstr ""
 
-#: source\webio\webio.py:39
+#: source\webio\webio.py:42
 msgid "webio启动完成"
 msgstr ""
 
@@ -1026,6 +1042,164 @@ msgstr "检查更新中..."
 #: source\webio\webpages\missiondownload.py:629
 msgid "Finished checking updates"
 msgstr "检查更新完成"
+
+#: source\webio\webpages\video2path.py:60
+msgid "Path does not exist!"
+msgstr "路径不存在！"
+
+#: source\webio\webpages\video2path.py:70
+msgid "Please waiting..."
+msgstr "请等待..."
+
+#: source\webio\webpages\video2path.py:83
+msgid "press any key in GIA PathToVideo window to continue."
+msgstr "在GIA PathToVideo窗口中按任何一个键来继续。"
+
+#: source\webio\webpages\video2path.py:93
+msgid "Path Recorder start!"
+msgstr "Path Recorder 启动!"
+
+#: source\webio\webpages\video2path.py:95
+msgid "Path Recorder stop!"
+msgstr "Path Recorder 结束!"
+
+#: source\webio\webpages\video2path.py:106
+msgid ""
+"警告：您已经切换到开发模式页面，所有主页功能均不可用。如需使用，请重启程序。"
+msgstr ""
+
+#: source\webio\webpages\video2path.py:108
+msgid "DEV MODE ENABLED."
+msgstr "DEV模式启动。"
+
+#: source\webio\webpages\video2path.py:112
+msgid "Tutorial"
+msgstr "教程"
+
+#: source\webio\webpages\video2path.py:113
+msgid ""
+"## 食用教程：\n"
+"1. 输入视频路径\n"
+"2. 加载视频\n"
+"3. 加载完成后点击播放视频\n"
+"4. 等待视频播放到你要开始记录的位置时，(暂停)点击分析坐标按钮\n"
+"5. 等待分析完成，日志区将显示可能的坐标id，坐标位置，区域，名称，匹配度， 选"
+"择你认为可能的**坐标id**输入初始化坐标输入框\n"
+"6. 点击预览初始坐标按钮，将显示该坐标的区域预览图\n"
+"7. 重复5-6步骤，确认无误后，点击确认初始坐标按钮\n"
+"8. 点击启停路径记录器按钮，开始记录\n"
+"9. 等待视频播放到你要结束记录的位置时， 点击启停路径记录器按钮，停止记录\n"
+"10. 重复4-9步骤，直到完成。\n"
+"11. TLPP文件将储存在dev_assets/tlpp目录下\n"
+"## 快捷键\n"
+"快捷键只能在GIA VideoToPath窗口使用\n"
+"|快捷键|用法|\n"
+"|----|----|\n"
+"| 空格 | 暂停/播放 |\n"
+"| `,` | 减小播放速度,记录路径时必须为现实速度 |\n"
+"| `.` | 增大播放速度,记录路径时必须为现实速度 |\n"
+"| `[` | 启动/停止记录 |\n"
+"| `a` | 分析初始坐标 |\n"
+"## 注意\n"
+"**必须在加载视频前填写所有参数！(除初始坐标id外)**\n"
+msgstr ""
+
+#: source\webio\webpages\video2path.py:160
+msgid "load/reload video"
+msgstr "加载/重载视频"
+
+#: source\webio\webpages\video2path.py:161
+msgid "Play video"
+msgstr "播放视频"
+
+#: source\webio\webpages\video2path.py:162
+msgid "Analyze init position"
+msgstr "分析初始坐标"
+
+#: source\webio\webpages\video2path.py:163
+msgid "Preview init position"
+msgstr "展示初始坐标"
+
+#: source\webio\webpages\video2path.py:164
+msgid "Confirm init position"
+msgstr "确认初始坐标"
+
+#: source\webio\webpages\video2path.py:165
+msgid "Start/Stop path recorder"
+msgstr "启动/停止路径记录"
+
+#: source\webio\webpages\video2path.py:166
+msgid "Cancel video"
+msgstr "取消视频"
+
+#: source\webio\webpages\video2path.py:169
+msgid "Video path"
+msgstr "视频路径"
+
+#: source\webio\webpages\video2path.py:170
+msgid "init position id"
+msgstr "初始坐标id"
+
+#: source\webio\webpages\video2path.py:171
+msgid "File head name"
+msgstr "TLPP文件名前缀"
+
+#: source\webio\webpages\video2path.py:172
+msgid "is pickup mode"
+msgstr "是否为拾取模式"
+
+#: source\webio\webpages\video2path.py:173
+msgid "Collection name"
+msgstr "采集物名称"
+
+#: source\webio\webpages\video2path.py:174
+msgid "Frame to start"
+msgstr "开始帧"
+
+#: source\webio\webpages\video2path.py:175
+msgid "Collect area"
+msgstr "采集区域"
+
+#: source\webio\webpages\video2path.py:176
+msgid "Video size"
+msgstr "视频窗口大小"
+
+#: source\webio\webpages\video2path.py:204
+msgid "Video is not available"
+msgstr "视频不可用"
+
+#: source\webio\webpages\video2path.py:209
+msgid "Load over."
+msgstr "加载完成。"
+
+#: source\webio\webpages\video2path.py:210
+msgid "ready to start."
+msgstr "准备开始。"
+
+#: source\webio\webpages\video2path.py:229
+msgid "不在主界面/画质过低/错误的视频大小/不完整的录屏"
+msgstr ""
+
+#: source\webio\webpages\video2path.py:234
+msgid "Analysis completion: "
+msgstr "分析完成："
+
+#: source\webio\webpages\video2path.py:238
+msgid ""
+"Please enter the possible ID into `init position id`, then press `Preview "
+"init position` button or `Confirm init position` button."
+msgstr ""
+"请在 `初始坐标id` 中输入可能的ID，然后按 \"展示初始坐标\"按钮或 \"确认初始坐"
+"标\"按钮。"
+
+#~ msgid "# Config"
+#~ msgstr "# 设置"
+
+#~ msgid "## Function"
+#~ msgstr "## 功能"
+
+#~ msgid "FlowMode"
+#~ msgstr "流程模式"
 
 #~ msgid "Mission installed, please apply and save."
 #~ msgstr "自定义任务已安装，请应用并保存。"
