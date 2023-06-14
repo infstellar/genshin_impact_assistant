@@ -67,6 +67,8 @@ class DomainTask(TaskTemplate):
                                    mode=CONTAIN_MATCHING,
                                    extract_white_threshold=254)
         if p1 != -1:
+            if len(p1)>1:
+                p1 = p1[0]
             itt.move_and_click([p1[0] + 5, p1[1] + 5], delay=1)
         else:
             texts = ocr.get_all_texts(itt.capture(jpgmode=0, posi=cap_area))
