@@ -158,8 +158,8 @@ class PaddleOcrFastDeploy():
     def get_all_texts(self, img, mode=0):
         res = self.analyze(img)
         if mode==1:
-            return ','.join(str(i) for i in res.text).replace(',','')
-        return res.text
+            return ','.join(str(i) for i in self._replace_texts(res.text)).replace(',','')
+        return [i for i in self._replace_texts(res.text)]
     
     def is_img_num(self, im_src):
         pdocr_timer_performance.reset()
