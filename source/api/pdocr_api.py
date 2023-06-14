@@ -188,12 +188,12 @@ class PaddleOcrFastDeploy():
 
 if __name__ == '__main__':
     ocr = PaddleOcrFastDeploy()
-    imsrc = cv2.imread("D:\\test2.jpg")
-    r = ocr.get_text_position(imsrc, "VsCode")
-    print(r)# boxes, rec_scores, text
-    imsrc = cv2.imread("D:\\test.jpg")
-    r = ocr.get_text_position(imsrc, "VsCode")
-    print(r)# boxes, rec_scores, text
+    # imsrc = cv2.imread("D:\\test2.jpg")
+    # r = ocr.get_text_position(imsrc, "VsCode")
+    # print(r)# boxes, rec_scores, text
+    # imsrc = cv2.imread("D:\\test.jpg")
+    # r = ocr.get_text_position(imsrc, "VsCode")
+    print(ocr._replace_texts('纳西姐'))# boxes, rec_scores, text
 
 
 

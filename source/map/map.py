@@ -130,6 +130,10 @@ class Map(MiniMap, BigMap, MapConverter):
         Returns:
             list: TianLiPosition format
         """
+        if not itt.get_img_existence(asset.IconUIEmergencyFood, is_log=False):
+            logger.warning(t2t("不在大世界，无法获取坐标"))
+            logger.warning(f"return (0,0)")
+            return [0,0]
         if not self.small_map_init_flag:
             self.reinit_smallmap()
             self.small_map_init_flag = True
