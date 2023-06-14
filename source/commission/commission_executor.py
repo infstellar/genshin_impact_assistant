@@ -2,6 +2,8 @@ from source.commission.util import *
 from source.task.task_template import TaskTemplate
 from source.commission.commission_parser import CommissionParser
 from source.commission.commission_acquisition import get_commission_object
+from source.ui.ui import ui_control
+from source.ui import page as UIPage
 
 class CommissionExecutor(TaskTemplate, CommissionParser):
     def __init__(self):
@@ -20,6 +22,7 @@ class CommissionExecutor(TaskTemplate, CommissionParser):
             if i["done"]: # this commission obj has been done.
                 logger.info(f"{i['type']} has been done.")
                 continue
+            ui_control.ensure_page(UIPage.page_main)
             self._add_sub_threading(co)
             co.continue_threading() # start commission obj
             while 1:
