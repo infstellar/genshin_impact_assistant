@@ -60,10 +60,14 @@ class CommissionParser():
                     
                     itt.move_and_click(list(i))
                     itt.delay("animation")
+                    for i in range(3):
+                        com_type = self._detect_commission_type()
+                        if com_type != None:
+                            break
+                        else:
+                            itt.delay("2animation")
                     itt.delay("animation")
-                    itt.delay("animation")
-                    com_type = self._detect_commission_type()
-                    itt.delay("animation")
+                    
                     while 1:
                         itt.key_press('esc')
                         itt.delay("2animation")

@@ -132,8 +132,8 @@ class Map(MiniMap, BigMap, MapConverter):
         """
         if not itt.get_img_existence(asset.IconUIEmergencyFood, is_log=False):
             logger.warning(t2t("不在大世界，无法获取坐标"))
-            logger.warning(f"return (0,0)")
-            return [0,0]
+            logger.warning(f"return {self.convert_GIMAP_to_cvAutoTrack(self.position)}")
+            return self.convert_GIMAP_to_cvAutoTrack(self.position)
         if not self.small_map_init_flag:
             self.reinit_smallmap()
             self.small_map_init_flag = True
