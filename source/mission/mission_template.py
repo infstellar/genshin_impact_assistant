@@ -176,7 +176,8 @@ class MissionExecutor(BaseThreading):
         if self.PUO_initialized:
             if puo_start_flag:
                 self.PUO.continue_threading()
-        return self._handle_exception()
+        self._handle_exception()
+        return self.TMCF.get_and_reset_err_code()
         
     def move_straight(self, position, is_tp = False, is_precise_arrival=None, stop_rule=None):
         if isinstance(position[0], int) or isinstance(position[0], float):

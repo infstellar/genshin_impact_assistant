@@ -141,6 +141,14 @@ class FlowController(base_threading.AdvanceThreading):
         """
         return True
     
+    def get_and_reset_err_code(self):
+        errc = self.last_err_code
+        self.reset_err_code()
+        return errc
+    
+    def reset_err_code(self):
+        self.last_err_code = ERR_NONE
+    
     def loop(self):
         rcode = self.flow_dict[self.current_flow_id].enter_flow()
         if "$END$" in rcode:
