@@ -257,7 +257,7 @@ class PathRecorderCore(FlowTemplate):
         # if self.upper.is_pickup_mode:
         #     self._fix_bps() # 这个功能好像与is_end=True功能冲突...
         with open(fr"{ROOT_PATH}/dev_assets/tlpp/{jsonname}.pydict", 'w') as f:
-            f.write(str(self.upper.collection_path_dict))
+            f.write(f"{jsonname} = "+str(self.upper.collection_path_dict))
         # save_json(self.upper.collection_path_dict,json_name=jsonname,default_path=f"assets\\TeyvatMovePath")
         logger.info(f"recording save as {jsonname}")
         self.rfc = FC.INIT
