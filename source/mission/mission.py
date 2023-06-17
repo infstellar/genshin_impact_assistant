@@ -64,7 +64,7 @@ class Mission(MissionExecutor):
         """
         return super().move_straight(position, is_tp, is_precise_arrival, stop_rule)
     
-    def move_along(self, path, is_tp=None, is_precise_arrival=None):
+    def move_along(self, path, is_tp=None, is_precise_arrival=None, stop_rule = None):
         """沿着TLPP行走。
         阻塞式任务.
 
@@ -72,13 +72,17 @@ class Mission(MissionExecutor):
             path (dict): TLPP格式字典。
             is_tp (bool, optional): 是否传送. Defaults to None.
             is_precise_arrival (bool, optional): 是否精确到达目的地(误差小于1m). Defaults to None.
+            stop_rule (_type_, optional): 停止条件. 可选:
+                STOP_RULE_ARRIVE: 到达后停止
+                STOP_RULE_F: 在目的地附近看到f后停止.
+                STOP_RULE_COMBAT: 发现敌人或进入战斗后停止。
 
         注: 在某些Mission中,path可能会是字符串.这是旧版本所使用的存储TLPP文件的方法,现已弃用. 目前所有的TLPP文件与Mission放在同一个py文件中.
         
         Returns:
             _type_: _description_
         """
-        return super().move_along(path, is_tp, is_precise_arrival)
+        return super().move_along(path, is_tp, is_precise_arrival, stop_rule)
     
     def start_combat(self, mode="Normal"):
         """开始战斗。

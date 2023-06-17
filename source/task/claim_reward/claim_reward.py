@@ -1,5 +1,5 @@
 from source.task.claim_reward.util import *
-from source.mission.mission_template import MissionExecutor
+from source.mission.mission_template import MissionExecutor, STOP_RULE_F
 from source.task.task_template import TaskTemplate
 from source.talk.talk import Talk
 from source.manager import asset
@@ -60,7 +60,7 @@ class ClaimRewardMission(MissionExecutor, Talk):
     def exec_mission(self):
         self.available_rewards = self.get_available_reward()
         if "Expedition" in self.available_rewards or "Commission" in self.available_rewards:
-            self.move_along("Katheryne20230408124320i0", is_precise_arrival=True)
+            self.move_along("Katheryne20230408124320i0", is_precise_arrival=True, stop_rule = STOP_RULE_F)
             if "Commission" in self.available_rewards:
                 self.talk_with_npc()
                 self.talk_until_switch(self.checkup_stop_func)
