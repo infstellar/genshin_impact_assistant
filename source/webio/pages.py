@@ -670,7 +670,7 @@ class CombatSettingPage(ConfigPage):
         # 配置页
         output.put_markdown(t2t('## config:'), scope=self.main_scope)
         output.put_scope("select_scope", scope=self.main_scope)
-        pin.put_select('file', self._config_file2lableAfile(self.config_files), scope="select_scope", value="config\\settings\\auto_combat.json")
+        pin.put_select('file', self._config_file2lableAfile(self.config_files), scope="select_scope", value="config/settings/Combat.json")
 
     def onclick_add_teamjson(self):
         n = input.input('team name')
