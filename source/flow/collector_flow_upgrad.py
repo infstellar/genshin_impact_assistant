@@ -83,6 +83,12 @@ class CollectorFlowConnector(FlowConnector):
         time.sleep(2)
     
 class CollectionCombat(FlowTemplate):
+    """这个类执行拾取中的战斗部分。
+    如果有战斗会切换到该流程。
+
+    Args:
+        FlowTemplate (_type_): _description_
+    """
     def __init__(self, upper: CollectorFlowConnector):
         super().__init__(upper, flow_id=ST.COLLECTION_COMBAT, next_flow_id=ST.COLLECTION_PICKUP, flow_timeout_time=300)
         self.upper=upper
@@ -107,30 +113,50 @@ class CollectionCombat(FlowTemplate):
             self.upper.stop_combat()
             self._next_rfc()
 
+class CollectionMine(FlowTemplate):
+    """采矿FLOW。
+
+    Args:
+        FlowTemplate (_type_): _description_
+    """
+    def __init__(self, upper: CollectorFlowConnector):
+        super().__init__(upper, flow_id=ST.COLLECTION_MINE, next_flow_id=ST.COLLECTION_PICKUP, flow_timeout_time=300)
+        self.upper=upper
+    
+    
+
 class PickUpCollection(FlowTemplate):
+    """拾取掉落物。
+    
+    工作原理：识别闪光点(rgb=255,255,255)的方向前进。
+    具体原理请查看pickup_operator.py。
+
+    Args:
+        FlowTemplate (_type_): _description_
+    """
     def __init__(self, upper: CollectorFlowConnector):
         self.upper = upper
         self.IN_PICKUP_COLLECTOR_timeout = timer_module.TimeoutTimer(45)
+        # 根据不同的采集类型设置超时时间。
         if self.upper.collector_type == COLLECTION:
             timeout_time = 150
         elif self.upper.collector_type == ENEMY:
             self.upper.puo.max_distance_from_target = 60
             timeout_time = 300
         elif self.upper.collector_type == MINERAL:
-            pass
+            timeout_time = 150
         super().__init__(upper, flow_id=ST.COLLECTION_PICKUP, next_flow_id=ST.END_COLLECTOR, flow_timeout_time=timeout_time)
     
     def state_before(self):
-        
-        if len(self.upper.pickup_points) > self.upper.pickup_points_index:
-            movement.move_to_position(self.upper.pickup_points[self.upper.pickup_points_index])
-            r = self.upper.puo.pickup_recognize()
+        if len(self.upper.pickup_points) > self.upper.pickup_points_index: # 如果有采集点
+            movement.move_to_position(self.upper.pickup_points[self.upper.pickup_points_index]) # 移动到目标位置
+            r = self.upper.puo.pickup_recognize() # 识别并采集
             self.upper.pickup_points_index += 1
             logger.debug(f"pickup point:{self.upper.pickup_points[self.upper.pickup_points_index]}, {r}")
         else:
-            if self.upper.is_activate_pickup:
-                self.upper.puo.set_search_mode(1)
-                self.upper.start_pickup()
+            if self.upper.is_activate_pickup: # 如果启动主动采集模式
+                self.upper.puo.set_search_mode(1) # 设置PUO为Search模式
+                self.upper.start_pickup() # 开始采集
                 self.upper.puo.reset_err_code()
                 self.flow_timeout.reset() # IMPORTANT
                 self.IN_PICKUP_COLLECTOR_timeout.reset()
@@ -140,16 +166,18 @@ class PickUpCollection(FlowTemplate):
                 self._set_rfc(FC.END)
     
     def state_in(self):
-        if self.upper.puo.pause_threading_flag:
+        """主要负责等待PUO完成。
+        """
+        if self.upper.puo.pause_threading_flag: # PUO结束时结束。
             self._next_rfc()
         
-        if self.IN_PICKUP_COLLECTOR_timeout.istimeout():
+        if self.IN_PICKUP_COLLECTOR_timeout.istimeout(): # 超时结束
             logger.info(f"IN_PICKUP_COLLECTOR timeout: {self.IN_PICKUP_COLLECTOR_timeout.timeout_limit}")
             logger.info(f"collect in xxx failed.")
             self._next_rfc()
             self._set_nfid(ST.END_COLLECTOR)
             self.upper.stop_pickup()
-        if combat_lib.CSDL.get_combat_state():
+        if combat_lib.CSDL.get_combat_state(): # 如果有战斗，回退到战斗FLOW。
             self.upper.stop_pickup()
             self._set_nfid(ST.COLLECTION_COMBAT)
             self._set_rfc(FC.END)

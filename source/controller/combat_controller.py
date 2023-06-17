@@ -14,6 +14,7 @@ CHARACTER_DIED = 1
 MODE_NORMAL = 'Normal'
 MODE_SHIELD = 'Shield'
 MODE_CORE = "Core"
+MODE_RECOVER = 'Recover'
 
 
 
