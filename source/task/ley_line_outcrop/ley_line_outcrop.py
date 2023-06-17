@@ -1,7 +1,7 @@
 from source.util import *
 from source.assets.ley_line_outcrop import *
 from source.task.ley_line_outcrop.util import *
-from source.mission.mission_template import MissionExecutor
+from source.mission.mission_template import MissionExecutor, EXCEPTION_RAISE
 from source.task.task_template import TaskTemplate
 from source.map.position.position import *
 from source.funclib import movement
@@ -84,7 +84,8 @@ class LeyLineOutcropMission(MissionExecutor):
         for i in range(self.collection_times):
             try:
                 self.target_posi = self.traverse_mondstant()
-                self.move(MODE='AUTO', stop_rule=0, target_posi=list(self.target_posi), is_tp=True, is_precise_arrival=True)
+                r = self.move(MODE='AUTO', stop_rule=0, target_posi=list(self.target_posi), is_tp=True, is_precise_arrival=True)
+                self.handle_tmf_stuck_then_raise(r)
                 self.circle_search(self.target_posi)
                 itt.key_press('f')
                 # self.collect(is_combat=True)
