@@ -48,6 +48,16 @@ class BaseThreading(threading.Thread):
         return not self.pause_threading_flag
 
     def checkup_stop_func(self):
+        """检查是否要退出。会检查暂停flag和停止flag。
+        使用方法：
+        在函数中使用：
+            if self.checkup_stop_func(): return 适当的返回值
+        在循环中：
+            if self.checkup_stop_func(): break
+
+        Returns:
+            _type_: _description_
+        """
         pt = time.time()
         def output_log(t):
             if t<0.05:
@@ -81,6 +91,12 @@ class BaseThreading(threading.Thread):
         self.last_err_code = ERR_NONE
     
     def _add_sub_threading(self, threading_obj, start=True):
+        """添加子线程。
+
+        Args:
+            threading_obj (_type_): 子线程对象
+            start (bool, optional): 是否开启子线程. Defaults to True.
+        """
         threading_obj.setDaemon(True)
         threading_obj.add_stop_func(self.checkup_stop_func)
         threading_obj.pause_threading()
@@ -90,12 +106,17 @@ class BaseThreading(threading.Thread):
         logger.debug(f"sub threading {threading_obj.name} has been add.")
 
     def _clean_sub_threading(self):
+        """移除所有子线程。
+        """
         for thread_obj in self.sub_threading_list:
             logger.debug(f"{self.name} stop {thread_obj.name}")
             thread_obj.stop_threading()
         self.sub_threading_list = []
     
     def loop(self):
+        """
+        在这里写要循环执行的代码。
+        """
         pass
     
     def run(self):
