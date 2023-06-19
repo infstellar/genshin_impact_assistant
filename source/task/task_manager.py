@@ -1,6 +1,6 @@
 from source.util import *
 import keyboard
-from source.task.task_template import TaskTemplate, TaskEndException
+from source.task.task_template import TaskTemplate
 from source.common.base_threading import BaseThreading
 from source.exceptions.util import *
 
@@ -33,9 +33,6 @@ class TaskManager(BaseThreading):
                 for pr in exception_instance.possible_reasons:
                     i+=1
                     logger.error(f'{t2t("Possible Reason")} {i}: {pr}')
-                    
-                
-        
     
     def append_task(self, task_name):
         self.task_list.append(task_name)
@@ -82,11 +79,11 @@ class TaskManager(BaseThreading):
             #     self.curr_task.end_task()
             #     self.reg_task_flag = not self.reg_task_flag
             if task_name == DOMAIN_TASK:
-                from source.task.domain_task import DomainTask
+                from source.task.domain.domain_task import DomainTask
                 self.curr_task = DomainTask()
                 
             elif task_name == MISSION_TASK:
-                from source.task.mission_task import MissionTask
+                from source.task.mission.mission_task import MissionTask
                 self.curr_task = MissionTask()
             elif task_name == COMMISSION_TASK:
                 from source.commission.commission_executor import CommissionExecutor

@@ -10,13 +10,9 @@ class LaunchGenshin(TaskTemplate):
         super().__init__()
         self.name = "LaunchGenshin"
 
-    def loop(self):
-        # time.sleep(2)
-        # print('exception test')
-        # raise TaskException()
+    def task_run(self):
         while 1:
             time.sleep(2)
             itt.appear_then_click(ClickToEnter)
             if ui_control.verify_page(UIPage.page_main):
                 break
-        self.pause_threading()

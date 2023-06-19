@@ -3,10 +3,20 @@ from source.mission.mission_template import MissionExecutor, STOP_RULE_F
 from source.task.task_template import TaskTemplate
 from source.talk.talk import Talk
 from source.manager import asset
-from source.task.claim_reward.assets import *
+from source.assets.claim_rewards import *
     
 
 class ClaimRewardMission(MissionExecutor, Talk):
+    """这个类以MissionExecutor的方式执行任务，因为Mission中已有许多适合该任务的函数可以直接调用。
+    
+    有关更多这样的Mission型任务的信息，可以参考source.task.ley_line_outcrop，该文件下有更多注释。
+
+    Args:
+        MissionExecutor (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
     def __init__(self):
         MissionExecutor.__init__(self, is_TMCF=True)
         Talk.__init__(self)
@@ -78,10 +88,9 @@ class ClaimRewardTask(TaskTemplate):
         super().__init__()
         self.CRM = ClaimRewardMission()
         self._add_sub_threading(self.CRM, start=False)
-        
-    def loop(self):
+    
+    def task_run(self):
         self.blocking_startup(self.CRM)
-        self.pause_threading()
         
 if __name__ == '__main__':
     crm = ClaimRewardMission()

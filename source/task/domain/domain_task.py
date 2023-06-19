@@ -7,7 +7,7 @@ from source.funclib.generic_lib import f_recognition
 from source.ui.ui import ui_control
 import source.ui.page as UIPage
 from source.interaction.interaction_core import itt
-from source.manager import asset, scene_manager
+from source.manager import asset
 from source.task import task_id as TI
 from source.funclib.err_code_lib import ERR_NONE, ERR_STUCK, ERR_PASS
 from source.common import timer_module
