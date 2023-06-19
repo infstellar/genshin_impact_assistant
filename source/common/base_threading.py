@@ -13,14 +13,14 @@ class BaseThreading(threading.Thread):
     """
     def __init__(self, thread_name = None):
         super().__init__()
-        self._init_succ_flag = False # Use in init slow threads
-        self.pause_threading_flag = False
-        self.stop_threading_flag = False
-        self.working_flag = False
-        self.while_sleep = 0.2
-        self.last_err_code = ERR_NONE
-        self.stop_func_list = []
-        self.sub_threading_list = []
+        self._init_succ_flag = False # 在初始化很慢的线程中使用
+        self.pause_threading_flag = False # 暂停线程标记
+        self.stop_threading_flag = False # 线程停止标记
+        self.working_flag = False # 废物
+        self.while_sleep = 0.2 # 每次循环间隔
+        self.last_err_code = ERR_NONE # 错误码
+        self.stop_func_list = [] # 停止函数列表。check_up_stop_func时循环执行里面的函数，如果有返回值为true的函数即停止。
+        self.sub_threading_list = [] # 子线程列表
         if thread_name != None:
             self.setName(thread_name)
 
@@ -146,17 +146,32 @@ class AdvanceThreading(BaseThreading):
         super().__init__(thread_name)
     
     def blocking_startup(self, threading_obj:BaseThreading):
+        """阻塞启动模式。
+        使用该模式启动线程时，会阻塞当前线程，循环执行threading_obj的loop函数。
+        此时，threading_obj不会作为线程启动。使用此方法可以避免启动过多线程。
+
+        Args:
+            threading_obj (BaseThreading): _description_
+
+        Returns:
+            _type_: _description_
+        """
         if threading_obj.is_alive():
             threading_obj.stop_threading()
         threading_obj.continue_threading()
         while 1:
-            time.sleep(self.while_sleep)
+            time.sleep(threading_obj.while_sleep)
             threading_obj.loop()
             if threading_obj.pause_threading_flag:
                 break
         return threading_obj.get_last_err_code()
 
 class FunctionThreading(AdvanceThreading):
+    """目前没啥用
+
+    Args:
+        AdvanceThreading (_type_): _description_
+    """
     def __init__(self, target, thread_name=None):
         super().__init__(thread_name)
         self.target = target
@@ -166,6 +181,8 @@ class FunctionThreading(AdvanceThreading):
         self.target()
         
 class ThreadBlockingRequest():
+    """线程阻塞请求
+    """
     def __init__(self) -> None:
         self.blocking_request_flag = False
         self.reply_request_flag = False
