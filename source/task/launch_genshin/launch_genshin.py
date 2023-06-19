@@ -11,6 +11,9 @@ class LaunchGenshin(TaskTemplate):
         self.name = "LaunchGenshin"
 
     def loop(self):
+        # time.sleep(2)
+        # print('exception test')
+        # raise TaskException()
         while 1:
             time.sleep(2)
             itt.appear_then_click(ClickToEnter)

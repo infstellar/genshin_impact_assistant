@@ -1,6 +1,10 @@
-class MissionEnd(Exception):pass
-class CollectError(Exception):pass
-class TeyvatMoveError(Exception):pass
-class PickUpOperatorError(Exception):pass
-class HandleExceptionInMission(Exception):pass
-class CharacterNotFound(Exception):pass
+from source.exceptions.util import *
+
+class MissionException(GIABaseException): pass
+
+class MissionEnd(MissionException):pass
+class CollectError(MissionException):pass
+class TeyvatMoveError(MissionException):pass
+class PickUpOperatorError(MissionException):pass
+class HandleExceptionInMission(MissionException):pass
+class CharacterNotFound(MissionException):pass

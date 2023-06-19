@@ -5,12 +5,13 @@ except:
 import time
 import keyboard
 from source.task import task_manager
-from source.mission import mission_manager
+import threading
 
 combat_flag = False
 collector_flag = False
 startstop_flag = False
 TASK_MANAGER = task_manager.TASK_MANAGER
+threading.excepthook = TASK_MANAGER.task_excepthook
 TASK_MANAGER.setDaemon(True)
 # TASK_MANAGER.pause_threading()
 TASK_MANAGER.start()

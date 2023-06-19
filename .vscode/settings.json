@@ -70,6 +70,7 @@
         "dtype",
         "Elast",
         "Epress",
+        "excepthook",
         "fastdeploy",
         "fromarray",
         "funclib",
