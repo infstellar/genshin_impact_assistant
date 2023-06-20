@@ -1,5 +1,5 @@
 from source.util import *
-from source.flow import collector_flow_upgrad, teyvat_move_flow_upgrad
+from source.flow import collector_flow_upgrade, teyvat_move_flow_upgrade
 from source.common.base_threading import BaseThreading
 from source.pickup.pickup_operator import PickupOperator
 from source.interaction.minimap_tracker import tracker
@@ -53,13 +53,13 @@ class MissionExecutor(BaseThreading):
     def _init_sub_threading(self, feat_name=""):
         if feat_name == "CFCF":
             if not self.CFCF_initialized:
-                self.CFCF = collector_flow_upgrad.CollectorFlowController()
+                self.CFCF = collector_flow_upgrade.CollectorFlowController()
                 self._add_sub_threading(self.CFCF, start=False)
                 self.CFCF_initialized = True
                 self.CFCF.start()
         if feat_name == "TMCF":
             if not self.TMCF_initialized:
-                self.TMCF = teyvat_move_flow_upgrad.TeyvatMoveFlowController()
+                self.TMCF = teyvat_move_flow_upgrade.TeyvatMoveFlowController()
                 self._add_sub_threading(self.TMCF, start=False)
                 self.TMCF_initialized = True
                 self.TMCF.start()

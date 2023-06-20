@@ -48,7 +48,7 @@ def import_current_module():
             pass
         elif current_flow == FLOW_COMBAT:
             # logger.info("正在导入 FLOW_COMBAT 模块，可能需要一些时间。")
-            from source.flow import alpha_loop
+            from source.flow.abandoned import alpha_loop
         elif current_flow == FLOW_DOMAIN:
             # logger.info("正在导入 FLOW_DOMAIN 模块，可能需要一些时间。")
             from source.flow import domain_flow
@@ -61,7 +61,7 @@ def import_current_module():
                 pass
             elif current_flow == FLOW_COMBAT:
                 # logger.info("正在导入 FLOW_COMBAT 模块，可能需要一些时间。")
-                from source.flow import alpha_loop
+                from source.flow.abandoned import alpha_loop
             # elif current_flow == FLOW_COLLECTOR:
             #     # logger.info("正在导入 FLOW_COLLECTOR 模块，可能需要一些时间。")
             #     from source.flow import collector_flow
@@ -92,7 +92,7 @@ def switch_collector_loop():
         t3.stop_threading()
     else:
         logger.info(t2t('启动自动采集'))
-        from source.flow import collector_flow
+        from source.flow.abandoned import collector_flow
         t3 = collector_flow.CollectorFlow()
         t3.setDaemon(True)
         t3.start()

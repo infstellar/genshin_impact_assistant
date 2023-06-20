@@ -1,7 +1,7 @@
 from source.util import *
 import keyboard
-from source.flow.flow_template import FlowController, FlowTemplate, FlowConnector, EndFlowTemplate
-import source.flow.flow_code as FC, source.flow.flow_state as ST
+from source.flow.utils.flow_template import FlowController, FlowTemplate, FlowConnector, EndFlowTemplate
+import source.flow.utils.flow_code as FC, source.flow.utils.flow_state as ST
 from source.interaction.minimap_tracker import tracker
 from source.funclib import movement, generic_lib, collector_lib
 from source.funclib.err_code_lib import *

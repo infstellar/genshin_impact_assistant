@@ -1,6 +1,6 @@
 from source.mission.mission_template import MissionExecutor
 from source.mission.cvars import *
-from source.flow.cvars import *
+from source.flow.utils.cvars import *
 
 """
 这里是Mission的标准类.编写你的mission时,请继承该类.

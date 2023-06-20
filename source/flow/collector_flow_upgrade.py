@@ -1,14 +1,14 @@
 from source.util import *
-from common import timer_module
-from source.flow import flow_state as ST
+from source.common import timer_module
+from source.flow.utils import flow_state as ST
 from source.interaction.interaction_core import itt
 from source.pickup import pickup_operator
 from source.interaction.minimap_tracker import tracker
 from source.combat import combat_controller
 from funclib.err_code_lib import ERR_PASS, ERR_STUCK, ERR_COLLECTOR_FLOW_TIMEOUT
 from source.util import *
-from source.flow.flow_template import FlowController, FlowTemplate, FlowConnector, EndFlowTemplate
-import source.flow.flow_code as FC
+from source.flow.utils.flow_template import FlowController, FlowTemplate, FlowConnector, EndFlowTemplate
+import source.flow.utils.flow_code as FC
 from source.common import timer_module
 from source.funclib import movement
 from source.funclib import combat_lib
