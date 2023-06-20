@@ -28,7 +28,7 @@ logger.demo = types.MethodType(demo, logger)
 
 # configure loguru
 logger.remove(handler_id=None)
-logger.add(os.path.join(ROOT_PATH, os.path.join(ROOT_PATH, 'Logs', "{time:YYYY-MM-DD}.log")), level="TRACE", backtrace=True, retention='15 days')
+logger.add(os.path.join(ROOT_PATH, os.path.join(ROOT_PATH, 'Logs', "{time:YYYY-MM-DD}/{time:YYYY-MM-DD}.log")), level="TRACE", backtrace=True, retention='15 days')
 if DEBUG_MODE:
     logger.add(sys.stdout, level="TRACE", backtrace=True)
 else:
