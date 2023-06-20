@@ -1,12 +1,12 @@
 from source.common import character
 from source.funclib import combat_lib
-from source.operator import tactic_operator
+from source.combat import tactic_operator
 from source.common.base_threading import BaseThreading
 from source.interaction.interaction_core import itt
 from common.timer_module import Timer, AdvanceTimer
 from source.util import *
 from source.manager import asset
-from source.operator.aim_operator import AimOperator
+from source.combat.aim_operator import AimOperator
 from source.api.pdocr_complete import ocr
 from source.funclib import movement
 from source.ui.ui import ui_control

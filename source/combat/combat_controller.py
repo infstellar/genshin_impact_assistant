@@ -7,7 +7,7 @@ from source.funclib import combat_lib
 from source.manager import asset
 from source.common.base_threading import AdvanceThreading
 from source.interaction.interaction_core import itt
-from source.operator.switch_character_operator import SwitchCharacterOperator
+from source.combat.switch_character_operator import SwitchCharacterOperator
 from source.path_lib import CONFIG_PATH_SETTING
 
 CHARACTER_DIED = 1

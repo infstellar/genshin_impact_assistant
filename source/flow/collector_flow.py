@@ -4,7 +4,7 @@ from source.interaction.interaction_core import itt
 from source.pickup import pickup_operator
 from source.flow import teyvat_move_flow
 from source.interaction.minimap_tracker import tracker
-from source.controller import combat_controller
+from source.combat import combat_controller
 from source.common.base_threading import BaseThreading
 from source.funclib import collector_lib, generic_lib, combat_lib
 import numpy as np

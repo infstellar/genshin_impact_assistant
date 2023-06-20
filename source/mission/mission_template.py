@@ -7,7 +7,7 @@ from source.funclib import combat_lib, generic_lib, movement
 from source.interaction.interaction_core import itt
 from source.funclib.err_code_lib import ERR_PASS, ERR_STUCK
 from source.common.timer_module import AdvanceTimer
-from source.controller.combat_controller import CombatController
+from source.combat.combat_controller import CombatController
 from source.map.map import genshin_map
 from source.exceptions.mission import *
 from source.mission.cvars import *

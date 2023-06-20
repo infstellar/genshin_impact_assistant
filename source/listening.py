@@ -76,7 +76,7 @@ def switch_combat_loop():
         logger.info(t2t('正在停止自动战斗'))
         t1.stop_threading()
     else:
-        from source.controller.combat_controller import CombatController
+        from source.combat.combat_controller import CombatController
         logger.info(t2t('启动自动战斗'))
         t1 = CombatController()
         t1.setDaemon(True)
