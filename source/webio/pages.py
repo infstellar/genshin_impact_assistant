@@ -544,6 +544,7 @@ class ConfigPage(AdvancePage):
             doc_items = None
             doc_special = None
             doc_annotation = None
+            doc_type = None
             if k in doc:
                 # 判断doc的类型
                 if type(doc[k]) == dict:
@@ -557,6 +558,8 @@ class ConfigPage(AdvancePage):
                         doc_special = doc[k]['special_index']
                     if "annotation" in doc[k]:
                         doc_annotation = doc[k]['annotation']
+                    if 'type' in doc[k]:
+                        doc_type = doc[k]['type']
                 if type(doc[k]) == str:
                     doc_now = doc[k]
             # 取显示名称
@@ -565,19 +568,32 @@ class ConfigPage(AdvancePage):
             k_sha1 = hashlib.sha1(k.encode('utf8')).hexdigest()
             component_name = '{}-{}'.format(add_name, k_sha1)
             
-            
-            if type(v) == str or v is None:
-                self._show_str(doc_items, component_name, display_name, scope_name, v, doc_special)
-            elif type(v) == int:
-                self._show_int(doc_items, component_name, display_name, scope_name, v, doc_special)
-            elif type(v) == float:
-                self._show_float(doc_items, component_name, display_name, scope_name, v, doc_special)
-            elif type(v) == bool:
-                self._show_bool(component_name, display_name, scope_name, v, doc_special)
-            elif type(v) == dict:
-                self._show_dict(level, component_name, display_name, scope_name, doc, v, doc_special)
-            elif type(v) == list:
-                self._show_list(level, display_name, scope_name, component_name, doc, v, doc_special)
+            if doc_type != None:
+                if doc_type == 'int':
+                    self._show_int(doc_items, component_name, display_name, scope_name, v, doc_special)
+                elif doc_type == 'float':
+                    self._show_float(doc_items, component_name, display_name, scope_name, v, doc_special)
+                elif doc_type == 'bool':
+                    self._show_bool(component_name, display_name, scope_name, v, doc_special)
+                elif doc_type == 'dict':
+                    self._show_dict(level, component_name, display_name, scope_name, doc, v, doc_special)
+                elif doc_type == 'list':
+                    self._show_list(level, display_name, scope_name, component_name, doc, v, doc_special)
+                elif doc_type == 'str':
+                    self._show_str(doc_items, component_name, display_name, scope_name, v, doc_special)
+            else:    
+                if type(v) == str or v is None:
+                    self._show_str(doc_items, component_name, display_name, scope_name, v, doc_special)
+                elif type(v) == int:
+                    self._show_int(doc_items, component_name, display_name, scope_name, v, doc_special)
+                elif type(v) == float:
+                    self._show_float(doc_items, component_name, display_name, scope_name, v, doc_special)
+                elif type(v) == bool:
+                    self._show_bool(component_name, display_name, scope_name, v, doc_special)
+                elif type(v) == dict:
+                    self._show_dict(level, component_name, display_name, scope_name, doc, v, doc_special)
+                elif type(v) == list:
+                    self._show_list(level, display_name, scope_name, component_name, doc, v, doc_special)
             if doc_annotation != None:
                     output.put_text(doc_annotation, scope=scope_name)
                     output.put_text("\n", scope=scope_name).style("font-size: 1px")
