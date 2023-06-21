@@ -5,7 +5,7 @@ import numpy as np
 from common import timer_module
 from source.common import character
 from source.interaction.interaction_core import itt
-from source.interaction import interaction_core
+from source.exceptions.combat import *
 from source.api.pdocr_light import ocr_light
 from source.api.pdocr_complete import ocr
 from source.ui.ui import ui_control
@@ -384,6 +384,9 @@ def get_characters_name(max_retry = 50):
                     ret_list.append(None)
         if len(ret_list)==4:
             return ret_list
+        else:
+            itt.save_snapshot('RecognizeCharacterNameError')
+            raise RecognizeCharacterNameError('Recognize fail')
     return ret_list
 
 def get_team_chara_names_in_party_setup():

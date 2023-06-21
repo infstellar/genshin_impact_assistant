@@ -807,6 +807,15 @@ class InteractionBGD:
             itt.key_down(key)
         else:
             itt.key_up(key)
+            
+    def save_snapshot(self, reason:str = ''):
+        img = self.capture()
+        if img.shape[2] == 4:
+            img = img[:,:,:3]
+        img_path = os.path.join(ROOT_PATH, "Logs", get_logger_format_date(), f"{reason} | {time.strftime('%H-%M-%S', time.localtime())}.jpg")
+        logger.warning(f"Snapshot saved to {img_path}")
+        cv2.imwrite(img_path, img)        
+    
 def itt_test(itt: InteractionBGD):
     pass
 

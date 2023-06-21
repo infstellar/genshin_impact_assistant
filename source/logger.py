@@ -31,12 +31,25 @@ def warning_once(self, message):
 def demo(self, message):
     self.info(f"DEMO: {message}")
 
-logger.warning_once = types.MethodType(warning_once, logger)
-logger.demo = types.MethodType(demo, logger)
+import datetime
+
+def delete_files(path, days):
+    now = datetime.datetime.now()
+    for root, dirs, files in os.walk(path):
+        for file in files:
+            file_path = os.path.join(root, file)
+            modified_time = datetime.datetime.fromtimestamp(os.path.getmtime(file_path))
+            if (now - modified_time).days > days:
+                os.remove(file_path)
+
+delete_files(f"{ROOT_PATH}/Logs", 30)
+
 
 # configure loguru
 logger.remove(handler_id=None)
-logger.add(os.path.join(ROOT_PATH, os.path.join(ROOT_PATH, 'Logs', "{time:YYYY-MM-DD}/{time:YYYY-MM-DD}.log")), level="TRACE", backtrace=True, retention='15 days')
+logger.warning_once = types.MethodType(warning_once, logger)
+logger.demo = types.MethodType(demo, logger)
+logger.add(os.path.join(ROOT_PATH, os.path.join(ROOT_PATH, 'Logs', "{time:YYYY-MM-DD}/{time:YYYY-MM-DD}.log")), level="TRACE", backtrace=True)
 if DEBUG_MODE:
     logger.add(sys.stdout, level="TRACE", backtrace=True)
 else:

@@ -1,5 +1,5 @@
 from source.util import *
-import keyboard
+from source.interaction.interaction_core import itt
 from source.task.task_template import TaskTemplate
 from source.common.base_threading import BaseThreading
 from source.exceptions.util import *
@@ -33,6 +33,8 @@ class TaskManager(BaseThreading):
                 for pr in exception_instance.possible_reasons:
                     i+=1
                     logger.error(f'{t2t("Possible Reason")} {i}: {pr}')
+        if isinstance(SnapshotException, exception_instance):
+            exception_instance.save_snapshot(itt.capture())
     
     def append_task(self, task_name):
         self.task_list.append(task_name)

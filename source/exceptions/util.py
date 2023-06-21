@@ -18,6 +18,6 @@ class SnapshotException(GIABaseException):
     def save_snapshot(self, img:ndarray):
         if img.shape[2] == 4:
             img = img[:,:,:3]
-        img_path = os.path.join(ROOT_PATH, "Logs", get_logger_format_date(), f"{self.__str__()}---{time.strftime('%H-%M-%S', time.localtime())}.jpg")
+        img_path = os.path.join(ROOT_PATH, "Logs", get_logger_format_date(), f"{self.__str__()} | {time.strftime('%H-%M-%S', time.localtime())}.jpg")
         logger.warning(f"Snapshot saved to {img_path}")
         cv2.imwrite(img_path, img)
