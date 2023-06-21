@@ -148,6 +148,7 @@ class WindowsCapture(Capture):
         height=int(height)
         if height in list(map(int, [1080/0.75, 1080/1.25, 1080/1.5, 1080/1.75, 1080/2, 1080/2.25, 1080/2.5, 1080/2.75, 1080/3])):
             logger.warning_once(t2t("You seem to have monitor scaling set? It is automatically recognized and this does not affect usage."))
+            logger.warning_once(f"scale: {height}")
             width = 1920
             height = 1080
             # 计算实际截屏区域大小
@@ -173,7 +174,7 @@ class WindowsCapture(Capture):
         return ret
     
     def _cover_privacy(self, img) -> ndarray:
-        img[1056 : 1075, 1770 : 1863, :3] = 0
+        img[1053 : 1075, 1770 : 1863, :3] = 128
         return img
     
 class CloudCapture(Capture):

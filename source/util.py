@@ -14,7 +14,7 @@ ASSETS_PATH = ROOT_PATH + '\\assets'
 if sys.path[0] != ROOT_PATH:   sys.path.insert(0, ROOT_PATH)
 if sys.path[1] != SOURCE_PATH: sys.path.insert(1, SOURCE_PATH)
 
-from source.logger import logger
+from source.logger import logger, get_logger_format_time, get_logger_format_date
 from source.config.config import GIAconfig
 from source.i18n import t2t, GLOBAL_LANG
 from source.path_lib import *

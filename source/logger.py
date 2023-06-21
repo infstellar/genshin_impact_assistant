@@ -1,11 +1,19 @@
 from loguru import logger
 import types
-import os, json
+import os
+import json
+import time
 from source.path_lib import *
 
 def load_json(json_name='General.json', default_path='config\\settings') -> dict:
     all_path = os.path.join(ROOT_PATH, default_path, json_name)
     return json.load(open(all_path, 'r', encoding='utf-8'))
+
+def get_logger_format_time():
+    return time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
+
+def get_logger_format_date():
+    return time.strftime('%Y-%m-%d', time.localtime())
 
 jpath = fr"{ROOT_PATH}/config/settings/General.json"
 if os.path.exists(jpath):
