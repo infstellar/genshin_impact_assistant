@@ -2,6 +2,7 @@
 import time, math, shutil, sys, os, json
 import win32gui, win32process, psutil, ctypes, pickle, traceback
 import numpy as np
+from numpy import ndarray
 import cv2, yaml
 from PIL import Image, ImageDraw, ImageFont
 from collections import OrderedDict
