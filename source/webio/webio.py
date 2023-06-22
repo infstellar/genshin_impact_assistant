@@ -1,9 +1,15 @@
 from source.util import *
-from source.webio.pages import *
+from pywebio import *
+from source.webio.util import *
+from source import webio
 import subprocess
 import pywebio
 import source.webio.log_handler
 from source.logger import add_logger_to_GUI
+from source.webio.webpages.main import MainPage
+from source.webio.webpages.general_settings import SettingPage
+from source.webio.webpages.combat_settings import CombatSettingPage
+from source.webio.webpages.collector_settings import CollectorSettingPage
 from source.webio.webpages.mission import MissionPage
 from source.webio.webpages.missiondownload import MissionDownloadPage
 from source.webio.webpages.video2path import VideoToPathPage
