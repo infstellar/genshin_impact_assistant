@@ -164,7 +164,7 @@ class MainPage(AdvancePage):
 
             m = upd_message()
             if m!="":
-                output.popup(t2t('更新提示'), m)
+                output.popup(t2t('Update Notice'), m, implicit_close=False)
         
     # def _get_mission_groups_config(self):
     #     jsons = load_json_from_folder(f"{CONFIG_PATH}\\mission_groups")
