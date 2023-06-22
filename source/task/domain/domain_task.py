@@ -11,6 +11,7 @@ from source.manager import asset
 from source.task import task_id as TI
 from source.funclib.err_code_lib import ERR_NONE, ERR_STUCK, ERR_PASS
 from source.common import timer_module
+from source.flow.utils.cvars import *
 
 
 class DomainTask(TaskTemplate):
@@ -26,7 +27,7 @@ class DomainTask(TaskTemplate):
         self.domain_name = GIAconfig.Domain_DomainName
         self.domain_stage_name = GIAconfig.Domain_DomainStageName
         self.domain_posi = load_items_position(self.domain_name,mode=1, ret_mode=1)[0]
-        self.TMFCF.set_parameter(stop_rule = 1, MODE = "AUTO", target_posi = self.domain_posi, is_tp=True, tp_type=["Domain"])
+        self.TMFCF.set_parameter(stop_rule = STOP_RULE_F, MODE = "AUTO", target_posi = self.domain_posi, is_tp=True, tp_type=["Domain"])
         self.TMFCF.set_target_posi(self.domain_posi)
         self.last_domain_times = int(GIAconfig.Domain_ChallengeTimes)
 

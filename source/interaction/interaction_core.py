@@ -321,6 +321,8 @@ class InteractionBGD:
                 return False
         elif ret_mode == IMG_RATE:
             return matching_rate
+    
+    appear = get_img_existence
         
     def get_text_existence(self, textobj: text_manager.TextTemplate, is_gray=False, is_log = True, ret_mode = IMG_BOOL, show_res = False):
         from source.api.pdocr_complete import ocr

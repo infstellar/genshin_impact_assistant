@@ -1,4 +1,4 @@
-from source.util import *
+from source.commission.util import *
 from source.mission.mission_template import MissionExecutor
 from source.map.position.position import *
 from source.interaction.interaction_core import itt
@@ -30,10 +30,19 @@ class CommissionTemplate(MissionExecutor, Talk):
         if stop_func is None:stop_func=self.checkup_stop_func
         return super().talk_until_switch(stop_func)
     
-    def is_mission_succ(self):
-        pass
-        # itt.capture()
+    def rec_commission_complete(self):
+        r = itt.appear(IconCommissionCommissionComplete)
+        if r:
+            logger.info(t2t('commission complete'))
+        return r
 
+    def fight_until_commission_complete(self):
+        self.start_combat()
+        while 1:
+            time.sleep(0.2)
+            if self.rec_commission_complete(): break
+        self.stop_combat()
+    
     def is_commission_complete(self):
         if self.is_commission_start == False:
             if self.is_in_commission():

@@ -132,13 +132,13 @@ class Mission(MissionExecutor):
         """
         return super().collect(MODE, collection_name, collector_type, is_combat, is_activate_pickup, pickup_points)
     
-    def circle_search(self, center_posi, stop_rule='F'):
+    def circle_search(self, center_posi, stop_rule=STOP_RULE_F):
         """进入一个循环，以中心坐标为圆心向外移动搜索。当符合stop_rule时退出。
         阻塞式任务.
 
         Args:
             center_posi (_type_): 中心坐标
-            stop_rule (str, optional): 停止条件。可选F或Combat。 Defaults to 'F'.
+            stop_rule (str, optional): 停止条件。可选 STOP_RULE_F 或 STOP_RULE_COMBAT 。 Defaults to STOP_RULE_F.
 
         Returns:
             _type_: _description_
@@ -289,7 +289,7 @@ class Mission(MissionExecutor):
         Returns:
             bool: _description_
         """
-        return super()._tmf_handle_stuck_then_recover(k)
+        return super().handle_tmf_stuck_then_recover(k)
     
     def handle_tmf_stuck_then_raise(self, k) -> bool:
         """传入TMF的错误码，如果出错则抛出异常，退出任务。

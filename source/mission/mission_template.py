@@ -102,7 +102,7 @@ class MissionExecutor(BaseThreading):
         curr_posi = list(tracker.get_position())
         target_posi = list(tracker.bigmap_tp(posi=curr_posi, tp_type=["Statue"], csf=self.checkup_stop_func).tianli)
         self.TMCF.reset()
-        self.TMCF.set_parameter(MODE="AUTO",stop_rule=1,target_posi=target_posi,is_tp=False)
+        self.TMCF.set_parameter(MODE="AUTO",stop_rule=STOP_RULE_F,target_posi=target_posi,is_tp=False)
         self.TMCF.start_flow()
         while 1:
             time.sleep(0.2)
@@ -251,7 +251,7 @@ class MissionExecutor(BaseThreading):
             self.CFCF.flow_connector.puo.reset_pickup_item_list()
         return self._handle_exception()
     
-    def circle_search(self, center_posi, stop_rule='F'):
+    def circle_search(self, center_posi, stop_rule=STOP_RULE_F):
         points = get_circle_points(center_posi[0],center_posi[1])
         itt.key_down('w')
         jil = movement.JumpInLoop(8)
@@ -262,11 +262,11 @@ class MissionExecutor(BaseThreading):
                 if euclidean_distance(p, genshin_map.get_position())<=2.2:
                     logger.debug(f"circle_search: {p} arrived")
                     break
-                if stop_rule == 'F':
+                if stop_rule == STOP_RULE_F:
                     if generic_lib.f_recognition():
                         itt.key_up('w')
                         return True
-                elif stop_rule == "Combat":
+                elif stop_rule == STOP_RULE_COMBAT:
                     if combat_lib.CSDL.get_combat_state():
                         itt.key_up('w')
                         return True
@@ -320,7 +320,7 @@ class MissionExecutor(BaseThreading):
             return True
         return False
     
-    def _tmf_handle_stuck_then_recover(self,k) -> bool:
+    def handle_tmf_stuck_then_recover(self,k) -> bool:
         if k == ERR_STUCK:
             self._recover()
             return True

@@ -1,4 +1,6 @@
-from source.manager.asset import Text
+from source.manager.asset import Text, ImgIcon
+
+IconCommissionCommissionComplete = ImgIcon()
 
 BasicKnowledgeOfTheKnights = Text(zh="西风骑士的基础知识",en="Basic Knowledge of the Knights")
 CrisisOfShields = Text(zh="持盾的危机", en="Crisis of Shields")
