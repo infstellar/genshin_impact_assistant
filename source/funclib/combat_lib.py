@@ -24,13 +24,15 @@ load_err_times = 0
 def default_stop_func():
     return False
 
-class TacticKeyNotFoundError(RuntimeError):
-    def __init__(self, arg):
-        self.args = [arg]
+class TacticKeyNotFoundError(GIABaseException):
+    POSSIBLE_REASONS = [
+        t2t('No corresponding parameters filled in')
+    ]
 
-class TacticKeyEmptyError(RuntimeError):
-    def __init__(self, arg):
-        self.args = [arg]
+class TacticKeyEmptyError(GIABaseException):
+    POSSIBLE_REASONS = [
+        t2t('No corresponding parameters filled in')
+    ]
 
 CREATE_WHEN_NOTFOUND = 0
 RAISE_WHEN_NOTFOUND = 1
@@ -452,7 +454,7 @@ def get_curr_team_file():
             return i["label"]
     return False
 
-class CharacterNameNotInCharacterParametersError(Exception):pass
+class CharacterNameNotInCharacterParametersError(GIABaseException):pass
 def generate_teamfile_automatic():
     if not (ui_control.verify_page(UIPage.page_main) or ui_control.verify_page(UIPage.page_domain)):
         ui_control.ui_goto(UIPage.page_main)
@@ -575,7 +577,7 @@ def get_chara_list():
             )
         )
     if load_err_times>0:
-        raise TacticKeyEmptyError(t2t("Character Key Empty Error"))
+        raise TacticKeyEmptyError("Character Key Empty Error")
         
     return chara_list
     

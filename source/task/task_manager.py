@@ -28,9 +28,9 @@ class TaskManager(BaseThreading):
         if isinstance(GIABaseException, exception_instance):
             if args.exc_value.stop_task_flag:
                 self.stop_tasklist()
-            if len(exception_instance.possible_reasons) > 0:
+            if len(exception_instance.POSSIBLE_REASONS) > 0:
                 i = 0
-                for pr in exception_instance.possible_reasons:
+                for pr in exception_instance.POSSIBLE_REASONS:
                     i+=1
                     logger.error(f'{t2t("Possible Reason")} {i}: {pr}')
         if isinstance(SnapshotException, exception_instance):

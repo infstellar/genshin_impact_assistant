@@ -5,7 +5,18 @@ class GIABaseException(Exception):
     def __init__(self, *args: object) -> None:
         super().__init__(*args)
         self.stop_task_flag = False # 当发生该异常时，是否结束所有Task。
-    
+        
+    def __str__(self) -> str:
+        r = '\x1b[31m'
+        r += super().__str__()
+        r+='\n'
+        if len(self.POSSIBLE_REASONS) > 0:
+            i = 0
+            for pr in self.POSSIBLE_REASONS:
+                i+=1
+                r+='\x1b[31m'
+                r+=(f'{t2t("Possible Reason")} {i}: {pr} \n')
+        return r
 class TaskException(GIABaseException):
     def __init__(self, *args: object) -> None:
         super().__init__(*args)
