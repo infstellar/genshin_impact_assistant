@@ -546,10 +546,12 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
                     for adsor_p in self.adsorptive_position:
                         if euclidean_distance(adsor_p, curr_posi) < adsorptive_threshold:
                             logger.info(f"adsorption: {adsor_p} start")
-                            for i in range(20):
+                            for i in range(15):
                                 if movement.move_to_posi_LoopMode(adsor_p, self.upper.checkup_stop_func, threshold=1):break
                                 if self.upper.is_auto_pickup:
-                                    if self.upper.PUO.pickup_recognize():break
+                                    if self.upper.PUO.pickup_recognize():
+                                        while self.upper.PUO.pickup_recognize():pass
+                                        break
                                 time.sleep(0.2)
                                 if i%5==0:
                                     logger.debug(f"adsorption: {i}")
