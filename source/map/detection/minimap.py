@@ -272,8 +272,8 @@ class MiniMap(MiniMapResource):
         image = image.astype(np.uint8)
         return image
 
-    def _predict_rotation(self, image):
-        if not GIAconfig.General_UsingAlphaChannel:
+    def _predict_rotation(self, image, use_alpha = False):
+        if not use_alpha:
             d = self.MINIMAP_RADIUS * 2
             # Upscale image and apply Gaussian filter for smother results
             scale = 2
@@ -364,6 +364,9 @@ class MiniMap(MiniMapResource):
     def update_rotation(self, image, layer=MapConverter.LAYER_Teyvat, update_position=True):
         if image.shape[2]==4:
             image = image[:,:,:3]
+            use_alpha = (self.scene == 'city')
+        else:
+            use_alpha = False
         # minimap = self._get_minimap(image, radius=self.MINIMAP_RADIUS)
         # minimap = rgb2luma(minimap)
         if layer == MapConverter.LAYER_Domain:
@@ -372,7 +375,7 @@ class MiniMap(MiniMapResource):
         else:
             minimap = self._get_minimap_subtract(image, update_position=update_position)
 
-        self.rotation = self._predict_rotation(minimap)
+        self.rotation = self._predict_rotation(minimap, use_alpha=use_alpha)
 
         # Uncomment this to debug
         # self.show_rotation(minimap, self.degree)

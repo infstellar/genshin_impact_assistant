@@ -455,7 +455,8 @@ if __name__ == '__main__':
     genshin_map.reinit_smallmap()
     while 1:
         time.sleep(0.2)
+        # print(genshin_map.get_rotation())
         # input()
         # itt.key_down('w')
-        print(genshin_map.get_and_verify_position())
+        # print(genshin_map.get_and_verify_position())
     
