@@ -386,9 +386,9 @@ def get_characters_name(max_retry = 50):
                     ret_list.append(None)
         if len(ret_list)==4:
             return ret_list
-        else:
-            itt.save_snapshot('RecognizeCharacterNameError')
-            raise RecognizeCharacterNameError('Recognize fail')
+
+    itt.save_snapshot('RecognizeCharacterNameError')
+    raise RecognizeCharacterNameError('Recognize fail')
     return ret_list
 
 def get_team_chara_names_in_party_setup():
