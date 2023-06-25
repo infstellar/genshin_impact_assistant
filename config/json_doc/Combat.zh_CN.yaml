@@ -1,3 +1,7 @@
+AdaptiveTeamSetup:
+  doc: 自动识别角色并生成队伍
+  annotation: 启用后，优先寻找tactic文件夹中适合的战斗策略，如果没有，则自动生成策略。如果希望强制使用自定义的战斗策略请关闭此项。
+
 E_long_cd_time:
   annotation: 长Ecd时间，没有则为0
   doc: 长元素战技cd时间

@@ -1,8 +1,8 @@
 from source.util import *
-import keyboard
-from source.task.task_template import TaskTemplate, TaskEndException
+from source.interaction.interaction_core import itt
+from source.task.task_template import TaskTemplate
 from source.common.base_threading import BaseThreading
-
+from source.exceptions.util import *
 
 COLLECTION_PATH_TASK = "CollectionPathTask"
 DOMAIN_TASK = "DomainTask"
@@ -20,6 +20,21 @@ class TaskManager(BaseThreading):
         self.task_list = []
         self.get_task_list = lambda:[]
         self.start_tasklist_flag = False
+    
+    def task_excepthook(self, args):
+        # if 'stop_task_flag' in args.exc_value.__dict__:
+        exception_instance = args.exc_value
+        logger.exception(exception_instance)
+        if isinstance(GIABaseException, exception_instance):
+            if args.exc_value.stop_task_flag:
+                self.stop_tasklist()
+            if len(exception_instance.POSSIBLE_REASONS) > 0:
+                i = 0
+                for pr in exception_instance.POSSIBLE_REASONS:
+                    i+=1
+                    logger.error(f'{t2t("Possible Reason")} {i}: {pr}')
+        if isinstance(SnapshotException, exception_instance):
+            exception_instance.save_snapshot(itt.capture())
     
     def append_task(self, task_name):
         self.task_list.append(task_name)
@@ -52,6 +67,12 @@ class TaskManager(BaseThreading):
         self.start_tasklist_flag = not self.start_tasklist_flag
         self.curr_task.stop_threading()
 
+    def stop_tasklist(self):
+        if self.start_tasklist_flag:
+            logger.info(t2t('stopping tasks'))
+            self.start_tasklist_flag = False
+            self.curr_task.stop_threading()
+    
     def start_stop_task(self, task_name):
         if not self.reg_task_flag:
             
@@ -60,11 +81,11 @@ class TaskManager(BaseThreading):
             #     self.curr_task.end_task()
             #     self.reg_task_flag = not self.reg_task_flag
             if task_name == DOMAIN_TASK:
-                from source.task.domain_task import DomainTask
+                from source.task.domain.domain_task import DomainTask
                 self.curr_task = DomainTask()
                 
             elif task_name == MISSION_TASK:
-                from source.task.mission_task import MissionTask
+                from source.task.mission.mission_task import MissionTask
                 self.curr_task = MissionTask()
             elif task_name == COMMISSION_TASK:
                 from source.commission.commission_executor import CommissionExecutor

@@ -189,7 +189,7 @@ class VideoToPathPage(AdvancePage):
         self.PRF = PathRecorderController()
         self.PRF.flow_connector.path_name = pin.pin[self.INPUT_PATH_FILE_HEAD_NAME]
         self.PRF.flow_connector.is_pickup_mode = bool(pin.pin[self.INPUT_IS_PICKUP_MODE])
-        self.PRF.flow_connector.coll_name = pin.pin[self.INPUT_PATH_FILE_HEAD_NAME]
+        self.PRF.flow_connector.coll_name = pin.pin[self.INPUT_COLL_NAME]
         self.frame_index = int(pin.pin[self.INPUT_FRAME_TO_START])
         self.target_fps = 30
         
@@ -293,13 +293,13 @@ class VideoToPathPage(AdvancePage):
         elif k & 0xFF == ord('b'):
             self.set_init_position()
         elif k & 0xFF == ord('.'):
-            fps+=5
-            self._show_log(f"fps set as {fps}")
+            self.target_fps+=5
+            self._show_log(f"fps set as {self.target_fps}")
         elif k & 0xFF == ord(','):
-            fps-=5
-            if fps <= 0:
-                fps = 1
-            self._show_log(f"fps set as {fps}")
+            self.target_fps-=5
+            if self.target_fps <= 0:
+                self.target_fps = 1
+            self._show_log(f"fps set as {self.target_fps}")
         elif k & 0xFF == ord(']'):
             self.PRF.pc._start_stop_recording()
             self._show_log(f"press any key to continue.")

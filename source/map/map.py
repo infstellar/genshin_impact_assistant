@@ -130,6 +130,10 @@ class Map(MiniMap, BigMap, MapConverter):
         Returns:
             list: TianLiPosition format
         """
+        if not itt.get_img_existence(asset.IconUIEmergencyFood, is_log=False):
+            logger.warning(t2t("不在大世界，无法获取坐标"))
+            logger.warning(f"return {self.convert_GIMAP_to_cvAutoTrack(self.position)}")
+            return self.convert_GIMAP_to_cvAutoTrack(self.position)
         if not self.small_map_init_flag:
             self.reinit_smallmap()
             self.small_map_init_flag = True
@@ -451,7 +455,8 @@ if __name__ == '__main__':
     genshin_map.reinit_smallmap()
     while 1:
         time.sleep(0.2)
+        # print(genshin_map.get_rotation())
         # input()
         # itt.key_down('w')
-        print(genshin_map.get_and_verify_position())
+        # print(genshin_map.get_and_verify_position())
     

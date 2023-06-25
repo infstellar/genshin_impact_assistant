@@ -1,6 +1,6 @@
 from source.mission.mission_template import MissionExecutor
 from source.mission.cvars import *
-from source.flow.cvars import *
+from source.flow.utils.cvars import *
 
 """
 这里是Mission的标准类.编写你的mission时,请继承该类.
@@ -64,7 +64,7 @@ class Mission(MissionExecutor):
         """
         return super().move_straight(position, is_tp, is_precise_arrival, stop_rule)
     
-    def move_along(self, path, is_tp=None, is_precise_arrival=None):
+    def move_along(self, path, is_tp=None, is_precise_arrival=None, stop_rule = None):
         """沿着TLPP行走。
         阻塞式任务.
 
@@ -72,13 +72,17 @@ class Mission(MissionExecutor):
             path (dict): TLPP格式字典。
             is_tp (bool, optional): 是否传送. Defaults to None.
             is_precise_arrival (bool, optional): 是否精确到达目的地(误差小于1m). Defaults to None.
+            stop_rule (_type_, optional): 停止条件. 可选:
+                STOP_RULE_ARRIVE: 到达后停止
+                STOP_RULE_F: 在目的地附近看到f后停止.
+                STOP_RULE_COMBAT: 发现敌人或进入战斗后停止。
 
         注: 在某些Mission中,path可能会是字符串.这是旧版本所使用的存储TLPP文件的方法,现已弃用. 目前所有的TLPP文件与Mission放在同一个py文件中.
         
         Returns:
             _type_: _description_
         """
-        return super().move_along(path, is_tp, is_precise_arrival)
+        return super().move_along(path, is_tp, is_precise_arrival, stop_rule)
     
     def start_combat(self, mode="Normal"):
         """开始战斗。
@@ -128,13 +132,13 @@ class Mission(MissionExecutor):
         """
         return super().collect(MODE, collection_name, collector_type, is_combat, is_activate_pickup, pickup_points)
     
-    def circle_search(self, center_posi, stop_rule='F'):
+    def circle_search(self, center_posi, stop_rule=STOP_RULE_F):
         """进入一个循环，以中心坐标为圆心向外移动搜索。当符合stop_rule时退出。
         阻塞式任务.
 
         Args:
             center_posi (_type_): 中心坐标
-            stop_rule (str, optional): 停止条件。可选F或Combat。 Defaults to 'F'.
+            stop_rule (str, optional): 停止条件。可选 STOP_RULE_F 或 STOP_RULE_COMBAT 。 Defaults to STOP_RULE_F.
 
         Returns:
             _type_: _description_
@@ -285,7 +289,7 @@ class Mission(MissionExecutor):
         Returns:
             bool: _description_
         """
-        return super()._tmf_handle_stuck_then_recover(k)
+        return super().handle_tmf_stuck_then_recover(k)
     
     def handle_tmf_stuck_then_raise(self, k) -> bool:
         """传入TMF的错误码，如果出错则抛出异常，退出任务。

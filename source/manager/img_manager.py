@@ -21,8 +21,19 @@ def qshow(img1):
     cv2.imshow('123', img1)
     cv2.waitKey(0)
 class ImgIcon(AssetBase):
-    def __init__(self, path=None, name=None, is_bbg=None, alpha=None, bbg_posi=None, cap_posi = None,
-                 jpgmode=2, threshold=0.91, win_page = 'all', win_text = None, offset = 0, print_log = LOG_NONE):
+    def __init__(self,
+                 path=None,
+                 name=None,
+                 is_bbg=None,
+                 alpha=None,
+                 bbg_posi=None,
+                 cap_posi = None,
+                 jpgmode=2,
+                 threshold=0.91,
+                 win_page = 'all',
+                 win_text = None,
+                 offset = 0,
+                 print_log = LOG_NONE):
         """创建一个img对象，用于图片识别等。
 
         Args:

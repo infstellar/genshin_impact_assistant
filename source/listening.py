@@ -5,12 +5,13 @@ except:
 import time
 import keyboard
 from source.task import task_manager
-from source.mission import mission_manager
+import threading
 
 combat_flag = False
 collector_flag = False
 startstop_flag = False
 TASK_MANAGER = task_manager.TASK_MANAGER
+threading.excepthook = TASK_MANAGER.task_excepthook
 TASK_MANAGER.setDaemon(True)
 # TASK_MANAGER.pause_threading()
 TASK_MANAGER.start()
@@ -47,7 +48,7 @@ def import_current_module():
             pass
         elif current_flow == FLOW_COMBAT:
             # logger.info("正在导入 FLOW_COMBAT 模块，可能需要一些时间。")
-            from source.flow import alpha_loop
+            from source.flow.abandoned import alpha_loop
         elif current_flow == FLOW_DOMAIN:
             # logger.info("正在导入 FLOW_DOMAIN 模块，可能需要一些时间。")
             from source.flow import domain_flow
@@ -60,7 +61,7 @@ def import_current_module():
                 pass
             elif current_flow == FLOW_COMBAT:
                 # logger.info("正在导入 FLOW_COMBAT 模块，可能需要一些时间。")
-                from source.flow import alpha_loop
+                from source.flow.abandoned import alpha_loop
             # elif current_flow == FLOW_COLLECTOR:
             #     # logger.info("正在导入 FLOW_COLLECTOR 模块，可能需要一些时间。")
             #     from source.flow import collector_flow
@@ -75,7 +76,7 @@ def switch_combat_loop():
         logger.info(t2t('正在停止自动战斗'))
         t1.stop_threading()
     else:
-        from source.controller.combat_controller import CombatController
+        from source.combat.combat_controller import CombatController
         logger.info(t2t('启动自动战斗'))
         t1 = CombatController()
         t1.setDaemon(True)
@@ -91,7 +92,7 @@ def switch_collector_loop():
         t3.stop_threading()
     else:
         logger.info(t2t('启动自动采集'))
-        from source.flow import collector_flow
+        from source.flow.abandoned import collector_flow
         t3 = collector_flow.CollectorFlow()
         t3.setDaemon(True)
         t3.start()

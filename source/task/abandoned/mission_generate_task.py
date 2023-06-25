@@ -2,8 +2,12 @@ from source.util import *
 from source.task.task_template import TaskTemplate
 
 from source.flow.path_recorder_flow import PathRecorderController
-from source.flow.collector_flow_upgrad import CollectorFlowController
+from source.flow.collector_flow_upgrade import CollectorFlowController
 from source.map.map import genshin_map
+
+"""
+已废弃。不要使用。
+"""
 
 """
 json格式:

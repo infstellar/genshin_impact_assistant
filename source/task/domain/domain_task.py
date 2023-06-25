@@ -1,16 +1,17 @@
 from source.util import *
-from source.flow.domain_flow_upgrad import DomainFlowController
-from source.flow.teyvat_move_flow_upgrad import TeyvatMoveFlowController
+from source.task.domain.domain_flow_upgrade import DomainFlowController
+from source.flow.teyvat_move_flow_upgrade import TeyvatMoveFlowController
 from source.task.task_template import TaskTemplate
 from source.funclib.collector_lib import load_items_position
 from source.funclib.generic_lib import f_recognition
 from source.ui.ui import ui_control
 import source.ui.page as UIPage
 from source.interaction.interaction_core import itt
-from source.manager import asset, scene_manager
+from source.manager import asset
 from source.task import task_id as TI
 from source.funclib.err_code_lib import ERR_NONE, ERR_STUCK, ERR_PASS
 from source.common import timer_module
+from source.flow.utils.cvars import *
 
 
 class DomainTask(TaskTemplate):
@@ -26,7 +27,7 @@ class DomainTask(TaskTemplate):
         self.domain_name = GIAconfig.Domain_DomainName
         self.domain_stage_name = GIAconfig.Domain_DomainStageName
         self.domain_posi = load_items_position(self.domain_name,mode=1, ret_mode=1)[0]
-        self.TMFCF.set_parameter(stop_rule = 1, MODE = "AUTO", target_posi = self.domain_posi, is_tp=True, tp_type=["Domain"])
+        self.TMFCF.set_parameter(stop_rule = STOP_RULE_F, MODE = "AUTO", target_posi = self.domain_posi, is_tp=True, tp_type=["Domain"])
         self.TMFCF.set_target_posi(self.domain_posi)
         self.last_domain_times = int(GIAconfig.Domain_ChallengeTimes)
 
@@ -67,6 +68,8 @@ class DomainTask(TaskTemplate):
                                    mode=CONTAIN_MATCHING,
                                    extract_white_threshold=254)
         if p1 != -1:
+            if len(p1)>1:
+                p1 = p1[0]
             itt.move_and_click([p1[0] + 5, p1[1] + 5], delay=1)
         else:
             texts = ocr.get_all_texts(itt.capture(jpgmode=0, posi=cap_area))

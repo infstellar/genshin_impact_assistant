@@ -2,15 +2,19 @@
 import time, math, shutil, sys, os, json
 import win32gui, win32process, psutil, ctypes, pickle, traceback
 import numpy as np
+from numpy import ndarray
 import cv2, yaml
 from PIL import Image, ImageDraw, ImageFont
 from collections import OrderedDict
+from typing import Union
+
 ROOT_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SOURCE_PATH = ROOT_PATH + '\\source'
 ASSETS_PATH = ROOT_PATH + '\\assets'
 if sys.path[0] != ROOT_PATH:   sys.path.insert(0, ROOT_PATH)
 if sys.path[1] != SOURCE_PATH: sys.path.insert(1, SOURCE_PATH)
-from source.logger import logger
+
+from source.logger import logger, get_logger_format_time, get_logger_format_date
 from source.config.config import GIAconfig
 from source.i18n import t2t, GLOBAL_LANG
 from source.path_lib import *
@@ -21,6 +25,7 @@ yaml
 shutil
 pickle
 traceback
+Union
 
 DEBUG_MODE = GIAconfig.General_DEBUG
 DEMO_MODE = False
@@ -28,7 +33,7 @@ INTERACTION_MODE = GIAconfig.General_InteractionMode
 IS_DEVICE_PC = True
 
 # load config file
-def load_json(json_name='General.json', folder_path='config\\settings', auto_create = False) -> dict:
+def load_json(json_name='General.json', folder_path='config\\settings', auto_create = False) -> Union[dict,list]:
     """加载json.
 
     Args:

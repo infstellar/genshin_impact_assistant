@@ -1,9 +1,7 @@
 from source.funclib.cvars import WALKING, FLYING, SWIMMING, CLIMBING
+from source.cvars import *
 
 IN_MOVE = WALKING
 IN_FLY = FLYING
 IN_WATER = SWIMMING
 IN_CLIMB = CLIMBING
-STOP_RULE_ARRIVE = 0
-STOP_RULE_F = 1
-STOP_RULE_COMBAT = 2

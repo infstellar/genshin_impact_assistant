@@ -1,10 +1,10 @@
 from source.mission.mission.util import *
 from source.mission.mission.base import MissionBase
-from source.flow import collector_flow_upgrad
+from source.flow import collector_flow_upgrade
 
 class MissionCollector():
     def __init__(self) -> None:
-        self.CFCF = collector_flow_upgrad.CollectorFlowController()
+        self.CFCF = collector_flow_upgrade.CollectorFlowController()
         self._add_sub_threading(self.CFCF, start=False)
         self.CFCF_initialized = True
         self.CFCF.start()

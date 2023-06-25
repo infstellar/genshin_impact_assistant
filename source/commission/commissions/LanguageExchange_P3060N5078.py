@@ -1,8 +1,8 @@
 from source.commission.commission import *
 
-class LanguageExchange_P3060N5078(CommissionTemplate):
+class LanguageExchange_P3060N5078(Commission):
     def __init__(self):
-        CommissionTemplate.__init__(self, "LanguageExchange", [3060,-5078], is_CFCF=True, is_TMCF=True)
+        super().__init__("LanguageExchange", [3060,-5078], is_CFCF=True, is_TMCF=True)
     
     def exec_mission(self):
         self.move_along("LanguageExchange20230414230230i0", is_precise_arrival=True)

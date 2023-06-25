@@ -2,7 +2,7 @@ from source.commission.commission_template import CommissionTemplate, LanguageEr
 from source.manager.asset import Text
 from source.commission.assets import *
 from source.commission.util import *
-from source.flow.cvars import *
+from source.flow.utils.cvars import *
 
 class Commission(CommissionTemplate):
     """

@@ -5,7 +5,7 @@ import numpy as np
 from common import timer_module
 from source.common import character
 from source.interaction.interaction_core import itt
-from source.interaction import interaction_core
+from source.exceptions.combat import *
 from source.api.pdocr_light import ocr_light
 from source.api.pdocr_complete import ocr
 from source.ui.ui import ui_control
@@ -24,13 +24,15 @@ load_err_times = 0
 def default_stop_func():
     return False
 
-class TacticKeyNotFoundError(RuntimeError):
-    def __init__(self, arg):
-        self.args = [arg]
+class TacticKeyNotFoundError(GIABaseException):
+    POSSIBLE_REASONS = [
+        t2t('No corresponding parameters filled in')
+    ]
 
-class TacticKeyEmptyError(RuntimeError):
-    def __init__(self, arg):
-        self.args = [arg]
+class TacticKeyEmptyError(GIABaseException):
+    POSSIBLE_REASONS = [
+        t2t('No corresponding parameters filled in')
+    ]
 
 CREATE_WHEN_NOTFOUND = 0
 RAISE_WHEN_NOTFOUND = 1
@@ -384,6 +386,9 @@ def get_characters_name(max_retry = 50):
                     ret_list.append(None)
         if len(ret_list)==4:
             return ret_list
+
+    itt.save_snapshot('RecognizeCharacterNameError')
+    raise RecognizeCharacterNameError('Recognize fail')
     return ret_list
 
 def get_team_chara_names_in_party_setup():
@@ -449,7 +454,7 @@ def get_curr_team_file():
             return i["label"]
     return False
 
-class CharacterNameNotInCharacterParametersError(Exception):pass
+class CharacterNameNotInCharacterParametersError(GIABaseException):pass
 def generate_teamfile_automatic():
     if not (ui_control.verify_page(UIPage.page_main) or ui_control.verify_page(UIPage.page_domain)):
         ui_control.ui_goto(UIPage.page_main)
@@ -572,7 +577,7 @@ def get_chara_list():
             )
         )
     if load_err_times>0:
-        raise TacticKeyEmptyError(t2t("Character Key Empty Error"))
+        raise TacticKeyEmptyError("Character Key Empty Error")
         
     return chara_list
     

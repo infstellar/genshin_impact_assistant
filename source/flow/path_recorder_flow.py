@@ -1,7 +1,7 @@
 from source.util import *
 import keyboard
-from source.flow.flow_template import FlowController, FlowTemplate, FlowConnector, EndFlowTemplate
-import source.flow.flow_code as FC, source.flow.flow_state as ST
+from source.flow.utils.flow_template import FlowController, FlowTemplate, FlowConnector, EndFlowTemplate
+import source.flow.utils.flow_code as FC, source.flow.utils.flow_state as ST
 from source.interaction.minimap_tracker import tracker
 from source.funclib import movement, generic_lib, collector_lib
 from source.funclib.err_code_lib import *
@@ -257,7 +257,7 @@ class PathRecorderCore(FlowTemplate):
         # if self.upper.is_pickup_mode:
         #     self._fix_bps() # 这个功能好像与is_end=True功能冲突...
         with open(fr"{ROOT_PATH}/dev_assets/tlpp/{jsonname}.pydict", 'w') as f:
-            f.write(str(self.upper.collection_path_dict))
+            f.write(f"{jsonname} = "+str(self.upper.collection_path_dict))
         # save_json(self.upper.collection_path_dict,json_name=jsonname,default_path=f"assets\\TeyvatMovePath")
         logger.info(f"recording save as {jsonname}")
         self.rfc = FC.INIT

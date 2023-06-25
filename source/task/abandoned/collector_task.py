@@ -1,5 +1,5 @@
 from source.task.task_template import TaskTemplate
-from source.flow.domain_flow_upgrad import DomainFlowController
+from source.task.domain.domain_flow_upgrade import DomainFlowController
 
 
 class CollectorTask(TaskTemplate):

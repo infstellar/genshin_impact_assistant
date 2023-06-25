@@ -1,3 +1,5 @@
 from source.exceptions.util import *
-from source.util import *
 
+
+if __name__ == '__main__':
+    pass

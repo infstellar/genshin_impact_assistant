@@ -59,6 +59,9 @@ class DangerousHaulGeneral(CommissionTemplate):
             if not combat_lib.CSDL.get_combat_state():
                 self.stop_combat()
                 break
+            if self.rec_commission_complete():
+                self.stop_combat()
+                break
         self.commission_succ()
         # self.pause_threading()
         

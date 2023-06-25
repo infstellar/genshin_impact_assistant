@@ -1,7 +1,7 @@
 from source.util import *
 from source.assets.ley_line_outcrop import *
 from source.task.ley_line_outcrop.util import *
-from source.mission.mission_template import MissionExecutor
+from source.mission.mission_template import MissionExecutor, EXCEPTION_RAISE
 from source.task.task_template import TaskTemplate
 from source.map.position.position import *
 from source.funclib import movement
@@ -10,6 +10,15 @@ from source.funclib.generic_lib import f_recognition
 
 
 class LeyLineOutcropMission(MissionExecutor):
+    """这个类以MissionExecutor的方式执行任务，因为Mission中已有许多适合该任务的函数可以直接调用。
+        （如果你愿意，可以将这个类修改为符合自定义任务规范的格式，打包成自定义任务（当然没有必要））
+
+    Args:
+        MissionExecutor (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
     TRAVERSE_MONDSTADT_POSITION=[TianLiPosition([783.450352, -6943.497652]),
                                  TianLiPosition([2489.331552, -6101.094052]),
                                  TianLiPosition([3101.988752, -6431.458452]),
@@ -84,7 +93,8 @@ class LeyLineOutcropMission(MissionExecutor):
         for i in range(self.collection_times):
             try:
                 self.target_posi = self.traverse_mondstant()
-                self.move(MODE='AUTO', stop_rule=0, target_posi=list(self.target_posi), is_tp=True, is_precise_arrival=True)
+                r = self.move(MODE='AUTO', stop_rule=0, target_posi=list(self.target_posi), is_tp=True, is_precise_arrival=True)
+                self.handle_tmf_stuck_then_raise(r)
                 self.circle_search(self.target_posi)
                 itt.key_press('f')
                 # self.collect(is_combat=True)
@@ -108,14 +118,19 @@ class LeyLineOutcropMission(MissionExecutor):
                 logger.error(str(e))
         
 class LeyLineOutcropTask(TaskTemplate):
+    """这个类将一个MissionExecutor类套壳成为TaskTemplate类。
+
+    Args:
+        TaskTemplate (_type_): _description_
+    """
     def __init__(self):
         super().__init__()
         self.LLOM = LeyLineOutcropMission()
         self._add_sub_threading(self.LLOM, start=False)
-        
-    def loop(self):
+    
+    def task_run(self):
+        # 阻塞式执行子线程。
         self.blocking_startup(self.LLOM)
-        self.pause_threading()
         
 if __name__ == '__main__':
     # llom = LeyLineOutcropMission()

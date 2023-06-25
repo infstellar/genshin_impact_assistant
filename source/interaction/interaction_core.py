@@ -321,6 +321,8 @@ class InteractionBGD:
                 return False
         elif ret_mode == IMG_RATE:
             return matching_rate
+    
+    appear = get_img_existence
         
     def get_text_existence(self, textobj: text_manager.TextTemplate, is_gray=False, is_log = True, ret_mode = IMG_BOOL, show_res = False):
         from source.api.pdocr_complete import ocr
@@ -807,6 +809,15 @@ class InteractionBGD:
             itt.key_down(key)
         else:
             itt.key_up(key)
+            
+    def save_snapshot(self, reason:str = ''):
+        img = self.capture()
+        if img.shape[2] == 4:
+            img = img[:,:,:3]
+        img_path = os.path.join(ROOT_PATH, "Logs", get_logger_format_date(), f"{reason} | {time.strftime('%H-%M-%S', time.localtime())}.jpg")
+        logger.warning(f"Snapshot saved to {img_path}")
+        cv2.imwrite(img_path, img)        
+    
 def itt_test(itt: InteractionBGD):
     pass
 

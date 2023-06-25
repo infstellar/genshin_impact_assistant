@@ -7,14 +7,14 @@ from funclib.err_code_lib import ERR_PASS, ERR_STUCK
 from source.ui.ui import ui_control
 import source.ui.page as UIPage
 from source.map.map import genshin_map
-from source.flow.flow_template import FlowConnector, FlowController, FlowTemplate, EndFlowTemplate
-from source.flow import flow_state as ST
-from source.flow import flow_code as FC
+from source.flow.utils.flow_template import FlowConnector, FlowController, FlowTemplate, EndFlowTemplate
+from source.flow.utils import flow_state as ST
+from source.flow.utils import flow_code as FC
 from source.ui.ui import ui_control
 import source.ui.page as UIPage
 from source.dev_tool.tianli_navigator import TianliNavigator
 from source.funclib import combat_lib
-from source.flow.cvars import *
+from source.flow.utils.cvars import *
 
 
 

@@ -158,8 +158,8 @@ class PaddleOcrFastDeploy():
     def get_all_texts(self, img, mode=0):
         res = self.analyze(img)
         if mode==1:
-            return ','.join(str(i) for i in res.text).replace(',','')
-        return res.text
+            return ','.join(str(self._replace_texts(i)) for i in res.text).replace(',','')
+        return [self._replace_texts(i) for i in res.text]
     
     def is_img_num(self, im_src):
         pdocr_timer_performance.reset()
@@ -188,12 +188,12 @@ class PaddleOcrFastDeploy():
 
 if __name__ == '__main__':
     ocr = PaddleOcrFastDeploy()
-    imsrc = cv2.imread("D:\\test2.jpg")
-    r = ocr.get_text_position(imsrc, "VsCode")
-    print(r)# boxes, rec_scores, text
-    imsrc = cv2.imread("D:\\test.jpg")
-    r = ocr.get_text_position(imsrc, "VsCode")
-    print(r)# boxes, rec_scores, text
+    # imsrc = cv2.imread("D:\\test2.jpg")
+    # r = ocr.get_text_position(imsrc, "VsCode")
+    # print(r)# boxes, rec_scores, text
+    # imsrc = cv2.imread("D:\\test.jpg")
+    # r = ocr.get_text_position(imsrc, "VsCode")
+    print(ocr._replace_texts('纳西姐'))# boxes, rec_scores, text
 
 
 

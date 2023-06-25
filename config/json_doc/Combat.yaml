@@ -19,3 +19,7 @@ vision:
   - Dendro
   - Anemo
   - ''
+n:
+  type: int
+priority:
+  type: int

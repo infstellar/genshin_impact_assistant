@@ -18,6 +18,9 @@ class Capture():
         self.cap_per_sec = timer_module.CyclicCounter(limit=3).start()
         self.last_cap_times = 0
 
+    def _cover_privacy(self, img: ndarray) -> ndarray:
+        return img
+    
     def _get_capture(self) -> np.ndarray:
         """
         需要根据不同设备实现该函数。
@@ -60,9 +63,9 @@ class Capture():
             self.fps_timer.reset()
             self.capture_cache_lock.acquire()
             self.capture_times+=1
-            self.capture_cache = self._get_capture()
+            self.capture_cache = self._cover_privacy(self._get_capture())
             while 1:
-                self.capture_cache = self._get_capture()
+                self.capture_cache = self._cover_privacy(self._get_capture())
                 if not self._check_shape(self.capture_cache):
                     logger.warning(
                         t2t("Fail to get capture: ")+
@@ -145,6 +148,7 @@ class WindowsCapture(Capture):
         height=int(height)
         if height in list(map(int, [1080/0.75, 1080/1.25, 1080/1.5, 1080/1.75, 1080/2, 1080/2.25, 1080/2.5, 1080/2.75, 1080/3])):
             logger.warning_once(t2t("You seem to have monitor scaling set? It is automatically recognized and this does not affect usage."))
+            logger.warning_once(f"scale: {height}")
             width = 1920
             height = 1080
             # 计算实际截屏区域大小
@@ -168,6 +172,10 @@ class WindowsCapture(Capture):
         # 返回截图数据为numpy.ndarray
         ret = np.frombuffer(buffer, dtype=np.uint8).reshape(height, width, 4)
         return ret
+    
+    def _cover_privacy(self, img) -> ndarray:
+        img[1053 : 1075, 1770 : 1863, :3] = 128
+        return img
     
 class CloudCapture(Capture):
     def __init__(self):

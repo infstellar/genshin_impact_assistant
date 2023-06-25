@@ -1,4 +1,4 @@
-from source.controller import combat_controller
+from source.combat import combat_controller
 from source.common.base_threading import BaseThreading
 from source.funclib import combat_lib
 from source.util import *

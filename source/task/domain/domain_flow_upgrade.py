@@ -1,14 +1,14 @@
 from source.util import *
-from source.flow.flow_template import FlowController, FlowTemplate, FlowConnector, EndFlowTemplate
-import source.flow.flow_code as FC
-from source.controller import combat_controller
+from source.flow.utils.flow_template import FlowController, FlowTemplate, FlowConnector, EndFlowTemplate
+import source.flow.utils.flow_code as FC
+from source.combat import combat_controller
 from common import timer_module
 from source.funclib import generic_lib, movement
 from source.funclib.err_code_lib import *
 from source.manager import posi_manager as PosiM, asset
 from source.interaction.interaction_core import itt
 from source.api import yolox_api
-from source.flow import flow_state as ST
+from source.flow.utils import flow_state as ST
 from source.assets.domain import *
 from source.common.timer_module import AdvanceTimer
 from source.ui import page as UIPage
