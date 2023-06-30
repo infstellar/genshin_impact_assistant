@@ -453,22 +453,25 @@ class MiniMap(MiniMapResource):
         diff = (self.rotation - rotation) % 360
         return diff <= threshold or diff >= 360 - threshold
 
-# if __name__ == '__main__':
-#     """
-#     MiniMap 模拟器监听测试
-#     """
-#     from source.device.genshin.genshin import Genshin
-#     device = Genshin('127.0.0.1:7555')
-#     device.disable_stuck_detection()
-#     device.screenshot_interval_set(0.3)
-#     minimap = MiniMap(MiniMap.DETECT_Mobile_720p)
-#     # 从璃月港传送点出发，初始坐标大概大概50px以内就行
-#     # 坐标位置是 GIMAP 的图片坐标
-#     minimap.init_position((4580, 3046))
-#     # 你可以移动人物，GIA会持续监听小地图位置和角色朝向
-#     while 1:
-#         device.screenshot()
-#         minimap.update_minimap(device.image)
+if __name__ == '__main__':
+    """
+    MiniMap 模拟器监听测试
+    """
+    from source.device.genshin.genshin import Genshin
+    device = Genshin('127.0.0.1:16384')
+    device.disable_stuck_detection()
+    device.screenshot_interval_set(0.3)
+    device.screenshot()
+    cv2.imshow('123',device.image)
+    cv2.waitKey(0)
+    minimap = MiniMap(MiniMap.DETECT_Mobile_720p)
+    # 从璃月港传送点出发，初始坐标大概大概50px以内就行
+    # 坐标位置是 GIMAP 的图片坐标
+    minimap.init_position((4580, 3046))
+    # 你可以移动人物，GIA会持续监听小地图位置和角色朝向
+    while 1:
+        device.screenshot()
+        minimap.update_minimap(device.image)
 
 
 if __name__ == '__main__':

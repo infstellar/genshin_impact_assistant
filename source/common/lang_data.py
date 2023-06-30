@@ -32,6 +32,17 @@ def get_all_characters_name():
 #     return None
 
 def translate_character_auto(content):
+    """输入任何语言的角色名，返回角色标准名（英文）
+    支持别名识别。
+    只支持精确识别。
+    如果角色名不存在，返回None。
+
+    Args:
+        content (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
     for item in characters_name_dict:
         if content in item['alias']+[item['standard_name']]:
             return item['standard_name']
