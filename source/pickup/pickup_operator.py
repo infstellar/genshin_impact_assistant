@@ -239,7 +239,7 @@ class PickupOperator(BaseThreading):
                 if self.checkup_stop_func():
                     return 0
                 movement.change_view_to_posi(self.target_posi, self.checkup_stop_func)
-                movement.move(movement.AHEAD, 4)
+                movement.move(movement.MOVE_AHEAD, 4)
                 self.itt.key_down('spacebar')
 
     def auto_pickup(self):

@@ -78,7 +78,7 @@ class MoveToChallenge(FlowTemplate):
         if self.upper.fast_mode:
             pass
         else:
-            movement.move(movement.AHEAD, 4)
+            movement.move(movement.MOVE_AHEAD, 4)
 
         if generic_lib.f_recognition():
             itt.key_up('w')
@@ -149,9 +149,9 @@ class FindingTree(FlowTemplate):
             logger.debug(dx)
 
             if dx >= 0:
-                movement.move(movement.RIGHT, self.move_num)
+                movement.move(movement.MOVE_RIGHT, self.move_num)
             else:
-                movement.move(movement.LEFT, self.move_num)
+                movement.move(movement.MOVE_LEFT, self.move_num)
             if abs(dx) <= 20:
                 self.upper.lockOnFlag += 1
                 self.move_num = 1
@@ -181,13 +181,13 @@ class FindingTree(FlowTemplate):
                         direc = not direc
                         self.upper.move_timer.reset()
                     if direc:
-                        movement.move(movement.LEFT, distance=10)
+                        movement.move(movement.MOVE_LEFT, distance=10)
                     else:
-                        movement.move(movement.RIGHT, distance=10)
+                        movement.move(movement.MOVE_RIGHT, distance=10)
 
                 else:  # maybe can't look at tree
                     logger.debug('can not find tree. moving back.')
-                    movement.move(movement.BACK, distance=4)
+                    movement.move(movement.MOVE_BACK, distance=4)
         else:
             self._next_rfc()
         if not ui_control.verify_page(UIPage.page_domain):

@@ -607,11 +607,11 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
             if not self.ready_to_end:
                 itt.key_down('w')
             else:
-                movement.move(movement.AHEAD,1.5)
+                movement.move(movement.MOVE_AHEAD,1.5)
         else:
             movement.change_view_to_posi(target_posi, stop_func = self.upper.checkup_stop_func, max_loop=4, offset=2, print_log = False)
             if self.ready_to_end:
-                movement.move(movement.AHEAD,1.5)
+                movement.move(movement.MOVE_AHEAD,1.5)
         if self.init_start == False:
             itt.key_down('w')
             self.init_start = True

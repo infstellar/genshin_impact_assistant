@@ -12,24 +12,26 @@ itt = itt
 
 
 # >0:right; <0:left
-def move(direction, distance=1):
+def move(direction, mode=MOVE_START, distance=-1):
     if IS_DEVICE_PC:
-        if direction == AHEAD:
-            itt.key_down('w')
+        d2k = {
+            MOVE_AHEAD:'w',
+            MOVE_BACK:'s',   
+            MOVE_LEFT:'a',
+            MOVE_RIGHT:'d'
+            }
+        if distance == -1:
+            if mode == MOVE_START:
+                itt.key_down(d2k[direction])
+            else:
+                itt.key_up(d2k[direction])
+        else:
+            itt.key_down(d2k[direction])
             itt.delay(0.1 * distance)
-            itt.key_up('w')
-        if direction == LEFT:
-            itt.key_down('a')
-            itt.delay(0.1 * distance)
-            itt.key_up('a')
-        if direction == RIGHT:
-            itt.key_down('d')
-            itt.delay(0.1 * distance)
-            itt.key_up('d')
-        if direction == BACK:
-            itt.key_down('s')
-            itt.delay(0.1 * distance)
-            itt.key_up('s')
+            itt.key_up(d2k[direction])
+    else:
+        pass 
+    
 jump_timer1 = Timer()
 jump_timer2 = Timer()
 def jump_timer_reset():
