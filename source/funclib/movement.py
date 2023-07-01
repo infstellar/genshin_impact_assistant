@@ -12,7 +12,7 @@ itt = itt
 
 
 # >0:right; <0:left
-def move(direction, mode=MOVE_START, distance=-1):
+def move(direction, distance:float=-1, mode=MOVE_START):
     if IS_DEVICE_PC:
         d2k = {
             MOVE_AHEAD:'w',

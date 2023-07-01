@@ -1,6 +1,6 @@
 from source.util import *
 from source.task.domain.domain_flow_upgrade import DomainFlowController
-from source.flow.teyvat_move_flow_upgrade import TeyvatMoveFlowController
+from source.teyvat_move.teyvat_move_flow_upgrade import TeyvatMoveFlowController
 from source.task.task_template import TaskTemplate
 from source.funclib.collector_lib import load_items_position
 from source.funclib.generic_lib import f_recognition

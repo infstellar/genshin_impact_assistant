@@ -1,5 +1,6 @@
+from source.teyvat_move import teyvat_move_flow_upgrade
 from source.util import *
-from source.flow import collector_flow_upgrade, teyvat_move_flow_upgrade
+from source.flow import collector_flow_upgrade
 from source.common.base_threading import BaseThreading
 from source.pickup.pickup_operator import PickupOperator
 from source.interaction.minimap_tracker import tracker

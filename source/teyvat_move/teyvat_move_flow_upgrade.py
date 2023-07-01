@@ -15,6 +15,8 @@ import source.ui.page as UIPage
 from source.dev_tool.tianli_navigator import TianliNavigator
 from source.funclib import combat_lib
 from source.flow.utils.cvars import *
+from source.teyvat_move.teyvat_move_optimizer import ThreeDimensionOptimizer
+from source.funclib.combat_lib import CSDL
 
 
 
@@ -240,6 +242,7 @@ class Navigation(TianliNavigator):
             logger.info(f"Moving to Navigation {output_id}")
             logger.info(f"Distance: {output_distance}")
             logger.info(f"Remaining navigation: {output_remaining_navigation}")
+
 class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon, Navigation):
     def __init__(self, upper: TeyvatMoveFlowConnector):
         FlowTemplate.__init__(self, upper, flow_id=ST.INIT_TEYVAT_MOVE, next_flow_id=ST.END_TEYVAT_MOVE_PASS)
@@ -379,33 +382,35 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
         self.landing_timer = timer_module.Timer(2)
         self.sprint_timer = timer_module.AdvanceTimer(2.5).reset()
         self.in_pt = timer_module.Performance(output_cycle=25)
-
     
-    def CalculateTheDistanceBetweenTheAngleExtensionLineAndTheTarget(self, curr,target):
-        """Not In Use
-
-        Args:
-            curr (_type_): _description_
-            target (_type_): _description_
-
-        Returns:
-            _type_: _description_
-        """
-        θ = genshin_map.get_rotation()
-        if θ<0:
-            θ+=360
-        θ-=90
-        if θ<=0:
-            θ+=360
-        print(θ)
-        target2=list(np.array(target)-np.array(curr))
-        X,Y=target2[0],target2[1]
-        K=math.tan(θ)
-        A=K
-        B=-1
-        D = abs(A*X+B*Y)/math.sqrt(K**2+1)
-        print(D, euclidean_distance(curr,target))
-        return D
+    def predict_tdo_degree(self, curr_posi, target_posi):
+        nx,ny,nz = self.TDO.predict_nearest_point(curr_posi[0], curr_posi[1], self.curr_break_point_index)
+        nz = max(0,nz)
+        dx,dy,dz = self.TDO.predict_gradient(nx,ny,nz)
+        if DEBUG_MODE:
+            print('tdo: nearest point:', nx,ny,nz)
+            print('tdo: nearest point gradient:', dx,dy,dz)
+        tdo_final_degree = generic_lib.points_angle([0,0], [dx, dy], coordinate=generic_lib.NEGATIVE_Y)
+        final_rate = round(euclidean_distance(curr_posi, [nx,ny]),2)
+        if final_rate>=15:
+            movement.move_to_position([nx,ny])
+            # tdo_final_degree = generic_lib.points_angle(curr_posi, [nx,ny], coordinate=generic_lib.NEGATIVE_Y)
+        else:
+            final_rate = final_rate/30
+        tdo_final_degree = add_angle(tdo_final_degree, generic_lib.points_angle(curr_posi, [nx,ny], coordinate=generic_lib.NEGATIVE_Y)*final_rate)
+        if DEBUG_MODE:
+            print(f"tdo: degree: {generic_lib.points_angle([0,0], [dx, dy], coordinate=generic_lib.NEGATIVE_Y)}"
+                "\n"
+                f"target posi degree: {generic_lib.points_angle(curr_posi, target_posi, coordinate=generic_lib.NEGATIVE_Y)}"
+                "\n"
+                f"tdo distance: {round(euclidean_distance(curr_posi, [nx,ny]),2)}"
+                "\n"
+                f"tdo final rate: {final_rate}"
+                "\n"
+                f"tdo final degree: {tdo_final_degree}"
+                )
+        self.curr_break_point_index = int(nz)
+        return tdo_final_degree
     
     def _exec_special_key(self, special_key):
         """Not In Use
@@ -441,10 +446,14 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
         if self.upper.is_reinit:
             genshin_map.reinit_smallmap()
         self.upper.while_sleep = 0
+        self.TDO = ThreeDimensionOptimizer(self.upper.path_dict)
         self._next_rfc()
     
     def state_in(self):
         self.in_pt.reset()
+        
+        
+        
         # 如果循环太慢而走的太快就会回头 可能通过量化移动时间和距离解决
         
         # 更新BP和CP
@@ -488,6 +497,7 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
                 if len(self.curr_breaks) - 1 > self.curr_break_point_index:
                     self.curr_break_point_index += 1 # BP+1
                     logger.debug(f"index {self.curr_break_point_index} posi {self.curr_breaks[self.curr_break_point_index]}")
+                    # pass
                 elif not self.ready_to_end:
                     if self.upper.is_precise_arrival:
                         logger.info("path ready to end")
@@ -505,7 +515,6 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
                     return
             else:
                 break
-        
         
         # 动作识别
         is_jump = False
@@ -547,6 +556,8 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
                         if euclidean_distance(adsor_p, curr_posi) < adsorptive_threshold:
                             logger.info(f"adsorption: {adsor_p} start")
                             for i in range(15):
+                                if CSDL.get_combat_state():
+                                    break
                                 if movement.move_to_posi_LoopMode(adsor_p, self.upper.checkup_stop_func, threshold=1):break
                                 if self.upper.is_auto_pickup:
                                     if self.upper.PUO.pickup_recognize():
@@ -599,17 +610,23 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
         self.in_pt.output_log(mess='TMF Path Performance:')
         # delta_distance = self.CalculateTheDistanceBetweenTheAngleExtensionLineAndTheTarget(curr_posi,target_posi)
         
+        
+        
         # 移动视角
-        delta_degree = abs(movement.calculate_delta_angle(genshin_map.get_rotation(),movement.calculate_posi2degree(target_posi)))
+        target_degree = movement.calculate_posi2degree(target_posi)
+        # target_degree = self.predict_tdo_degree(curr_posi, target_posi)
+        delta_degree = abs(movement.calculate_delta_angle(genshin_map.get_rotation(),target_degree))
         if delta_degree >= 20:
             itt.key_up('w')
-            movement.change_view_to_posi(target_posi, stop_func = self.upper.checkup_stop_func)
+            # movement.change_view_to_posi(target_posi, stop_func = self.upper.checkup_stop_func)
+            movement.change_view_to_angle(target_degree)
             if not self.ready_to_end:
                 itt.key_down('w')
             else:
                 movement.move(movement.MOVE_AHEAD,1.5)
         else:
-            movement.change_view_to_posi(target_posi, stop_func = self.upper.checkup_stop_func, max_loop=4, offset=2, print_log = False)
+            # movement.change_view_to_posi(target_posi, stop_func = self.upper.checkup_stop_func, max_loop=4, offset=2, print_log = False)
+            movement.change_view_to_angle(target_degree)
             if self.ready_to_end:
                 movement.move(movement.MOVE_AHEAD,1.5)
         if self.init_start == False:
