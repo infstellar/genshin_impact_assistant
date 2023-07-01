@@ -32,7 +32,7 @@ class ThreeDimensionOptimizer():
     
     def predict_nearest_point(self, x, y, z):
         distances = (self.x_new - x)**2 + (self.y_new - y)**2
-        distances = distances*(self.z_new - z)*10
+        # distances = distances*(self.z_new - z)*10
         
         for i in range(len(distances)):
             min_index = np.argmin(distances)

@@ -6,6 +6,7 @@ from source.task.task_template import TaskTemplate
 from source.map.position.position import *
 from source.funclib import movement
 from source.funclib.generic_lib import f_recognition
+from source.funclib.collector_lib import load_items_position
 
 
 
@@ -93,7 +94,17 @@ class LeyLineOutcropMission(MissionExecutor):
         for i in range(self.collection_times):
             try:
                 self.target_posi = self.traverse_mondstant()
-                r = self.move(MODE='AUTO', stop_rule=STOP_RULE_F, target_posi=list(self.target_posi), is_tp=True, is_precise_arrival=True)
+                ley_line_opt_position = load_items_position(marker_title="地脉衍出", ret_mode=1, match_mode=1)
+                distances = euclidean_distance_plist(self.target_posi, ley_line_opt_position)
+                logger.debug(f"min distances: {min(distances)}")
+                min_index = np.argmin(distances)
+                if min(distances) >= 30:
+                    logger.info(t2t('redirect to the nearest ley line outcrop position fail.'))
+                else:
+                    self.target_posi = ley_line_opt_position[min_index]
+                    logger.info(t2t('redirect to the nearest ley line outcrop position succ: ')+
+                                f"{self.target_posi}")
+                r = self.move(MODE='AUTO', stop_rule=STOP_RULE_ARRIVE, target_posi=list(self.target_posi), is_tp=True, is_precise_arrival=False)
                 self.handle_tmf_stuck_then_raise(r)
                 self.circle_search(self.target_posi)
                 itt.key_press('f')
