@@ -208,10 +208,7 @@ def load_items_position(marker_title:str, mode=0, area_id=None, blacklist_id=Non
                 ret_dict.append(list(np.array( list(map(float,item["position"].split(','))))*1.5))
     # print()
     return ret_dict  
-if __name__ == '__main__':
-    from source.manager import asset
-    s = load_items_position(marker_title=asset.QTSX.text, ret_mode=1, match_mode=1)
-    print()
+
 def load_feature_position(text, blacklist_id=None, ret_mode = 0, check_mode = 0):
     ita = load_json("itemall.json", "assets")
     if blacklist_id == None:
@@ -239,4 +236,11 @@ def load_feature_position(text, blacklist_id=None, ret_mode = 0, check_mode = 0)
                      ret_dict.append(list(np.array( list(map(float,item["geometry"]["coordinates"])) )*1.5))
     # print()
     return ret_dict  
+
+if __name__ == '__main__':
+    s = load_items_position(marker_title="地脉衍出", ret_mode=1, match_mode=1)
+    print()
+    from source.manager import asset
+    s = load_items_position(marker_title=asset.QTSX.text, ret_mode=1, match_mode=1)
+    print()
 

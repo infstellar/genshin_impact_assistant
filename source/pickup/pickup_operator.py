@@ -39,6 +39,7 @@ class PickupOperator(BaseThreading):
         self.search_mode = SEARCH_MODE_PICKUP
         self.last_search_times = 2
         self.crazy_f = False
+        self.pickup_fail_cooldown = timer_module.AdvanceTimer(limit=2).reset()
         
     def continue_threading(self):
         if self.pause_threading_flag != False:
@@ -153,6 +154,8 @@ class PickupOperator(BaseThreading):
         return res
     
     def pickup_recognize(self):
+        if not self.pickup_fail_cooldown.reached():
+            return False
         ret = generic_lib.f_recognition()
         if ret:
             time.sleep(0.05)
@@ -170,6 +173,7 @@ class PickupOperator(BaseThreading):
             
             if itt.similar_img(cap[:,:,:3], IconGeneralTalkBubble.image)>0.99:
                 logger.info(f"pickup recognize: talk bubble; skip")
+                self.pickup_fail_cooldown.reset()
                 return False
             # img_manager.qshow(cap)
             # img = extract_white_letters(cap)
@@ -235,7 +239,7 @@ class PickupOperator(BaseThreading):
                 if self.checkup_stop_func():
                     return 0
                 movement.change_view_to_posi(self.target_posi, self.checkup_stop_func)
-                movement.move(movement.AHEAD, 4)
+                movement.move(movement.MOVE_AHEAD, 4)
                 self.itt.key_down('spacebar')
 
     def auto_pickup(self):

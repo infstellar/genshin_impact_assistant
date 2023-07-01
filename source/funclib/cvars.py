@@ -1,9 +1,11 @@
 from source.util import *
 
-AHEAD = 'W'
-LEFT = "A"
-BACK = "S"
-RIGHT = "D"
+MOVE_AHEAD = 'W'
+MOVE_LEFT = "A"
+MOVE_BACK = "S"
+MOVE_RIGHT = "D"
+MOVE_START = 'down'
+MOVE_END = 'up'
 
 CORRECT_DEGREE = GIAconfig.General_CorrDegree
 HORIZONTAL = 1

@@ -43,9 +43,6 @@ class AdvanceTimer:
                         pass
                 else:
                     confirm_timer.reset()
-
-                Also, It's a good idea to set `count`, to make alas run more stable on slow computers.
-                Expected speed is 0.35 second / screenshot.
         """
         self.limit = limit
         self.count = count
@@ -119,6 +116,11 @@ class AdvanceTimer:
     __repr__ = __str__
 
 class CyclicVelocityDetector(Timer):
+    """循环速度计时器
+
+    Args:
+        Timer (_type_): _description_
+    """
     def __init__(self):
         super().__init__()
         
@@ -128,6 +130,11 @@ class CyclicVelocityDetector(Timer):
         return int(1/dt)
 
 class CyclicCounter(AdvanceTimer):
+    """循环次数计时器。
+
+    Args:
+        AdvanceTimer (_type_): _description_
+    """
     def __init__(self, limit, count=0):
         super().__init__(limit, count)
         self.times = 0
@@ -141,6 +148,11 @@ class CyclicCounter(AdvanceTimer):
             self.times += 1
             return False
 class TimeoutTimer(Timer):
+    """超时计时器。
+
+    Args:
+        Timer (_type_): _description_
+    """
     def __init__(self, timeout_limit):
         super().__init__()
         self.timeout_limit=timeout_limit
@@ -163,6 +175,11 @@ class TimeoutTimer(Timer):
             return False
         
 class FileTimer(Timer):
+    """文件计时器。时间数据将会保存在文件中，不会丢失。
+
+    Args:
+        Timer (_type_): _description_
+    """
     def __init__(self, timer_name:str):
         super().__init__()
         self.path = os.path.join(ROOT_PATH, "config\\timer", timer_name+".txt")
@@ -182,6 +199,9 @@ class FileTimer(Timer):
             f.close()
 
 class Genshin400Timer():
+    """
+    Abandoned.
+    """
     def __init__(self):
         timer_name = "Genshin400"
         self.path = os.path.join(ROOT_PATH, "config\\timer", timer_name+".txt")

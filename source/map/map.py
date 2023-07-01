@@ -176,10 +176,11 @@ class Map(MiniMap, BigMap, MapConverter):
     def get_smallmap_from_teleporter(self, area=None):
         if area == None:
             area = ['Inazuma',"Liyue","Mondstadt"]
+        tpers_dict = []
         rlist = []
         rd = []
         added = []
-        for md in range(10,60,10):
+        for md in [60]:
             logger.info(f"d: {md}")
             for i in DICT_TELEPORTER:
                 tper = DICT_TELEPORTER[i]
@@ -193,12 +194,16 @@ class Map(MiniMap, BigMap, MapConverter):
                 if d<=md:
                     if tper in added:
                         continue
-                    rlist.append(tper)
-                    rd.append(d)
-                    logger.info(f"id {len(rlist)-1} position {tper.position} {tper.name} {tper.region}, d={d}")
+                    tpers_dict.append(
+                        {
+                            'tper':tper,
+                            'd':d
+                        }
+                    )
+                    # logger.info(f"id {len(rlist)-1} position {tper.position} {tper.name} {tper.region}, d={d}")
                     added.append(tper)
-        
-        return rlist, rd         
+        tpers_dict.sort(key=lambda x:x['d'])
+        return [i['tper'] for i in tpers_dict], [i['d'] for i in tpers_dict]         
         # self.init_position(tuple(list(map(int,max_position))))
         # logger.info(f"init_smallmap_from_teleporter:{max_n} {max_position} {max_tper.name}")
 

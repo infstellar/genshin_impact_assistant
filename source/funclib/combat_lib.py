@@ -38,34 +38,6 @@ CREATE_WHEN_NOTFOUND = 0
 RAISE_WHEN_NOTFOUND = 1
 
 
-def get_param(team_item, para_name, auto_fill_flag, chara_name="", exception_mode = RAISE_WHEN_NOTFOUND, value_when_empty = None):
-    global load_err_times
-    r = None
-    if para_name not in team_item:
-        if value_when_empty is None:
-            if exception_mode == RAISE_WHEN_NOTFOUND:
-                logger.error(f"{t2t('Tactic ERROR: INDEX NOT FOUND')}")
-                logger.error(f"{t2t('parameter name')}: {para_name}; {t2t('character name')}: {chara_name}")
-                raise TacticKeyNotFoundError(f"Key: {para_name}")
-            elif exception_mode == CREATE_WHEN_NOTFOUND:
-                pass
-    else:
-        r = team_item[para_name]
-
-    
-    if r == '' or r == None:
-        if value_when_empty != None:
-            r = value_when_empty
-        else:
-            logger.error(f"{t2t('Tactic ERROR: Key Empty')}")
-            logger.error(f"{t2t('parameter name')}: {para_name}; {t2t('character name')}: {chara_name}")
-            load_err_times+=1
-            # raise TacticKeyEmptyError(f"Key: {para_name}")
-    logger.trace(f"character: {chara_name} para_name: {para_name} value: {r}")
-    return r
-
-
-
 
 
 def unconventionality_situation_detection(autoDispose=True, detect_type='abc', stop_func=lambda:False):
@@ -487,7 +459,33 @@ def generate_teamfile_automatic():
         else:
             raise CharacterNameNotInCharacterParametersError(name)
     return team_file
-        
+
+def get_param(team_item, para_name, auto_fill_flag, chara_name="", exception_mode = RAISE_WHEN_NOTFOUND, value_when_empty = None):
+    global load_err_times
+    r = None
+    if para_name not in team_item:
+        if value_when_empty is None:
+            if exception_mode == RAISE_WHEN_NOTFOUND:
+                logger.error(f"{t2t('Tactic ERROR: INDEX NOT FOUND')}")
+                logger.error(f"{t2t('parameter name')}: {para_name}; {t2t('character name')}: {chara_name}")
+                raise TacticKeyNotFoundError(f"Key: {para_name}")
+            elif exception_mode == CREATE_WHEN_NOTFOUND:
+                pass
+    else:
+        r = team_item[para_name]
+
+    
+    if r == '' or r == None:
+        if value_when_empty != None:
+            r = value_when_empty
+        else:
+            logger.error(f"{t2t('Tactic ERROR: Key Empty')}")
+            logger.error(f"{t2t('parameter name')}: {para_name}; {t2t('character name')}: {chara_name}")
+            load_err_times+=1
+            # raise TacticKeyEmptyError(f"Key: {para_name}")
+    logger.trace(f"character: {chara_name} para_name: {para_name} value: {r}")
+    return r
+
 def get_chara_list():
     """获得一个由4个Character对象组合的列表，用于自动战斗。
 

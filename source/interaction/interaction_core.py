@@ -795,20 +795,26 @@ class InteractionBGD:
         # print('lock!')
         self.itt_exec.drag(origin_xy, targe_xy, isBorderlessWindow=self.isBorderlessWindow)
         self.operation_lock.release()
-        
+    
+    @before_operation()  
     def freeze_key(self, key, operate="down"):
+        self.operation_lock.acquire()
         self.key_freeze[key] = self.key_status[key]
         if operate=="down":
-            itt.key_down(key)
+            self.itt_exec.key_down(key)
         else:
-            itt.key_up(key)
+            self.itt_exec.key_up(key)
+        self.operation_lock.release()
     
+    @before_operation()
     def unfreeze_key(self, key):
+        self.operation_lock.acquire()
         operate = self.key_freeze[key]
         if operate:
-            itt.key_down(key)
+            self.itt_exec.key_down(key)
         else:
-            itt.key_up(key)
+            self.itt_exec.key_up(key)
+        self.operation_lock.release()
             
     def save_snapshot(self, reason:str = ''):
         img = self.capture()

@@ -26,6 +26,7 @@ class VideoToPathPage(AdvancePage):
     INPUT_COLL_AREA = 'COLL_AREA'
     INPUT_INIT_POSITION_ID = 'INIT_POSITION_ID'
     INPUT_VIDEO_SIZE = 'VIDEO_SIZE'
+    INPUT_AUTO_STOP = 'AUTO_STOP'
     SCOPE_PREVIEW_IMG = 'PREVIEW_IMG'
     SCOPE_LOG = 'log_scope'
     SCOPE_LOG_AREA = 'LogArea'
@@ -173,7 +174,8 @@ class VideoToPathPage(AdvancePage):
                         pin.put_input(self.INPUT_COLL_NAME, label=t2t("Collection name")),
                         pin.put_input(self.INPUT_FRAME_TO_START, label=t2t("Frame to start"), type=input.NUMBER, value=0),
                         pin.put_input(self.INPUT_COLL_AREA, label=t2t("Collect area"), value='Liyue|Mondstadt|Inazuma'),
-                        pin.put_input(self.INPUT_VIDEO_SIZE, label=t2t("Video size"), value='1280x720')
+                        pin.put_input(self.INPUT_VIDEO_SIZE, label=t2t("Video size"), value='1280x720'),
+                        pin.put_select(self.INPUT_AUTO_STOP,[{"label": 'True', "value": True}, {"label": 'False', "value": False}], value=True,label=t2t('Automatic stop recording when switching to the bigmap'))
                     ], size='auto')
                 ]
             )
@@ -324,7 +326,11 @@ class VideoToPathPage(AdvancePage):
             self._show_log(f"frame: {self.frame_index}")
         if self.frame_index%11==0:
             output.set_processbar(self.PROCESSBAR_VIDEO, self.frame_index/self.total_frames)
-
+        if pin.pin[self.INPUT_AUTO_STOP]:
+            if ui_control.verify_page(UIPage.page_bigmap):
+                if str(self.PRF.pc.rfc) == '2':
+                    self._show_log(t2t("Auto Stop"))
+                    self.start_stop_prc()
     def _load_modules(self):
         from source.funclib.combat_lib import CSDL
         CSDL.pause_threading()

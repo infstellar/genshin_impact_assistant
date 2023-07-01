@@ -216,7 +216,7 @@ class SwitchCharacterOperator(BaseThreading):
                     movement.jump_timer_reset()
                 movement.jump_in_loop(jump_dt=3)
                 if i > 45:
-                    movement.move([movement.AHEAD,movement.LEFT,movement.RIGHT,movement.BACK][i%4], distance=3)
+                    movement.move([movement.MOVE_AHEAD,movement.MOVE_LEFT,movement.MOVE_RIGHT,movement.MOVE_BACK][i%4], distance=3)
             if i > 55:
                 logger.warning('角色切换失败')
             logger.trace(f"sco loop cost: {time.time()-pt}")

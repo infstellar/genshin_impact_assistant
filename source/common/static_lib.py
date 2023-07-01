@@ -8,6 +8,11 @@ if GIAconfig.General_CaptureMode == "compatibility":
 else:
     d3d_capture = None
 def get_handle():
+    """获得句柄
+
+    Returns:
+        _type_: _description_
+    """
     if not GIAconfig.General_CloudGenshin:
         handle = ctypes.windll.user32.FindWindowW(None, 'Genshin Impact')
         if handle != 0:

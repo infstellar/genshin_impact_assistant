@@ -182,7 +182,7 @@ def is_int(x):
     else:
         return True
 
-def points_angle(p1, p2, coordinate=ANGLE_NORMAL):
+def points_angle(p1, target_posi, coordinate=ANGLE_NORMAL):
     """计算两点间角度.
 
     Args:
@@ -197,8 +197,8 @@ def points_angle(p1, p2, coordinate=ANGLE_NORMAL):
     # p2: target point
     x = p1[0]
     y = p1[1]
-    tx = p2[0]
-    ty = p2[1]
+    tx = target_posi[0]
+    ty = target_posi[1]
     if coordinate == ANGLE_NEGATIVE_Y:
         y = -y
         ty = -ty
@@ -213,6 +213,18 @@ def points_angle(p1, p2, coordinate=ANGLE_NORMAL):
     if degree > 180:
         degree -= 360
     return degree
+
+def add_angle(angle, delta):
+    if DEBUG_MODE:
+        print(f"add angle: {angle}+{delta}", end='=')
+    angle+=delta
+    if angle > 180:
+        angle -= 360
+    if angle < -180:
+        angle += 360
+    if DEBUG_MODE:
+        print(angle)
+    return angle
 
 def save_json(x, json_name='General.json', default_path='config\\settings', sort_keys=True, auto_create=False):
     """保存json.

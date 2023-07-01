@@ -28,6 +28,11 @@ def log_format(x, name):
 
 
 class Character:
+    """角色信息类
+
+    Returns:
+        _type_: _description_
+    """
     @logger.catch
     def __init__(self, name='=', position='', n=0, priority=0,
                  E_short_cd_time:float=0, E_long_cd_time:float=0,
@@ -74,21 +79,6 @@ class Character:
             return "e?e~:none;"
         elif self.position == "Core":
             return "a,a"
-    
-    def _init_log(self):
-        logger.debug('---- character info ----')
-        log_format(self.name, 'name')
-        log_format(self.position, 'position')
-        log_format(self.E_short_cd_time, 'E_short_cd_time')
-        log_format(self.E_long_cd_time, 'E_long_cd_time')
-        log_format(self.Elast_time, 'Elast_time')
-        log_format(self.Qlast_time, 'Qlast_time')
-        log_format(self.tactic_group, 'tactic_group')
-        log_format(self.priority, 'priority')
-        log_format(self.n, 'n')
-        log_format(self.Epress_time, 'Epress_time')
-        log_format(self.Ecd_time, 'Ecd_time')
-        logger.debug('---- character info end ----')
 
     def _trigger_e_ready(self):
         if self.is_E_ready():
