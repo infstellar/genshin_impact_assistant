@@ -93,7 +93,7 @@ class LeyLineOutcropMission(MissionExecutor):
         for i in range(self.collection_times):
             try:
                 self.target_posi = self.traverse_mondstant()
-                r = self.move(MODE='AUTO', stop_rule=0, target_posi=list(self.target_posi), is_tp=True, is_precise_arrival=True)
+                r = self.move(MODE='AUTO', stop_rule=STOP_RULE_F, target_posi=list(self.target_posi), is_tp=True, is_precise_arrival=True)
                 self.handle_tmf_stuck_then_raise(r)
                 self.circle_search(self.target_posi)
                 itt.key_press('f')

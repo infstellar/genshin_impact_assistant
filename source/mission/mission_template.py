@@ -142,7 +142,7 @@ class MissionExecutor(BaseThreading):
             self.stop_combat()
     
     def move(self, MODE:str = None,
-             stop_rule:int = None,
+             stop_rule = None,
              target_posi:list = None,
              path_dict:dict = None,
              to_next_posi_offset:float = None,

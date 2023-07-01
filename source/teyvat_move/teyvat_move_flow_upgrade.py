@@ -308,7 +308,7 @@ class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon, Navigation):
         
         # p1 = self.upper.target_posi
         
-        if self.is_stuck(self.current_posi):
+        if self.is_stuck(self.current_posi, threshold=60):
             self._set_nfid(ST.END_TEYVAT_MOVE_STUCK)
             self._set_rfc(FC.END)
         
