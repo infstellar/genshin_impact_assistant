@@ -17,10 +17,10 @@ The aim of GIA is: let the program play Genshin, and you just need to selected c
 </div>
 
 # General Introduction 基本介绍
-An Genshin automatic operation assistance based on image recognization and similated keyboard operation. Does not involve not-allowed operation.  
+A Genshin automatic operation assistance based on image recognition and simulated keyboard operation. Does not involve not-allowed operation.  
 基于图像识别的原神自动操作辅助.使用图片识别与模拟键盘操作,不涉及违规操作.
 
-To those who have not used github: the blue text in the docs is a hyperlink that can be clicked.  
+To those who have not used GitHub: the blue text in the docs is a hyperlink that can be clicked.  
 To没用过github的小伙伴: 描述文档中的蓝色文字是链接,可以打开的.
 
 ## Complete Documentation 详细信息

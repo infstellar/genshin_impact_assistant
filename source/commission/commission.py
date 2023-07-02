@@ -16,9 +16,9 @@ class Commission(CommissionTemplate):
             commission_type (str): 委托名.英文名.
             commission_position (list): 委托的坐标.天理坐标格式.
         """
-        if GLOBAL_LANG not in supported_lang:
-            logger.error(t2t("不支持的语言:")+str(GLOBAL_LANG))
-            raise LanguageError
+        # if GLOBAL_LANG not in supported_lang:
+        #     logger.error(t2t("不支持的语言:")+str(GLOBAL_LANG))
+        #     raise LanguageError
         super().__init__(commission_type, commission_position, is_CFCF, is_PUO, is_TMCF, is_CCT)
     
     def commission_succ(self):

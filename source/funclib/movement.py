@@ -4,7 +4,7 @@ from source.util import *
 from source.funclib import generic_lib
 from source.map.map import genshin_map
 from source.manager import asset
-from source.common.timer_module import Timer
+from source.common.timer_module import *
 from source.assets.movement import *
 from source.funclib.cvars import *
 
@@ -112,7 +112,8 @@ def calculate_delta_angle(cangle,tangle):
         dangle = (360+dangle)
     return dangle
 
-def change_view_to_angle(tangle, stop_func=lambda:False, maxloop=25, offset=5, print_log=True):
+
+def change_view_to_angle(tangle, stop_func=lambda:False, maxloop=25, offset=5, print_log=True, loop_sleep = 0.05):
     i = 0
     while 1:
         cangle = genshin_map.get_rotation()
@@ -125,10 +126,9 @@ def change_view_to_angle(tangle, stop_func=lambda:False, maxloop=25, offset=5, p
         rate: 
         
         """
-        
+        time.sleep(loop_sleep)
         # print(cangle, dangle, rate)
         cview(dangle, rate=rate)
-        time.sleep(0.05)
         if i > maxloop:
             break
         if stop_func():

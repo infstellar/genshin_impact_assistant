@@ -1,11 +1,9 @@
 from source.util import *
-from source.common import timer_module
+from source.common.timer_module import *
 from source.funclib import generic_lib, movement
 from source.interaction.interaction_core import itt
 from source.pickup.pickup_operator import PickupOperator
-from funclib.err_code_lib import ERR_PASS, ERR_STUCK
-from source.ui.ui import ui_control
-import source.ui.page as UIPage
+from source.funclib.err_code_lib import ERR_PASS, ERR_STUCK
 from source.map.map import genshin_map
 from source.flow.utils.flow_template import FlowConnector, FlowController, FlowTemplate, EndFlowTemplate
 from source.flow.utils import flow_state as ST
@@ -15,9 +13,11 @@ import source.ui.page as UIPage
 from source.dev_tool.tianli_navigator import TianliNavigator
 from source.funclib import combat_lib
 from source.flow.utils.cvars import *
-from source.teyvat_move.teyvat_move_optimizer import ThreeDimensionOptimizer
+from source.teyvat_move.teyvat_move_optimizer import B_SplineCurve_GuidingHead_Optimizer
 from source.funclib.combat_lib import CSDL
 
+
+ENABLE_OPTMIZER = True
 
 
 class TeyvatMoveFlowConnector(FlowConnector):
@@ -43,7 +43,7 @@ class TeyvatMoveFlowConnector(FlowConnector):
         self.PUO = PickupOperator()
 
         self.motion_state = IN_MOVE
-        self.jump_timer = timer_module.Timer()
+        self.jump_timer = Timer()
         self.current_state = ST.INIT_TEYVAT_TELEPORT
         
         self.priority_waypoints = load_json("priority_waypoints.json", folder_path='assets')
@@ -71,7 +71,7 @@ class TeyvatMoveFlowConnector(FlowConnector):
         self.is_auto_pickup = False
         
         self.motion_state = IN_MOVE
-        self.jump_timer = timer_module.Timer()
+        self.jump_timer = Timer()
         self.current_state = ST.INIT_TEYVAT_TELEPORT
 
 
@@ -102,11 +102,11 @@ class TeyvatMoveCommon():
     def __init__(self):
         self.motion_state = IN_MOVE
         self.jil = movement.JumpInLoop(2)
-        self.jump_timer3 = timer_module.Timer()
+        self.jump_timer3 = Timer()
         self.history_position = []
-        self.history_position_timer = timer_module.AdvanceTimer(limit=1).start()
+        self.history_position_timer = AdvanceTimer(limit=1).start()
         self.last_w_position = [0,0]
-        self.press_w_timer = timer_module.AdvanceTimer(limit=1).start()
+        self.press_w_timer = AdvanceTimer(limit=1).start()
 
     def switch_motion_state(self, jump=True):
         self.motion_state = movement.get_current_motion_state()
@@ -148,13 +148,13 @@ class TeyvatMoveCommon():
                 logger.info(f"position duplication, press w")
                 itt.key_press('w')
 
-    def detect_stop_rule(self, stop_rule, is_precise_arrival, target_posi, stop_offset):
+    def detect_stop_rule(self, stop_rule, is_precise_arrival, target_posi, curr_posi, stop_offset):
         if stop_rule == STOP_RULE_ARRIVE:
             if is_precise_arrival:
                 threshold=1
             else:
                 threshold=6
-            if euclidean_distance(target_posi, genshin_map.get_position())<=threshold:
+            if euclidean_distance(target_posi, curr_posi)<=threshold:
                 logger.info(t2t("已到达目的地附近，本次导航结束。"))
                 itt.key_up('w')
                 return True
@@ -163,7 +163,7 @@ class TeyvatMoveCommon():
                 threshold = 25
             else:
                 threshold = stop_offset
-            if euclidean_distance(target_posi, genshin_map.get_position())<=threshold:
+            if euclidean_distance(target_posi, curr_posi)<=threshold:
                 if generic_lib.f_recognition():
                     itt.key_up('w')
                     itt.delay('2animation')
@@ -178,7 +178,7 @@ class TeyvatMoveCommon():
                 threshold = 25
             else:
                 threshold = stop_offset
-            if euclidean_distance(target_posi, genshin_map.get_position())<=threshold:
+            if euclidean_distance(target_posi, curr_posi)<=threshold:
                 if combat_lib.CSDL.get_combat_state():
                     logger.info(t2t("准备打架，本次导航结束。"))
                     itt.key_up('w')
@@ -249,7 +249,7 @@ class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon, Navigation):
         TeyvatMoveCommon.__init__(self)
         Navigation.__init__(self, genshin_map.get_position(), self.upper.target_posi)
         self.upper = upper
-        self.auto_move_timeout = timer_module.AdvanceTimer(limit=300).start()
+        self.auto_move_timeout = AdvanceTimer(limit=300).start()
         self.in_flag = False
         self.posi_list = []
         self.posi_index = 0
@@ -323,7 +323,7 @@ class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon, Navigation):
             itt.key_down('w')
             self.in_flag = True
         
-        r = self.detect_stop_rule(self.upper.stop_rule, self.upper.is_precise_arrival, self.upper.target_posi, self.upper.stop_offset)
+        r = self.detect_stop_rule(self.upper.stop_rule, self.upper.is_precise_arrival, self.upper.target_posi, self.current_posi, self.upper.stop_offset)
         if r:
             self._next_rfc()
         
@@ -379,14 +379,17 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
         self.init_start = False
         
         
-        self.landing_timer = timer_module.Timer(2)
-        self.sprint_timer = timer_module.AdvanceTimer(2.5).reset()
-        self.in_pt = timer_module.Performance(output_cycle=25)
+        self.landing_timer = Timer(2)
+        self.sprint_timer = AdvanceTimer(2.5).reset()
+        if not DEBUG_MODE:
+            self.in_pt = Performance(output_cycle=25)
+        else:
+            self.in_pt = Performance(output_cycle=1)
     
     def predict_tdo_degree(self, curr_posi, target_posi):
         nx,ny,nz = self.TDO.predict_nearest_point(curr_posi[0], curr_posi[1], self.curr_break_point_index)
         nz = max(0,nz)
-        dx,dy,dz = self.TDO.predict_gradient(nx,ny,nz)
+        dx,dy,dz = self.TDO.predict_gradient(nz)
         if DEBUG_MODE:
             print('tdo: nearest point:', nx,ny,nz)
             print('tdo: nearest point gradient:', dx,dy,dz)
@@ -411,6 +414,28 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
                 )
         self.curr_break_point_index = int(nz)
         return tdo_final_degree
+
+    def _low8up9(self, x):
+        decimals = math.modf(x)[0]
+        if decimals >= 0.9:
+            return math.ceil(x)
+        else:
+            return math.floor(x)
+
+    def predict_tdo_position(self, curr_posi, target_posi):
+        nx,ny,nz = self.TDO.predict_nearest_point(curr_posi[0], curr_posi[1], self.curr_break_point_index)
+        nz = max(0,nz)
+        r_posi = self.TDO.predict_guiding_head_position(nz)
+        print(
+            f"curr posi: {curr_posi}"
+            "\n"
+            f"target posi: {target_posi}"
+            "\n"
+            f"guiding head posi: {r_posi}"
+        )
+        self.curr_break_point_index = int(self._low8up9(nz))
+        return r_posi
+        
     
     def _exec_special_key(self, special_key):
         """Not In Use
@@ -422,6 +447,7 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
         itt.key_press(special_key)
         logger.info(f"key {special_key} exec.")
 
+    # @timer
     def _refresh_curr_posi_index(self, curr_posi):
         posi_list = []
         for i in self.upper.path_dict["position_list"][
@@ -446,30 +472,30 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
         if self.upper.is_reinit:
             genshin_map.reinit_smallmap()
         self.upper.while_sleep = 0
-        self.TDO = ThreeDimensionOptimizer(self.upper.path_dict)
+        self.TDO = B_SplineCurve_GuidingHead_Optimizer(self.upper.path_dict)
         self._next_rfc()
     
     def state_in(self):
         self.in_pt.reset()
-        
-        
-        
+        # print(f"time0: {self.in_pt.get_diff_time()}")
         # 如果循环太慢而走的太快就会回头 可能通过量化移动时间和距离解决
         
         # 更新BP和CP
         while 1: 
+            print(f"time0.1: {self.in_pt.get_diff_time()}")
             target_posi = self.curr_breaks[self.curr_break_point_index]
             curr_posi = genshin_map.get_position()
                     
             # 刷新当前position index
             self._refresh_curr_posi_index(list(curr_posi))
-            special_key = self.curr_path[self.curr_path_index]["special_key"]
-            if self.upper.ignore_space and special_key == "space": # ignore space
-                special_key = None
-            if special_key is None: # 设定offset
-                offset = 6 # NO SK
-            else:
-                offset = 6 # SK
+            # special_key = self.curr_path[self.curr_path_index]["special_key"]
+            # if self.upper.ignore_space and special_key == "space": # ignore space
+            #     special_key = None
+            # if special_key is None: # 设定offset
+            #     offset = 6 # NO SK
+            # else:
+            #     offset = 6 # SK
+            offset = 6
             if self.curr_path[self.curr_path_index]["motion"]=="FLYING":
                 offset = 12
             if "additional_info" in self.upper.path_dict:
@@ -479,6 +505,7 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
             if self.ready_to_end:
                 offset = min(3,max(1,(self.end_times)/10))
             # 如果两个BP距离小于offset就会瞬移，排除一下。
+
             if self.curr_break_point_index < len(self.curr_breaks)-1: 
                 dist = euclidean_distance(self.curr_breaks[self.curr_break_point_index], self.curr_breaks[self.curr_break_point_index+1])
                 if dist >= 1 and dist <=offset:
@@ -489,32 +516,63 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
                     logger.trace(f"BPs too close <1: dist: {dist}")
                     offset = 1
                     logger.trace(f"offset: {offset}")
+            
+            # print(f"time0.2: {self.in_pt.get_diff_time()}")
+                    
             # 执行SK
-            if special_key != None: 
-                self._exec_special_key(special_key)
+            # if special_key != None: 
+            #     self._exec_special_key(special_key)
             # 检测是否要切换到下一个BP
-            if euclidean_distance(target_posi, curr_posi) <= offset: 
-                if len(self.curr_breaks) - 1 > self.curr_break_point_index:
-                    self.curr_break_point_index += 1 # BP+1
-                    logger.debug(f"index {self.curr_break_point_index} posi {self.curr_breaks[self.curr_break_point_index]}")
-                    # pass
-                elif not self.ready_to_end:
-                    if self.upper.is_precise_arrival:
-                        logger.info("path ready to end")
-                        self.ready_to_end = True
-                        break
+            if not ENABLE_OPTMIZER:
+                if euclidean_distance(target_posi, curr_posi) <= offset: 
+                    if len(self.curr_breaks) - 1 > self.curr_break_point_index:
+                        self.curr_break_point_index += 1 # BP+1
+                        logger.debug(f"index {self.curr_break_point_index} posi {self.curr_breaks[self.curr_break_point_index]}")
+                        # pass
+                    elif not self.ready_to_end:
+                        if self.upper.is_precise_arrival:
+                            logger.info("path ready to end")
+                            self.ready_to_end = True
+                            break
+                        else:
+                            logger.info("path end")
+                            self._next_rfc()
+                            itt.key_up('w')
+                            return
                     else:
                         logger.info("path end")
                         self._next_rfc()
                         itt.key_up('w')
                         return
                 else:
-                    logger.info("path end")
-                    self._next_rfc()
-                    itt.key_up('w')
-                    return
+                    break
             else:
-                break
+                if euclidean_distance(target_posi, curr_posi) <= offset:
+                    if not len(self.curr_breaks) - 1 > self.curr_break_point_index:
+                        if not self.ready_to_end:
+                            if self.upper.is_precise_arrival:
+                                logger.info("path ready to end")
+                                self.ready_to_end = True
+                                break
+                            else:
+                                logger.info("path end")
+                                self._next_rfc()
+                                itt.key_up('w')
+                                return
+                        else:
+                            logger.info("path end")
+                            self._next_rfc()
+                            itt.key_up('w')
+                            return
+                    else:
+                        break
+                else:
+                    break
+            
+            
+            # print(f"time0.3: {self.in_pt.get_diff_time()}")
+        
+        print(f"time1: {self.in_pt.get_diff_time()}")
         
         # 动作识别
         is_jump = False
@@ -547,18 +605,20 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
                 else:
                     self.landing_timer.reset()
         
+        print(f"time2: {self.in_pt.get_diff_time()}")
+        
         # 吸附模式: 当当前距离小于允许吸附距离，开始向目标吸附点移动
         if len(self.adsorptive_position)>0:
-            adsorptive_threshold = 6
+            absorptive_threshold = 6
             if self.motion_state == IN_MOVE:
-                if min(euclidean_distance_plist(curr_posi, self.adsorptive_position)) < adsorptive_threshold:
-                    for adsor_p in self.adsorptive_position:
-                        if euclidean_distance(adsor_p, curr_posi) < adsorptive_threshold:
-                            logger.info(f"adsorption: {adsor_p} start")
+                if min(euclidean_distance_plist(curr_posi, self.adsorptive_position)) < absorptive_threshold:
+                    for adsorb_p in self.adsorptive_position:
+                        if euclidean_distance(adsorb_p, curr_posi) < absorptive_threshold:
+                            logger.info(f"adsorption: {adsorb_p} start")
                             for i in range(15):
                                 if CSDL.get_combat_state():
                                     break
-                                if movement.move_to_posi_LoopMode(adsor_p, self.upper.checkup_stop_func, threshold=1):break
+                                if movement.move_to_posi_LoopMode(adsorb_p, self.upper.checkup_stop_func, threshold=1):break
                                 if self.upper.is_auto_pickup:
                                     if self.upper.PUO.pickup_recognize():
                                         while self.upper.PUO.pickup_recognize():pass
@@ -566,13 +626,17 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
                                 time.sleep(0.2)
                                 if i%5==0:
                                     logger.debug(f"adsorption: {i}")
-                            logger.info(f"adsorption: {adsor_p} end")        
-                            self.adsorptive_position.pop(self.adsorptive_position.index(adsor_p))
+                            logger.info(f"adsorption: {adsorb_p} end")
+                            self.adsorptive_position.pop(self.adsorptive_position.index(adsorb_p))
                             break
+            curr_posi = genshin_map.get_position()
+        
+        print(f"time3: {self.in_pt.get_diff_time()}")
         
         # 自动拾取
         if self.upper.is_auto_pickup:
             while self.upper.PUO.pickup_recognize():pass
+            curr_posi = genshin_map.get_position()
         
         # 检测移动是否卡住
         if self.is_stuck(curr_posi, threshold=45):
@@ -580,18 +644,7 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
         if self.is_stuck(curr_posi, threshold=60):
             self._set_nfid(ST.END_TEYVAT_MOVE_STUCK)
             self._set_rfc(FC.END)
-        
-        # 冲
-        if self.sprint_timer.reached():
-            if euclidean_distance(curr_posi, target_posi)>=30:
-                if self.motion_state == IN_MOVE:
-                    logger.debug(f'sprint {euclidean_distance(curr_posi, target_posi)}')
-                    itt.key_press('left_shift')
-                    self.sprint_timer.reset()
-        
-        # w
-        self.auto_w(curr_posi)
-        
+            
         # 是否准备结束
         if self.ready_to_end:
             self.end_times += 1
@@ -601,38 +654,53 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
             self._set_nfid(ST.END_TEYVAT_MOVE_STUCK)
             self._set_rfc(FC.END)
         
-        r = self.detect_stop_rule(self.upper.stop_rule, self.upper.is_precise_arrival, self.upper.path_dict["end_position"], self.upper.stop_offset)
+        r = self.detect_stop_rule(self.upper.stop_rule, self.upper.is_precise_arrival, self.upper.path_dict["end_position"], curr_posi, self.upper.stop_offset)
         if r:
             self._next_rfc()
+        
+        print(f"time4: {self.in_pt.get_diff_time()}")
         
         # 输出日志
         logger.debug(f"next break position distance: {euclidean_distance(target_posi, curr_posi)}")
         self.in_pt.output_log(mess='TMF Path Performance:')
         # delta_distance = self.CalculateTheDistanceBetweenTheAngleExtensionLineAndTheTarget(curr_posi,target_posi)
         
-        
-        
         # 移动视角
-        target_degree = movement.calculate_posi2degree(target_posi)
-        # target_degree = self.predict_tdo_degree(curr_posi, target_posi)
+        if not ENABLE_OPTMIZER:
+            target_degree = movement.calculate_posi2degree(target_posi)
+        else:
+            target_degree = movement.calculate_posi2degree(self.predict_tdo_position(curr_posi, target_posi))
+            # target_degree = self.predict_tdo_degree(curr_posi, target_posi)
         delta_degree = abs(movement.calculate_delta_angle(genshin_map.get_rotation(),target_degree))
-        if delta_degree >= 20:
+        if delta_degree >= 45:
             itt.key_up('w')
             # movement.change_view_to_posi(target_posi, stop_func = self.upper.checkup_stop_func)
-            movement.change_view_to_angle(target_degree)
+            movement.change_view_to_angle(target_degree, offset=15)
             if not self.ready_to_end:
                 itt.key_down('w')
             else:
                 movement.move(movement.MOVE_AHEAD,1.5)
         else:
             # movement.change_view_to_posi(target_posi, stop_func = self.upper.checkup_stop_func, max_loop=4, offset=2, print_log = False)
-            movement.change_view_to_angle(target_degree)
+            movement.change_view_to_angle(target_degree, loop_sleep=0, maxloop=4)
             if self.ready_to_end:
                 movement.move(movement.MOVE_AHEAD,1.5)
         if self.init_start == False:
             itt.key_down('w')
             self.init_start = True
+            
+        # 冲
+        # if self.sprint_timer.reached():
+        #     if euclidean_distance(curr_posi, target_posi)>=30:
+        #         if self.motion_state == IN_MOVE:
+        #             logger.debug(f'sprint {euclidean_distance(curr_posi, target_posi)}')
+        #             itt.key_press('left_shift')
+        #             self.sprint_timer.reset()
+                    
+        # w
+        self.auto_w(curr_posi)
         
+        print(f"time5: {self.in_pt.get_diff_time()}")
         
     def state_after(self):
         self.next_flow_id = self.flow_id
@@ -766,7 +834,7 @@ if __name__ == '__main__':
     #     movement.change_view_to_angle(degree, lambda:False)
     
     TMFC = TeyvatMoveFlowController()
-    TMFC.set_parameter(MODE="PATH",path_dict=load_json("Cecilia20230513195754i0.json","assets\\TeyvatMovePath"), is_tp=True)
+    TMFC.set_parameter(MODE="PATH",path_dict=load_json("QXV220230513090727i0.json","assets\\TeyvatMovePath"), is_tp=True)
     # TMFC.set_parameter(MODE="AUTO", target_posi=[2032,-4879], is_tp=False)
     TMFC.start_flow()
     TMFC.start()
