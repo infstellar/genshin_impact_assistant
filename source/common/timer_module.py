@@ -2,6 +2,7 @@ import time
 from source.path_lib import *
 import pytz, datetime
 from source.logger import *
+from functools import wraps
 
 class Timer:
     def __init__(self, diff_start_time:float=0):
@@ -236,7 +237,19 @@ class Performance(Timer):
             self._output_num+=1
         else:
             self.reset_and_get()
-                   
+
+def timer(function):
+    @wraps(function)
+    def function_timer(*args, **kwargs):
+        t0 = time.time()
+
+        result = function(*args, **kwargs)
+        t1 = time.time()
+        print('%s: %s s' % (function.__name__, str(round(t1 - t0, 10))))
+        return result
+
+    return function_timer
+             
 if __name__ == '__main__':
     a = Genshin400Timer()
     print(a.is_new_day())

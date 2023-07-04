@@ -36,7 +36,7 @@
 - 让sco get_characters_name()在continue时获得charalist
 - move straight在移动视角前按下了w
 - sco切换失败时上下左右跳
-- LLO使用Domian同款急停 pass
+- LLO使用Domain同款急停 pass
 - 攀高危险按按中键 pass
 - ao在秘境里一走到底 pass
 - mission reg exception pass
