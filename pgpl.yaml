@@ -1,0 +1,26 @@
+GIA-China:
+  AutoUpdate: true
+  Branch: main
+  GitProxy: false
+  InstallDependencies: true
+  KeepLocalChanges: true
+  Main: genshin_assistant.py
+  PypiMirror: AUTO
+  PythonMirror: AUTO
+  PythonVersion: "3.10.10"
+  Repository: https://gitee.com/GenshinImpactAssistant/GIA_Launcher_Download_Lib
+  RequirementsFile: requirements.txt
+  Tag: ""
+GIA-Global:
+  AutoUpdate: true
+  Branch: main
+  GitProxy: false
+  InstallDependencies: true
+  KeepLocalChanges: true
+  Main: genshin_assistant.py
+  PypiMirror: AUTO
+  PythonMirror: AUTO
+  PythonVersion: "3.10.10"
+  Repository: https://github.com/GenshinImpactAssistant/GIA_Launcher_Download_Lib
+  RequirementsFile: requirements.txt
+  Tag: ""
