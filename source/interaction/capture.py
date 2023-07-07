@@ -105,7 +105,7 @@ class WindowsCapture(Capture):
         self.max_fps = 30
         self.monitor_num = 1
         self.monitor_id = 0
-        self.scale_factor = self._get_screen_scale_factor()
+        # self.scale_factor = self._get_screen_scale_factor()
         
     def _check_shape(self, img:np.ndarray):
         if img.shape == (1080,1920,4):
@@ -124,7 +124,7 @@ class WindowsCapture(Capture):
     def _get_screen_scale_factor(self):
         monitors = win32api.EnumDisplayMonitors()
         self.monitor_num = len(monitors)
-        monitor = monitors[self.monitor_id][0]
+        monitor = monitors[self.monitor_id][2]
         if self.monitor_num>1:
             logger.info(t2t("multiple monitor detected: ")+str(self.monitor_num))
         # Get a pointer to a DEVICE_SCALE_FACTOR value

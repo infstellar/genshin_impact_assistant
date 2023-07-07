@@ -1,16 +1,11 @@
 # TODO: Update with exact module version
 numpy
-torch==1.13.1
+torch
 loguru
 tqdm
-torchvision==0.14.1
+torchvision
 tabulate
 
-# verified versions
-# pycocotools corresponds to https://github.com/ppwwyyxx/cocoapi
-# pycocotools
-
-# paddleocr
 paddleocr
 paddlepaddle
 
@@ -26,17 +21,17 @@ keyboard
 scipy
 py7zr
 
-PyAutoGUI==0.9.53
+PyAutoGUI
 PyQt5
 pywebio
-pydirectinput==1.0.4
+pydirectinput
 
-# pycocotools NO PYCOCOTOOLS WHEN AUTOINSTALL!
 
-adbutils==0.11.0
-uiautomator2==2.16.17
-filelock==3.3.0
-lxml==4.6.3
+adbutils
+uiautomator2
+uiautomator2cache
+filelock
+lxml
 pydantic
 gimap==3.4.6
 pyyaml
@@ -44,3 +39,9 @@ pyyaml
 fastdeploy-python
 json5
 sortedcontainers
+pytz
+sympy
+scikit-learn
+requests
+dataclasses
+psutil
