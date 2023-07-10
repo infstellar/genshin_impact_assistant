@@ -32,7 +32,7 @@ uiautomator2
 uiautomator2cache
 filelock
 lxml
-pydantic
+pydantic==1.10.11
 gimap==3.4.6
 pyyaml
 
