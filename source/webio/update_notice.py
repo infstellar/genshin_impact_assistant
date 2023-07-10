@@ -31,7 +31,7 @@ def upd_message():
                         提升自定义任务采集成功率"
         if version_num < 1100:
             ret_message += "Python版本升级提示：GIA的python版本将升级到3.10.10。"
-            "目前(0.8.6.1089 ~ 0.9.0.1100)，GIA支持py3.7与py3.10双版本运行。py3.7的最后支持日期为2023.7.12。\n"
+            "目前(0.8.6.1089 ~ 0.9.0.1100)，GIA支持py3.7与py3.10双版本运行。py3.7的最后支持日期为2023.7.15。\n"
             "如果从GIA Launcher启动，请及时更换为最新的python-git-program-launcher启动器；如果从源代码启动，请更换使用3.10.10版本的python。\n"
             "更多信息，请查看Release 0.9.0的更新通知。"
 
