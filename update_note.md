@@ -1,5 +1,6 @@
 ## TODO：
 - commission set time
+- TMF的F拾取有点小问题
 - chara name 使用新方法
 - commission retry max: 2
 - commission的CSDL end好像有点问题
@@ -17,6 +18,7 @@
 - combat lib识别受ui限制
 
 ## Done：
+- 视角乱转
 - commission 执行完就是成功
 - 测试优化的复活功能
 - generate pot: use "path"
