@@ -2,7 +2,7 @@ from source.util import *
 
 
 logger.info(t2t('Creating ocr object.'))
-from common.timer_module import Timer
+from source.common.timer_module import Timer
 
 pdocr_timer_performance = Timer()
 pdocr_timer_performance.reset()

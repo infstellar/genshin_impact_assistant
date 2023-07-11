@@ -2,7 +2,7 @@ from source.util import *
 from source.interaction.interaction_core import itt
 from source.common.base_threading import BaseThreading
 from source.common import static_lib
-from common.timer_module import Timer
+from source.common.timer_module import Timer
 from source.path_lib import CONFIG_PATH_SETTING
 if GIAconfig.General_InteractionMode == INTERACTION_DESKTOP_BACKGROUND:
     from source.interaction.interaction_dm import unbind, bind

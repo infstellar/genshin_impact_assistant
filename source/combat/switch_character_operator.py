@@ -3,7 +3,7 @@ from source.funclib import combat_lib
 from source.combat import tactic_operator
 from source.common.base_threading import BaseThreading
 from source.interaction.interaction_core import itt
-from common.timer_module import Timer, AdvanceTimer
+from source.common.timer_module import Timer, AdvanceTimer
 from source.util import *
 from source.manager import asset
 from source.combat.aim_operator import AimOperator

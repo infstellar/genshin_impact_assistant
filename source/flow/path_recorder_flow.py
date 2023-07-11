@@ -9,7 +9,7 @@ from source.interaction.interaction_core import itt
 import pytz, datetime
 from source.ui.ui import ui_control
 from source.ui import page as UIPage
-from common.timer_module import AdvanceTimer, Timer
+from source.common.timer_module import AdvanceTimer, Timer
 
 
 class PathRecorderConnector(FlowConnector):

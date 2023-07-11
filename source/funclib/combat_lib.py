@@ -2,7 +2,7 @@ from source.manager import img_manager, posi_manager, asset
 from source.util import *
 from source.common.base_threading import BaseThreading
 import numpy as np
-from common import timer_module
+from source.common import timer_module
 from source.common import character
 from source.interaction.interaction_core import itt
 from source.exceptions.combat import *

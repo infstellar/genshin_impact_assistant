@@ -1,6 +1,6 @@
 from source.manager import posi_manager
 from source.interaction.interaction_core import itt
-from common.timer_module import Timer
+from source.common.timer_module import Timer
 from source.util import *
 
 

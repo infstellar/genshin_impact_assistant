@@ -2,7 +2,7 @@ from source.funclib import movement, combat_lib
 from source.manager import img_manager
 from source.common.base_threading import BaseThreading, ThreadBlockingRequest
 from source.interaction.interaction_core import itt
-from common.timer_module import Timer,AdvanceTimer
+from source.common.timer_module import Timer,AdvanceTimer
 from source.util import *
 from source.ui.ui import ui_control
 from source.ui import page as UIPage

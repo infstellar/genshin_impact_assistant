@@ -1,5 +1,5 @@
 from source.util import *
-from common import flow_state as ST, timer_module
+from source.common import flow_state as ST, timer_module
 from source.interaction.interaction_core import itt
 from source.pickup import pickup_operator
 from source.flow import teyvat_move_flow

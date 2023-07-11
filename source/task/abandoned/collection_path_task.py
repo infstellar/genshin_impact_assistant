@@ -3,7 +3,7 @@ from source.flow.path_recorder_flow import PathRecorderController
 from source.task.task_template import TaskTemplate
 from source.interaction.interaction_core import itt
 from source.manager import asset, text_manager
-from common import flow_state as ST
+from source.common import flow_state as ST
 from source.task import task_id as TI
 from source.funclib.err_code_lib import ERR_NONE, ERR_STUCK, ERR_PASS
 from source.path_lib import *
