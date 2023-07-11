@@ -7,7 +7,7 @@ GIA-China:
   Main: genshin_assistant.py
   PypiMirror: AUTO
   PythonMirror: AUTO
-  PythonVersion: "3.10.10"
+  PythonVersion: "3.7.6"
   Repository: https://gitee.com/GenshinImpactAssistant/GIA_Launcher_Download_Lib
   RequirementsFile: requirements.txt
   Tag: ""
@@ -20,7 +20,7 @@ GIA-Global:
   Main: genshin_assistant.py
   PypiMirror: AUTO
   PythonMirror: AUTO
-  PythonVersion: "3.10.10"
+  PythonVersion: "3.7.6"
   Repository: https://github.com/GenshinImpactAssistant/GIA_Launcher_Download_Lib
   RequirementsFile: requirements.txt
   Tag: ""
