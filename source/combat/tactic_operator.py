@@ -2,7 +2,7 @@ from source.api.pdocr_light import ocr_light
 from source.common.base_threading import BaseThreading
 from source.common.character import Character, Q_SKILL_COLOR
 from source.interaction.interaction_core import itt
-from common.timer_module import Timer, AdvanceTimer
+from source.common.timer_module import Timer, AdvanceTimer
 from source.util import *
 import cv2
 from source.funclib import combat_lib
