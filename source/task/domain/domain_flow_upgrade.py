@@ -125,6 +125,7 @@ class Challenge(FlowTemplate):
 class FindingTree(FlowTemplate):
     def __init__(self, upper:DomainFlowConnector):
         super().__init__(upper, flow_id=ST.INIT_FINGING_TREE, next_flow_id=ST.INIT_MOVETO_TREE)
+        self.direc_fb = True
         self.upper = upper
         self.move_num = 0
         self.keep_w_flag = False
@@ -172,18 +173,24 @@ class FindingTree(FlowTemplate):
         if self.upper.lockOnFlag <= 5:
             is_tree = self.align_to_tree()
             self.upper.ahead_timer.reset()
-            direc = True
+            direc_lr = True
+            self.direc_fb = True
             if not is_tree:
                 movement.view_to_angle_domain(-90, self.upper.checkup_stop_func)
 
                 if self.upper.isLiYue:  # barrier treatment
                     if self.upper.move_timer.get_diff_time() >= 20:
-                        direc = not direc
+                        direc_lr = not direc_lr
                         self.upper.move_timer.reset()
-                    if direc:
+                    if direc_lr:
                         movement.move(movement.MOVE_LEFT, distance=10)
                     else:
                         movement.move(movement.MOVE_RIGHT, distance=10)
+                    if self.direc_fb:
+                        movement.move(movement.MOVE_AHEAD, distance=3)
+                    else:
+                        movement.move(movement.MOVE_AHEAD, distance=3)
+                    self.direc_fb = not self.direc_fb
 
                 else:  # maybe can't look at tree
                     logger.debug('can not find tree. moving back.')
