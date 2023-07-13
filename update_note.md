@@ -1,5 +1,6 @@
 ## TODO：
 - commission set time
+- appear x2
 - TMF的F拾取有点小问题
 - chara name 使用新方法
 - commission retry max: 2

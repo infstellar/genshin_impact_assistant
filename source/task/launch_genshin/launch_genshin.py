@@ -5,6 +5,7 @@ from source.ui.ui import ui_control
 from source.ui import page as UIPage
 from source.interaction.interaction_core import itt
 
+
 class LaunchGenshin(TaskTemplate):
     def __init__(self):
         super().__init__()

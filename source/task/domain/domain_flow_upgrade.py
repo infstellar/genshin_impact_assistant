@@ -60,6 +60,11 @@ class MoveToChallenge(FlowTemplate):
         self.rfc = 1
     
     def state_before(self):
+        """
+        关闭弹窗，校准方向。
+        Returns:
+
+        """
         while 1:
             if itt.get_img_existence(asset.IconUIInDomain):
                 break
@@ -74,6 +79,11 @@ class MoveToChallenge(FlowTemplate):
             itt.key_down('w')
     
     def state_in(self):
+        """
+        移动直到到达。
+        Returns:
+
+        """
         movement.view_to_angle_domain(-90, self.upper.checkup_stop_func)
         if self.upper.fast_mode:
             pass
@@ -93,7 +103,7 @@ class Challenge(FlowTemplate):
         
     def state_init(self):
         logger.info(t2t('正在开始战斗'))
-        self.upper.combat_loop.continue_threading()
+        self.upper.combat_loop.continue_threading() # 开始打架
         itt.key_press('f')
         time.sleep(0.1)
         
@@ -102,6 +112,11 @@ class Challenge(FlowTemplate):
         self._next_rfc()
     
     def state_in(self):
+        """
+        等打架打完。
+        Returns:
+
+        """
         if itt.get_img_existence(IconGeneralChallengeSuccess):
             self.rfc = FC.AFTER
             return
@@ -131,6 +146,11 @@ class FindingTree(FlowTemplate):
         self.keep_w_flag = False
 
     def get_tree_posi(self):
+        """
+        使用yolox获得石化古树在屏幕上的坐标
+        Returns:
+
+        """
         cap =itt.capture(jpgmode=0)
         # cv2.imshow('123',cap)
         # cv2.waitKey(0)
@@ -143,6 +163,11 @@ class FindingTree(FlowTemplate):
         return False
 
     def align_to_tree(self):
+        """
+        使视角对准-90°，同时根据当前位置与石化古树的差值设置移动距离。
+        Returns: bool：石化古树是否存在。
+
+        """
         movement.view_to_angle_domain(-90, self.upper.checkup_stop_func)
         t_posi = self.get_tree_posi()
         if t_posi:
@@ -197,6 +222,9 @@ class FindingTree(FlowTemplate):
                     movement.move(movement.MOVE_BACK, distance=4)
         else:
             self._next_rfc()
+
+        # 处理掉下虚空的情况
+
         if not ui_control.verify_page(UIPage.page_domain):
             time.sleep(0.2)
             if not ui_control.verify_page(UIPage.page_domain):
@@ -215,7 +243,7 @@ class MoveToTree(FlowTemplate):
         self._next_rfc()
 
     def state_in(self):
-        
+        # 跳跃前进
         if self.upper.ahead_timer.get_diff_time() >= 5:
             itt.key_press('spacebar')
             self.upper.ahead_timer.reset()
