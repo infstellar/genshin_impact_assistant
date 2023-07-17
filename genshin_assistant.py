@@ -1,14 +1,8 @@
 import asyncio
 import threading
-from pywebio import platform
-
 # import source.config
 # print(source.config.template_translator())
 # print(source.config.template_translator_tactic())
-
-from source.webio import webio
-
-
 import source.util
 import time
 
@@ -21,6 +15,9 @@ if not source.util.DEBUG_MODE:
     giaocr.install_gia_dependence(source.util.ROOT_PATH)
     giayolo.install_gia_dependence(source.util.ROOT_PATH)
     print(f"sha-1 verify cost: {time.time()-pt}")
+
+from pywebio import platform
+from source.webio import webio
 
 def server_thread():
     # https://zhuanlan.zhihu.com/p/101586682
