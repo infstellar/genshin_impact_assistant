@@ -196,6 +196,7 @@ class FindingTree(FlowTemplate):
 
     def state_in(self):
         if self.upper.lockOnFlag <= 5:
+            movement.jump_in_loop(jump_dt=4)
             is_tree = self.align_to_tree()
             self.upper.ahead_timer.reset()
             direc_lr = True
