@@ -18,12 +18,15 @@ def copy_from_to(rootpath):
             continue
         for f in files:
             if f not in [".gitmodules", ".git"]:
+                flag1 = False
                 for iii in ["POI_JSON_API", "TeyvatMovePath", "PPOCRModels", "YoloxModels"]:
-                    if iii not in root:
+                    if iii in root:
+                        flag1 = True
                         # print(f"{f} has been copied.\n from {os.path.join(root, f)}\n to {os.path.join(root.replace(path1, path2), f)}")
-                        verify_path(root.replace(path1, path2))
-                        shutil.copy(os.path.join(root, f), os.path.join(root.replace(path1, path2), f))
-                        times+=1
+                if not flag1:
+                    verify_path(root.replace(path1, path2))
+                    shutil.copy(os.path.join(root, f), os.path.join(root.replace(path1, path2), f))
+                    times+=1
     print(times)
     # for d in dirs:
     #     if d not in [".git"]:
