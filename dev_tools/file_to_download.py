@@ -17,11 +17,13 @@ def copy_from_to(rootpath):
         if ".github" in root:
             continue
         for f in files:
-            if f not in [".gitmodules", ".git", "POI_JSON_API", "TeyvatMovePath", "PPOCRModels", "YoloxModels"]:
-                # print(f"{f} has been copied.\n from {os.path.join(root, f)}\n to {os.path.join(root.replace(path1, path2), f)}")
-                verify_path(root.replace(path1, path2))
-                shutil.copy(os.path.join(root, f), os.path.join(root.replace(path1, path2), f))
-                times+=1
+            if f not in [".gitmodules", ".git"]:
+                for iii in ["POI_JSON_API", "TeyvatMovePath", "PPOCRModels", "YoloxModels"]:
+                    if iii not in root:
+                        # print(f"{f} has been copied.\n from {os.path.join(root, f)}\n to {os.path.join(root.replace(path1, path2), f)}")
+                        verify_path(root.replace(path1, path2))
+                        shutil.copy(os.path.join(root, f), os.path.join(root.replace(path1, path2), f))
+                        times+=1
     print(times)
     # for d in dirs:
     #     if d not in [".git"]:
@@ -42,5 +44,5 @@ def del_files():
             elif os.path.isdir(filePath):
                 shutil.rmtree(filePath) # 删除文件夹
 
-del_files()
+# del_files()
 copy_from_to(path1)
