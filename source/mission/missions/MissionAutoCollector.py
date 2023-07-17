@@ -1,5 +1,5 @@
 from source.util import *
-from source.common import flow_state as ST
+from source.flow.utils import flow_state as ST
 from source.interaction.minimap_tracker import tracker
 from source.funclib import collector_lib
 import datetime
