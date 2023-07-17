@@ -321,8 +321,6 @@ class InteractionBGD:
                 return False
         elif ret_mode == IMG_RATE:
             return matching_rate
-    
-    appear = get_img_existence
         
     def get_text_existence(self, textobj: text_manager.TextTemplate, is_gray=False, is_log = True, ret_mode = IMG_BOOL, show_res = False):
         from source.api.pdocr_complete import ocr
@@ -334,6 +332,12 @@ class InteractionBGD:
         else:
             logger.debug(f"get_text_existence: text: {textobj.text} Not Found")
             return False
+
+    def appear(self, obj):
+        if isinstance(obj, text_manager.TextTemplate):
+            return self.get_text_existence(obj)
+        elif isinstance(obj, img_manager.ImgIcon):
+            return self.get_img_existence(obj)
 
     def appear_then_click(self, inputvar, is_gray=False, is_log = False):
         """appear then click

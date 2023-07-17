@@ -40,6 +40,11 @@ class LeyLineOutcropMission(MissionExecutor):
         self.target_posi = None
 
     def traverse_mondstant(self):
+        """
+        遍历蒙德，获得地脉衍出的位置。
+        Returns: TianLi坐标
+
+        """
         ui_control.ensure_page(UIPage.page_bigmap)
         for posi in self.TRAVERSE_MONDSTADT_POSITION:
             genshin_map.get_bigmap_posi()
@@ -67,6 +72,11 @@ class LeyLineOutcropMission(MissionExecutor):
             genshin_map._move_bigmap(posi.tianli, force_center = True)
     
     def touch_the_ley_line_blossom(self):
+        """
+        识别宝箱图片，接近并领取地脉之花。
+        Returns:是否成功。
+
+        """
         if not itt.get_img_existence(IconLeyLineOutcropReward):
             movement.move_to_position(list(self.target_posi), stop_func=self.checkup_stop_func)
         while 1:
@@ -93,7 +103,8 @@ class LeyLineOutcropMission(MissionExecutor):
     def exec_mission(self):
         for i in range(self.collection_times):
             try:
-                self.target_posi = self.traverse_mondstant()
+                self.target_posi = self.traverse_mondstant() # 获得坐标
+                # 从数据库获得所有地脉衍出坐标，如果当前坐标与数据库坐标差值小于阈值，使用数据库坐标修正。
                 ley_line_opt_position = load_items_position(marker_title="地脉衍出", ret_mode=1, match_mode=1)
                 distances = euclidean_distance_plist(self.target_posi, ley_line_opt_position)
                 logger.debug(f"min distances: {min(distances)}")
@@ -104,11 +115,17 @@ class LeyLineOutcropMission(MissionExecutor):
                     self.target_posi = ley_line_opt_position[min_index]
                     logger.info(t2t('redirect to the nearest ley line outcrop position succ: ')+
                                 f"{self.target_posi}")
+                # 移动到位置
                 r = self.move(MODE='AUTO', stop_rule=STOP_RULE_ARRIVE, target_posi=list(self.target_posi), is_tp=True, is_precise_arrival=False)
                 self.handle_tmf_stuck_then_raise(r)
-                self.circle_search(self.target_posi)
-                itt.key_press('f')
+                while 1:
+                    self.circle_search(self.target_posi)
+                    itt.delay(0.6)
+                    if f_recognition():
+                        itt.key_press('f')
+                        break
                 # self.collect(is_combat=True)
+                # 开打
                 self.start_combat()
                 while 1:
                     time.sleep(1)

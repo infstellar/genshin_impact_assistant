@@ -9,6 +9,18 @@ from pywebio import platform
 from source.webio import webio
 
 
+import source.util
+import time
+
+if not source.util.DEBUG_MODE:
+    import giadep
+    import giaocr
+    import giayolo
+    pt = time.time()
+    giadep.install_gia_dependence(source.util.ROOT_PATH)
+    giaocr.install_gia_dependence(source.util.ROOT_PATH)
+    giayolo.install_gia_dependence(source.util.ROOT_PATH)
+    print(f"sha-1 verify cost: {time.time()-pt}")
 
 def server_thread():
     # https://zhuanlan.zhihu.com/p/101586682
@@ -20,7 +32,7 @@ def server_thread():
 
 threading.Thread(target=server_thread, daemon=False).start()
 
-import source.util
+
 from source.error_code.main_err import *
 
 source.util.logger.info(source.util.t2t('正在初始化，请稍后'))

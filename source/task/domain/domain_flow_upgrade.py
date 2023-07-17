@@ -60,6 +60,11 @@ class MoveToChallenge(FlowTemplate):
         self.rfc = 1
     
     def state_before(self):
+        """
+        关闭弹窗，校准方向。
+        Returns:
+
+        """
         while 1:
             if itt.get_img_existence(asset.IconUIInDomain):
                 break
@@ -74,6 +79,11 @@ class MoveToChallenge(FlowTemplate):
             itt.key_down('w')
     
     def state_in(self):
+        """
+        移动直到到达。
+        Returns:
+
+        """
         movement.view_to_angle_domain(-90, self.upper.checkup_stop_func)
         if self.upper.fast_mode:
             pass
@@ -93,7 +103,7 @@ class Challenge(FlowTemplate):
         
     def state_init(self):
         logger.info(t2t('正在开始战斗'))
-        self.upper.combat_loop.continue_threading()
+        self.upper.combat_loop.continue_threading() # 开始打架
         itt.key_press('f')
         time.sleep(0.1)
         
@@ -102,6 +112,11 @@ class Challenge(FlowTemplate):
         self._next_rfc()
     
     def state_in(self):
+        """
+        等打架打完。
+        Returns:
+
+        """
         if itt.get_img_existence(IconGeneralChallengeSuccess):
             self.rfc = FC.AFTER
             return
@@ -125,11 +140,17 @@ class Challenge(FlowTemplate):
 class FindingTree(FlowTemplate):
     def __init__(self, upper:DomainFlowConnector):
         super().__init__(upper, flow_id=ST.INIT_FINGING_TREE, next_flow_id=ST.INIT_MOVETO_TREE)
+        self.direc_fb = True
         self.upper = upper
         self.move_num = 0
         self.keep_w_flag = False
 
     def get_tree_posi(self):
+        """
+        使用yolox获得石化古树在屏幕上的坐标
+        Returns:
+
+        """
         cap =itt.capture(jpgmode=0)
         # cv2.imshow('123',cap)
         # cv2.waitKey(0)
@@ -142,6 +163,11 @@ class FindingTree(FlowTemplate):
         return False
 
     def align_to_tree(self):
+        """
+        使视角对准-90°，同时根据当前位置与石化古树的差值设置移动距离。
+        Returns: bool：石化古树是否存在。
+
+        """
         movement.view_to_angle_domain(-90, self.upper.checkup_stop_func)
         t_posi = self.get_tree_posi()
         if t_posi:
@@ -170,26 +196,36 @@ class FindingTree(FlowTemplate):
 
     def state_in(self):
         if self.upper.lockOnFlag <= 5:
+            movement.jump_in_loop(jump_dt=4)
             is_tree = self.align_to_tree()
             self.upper.ahead_timer.reset()
-            direc = True
+            direc_lr = True
+            self.direc_fb = True
             if not is_tree:
                 movement.view_to_angle_domain(-90, self.upper.checkup_stop_func)
 
                 if self.upper.isLiYue:  # barrier treatment
                     if self.upper.move_timer.get_diff_time() >= 20:
-                        direc = not direc
+                        direc_lr = not direc_lr
                         self.upper.move_timer.reset()
-                    if direc:
+                    if direc_lr:
                         movement.move(movement.MOVE_LEFT, distance=10)
                     else:
                         movement.move(movement.MOVE_RIGHT, distance=10)
+                    if self.direc_fb:
+                        movement.move(movement.MOVE_AHEAD, distance=3)
+                    else:
+                        movement.move(movement.MOVE_AHEAD, distance=3)
+                    self.direc_fb = not self.direc_fb
 
                 else:  # maybe can't look at tree
                     logger.debug('can not find tree. moving back.')
                     movement.move(movement.MOVE_BACK, distance=4)
         else:
             self._next_rfc()
+
+        # 处理掉下虚空的情况
+
         if not ui_control.verify_page(UIPage.page_domain):
             time.sleep(0.2)
             if not ui_control.verify_page(UIPage.page_domain):
@@ -208,7 +244,7 @@ class MoveToTree(FlowTemplate):
         self._next_rfc()
 
     def state_in(self):
-        
+        # 跳跃前进
         if self.upper.ahead_timer.get_diff_time() >= 5:
             itt.key_press('spacebar')
             self.upper.ahead_timer.reset()
