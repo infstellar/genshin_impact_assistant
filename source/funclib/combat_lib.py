@@ -511,6 +511,7 @@ def get_chara_list():
                 team = generate_teamfile_automatic()
             except CharacterNameNotInCharacterParametersError as e:
                 logger.info(f"CharacterNameNotInCharacterParametersError: {e}")
+                raise e
         else:
             team = load_json(team_name, folder_path=r"config/tactic")    
     else:

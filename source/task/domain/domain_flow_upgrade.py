@@ -196,15 +196,15 @@ class FindingTree(FlowTemplate):
 
     def state_in(self):
         if self.upper.lockOnFlag <= 5:
-            movement.jump_in_loop(jump_dt=4)
+
             is_tree = self.align_to_tree()
             self.upper.ahead_timer.reset()
             direc_lr = True
             self.direc_fb = True
             if not is_tree:
                 movement.view_to_angle_domain(-90, self.upper.checkup_stop_func)
-
                 if self.upper.isLiYue:  # barrier treatment
+                    movement.jump_in_loop(jump_dt=10)
                     if self.upper.move_timer.get_diff_time() >= 20:
                         direc_lr = not direc_lr
                         self.upper.move_timer.reset()
