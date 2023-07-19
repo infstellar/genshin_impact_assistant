@@ -80,8 +80,8 @@ class MissionMain(MissionExecutor):
         self.current_position = tracker.get_position()
         self.collection_details = load_json("collection_id_details.json", "config\\auto_collector", auto_create=True)
         self.collector_posi_dict.sort(key=self.sort_by_distance_and_succrate)
-        logger.info("switch Flow to: BEFORE_MOVETO_COLLECTOR")
-        self.current_state = ST.BEFORE_MOVETO_COLLECTOR
+        # logger.info("switch Flow to: BEFORE_MOVETO_COLLECTOR")
+        # self.current_state = ST.BEFORE_MOVETO_COLLECTOR
         self.collector_i = 0
     
     def _set_target_position(self):

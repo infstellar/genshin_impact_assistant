@@ -28,7 +28,7 @@ traceback
 Union
 
 DEBUG_MODE = GIAconfig.General_DEBUG
-DEMO_MODE = True
+DEMO_MODE = False
 INTERACTION_MODE = GIAconfig.General_InteractionMode
 IS_DEVICE_PC = True
 
