@@ -146,7 +146,7 @@ class TacticOperator(BaseThreading):
 
         if ret:
             if float(t) <= self.character.E_short_cd_time:
-                logger.debug(f"longE failed. Ecd time: {t}; short Ecd time: {self.character.E_long_cd_time}; long Ecd time:{self.character.E_short_cd_time}")
+                logger.debug(f"longE failed. Ecd time: {t}; short Ecd time: {self.character.E_short_cd_time}; long Ecd time:{self.character.E_long_cd_time}")
                 time.sleep(float(t))
                 return False
             else:
