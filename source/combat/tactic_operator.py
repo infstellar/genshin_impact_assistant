@@ -500,8 +500,7 @@ class TacticOperator(BaseThreading):
                     self.itt.delay(int(tas) / 1000, randtime=False)
                 elif tas == '>':
                     break
-
-                if '?' in tas:
+                elif '?' in tas:
                     tas1 = tas[0:tas.index('?') + 1]
                     if tas1 == 'e?':
                         self.estimate_e_ready(tas)
@@ -511,6 +510,12 @@ class TacticOperator(BaseThreading):
                         self.estimate_q_ready(tas)
                     elif tas1 == '#@q?':
                         self.estimate_lock_q_ready(tas)
+                    else:
+                        logger.warning(t2t("Unknown tactic key: ") + str(tas1))
+                else:
+                    logger.warning(t2t("Unknown tactic key: ")+str(tas))
+
+
         
         
 
