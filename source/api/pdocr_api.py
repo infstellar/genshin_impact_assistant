@@ -154,9 +154,14 @@ class PaddleOcrFastDeploy():
             return list(ret_position[0])
         elif len(ret_position)>1:
             return list(ret_position)
+    
             
-    def get_all_texts(self, img, mode=0):
+    def get_all_texts(self, img, mode=0, per_monitor=False):
+        if per_monitor:
+            pt=time.time()
         res = self.analyze(img)
+        if per_monitor:
+            logger.info(f"ocr performance: {round(time.time()-pt,2)}")
         if mode==1:
             return ','.join(str(self._replace_texts(i)) for i in res.text).replace(',','')
         return [self._replace_texts(i) for i in res.text]

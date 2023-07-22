@@ -10,6 +10,7 @@ import win32api
 import win32gui
 from source.common import static_lib
 from source.manager import img_manager, text_manager, button_manager
+from source.common.timer_module import timer
 
 
 IMG_RATE = 0
@@ -103,7 +104,8 @@ class InteractionBGD:
         # if static_lib.HANDLE == 0:
         #     logger.error(t2t("未找到句柄，请确认原神窗口是否开启。"))
     
-    def capture(self, posi=None, shape='yx', jpgmode=None, check_shape = True):
+    @timer
+    def capture(self, posi=None, shape='yx', jpgmode=None, check_shape = True, recapture_limit = 0):
         """窗口客户区截图
 
         Args:
@@ -118,7 +120,7 @@ class InteractionBGD:
             numpy.ndarray: 图片数组
         """
 
-        ret = self.capture_obj.capture()
+        ret = self.capture_obj.capture(recapture_limit=recapture_limit)
         
         # if check_shape:
         #     if ret.shape != (1080, 1920, 4):
@@ -203,6 +205,7 @@ class InteractionBGD:
 
         return matched_coordinates
 
+    @timer
     def similar_img(self, img, target, is_gray=False, is_show_res: bool = False, ret_mode=IMG_RATE):
         """单个图片匹配
 
@@ -273,6 +276,7 @@ class InteractionBGD:
         else:
             return False
 
+    @timer
     def get_img_existence(self, imgicon: img_manager.ImgIcon, is_gray=False, is_log=True, ret_mode = IMG_BOOL, show_res = False, cap = None):
         """检测图片是否存在
 

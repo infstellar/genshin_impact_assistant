@@ -1,3 +1,5 @@
+import numpy as np
+
 from source.common.base_threading import BaseThreading
 from source.util import *
 from source.interaction.interaction_core import itt
@@ -13,7 +15,7 @@ SEARCH_MODE_FINDING = 1
 SEARCH_MODE_PICKUP = 0
 
 class PickupOperator(BaseThreading):
-
+    
     def __init__(self):
         super().__init__()
         self.setName("PickupOperator")
@@ -40,6 +42,7 @@ class PickupOperator(BaseThreading):
         self.last_search_times = 2
         self.crazy_f = False
         self.pickup_fail_cooldown = timer_module.AdvanceTimer(limit=2).reset()
+        self.while_sleep = 0.1
         
     def continue_threading(self):
         if self.pause_threading_flag != False:
@@ -97,10 +100,11 @@ class PickupOperator(BaseThreading):
                 continue
             while 1:
                 if self.checkup_stop_func():break
+                logger.info('enter 1')
                 ret = self.pickup_recognize()
                 if not ret:
                     break
-                self.itt.delay(0.5, comment="Waiting for Genshin picking animation")
+                # self.itt.delay(0.4, comment="Waiting for Genshin picking animation")
             
             if self.search_mode == SEARCH_MODE_FINDING:
                 
@@ -156,15 +160,13 @@ class PickupOperator(BaseThreading):
     def pickup_recognize(self):
         if not self.pickup_fail_cooldown.reached():
             return False
-        ret = generic_lib.f_recognition()
+        ret = generic_lib.f_recognition(cap=itt.capture(jpgmode=0, recapture_limit=0.1, posi=asset.IconGeneralFButton.cap_posi))
         if ret:
-            time.sleep(0.05)
             ret = self.itt.get_img_position(asset.IconGeneralFButton)
-            if ret == False:
-                return 0
+            if ret == False: return 0
             
-            itt.freeze_key('w', operate='up')
-            time.sleep(0.1)
+            # itt.freeze_key('w', operate='up')
+            # time.sleep(0.1)
 
             y1 = asset.IconGeneralFButton.cap_posi[1]
             x1 = asset.IconGeneralFButton.cap_posi[0]
@@ -178,7 +180,8 @@ class PickupOperator(BaseThreading):
             # img_manager.qshow(cap)
             # img = extract_white_letters(cap)
             cap = self.itt.png2jpg(cap, channel='ui', alpha_num=160)
-            res = ocr.get_all_texts(cap)
+            res = ocr.get_all_texts(cap, per_monitor=True)
+            logger.info('enter 2')
             if len(res) != 0:
                 for text in res:
                     if text == '':
@@ -192,15 +195,14 @@ class PickupOperator(BaseThreading):
                             for i in range(25):
                                 itt.key_press('f')
                                 time.sleep(0.05)
-                        # self.itt.delay(0)
                         self.pickup_item_list.append(text)
                         logger.info(t2t('pickup: ') + str(text))
+                        
                         if str(text) in self.target_name:
                             logger.info(t2t("已找到：") + self.target_name)
                             self.pickup_succ = True
-                        itt.unfreeze_key('w')
+                        logger.info('out 1')
                         return True
-            itt.unfreeze_key('w')
         return False
 
     def reset_pickup_item_list(self):
@@ -215,15 +217,52 @@ class PickupOperator(BaseThreading):
         imsrc[:, 0:300, :] = 0
         imsrc[:, 1600:1920, :] = 0
         imsrc[350:751, 1079:1300, :] = 0
-        a = ((imsrc[:, :, 0] >= 253).astype('uint8') + (imsrc[:, :, 1] >= 253).astype('uint8') + (
-                imsrc[:, :, 2] >= 253).astype('uint8')) >= 3
-        output_img = a.astype('uint8') * 255
+        # a = ((imsrc[:, :, 0] >= 253).astype('uint8') + (imsrc[:, :, 1] >= 253).astype('uint8') + (
+        #         imsrc[:, :, 2] >= 253).astype('uint8')) >= 3
+        # output_img = a.astype('uint8') * 255
+        mask = np.logical_not(np.all(imsrc > 200, axis=-1))
+        imsrc[mask] = [0, 0, 0]
+        output_img = imsrc.copy()
         # print()
         if show_res:
             cv2.imshow('find_collector', output_img)
-            cv2.waitKey(20)
-        c_s = img_manager.get_rect(output_img, self.itt.capture(jpgmode=0), ret_mode=2)
+            cv2.imwrite(os.path.join(ROOT_PATH, 'tools', 'pickup', f'{time.time()}.jpg'), output_img)
+            cv2.waitKey(1)
+        # c_s = img_manager.get_rect(output_img, self.itt.capture(jpgmode=0), ret_mode=2)
+        c_s = self.match_blink(output_img)
+        # c_s = 0
         return c_s
+
+    BLINK_THRESHOLD = 0.82
+    
+    def match_blink(self, img:np.ndarray, ignore_close=False, show_res = True):
+        raw_img = img.copy()
+        img = img.astype('float')
+        img = ((img[:,:,0]+img[:,:,1]+img[:,:,2])/3).astype('uint8')
+        mask = np.ones_like(IconGeneralBlink.image[:,:,0]).astype('uint8')
+        # mask = mask*255
+        res = cv2.matchTemplate(img, IconGeneralBlink.image[:,:,0], cv2.TM_CCORR_NORMED) # , mask=mask
+        res[np.where(res == np.nan)] = 0
+        loc = np.where(res >= self.BLINK_THRESHOLD)
+        matched_coordinates = sorted(zip(*loc[::-1]), key=lambda x: res[x[1], x[0]], reverse=True)
+        if show_res:
+            show_img = raw_img.copy()
+            for p in matched_coordinates:
+                cv2.drawMarker(show_img, position=(int(p[0]), int(p[1])), color=(0, 0, 255), markerSize=3,markerType=cv2.MARKER_CROSS, thickness=5)
+            cv2.imshow('match_blink', show_img)
+            cv2.waitKey(1)
+            print(res.max(), res.min())
+        if ignore_close:
+            ret_coordinates = []
+            for i in matched_coordinates:
+                if len(ret_coordinates) == 0:
+                    ret_coordinates.append(i)
+                    continue
+                if min(euclidean_distance_plist(i, ret_coordinates))>=15:
+                    ret_coordinates.append(i)
+            return ret_coordinates
+        else:
+            return matched_coordinates
 
     def reset_collector_loops(self):
         # print('reset')
@@ -304,14 +343,16 @@ if __name__ == '__main__':
     
     
     po = PickupOperator()
+    # while 1:
+    #     print(po.find_collector(show_res=True))
     # po.set_target_position([4813.5, -4180.5])
     # po.pause_threading()
-    # po.start()
+    po.start()
     # po.set_search_mode(0)
-    # po.continue_threading()
+    po.continue_threading()
     while 1:
+        time.sleep(1)
         # po.find_collector()
-        time.sleep(0.1)
-        po.pickup_recognize()
+        # po.pickup_recognize()
         # po.pickup_recognize()
         # print()

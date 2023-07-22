@@ -35,7 +35,7 @@ class Capture():
             return False
         
 
-    def capture(self, is_next_img = False) -> np.ndarray:
+    def capture(self, is_next_img = False, recapture_limit = 0) -> np.ndarray:
         """
         is_next_img: 强制截取下一张图片
         """
@@ -51,7 +51,11 @@ class Capture():
                     logger.debug(f"capps: {r/3}")
                 elif r >= 40*3:
                     logger.info(f"capps: {r/3}")
-        self._capture(is_next_img)
+        if self.fps_timer.get_diff_time() > recapture_limit:
+            self._capture(is_next_img)
+        else:
+            print(1)
+            pass
         self.capture_cache_lock.acquire()
         cp = self.capture_cache.copy()
         self.capture_cache_lock.release()
