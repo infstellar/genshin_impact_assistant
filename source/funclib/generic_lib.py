@@ -14,7 +14,7 @@ NEGATIVE_X = 2
 NEGATIVE_XY = 3
 itt = itt
 
-@timer
+# @timer
 def f_recognition(mode='button_only', cap=None):
     if itt.get_img_existence(asset.IconGeneralFButton, cap=cap):
         return True

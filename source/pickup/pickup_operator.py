@@ -98,12 +98,15 @@ class PickupOperator(BaseThreading):
             if self.checkup_stop_func():
                 self.pause_threading_flag = True
                 continue
-            while 1:
-                if self.checkup_stop_func():break
-                logger.info('enter 1')
-                ret = self.pickup_recognize()
-                if not ret:
-                    break
+            ret = generic_lib.f_recognition()
+            if ret:
+                itt.delay(0.2, comment='Waiting for Genshin picking animation')
+                while 1:
+                    if self.checkup_stop_func():break
+                    # logger.info('enter 1')
+                    ret = self.pickup_recognize()
+                    if not ret:
+                        break
                 # self.itt.delay(0.4, comment="Waiting for Genshin picking animation")
             
             if self.search_mode == SEARCH_MODE_FINDING:
@@ -181,7 +184,7 @@ class PickupOperator(BaseThreading):
             # img = extract_white_letters(cap)
             cap = self.itt.png2jpg(cap, channel='ui', alpha_num=160)
             res = ocr.get_all_texts(cap, per_monitor=True)
-            logger.info('enter 2')
+            # logger.info('enter 2')
             if len(res) != 0:
                 for text in res:
                     if text == '':
@@ -201,7 +204,7 @@ class PickupOperator(BaseThreading):
                         if str(text) in self.target_name:
                             logger.info(t2t("已找到：") + self.target_name)
                             self.pickup_succ = True
-                        logger.info('out 1')
+                        # logger.info('out 1')
                         return True
         return False
 
