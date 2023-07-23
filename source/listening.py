@@ -6,11 +6,13 @@ import time
 import keyboard
 from source.task import task_manager
 import threading
+from source.ingame_assist.manager import IngameAssistManager
 
 combat_flag = False
 collector_flag = False
 startstop_flag = False
 TASK_MANAGER = task_manager.TASK_MANAGER
+INGAME_ASSIST_MANAGER = IngameAssistManager()
 threading.excepthook = TASK_MANAGER.task_excepthook
 TASK_MANAGER.setDaemon(True)
 # TASK_MANAGER.pause_threading()
@@ -85,7 +87,7 @@ def switch_combat_loop():
         t1.continue_threading()
     combat_flag = not combat_flag
 
-def switch_collector_loop():
+def switch_story_skip_loop():
     global t3, collector_flag
     if collector_flag:
         logger.info(t2t('正在停止自动采集'))

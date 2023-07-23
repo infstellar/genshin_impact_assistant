@@ -100,7 +100,7 @@ class PickupOperator(BaseThreading):
                 continue
             ret = generic_lib.f_recognition()
             if ret:
-                itt.delay(0.2, comment='Waiting for Genshin picking animation')
+                itt.delay(0.1, comment='Waiting for Genshin picking animation')
                 while 1:
                     if self.checkup_stop_func():break
                     # logger.info('enter 1')
