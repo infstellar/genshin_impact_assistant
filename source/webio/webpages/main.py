@@ -132,7 +132,7 @@ class MainPage(AdvancePage):
                     
                     output.put_markdown(t2t('## Statement')),
                     output.put_row([output.put_text(t2t('任务状态')), None, output.put_scope('StateArea')],size='40% 10px 60%'),
-                    output.put_markdown(t2t('## Semi-automatic Functions')),  # 左竖列标题
+                    output.put_markdown(t2t('## Semi-automatic Functions')),
                     output.put_markdown(t2t("Can only be activated from the hotkey \'[\'")),
                     output.put_text(t2t('Do not enable semi-automatic functions and tasks at the same time')),
                     output.put_row([  # FlowMode
@@ -141,10 +141,23 @@ class MainPage(AdvancePage):
                         pin.put_select(('FlowMode'), [
                             {'label': t2t('Idle'), 'value': listening.FLOW_IDLE},
                             {'label': t2t('Auto Combat'), 'value': listening.FLOW_COMBAT}
-                        ]),
+                        ])
                         ],
-                    
-                )
+                    ),
+                    output.put_markdown(t2t('## Ingame assist')),
+                    output.put_row([  # FlowMode
+                        output.put_button(t2t('apply'), onclick=self._onclick_apply_ingame_assist),
+                        pin.put_checkbox(name="ingame_assist", options=[
+                            {
+                                'label':t2t('Pickup assist'),
+                                'value':'pickup_assist'
+                            },
+                            {
+                                'label':t2t('Auto story assist'),
+                                'value':'story_skip_assist'
+                            }]
+                        )
+                        ]),
                 ], size='auto'), None,
                 output.put_scope('Log')
 
@@ -203,6 +216,9 @@ class MainPage(AdvancePage):
         output_text = t2t('LAN IP') + " : " + LAN_ip + '\n' + t2t("WAN IP") + ' : ' + WAN_ip
         output.popup(f'ip address', output_text, size=output.PopupSize.SMALL)
 
+    def _onclick_apply_ingame_assist(self):
+        listening.INGAME_ASSIST_MANAGER.apply_change(pin.pin['ingame_assist'])
+    
     def logout(self, text: str, color='black'):
         if self.loaded:
             self.log_list_lock.acquire()

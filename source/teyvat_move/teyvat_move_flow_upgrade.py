@@ -434,6 +434,9 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
             f"guiding head posi: {r_posi}"
         )
         self.curr_break_point_index = int(self._low8up9(nz))
+        if self.curr_break_point_index > len(self.curr_breaks)-1:
+            logger.info('index out of range')
+            self.curr_break_point_index = len(self.curr_breaks)-1
         return r_posi
         
     
@@ -473,6 +476,8 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
             genshin_map.reinit_smallmap()
         self.upper.while_sleep = 0
         self.TDO = B_SplineCurve_GuidingHead_Optimizer(self.upper.path_dict)
+        if self.upper.is_auto_pickup:
+            self.upper.PUO.continue_threading()
         self._next_rfc()
     
     def state_in(self):
@@ -615,13 +620,21 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
                     for adsorb_p in self.adsorptive_position:
                         if euclidean_distance(adsorb_p, curr_posi) < absorptive_threshold:
                             logger.info(f"adsorption: {adsorb_p} start")
+                            if self.upper.is_auto_pickup:
+                                pickup_item_num = len(self.upper.PUO.pickup_item_list)
                             for i in range(15):
                                 if CSDL.get_combat_state():
                                     break
-                                if movement.move_to_posi_LoopMode(adsorb_p, self.upper.checkup_stop_func, threshold=1):break
+                                if movement.move_to_posi_LoopMode(adsorb_p, self.upper.checkup_stop_func, threshold=0.5):break
+                                if self.upper.PUO.auto_pickup() > 0:
+                                    logger.info("adsorption: finding blink: start")
+                                    while 1:
+                                        movement.move(direction=movement.MOVE_AHEAD,distance=2)
+                                        if self.upper.PUO.auto_pickup() == 0: break
+                                    logger.info("adsorption: finding blink: end")
                                 if self.upper.is_auto_pickup:
-                                    if self.upper.PUO.pickup_recognize():
-                                        while self.upper.PUO.pickup_recognize():pass
+                                    if len(self.upper.PUO.pickup_item_list) > pickup_item_num:
+                                        logger.info('picked, adsorption stopping')
                                         break
                                 time.sleep(0.2)
                                 if i%5==0:
@@ -711,6 +724,8 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
             itt.left_click()
         self._set_nfid(ST.END_TEYVAT_MOVE_PASS)
         self.upper.while_sleep = 0.2
+        if self.upper.is_auto_pickup:
+            self.upper.PUO.pause_threading()
         self._next_rfc()
         
     def state_end(self):
@@ -733,6 +748,7 @@ class TeyvatMoveFlowController(FlowController):
         self.flow_connector = self.flow_connector # type: TeyvatMoveFlowConnector
         self.get_while_sleep = self.flow_connector.get_while_sleep
         self.append_flow(TeyvatTeleport(self.flow_connector))
+        self._add_sub_threading(self.flow_connector.PUO)
 
     def start_flow(self):
         self.flow_dict = {}

@@ -32,6 +32,8 @@ def upd_message():
         if version_num < 1100:
             ret_message += "有新的启动器可用：python-git-program-launcher\n"
             "更多信息，请查看Release 0.9.0的更新通知。"
+        if version_num < 1130:
+            ret_message += "添加了游戏内辅助功能"
 
     x = load_json()
     x["Version"] = GIA_VERSION

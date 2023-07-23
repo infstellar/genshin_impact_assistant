@@ -768,5 +768,17 @@
         "vision": "Anemo",
         "trigger": "e_ready",
         "position": "Normal"
+    },
+    "Kirara": {
+        "E_short_cd_time": 8,
+        "E_long_cd_time": 12,
+        "Elast_time": 12,
+        "Epress_time": 2,
+        "Qcd_time": 15,
+        "Qlast_time": 12,
+        "tactic_group": "e?e~:none;q?q:none;",
+        "vision": "Dendro",
+        "trigger": "e_ready",
+        "position": "Shield"
     }
 }

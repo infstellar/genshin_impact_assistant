@@ -6,8 +6,7 @@ To Generate POT file, use follow command:
 
 ```
 cd translation
-python pygettext.py -d zh_CN -p locale/zh_CN/LC_MESSAGES ../*.py
-python pygettext.py -d en_US -p locale/en_US/LC_MESSAGES ../*.py
+python generate_pot.py
 cd ../
 ```
 

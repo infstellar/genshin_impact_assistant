@@ -17,6 +17,9 @@ class Talk():
         logger.debug(f"Talk: delay 0.6")
         itt.delay(0.6)
     
+    def _is_in_talking(self) -> bool:
+        return itt.get_img_existence(IconTalkTalking1) or itt.get_img_existence(IconTalkTalking2) or itt.get_img_existence(ButtonTalkSkip)
+    
     def talk_wait(self, x):
         logger.debug(f"Talk: wait {x}")
         itt.delay(x)

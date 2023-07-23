@@ -146,7 +146,7 @@ class TacticOperator(BaseThreading):
 
         if ret:
             if float(t) <= self.character.E_short_cd_time:
-                logger.debug(f"longE failed. Ecd time: {t}; short Ecd time: {self.character.E_long_cd_time}; long Ecd time:{self.character.E_short_cd_time}")
+                logger.debug(f"longE failed. Ecd time: {t}; short Ecd time: {self.character.E_short_cd_time}; long Ecd time:{self.character.E_long_cd_time}")
                 time.sleep(float(t))
                 return False
             else:
@@ -500,8 +500,7 @@ class TacticOperator(BaseThreading):
                     self.itt.delay(int(tas) / 1000, randtime=False)
                 elif tas == '>':
                     break
-
-                if '?' in tas:
+                elif '?' in tas:
                     tas1 = tas[0:tas.index('?') + 1]
                     if tas1 == 'e?':
                         self.estimate_e_ready(tas)
@@ -511,6 +510,12 @@ class TacticOperator(BaseThreading):
                         self.estimate_q_ready(tas)
                     elif tas1 == '#@q?':
                         self.estimate_lock_q_ready(tas)
+                    else:
+                        logger.warning(t2t("Unknown tactic key: ") + str(tas1))
+                else:
+                    logger.warning(t2t("Unknown tactic key: ")+str(tas))
+
+
         
         
 

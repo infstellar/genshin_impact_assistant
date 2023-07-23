@@ -23,3 +23,17 @@ n:
   type: int
 priority:
   type: int
+E_long_cd_time:
+  type: float
+E_short_cd_time:
+  type: float
+Elast_time:
+  type: float
+Epress_time:
+  type: float
+Qcd_time:
+  type: float
+Qlast_time:
+  type: float
+long_attack_time:
+  type: float

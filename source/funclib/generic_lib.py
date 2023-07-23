@@ -5,6 +5,7 @@ from source.util import *
 from source.ui.ui import ui_control
 import source.ui.page as UIPage
 from source.interaction.minimap_tracker import tracker
+from source.common.timer_module import timer
 
 
 NORMAL = 0
@@ -13,8 +14,9 @@ NEGATIVE_X = 2
 NEGATIVE_XY = 3
 itt = itt
 
-def f_recognition(mode='button_only'):
-    if itt.get_img_existence(asset.IconGeneralFButton):
+# @timer
+def f_recognition(mode='button_only', cap=None):
+    if itt.get_img_existence(asset.IconGeneralFButton, cap=cap):
         return True
     else:
         return False
