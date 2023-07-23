@@ -93,6 +93,7 @@ class MainPage(AdvancePage):
         with output.use_scope(self.main_scope):
             output.put_row([
                 output.put_button(label=t2t("Get IP address"), onclick=self.on_click_ip_address, scope=self.main_scope),
+                output.put_button(label=t2t("Open log folder"), onclick=self._onclick_open_log_folder, scope=self.main_scope),
                 output.put_link(t2t('View Document'), url='https://genshinimpactassistant.github.io/GIA-Document', new_window = True).style('font-size: 20px')
             ])
             
@@ -218,7 +219,11 @@ class MainPage(AdvancePage):
 
     def _onclick_apply_ingame_assist(self):
         listening.INGAME_ASSIST_MANAGER.apply_change(pin.pin['ingame_assist'])
-    
+
+    @logger.catch
+    def _onclick_open_log_folder(self):
+        os.startfile(os.path.join(ROOT_PATH, "Logs"))
+
     def logout(self, text: str, color='black'):
         if self.loaded:
             self.log_list_lock.acquire()
