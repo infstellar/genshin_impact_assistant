@@ -614,5 +614,12 @@
       "放浪者"
     ],
     "standard_name": "Wanderer"
+  },
+  {
+    "alias": [
+      "绮良良",
+      "綺良々"
+    ],
+    "standard_name": "Kirara"
   }
 ]
