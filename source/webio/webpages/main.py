@@ -153,7 +153,7 @@ class MainPage(AdvancePage):
                                 'value':'pickup_assist'
                             },
                             {
-                                'label':t2t('Story skip assist'),
+                                'label':t2t('Auto story assist'),
                                 'value':'story_skip_assist'
                             }]
                         )
