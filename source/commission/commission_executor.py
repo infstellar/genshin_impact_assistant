@@ -10,13 +10,13 @@ class CommissionExecutor(TaskTemplate, CommissionParser):
         super().__init__()
         self.setName("CommissionExecutor")
             
-        self._set_and_save_and_load_commission_dicts()
+        self._set_and_save_and_load_commission_dicts() # 扫描,加载委托
         self.exec_times = 0
         self.EXEC_LIMIT = 3
         
     def loop(self):
         for i in self.commission_dicts:
-            co = get_commission_object(i["type"], i["position"])
+            co = get_commission_object(i["type"], i["position"]) # 获得委托对象
             if not co: # commission obj not exist/cannot get obj
                 continue
             if i["done"]: # this commission obj has been done.

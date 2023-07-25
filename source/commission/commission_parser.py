@@ -10,6 +10,8 @@ from source.commission.commission_acquisition import get_commission_object
 from source.api.pdocr_complete import ocr
 from source.common.timer_module import FileTimer
 
+# 从大地图寻找委托
+# 看不懂也没关系,反正也没啥影响,能跑就行(
 
 class CommissionParser():
     TRAVERSE_MONDSTADT_POSITION=[TianLiPosition([783.450352, -6943.497652]),
