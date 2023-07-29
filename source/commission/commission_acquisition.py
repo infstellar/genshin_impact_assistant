@@ -35,14 +35,17 @@ def get_commission_object(commission_type, commission_position:list):
 
     posi = commission_position
     logger.info(f"get commission: {commission_type, commission_position}")
-    for i in commission_index.COMMISSION_INDEX:
+    for i in commission_index.COMMISSION_INDEX: # 从commission_index找
         if commission_index.COMMISSION_INDEX[i]["type"] == commission_type:
             if euclidean_distance(commission_index.COMMISSION_INDEX[i]["position"], posi)<=offset:
                 return commission_index.get_commission_object(i)
     logger.info(f"get commission fail, try to get general commission")
+    
+    # 只需要战斗的委托类型
     if commission_type in ["ASmallStepForHilichurls", "Emergency", "IcyIssues", "ForTheHarbingers", "BigIceColdCrisis", "SpreadingEvil", "PudgyPyrotechnicians", "CrisisOfShields"]:
         import source.commission.general.OnlyFight
         return source.commission.general.OnlyFight.FightOnlyGeneral(commission_type, commission_position)
+    # 特殊委托
     elif commission_type == "IncreasingDanger":
         import source.commission.general.IncreasingDanger
         return source.commission.general.IncreasingDanger.IncreasingDangerGeneral(commission_position)

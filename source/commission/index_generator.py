@@ -2,6 +2,8 @@ from source.util import *
 
 """
 生成commission index，提供导入。
+
+commission index作用: 为commissions文件夹下的脚本型委托提供导入方法
 """
 
 def str_to_position(commission_position):
