@@ -11,6 +11,7 @@ GIA-China:
   Repository: https://gitee.com/GenshinImpactAssistant/GIA_Launcher_Download_Lib
   RequirementsFile: requirements.txt
   Tag: ""
+  UAC: true
 GIA-Global:
   AutoUpdate: true
   Branch: main
@@ -24,3 +25,4 @@ GIA-Global:
   Repository: https://github.com/GenshinImpactAssistant/GIA_Launcher_Download_Lib
   RequirementsFile: requirements.txt
   Tag: ""
+  UAC: true

@@ -500,6 +500,8 @@ class TacticOperator(BaseThreading):
                     self.itt.delay(int(tas) / 1000, randtime=False)
                 elif tas == '>':
                     break
+                elif tas == 'none':
+                    pass
                 elif '?' in tas:
                     tas1 = tas[0:tas.index('?') + 1]
                     if tas1 == 'e?':
