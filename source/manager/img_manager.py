@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 from source.manager.util import *
+from copy import deepcopy
 
 # COMING_OUT_BY_SPACE = 
 # IN_DOMAIN = "IN_DOMAIN"
@@ -100,6 +101,9 @@ class ImgIcon(AssetBase):
             self.image = crop(self.raw_image, self.bbg_posi)
         else:
             self.image = self.raw_image.copy()
+    
+    def copy(self):
+        return deepcopy(self)
     
     def show_image(self):
         cv2.imshow('123', self.image)

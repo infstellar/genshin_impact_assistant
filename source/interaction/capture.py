@@ -54,7 +54,7 @@ class Capture():
         if self.fps_timer.get_diff_time() > recapture_limit:
             self._capture(is_next_img)
         else:
-            print(1)
+            # print(1)
             pass
         self.capture_cache_lock.acquire()
         cp = self.capture_cache.copy()

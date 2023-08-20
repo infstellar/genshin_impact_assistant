@@ -19,7 +19,7 @@ IconBigmapDomain = ImgIcon()
 IconGeneralMotionSwimming = ImgIcon(bbg_posi=[1808,968,1872,1016], cap_posi='bbg')# 不能删bbg
 IconGeneralMotionClimbing = ImgIcon(bbg_posi=[1706,960,1866,1022], cap_posi='bbg')# 不能删bbg
 IconGeneralMotionFlying = ImgIcon(bbg_posi=[1706,960,1866,1022], cap_posi='bbg')# 不能删bbg
-IconUIEmergencyFood = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.98)
+IconUIEmergencyFood = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.97)
 IconUIBigmap = ImgIcon(cap_posi=[1300,36,1750, 59 ], print_log=LOG_WHEN_TRUE, threshold=0.95, offset=10)
 IconUIEscMenu = ImgIcon(print_log=LOG_WHEN_TRUE, threshold=0.97)
 ButtonUISwitchToTimeMenu = Button(print_log=LOG_WHEN_TRUE)

@@ -1,6 +1,8 @@
 from source.manager import asset
 from source.util import *
 
+IconUIEmergencyFood = asset.IconUIEmergencyFood.copy()
+IconUIEmergencyFood.threshold = 0.95
 ButtonTalkSkip = asset.Button(threshold=0.99)
 ButtonTalkSkip_Force = asset.Button(name="ButtonTalkSkip", threshold=0, click_offset=[-120,0])
 AreaTalkSelects = asset.Area()
