@@ -60,7 +60,7 @@ class CommissionParser():
                             continue
                     commission_positions.append(target_tianli_posi)
                     
-                    itt.move_and_click(list(i))
+                    itt.move_and_click([list(i)[0]+8, list(i)[1]+8]) # 修正
                     itt.delay("animation")
                     for i in range(3):
                         com_type = self._detect_commission_type()

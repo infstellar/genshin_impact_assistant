@@ -23,6 +23,11 @@ def sort_flag_1(x: character.Character):
 
 
 class SwitchCharacterOperator(BaseThreading):
+    """负责换人,同时控制策略执行和自动瞄准.
+
+    Args:
+        BaseThreading (_type_): _description_
+    """
     def __init__(self):
         super().__init__()
         self.setName('SwitchCharacterOperator')
@@ -33,13 +38,13 @@ class SwitchCharacterOperator(BaseThreading):
         self._add_sub_threading(self.tactic_operator)
         self._add_sub_threading(self.aim_operator)
         
-        self.current_num = 1 # combat_lib.get_current_chara_num(self.checkup_stop_func)
-        self.switch_timer = Timer(diff_start_time=2)
+        self.current_character_num = 1 
+        self.switch_timer = Timer(diff_start_time=2) # 换人冷却计时器
         self.tactic_operator.set_enter_timer(self.switch_timer)
 
-        self.died_character = [] # 存储的是n而非name
-        self.reborn_timer = Timer(diff_start_time=150)
-        self.position_check_timer = AdvanceTimer(0.3).start()
+        self.died_character = [] # 存储的是角色序号而非角色名称
+        self.reborn_timer = Timer(diff_start_time=150) # 鸡蛋复活计时器
+        self.position_check_timer = AdvanceTimer(0.3).start() # position级别角色检查计时器
         self.mode="Normal"
     
     def run(self):
@@ -144,7 +149,10 @@ class SwitchCharacterOperator(BaseThreading):
         """_summary_
 
         Args:
-            switch_type (str, optional): _description_. Defaults to "TRIGGER". "TRIGGER" "SHIELD" "CORE"
+            switch_type (str, optional): 角色切换模式. Defaults to "TRIGGER". 
+                "TRIGGER":使用trigger作为切换标准\n
+                "SHIELD":仅切换并执行护盾类角色的策略组
+            
 
         Returns:
             _type_: _description_
@@ -162,10 +170,10 @@ class SwitchCharacterOperator(BaseThreading):
             elif switch_type in ["CORE","SHIELD"] and chara.is_position_ready(switch_type):
                 tg=chara.tactic_group
             if tg != None: 
-                self.current_num = combat_lib.get_current_chara_num(self.checkup_stop_func)
-                logger.debug(f"switch_character: {switch_type}: targetnum: {chara.n} current num: {self.current_num} tactic group: {tg}")
+                self.current_character_num = combat_lib.get_current_chara_num(self.checkup_stop_func)
+                logger.debug(f"switch_character: {switch_type}: targetnum: {chara.n} current num: {self.current_character_num} tactic group: {tg}")
                 self.tactic_operator.pause_threading()
-                if chara.n != self.current_num:
+                if chara.n != self.current_character_num:
                     r = self._switch_character(chara.n)
                     if not r: # Failed
                         continue
@@ -222,7 +230,7 @@ class SwitchCharacterOperator(BaseThreading):
             logger.trace(f"sco loop cost: {time.time()-pt}")
             if switch_succ_num >= switch_target_num:
                 logger.debug(f"switch chara to {x} succ")
-                self.current_num = x
+                self.current_character_num = x
                 self.switch_timer.reset()
                 # itt.delay(0.05)
                 return True
@@ -246,7 +254,7 @@ class SwitchCharacterOperator(BaseThreading):
             self.tactic_operator.set_parameter(None, None)
             self.tactic_operator.continue_threading()
             self.aim_operator.continue_threading()
-            self.current_num = combat_lib.get_current_chara_num(self.checkup_stop_func)
+            self.current_character_num = combat_lib.get_current_chara_num(self.checkup_stop_func)
 
 
 if __name__ == '__main__':

@@ -31,7 +31,7 @@ class Talk():
             if stop_func():return
             itt.move_and_click(ButtonTalkSkip.click_position())
             # itt.move_to(-120,0,relative=True)
-            if itt.get_img_existence(asset.IconUIEmergencyFood): return True
+            if itt.get_img_existence(IconUIEmergencyFood): return True
             
     def talk_switch(self, textobj:asset.Text) -> bool:
         logger.info(f"Talk: Switch: {textobj.text}")
