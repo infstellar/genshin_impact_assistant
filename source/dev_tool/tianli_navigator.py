@@ -68,7 +68,8 @@ class TianliNavigator(astar.AStar, MapConverter):
         return node.links
 
 class TianLiNavigatorDev(TianliNavigator):
-    GIMAP_RAWIMG = cv2.imread(fr"F:/GIMAP.png")
+    import gimapdev
+    GIMAP_RAWIMG = gimapdev.GIMAP
     def __init__(self) -> None:
         super().__init__()
         plt.title("title")
