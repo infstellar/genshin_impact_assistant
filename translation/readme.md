@@ -5,9 +5,7 @@
 To Generate POT file, use follow command:
 
 ```
-cd translation
-python generate_pot.py
-cd ../
+python translation/generate_pot.py
 ```
 
 ## Translate In PoEdit

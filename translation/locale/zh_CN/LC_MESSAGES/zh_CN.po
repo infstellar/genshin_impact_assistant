@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2023-07-23 15:47+0800\n"
-"PO-Revision-Date: 2023-07-23 15:52+0800\n"
+"POT-Creation-Date: 2023-09-17 16:47+0800\n"
+"PO-Revision-Date: 2023-09-17 16:47+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -48,7 +48,7 @@ msgstr "正在创建OCR对象"
 msgid "导入paddleocr时错误; err code: 001"
 msgstr ""
 
-#: source\api\pdocr_api.py:214
+#: source\api\pdocr_api.py:216
 msgid "ocr device: "
 msgstr "OCR 运行设备："
 
@@ -72,7 +72,7 @@ msgstr ""
 msgid "停止自动战斗"
 msgstr ""
 
-#: source\combat\tactic_operator.py:514 source\combat\tactic_operator.py:516
+#: source\combat\tactic_operator.py:516 source\combat\tactic_operator.py:518
 msgid "Unknown tactic key: "
 msgstr "未知策略代码："
 
@@ -170,6 +170,34 @@ msgstr "准备停止记录"
 msgid "start recording"
 msgstr "开始记录"
 
+#: source\forgettext.py:2
+msgid "day(s)"
+msgstr "天"
+
+#: source\forgettext.py:3
+msgid "success rate"
+msgstr "成功率"
+
+#: source\forgettext.py:4
+msgid "total num"
+msgstr "总次数"
+
+#: source\forgettext.py:5
+msgid "success num"
+msgstr "成功次数"
+
+#: source\forgettext.py:6
+msgid "fail num"
+msgstr "失败次数"
+
+#: source\forgettext.py:7
+msgid "Within"
+msgstr "在"
+
+#: source\forgettext.py:8
+msgid "running speed"
+msgstr "运行速度"
+
 #: source\funclib\combat_lib.py:29 source\funclib\combat_lib.py:34
 msgid "No corresponding parameters filled in"
 msgstr "未填写相应参数"
@@ -218,6 +246,42 @@ msgstr ""
 msgid "将在0.2秒后再次尝试获取UI界面"
 msgstr ""
 
+#: source\generic_event.py:21 source\generic_event.py:55
+msgid "Fluent"
+msgstr "流畅"
+
+#: source\generic_event.py:46
+msgid "EXTREMELY LOW PERFORMANCE"
+msgstr "极低性能"
+
+#: source\generic_event.py:49
+msgid "LOW PERFORMANCE"
+msgstr "低性能"
+
+#: source\generic_event.py:52
+msgid "MEDIUM PERFORMANCE"
+msgstr "中等性能"
+
+#: source\generic_event.py:81 source\interaction\interaction_core.py:43
+msgid "恢复操作"
+msgstr ""
+
+#: source\generic_event.py:83
+msgid "是原神窗口"
+msgstr ""
+
+#: source\generic_event.py:83 source\interaction\interaction_core.py:45
+msgid " 秒"
+msgstr ""
+
+#: source\generic_event.py:83 source\interaction\interaction_core.py:45
+msgid "当前窗口焦点为"
+msgstr ""
+
+#: source\generic_event.py:83 source\interaction\interaction_core.py:45
+msgid "，操作暂停 "
+msgstr ""
+
 #: source\interaction\capture.py:75
 msgid "Fail to get capture: "
 msgstr "截图失败"
@@ -248,24 +312,8 @@ msgid ""
 "this does not affect usage."
 msgstr "你看起来使用了多个不同的显示器缩放？已自动识别。"
 
-#: source\interaction\interaction_core.py:43
-msgid "恢复操作"
-msgstr ""
-
-#: source\interaction\interaction_core.py:45
-msgid " 秒"
-msgstr ""
-
 #: source\interaction\interaction_core.py:45
 msgid "不是原神窗口"
-msgstr ""
-
-#: source\interaction\interaction_core.py:45
-msgid "当前窗口焦点为"
-msgstr ""
-
-#: source\interaction\interaction_core.py:45
-msgid "，操作暂停 "
 msgstr ""
 
 #: source\interaction\interaction_core.py:365
@@ -311,6 +359,30 @@ msgstr ""
 #: source\interaction\interaction_core.py:771
 #: source\interaction\interaction_core.py:786
 msgid "移动鼠标到坐标: "
+msgstr ""
+
+#: source\listening.py:73
+msgid "Program stop."
+msgstr "程序终止"
+
+#: source\listening.py:78
+msgid "正在停止自动战斗"
+msgstr ""
+
+#: source\listening.py:82
+msgid "启动自动战斗"
+msgstr ""
+
+#: source\listening.py:93
+msgid "正在停止自动采集"
+msgstr ""
+
+#: source\listening.py:96
+msgid "启动自动采集"
+msgstr ""
+
+#: source\listening.py:135
+msgid "导入完成"
 msgstr ""
 
 #: source\map\map.py:134
@@ -443,6 +515,18 @@ msgstr ""
 
 #: source\ui\ui.py:39
 msgid "未知Page, 重新检测"
+msgstr ""
+
+#: source\util.py:76 source\util.py:78
+msgid " 请检查"
+msgstr ""
+
+#: source\util.py:76 source\util.py:78
+msgid "目录不存在："
+msgstr ""
+
+#: source\util.py:90
+msgid "请用管理员权限运行"
 msgstr ""
 
 #: source\webio\advance_page.py:19
@@ -604,8 +688,8 @@ msgstr "自动采集设置"
 msgid "LeyLineOutcrop.json"
 msgstr "地脉衍出"
 
-#: source\webio\webpages\config.py:85 source\webio\webpages\main.py:39
-#: source\webio\webpages\main.py:42
+#: source\webio\webpages\config.py:85 source\webio\webpages\main.py:44
+#: source\webio\webpages\main.py:47
 msgid "未找到会话，可能由于窗口关闭。请刷新页面重试。"
 msgstr ""
 
@@ -629,125 +713,137 @@ msgstr "否"
 msgid "Yes"
 msgstr "是"
 
-#: source\webio\webpages\main.py:47
+#: source\webio\webpages\main.py:52
 msgid "正在导入模块, 可能需要一些时间。"
 msgstr ""
 
-#: source\webio\webpages\main.py:49
+#: source\webio\webpages\main.py:54
 msgid "在导入完成前，请不要切换页面。"
 msgstr ""
 
-#: source\webio\webpages\main.py:95
+#: source\webio\webpages\main.py:102
+msgid ""
+"Warning: Extremely low performance, if you see this message for a long time, "
+"please check if your computer meets the lowest requirements."
+msgstr ""
+"警告： 性能极低，如果您长时间看到此信息，请检查您的计算机是否满足最低配置要"
+"求。"
+
+#: source\webio\webpages\main.py:112
 msgid "Get IP address"
 msgstr "获取IP地址"
 
-#: source\webio\webpages\main.py:96
+#: source\webio\webpages\main.py:113
+msgid "Open log folder"
+msgstr "打开日志文件夹"
+
+#: source\webio\webpages\main.py:116
 msgid "View Document"
 msgstr "查看文档"
 
-#: source\webio\webpages\main.py:102
+#: source\webio\webpages\main.py:122
 msgid "Launch genshin"
 msgstr "进入原神"
 
-#: source\webio\webpages\main.py:106
+#: source\webio\webpages\main.py:126
 msgid "Domain Task"
 msgstr "秘境任务"
 
-#: source\webio\webpages\main.py:110
+#: source\webio\webpages\main.py:130
 msgid "Daily Commission"
 msgstr "每日委托"
 
-#: source\webio\webpages\main.py:114
+#: source\webio\webpages\main.py:134
 msgid "Claim Reward"
 msgstr "领取日常奖励"
 
-#: source\webio\webpages\main.py:118
+#: source\webio\webpages\main.py:138
 msgid "Ley Line Outcrop"
 msgstr "地脉衍出"
 
-#: source\webio\webpages\main.py:122
+#: source\webio\webpages\main.py:142
 #: source\webio\webpages\missiondownload.py:160
 #: source\webio\webpages\missiondownload.py:239
 msgid "Mission"
 msgstr "自定义任务"
 
-#: source\webio\webpages\main.py:128
+#: source\webio\webpages\main.py:148
 msgid "Task List"
 msgstr "任务列表"
 
-#: source\webio\webpages\main.py:129
+#: source\webio\webpages\main.py:149
 msgid "Can only be activated from the button"
 msgstr "只能通过按钮启动"
 
-#: source\webio\webpages\main.py:131
+#: source\webio\webpages\main.py:151
 msgid "启动/停止Task"
 msgstr ""
 
-#: source\webio\webpages\main.py:133
+#: source\webio\webpages\main.py:153
 msgid "## Statement"
 msgstr "## 状态"
 
-#: source\webio\webpages\main.py:134
+#: source\webio\webpages\main.py:154
 msgid "任务状态"
 msgstr ""
 
-#: source\webio\webpages\main.py:135
+#: source\webio\webpages\main.py:155
 msgid "## Semi-automatic Functions"
 msgstr "## 半自动功能"
 
-#: source\webio\webpages\main.py:136
+#: source\webio\webpages\main.py:156
 msgid "Can only be activated from the hotkey '['"
 msgstr "只能通过快捷键启动（默认为‘['）"
 
-#: source\webio\webpages\main.py:137
+#: source\webio\webpages\main.py:157
 msgid "Do not enable semi-automatic functions and tasks at the same time"
 msgstr "不要同时启用半自动功能和任务"
 
-#: source\webio\webpages\main.py:139
+#: source\webio\webpages\main.py:159
 msgid "Semi-automatic Functions"
 msgstr "半自动功能"
 
-#: source\webio\webpages\main.py:142
+#: source\webio\webpages\main.py:162
 msgid "Idle"
 msgstr "空闲"
 
-#: source\webio\webpages\main.py:143
+#: source\webio\webpages\main.py:163
 msgid "Auto Combat"
 msgstr "自动战斗"
 
-#: source\webio\webpages\main.py:147
+#: source\webio\webpages\main.py:167
 msgid "## Ingame assist"
 msgstr "## 游戏内辅助"
 
-#: source\webio\webpages\main.py:149
+#: source\webio\webpages\main.py:169
 msgid "apply"
 msgstr "应用"
 
-#: source\webio\webpages\main.py:152
+#: source\webio\webpages\main.py:172
 msgid "Pickup assist"
 msgstr "拾取辅助"
 
-#: source\webio\webpages\main.py:156
+#: source\webio\webpages\main.py:176
 msgid "Auto story assist"
 msgstr "自动剧情辅助"
 
-#: source\webio\webpages\main.py:173
+#: source\webio\webpages\main.py:193
 msgid "## Log"
 msgstr "## 日志"
 
-#: source\webio\webpages\main.py:180
+#: source\webio\webpages\main.py:200
 msgid "Update Notice"
 msgstr "更新提示"
 
-#: source\webio\webpages\main.py:215
+#: source\webio\webpages\main.py:235
 msgid "Not Enabled"
 msgstr "未启用"
 
-#: source\webio\webpages\main.py:216
+#: source\webio\webpages\main.py:236
 msgid "LAN IP"
 msgstr "局域网IP"
 
-#: source\webio\webpages\main.py:216
+#: source\webio\webpages\main.py:236
 msgid "WAN IP"
 msgstr "以太网IP"
 
@@ -1289,24 +1385,3 @@ msgstr "自动停止"
 
 #~ msgid "cvAutoTrack DLL has been loaded."
 #~ msgstr "cvAutoTrack DLL 已经加载"
-
-#~ msgid "day(s)"
-#~ msgstr "天"
-
-#~ msgid "success rate"
-#~ msgstr "成功率"
-
-#~ msgid "total num"
-#~ msgstr "总次数"
-
-#~ msgid "success num"
-#~ msgstr "成功次数"
-
-#~ msgid "fail num"
-#~ msgstr "失败次数"
-
-#~ msgid "Within"
-#~ msgstr "在"
-
-#~ msgid "Program stop."
-#~ msgstr "程序终止"

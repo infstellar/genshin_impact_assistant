@@ -17,6 +17,8 @@ class GenericEvent(BaseThreading):
         self.w_down_flag = False
         self.setName("GenericEvent")
         self.while_sleep = 2
+        self.dilation_rate = 1 
+        self.dilation_rate_note = t2t("Fluent")
             
     def run(self) -> None:
         '''if you're using this class, copy this'''
@@ -40,12 +42,20 @@ class GenericEvent(BaseThreading):
                 continue
             '''write your code below'''
             dilation_rate = self.while_sleep/(time.time()-pt)
-            if dilation_rate < 0.8:
-                logger.warning(f"time dilation rate: {dilation_rate}")
-            elif dilation_rate < 0.95:
-                logger.info(f"time dilation rate: {dilation_rate}")
-            elif dilation_rate < 0.98:
+            if dilation_rate < 0.6:
+                self.dilation_rate_note = t2t("EXTREMELY LOW PERFORMANCE")
                 logger.trace(f"time dilation rate: {dilation_rate}")
+            elif dilation_rate < 0.8:
+                self.dilation_rate_note = t2t("LOW PERFORMANCE")
+                logger.trace(f"time dilation rate: {dilation_rate}")
+            elif dilation_rate < 0.95:
+                self.dilation_rate_note = t2t("MEDIUM PERFORMANCE")
+                logger.trace(f"time dilation rate: {dilation_rate}")
+            else:
+                self.dilation_rate_note = t2t("Fluent")
+                
+            
+            self.dilation_rate = dilation_rate
             
             if INTERACTION_MODE == INTERACTION_DESKTOP_BACKGROUND or INTERACTION_DESKTOP:
                 if static_lib.W_KEYDOWN == True:

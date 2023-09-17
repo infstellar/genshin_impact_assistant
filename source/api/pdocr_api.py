@@ -41,6 +41,13 @@ RETURN_TEXT = 1
 RETURN_POSITION = 0
 RETURN_POINT = 3
 
+REPLACE_DICT = {
+            "惊垫":"惊蛰",
+            "烟排":"烟绯",
+            "花染":"椛染",
+            "纳西姐":"纳西妲"
+        }
+
 
 
 class PaddleOcrFastDeploy():
@@ -70,16 +77,11 @@ class PaddleOcrFastDeploy():
         res = self.model.predict(img)
         logger.trace(str(res).replace('\n',''))
         return res
-    REPLACE_DICT = {
-            "惊垫":"惊蛰",
-            "烟排":"烟绯",
-            "花染":"椛染",
-            "纳西姐":"纳西妲"
-        }
+    
     def _replace_texts(self, text:str):
-        for i in self.REPLACE_DICT:
+        for i in REPLACE_DICT:
             if i in text:
-                text = text.replace(i, self.REPLACE_DICT[i])
+                text = text.replace(i, REPLACE_DICT[i])
         return text
 
     def _preprocessing_str(self, x:str):

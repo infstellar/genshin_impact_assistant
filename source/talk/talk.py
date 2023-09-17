@@ -18,6 +18,11 @@ class Talk():
         itt.delay(0.6)
     
     def _is_in_talking(self) -> bool:
+        """Detect whether in a conversation.
+
+        Returns:
+            bool: whether in a conversation.
+        """
         return itt.get_img_existence(IconTalkTalking1) or itt.get_img_existence(IconTalkTalking2) or itt.get_img_existence(ButtonTalkSkip)
     
     def talk_wait(self, x):
