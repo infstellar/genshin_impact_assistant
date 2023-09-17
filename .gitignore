@@ -126,9 +126,11 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+*.idea
+
 test_py/
 outputimgs/
-tools/snapshot/
+tools/
 source.7z
 source.7z.tmp
 tests/
