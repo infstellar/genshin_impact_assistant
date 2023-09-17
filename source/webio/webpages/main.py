@@ -11,10 +11,15 @@ from source.webio.advance_page import AdvancePage
 from source.common import timer_module
 from source.webio.update_notice import upd_message
 from source.config.cvars import *
+from source.generic_event import generic_event
 
 
 
 class MainPage(AdvancePage):
+    
+    PROCESSBAR_PERFORMANCE = AN()
+    SCOPE_PERFORMANCE = AN()
+    
     def __init__(self):
         super().__init__()
         self.log_list = []
@@ -50,12 +55,14 @@ class MainPage(AdvancePage):
                     f'color: black; font_size: 20px')
                 self.log_list_lock.release()
                 listening.call_you_import_module()
-            # if pin.pin["MissionSelect"] != self.ui_mission_select:
-            #     self.ui_mission_select = pin.pin["MissionSelect"]
-            #     output.clear_scope("SCOPEMissionIntroduction")
-            #     if self.ui_mission_select is None:
-            #         continue
-                # output.put_text(self._get_mission_groups_dict()["introduction"][GLOBAL_LANG],scope="SCOPEMissionIntroduction")
+                                # if pin.pin["MissionSelect"] != self.ui_mission_select:
+                                #     self.ui_mission_select = pin.pin["MissionSelect"]
+                                #     output.clear_scope("SCOPEMissionIntroduction")
+                                #     if self.ui_mission_select is None:
+                                #         continue
+                                    # output.put_text(self._get_mission_groups_dict()["introduction"][GLOBAL_LANG],scope="SCOPEMissionIntroduction")
+            
+            # Output log
             
             self.log_list_lock.acquire()
             for text, color in self.log_list:
@@ -67,6 +74,8 @@ class MainPage(AdvancePage):
             self.log_list.clear()
             self.log_list_lock.release()
 
+            # refresh task state
+            
             if self.refresh_flow_info_timer.get_diff_time() >= 0.2:
                 self.refresh_flow_info_timer.reset()
                 if listening.TASK_MANAGER.get_task_statement() != self.ui_statement:
@@ -84,7 +93,15 @@ class MainPage(AdvancePage):
                     output.put_button(label=str(listening.TASK_MANAGER.start_tasklist_flag), onclick=self.on_click_startstop,
                           scope='Button_StartStop')
 
+            # refresh performance bar
             
+            
+            output.set_progressbar(name=self.PROCESSBAR_PERFORMANCE, value=generic_event.dilation_rate, label=f'{generic_event.dilation_rate_note}     {t2t("running speed")}: {round(generic_event.dilation_rate,2)*100}%')
+            # output.clear(self.SCOPE_PERFORMANCE)
+            if generic_event.dilation_rate<=0.6:
+                output.toast(t2t("Warning: Extremely low performance, if you see this message for a long time, please check if your computer meets the lowest requirements."), color='red')
+                time.sleep(0.5)
+                
             time.sleep(0.1)
     
     def _load(self):
@@ -94,6 +111,8 @@ class MainPage(AdvancePage):
             output.put_row([
                 output.put_button(label=t2t("Get IP address"), onclick=self.on_click_ip_address, scope=self.main_scope),
                 output.put_button(label=t2t("Open log folder"), onclick=self._onclick_open_log_folder, scope=self.main_scope),
+                output.put_processbar(name=self.PROCESSBAR_PERFORMANCE, init = 1),
+                output.put_scope(name=self.SCOPE_PERFORMANCE),
                 output.put_link(t2t('View Document'), url='https://genshinimpactassistant.github.io/GIA-Document', new_window = True).style('font-size: 20px')
             ])
             

@@ -10,7 +10,7 @@ from source.flow.utils import flow_state as ST
 from source.flow.utils import flow_code as FC
 from source.ui.ui import ui_control
 import source.ui.page as UIPage
-from source.dev_tool.tianli_navigator import TianliNavigator
+from source.map.tianli_navigator import TianliNavigator
 from source.funclib import combat_lib
 from source.flow.utils.cvars import *
 from source.teyvat_move.teyvat_move_optimizer import B_SplineCurve_GuidingHead_Optimizer

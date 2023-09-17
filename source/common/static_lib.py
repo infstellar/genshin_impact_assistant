@@ -27,7 +27,14 @@ def get_handle():
     logger.warning(t2t("CANNOT FIND HANDLE"))
 
 HANDLE = get_handle()
-
+class handle_obj():
+    def __init__(self) -> None:
+        self.handle = get_handle()
+    def get_handle(self):
+        return self.handle
+    def refresh_handle(self):
+        self.handle = get_handle()
+HANDLEOBJ = handle_obj()
 def search_handle():
     global HANDLE
     HANDLE = get_handle()

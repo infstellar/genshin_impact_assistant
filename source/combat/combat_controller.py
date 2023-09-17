@@ -39,7 +39,7 @@ class CombatController(AdvanceThreading):
         self.sco.pause_threading()
 
         self.is_check_died = False
-        self.mode="Normal"
+        self.mode = "Normal"
         self.sco.mode = self.mode
         # self.super_stop_func=super_stop_func
     
