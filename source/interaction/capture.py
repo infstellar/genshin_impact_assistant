@@ -115,8 +115,8 @@ class WindowsCapture(Capture):
         if img.shape == (1080,1920,4):
             return True
         else:
-            static_lib.search_handle()
-            logger.info(t2t("research handle: ")+str(static_lib.HANDLE))
+            static_lib.HANDLEOBJ.refresh_handle()
+            logger.info(t2t("research handle: ")+str(static_lib.HANDLEOBJ.get_handle()))
             if self.monitor_num>1:
                 if self.monitor_id==(self.monitor_num-1):
                     self.monitor_id=0
@@ -142,9 +142,9 @@ class WindowsCapture(Capture):
     
     def _get_capture(self):
         r = RECT()
-        self.GetClientRect(static_lib.HANDLE, ctypes.byref(r))
+        self.GetClientRect(static_lib.HANDLEOBJ.get_handle(), ctypes.byref(r))
         width, height = r.right, r.bottom
-        # left, top, right, bottom = win32gui.GetWindowRect(static_lib.HANDLE)
+        # left, top, right, bottom = win32gui.GetWindowRect(static_lib.HANDLEOBJ.get_handle())
         # 获取桌面缩放比例
         #desktop_dc = self.GetDC(0)
         #scale_x = self.GetDeviceCaps(desktop_dc, 88)
@@ -160,7 +160,7 @@ class WindowsCapture(Capture):
             # height = int(int(height)*self.scale_factor)
         
         # 开始截图
-        dc = self.GetDC(static_lib.HANDLE)
+        dc = self.GetDC(static_lib.HANDLEOBJ.get_handle())
         cdc = self.CreateCompatibleDC(dc)
         bitmap = self.CreateCompatibleBitmap(dc, width, height)
         self.SelectObject(cdc, bitmap)
@@ -172,7 +172,7 @@ class WindowsCapture(Capture):
         self.GetBitmapBits(bitmap, total_bytes, byte_array.from_buffer(buffer))
         self.DeleteObject(bitmap)
         self.DeleteObject(cdc)
-        self.ReleaseDC(static_lib.HANDLE, dc)
+        self.ReleaseDC(static_lib.HANDLEOBJ.get_handle(), dc)
         # 返回截图数据为numpy.ndarray
         ret = np.frombuffer(buffer, dtype=np.uint8).reshape(height, width, 4)
         return ret
@@ -187,7 +187,7 @@ class CloudCapture(Capture):
     
     def _get_capture(self) -> np.ndarray:
         
-        wx, wy, w, h = win32gui.GetWindowRect(static_lib.HANDLE)
+        wx, wy, w, h = win32gui.GetWindowRect(static_lib.HANDLEOBJ.get_handle())
         pyautogui.screenshot(region=[0,0,100,100])
     
     

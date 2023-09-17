@@ -39,29 +39,29 @@ class InteractionNormal(InteractionTemplate):
         if not self.CONSOLE_ONLY:
             wparam = 0
             lparam = 0 << 16 | 0
-            self.PostMessageW(static_lib.HANDLE, self.WM_LBUTTONDOWN, wparam, lparam)
+            self.PostMessageW(static_lib.HANDLEOBJ.get_handle(), self.WM_LBUTTONDOWN, wparam, lparam)
             time.sleep(0.06)
-            self.PostMessageW(static_lib.HANDLE, self.WM_LBUTTONUP, wparam, lparam)
+            self.PostMessageW(static_lib.HANDLEOBJ.get_handle(), self.WM_LBUTTONUP, wparam, lparam)
     
     def left_down(self):
         if not self.CONSOLE_ONLY:
             wparam = 0
             lparam = 0 << 16 | 0
-            self.PostMessageW(static_lib.HANDLE, self.WM_LBUTTONDOWN, wparam, lparam)
+            self.PostMessageW(static_lib.HANDLEOBJ.get_handle(), self.WM_LBUTTONDOWN, wparam, lparam)
             time.sleep(0.01)
-            self.PostMessageW(static_lib.HANDLE, self.WM_LBUTTONDOWN, wparam, lparam)
+            self.PostMessageW(static_lib.HANDLEOBJ.get_handle(), self.WM_LBUTTONDOWN, wparam, lparam)
             time.sleep(0.01)
-            self.PostMessageW(static_lib.HANDLE, self.WM_LBUTTONDOWN, wparam, lparam)
+            self.PostMessageW(static_lib.HANDLEOBJ.get_handle(), self.WM_LBUTTONDOWN, wparam, lparam)
     
     def left_up(self):
         if not self.CONSOLE_ONLY:
             wparam = 0
             lparam = 0 << 16 | 0
-            self.PostMessageW(static_lib.HANDLE, self.WM_LBUTTONUP, wparam, lparam)
+            self.PostMessageW(static_lib.HANDLEOBJ.get_handle(), self.WM_LBUTTONUP, wparam, lparam)
             time.sleep(0.01)
-            self.PostMessageW(static_lib.HANDLE, self.WM_LBUTTONUP, wparam, lparam)
+            self.PostMessageW(static_lib.HANDLEOBJ.get_handle(), self.WM_LBUTTONUP, wparam, lparam)
             time.sleep(0.01)
-            self.PostMessageW(static_lib.HANDLE, self.WM_LBUTTONUP, wparam, lparam)
+            self.PostMessageW(static_lib.HANDLEOBJ.get_handle(), self.WM_LBUTTONUP, wparam, lparam)
     
     def left_double_click(self, dt):
         if not self.CONSOLE_ONLY:
@@ -73,9 +73,9 @@ class InteractionNormal(InteractionTemplate):
         if not self.CONSOLE_ONLY:
             wparam = 0
             lparam = 0 << 16 | 0
-            self.PostMessageW(static_lib.HANDLE, self.WM_RBUTTONDOWN, wparam, lparam)
+            self.PostMessageW(static_lib.HANDLEOBJ.get_handle(), self.WM_RBUTTONDOWN, wparam, lparam)
             time.sleep(0.06)
-            self.PostMessageW(static_lib.HANDLE, self.WM_RBUTTONUP, wparam, lparam)
+            self.PostMessageW(static_lib.HANDLEOBJ.get_handle(), self.WM_RBUTTONUP, wparam, lparam)
     
     def middle_click(self):
         pyautogui.click(button='middle')
@@ -89,7 +89,7 @@ class InteractionNormal(InteractionTemplate):
             scan_code = self.MapVirtualKeyW(vk_code, 0)
             wparam = vk_code
             lparam = (scan_code << 16) | 1
-            self.PostMessageW(static_lib.HANDLE, self.WM_KEYDOWN, wparam, lparam)
+            self.PostMessageW(static_lib.HANDLEOBJ.get_handle(), self.WM_KEYDOWN, wparam, lparam)
     
     def key_up(self, key):
         if key == 'w':
@@ -101,7 +101,7 @@ class InteractionNormal(InteractionTemplate):
             # https://docs.microsoft.com/en-us/windows/win32/inputdev/wm-keyup
             wparam = vk_code
             lparam = (scan_code << 16) | 0XC0000001
-            self.PostMessageW(static_lib.HANDLE, self.WM_KEYUP, wparam, lparam)
+            self.PostMessageW(static_lib.HANDLEOBJ.get_handle(), self.WM_KEYUP, wparam, lparam)
     
     def key_press(self, key):
         if not self.CONSOLE_ONLY:
@@ -110,9 +110,9 @@ class InteractionNormal(InteractionTemplate):
             wparam = vk_code
             lparam = (scan_code << 16) | 1
             lparam2 = (scan_code << 16) | 0XC0000001
-            self.PostMessageW(static_lib.HANDLE, self.WM_KEYDOWN, wparam, lparam)
+            self.PostMessageW(static_lib.HANDLEOBJ.get_handle(), self.WM_KEYDOWN, wparam, lparam)
             time.sleep(0.05)
-            self.PostMessageW(static_lib.HANDLE, self.WM_KEYUP, wparam, lparam2)
+            self.PostMessageW(static_lib.HANDLEOBJ.get_handle(), self.WM_KEYUP, wparam, lparam2)
     
     def move_to(self, x: int, y: int, relative=False, isBorderlessWindow=False):
         x = int(x)
@@ -122,7 +122,7 @@ class InteractionNormal(InteractionTemplate):
             win32api.mouse_event(win32con.MOUSEEVENTF_MOVE, x, y)
         else:
 
-            wx, wy, w, h = win32gui.GetWindowRect(static_lib.HANDLE)
+            wx, wy, w, h = win32gui.GetWindowRect(static_lib.HANDLEOBJ.get_handle())
             x += wx
             if isBorderlessWindow:
                 y += wy
