@@ -69,6 +69,8 @@ class InteractionBGD:
     thanks for https://zhuanlan.zhihu.com/p/361569101
     """
 
+    RECAPTURE_LIMIT = 0.5 # Screenshot Cache Maximum Interval
+    
     def __init__(self):
         logger.info("InteractionBGD created")
         self.WHEEL_DELTA = 120
@@ -105,7 +107,7 @@ class InteractionBGD:
         #     logger.error(t2t("未找到句柄，请确认原神窗口是否开启。"))
     
     # @timer
-    def capture(self, posi=None, shape='yx', jpgmode=NORMAL_CHANNELS, check_shape = True, recapture_limit = 0):
+    def capture(self, posi=None, shape='yx', jpgmode=NORMAL_CHANNELS, check_shape = True, recapture_limit:float = 0):
         """窗口客户区截图
 
         Args:
@@ -193,20 +195,22 @@ class InteractionBGD:
             return False
 
     # @timer
-    def get_img_existence(self, imgicon: img_manager.ImgIcon, is_gray=False, is_log=True, ret_mode = IMG_BOOL, show_res = False, cap = None):
+    def get_img_existence(self, imgicon: img_manager.ImgIcon, is_gray=False, is_log=True, ret_mode = IMG_BOOL, show_res = False, cap = None, use_cache = False):
         """检测图片是否存在
 
         Args:
             imgicon (img_manager.ImgIcon): imgicon对象
             is_gray (bool, optional): 是否启用灰度匹配. Defaults to False.
             is_log (bool, optional): 是否打印日志. Defaults to False.
+            use_cache (bool, optional): Whether to use the last screenshot cache. Defaults to False.
+
 
         Returns:
             bool: bool
         """
         upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
         if cap is None:
-            cap = self.capture(posi=imgicon.cap_posi, jpgmode=imgicon.jpgmode)
+            cap = self.capture(posi=imgicon.cap_posi, jpgmode=imgicon.jpgmode, recapture_limit=(self.RECAPTURE_LIMIT if use_cache else 0))
 
         matching_rate = similar_img(cap, imgicon.image)
         
@@ -242,9 +246,9 @@ class InteractionBGD:
         elif ret_mode == IMG_RATE:
             return matching_rate
         
-    def get_text_existence(self, textobj: text_manager.TextTemplate, is_gray=False, is_log = True, ret_mode = IMG_BOOL, show_res = False):
+    def get_text_existence(self, textobj: text_manager.TextTemplate, is_gray=False, is_log = True, ret_mode = IMG_BOOL, show_res = False, use_cache = False):
         from source.api.pdocr_complete import ocr
-        cap = self.capture(posi = textobj.cap_area, jpgmode=NORMAL_CHANNELS)
+        cap = self.capture(posi = textobj.cap_area, jpgmode=NORMAL_CHANNELS, recapture_limit=(self.RECAPTURE_LIMIT if use_cache else 0))
         if ocr.get_text_position(cap, textobj.text) != -1:
             if is_log:
                 logger.debug(f"get_text_existence: text: {textobj.text} Found")
@@ -253,11 +257,11 @@ class InteractionBGD:
             logger.debug(f"get_text_existence: text: {textobj.text} Not Found")
             return False
 
-    def appear(self, obj):
+    def appear(self, obj, use_cache=False):
         if isinstance(obj, text_manager.TextTemplate):
-            return self.get_text_existence(obj)
-        elif isinstance(obj, img_manager.ImgIcon):
-            return self.get_img_existence(obj)
+            return self.get_text_existence(obj, use_cache=use_cache)
+        elif isinstance(obj, img_manager.ImgIcon): # Button is also an Icon
+            return self.get_img_existence(obj, use_cache=use_cache)
 
     def appear_then_click(self, inputvar, is_gray=False, is_log = False):
         """appear then click
@@ -265,7 +269,7 @@ class InteractionBGD:
         Args:
             inputvar (img_manager.ImgIcon/text_manager.TextTemplate/button_manager.Button)
             is_gray (bool, optional): 是否启用灰度匹配. Defaults to False.
-
+            
         Returns:
             bool: bool,点击操作是否成功
         """
