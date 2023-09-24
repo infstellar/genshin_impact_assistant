@@ -34,7 +34,7 @@ class MainPage(AdvancePage):
 
     def _on_load(self):  # 加载事件
         super()._on_load()
-        pin.pin['FlowMode'] = listening.current_flow
+        pin.pin['FlowMode'] = listening.SEMIAUTO_FUNC_MANAGER.last_d
 
     def _event_thread(self):
         while self.loaded:  # 当界面被加载时循环运行
@@ -46,15 +46,16 @@ class MainPage(AdvancePage):
             except SessionClosedException:
                 logger.info(t2t("未找到会话，可能由于窗口关闭。请刷新页面重试。"))
                 return
-            if pin.pin['FlowMode'] != listening.current_flow:  # 比较变更是否被应用
-                listening.current_flow = pin.pin['FlowMode']  # 应用变更
-                self.log_list_lock.acquire()
-                output.put_text(t2t("正在导入模块, 可能需要一些时间。"), scope='LogArea').style(
-                    f'color: black; font_size: 20px')
-                output.put_text(t2t("在导入完成前，请不要切换页面。"), scope='LogArea').style(
-                    f'color: black; font_size: 20px')
-                self.log_list_lock.release()
-                listening.call_you_import_module()
+            if pin.pin['FlowMode'] != listening.SEMIAUTO_FUNC_MANAGER.last_d:  # 比较变更是否被应用
+                listening.SEMIAUTO_FUNC_MANAGER.last_d = pin.pin['FlowMode']  # 应用变更
+                listening.SEMIAUTO_FUNC_MANAGER.apply_change(pin.pin['FlowMode'])
+                # self.log_list_lock.acquire()
+                # output.put_text(t2t("正在导入模块, 可能需要一些时间。"), scope='LogArea').style(
+                #     f'color: black; font_size: 20px')
+                # output.put_text(t2t("在导入完成前，请不要切换页面。"), scope='LogArea').style(
+                #     f'color: black; font_size: 20px')
+                # self.log_list_lock.release()
+                # listening.call_you_import_module()
                                 # if pin.pin["MissionSelect"] != self.ui_mission_select:
                                 #     self.ui_mission_select = pin.pin["MissionSelect"]
                                 #     output.clear_scope("SCOPEMissionIntroduction")
@@ -90,7 +91,7 @@ class MainPage(AdvancePage):
                 if listening.TASK_MANAGER.start_tasklist_flag != self.is_task_start:
                     self.is_task_start = listening.TASK_MANAGER.start_tasklist_flag
                     output.clear('Button_StartStop')
-                    output.put_button(label=str(listening.TASK_MANAGER.start_tasklist_flag), onclick=self.on_click_startstop,
+                    output.put_button(label={False:t2t("启动任务"),True:t2t("运行中,点击停止任务")}[listening.TASK_MANAGER.start_tasklist_flag], onclick=self.on_click_startstop,
                           scope='Button_StartStop')
 
             # refresh performance bar
@@ -159,13 +160,13 @@ class MainPage(AdvancePage):
                         output.put_text(t2t('Semi-automatic Functions')),
                         
                         pin.put_select(('FlowMode'), [
-                            {'label': t2t('Idle'), 'value': listening.FLOW_IDLE},
-                            {'label': t2t('Auto Combat'), 'value': listening.FLOW_COMBAT}
+                            {'label': t2t('Idle'), 'value': "idle"},
+                            {'label': t2t('Auto Combat'), 'value': "semiauto_combat"}
                         ])
                         ],
                     ),
                     output.put_markdown(t2t('## Ingame assist')),
-                    output.put_row([  # FlowMode
+                    output.put_row([
                         output.put_button(t2t('apply'), onclick=self._onclick_apply_ingame_assist),
                         pin.put_checkbox(name="ingame_assist", options=[
                             {
@@ -183,10 +184,8 @@ class MainPage(AdvancePage):
 
             ], scope=self.main_scope, size='40% 10px 60%')
 
-            # PickUpButton
-            output.put_button(label=str(listening.FEAT_PICKUP), onclick=self.on_click_pickup, scope='Button_PickUp')
             # Button_StartStop
-            output.put_button(label=str(listening.startstop_flag), onclick=self.on_click_startstop,
+            output.put_button(label={False:t2t("启动任务"),True:t2t("运行中,点击停止任务")}[listening.TASK_MANAGER.start_tasklist_flag], onclick=self.on_click_startstop,
                             scope='Button_StartStop')
 
             # Log
@@ -210,11 +209,6 @@ class MainPage(AdvancePage):
     #         raise FileNotFoundError
     #     return load_json(str(jsonname),default_path=f"{CONFIG_PATH}\\mission_groups")
     
-    def on_click_pickup(self):
-        output.clear('Button_PickUp')
-        listening.FEAT_PICKUP = not listening.FEAT_PICKUP
-        output.put_button(label=str(listening.FEAT_PICKUP), onclick=self.on_click_pickup, scope='Button_PickUp')
-    
     def on_click_startstop(self):
         # listening.MISSION_MANAGER.set_mission_list(list(pin.pin["MissionSelect"]))
         listening.TASK_MANAGER.set_tasklist(pin.pin["task_list"])
@@ -227,7 +221,7 @@ class MainPage(AdvancePage):
 
         time.sleep(0.2)
         output.clear('Button_StartStop')
-        output.put_button(label=str(listening.TASK_MANAGER.start_tasklist_flag), onclick=self.on_click_startstop,
+        output.put_button(label={False:t2t("启动任务"),True:t2t("运行中,点击停止任务")}[listening.TASK_MANAGER.start_tasklist_flag], onclick=self.on_click_startstop,
                           scope='Button_StartStop')
 
     def on_click_ip_address(self):
