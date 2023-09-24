@@ -31,7 +31,6 @@ class ImgIcon(AssetBase):
                  cap_posi = None,
                  jpgmode=2,
                  threshold=0.91,
-                 win_page = 'all',
                  win_text = None,
                  offset = 0,
                  print_log = LOG_NONE):
@@ -46,7 +45,6 @@ class ImgIcon(AssetBase):
             cap_posi (list/str, optional): 截图坐标。注意：可以填入'bbg'字符串关键字，使用bbg坐标; 可以填入'all'字符串关键字，截图全屏. Defaults to None.
             jpgmode (int, optional): 截图时的jpgmode，将废弃. Defaults to 2.
             threshold (float, optional): 匹配阈值. Defaults to 0.91.
-            win_page (str, optional): 匹配时的UI界面. Defaults to 'all'.
             win_text (str, optional): 匹配时图片内应该包含的文字. Defaults to None.
             offset (int, optional): 截图范围偏移. Defaults to 0.
             print_log (int, optional): 打印日志模式. Defaults to LOG_NONE.
@@ -87,7 +85,6 @@ class ImgIcon(AssetBase):
         
         self.jpgmode = jpgmode
         self.threshold = threshold
-        self.win_page = win_page
         self.win_text = win_text
         self.offset = offset
         self.print_log = print_log

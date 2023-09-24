@@ -130,10 +130,10 @@ def jwa_3(imsrc, alpha_threshold = 503): # 503
 
 
 def teyvat_smallmap_crusade_target_search(itt: interaction_core.InteractionBGD, imgicon):
-    imsrc = itt.capture(posi=posi_teyvat_map)
+    imsrc = itt.capture(posi=posi_teyvat_map, jpgmode=FOUR_CHANNELS)
     imsrc = itt.png2jpg(imsrc, channel='ui')
     img_target = imgicon.image
-    r, pp = itt.similar_img(imsrc, img_target, ret_mode=interaction_core.IMG_POSI)
+    r, pp = similar_img(imsrc, img_target, ret_mode=interaction_core.IMG_POSI)
     p = [0, 0]
     p[0] = pp[0] + img_target.shape[1] / 2
     p[1] = pp[1] + img_target.shape[0] / 2
@@ -180,7 +180,7 @@ def teyvat_smallmap_crusade_target_search(itt: interaction_core.InteractionBGD, 
 if __name__ == '__main__':
     # qshow(itt.capture(posi=posi_map))
     while 1:
-        r = jwa_3(itt.capture(posi=posi_map))
+        r = jwa_3(itt.capture(posi=posi_map, jpgmode=FOUR_CHANNELS))
         # print(r)
         # teyvat_smallmap_crusade_target_search(itt)
         time.sleep(0.1)

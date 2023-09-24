@@ -1,7 +1,7 @@
 from source.map.detection.resource import MiniMapResource
 from source.map.detection.utils import *
 from source.map.extractor.convert import MapConverter
-from source.util import logger
+from source.util import logger, NORMAL_CHANNELS
 
 
 class BigMap(MiniMapResource):
@@ -69,7 +69,7 @@ if __name__ == '__main__':
     import time
 
     while 1:
-        bm.update_bigmap(itt.capture(jpgmode=0))
+        bm.update_bigmap(itt.capture(jpgmode=NORMAL_CHANNELS))
         time.sleep(0.1)
 
 

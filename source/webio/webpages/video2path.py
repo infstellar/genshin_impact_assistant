@@ -73,7 +73,7 @@ class VideoToPathPage(AdvancePage):
     
     def _onclick_show_result(self):
         index = int(pin.pin[self.INPUT_INIT_POSITION_ID])
-        img = cv2.cvtColor(genshin_map.get_img_near_posi(itt.capture(), self.analysis_result[index].position), cv2.COLOR_BGR2RGB)
+        img = cv2.cvtColor(genshin_map.get_img_near_posi(itt.capture(jpgmode=FOUR_CHANNELS), self.analysis_result[index].position), cv2.COLOR_BGR2RGB)
         
         output.clear_scope(self.SCOPE_PREVIEW_IMG)
         output.put_image(Image.fromarray(cv2.cvtColor(img, cv2.COLOR_BGR2RGB)).convert('RGB'), title='preview', scope=self.SCOPE_PREVIEW_IMG)

@@ -6,7 +6,7 @@ from source.map.detection.resource import MiniMapResource
 from source.map.detection.utils import *
 from source.map.extractor.convert import MapConverter
 from source.funclib.small_map import jwa_3, posi_map
-from source.util import logger, GIAconfig
+from source.util import *
 from source.interaction.interaction_core import itt
 ONE_CHANNEL = 1
 THREE_CHANNEL = 3
@@ -359,7 +359,7 @@ class MiniMap(MiniMapResource):
             self.rotation_confidence = round(peak_confidence(result), 3)
             return degree
         else:
-            return jwa_3(itt.capture(posi=posi_map))
+            return jwa_3(itt.capture(posi=posi_map, jpgmode=FOUR_CHANNELS))
 
     def update_rotation(self, image, layer=MapConverter.LAYER_Teyvat, update_position=True):
         if image.shape[2]==4:
@@ -487,7 +487,7 @@ if __name__ == '__main__':
     minimap.init_position(MapConverter.convert_cvAutoTrack_to_GIMAP([1334,-4057]))
     # 你可以移动人物，GIA会持续监听小地图位置和角色朝向
     while 1:
-        image = itt.capture()
+        image = itt.capture(jpgmode=FOUR_CHANNELS)
         image = cv2.cvtColor(image, cv2.COLOR_BGRA2RGBA)
         # if image.shape != (1080, 1920, 3):
         #     time.sleep(0.3)

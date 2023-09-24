@@ -23,7 +23,7 @@ class ClaimRewardMission(MissionExecutor, Talk):
         
     def get_available_reward(self):
         ui_control.ensure_page(UIPage.page_bigmap)
-        cap = itt.capture(jpgmode=0, posi=asset.AreaClaimRewardAvailableReward.position)
+        cap = itt.capture(jpgmode=NORMAL_CHANNELS, posi=asset.AreaClaimRewardAvailableReward.position)
         img = extract_white_letters(cap)
         res = ocr.get_all_texts(img)
         rewards = []
@@ -38,9 +38,9 @@ class ClaimRewardMission(MissionExecutor, Talk):
     def _exec_dispatch(self):
         def reset_character():
             while 1:
-                cap = itt.capture(jpgmode=0)
-                complete_posi = itt.match_multiple_img(cap, IconExpeditionComplete.image, ignore_close=True)
-                complete_posi += itt.match_multiple_img(cap, IconExpeditionComplete2.image, ignore_close=True)
+                cap = itt.capture(jpgmode=NORMAL_CHANNELS)
+                complete_posi = match_multiple_img(cap, IconExpeditionComplete.image, ignore_close=True)
+                complete_posi += match_multiple_img(cap, IconExpeditionComplete2.image, ignore_close=True)
                 if len(complete_posi)==0:
                     return
                 chara_head_posi = np.array(complete_posi)+np.array([80,80])

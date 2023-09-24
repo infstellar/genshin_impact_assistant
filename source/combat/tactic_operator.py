@@ -117,7 +117,7 @@ class TacticOperator(BaseThreading):
             return True
 
     def _is_e_release(self, show_res = False):
-        cap = self.itt.capture(posi=posi_manager.posi_chara_e)
+        cap = self.itt.capture(posi=posi_manager.posi_chara_e, jpgmode=FOUR_CHANNELS)
         cap = self.itt.png2jpg(cap, channel='ui', alpha_num=100)
         if show_res:
             cv2.imshow("_is_e_release", cap)
@@ -127,7 +127,7 @@ class TacticOperator(BaseThreading):
         if ret:
             return True
         else:
-            cap = self.itt.capture(posi=posi_manager.posi_chara_e)
+            cap = self.itt.capture(posi=posi_manager.posi_chara_e, jpgmode=FOUR_CHANNELS)
             cap = self.itt.png2jpg(cap, channel='ui', alpha_num=100)
             ret, t = ocr_light.is_img_num_plus(cap)
 
@@ -137,7 +137,7 @@ class TacticOperator(BaseThreading):
                 return False
             
     def _is_longE_release(self, show_res = False):
-        cap = self.itt.capture(posi=posi_manager.posi_chara_e)
+        cap = self.itt.capture(posi=posi_manager.posi_chara_e, jpgmode=FOUR_CHANNELS)
         cap = self.itt.png2jpg(cap, channel='ui', alpha_num=100)
         if show_res:
             cv2.imshow("_is_e_release", cap)
@@ -353,7 +353,7 @@ class TacticOperator(BaseThreading):
             bool: Whether Q-Skill can be triggered
         """
 
-        cap = self.itt.capture(jpgmode=0)
+        cap = self.itt.capture(jpgmode=NORMAL_CHANNELS)
         
         imsrc = cap
         imsrc_q_skill = crop(imsrc, posi_manager.posi_complete_chara_q)

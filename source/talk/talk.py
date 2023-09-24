@@ -40,7 +40,7 @@ class Talk():
             
     def talk_switch(self, textobj:asset.Text) -> bool:
         logger.info(f"Talk: Switch: {textobj.text}")
-        cap = itt.capture(posi=AreaTalkSelects.position, jpgmode=0)
+        cap = itt.capture(posi=AreaTalkSelects.position, jpgmode=NORMAL_CHANNELS)
         cap = recorp(cap,area=AreaTalkSelects.position)
         posi = ocr.get_text_position(cap, textobj.text)
         if posi != -1:

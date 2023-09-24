@@ -34,7 +34,7 @@ class TaskManager(BaseThreading):
                     i+=1
                     logger.error(f'{t2t("Possible Reason")} {i}: {pr}')
         if isinstance(SnapshotException, exception_instance):
-            exception_instance.save_snapshot(itt.capture())
+            exception_instance.save_snapshot(itt.capture(jpgmode=FOUR_CHANNELS))
     
     def append_task(self, task_name):
         self.task_list.append(task_name)

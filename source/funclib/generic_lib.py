@@ -63,7 +63,7 @@ def recover_all(stop_func):
         gsp = big_map.get_middle_gs_point(stop_func)
     itt.move_and_click(gsp)
     time.sleep(0.5)
-    p1 = ocr.get_text_position(itt.capture(jpgmode=0), "七天神像")
+    p1 = ocr.get_text_position(itt.capture(jpgmode=NORMAL_CHANNELS), "七天神像")
     if p1 != -1:
         itt.move_and_click([p1[0] + 30, p1[1] + 30], delay=1)
 

@@ -101,7 +101,7 @@ class SwitchCharacterOperator(BaseThreading):
             succ_flag_1 = False
             print(self.died_character)
             for i in range(10):
-                if ocr.is_img_num_plus(itt.capture(posi=asset.AreaCombatRevivalFoods.position, jpgmode=0))[0]:
+                if ocr.is_img_num_plus(itt.capture(posi=asset.AreaCombatRevivalFoods.position, jpgmode=NORMAL_CHANNELS))[0]:
                     break
                 time.sleep(0.15)
                 if self.checkup_stop_func(): # break

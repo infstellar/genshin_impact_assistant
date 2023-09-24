@@ -13,14 +13,14 @@ class IncreasingDangerGeneral(CommissionTemplate):
         super().__init__("IncreasingDanger", commission_position, is_CCT=True, is_CFCF=False)
     
     def _aim_to_commission_icon(self):
-        cap = itt.capture(jpgmode=0)
+        cap = itt.capture(jpgmode=NORMAL_CHANNELS)
         ban_posi=asset.IconCommissionCommissionIcon.cap_posi
         cap[ban_posi[1]:ban_posi[3],ban_posi[0]:ban_posi[2]]=0
         r = movement.view_to_imgicon(cap, asset.IconCommissionInCommission)
         if not r:
             return False
         if r<=30:
-            dist_cap = itt.capture([SCREEN_CENTER_X-80,SCREEN_CENTER_Y-100,SCREEN_CENTER_X+80,SCREEN_CENTER_Y+40],jpgmode=0)
+            dist_cap = itt.capture([SCREEN_CENTER_X-80,SCREEN_CENTER_Y-100,SCREEN_CENTER_X+80,SCREEN_CENTER_Y+40],jpgmode=NORMAL_CHANNELS)
             dist_cap = extract_white_letters(dist_cap, threshold=90)
             # is_num, dist = ocr.is_img_num_plus(dist_cap)
             res = ocr_light.get_all_texts(dist_cap)

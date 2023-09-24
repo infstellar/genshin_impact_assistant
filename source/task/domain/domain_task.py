@@ -62,7 +62,7 @@ class DomainTask(TaskTemplate):
         cap_area = asset.AreaDomainSwitchChallenge.position
         itt.delay(1,comment="genshin animation")
         self.domain_stage_name = self._domain_text_process(self.domain_stage_name)
-        p1 = ocr.get_text_position(itt.capture(jpgmode=0, posi=cap_area), self.domain_stage_name,
+        p1 = ocr.get_text_position(itt.capture(jpgmode=NORMAL_CHANNELS, posi=cap_area), self.domain_stage_name,
                                    cap_posi_leftup=cap_area[:2],
                                    text_process = self._domain_text_process,
                                    mode=CONTAIN_MATCHING,
@@ -72,7 +72,7 @@ class DomainTask(TaskTemplate):
                 p1 = p1[0]
             itt.move_and_click([p1[0] + 5, p1[1] + 5], delay=1)
         else:
-            texts = ocr.get_all_texts(itt.capture(jpgmode=0, posi=cap_area))
+            texts = ocr.get_all_texts(itt.capture(jpgmode=NORMAL_CHANNELS, posi=cap_area))
             
             logger.warning(t2t("找不到秘境名称，放弃选择。"))
             logger.info(f"all texts: {list(map(self._domain_text_process, texts))}")
@@ -95,7 +95,7 @@ class DomainTask(TaskTemplate):
     
     def _end_domain(self):
         time.sleep(0.5)
-        cap = itt.capture()
+        cap = itt.capture(jpgmode=FOUR_CHANNELS)
         cap = itt.png2jpg(cap, channel='ui')
         if self.last_domain_times > 1:
             logger.info(t2t('开始下一次秘境'))

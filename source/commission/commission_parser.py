@@ -43,10 +43,10 @@ class CommissionParser():
             genshin_map.get_bigmap_posi()
             genshin_map._move_bigmap(posi.tianli, force_center = True)
             cap_posi = [220,240,1920-200,1080-150]
-            img = itt.capture(jpgmode=0)
+            img = itt.capture(jpgmode=NORMAL_CHANNELS)
             img = crop(img, cap_posi)
             img = recorp(img,cap_posi)
-            positions = itt.match_multiple_img(img, template=asset.IconBigmapCommission.image)
+            positions = match_multiple_img(img, template=asset.IconBigmapCommission.image)
             if len(positions)>0:
                 curr_posi = genshin_map.get_bigmap_posi()
                 for i in positions:
@@ -119,7 +119,7 @@ class CommissionParser():
             return True
         
     def _detect_commission_type(self)->str:
-        img = itt.capture(jpgmode=0)
+        img = itt.capture(jpgmode=NORMAL_CHANNELS)
         img_choose = crop(img.copy(), asset.AreaBigmapChoose.position)
         img_sidebar = crop(img.copy(), asset.AreaBigmapSidebarCommissionName.position)
         

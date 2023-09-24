@@ -151,7 +151,7 @@ class FindingTree(FlowTemplate):
         Returns:
 
         """
-        cap =itt.capture(jpgmode=0)
+        cap =itt.capture(jpgmode=NORMAL_CHANNELS)
         # cv2.imshow('123',cap)
         # cv2.waitKey(0)
         addition_info, ret2 = yolox_api.yolo_tree.predicte(cap)

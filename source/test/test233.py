@@ -12,7 +12,7 @@ a = itt.get_img_existence(asset.ButtonGeneralAllCharacterDied)
 # print()
 
 while 1:
-        imsrc = itt.capture().copy()
+        imsrc = itt.capture(jpgmode=FOUR_CHANNELS).copy()
         imsrc = itt.png2jpg(imsrc, alpha_num=1)
         # qshow(imsrc)
         imsrc[950:1080, :, :] = 0
@@ -25,7 +25,7 @@ while 1:
         # print()
         cv2.imshow('123', outputimg)
         cv2.waitKey(20)
-        adad = img_manager.get_rect(outputimg, itt.capture(jpgmode=0), ret_mode=2)
+        adad = img_manager.get_rect(outputimg, itt.capture(jpgmode=NORMAL_CHANNELS), ret_mode=2)
     
 
 

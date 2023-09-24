@@ -83,7 +83,7 @@ while success:
                     break
                 else:
                     iii = int(iii)
-                cv2.imshow(f'tper{iii}', genshin_map.get_img_near_posi(itt.capture(), rlist[iii].position))
+                cv2.imshow(f'tper{iii}', genshin_map.get_img_near_posi(itt.capture(jpgmode=FOUR_CHANNELS), rlist[iii].position))
                 cv2.waitKey(1)
                 genshin_map.init_position(rlist[iii].position)
             logger.info(f"press any key to continue.")

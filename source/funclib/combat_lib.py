@@ -218,7 +218,7 @@ def get_arrow_img(img, show_res=False):
     return arrow_img
 
 def get_enemy_arrow_direction():
-    orsrc = itt.capture()
+    orsrc = itt.capture(jpgmode=FOUR_CHANNELS)
     arrow_img = get_arrow_img(orsrc.copy())
     ret_contours = img_manager.get_rect(arrow_img, orsrc, ret_mode=3)
     # ret_range = img_manager.get_rect(imsrc2, orsrc, ret_mode=0)
@@ -248,7 +248,7 @@ def combat_statement_detection():
     # return: ret[0]: blood bar; ret[1]: enemy arrow
     ret = [False,False]
     
-    im_src = itt.capture()
+    im_src = itt.capture(jpgmode=FOUR_CHANNELS)
     orsrc = im_src.copy()
     blood_bar_img = get_enemy_blood_bar_img(orsrc.copy())
     
@@ -294,7 +294,7 @@ def combat_statement_detection():
     return ret
 
 def get_chara_blood():
-    img = itt.capture(jpgmode=0,posi=asset.AreaCombatBloodBar.position)
+    img = itt.capture(jpgmode=NORMAL_CHANNELS,posi=asset.AreaCombatBloodBar.position)
     img = extract_white_letters(img, threshold=251)
     t = ocr_light.get_all_texts(img)
     t2 = ','.join(str(i) for i in t).replace(',','')
@@ -326,7 +326,7 @@ def get_chara_blood_percentage():
 
 def is_character_healthy():
     if ui_control.verify_page(UIPage.page_main):
-        img = itt.capture(jpgmode=0)
+        img = itt.capture(jpgmode=NORMAL_CHANNELS)
         if IS_DEVICE_PC:
             col = img[1011,847]
         target_col = [35,215,150]
@@ -335,7 +335,7 @@ def is_character_healthy():
 def get_characters_name(max_retry = 50):
     retry_times = 0
     for retry_times in range(max_retry):
-        cap = itt.capture(jpgmode=0)
+        cap = itt.capture(jpgmode=NORMAL_CHANNELS)
         # img = extract_white_letters(cap)
         img = cap
         ret_list = []
@@ -368,7 +368,7 @@ def get_team_chara_names_in_party_setup():
     text_list = []
     for i in [asset.AreaCombatPartySetupCharaName1,asset.AreaCombatPartySetupCharaName2,
               asset.AreaCombatPartySetupCharaName3,asset.AreaCombatPartySetupCharaName4]:
-        img = itt.capture(jpgmode=0, posi=i.position)
+        img = itt.capture(jpgmode=NORMAL_CHANNELS, posi=i.position)
         img2 = extract_white_letters(img)
         text = ocr.get_all_texts(img2)
         text_list.append(text[0])

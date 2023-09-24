@@ -208,13 +208,13 @@ def change_view_to_angle(tangle, stop_func=lambda: False, maxloop=25, offset=5, 
 
 def view_to_angle_domain(angle, stop_func, deltanum=0.65, maxloop=100, corrected_num=CORRECT_DEGREE):
     if IS_DEVICE_PC:
-        cap = itt.capture(posi=small_map.posi_map)
+        cap = itt.capture(posi=small_map.posi_map, jpgmode=FOUR_CHANNELS)
         degree = small_map.jwa_3(cap)
         i = 0
         if not abs(degree - (angle - corrected_num)) < deltanum:
             logger.debug(f"view_to_angle_domain: angle: {angle} deltanum: {deltanum} maxloop: {maxloop} ")
         while not abs(degree - (angle - corrected_num)) < deltanum:
-            degree = small_map.jwa_3(itt.capture(posi=small_map.posi_map))
+            degree = small_map.jwa_3(itt.capture(posi=small_map.posi_map, jpgmode=FOUR_CHANNELS))
             # print(degree)
             cview((degree - (angle - corrected_num)))
             time.sleep(0.05)
@@ -229,7 +229,7 @@ def view_to_angle_domain(angle, stop_func, deltanum=0.65, maxloop=100, corrected
 
 def view_to_imgicon(cap: np.ndarray, imgicon: asset.ImgIcon):
     corr_rate = 1
-    ret_points = itt.match_multiple_img(cap, imgicon.image)
+    ret_points = match_multiple_img(cap, imgicon.image)
     if len(ret_points) == 0: return False
     points_length = []
     for point in ret_points:
@@ -317,16 +317,16 @@ def get_current_motion_state() -> str:
         mask = cv2.inRange(hsv, lower_white, upper_white)
         return mask
 
-    cap = itt.capture()
+    cap = itt.capture(jpgmode=FOUR_CHANNELS)
     cap = preprocessing(cap)
     img1 = crop(cap.copy(), IconMovementClimb.cap_posi)
-    r1 = itt.similar_img(img1, IconMovementClimbing.image[:, :, 0])
+    r1 = similar_img(img1, IconMovementClimbing.image[:, :, 0])
     img1 = crop(cap.copy(), IconMovementSwim.cap_posi)
-    r2 = itt.similar_img(img1, IconMovementSwimming.image[:, :, 0])
+    r2 = similar_img(img1, IconMovementSwimming.image[:, :, 0])
     # cv2.imshow('flying', img1)
     # cv2.waitKey(1)
     img1 = crop(cap.copy(), IconMovementFly.cap_posi)
-    r3 = itt.similar_img(img1, IconMovementFlying.image[:, :, 0])
+    r3 = similar_img(img1, IconMovementFlying.image[:, :, 0])
     if max(r1, r2, r3) > 0.8:
         logger.trace(f"get_current_motion_state: climb{round(r1, 2)} swim{round(r2, 2)} fly{round(r3, 2)}")
     if r1 > 0.85:
@@ -370,7 +370,7 @@ if __name__ == '__main__':
         time.sleep(0.2)
         change_view_to_angle(90)
         # print(genshin_map.get_rotation())
-    #     cap = itt.capture(jpgmode=0)
+    #     cap = itt.capture(jpgmode=NORMAL_CHANNELS)
     #     ban_posi=asset.IconCommissionCommissionIcon.cap_posi
     #     cap[ban_posi[1]:ban_posi[3],ban_posi[0]:ban_posi[2]]=0
     #     print(view_to_imgicon(cap, asset.IconCommissionInCommission))

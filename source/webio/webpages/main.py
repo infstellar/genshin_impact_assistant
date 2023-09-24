@@ -235,9 +235,15 @@ class MainPage(AdvancePage):
 
     @logger.catch
     def _onclick_open_log_folder(self):
+        '''Open the log folder when clicked'''
         os.startfile(os.path.join(ROOT_PATH, "Logs"))
 
     def logout(self, text: str, color='black'):
+        '''
+        Logs a message to the log list.
+        :param text: The message to log.
+        :param color: The color of the message.
+        '''
         if self.loaded:
             self.log_list_lock.acquire()
             self.log_list.append((text, color))
