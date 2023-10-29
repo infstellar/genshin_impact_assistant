@@ -4,6 +4,7 @@ from source.task.task_template import TaskTemplate
 from source.talk.talk import Talk
 from source.manager import asset
 from source.assets.claim_rewards import *
+import os
     
 
 class ClaimRewardMission(MissionExecutor, Talk):
@@ -36,36 +37,9 @@ class ClaimRewardMission(MissionExecutor, Talk):
         return rewards
     
     def _exec_dispatch(self):
-        def reset_character():
-            while 1:
-                cap = itt.capture(jpgmode=0)
-                complete_posi = itt.match_multiple_img(cap, IconExpeditionComplete.image, ignore_close=True)
-                complete_posi += itt.match_multiple_img(cap, IconExpeditionComplete2.image, ignore_close=True)
-                if len(complete_posi)==0:
-                    return
-                chara_head_posi = np.array(complete_posi)+np.array([80,80])
-                for posi in chara_head_posi:
-                    itt.move_and_click(posi)
-                    itt.delay("2animation")
-                    r1 = itt.appear_then_click(ButtonExpeditionClaim)
-                    itt.delay("2animation")
-                    itt.move_and_click(ButtonExpeditionClaim.click_position())
-                    itt.delay("2animation")
-                    itt.appear_then_click(ButtonExpeditionSelectCharacters)
-                    itt.delay("2animation")
-                    i=0
-                    while 1:
-                        cp = ButtonExpeditionFirstCharacter.click_position()
-                        itt.move_and_click([cp[0],cp[1]+i])
-                        itt.delay("2animation")
-                        if itt.get_img_existence(IconClaimRewardExpedition):
-                            break
-                        i+=80
-        for area in [ButtonExpeditionMD, ButtonExpeditionLY, ButtonExpeditionDQ, ButtonExpeditionXM]:   
-            r = itt.appear_then_click(area)
-            if not r: continue
-            itt.delay("2animation")
-            reset_character()
+        itt.delay(1)
+        cmd = "start AutoHotkey64.exe OneFiledispatch.ahk"
+        os.system(cmd)
 
     def exec_mission(self):
         self.available_rewards = self.get_available_reward()
@@ -81,7 +55,6 @@ class ClaimRewardMission(MissionExecutor, Talk):
                 self.talk_until_switch(self.checkup_stop_func)
                 self.talk_switch(DispatchCharacterOnExpedition)
                 self._exec_dispatch()
-                self.exit_talk()
         
 class ClaimRewardTask(TaskTemplate):
     def __init__(self):
