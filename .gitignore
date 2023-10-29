@@ -214,6 +214,7 @@ translation/locale/zh_CN/LC_MESSAGES/zh_CN.mo
 .history/*
 missions/mission_index.py
 missions/mission_meta.py
+missions/*.py
 missions/disable/*.py
 missions/backup/*.py
 
