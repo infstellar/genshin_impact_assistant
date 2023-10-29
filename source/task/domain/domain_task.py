@@ -62,20 +62,22 @@ class DomainTask(TaskTemplate):
         cap_area = asset.AreaDomainSwitchChallenge.position
         itt.delay(1,comment="genshin animation")
         self.domain_stage_name = self._domain_text_process(self.domain_stage_name)
-        p1 = ocr.get_text_position(itt.capture(jpgmode=NORMAL_CHANNELS, posi=cap_area), self.domain_stage_name,
-                                   cap_posi_leftup=cap_area[:2],
-                                   text_process = self._domain_text_process,
-                                   mode=CONTAIN_MATCHING,
-                                   extract_white_threshold=254)
-        if p1 != -1:
-            if len(p1)>1:
-                p1 = p1[0]
-            itt.move_and_click([p1[0] + 5, p1[1] + 5], delay=1)
-        else:
-            texts = ocr.get_all_texts(itt.capture(jpgmode=NORMAL_CHANNELS, posi=cap_area))
-            
-            logger.warning(t2t("找不到秘境名称，放弃选择。"))
-            logger.info(f"all texts: {list(map(self._domain_text_process, texts))}")
+        retry_count = 0
+        while retry_count < 3:
+            p1 = ocr.get_text_position(itt.capture(jpgmode=NORMAL_CHANNELS, posi=cap_area), self.domain_stage_name,
+                                       cap_posi_leftup=cap_area[:2],
+                                       text_process = self._domain_text_process,
+                                       mode=CONTAIN_MATCHING)
+            logger.info(f"domain_stage_name:{self.domain_stage_name}, p1:{p1}, cap_area:{cap_area}")
+            if p1 != -1:
+                itt.move_and_click([p1[0] + 5, p1[1] + 5], delay=1)
+                break
+            else:
+                texts = ocr.get_all_texts(itt.capture(jpgmode=NORMAL_CHANNELS, posi=cap_area))
+                logger.warning(t2t("找不到秘境名称，重试中。"))
+                logger.info(f"all texts: {list(map(self._domain_text_process, texts))}")
+                itt.delay(1.5)
+                retry_count += 1
         
         # itt.delay(1, comment="too fast TAT")
         ctimer = timer_module.TimeoutTimer(5)
