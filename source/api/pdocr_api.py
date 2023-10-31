@@ -158,9 +158,11 @@ class PaddleOcrFastDeploy():
             return list(ret_position)
     
             
-    def get_all_texts(self, img, mode=0, per_monitor=False):
+    def get_all_texts(self, img, mode=0, per_monitor=False,extract_white_threshold=None):
         if per_monitor:
             pt=time.time()
+        if extract_white_threshold!=None:
+            img = extract_white_letters(img, threshold = extract_white_threshold)
         res = self.analyze(img)
         if per_monitor:
             logger.info(f"ocr performance: {round(time.time()-pt,2)}")

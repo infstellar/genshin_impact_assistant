@@ -263,6 +263,100 @@ class InteractionBGD:
         elif isinstance(obj, img_manager.ImgIcon): # Button is also an Icon
             return self.get_img_existence(obj, use_cache=use_cache)
 
+    def appear_then_nothing(self, inputvar, is_gray=False, is_log = False):
+        """appear then click
+
+        Args:
+            inputvar (img_manager.ImgIcon/text_manager.TextTemplate/button_manager.Button)
+            is_gray (bool, optional): 是否启用灰度匹配. Defaults to False.
+
+        Returns:
+            bool: bool,点击操作是否成功
+        """
+
+        if isinstance(inputvar, button_manager.Button):
+            imgicon = inputvar
+            upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
+
+            if not inputvar.click_retry_timer.reached():
+                return False
+
+            if inputvar.click_fail_timer.reached_and_reset():
+                logger.error(t2t("appear then click fail"))
+                logger.info(f"{inputvar.name} {inputvar.click_position}")
+                return False
+
+            cap = self.capture(posi=imgicon.cap_posi, jpgmode=imgicon.jpgmode)
+            # min_rate = img_manager.matching_rate_dict[imgname]
+
+            if inputvar.is_bbg == False:
+                matching_rate, click_posi = similar_img(imgicon.image, cap, is_gray=is_gray, ret_mode=IMG_POSI)
+            else:
+                matching_rate = similar_img(imgicon.image, cap, is_gray=is_gray)
+
+            if matching_rate >= imgicon.threshold:
+                if imgicon.win_text != None:
+                    from source.api.pdocr_complete import ocr
+                    r = ocr.get_text_position(cap, imgicon.win_text)
+                    if r==-1:
+                        matching_rate = 0
+
+            if imgicon.is_print_log(matching_rate >= imgicon.threshold) or is_log:
+                logger.debug(
+                'imgname: ' + imgicon.name + 'matching_rate: ' + str(
+                    matching_rate) + ' |function name: ' + upper_func_name)
+
+            if matching_rate >= imgicon.threshold:
+                p = imgicon.cap_posi
+                logger.debug(f"appear then click: True: {imgicon.name} func: {upper_func_name}")
+                inputvar.click_fail_timer.reset()
+                inputvar.click_retry_timer.reset()
+                return True
+            else:
+                return False
+
+        elif isinstance(inputvar, img_manager.ImgIcon):
+            imgicon = inputvar
+            upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
+
+            cap = self.capture(posi=imgicon.cap_posi, jpgmode=imgicon.jpgmode)
+            # min_rate = img_manager.matching_rate_dict[imgname]
+
+            matching_rate = similar_img(imgicon.image, cap, is_gray=is_gray)
+
+            if matching_rate >= imgicon.threshold:
+                if imgicon.win_text != None:
+                    from source.api.pdocr_complete import ocr
+                    r = ocr.get_text_position(cap, imgicon.win_text)
+                    if r==-1:
+                        matching_rate = 0
+
+            if imgicon.is_print_log(matching_rate >= imgicon.threshold) or is_log:
+                logger.debug('imgname: ' + imgicon.name + 'matching_rate: ' + str(matching_rate) + ' |function name: ' + upper_func_name)
+
+            if matching_rate >= imgicon.threshold:
+                p = imgicon.cap_posi
+                center_p = [(p[0] + p[2]) / 2, (p[1] + p[3]) / 2]
+
+                logger.debug(f"appear then click: True: {imgicon.name} func: {upper_func_name}")
+                return True
+            else:
+                return False
+
+        elif isinstance(inputvar, text_manager.TextTemplate):
+            from source.api.pdocr_complete import ocr
+            upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
+            p1 = ocr.get_text_position(self.capture(jpgmode=NORMAL_CHANNELS, posi=inputvar.cap_area), inputvar.text, cap_posi_leftup=inputvar.cap_area[:2])
+            if is_log:
+                logger.debug('text: ' + inputvar.text + 'position: ' + str(p1) + ' |function name: ' + upper_func_name)
+            if p1 != -1:
+                logger.debug(f"appear then click: True: {inputvar.text} func: {upper_func_name}")
+                return True
+            else:
+                return False
+
+
+
     def appear_then_click(self, inputvar, is_gray=False, is_log = False):
         """appear then click
 
