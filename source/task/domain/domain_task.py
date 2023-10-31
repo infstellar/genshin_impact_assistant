@@ -105,55 +105,24 @@ class DomainTask(TaskTemplate):
             self.last_domain_times -= 1
             while 1:
                 if self.checkup_stop_func():return
-                r = itt.appear_then_nothing(asset.conti_challenge)
+                r = itt.appear_then_click(asset.conti_challenge)
                 if r:
-                    from source.api.pdocr_complete import ocr
-                    from source.api.pdocr_api import SHAPE_MATCHING, ACCURATE_MATCHING, CONTAIN_MATCHING
-                    resin_mode = GIAconfig.Domain_Resin
-                    if str(resin_mode) == '40':
-                        area = asset.AreaDomainResidue.position
-                        text = ocr.get_all_texts(itt.capture(jpgmode=NORMAL_CHANNELS, posi=area),extract_white_threshold=255)
-                        print(text)
-                        if len(text) > 0 and text[0].isdigit() and int(text[0]) >= 1:
-                            logger.info(t2t('有足够的树脂，继续下一次'))
-                        else:
-                            logger.info(t2t('树脂不足，提前退出'))
-                            self._exit_domain()
-                            return
-                    elif str(resin_mode) == '20':
-                        area = asset.AreaDomainResidue1.position
-                        text = ocr.get_all_texts(itt.capture(jpgmode=NORMAL_CHANNELS, posi=area),extract_white_threshold=255)
-                        print(text)
-                        if len(text) > 0 and text[0].isdigit() and int(text[0]) >= 20:
-                            logger.info(t2t('有足够的树脂，继续下一次'))
-                        else:
-                            logger.info(t2t('树脂不足，提前退出'))
-                            self._exit_domain()
-                            return
-
-                    r = itt.appear_then_click(asset.conti_challenge)
-                    if r:
-                        break
-
+                    break
             self.flow_mode = TI.DT_IN_DOMAIN
             self.dfc.reset()
             
         else:
             logger.info(t2t('次数结束。退出秘境'))
             # logger.info('no more times. exit domain.')
-            self._exit_domain()
-
-
-    def _exit_domain(self):
-        while 1:
-            if self.checkup_stop_func():return
-            r = itt.appear_then_click(asset.exit_challenge)
-            if r:
-                break
-
-        # exit all threads
-        self.pause_threading()
-        time.sleep(10)
+            while 1:
+                if self.checkup_stop_func():return
+                r = itt.appear_then_click(asset.exit_challenge)
+                if r:
+                    break
+                
+            # exit all threads
+            self.pause_threading()
+            time.sleep(10)
 
     def _check_state(self):
         
