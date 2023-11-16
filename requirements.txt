@@ -22,7 +22,6 @@ scipy
 py7zr
 
 PyAutoGUI==0.9.53
-PyQt5
 pywebio
 pydirectinput
 

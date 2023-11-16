@@ -165,7 +165,7 @@ while 1:
     input('wait')
     i += 1
     num_i += 1
-    cap = itt.capture(jpgmode=0)
+    cap = itt.capture(jpgmode=NORMAL_CHANNELS)
     # cap = itt.png2jpg(cap, channel = 'ui', alpha_num = 50)# 22 no Q
     cv2.imwrite(ROOT_PATH + '\\' + "tools\\snapshot\\" + str(time.time()) + ".jpg", cap) # type: ignore
     x = str(time.time())

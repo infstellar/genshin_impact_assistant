@@ -9,7 +9,7 @@ def get_coll_name():
     ret = itt.get_img_position(asset.IconGeneralFButton)
     y1 = asset.IconGeneralFButton.cap_posi[1]
     x1 = asset.IconGeneralFButton.cap_posi[0]
-    cap = itt.capture()
+    cap = itt.capture(jpgmode=FOUR_CHANNELS)
     cap = crop(cap, [x1 + ret[0] + 53, y1 + ret[1] - 20, x1 + ret[0] + 361,  y1 + ret[1] + 54])
     cap = itt.png2jpg(cap, channel='ui', alpha_num=160)
     res = ocr.get_all_texts(cap,mode=1)

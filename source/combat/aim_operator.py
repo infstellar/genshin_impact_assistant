@@ -280,7 +280,7 @@ class AimOperator(BaseThreading):
         Returns:
             _type_: _description_
         """
-        cap = self.itt.capture()
+        cap = self.itt.capture(jpgmode=FOUR_CHANNELS)
         orsrc = cap.copy()
         imsrc = combat_lib.get_enemy_blood_bar_img(cap)
         _, imsrc2 = cv2.threshold(imsrc, 1, 255, cv2.THRESH_BINARY)

@@ -149,7 +149,7 @@ class PickupOperator(BaseThreading):
         ret = self.itt.get_img_position(asset.IconGeneralFButton)
         y1 = asset.IconGeneralFButton.cap_posi[1]
         x1 = asset.IconGeneralFButton.cap_posi[0]
-        cap = self.itt.capture()
+        cap = self.itt.capture(jpgmode=FOUR_CHANNELS)
         cap = crop(cap, [x1 + ret[0] + 53, y1 + ret[1] - 20, x1 + ret[0] + 361,  y1 + ret[1] + 54])
         # img_manager.qshow(cap)
         cap = self.itt.png2jpg(cap, channel='ui', alpha_num=160)
@@ -163,7 +163,7 @@ class PickupOperator(BaseThreading):
     def pickup_recognize(self):
         if not self.pickup_fail_cooldown.reached():
             return False
-        ret = generic_lib.f_recognition(cap=itt.capture(jpgmode=0, recapture_limit=0.1, posi=asset.IconGeneralFButton.cap_posi))
+        ret = generic_lib.f_recognition(cap=itt.capture(jpgmode=NORMAL_CHANNELS, recapture_limit=0.1, posi=asset.IconGeneralFButton.cap_posi))
         if ret:
             ret = self.itt.get_img_position(asset.IconGeneralFButton)
             if ret == False: return 0
@@ -173,10 +173,10 @@ class PickupOperator(BaseThreading):
 
             y1 = asset.IconGeneralFButton.cap_posi[1]
             x1 = asset.IconGeneralFButton.cap_posi[0]
-            cap = self.itt.capture()
+            cap = self.itt.capture(jpgmode=FOUR_CHANNELS)
             cap = crop(cap, [x1 + ret[0] + 53, y1 + ret[1] - 20, x1 + ret[0] + 361,  y1 + ret[1] + 54])
             
-            if itt.similar_img(cap[:,:,:3], IconGeneralTalkBubble.image)>0.99:
+            if similar_img(cap[:,:,:3], IconGeneralTalkBubble.image)>0.99:
                 logger.info(f"pickup recognize: talk bubble; skip")
                 self.pickup_fail_cooldown.reset()
                 return False
@@ -212,7 +212,7 @@ class PickupOperator(BaseThreading):
         self.pickup_item_list = []
     
     def find_collector(self, show_res=False):
-        imsrc = self.itt.capture().copy()
+        imsrc = self.itt.capture(jpgmode=FOUR_CHANNELS).copy()
         imsrc = self.itt.png2jpg(imsrc, alpha_num=1)
         # qshow(imsrc)
         imsrc[950:1080, :, :] = 0
@@ -231,7 +231,7 @@ class PickupOperator(BaseThreading):
             cv2.imshow('find_collector', output_img)
             cv2.imwrite(os.path.join(ROOT_PATH, 'tools', 'pickup', f'{time.time()}.jpg'), output_img)
             cv2.waitKey(1)
-        # c_s = img_manager.get_rect(output_img, self.itt.capture(jpgmode=0), ret_mode=2)
+        # c_s = img_manager.get_rect(output_img, self.itt.capture(jpgmode=NORMAL_CHANNELS), ret_mode=2)
         c_s = self.match_blink(output_img)
         # c_s = 0
         return c_s

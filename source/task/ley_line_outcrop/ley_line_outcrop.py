@@ -49,14 +49,14 @@ class LeyLineOutcropMission(MissionExecutor):
         for posi in self.TRAVERSE_MONDSTADT_POSITION:
             genshin_map.get_bigmap_posi()
             cap_posi = [220,240,1920-200,1080-150]
-            img = itt.capture(jpgmode=0)
+            img = itt.capture(jpgmode=NORMAL_CHANNELS)
             img = crop(img, cap_posi)
             img = recorp(img,cap_posi)
             if self.type == "Wealth":
                 template_img = IconLeyLineOutcropBlossomOfWealth.image
             elif self.type == "Revelation":
                 template_img = IconLeyLindOutcropBlossomOfRevelation.image
-            positions = itt.match_multiple_img(img, template=template_img)
+            positions = match_multiple_img(img, template=template_img)
             if len(positions)>0:
                 curr_posi = genshin_map.get_bigmap_posi()
                 posi = positions[0]
@@ -83,7 +83,7 @@ class LeyLineOutcropMission(MissionExecutor):
             if self.checkup_stop_func():
                 itt.key_up('w')
                 return
-            cap = itt.capture(jpgmode=0)
+            cap = itt.capture(jpgmode=NORMAL_CHANNELS)
             dist = movement.view_to_imgicon(cap, IconLeyLineOutcropReward)
             
             if dist<15:

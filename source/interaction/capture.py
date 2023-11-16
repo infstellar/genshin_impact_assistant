@@ -11,7 +11,7 @@ import pyautogui
 class Capture():
     def __init__(self):
         self.capture_cache = np.zeros_like((1080,1920,3), dtype="uint8")
-        self.max_fps = 180
+        self.max_fps = 180 # 60 or 30 may be better
         self.fps_timer = timer_module.Timer(diff_start_time=1)
         self.capture_cache_lock = threading.Lock()
         self.capture_times = 0
@@ -35,7 +35,7 @@ class Capture():
             return False
         
 
-    def capture(self, is_next_img = False, recapture_limit = 0) -> np.ndarray:
+    def capture(self, is_next_img = False, recapture_limit:float = 0) -> np.ndarray:
         """
         is_next_img: 强制截取下一张图片
         """

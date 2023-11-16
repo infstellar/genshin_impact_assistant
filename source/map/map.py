@@ -56,14 +56,14 @@ class Map(MiniMap, BigMap, MapConverter):
     def _upd_smallmap(self) -> None:
         # self.lock.acquire()
         if itt.get_img_existence(asset.IconUIEmergencyFood, is_log=False):
-            self.update_position(itt.capture())
+            self.update_position(itt.capture(jpgmode=FOUR_CHANNELS))
             # self.smallmap_upd_timer.reset()
         # self.lock.release()
 
     def _upd_bigmap(self) -> None:
         # self.lock.acquire()
         if ui_control.verify_page(UIPage.page_bigmap):
-            self.update_bigmap(itt.capture(jpgmode=0))
+            self.update_bigmap(itt.capture(jpgmode=NORMAL_CHANNELS))
         # self.lock.release()
 
     def get_and_verify_position(self):
@@ -211,7 +211,7 @@ class Map(MiniMap, BigMap, MapConverter):
         self.reinit_smallmap()
 
     def get_direction(self) -> float:
-        imsrc = cv2.cvtColor(itt.capture(jpgmode=0),cv2.COLOR_BGR2RGB)
+        imsrc = cv2.cvtColor(itt.capture(jpgmode=NORMAL_CHANNELS),cv2.COLOR_BGR2RGB)
         # self.lock.acquire()
         self.update_direction(imsrc)
         # self.lock.release()
@@ -221,7 +221,7 @@ class Map(MiniMap, BigMap, MapConverter):
     def get_rotation(self) -> float:
         # self.lock.acquire()
         pt = time.time()
-        self.update_rotation(itt.capture(jpgmode=0))
+        self.update_rotation(itt.capture(jpgmode=NORMAL_CHANNELS))
         if time.time()-pt>0.1:
             logger.info(f"get_rotation spent too long: {time.time()-pt}")
         # print(self.direction)

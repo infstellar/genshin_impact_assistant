@@ -34,7 +34,7 @@ class TaskManager(BaseThreading):
                     i+=1
                     logger.error(f'{t2t("Possible Reason")} {i}: {pr}')
         if isinstance(SnapshotException, exception_instance):
-            exception_instance.save_snapshot(itt.capture())
+            exception_instance.save_snapshot(itt.capture(jpgmode=FOUR_CHANNELS))
     
     def append_task(self, task_name):
         self.task_list.append(task_name)
@@ -119,6 +119,7 @@ class TaskManager(BaseThreading):
 
 
     def loop(self):
+        # TODO: 持续检测len(self.task_list), 任务队列中第一个任务完成后删除.
         if self.start_tasklist_flag:
             # self.task_list = self.get_task_list()
             if len(self.task_list) > 0:
@@ -147,6 +148,9 @@ class TaskManager(BaseThreading):
                 logger.info(f"all task end.")
                 self.stop_tasklist()
                 # self.pause_threading()
+            else:
+                logger.info(f"all task end.")
+                self.stop_tasklist()
 
 TASK_MANAGER = TaskManager()
 

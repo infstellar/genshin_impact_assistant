@@ -69,6 +69,8 @@ class InteractionBGD:
     thanks for https://zhuanlan.zhihu.com/p/361569101
     """
 
+    RECAPTURE_LIMIT = 0.5 # Screenshot Cache Maximum Interval
+    
     def __init__(self):
         logger.info("InteractionBGD created")
         self.WHEEL_DELTA = 120
@@ -105,7 +107,7 @@ class InteractionBGD:
         #     logger.error(t2t("未找到句柄，请确认原神窗口是否开启。"))
     
     # @timer
-    def capture(self, posi=None, shape='yx', jpgmode=None, check_shape = True, recapture_limit = 0):
+    def capture(self, posi=None, shape='yx', jpgmode=NORMAL_CHANNELS, check_shape = True, recapture_limit:float = 0):
         """窗口客户区截图
 
         Args:
@@ -147,95 +149,11 @@ class InteractionBGD:
             # ret = self.png2jpg(ret, bgcolor='black', channel='bg', alpha_num = 175)
         elif jpgmode == 3:
             ret = ret[:, :, :3]
+        elif jpgmode == FOUR_CHANNELS:
+            return ret
         return ret
 
-    def match_multiple_img(self, img, template, is_gray=False, is_show_res: bool = False, ret_mode=IMG_POINT,
-                           threshold=0.98, ignore_close=False):
-        """多图片识别
-
-        Args:
-            img (numpy): 截图Mat
-            template (numpy): 要匹配的样板图片
-            is_gray (bool, optional): 是否启用灰度匹配. Defaults to False.
-            is_show_res (bool, optional): 结果显示. Defaults to False.
-            ret_mode (int, optional): 返回值模式,目前只有IMG_POINT. Defaults to IMG_POINT. 
-            threshold (float, optional): 最小匹配度. Defaults to 0.98.
-
-        Returns:
-            list[list[], ...]: 匹配成功的坐标列表
-        """
-        if is_gray:
-            img = cv2.cvtColor(img, cv2.COLOR_BGRA2GRAY)
-            template = cv2.cvtColor(template, cv2.COLOR_BGRA2GRAY)
-        res_posi = []
-        res = cv2.matchTemplate(img, template, cv2.TM_CCORR_NORMED)
-        # res = cv2.matchTemplate(img, template, cv2.TM_CCORR_NORMED)  # TM_CCOEFF_NORMED
-        # img_manager.qshow(template)
-        # h, w = template.shape[:2]  # 获取模板高和宽
-        loc = np.where(res >= threshold)  # 匹配结果小于阈值的位置
-        
-        # Sort coordinates of matched pixels by their similarity score in descending order
-        matched_coordinates = sorted(zip(*loc[::-1]), key=lambda x: res[x[1], x[0]], reverse=True)
-        if ignore_close:
-            ret_coordinates = []
-            for i in matched_coordinates:
-                if len(ret_coordinates) == 0:
-                    ret_coordinates.append(i)
-                    continue
-                if min(euclidean_distance_plist(i, ret_coordinates))>=15:
-                    ret_coordinates.append(i)
-            return ret_coordinates
-        # for pt in zip(*loc[::-1]):  # 遍历位置，zip把两个列表依次参数打包
-        #     right_bottom = (pt[0] + w, pt[1] + h)  # 右下角位置
-        #     if ret_mode == IMG_RECT:
-        #         res_posi.append([pt[0], pt[1], pt[0] + w, pt[1] + h])
-        #     else:
-        #         res_posi.append([pt[0] + w / 2, pt[1] + h / 2])
-        #     # cv2.rectangle((show_img), pt, right_bottom, (0,0,255), 2) #绘制匹配到的矩阵
-        # if is_show_res:
-        #     show_img = img.copy()
-        #     # print(*loc[::-1])
-        #     for pt in zip(*loc[::-1]):  # 遍历位置，zip把两个列表依次参数打包
-        #         right_bottom = (pt[0] + w, pt[1] + h)  # 右下角位置
-        #         cv2.rectangle((show_img), pt, right_bottom, (0, 0, 255), 2)  # 绘制匹配到的矩阵
-        #     cv2.imshow("img", show_img)
-        #     cv2.imshow("template", template)
-        #     cv2.waitKey(0)  # 获取按键的ASCII码
-        #     cv2.destroyAllWindows()  # 释放所有的窗口
-
-        return matched_coordinates
-
     # @timer
-    def similar_img(self, img, target, is_gray=False, is_show_res: bool = False, ret_mode=IMG_RATE):
-        """单个图片匹配
-
-        Args:
-            img (numpy): Mat
-            template (numpy): 要匹配的样板图片
-            is_gray (bool, optional): 是否启用灰度匹配. Defaults to False.
-            is_show_res (bool, optional): 结果显示. Defaults to False.
-            ret_mode (int, optional): 返回值模式. Defaults to IMG_RATE.
-
-        Returns:
-            float/(float, list[]): 匹配度或者匹配度和它的坐标
-        """
-        if is_gray:
-            img = cv2.cvtColor(img, cv2.COLOR_BGRA2GRAY)
-            target = cv2.cvtColor(target, cv2.COLOR_BGRA2GRAY)
-        # 模板匹配，将alpha作为mask，TM_CCORR_NORMED方法的计算结果范围为[0, 1]，越接近1越匹配
-        # img_manager.qshow(img)
-        result = cv2.matchTemplate(img, target, cv2.TM_CCORR_NORMED)  # TM_CCOEFF_NORMED
-        # 获取结果中最大值和最小值以及他们的坐标
-        min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
-        if is_show_res:
-            cv2.waitKey()
-        # 在窗口截图中匹配位置画红色方框
-        matching_rate = max_val
-        
-        if ret_mode == IMG_RATE:
-            return matching_rate
-        elif ret_mode == IMG_POSI:
-            return matching_rate, max_loc
 
     def get_img_position(self, imgicon: img_manager.ImgIcon, is_gray=False, is_log=False):
         """获得图片在屏幕上的坐标
@@ -255,7 +173,7 @@ class InteractionBGD:
         # else:
         cap = self.capture(posi=imgicon.cap_posi, jpgmode=imgicon.jpgmode)
 
-        matching_rate, max_loc = self.similar_img(cap, imgicon.image, ret_mode=IMG_POSI)
+        matching_rate, max_loc = similar_img(cap, imgicon.image, ret_mode=IMG_POSI)
 
         if matching_rate >= imgicon.threshold:
             if imgicon.win_text != None:
@@ -277,22 +195,24 @@ class InteractionBGD:
             return False
 
     # @timer
-    def get_img_existence(self, imgicon: img_manager.ImgIcon, is_gray=False, is_log=True, ret_mode = IMG_BOOL, show_res = False, cap = None):
+    def get_img_existence(self, imgicon: img_manager.ImgIcon, is_gray=False, is_log=True, ret_mode = IMG_BOOL, show_res = False, cap = None, use_cache = False):
         """检测图片是否存在
 
         Args:
             imgicon (img_manager.ImgIcon): imgicon对象
             is_gray (bool, optional): 是否启用灰度匹配. Defaults to False.
             is_log (bool, optional): 是否打印日志. Defaults to False.
+            use_cache (bool, optional): Whether to use the last screenshot cache. Defaults to False.
+
 
         Returns:
             bool: bool
         """
         upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
         if cap is None:
-            cap = self.capture(posi=imgicon.cap_posi, jpgmode=imgicon.jpgmode)
+            cap = self.capture(posi=imgicon.cap_posi, jpgmode=imgicon.jpgmode, recapture_limit=(self.RECAPTURE_LIMIT if use_cache else 0))
 
-        matching_rate = self.similar_img(cap, imgicon.image)
+        matching_rate = similar_img(cap, imgicon.image)
         
         if matching_rate >= imgicon.threshold:
             if imgicon.win_text != None:
@@ -326,9 +246,9 @@ class InteractionBGD:
         elif ret_mode == IMG_RATE:
             return matching_rate
         
-    def get_text_existence(self, textobj: text_manager.TextTemplate, is_gray=False, is_log = True, ret_mode = IMG_BOOL, show_res = False):
+    def get_text_existence(self, textobj: text_manager.TextTemplate, is_gray=False, is_log = True, ret_mode = IMG_BOOL, show_res = False, use_cache = False):
         from source.api.pdocr_complete import ocr
-        cap = self.capture(posi = textobj.cap_area, jpgmode = 0)
+        cap = self.capture(posi = textobj.cap_area, jpgmode=NORMAL_CHANNELS, recapture_limit=(self.RECAPTURE_LIMIT if use_cache else 0))
         if ocr.get_text_position(cap, textobj.text) != -1:
             if is_log:
                 logger.debug(f"get_text_existence: text: {textobj.text} Found")
@@ -337,11 +257,11 @@ class InteractionBGD:
             logger.debug(f"get_text_existence: text: {textobj.text} Not Found")
             return False
 
-    def appear(self, obj):
+    def appear(self, obj, use_cache=False):
         if isinstance(obj, text_manager.TextTemplate):
-            return self.get_text_existence(obj)
-        elif isinstance(obj, img_manager.ImgIcon):
-            return self.get_img_existence(obj)
+            return self.get_text_existence(obj, use_cache=use_cache)
+        elif isinstance(obj, img_manager.ImgIcon): # Button is also an Icon
+            return self.get_img_existence(obj, use_cache=use_cache)
 
     def appear_then_click(self, inputvar, is_gray=False, is_log = False):
         """appear then click
@@ -349,7 +269,7 @@ class InteractionBGD:
         Args:
             inputvar (img_manager.ImgIcon/text_manager.TextTemplate/button_manager.Button)
             is_gray (bool, optional): 是否启用灰度匹配. Defaults to False.
-
+            
         Returns:
             bool: bool,点击操作是否成功
         """
@@ -370,9 +290,9 @@ class InteractionBGD:
             # min_rate = img_manager.matching_rate_dict[imgname]
 
             if inputvar.is_bbg == False:
-                matching_rate, click_posi = self.similar_img(imgicon.image, cap, is_gray=is_gray, ret_mode=IMG_POSI)
+                matching_rate, click_posi = similar_img(imgicon.image, cap, is_gray=is_gray, ret_mode=IMG_POSI)
             else:
-                matching_rate = self.similar_img(imgicon.image, cap, is_gray=is_gray)
+                matching_rate = similar_img(imgicon.image, cap, is_gray=is_gray)
 
             if matching_rate >= imgicon.threshold:
                 if imgicon.win_text != None:
@@ -406,7 +326,7 @@ class InteractionBGD:
             cap = self.capture(posi=imgicon.cap_posi, jpgmode=imgicon.jpgmode)
             # min_rate = img_manager.matching_rate_dict[imgname]
 
-            matching_rate = self.similar_img(imgicon.image, cap, is_gray=is_gray)
+            matching_rate = similar_img(imgicon.image, cap, is_gray=is_gray)
 
             if matching_rate >= imgicon.threshold:
                 if imgicon.win_text != None:
@@ -430,7 +350,7 @@ class InteractionBGD:
         elif isinstance(inputvar, text_manager.TextTemplate):
             from source.api.pdocr_complete import ocr
             upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
-            p1 = ocr.get_text_position(self.capture(jpgmode=0, posi=inputvar.cap_area), inputvar.text, cap_posi_leftup=inputvar.cap_area[:2])
+            p1 = ocr.get_text_position(self.capture(jpgmode=NORMAL_CHANNELS, posi=inputvar.cap_area), inputvar.text, cap_posi_leftup=inputvar.cap_area[:2])
             if is_log:
                 logger.debug('text: ' + inputvar.text + 'position: ' + str(p1) + ' |function name: ' + upper_func_name)
             if p1 != -1:
@@ -473,7 +393,7 @@ class InteractionBGD:
         cap = self.capture(posi=imgicon.cap_posi, jpgmode=imgicon.jpgmode)
         # min_rate = img_manager.matching_rate_dict[imgname]
 
-        matching_rate = self.similar_img(imgicon.image, cap, is_gray=is_gray)
+        matching_rate = similar_img(imgicon.image, cap, is_gray=is_gray)
 
         if matching_rate >= imgicon.threshold:
             if imgicon.win_text != None:
@@ -825,7 +745,7 @@ class InteractionBGD:
         self.operation_lock.release()
             
     def save_snapshot(self, reason:str = ''):
-        img = self.capture()
+        img = self.capture(jpgmode=FOUR_CHANNELS)
         if img.shape[2] == 4:
             img = img[:,:,:3]
         img_path = os.path.join(ROOT_PATH, "Logs", get_logger_format_date(), f"{reason} | {time.strftime('%H-%M-%S', time.localtime())}.jpg")

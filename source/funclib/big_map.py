@@ -107,11 +107,11 @@ def get_tw_points(bigmatMat, stop_func):
     Returns:
         list: 坐标列表
     """
-    ret = itt.match_multiple_img(bigmatMat, asset.IconBigmapTeleportWaypoint.image)
+    ret = match_multiple_img(bigmatMat, asset.IconBigmapTeleportWaypoint.image)
     if len(ret) == 0: # 自动重试
         logger.warning("获取传送锚点坐标失败，正在重试")
         time.sleep(5)
-        bigmatMat = itt.capture(jpgmode=0)
+        bigmatMat = itt.capture(jpgmode=NORMAL_CHANNELS)
         ui_control.ui_goto(UIPage.page_bigmap)
         # scene_manager.switchto_bigmapwin(scene_manager.default_stop_func)
         return get_tw_points(bigmatMat, stop_func)
@@ -126,11 +126,11 @@ def get_gs_points(bigmatMat, stop_func):
     Returns:
         list: 坐标列表
     """
-    ret = itt.match_multiple_img(bigmatMat, asset.IconBigmapGodStatue.image, threshold=0.98)
+    ret = match_multiple_img(bigmatMat, asset.IconBigmapGodStatue.image, threshold=0.98)
     if len(ret) == 0: # 自动重试
         logger.warning("获取七天神像坐标失败，正在重试")
         time.sleep(5)
-        bigmatMat = itt.capture(jpgmode=0)
+        bigmatMat = itt.capture(jpgmode=NORMAL_CHANNELS)
         ui_control.ui_goto(UIPage.page_bigmap)
         # scene_manager.switchto_bigmapwin(scene_manager.default_stop_func)
         return get_gs_points(bigmatMat, stop_func)
@@ -145,7 +145,7 @@ def get_dm_points(bigmatMat, stop_func):
     Returns:
         list: 坐标列表
     """
-    ret = itt.match_multiple_img(bigmatMat, asset.IconBigmapDomain.image, threshold=0.98)
+    ret = match_multiple_img(bigmatMat, asset.IconBigmapDomain.image, threshold=0.98)
     return np.asarray(ret)
 
 def get_middle_gs_point(stop_func):
@@ -154,7 +154,7 @@ def get_middle_gs_point(stop_func):
     Returns:
         list: [x,y]
     """
-    a = itt.capture(jpgmode=0)
+    a = itt.capture(jpgmode=NORMAL_CHANNELS)
     b = get_gs_points(a, stop_func)
     b = np.asarray(b)
     c = euclidean_distance_plist([1080/2,1920/2],b)
@@ -172,7 +172,7 @@ def get_closest_teleport_waypoint(object_img: img_manager.ImgIcon):
         _type_: _description_
     """
     return calculate_nearest_posi(
-        itt.match_multiple_img(itt.capture(jpgmode=0), object_img.image),
+        match_multiple_img(itt.capture(jpgmode=NORMAL_CHANNELS), object_img.image),
         get_navigation_posi())
     
 def reset_map_size():
@@ -229,12 +229,12 @@ def nearest_big_map_tw_posi(current_posi, target_posi, stop_func, include_gs = T
     Returns:
         _type_: 最近的传送锚点坐标
     """
-    twpoints = np.array(get_tw_points(itt.capture(jpgmode=0), stop_func)) # 获得所有传送锚点坐标
+    twpoints = np.array(get_tw_points(itt.capture(jpgmode=NORMAL_CHANNELS), stop_func)) # 获得所有传送锚点坐标
     if include_gs:
-        twpoints = np.concatenate((twpoints, get_gs_points(itt.capture(jpgmode=0), stop_func)))
+        twpoints = np.concatenate((twpoints, get_gs_points(itt.capture(jpgmode=NORMAL_CHANNELS), stop_func)))
     if include_dm:
-        if len(get_dm_points(itt.capture(jpgmode=0), stop_func)) > 0:
-            twpoints = np.concatenate((twpoints, get_dm_points(itt.capture(jpgmode=0), stop_func)))
+        if len(get_dm_points(itt.capture(jpgmode=NORMAL_CHANNELS), stop_func)) > 0:
+            twpoints = np.concatenate((twpoints, get_dm_points(itt.capture(jpgmode=NORMAL_CHANNELS), stop_func)))
     if len(twpoints) == 0:
         return []
     twpoints_teyvat = twpoints.copy() # 拷贝
@@ -254,9 +254,9 @@ def nearest_teyvat_tw_posi(current_posi, target_posi, stop_func, include_gs = Tr
     Returns:
         _type_: _description_
     """
-    twpoints = np.array(get_tw_points(itt.capture(jpgmode=0), stop_func)) # 获得传送锚点坐标
+    twpoints = np.array(get_tw_points(itt.capture(jpgmode=NORMAL_CHANNELS), stop_func)) # 获得传送锚点坐标
     if include_gs:
-        twpoints = np.concatenate((twpoints, get_gs_points(itt.capture(jpgmode=0), stop_func)))
+        twpoints = np.concatenate((twpoints, get_gs_points(itt.capture(jpgmode=NORMAL_CHANNELS), stop_func)))
     twpoints_teyvat = twpoints.copy() # copy
     twpoints_teyvat = bigmap_posi2teyvat_posi(current_posi, twpoints_teyvat) # 转换为提瓦特坐标
     p = np.argmin(euclidean_distance_plist(target_posi, twpoints_teyvat))
