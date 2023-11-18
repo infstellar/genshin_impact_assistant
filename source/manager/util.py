@@ -30,10 +30,10 @@ class AssetBase():
             raise IMG_NOT_FOUND(self.name)
                 
     def search_path(self, filename) -> str:
-        filename+=".jpg"
-        folder_path = os.path.join(ASSETS_PATH)
-        for root, dirs, files in os.walk(folder_path):
-            if filename in files:
-                return os.path.abspath(os.path.join(root, filename))
-        logger.error(f"SearchPathError:{filename}")
-        return None
+        for comp_filename in [filename+'.png',filename+'.jpg']:
+            folder_path = os.path.join(ASSETS_PATH)
+            for root, dirs, files in os.walk(folder_path):
+                if comp_filename in files:
+                    return os.path.abspath(os.path.join(root, comp_filename))
+            logger.error(f"SearchPathError:{comp_filename}")
+            return None
