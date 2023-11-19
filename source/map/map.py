@@ -231,14 +231,10 @@ class Map(MiniMap, BigMap, MapConverter):
     def check_bigmap_scaling(self) -> None:
         if not itt.get_img_existence(asset.IconBigMapScaling):
             origin_page = ui_control.get_page()
-            while not itt.appear_then_click(asset.ButtonBigmapSwitchMap): itt.delay(0.2)
-            itt.delay("animation")
-            while not itt.appear_then_click(asset.MapAreaCYJY): itt.delay(0.2)
-            itt.delay("animation")
-            while not itt.appear_then_click(asset.ButtonBigmapSwitchMap): itt.delay(0.2)
-            itt.delay("animation")
-            while not itt.appear_then_click(asset.MapAreaLY): itt.delay(0.2)
-            itt.delay("animation")
+            while not itt.appear_then_click(asset.ButtonBigmapSwitchMap): siw()
+            while not itt.appear_then_click(asset.MapAreaCYJY): siw()
+            while not itt.appear_then_click(asset.ButtonBigmapSwitchMap): siw()
+            while not itt.appear_then_click(asset.MapAreaLY): siw()
             if origin_page == UIPage.page_main:
                 ui_control.ui_goto(UIPage.page_main)
             elif origin_page == UIPage.page_bigmap:
@@ -356,25 +352,22 @@ class Map(MiniMap, BigMap, MapConverter):
 
     def _switch_to_area(self, tp_region):
         while 1:
-            time.sleep(0.1)
+            siw()
             itt.appear_then_click(asset.ButtonBigmapSwitchMap)
             if not itt.get_img_existence(asset.IconUIBigmap): break
-        itt.delay('animation')
         if tp_region == "Mondstadt":
-            while not itt.appear_then_click(asset.MapAreaMD): itt.delay(0.2)
+            while not itt.appear_then_click(asset.MapAreaMD): siw()
         elif tp_region == "Liyue":
-            while not itt.appear_then_click(asset.MapAreaLY): itt.delay(0.2)
+            while not itt.appear_then_click(asset.MapAreaLY): siw()
         elif tp_region == "Inazuma":
-            while not itt.appear_then_click(asset.MapAreaDQ): itt.delay(0.2)
+            while not itt.appear_then_click(asset.MapAreaDQ): siw()
         elif tp_region == "Sumeru":
-            while not itt.appear_then_click(asset.MapAreaXM): itt.delay(0.2)
-        itt.delay('animation')
+            while not itt.appear_then_click(asset.MapAreaXM): siw()
         while 1:
             time.sleep(0.1)
             if itt.get_img_existence(asset.IconUIBigmap): break
             itt.appear_then_click(asset.ButtonBigmapCloseMarkTableInTP)
-        itt.delay('animation')
-
+            
     def bigmap_tp(self, posi: list, tp_mode=0, tp_type: list = None, csf=lambda:False) -> TianLiPosition:
         """传送到指定坐标。
 

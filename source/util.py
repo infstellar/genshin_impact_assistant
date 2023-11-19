@@ -166,6 +166,12 @@ def is_json_equal(j1: str, j2: str) -> bool:
     except:
         return False
 
+def siw():
+    """delay in while.
+    
+    """
+    time.sleep(0.1)
+
 def is_int(x):
     """_summary_
 
