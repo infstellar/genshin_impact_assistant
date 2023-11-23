@@ -769,6 +769,78 @@
         "trigger": "e_ready",
         "position": "Normal"
     },
+    "Lyney": {
+        "E_short_cd_time": 15,
+        "E_long_cd_time": 0,
+        "Elast_time": 0,
+        "Epress_time": 0,
+        "Qcd_time": 15,
+        "Qlast_time": 3,
+        "tactic_group": "e?e~:none;q?q:none;",
+        "vision": "Pyro",
+        "trigger": "e_ready",
+        "position": "Normal"
+    },
+    "Lynette": {
+        "E_short_cd_time": 12,
+        "E_long_cd_time": 12,
+        "Elast_time": 0,
+        "Epress_time": 2.5,
+        "Qcd_time": 18,
+        "Qlast_time": 12,
+        "tactic_group": "e?e~:none;q?q:none;",
+        "vision": "Anemo",
+        "trigger": "e_ready",
+        "position": "Normal"
+    },
+    "Freminet": {
+        "E_short_cd_time": 10,
+        "E_long_cd_time": 10,
+        "Elast_time": 0,
+        "Epress_time": 0,
+        "Qcd_time": 15,
+        "Qlast_time": 10,
+        "tactic_group": "e?e~:none;q?q:none;",
+        "vision": "Cryo",
+        "trigger": "e_ready",
+        "position": "Normal"
+    },
+    "Neuvillette": {
+        "E_short_cd_time": 12,
+        "E_long_cd_time": 12,
+        "Elast_time": 15,
+        "Epress_time": 0,
+        "Qcd_time": 18,
+        "Qlast_time": 0,
+        "tactic_group": "e?e~:none;q?q:none;",
+        "vision": "Hydro",
+        "trigger": "e_ready",
+        "position": "Main"
+    },
+    "Wriothesley": {
+        "E_short_cd_time": 16,
+        "E_long_cd_time": 16,
+        "Elast_time": 10,
+        "Epress_time": 0,
+        "Qcd_time": 15,
+        "Qlast_time": 10,
+        "tactic_group": "e?e~:none;q?q:none;",
+        "vision": "Cryo",
+        "trigger": "e_ready",
+        "position": "Normal"
+    },
+    "Furina": {
+        "E_short_cd_time": 20,
+        "E_long_cd_time": 20,
+        "Elast_time": 30,
+        "Epress_time": 0,
+        "Qcd_time": 15,
+        "Qlast_time": 18,
+        "tactic_group": "e?e~:none;q?q:none;",
+        "vision": "Hydro",
+        "trigger": "e_ready",
+        "position": "Recovery"
+    },
     "Kirara": {
         "E_short_cd_time": 8,
         "E_long_cd_time": 12,

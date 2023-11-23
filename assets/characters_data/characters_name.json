@@ -906,5 +906,60 @@
         "title"
       ],
       "zhCN": "流浪者"
+    },
+    {
+      "en": "Lyney",
+      "ja": "リネ",
+      "tags": [
+        "fontaine",
+        "character-main"
+      ],
+      "zhCN": "林尼"
+    },
+    {
+      "en": "Lynette",
+      "ja": "リネット",
+      "tags": [
+        "fontaine",
+        "character-main"
+      ],
+      "zhCN": "琳妮特"
+    },
+    {
+      "en": "Freminet",
+      "ja": "フレミネ",
+      "tags": [
+        "fontaine",
+        "character-main"
+      ],
+      "zhCN": "菲米尼"
+    },
+    {
+      "en": "Neuvillette",
+      "ja": "ヌヴィレット",
+      "tags": [
+        "fontaine",
+        "character-main"
+      ],
+      "zhCN": "那维莱特"
+    },
+    {
+      "en": "Wriothesley",
+      "ja": "リオセスリ",
+      "tags": [
+        "fontaine",
+        "character-main"
+      ],
+      "zhCN": "莱欧斯利"
+    },
+    {
+      "en": "Furina",
+      "ja": "フリーナ",
+      "notes": "タグのプレイアブル・NPC 分類は仮",
+      "tags": [
+        "fontaine",
+        "character-main"
+      ],
+      "zhCN": "芙宁娜"
     }
   ]
