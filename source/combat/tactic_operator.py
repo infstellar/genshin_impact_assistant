@@ -312,7 +312,19 @@ class TacticOperator(BaseThreading):
             return 0
         self.chara_waiting(mode=1)
         self.itt.left_down()
-        self.itt.delay(self.character.long_attack_time)
+        if self.character.name == 'Neuvillette':
+            itt.middle_click()
+            itt.delay(0.4, comment='Neuvillette attack - view reset')
+            pt = time.time()
+            i = 0
+            while 1:
+                if time.time() - pt >= self.character.long_attack_time:
+                    break
+                itt.move_to(200,0,relative=True)
+                time.sleep(0.01)
+                i+=1
+        else:
+            self.itt.delay(self.character.long_attack_time)
         self.itt.left_up()
 
     def do_jump(self):

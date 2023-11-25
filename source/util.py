@@ -6,7 +6,7 @@ from numpy import ndarray
 import cv2, yaml
 from PIL import Image, ImageDraw, ImageFont
 from collections import OrderedDict
-from typing import Union
+from typing import Union, List, Tuple 
 
 ROOT_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SOURCE_PATH = ROOT_PATH + '\\source'
@@ -165,6 +165,12 @@ def is_json_equal(j1: str, j2: str) -> bool:
         return json.dumps(json.loads(j1), sort_keys=True) == json.dumps(json.loads(j2), sort_keys=True)
     except:
         return False
+
+def siw():
+    """delay in while.
+    
+    """
+    time.sleep(0.1)
 
 def is_int(x):
     """_summary_
@@ -738,7 +744,7 @@ FOUR_CHANNELS = 40000
 
 class FunctionModeError(Exception):pass
 
-def similar_img(img, target, is_gray=False, is_show_res: bool = False, ret_mode=IMG_RATE):
+def similar_img(img, target, is_gray=False, is_show_res: bool = False, ret_mode=IMG_RATE) -> Union[float, Tuple[float,float]]:
     """单个图片匹配
 
     Args:
@@ -770,6 +776,22 @@ def similar_img(img, target, is_gray=False, is_show_res: bool = False, ret_mode=
         return matching_rate, max_loc
     else:
         raise FunctionModeError
+
+def calculate_similarity(arr1, arr2):
+   # 确保两个数组大小相同
+   assert arr1.shape == arr2.shape
+
+   # 将两个数组转换为float32格式，并进行归一化
+   arr1 = arr1.astype(np.float32) / 255.0
+   arr2 = arr2.astype(np.float32) / 255.0
+
+   # 计算两个数组的余弦相似度
+   dot_product = np.dot(arr1.reshape(-1), arr2.reshape(-1))
+   norm1 = np.linalg.norm(arr1.reshape(-1))
+   norm2 = np.linalg.norm(arr2.reshape(-1))
+   similarity = dot_product / (norm1 * norm2)
+
+   return similarity
 
 def match_multiple_img(img, template, is_gray=False, is_show_res: bool = False, ret_mode=IMG_POINT,
                            threshold=0.98, ignore_close=False):

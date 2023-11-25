@@ -31,9 +31,12 @@ def upd_message():
                         提升自定义任务采集成功率"
         if version_num < 1100:
             ret_message += "有新的启动器可用：python-git-program-launcher\n"
-            "更多信息，请查看Release 0.9.0的更新通知。"
+            "更多信息，请查看Release 0.9.0的更新通知。\n"
         if version_num < 1130:
-            ret_message += "添加了游戏内辅助功能"
+            ret_message += "添加了游戏内辅助功能\n"
+        if version_num < 1158:
+            ret_message += "角色支持增加到4.2\n"\
+                           "增加对那维莱特转圈圈的适配"
 
     x = load_json()
     x["Version"] = GIA_VERSION

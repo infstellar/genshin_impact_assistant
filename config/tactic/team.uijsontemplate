@@ -12,7 +12,7 @@
       "trigger": "",
       "Qlast_time": -1,
       "Qcd_time": -1,
-      "long_attack_time":2.5,
+      "long_attack_time":-1,
       "vision":""
     },
     "second": {
@@ -28,7 +28,7 @@
       "trigger": "",
       "Qlast_time": -1,
       "Qcd_time": -1,
-      "long_attack_time":2.5,
+      "long_attack_time":-1,
       "vision":""
     },
     "third": {
@@ -44,7 +44,7 @@
       "trigger": "",
       "Qlast_time": -1,
       "Qcd_time": -1,
-      "long_attack_time":2.5,
+      "long_attack_time":-1,
       "vision":""
     },
     "forth": {
@@ -60,7 +60,7 @@
       "trigger": "",
       "Qlast_time": -1,
       "Qcd_time": -1,
-      "long_attack_time":2.5,
+      "long_attack_time":-1,
       "vision":""
     }
   }

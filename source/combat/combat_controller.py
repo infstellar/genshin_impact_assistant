@@ -82,5 +82,8 @@ class CombatController(AdvanceThreading):
 if __name__ == '__main__':
     cl = CombatController()
     cl.start()
+    cl.continue_threading()
+    while 1:
+        time.sleep(1)
     # a = get_chara_list()
     # print()
