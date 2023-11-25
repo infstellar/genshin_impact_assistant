@@ -28,7 +28,7 @@ class CombatSettingPage(ConfigPage):
                 not_found.append(j[i]["name"])
                 continue
             if cname in autofill_j:
-                for k in ["position", "E_short_cd_time", "E_long_cd_time", "Elast_time", "Epress_time", "tactic_group", "trigger", "Qlast_time", "Qcd_time", "vision"]:
+                for k in ["position", "E_short_cd_time", "E_long_cd_time", "Elast_time", "Epress_time", "tactic_group", "trigger", "Qlast_time", "Qcd_time", "vision", "long_attack_time"]:
                     if j[i][k] == "" or j[i][k] == -1:
                         j[i][k] = autofill_j[cname][k]
             else:

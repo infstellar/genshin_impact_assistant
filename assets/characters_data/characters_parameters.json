@@ -812,9 +812,10 @@
         "Epress_time": 0,
         "Qcd_time": 18,
         "Qlast_time": 0,
-        "tactic_group": "e?e~:none;q?q:none;",
+        "tactic_group": "e?e~:none;q?q:none;a~;",
         "vision": "Hydro",
         "trigger": "e_ready",
+        "long_attack_time": 6,
         "position": "Main"
     },
     "Wriothesley": {
