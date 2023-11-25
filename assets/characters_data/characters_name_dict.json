@@ -621,5 +621,47 @@
       "綺良々"
     ],
     "standard_name": "Kirara"
+  },
+  {
+    "alias": [
+      "林尼",
+      "リネ"
+    ],
+    "standard_name": "Lyney"
+  },
+  {
+    "alias": [
+      "琳妮特",
+      "リネット"
+    ],
+    "standard_name": "Lynette"
+  },
+  {
+    "alias": [
+      "菲米尼",
+      "フレミネ"
+    ],
+    "standard_name": "Freminet"
+  },
+  {
+    "alias": [
+      "那维莱特",
+      "ヌヴィレット"
+    ],
+    "standard_name": "Neuvillette"
+  },
+  {
+    "alias": [
+      "莱欧斯利",
+      "リオセスリ"
+    ],
+    "standard_name": "Wriothesley"
+  },
+  {
+    "alias": [
+      "芙宁娜",
+      "フリーナ"
+    ],
+    "standard_name": "Furina"
   }
 ]

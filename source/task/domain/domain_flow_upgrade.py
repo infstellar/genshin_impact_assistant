@@ -216,7 +216,7 @@ class FindingTree(FlowTemplate):
                     if self.direc_fb:
                         movement.move(movement.MOVE_AHEAD, distance=3)
                     else:
-                        movement.move(movement.MOVE_AHEAD, distance=3)
+                        movement.move(movement.MOVE_BACK, distance=3)
                     self.direc_fb = not self.direc_fb
 
                 else:  # maybe can't look at tree

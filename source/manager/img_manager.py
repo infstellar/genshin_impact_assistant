@@ -1,6 +1,7 @@
+from source.manager.util import *
 import cv2
 import numpy as np
-from source.manager.util import *
+from source.common.timer_module import Timer, AdvanceTimer
 from copy import deepcopy
 
 # COMING_OUT_BY_SPACE = 
@@ -22,6 +23,19 @@ def qshow(img1):
     cv2.imshow('123', img1)
     cv2.waitKey(0)
 class ImgIcon(AssetBase):
+    
+    def __getattribute__(self, attr): #注意：attr是传入的属性名,不是属性值
+        if attr == 'threshold':
+            r = self._get_threshold()
+            if DEBUG_MODE:
+                pass
+                # print('threshold', r)
+            return r
+        return super().__getattribute__(attr) #返回属性名
+    
+    threshold_attenuation_timer = Timer(diff_start_time=10)
+    obj_called_timer = Timer(diff_start_time=10)
+    
     def __init__(self,
                  path=None,
                  name=None,
@@ -30,7 +44,7 @@ class ImgIcon(AssetBase):
                  bbg_posi=None,
                  cap_posi = None,
                  jpgmode=2,
-                 threshold=0.91,
+                 threshold:Union[float, Tuple[float,float,float]]=0.91,
                  win_text = None,
                  offset = 0,
                  print_log = LOG_NONE):
@@ -44,7 +58,7 @@ class ImgIcon(AssetBase):
             bbg_posi (list/None, optional): 黑色背景的图片坐标，默认自动识别坐标. Defaults to None.
             cap_posi (list/str, optional): 截图坐标。注意：可以填入'bbg'字符串关键字，使用bbg坐标; 可以填入'all'字符串关键字，截图全屏. Defaults to None.
             jpgmode (int, optional): 截图时的jpgmode，将废弃. Defaults to 2.
-            threshold (float, optional): 匹配阈值. Defaults to 0.91.
+            threshold (float|tuple(float, float), optional): 匹配阈值. var1>var2. Defaults to 0.91.
             win_text (str, optional): 匹配时图片内应该包含的文字. Defaults to None.
             offset (int, optional): 截图范围偏移. Defaults to 0.
             print_log (int, optional): 打印日志模式. Defaults to LOG_NONE.
@@ -84,7 +98,8 @@ class ImgIcon(AssetBase):
             self.cap_posi = [0, 0, 1080, 1920]
         
         self.jpgmode = jpgmode
-        self.threshold = threshold
+        self.raw_threshold = threshold
+        self.threshold = None
         self.win_text = win_text
         self.offset = offset
         self.print_log = print_log
@@ -99,6 +114,22 @@ class ImgIcon(AssetBase):
         else:
             self.image = self.raw_image.copy()
     
+    def _get_threshold(self):
+        # return self.raw_threshold
+        if isinstance(self.raw_threshold, float) or isinstance(self.raw_threshold, int):
+            return self.raw_threshold
+        elif isinstance(self.raw_threshold, list) or isinstance(self.raw_threshold, tuple):
+            return self.raw_threshold[1]
+            # dt = self.raw_threshold[2]
+            # if self.obj_called_timer.get_diff_time() > dt*2:
+            #     self.threshold_attenuation_timer.reset()
+            #     self.obj_called_timer.reset()
+            # if self.obj_called_timer.get_diff_time() <= dt*2:
+            #     rate = maxmin((dt-self.threshold_attenuation_timer.get_diff_time())/dt,1,0)
+            #     if 0.8>=rate>=0.5: rate = 0.8
+            #     ret = self.raw_threshold[1] + (self.raw_threshold[0]-self.raw_threshold[1])*rate
+            #     return ret
+            
     def copy(self):
         return deepcopy(self)
     

@@ -11,6 +11,7 @@ import win32gui
 from source.common import static_lib
 from source.manager import img_manager, text_manager, button_manager
 from source.common.timer_module import timer
+from source.common.timer_module import TimeoutTimer, Timer, AdvanceTimer
 
 
 IMG_RATE = 0
@@ -416,6 +417,32 @@ class InteractionBGD:
         else:
             return False
 
+    def wait_until_stable(self, threshold = 0.9995, timeout = 10):
+        timeout_timer = TimeoutTimer(timeout)
+        last_cap = self.capture()
+        pt = time.time()
+        t = AdvanceTimer(0.3, 1)
+        while 1:
+            time.sleep(0.1)
+            if timeout_timer.istimeout():
+                logger.warning("TIMEOUT")
+                break
+            curr_img = self.capture()
+            simi = similar_img(last_cap, curr_img)# abs((last_cap.astype(int)-curr_img.astype(int))).sum()
+            if DEBUG_MODE: print('simi', simi)
+            if simi > threshold:
+                pass
+            else:
+                t.reset()
+            if t.reached():
+                if DEBUG_MODE: print('wait time: ', time.time()-pt)
+                break
+            last_cap = curr_img.copy()
+
+        
+        
+        
+    
     def extract_white_letters(image, threshold=128):
         """_summary_
 
@@ -762,10 +789,10 @@ itt = InteractionBGD()
 
 if __name__ == '__main__':
     ib = InteractionBGD()
-    rootpath = "D:\\Program Data\\vscode\\GIA\\genshin_impact_assistant\\dist\\imgs"
+    # rootpath = "D:\\Program Data\\vscode\\GIA\\genshin_impact_assistant\\dist\\imgs"
     # ib.similar_img_pixel(cv2.imread(rootpath+"\\yunjin_q.png"),cv2.imread(rootpath+"\\zhongli_q.png"))
-    from source.manager import asset
-    itt.appear_then_click(asset.ButtonFoodEgg, is_log=True)
+    # from source.manager import asset
+    # itt.appear_then_click(asset.ButtonFoodEgg, is_log=True)
     # print(win32api.GetCursorPos())
     # win32api.mouse_event(win32con.MOUSEEVENTF_MOVE, 150, 150)
     # print(win32api.GetCursorPos())
@@ -784,13 +811,14 @@ if __name__ == '__main__':
     # a = ib.get_text_existence(asset.LEYLINEDISORDER)
     # print(a)
     # img_manager.qshow(ib.capture())
-    print()
+    # print()
     while 1:
         # time.sleep(1)
         # print(ib.get_img_existence(img_manager.motion_flying), ib.get_img_existence(img_manager.motion_climbing),
         #       ib.get_img_existence(asset.motion_swimming))
         time.sleep(2)
-        ib.move_and_click([100,100], type="left")
+        # ib.move_and_click([100,100], type="left")
+        ib.wait_until_stable()
         # print(ib.get_img_existence(img_manager.USE_20X2RESIN_DOBLE_CHOICES))
         # ib.appear_then_click(imgname=asset.USE_20RESIN_DOBLE_CHOICES)
         # ib.move_to(100,100)

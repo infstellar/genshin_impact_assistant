@@ -131,6 +131,7 @@ class UI():
             page.parent = None
         self.switch_ui_lock.release()
         itt.delay(0.5, comment="ui goto is waiting genshin animation")
+        # itt.wait_until_stable()
     
     def ensure_page(self, page:UIPage):
         if not self.verify_page(page):
@@ -140,4 +141,4 @@ ui_control = UI()
 
 if __name__ == '__main__':
     ui = UI()
-    ui.ui_goto(page_time)
+    ui.ui_goto(page_bigmap)
