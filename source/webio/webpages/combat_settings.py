@@ -18,6 +18,9 @@ class CombatSettingPage(ConfigPage):
         
     def _autofill(self):
         j = self.get_json(json.load(open(self.file_name, 'r', encoding='utf8')))
+        for i in j:
+            if 'long_attack_time' not in i:
+                j[i]["long_attack_time"]=2.5
         autofill_j = load_json("characters_parameters.json", f"{ASSETS_PATH}\\characters_data")
         not_found = []
             
