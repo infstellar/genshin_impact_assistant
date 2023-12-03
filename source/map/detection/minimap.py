@@ -8,8 +8,8 @@ from source.map.extractor.convert import MapConverter
 from source.funclib.small_map import jwa_3, posi_map
 from source.util import *
 from source.interaction.interaction_core import itt
-ONE_CHANNEL = 1
-THREE_CHANNEL = 3
+# ONE_CHANNEL = 1
+# THREE_CHANNEL = 3
 
 class MiniMap(MiniMapResource):
 
@@ -40,7 +40,7 @@ class MiniMap(MiniMapResource):
         search_image = crop(self.TChannelGIMAP, search_area)
         return search_image
     
-    def _predict_position(self, image, scale, channel=ONE_CHANNEL):
+    def _predict_position(self, image, scale):
         """
         Args:
             image:
@@ -60,10 +60,10 @@ class MiniMap(MiniMapResource):
         search_area = area_offset((0, 0, *search_size), offset=(-search_size // 2).astype(np.int64))
         search_area = area_offset(search_area, offset=np.multiply(search_position, self.POSITION_SEARCH_SCALE))
         search_area = np.array(search_area).astype(np.int64)
-        if channel == ONE_CHANNEL:
-            search_image = crop(self.GIMAP, search_area)
-        elif channel == THREE_CHANNEL:
-            search_image = crop(self.TChannelGIMAP, search_area)
+        # if channel == ONE_CHANNEL:
+        search_image = crop(self.GIMAP, search_area)
+        # elif channel == THREE_CHANNEL:
+        #     search_image = crop(self.TChannelGIMAP, search_area)
         
         result = cv2.matchTemplate(search_image, local, cv2.TM_CCOEFF_NORMED)
         _, sim, _, loca = cv2.minMaxLoc(result)
@@ -119,10 +119,10 @@ class MiniMap(MiniMapResource):
         - position
         - position_scene
         """
-        if origin_image.shape[2]==4:
-            image = itt.png2jpg(origin_image, channel='bg', alpha_num=252)
-        else:
-            image = origin_image
+        # if origin_image.shape[2]==4:
+        #     image = itt.png2jpg(origin_image, channel='bg', alpha_num=252)
+        # else:
+        image = origin_image
         image = self._get_minimap(image, self.MINIMAP_POSITION_RADIUS)
         
         image_one = image.copy()
@@ -137,12 +137,12 @@ class MiniMap(MiniMapResource):
         best_loca = (0, 0)
         best_scene = 'wild'
         for scene, scale in self._position_scale_dict.items():
-            if scene == 'wild':
-                inp_img = image_one
-                channel = ONE_CHANNEL
-            else:
-                inp_img = image_three
-                channel = THREE_CHANNEL
+            # if scene == 'wild':
+            inp_img = image_one
+            # channel = ONE_CHANNEL
+            # else:
+            #     inp_img = image_three
+            #     channel = THREE_CHANNEL
             similarity, local_sim, location = self._predict_position(inp_img, scale, channel=channel)
             # print(scene, scale, similarity, location)
             if similarity > best_sim:
@@ -150,13 +150,13 @@ class MiniMap(MiniMapResource):
                 best_local_sim = local_sim
                 best_loca = location
                 best_scene = scene
-                best_channel = channel
+                # best_channel = channel
 
         self.position_similarity = round(best_sim, 5)
         self.position_similarity_local = round(best_local_sim, 5)
         self.position = tuple(np.round(best_loca, 1))
         self.scene = best_scene
-        self.channel = best_channel
+        # self.channel = best_channel
         # logger.trace(f'P:({float2str(self.position[0], 4)}, {float2str(self.position[1], 4)}) ')
         return self.position
 
