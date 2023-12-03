@@ -55,11 +55,13 @@ class B_SplineCurve_GuidingHead_Optimizer():
             min_index = np.argmin(distances)
             if self.z_new[min_index] < z - 1:
                 distances[min_index] = 99999
-                print('pnp skip: <-1')
+                if DEBUG_MODE:
+                    print('pnp skip: <-1')
                 continue
             elif self.z_new[min_index] > z + 4:
                 distances[min_index] = 99999
-                print('pnp skip: >1')
+                if DEBUG_MODE:
+                    print('pnp skip: >1')
                 continue
             else:
                 break

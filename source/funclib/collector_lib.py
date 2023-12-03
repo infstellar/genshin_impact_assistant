@@ -145,6 +145,20 @@ def get_item_id(item_name:str, area_id:list, match_mode = 0) -> list:
 from source.map.extractor.convert import MapConverter
 
 def load_items_position(marker_title:str, mode=0, area_id=None, blacklist_id=None, ret_mode = 0, check_mode = 0, match_mode = 0):
+    """_summary_
+
+    Args:
+        marker_title (str): the marker title of item, see kongying tavern dataset.
+        mode (int, optional): 0: match by iconTag; 1: match by markerTitle
+        area_id (_type_, optional): _description_. Defaults to None.
+        blacklist_id (_type_, optional): _description_. Defaults to None.
+        ret_mode (int, optional): _description_. Defaults to 0.
+        check_mode (int, optional): _description_. Defaults to 0.
+        match_mode (int, optional): _description_. Defaults to 0.
+
+    Returns:
+        _type_: _description_
+    """
     if area_id == None:
         # area_i = load_json("auto_collector.json", "config\\settings")["collection_area"]
         area_i = GIAconfig.Collector_CollectionArea
@@ -186,6 +200,8 @@ def load_items_position(marker_title:str, mode=0, area_id=None, blacklist_id=Non
         blacklist_id = []
     ret_dict=[]
     i=0
+    if ret_mode == 2:
+        return common_name
     for item in common_name:
         i+=1
         if item == None:
@@ -209,38 +225,68 @@ def load_items_position(marker_title:str, mode=0, area_id=None, blacklist_id=Non
     # print()
     return ret_dict  
 
-def load_feature_position(text, blacklist_id=None, ret_mode = 0, check_mode = 0):
-    ita = load_json("itemall.json", "assets")
-    if blacklist_id == None:
-        blacklist_id = []
-    ret_dict=[]
-    i=0
-    for feature in ita:
-        i+=1
-        if feature == None:
-            continue
-        for item in feature["features"]:
-            if check_mode == 0:
-                if item["id"] in blacklist_id:
-                    continue
-            elif check_mode == 1:
-                if item["id"] not in blacklist_id:
-                    continue
-            if text in item["properties"]["popTitle"] :
-                if ret_mode == 0:
-                    ret_dict.append({
-                        "id":item["id"],
-                        "position":list(np.array( list(map(float,item["geometry"]["coordinates"])) )*1.5)
-                    })
-                elif ret_mode == 1:
-                     ret_dict.append(list(np.array( list(map(float,item["geometry"]["coordinates"])) )*1.5))
-    # print()
-    return ret_dict  
+def load_all_dict():
+    id_index = list(range(1,14))
+    ita = []
+    for i in id_index:
+        ita += load_json(str(i)+".json", f"assets\\POI_JSON_API\\{GLOBAL_LANG}\\dataset")
+    return ita
+
+def predict_feature_by_position(posi, ita, threshold=15):
+    tl_posi = MapConverter.convert_cvAutoTrack_to_kongying(posi)
+    ret_list = []
+    for i in ita:
+        if euclidean_distance( tl_posi, list(map(float,i["position"].split(','))) ) < threshold:
+            ret_list.append(i)
+    return ret_list
+
+# def load_feature_position(text, blacklist_id=None, ret_mode = 0, check_mode = 0):
+#     """_summary_
+
+#     Args:
+#         text (_type_): the name of collection, en_US
+#         blacklist_id (_type_, optional): _description_. Defaults to None.
+#         ret_mode (int, optional): 0: collection and position; 1: position list only.
+#         check_mode (int, optional): _description_. Defaults to 0.
+
+#     Returns:
+#         _type_: _description_
+#     """
+#     ita = load_json("itemall.json", "assets")
+#     if blacklist_id == None:
+#         blacklist_id = []
+#     ret_dict=[]
+#     i=0
+#     for feature in ita:
+#         i+=1
+#         if feature == None:
+#             continue
+#         for item in feature["features"]:
+#             if check_mode == 0:
+#                 if item["id"] in blacklist_id:
+#                     continue
+#             elif check_mode == 1:
+#                 if item["id"] not in blacklist_id:
+#                     continue
+#             if text in item["properties"]["popTitle"] :
+#                 if ret_mode == 0:
+#                     ret_dict.append({
+#                         "id":item["id"],
+#                         "position":list(np.array( list(map(float,item["geometry"]["coordinates"])) )*1.5)
+#                     })
+#                 elif ret_mode == 1:
+#                      ret_dict.append(list(np.array( list(map(float,item["geometry"]["coordinates"])) )*1.5))
+#     # print()
+#     return ret_dict  
 
 if __name__ == '__main__':
-    s = load_items_position(marker_title="地脉衍出", ret_mode=1, match_mode=1)
+    pt=time.time()
+    s = predict_feature_by_position([0,0], load_all_dict())
+    print(time.time()-pt)
     print()
-    from source.manager import asset
-    s = load_items_position(marker_title=asset.QTSX.text, ret_mode=1, match_mode=1)
-    print()
+    # s = load_items_position(marker_title="地脉衍出", ret_mode=1, match_mode=1)
+    # print()
+    # from source.manager import asset
+    # s = load_items_position(marker_title=asset.QTSX.text, ret_mode=1, match_mode=1)
+    # print()
 

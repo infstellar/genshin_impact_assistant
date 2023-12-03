@@ -124,7 +124,7 @@ class Map(MiniMap, BigMap, MapConverter):
             return over_times/20 > threshold
         return False
     
-    def get_position(self, is_verify_position = True):
+    def get_position(self, is_verify_position = False):
         """get current character position
 
         Returns:

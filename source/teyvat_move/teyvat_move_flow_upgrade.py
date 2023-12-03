@@ -457,7 +457,10 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
             self.curr_path_index:min(self.curr_path_index+10, len(self.upper.path_dict["position_list"])-1)
         ]:
             posi_list.append(i["position"])
-        self.curr_path_index += np.argmin(euclidean_distance_plist(curr_posi, posi_list))
+        if not len(posi_list)==0:
+            self.curr_path_index += np.argmin(euclidean_distance_plist(curr_posi, posi_list))
+        else:
+            self.curr_path_index = 0
         
     def state_before(self):
         self.curr_path = self.upper.path_dict["position_list"]
@@ -503,10 +506,11 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
             offset = 6
             if self.curr_path[self.curr_path_index]["motion"]=="FLYING":
                 offset = 12
-            if "additional_info" in self.upper.path_dict:
-                if self.curr_break_point_index in self.upper.path_dict["additional_info"]["pickup_points"]:
-                    logger.debug('bp is pp, o=3.5.')
-                    offset = 3.5
+            if "additional_info" in self.upper.path_dict.keys():
+                if "pickup_points" in self.upper.path_dict["additional_info"].keys():
+                    if self.curr_break_point_index in self.upper.path_dict["additional_info"]["pickup_points"]:
+                        logger.debug('bp is pp, o=3.5.')
+                        offset = 3.5
             if self.ready_to_end:
                 offset = min(3,max(1,(self.end_times)/10))
             # 如果两个BP距离小于offset就会瞬移，排除一下。
@@ -579,6 +583,7 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
         
         print(f"time1: {self.in_pt.get_diff_time()}")
         
+        
         # 动作识别
         is_jump = False
         is_nearby = euclidean_distance(curr_posi, target_posi)<2
@@ -643,8 +648,8 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
                             self.adsorptive_position.pop(self.adsorptive_position.index(adsorb_p))
                             break
             curr_posi = genshin_map.get_position()
-        
-        print(f"time3: {self.in_pt.get_diff_time()}")
+            
+            print(f"time3: {self.in_pt.get_diff_time()}")
         
         # 自动拾取
         if self.upper.is_auto_pickup:

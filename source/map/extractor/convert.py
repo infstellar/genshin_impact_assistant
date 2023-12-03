@@ -167,14 +167,34 @@ class MapConverter:
         return points
     
     @classmethod
-    def convert_kongying_to_cvAutoTrack(cls, points, layer=LAYER_Teyvat) -> np.ndarray:
+    def convert_kongying_to_cvAutoTrack(cls, points, layer=LAYER_Teyvat, decimal=-1) -> np.ndarray:
         points = np.array(points)
         
         if layer == cls.LAYER_Teyvat:
             points = points * 1.5
+
+        if decimal != -1:
+            points = np.round(points, decimals=decimal)
+        
+        return points
     
+    @classmethod
+    def convert_kongying_curve_to_cvAutoTrack(cls, points, layer=LAYER_Teyvat, decimal=-1) -> np.ndarray:
+        points = np.array(points)
+        # +533.5, *-1+2184
+        if layer == cls.LAYER_Teyvat:
+            points[0] = points[0] + 538 # 533.5
+            points[1] = points[1]*-1 - 2184 # ky tavern
+            points = points * 1.5 # cvat
+
+        if decimal != -1:
+            points = np.round(points, decimals=decimal)
+        
         return points
 
+if __name__ == '__main__':
+    print(MapConverter.convert_kongying_curve_to_cvAutoTrack([0,0])) # 4480 3015.5
+    
     # @classmethod
     # def convert_ANY_to_cvAutoTrack(cls,posi_obj:GenshinPosition) -> GenshinPosition:
     #     if isinstance(posi_obj, GIMAPPosition):

@@ -26,6 +26,10 @@ class MissionPage(AdvancePage):
         
     
     def _refresh(self):
+        from source.mission.index_generator import generate_mission_index
+        generate_mission_index()
+        logger.debug(f"generate mission index succ")
+        import missions.mission_index
         self.MISSION_INDEX = missions.mission_index.MISSION_INDEX
         self.MISSION_META = load_json('mission_internal_meta.json', fr"{ROOT_PATH}/source/mission")
         if os.path.exists(fr"{ROOT_PATH}/config/missiondownload/missiondownload_meta.json"):
