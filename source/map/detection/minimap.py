@@ -143,7 +143,7 @@ class MiniMap(MiniMapResource):
             # else:
             #     inp_img = image_three
             #     channel = THREE_CHANNEL
-            similarity, local_sim, location = self._predict_position(inp_img, scale, channel=channel)
+            similarity, local_sim, location = self._predict_position(inp_img, scale)
             # print(scene, scale, similarity, location)
             if similarity > best_sim:
                 best_sim = similarity
@@ -416,7 +416,7 @@ class MiniMap(MiniMapResource):
             f'({float2str(self.position_similarity, 3)}|{float2str(self.position_similarity_local, 3)}), '
             f'S:{self.scene}, '
             f'D:{float2str(self.direction, 3)} ({float2str(self.direction_similarity, 3)}), '
-            f'C:{self.channel}, '
+            # f'C:{self.channel}, '
             f'R:{self.rotation} ({float2str(self.rotation_confidence)})')
 
 

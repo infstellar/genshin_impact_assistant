@@ -183,8 +183,8 @@ class MapConverter:
         points = np.array(points)
         # +533.5, *-1+2184
         if layer == cls.LAYER_Teyvat:
-            points[0] = points[0] + 538 # 533.5
-            points[1] = points[1]*-1 - 2184 # ky tavern
+            points[0] = points[0] + 533.5 # 533.5
+            points[1] = points[1]*-1 - 2184 # ky tavern # -2184
             points = points * 1.5 # cvat
 
         if decimal != -1:

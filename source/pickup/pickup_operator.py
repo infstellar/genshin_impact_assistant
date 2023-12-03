@@ -238,7 +238,7 @@ class PickupOperator(BaseThreading):
 
     BLINK_THRESHOLD = 0.82
     
-    def match_blink(self, img:np.ndarray, ignore_close=False, show_res = True):
+    def match_blink(self, img:np.ndarray, ignore_close=False, show_res = False):
         raw_img = img.copy()
         img = img.astype('float')
         img = ((img[:,:,0]+img[:,:,1]+img[:,:,2])/3).astype('uint8')

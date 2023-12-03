@@ -619,7 +619,7 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
         
         # 吸附模式: 当当前距离小于允许吸附距离，开始向目标吸附点移动
         if len(self.adsorptive_position)>0:
-            absorptive_threshold = 6
+            absorptive_threshold = 15
             if self.motion_state == IN_MOVE:
                 if min(euclidean_distance_plist(curr_posi, self.adsorptive_position)) < absorptive_threshold:
                     for adsorb_p in self.adsorptive_position:
