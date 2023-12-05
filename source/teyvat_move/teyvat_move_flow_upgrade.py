@@ -360,6 +360,9 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
     BP: break point. 程序行走使用的点。
     CP: current point. 执行SK，切换Motion使用的点。
     """
+    
+    IS_NAHIDA = False
+    
     def __init__(self, upper: TeyvatMoveFlowConnector):
         FlowTemplate.__init__(self, upper, flow_id=ST.INIT_TEYVAT_MOVE, next_flow_id=ST.END_TEYVAT_MOVE_PASS)
         TeyvatMoveCommon.__init__(self)
@@ -481,6 +484,9 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
         self.TDO = B_SplineCurve_GuidingHead_Optimizer(self.upper.path_dict)
         if self.upper.is_auto_pickup:
             self.upper.PUO.continue_threading()
+            
+        self.IS_NAHIDA = 'Nahida' in combat_lib.get_characters_name()    
+        
         self._next_rfc()
     
     def state_in(self):
@@ -638,6 +644,9 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
                                         if self.upper.PUO.auto_pickup() == 0: break
                                     logger.info("adsorption: finding blink: end")
                                 if self.upper.is_auto_pickup:
+                                    if i > 3 and self.IS_NAHIDA:
+                                        self.upper.PUO.activate_pickup()
+                                        break
                                     if len(self.upper.PUO.pickup_item_list) > pickup_item_num:
                                         logger.info('picked, adsorption stopping')
                                         break

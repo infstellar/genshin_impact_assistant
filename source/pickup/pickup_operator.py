@@ -5,7 +5,7 @@ from source.util import *
 from source.interaction.interaction_core import itt
 from source.api.pdocr_complete import ocr
 from source.common import timer_module, static_lib
-from source.funclib import generic_lib, movement
+from source.funclib import generic_lib, movement, combat_lib
 from source.manager import img_manager, asset
 import cv2
 from source.interaction.minimap_tracker import tracker
@@ -284,6 +284,36 @@ class PickupOperator(BaseThreading):
                 movement.move(movement.MOVE_AHEAD, 4)
                 self.itt.key_down('spacebar')
 
+    def activate_pickup(self):
+        if 'Nahida' in combat_lib.get_characters_name(max_retry=30):
+            names = combat_lib.get_characters_name()
+            nahida_index = names.index('Nahida') + 1
+            while not combat_lib.get_current_chara_num(self.checkup_stop_func) == nahida_index:
+                itt.key_press(str(nahida_index))
+                time.sleep(0.2)
+            
+            # itt.middle_click()
+            # itt.delay(0.3, comment='reset view')
+            
+            itt.key_down('e')
+            for i in range(20):
+                itt.move_to(0,400,relative=True)
+                time.sleep(0.02)  
+            
+            for i in range(35):
+                itt.move_to(600,-50,relative=True)
+                time.sleep(0.05)
+            
+            itt.middle_click()
+            
+            itt.key_up('e')
+            
+            return 0
+            
+        else:
+            return self.auto_pickup()
+        
+        
     def auto_pickup(self):
         # time.sleep(0.1)
         if self.checkup_stop_func():
@@ -352,7 +382,7 @@ if __name__ == '__main__':
     # po.pause_threading()
     po.start()
     # po.set_search_mode(0)
-    po.continue_threading()
+    po.activate_pickup()
     while 1:
         time.sleep(1)
         # po.find_collector()
