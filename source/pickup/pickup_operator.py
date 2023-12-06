@@ -284,8 +284,8 @@ class PickupOperator(BaseThreading):
                 movement.move(movement.MOVE_AHEAD, 4)
                 self.itt.key_down('spacebar')
 
-    def activate_pickup(self):
-        if 'Nahida' in combat_lib.get_characters_name(max_retry=30):
+    def activate_pickup(self, is_nahida = False):
+        if is_nahida: # 'Nahida' in combat_lib.get_characters_name(max_retry=30)
             names = combat_lib.get_characters_name()
             nahida_index = names.index('Nahida') + 1
             while not combat_lib.get_current_chara_num(self.checkup_stop_func) == nahida_index:

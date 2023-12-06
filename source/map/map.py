@@ -351,6 +351,7 @@ class Map(MiniMap, BigMap, MapConverter):
         return min_teleporter
 
     def _switch_to_area(self, tp_region):
+        
         while 1:
             siw()
             itt.appear_then_click(asset.ButtonBigmapSwitchMap)
@@ -382,13 +383,13 @@ class Map(MiniMap, BigMap, MapConverter):
         """
         if tp_type == None:
             tp_type = ["Teleporter", "Statue", "Domain"]
-        ui_control.ui_goto(UIPage.page_bigmap)
+        ui_control.ensure_page(UIPage.page_bigmap)
         if tp_mode == 0:
             target_teleporter = self._find_closest_teleporter(posi, tp_type=tp_type)
         tp_posi = self.convert_GIMAP_to_cvAutoTrack(target_teleporter.position)
         tp_type = target_teleporter.tp
         tp_region = target_teleporter.region
-
+        ui_control.ensure_page(UIPage.page_bigmap)
         self.check_bigmap_scaling()
 
         self._switch_to_area(tp_region)

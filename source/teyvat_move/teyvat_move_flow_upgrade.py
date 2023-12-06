@@ -645,7 +645,7 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
                                     logger.info("adsorption: finding blink: end")
                                 if self.upper.is_auto_pickup:
                                     if i > 3 and self.IS_NAHIDA:
-                                        self.upper.PUO.activate_pickup()
+                                        self.upper.PUO.activate_pickup(is_nahida=True)
                                         break
                                     if len(self.upper.PUO.pickup_item_list) > pickup_item_num:
                                         logger.info('picked, adsorption stopping')
