@@ -223,3 +223,4 @@ dev_assets/tlpp/*
 requirements2.txt
 config/missiondownload/missiondownload_meta.json
 config/cookies/web_genshin_cookies.json
+local_edit_missions/

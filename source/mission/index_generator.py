@@ -7,10 +7,18 @@ import importlib
 def generate_mission_index():
     mission_list = []
     extra_mission_list = []
+    local_mission_list = []
     for root, dirs, files in os.walk(os.path.join(ROOT_PATH,"source\\mission\\missions")):
         for file in files:
             if file[file.index('.'):]==".py":
                 mission_list.append(file.replace('.py',''))
+    
+    if os.path.exists(os.path.join(ROOT_PATH,"local_edit_missions")):
+        for root, dirs, files in os.walk(os.path.join(ROOT_PATH,"local_edit_missions")):
+            for file in files:
+                if file[file.index('.'):]==".py":
+                    local_mission_list.append(file.replace('.py',''))            
+    
     # Only fetch files in the root directory of the missions folder
     # Do not fetch files in subdirectories
     for file in os.listdir(os.path.join(ROOT_PATH,"missions")):
@@ -23,7 +31,7 @@ def generate_mission_index():
         f.write("\"\"\"This file is generated automatically. Do not manually modify it.\"\"\"\n")
         f.write(f"import os, sys\n")
         f.write(f"sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))\n")
-        f.write(f"MISSION_INDEX = {str(mission_list+extra_mission_list)}\n")
+        f.write(f"MISSION_INDEX = {str(local_mission_list+extra_mission_list+mission_list)}\n")
         f.write("def get_mission_object(mission_name:str):\n")
         for i in mission_list:
             f.write(f"    if mission_name == '{i}':\n")
@@ -33,6 +41,10 @@ def generate_mission_index():
             f.write(f"    if mission_name == '{i}':\n")
             f.write(f"        import missions.{i}\n")
             f.write(f"        return missions.{i}.MissionMain()\n")
+        for i in local_mission_list:
+            f.write(f"    if mission_name == '{i}':\n")
+            f.write(f"        import local_edit_missions.{i}\n")
+            f.write(f"        return local_edit_missions.{i}.MissionMain()\n")
     
     import missions.mission_index
     importlib.reload(missions.mission_index)

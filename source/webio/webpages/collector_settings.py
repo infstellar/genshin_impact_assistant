@@ -143,6 +143,10 @@ class CollectorSettingPage(ConfigPage):
                 pin.put_textarea(component_name, label=display_name, value=list2format_list_text(v), scope=scope_name)
                 
     def _onchange_collection_name(self, x):
+        if x == '':
+            output.clear("PREDICT_AND_VERIFY_01_scope")
+            output.put_text(t2t("Waiting..."), scope="PREDICT_AND_VERIFY_01_scope").style(f'color: black; font_size: 20px')
+            return
         if x in self.collection_names:
             output.clear_scope("PREDICT_AND_VERIFY_01_scope")
             output.put_text(t2t("Verified!"), scope="PREDICT_AND_VERIFY_01_scope").style(f'color: green; font_size: 20px')
