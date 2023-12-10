@@ -363,6 +363,7 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
     
     IS_NAHIDA = False
     ENABLE_OPTIMIZER = True
+    last_adsorptive_position = [10000000,10000000]
     
     def __init__(self, upper: TeyvatMoveFlowConnector):
         FlowTemplate.__init__(self, upper, flow_id=ST.INIT_TEYVAT_MOVE, next_flow_id=ST.END_TEYVAT_MOVE_PASS)
@@ -807,8 +808,13 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
                             if self.upper.PUO.auto_pickup() == 0: break
                         logger.info("adsorption: finding blink: end")
                     if self.upper.is_auto_pickup:
+                        if self.IS_NAHIDA:
+                            if euclidean_distance(self.last_adsorptive_position, curr_posi) < 15:
+                                logger.info('in nahida mode & scanned once, skip the ads')
+                                break
                         if i > 2 and self.IS_NAHIDA:
                             self.upper.PUO.active_pickup(is_nahida=True)
+                            self.last_adsorptive_position = adsorb_p
                             break
                         if len(self.upper.PUO.pickup_item_list) > pickup_item_num:
                             logger.info('picked, adsorption stopping')
