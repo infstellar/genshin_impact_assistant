@@ -20,7 +20,7 @@ class B_SplineCurve_GuidingHead_Optimizer():
 
 
     """
-    def __init__(self, tlpp) -> None:
+    def __init__(self, tlpp, fit_index = -1) -> None:
         self.bps = tlpp
         self.points = []
         last_i = [99999,99999]
@@ -29,14 +29,21 @@ class B_SplineCurve_GuidingHead_Optimizer():
                 continue
             self.points.append([float(i[0]), float(i[1]), tlpp['break_position'].index(i)])
             last_i = i
+            
+        if fit_index == -1:
+            self.fit_index = 1000+100*len(tlpp['break_position'])
+        else:
+            self.fit_index = 1000
+        logger.debug(f'fit index: {self.fit_index}')
+            
         self.x_new, self.y_new, self.z_new, self.tck = self._fit_curve(self.points)
-
+        
         self.curr_length = 0 # 0~1
 
     def _fit_curve(self, points):
         points = np.array(points)
         tck, u = splprep(points.T, u=None, s=0.0)
-        u_new = np.linspace(u.min(), u.max(), 1000)
+        u_new = np.linspace(u.min(), u.max(), self.fit_index)
         x_new, y_new, z_new = splev(u_new, tck)
         return x_new, y_new, z_new, tck
 

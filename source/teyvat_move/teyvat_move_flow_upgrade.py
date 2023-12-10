@@ -17,7 +17,7 @@ from source.teyvat_move.teyvat_move_optimizer import B_SplineCurve_GuidingHead_O
 from source.funclib.combat_lib import CSDL
 
 
-ENABLE_OPTMIZER = True
+ENABLE_OPTIMIZER = True
 
 
 class TeyvatMoveFlowConnector(FlowConnector):
@@ -472,6 +472,10 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
             self.adsorptive_position = self.upper.path_dict["adsorptive_position"]
         else:
             self.adsorptive_position = []
+        if "additional_info" in self.upper.path_dict.keys():
+            self.additional_info = self.upper.path_dict["additional_info"]
+        else:
+            self.additional_info = {}
         self.ready_to_end = False
         self.init_start = False
         self.curr_path_index = 0
@@ -487,7 +491,38 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
             
         self.IS_NAHIDA = 'Nahida' in combat_lib.get_characters_name()    
         
+        if 'kyt2m_version' in self.additional_info.keys():
+            self.curr_break_point_index = 1
+        
         self._next_rfc()
+    
+    def _land(self, enforce=False):
+        retry_timer = AdvanceTimer(10)
+        if self.landing_timer.get_diff_time()>2 or enforce:
+            if self.landing_timer.get_diff_time()<5 or enforce:
+                logger.info("landing")
+                itt.key_press('x')
+                itt.left_click()
+                retry_timer.reset()
+                while 1:
+                    if self.upper.checkup_stop_func():
+                        break
+                    self.switch_motion_state()
+                    if (self.motion_state != IN_FLY) and (self.motion_state != IN_CLIMB):
+                        break
+                    time.sleep(0.1)
+                    
+                    if retry_timer.reached_and_reset():
+                        itt.key_press('x')
+                        itt.left_click()
+            else:
+                self.landing_timer.reset()
+    
+    climb_until_walk_to_ads_flag = False
+    delay_ads = False
+    switch_bp_flag = False
+    switch_bp_flag_for_ads = False
+    # any_jump_timer = AdvanceTimer()
     
     def state_in(self):
         self.in_pt.reset()
@@ -538,9 +573,11 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
             # if special_key != None: 
             #     self._exec_special_key(special_key)
             # 检测是否要切换到下一个BP
-            if not ENABLE_OPTMIZER:
+            if not ENABLE_OPTIMIZER:
                 if euclidean_distance(target_posi, curr_posi) <= offset: 
                     if len(self.curr_breaks) - 1 > self.curr_break_point_index:
+                        # if not self.curr_break_point_index == 0:
+                        #     self.switch_bp_flag_for_ads = True
                         self.curr_break_point_index += 1 # BP+1
                         logger.debug(f"index {self.curr_break_point_index} posi {self.curr_breaks[self.curr_break_point_index]}")
                         # pass
@@ -607,58 +644,49 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
                 fly_flag = True
         
         if self.motion_state == IN_FLY and self.curr_path[self.curr_path_index]["motion"]=="WALKING" and (not fly_flag): # 降落
-            if self.landing_timer.get_diff_time()>2:
-                if self.landing_timer.get_diff_time()<5:
-                    logger.info("landing")
-                    itt.left_click()
-                    while 1:
-                        if self.upper.checkup_stop_func():
-                            break
-                        self.switch_motion_state()
-                        time.sleep(0.1)
-                        if self.motion_state != IN_FLY:
-                            break
-                else:
-                    self.landing_timer.reset()
+            self._land()
+            # if self.landing_timer.get_diff_time()>2:
+            #     if self.landing_timer.get_diff_time()<5:
+            #         logger.info("landing")
+            #         itt.left_click()
+            #         while 1:
+            #             if self.upper.checkup_stop_func():
+            #                 break
+            #             self.switch_motion_state()
+            #             time.sleep(0.1)
+            #             if self.motion_state != IN_FLY:
+            #                 break
+            #     else:
+            #         self.landing_timer.reset()
+        
+        if self.curr_path[self.curr_path_index]["motion"]=="ANY":
+            movement.jump_in_loop()
         
         print(f"time2: {self.in_pt.get_diff_time()}")
         
+        def is_ads(threshold):
+            return min(euclidean_distance_plist(curr_posi, self.adsorptive_position)) < threshold
+        
         # 吸附模式: 当当前距离小于允许吸附距离，开始向目标吸附点移动
-        if len(self.adsorptive_position)>0:
-            absorptive_threshold = 15
-            if self.motion_state == IN_MOVE:
-                if min(euclidean_distance_plist(curr_posi, self.adsorptive_position)) < absorptive_threshold:
-                    for adsorb_p in self.adsorptive_position:
-                        if euclidean_distance(adsorb_p, curr_posi) < absorptive_threshold:
-                            logger.info(f"adsorption: {adsorb_p} start")
-                            if self.upper.is_auto_pickup:
-                                pickup_item_num = len(self.upper.PUO.pickup_item_list)
-                            for i in range(15):
-                                if CSDL.get_combat_state():
-                                    break
-                                if movement.move_to_posi_LoopMode(adsorb_p, self.upper.checkup_stop_func, threshold=0.5):break
-                                if self.upper.PUO.auto_pickup() > 0:
-                                    logger.info("adsorption: finding blink: start")
-                                    while 1:
-                                        movement.move(direction=movement.MOVE_AHEAD,distance=2)
-                                        if self.upper.PUO.auto_pickup() == 0: break
-                                    logger.info("adsorption: finding blink: end")
-                                if self.upper.is_auto_pickup:
-                                    if i > 3 and self.IS_NAHIDA:
-                                        self.upper.PUO.activate_pickup(is_nahida=True)
-                                        break
-                                    if len(self.upper.PUO.pickup_item_list) > pickup_item_num:
-                                        logger.info('picked, adsorption stopping')
-                                        break
-                                time.sleep(0.2)
-                                if i%5==0:
-                                    logger.debug(f"adsorption: {i}")
-                            logger.info(f"adsorption: {adsorb_p} end")
-                            self.adsorptive_position.pop(self.adsorptive_position.index(adsorb_p))
-                            break
-            curr_posi = genshin_map.get_position()
+        if len(self.adsorptive_position) > 0:
+            adsorptive_threshold = 15
+            if is_ads(adsorptive_threshold):
+                if self.motion_state == IN_FLY:
+                    self._land()
+                if self.motion_state == IN_CLIMB:
+                        logger.info('climb_until_walk_to_ads_flag: True')
+                        self.climb_until_walk_to_ads_flag = True
+                        if 'is_cliff_collection' in self.additional_info.keys():
+                            if self.additional_info['is_cliff_collection']:
+                                self._land()
+                                itt.delay(0.5)              
+                if self.motion_state == IN_MOVE:
+                    self._exec_ads(curr_posi, adsorptive_threshold)
             
-            print(f"time3: {self.in_pt.get_diff_time()}")
+        # self._exec_active_pickup()
+        curr_posi = genshin_map.get_position()
+        
+        print(f"time3: {self.in_pt.get_diff_time()}")
         
         # 自动拾取
         if self.upper.is_auto_pickup:
@@ -693,7 +721,7 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
         # delta_distance = self.CalculateTheDistanceBetweenTheAngleExtensionLineAndTheTarget(curr_posi,target_posi)
         
         # 移动视角
-        if not ENABLE_OPTMIZER:
+        if not ENABLE_OPTIMIZER:
             target_degree = movement.calculate_posi2degree(target_posi)
         else:
             target_degree = movement.calculate_posi2degree(self.predict_tdo_position(curr_posi, target_posi))
@@ -736,6 +764,7 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
         if self.motion_state == IN_FLY:
             logger.info(f"landing")
             itt.left_click()
+        self._exec_active_pickup(force=True)
         self._set_nfid(ST.END_TEYVAT_MOVE_PASS)
         self.upper.while_sleep = 0.2
         if self.upper.is_auto_pickup:
@@ -745,7 +774,48 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
     def state_end(self):
         itt.key_up('w')
         return super().state_end()
+    
+    def _exec_active_pickup(self, force=False):
+        if 'is_active_pickup_in_bp' in self.additional_info.keys():
+            if self.additional_info['is_active_pickup_in_bp']:
+                if self.IS_NAHIDA:
+                    self._land(enforce=True)
+                    self.switch_motion_state()
+                    if self.motion_state == WALKING:
+                        self.upper.PUO.active_pickup(is_nahida=True)
 
+    
+    def _exec_ads(self, curr_posi, absorptive_threshold):
+        for adsorb_p in self.adsorptive_position:
+            if euclidean_distance(adsorb_p, curr_posi) < absorptive_threshold:
+                logger.info(f"adsorption: {adsorb_p} start")
+                if self.upper.is_auto_pickup:
+                    pickup_item_num = len(self.upper.PUO.pickup_item_list)
+                for i in range(15):
+                    if CSDL.get_combat_state():
+                        break
+                    if movement.move_to_posi_LoopMode(adsorb_p, self.upper.checkup_stop_func, threshold=0.5):break
+                    if self.upper.PUO.auto_pickup() > 0:
+                        logger.info("adsorption: finding blink: start")
+                        while 1:
+                            movement.move(direction=movement.MOVE_AHEAD,distance=2)
+                            if self.upper.PUO.auto_pickup() == 0: break
+                        logger.info("adsorption: finding blink: end")
+                    if self.upper.is_auto_pickup:
+                        if i > 2 and self.IS_NAHIDA:
+                            self.upper.PUO.active_pickup(is_nahida=True)
+                            break
+                        if len(self.upper.PUO.pickup_item_list) > pickup_item_num:
+                            logger.info('picked, adsorption stopping')
+                            break
+                    time.sleep(0.2)
+                    if i%5==0:
+                        logger.debug(f"adsorption: {i}")
+                logger.info(f"adsorption: {adsorb_p} end")
+                # self.climb_until_walk_to_ads_flag = False
+                self.adsorptive_position.pop(self.adsorptive_position.index(adsorb_p))
+                break
+    
 class TeyvatMoveStuck(EndFlowTemplate):
     def __init__(self, upper: FlowConnector):
         super().__init__(upper, flow_id=ST.END_TEYVAT_MOVE_STUCK, err_code_id=ERR_STUCK)

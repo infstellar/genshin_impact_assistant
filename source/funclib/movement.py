@@ -346,7 +346,7 @@ def get_current_motion_state() -> str:
     #     return WALKING
 
 
-def move_to_posi_LoopMode(target_posi, stop_func, threshold=6):
+def move_to_posi_LoopMode(target_posi, stop_func, threshold:float=6):
     """移动到指定坐标。适合用于while循环的模式。
 
     Args:

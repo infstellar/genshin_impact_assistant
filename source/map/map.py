@@ -229,17 +229,19 @@ class Map(MiniMap, BigMap, MapConverter):
         return self.rotation
 
     def check_bigmap_scaling(self) -> None:
+        # origin_page = ui_control.get_page()
+        ui_control.ensure_page(UIPage.page_bigmap)
         if not itt.get_img_existence(asset.IconBigMapScaling):
-            origin_page = ui_control.get_page()
+            # ui_control.ui_goto(UIPage.page_bigmap)
             while not itt.appear_then_click(asset.ButtonBigmapSwitchMap): siw()
             while not itt.appear_then_click(asset.MapAreaCYJY): siw()
             while not itt.appear_then_click(asset.ButtonBigmapSwitchMap): siw()
             while not itt.appear_then_click(asset.MapAreaLY): siw()
-            if origin_page == UIPage.page_main:
-                ui_control.ui_goto(UIPage.page_main)
-            elif origin_page == UIPage.page_bigmap:
-                ui_control.ui_goto(UIPage.page_main)
-                ui_control.ui_goto(UIPage.page_bigmap)
+            # if origin_page == UIPage.page_main:
+            #     ui_control.ui_goto(UIPage.page_main)
+            # elif origin_page == UIPage.page_bigmap:
+            #     ui_control.ui_goto(UIPage.page_main)
+            #     ui_control.ui_goto(UIPage.page_bigmap)
     
     def get_bigmap_posi(self, is_upd=True) -> GIMAPPosition:
         self.check_bigmap_scaling()

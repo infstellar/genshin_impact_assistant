@@ -1,4 +1,5 @@
 import numpy as np
+import random
 
 from source.common.base_threading import BaseThreading
 from source.util import *
@@ -284,10 +285,11 @@ class PickupOperator(BaseThreading):
                 movement.move(movement.MOVE_AHEAD, 4)
                 self.itt.key_down('spacebar')
 
-    def activate_pickup(self, is_nahida = False):
+    def active_pickup(self, is_nahida = False):
         if is_nahida: # 'Nahida' in combat_lib.get_characters_name(max_retry=30)
             names = combat_lib.get_characters_name()
             nahida_index = names.index('Nahida') + 1
+            origin_chara_index = combat_lib.get_current_chara_num(self.checkup_stop_func)
             while not combat_lib.get_current_chara_num(self.checkup_stop_func) == nahida_index:
                 itt.key_press(str(nahida_index))
                 time.sleep(0.2)
@@ -296,17 +298,39 @@ class PickupOperator(BaseThreading):
             # itt.delay(0.3, comment='reset view')
             
             itt.key_down('e')
-            for i in range(20):
-                itt.move_to(0,400,relative=True)
+            itt.delay(0.4, comment='waiting the Nahida E skill start')
+            itt.key_down('e')
+            
+            for i in range(10):
+                itt.move_to(0,800,relative=True)
                 time.sleep(0.02)  
             
-            for i in range(35):
-                itt.move_to(600,-50,relative=True)
-                time.sleep(0.05)
+            rate = 1.2
             
-            itt.middle_click()
+            for i in range(int(108*rate)):
+                if i%int(8*rate)==0:
+                    if i >= 90*rate:
+                        itt.move_to(0,-1500,relative=True)
+                    if i >= 80*rate:
+                        itt.move_to(0,-1000,relative=True)
+                    elif i >= 60*rate:
+                        itt.move_to(0,-600,relative=True)
+                    elif i >= 20*rate:
+                        itt.move_to(0,-200,relative=True)
+                    else:
+                        itt.move_to(0,-100,relative=True)
+                    time.sleep(0.02)
+                itt.move_to(int(400/rate)+random.randint(-100, 100),0,relative=True)
+                time.sleep(0.02)
             
             itt.key_up('e')
+            
+            itt.delay(0.4, comment='waiting the Nahida E skill end')
+            itt.middle_click()
+            
+            while not combat_lib.get_current_chara_num(self.checkup_stop_func) == origin_chara_index:
+                itt.key_press(str(origin_chara_index))
+                time.sleep(0.2)
             
             return 0
             
@@ -382,7 +406,7 @@ if __name__ == '__main__':
     # po.pause_threading()
     po.start()
     # po.set_search_mode(0)
-    po.activate_pickup()
+    po.active_pickup(is_nahida=True)
     while 1:
         time.sleep(1)
         # po.find_collector()

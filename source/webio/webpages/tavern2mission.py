@@ -16,6 +16,9 @@ class Tavern2Mission(AdvancePage):
     INPUT_AUTHOR=AN()
     INPUT_DESCRIPTION=AN()
     INPUT_NOTE=AN()
+    INPUT_MISSION_FILE_NAME = AN()
+    
+    CHECKBOX_ADDITIONAL_INFO = AN()
     
     SCOPE_POSSIBLE_ROUTE = AN()
     
@@ -38,10 +41,17 @@ class Tavern2Mission(AdvancePage):
                     output.put_text("")
                 ])
             pin.pin_on_change(self.INPUT_COLLECTION_NAME, onchange=self._onchange_collection_name, clear=False, init_run=True)
+            pin.put_input(self.INPUT_MISSION_FILE_NAME, help_text=t2t('input mission file name, it should be `AuthorName`_`MissionName` '))
             pin.put_input(self.INPUT_MISSION_NAME, help_text=t2t('input mission name'))
             pin.put_input(self.INPUT_AUTHOR, help_text=t2t('input author'))
             pin.put_input(self.INPUT_DESCRIPTION, help_text=t2t('input description'))
             pin.put_input(self.INPUT_NOTE, help_text=t2t('input note'))
+            pin.put_checkbox(self.CHECKBOX_ADDITIONAL_INFO, options=[
+                {'label': t2t('is collection in cliff'), 'value': "is_cliff_collection"},
+                {'label': t2t('whether active pickup in waypoints'), 'value': "is_active_pickup_in_bp"},
+                {'label': t2t('whether disable adsorptive positions'), 'value': "is_disable_ads_points"},
+                {'label': t2t('whether Nahida is needed'), 'value': "is_nahida_needed"},
+                ])
             # output.put_button(self.BUTTON_GENERATE, onclick=self._generate_mission)
     
     def _summarize_collection(self, plist):
@@ -105,7 +115,7 @@ class Tavern2Mission(AdvancePage):
     
     def _generate_mission(self, curve_poi:list):
         
-        if pin.pin[self.INPUT_MISSION_NAME] == '' or pin.pin[self.INPUT_COLLECTION_NAME] == '' or pin.pin[self.INPUT_AUTHOR] == '':
+        if pin.pin[self.INPUT_MISSION_NAME] == '' or pin.pin[self.INPUT_COLLECTION_NAME] == '' or pin.pin[self.INPUT_AUTHOR] == '' or pin.pin[self.INPUT_MISSION_FILE_NAME] == '':
             output.toast(t2t('mission name or collection name or author is/are empty, please check it.'), color='error')
             return
         
@@ -121,7 +131,7 @@ class Tavern2Mission(AdvancePage):
             print(tianli_posi_list)
         
         verify_path(fr'{ROOT_PATH}/local_edit_missions')
-        path = fr'{ROOT_PATH}/local_edit_missions/{pin.pin[self.INPUT_MISSION_NAME]}.py'
+        path = fr'{ROOT_PATH}/local_edit_missions/{pin.pin[self.INPUT_MISSION_FILE_NAME]}.py'
         position_list = []
         i=0
         for p in tianli_posi_list:
@@ -139,20 +149,46 @@ class Tavern2Mission(AdvancePage):
         
         ita = collector_lib.load_items_position(pin.pin[self.INPUT_COLLECTION_NAME], ret_mode=2)
         for p in tianli_posi_list:
-            rita = collector_lib.predict_feature_by_position(p, ita)
+            rita = collector_lib.predict_feature_by_position(p, ita, threshold=35)
             if len(rita) > 0:
                 for i in rita:
                     adsorptive_position.append(list(MapConverter.convert_kongying_to_cvAutoTrack(np.array( list(map(float,i["position"].split(',')))), decimal=2)))
                 pickup_points.append(tianli_posi_list.index(p))
-                
+        
+        # 修正空荧酒馆误差
+        # tianli_posi_list[0][1]+=10
+        
+        note = f'{pin.pin[self.INPUT_NOTE]}'
+        if 'is_nahida_needed' in pin.pin[self.CHECKBOX_ADDITIONAL_INFO]:
+            note+='\n 必须需要纳西妲 Nahida must be needed'
+         
         META={
-            'name':f'{pin.pin[self.INPUT_MISSION_NAME]}',
+            'name':{
+                GLOBAL_LANG:f'{pin.pin[self.INPUT_MISSION_NAME]}'
+            },
             'author':f"{pin.pin[self.INPUT_AUTHOR]}",
-            'tags':["采集"],
+            'tags':{
+                'zh_CN':["采集"],
+                'en_US':["Collect"]
+            },
             'local_edit_mission':f'{pin.pin[self.INPUT_MISSION_NAME]}',
             'description':f'{pin.pin[self.INPUT_DESCRIPTION]}',
-            'note':f'{pin.pin[self.INPUT_NOTE]}'
+            'note':note
         }       
+        
+        additional_info = {
+            "kyt2m_version":"1.0",
+            "pickup_points":pickup_points, 
+        }
+        if 'is_cliff_collection' in pin.pin[self.CHECKBOX_ADDITIONAL_INFO]:
+            additional_info['is_cliff_collection'] = True
+        if 'is_disable_ads_points' in pin.pin[self.CHECKBOX_ADDITIONAL_INFO]:
+            adsorptive_position = []
+        if 'is_active_pickup_in_bp' in pin.pin[self.CHECKBOX_ADDITIONAL_INFO]:
+            additional_info['is_active_pickup_in_bp'] = True
+            adsorptive_position = tianli_posi_list[1:]
+        if 'is_nahida_needed' in pin.pin[self.CHECKBOX_ADDITIONAL_INFO]:
+            additional_info['is_nahida_needed'] = True
         
         with open(path, 'w', encoding='utf-8') as f:
             tlpp_path = {
@@ -161,11 +197,7 @@ class Tavern2Mission(AdvancePage):
                 "position_list":position_list,
                 "break_position": tianli_posi_list,
                 "time": "",
-                "additional_info":{
-                    "kyt2m_version":"1.0",
-                    "pickup_points":pickup_points
-                    
-                },
+                "additional_info":additional_info,
                 "adsorptive_position":adsorptive_position
             }
             s = \
@@ -190,7 +222,9 @@ kyt2m_default_value = {str(tlpp_path)}
         local_meta = load_json('local_edit_mission_meta.json', fr"{ROOT_PATH}/config/mission",auto_create=True)
         JSON_META = META
         JSON_META['title'] = META['name']
-        local_meta.update({pin.pin[self.INPUT_MISSION_NAME]:JSON_META})
+        JSON_META['name'] = META['name'][GLOBAL_LANG]
+        JSON_META['tags'] = META['tags'][GLOBAL_LANG]
+        local_meta.update({pin.pin[self.INPUT_MISSION_FILE_NAME]:JSON_META})
         save_json(local_meta,'local_edit_mission_meta.json', fr"{ROOT_PATH}/config/mission")
         output.toast(t2t('mission has saved to ')+f'{path}')
     def _upload_file(self):
