@@ -1,5 +1,6 @@
 ## TODO：
 - commission set time
+- ui切完再检查一次
 - appear x2
 - TMF的F拾取有点小问题
 - chara name 使用新方法

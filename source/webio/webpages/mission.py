@@ -18,7 +18,7 @@ class MissionPage(AdvancePage):
     MISSION_META = load_json('mission_internal_meta.json', fr"{ROOT_PATH}/source/mission")
     NAME_PROCESSBAR_MissionRebuild = 'PROCESSBAR_MissionRebuild'
     def __init__(self) -> None:
-        super().__init__()
+        super().__init__(document_link=f'https://genshinimpactassistant.github.io/GIA-Document/#/{GLOBAL_LANG}/mission')
         self.missions = self.MISSION_INDEX
         self._create_default_settings()
         self.process_i = 1
@@ -26,10 +26,17 @@ class MissionPage(AdvancePage):
         
     
     def _refresh(self):
+        from source.mission.index_generator import generate_mission_index
+        generate_mission_index()
+        logger.debug(f"generate mission index succ")
+        import missions.mission_index
         self.MISSION_INDEX = missions.mission_index.MISSION_INDEX
         self.MISSION_META = load_json('mission_internal_meta.json', fr"{ROOT_PATH}/source/mission")
+        # self.LOCAL_MISSION_META = {}
         if os.path.exists(fr"{ROOT_PATH}/config/missiondownload/missiondownload_meta.json"):
             self.MISSION_META.update(load_json('missiondownload_meta.json', fr"{ROOT_PATH}/config/missiondownload"))
+        if os.path.exists(fr"{ROOT_PATH}/config/mission/local_edit_mission_meta.json"):
+            self.MISSION_META.update(load_json('local_edit_mission_meta.json', fr"{ROOT_PATH}/config/mission"))
         self.missions = self.MISSION_INDEX
     
     def _create_default_settings(self):
@@ -58,21 +65,29 @@ class MissionPage(AdvancePage):
             mnote = None
             mtime = None
             if mission_name in self.MISSION_META:
-                if GLOBAL_LANG in self.MISSION_META[mission_name]['title']:
-                    mission_show_name = self.MISSION_META[mission_name]['title'][GLOBAL_LANG]
-                else:
-                    mission_show_name = self.MISSION_META[mission_name]['title']
-                if 'author' in self.MISSION_META[mission_name]:
-                    mauthor = self.MISSION_META[mission_name]['author']
-                if 'note' in self.MISSION_META[mission_name]:
-                    mnote = self.MISSION_META[mission_name]['note']
-                if 'last_update' in self.MISSION_META[mission_name]:
-                    mtime = f"UTC {self.MISSION_META[mission_name]['last_update']}"
+                if 'title' in self.MISSION_META[mission_name].keys():
+                    if GLOBAL_LANG in self.MISSION_META[mission_name]['title']:
+                        mission_show_name = self.MISSION_META[mission_name]['title'][GLOBAL_LANG]
+                    else:
+                        mission_show_name = self.MISSION_META[mission_name]['title']
+                if 'author' in self.MISSION_META[mission_name].keys():
+                    if 'author' in self.MISSION_META[mission_name]:
+                        mauthor = self.MISSION_META[mission_name]['author']
+                if 'note' in self.MISSION_META[mission_name].keys():
+                    if 'note' in self.MISSION_META[mission_name]:
+                        mnote = self.MISSION_META[mission_name]['note']
+                if 'last_update' in self.MISSION_META[mission_name].keys():
+                    if 'last_update' in self.MISSION_META[mission_name]:
+                        mtime = f"UTC {self.MISSION_META[mission_name]['last_update']}"
+                curr_mission_meta = self.MISSION_META[mission_name]
             else:
                 mission_show_name = mission_name
+                curr_mission_meta = {}
             
-            curr_mission_meta = self.MISSION_META[mission_name]
             
+            if 'local_edit_mission' in curr_mission_meta:
+                # if os.path.exists(curr_mission_meta['local_edit_mission']):
+                output.put_markdown(t2t('## Local Mission')+': '+mission_show_name, scope=mission_name)
             output.put_text(mission_show_name, scope=mission_name)
             pv = 999
             ebd = False
@@ -95,6 +110,7 @@ class MissionPage(AdvancePage):
                 output.put_text(t2t('Time: ')+mtime, scope=mission_name)
             if mnote!=None:
                 output.put_text(t2t('Note: ')+mnote, scope=mission_name)
+            
             
 
     

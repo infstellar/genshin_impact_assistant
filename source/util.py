@@ -250,6 +250,12 @@ def save_json(x, json_name='General.json', default_path='config\\settings', sort
         json.dump(x, open(os.path.join(default_path, json_name), 'w', encoding='utf-8'),
               ensure_ascii=False)
 
+def verify_path(root):
+    if not os.path.exists(root):
+        verify_path(os.path.join(root, "../"))
+        os.mkdir(root)
+        print(f"dir {root} has been created")
+
 def euclidean_distance(p1, p2):
     """计算两点间欧氏距离.
 

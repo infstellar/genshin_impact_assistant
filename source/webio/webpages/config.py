@@ -11,7 +11,7 @@ from source.config.cvars import *
 
 class ConfigPage(AdvancePage):
     def __init__(self, config_file_name):
-        super().__init__()
+        super().__init__(document_link=f'https://genshinimpactassistant.github.io/GIA-Document/#/{GLOBAL_LANG}/gui')
 
         # self.main_scope = "SettingPage"
 

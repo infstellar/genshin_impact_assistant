@@ -56,7 +56,7 @@ class Map(MiniMap, BigMap, MapConverter):
     def _upd_smallmap(self) -> None:
         # self.lock.acquire()
         if itt.get_img_existence(asset.IconUIEmergencyFood, is_log=False):
-            self.update_position(itt.capture(jpgmode=FOUR_CHANNELS))
+            self.update_position(itt.capture(jpgmode=NORMAL_CHANNELS))
             # self.smallmap_upd_timer.reset()
         # self.lock.release()
 
@@ -124,7 +124,7 @@ class Map(MiniMap, BigMap, MapConverter):
             return over_times/20 > threshold
         return False
     
-    def get_position(self, is_verify_position = True):
+    def get_position(self, is_verify_position = False):
         """get current character position
 
         Returns:
@@ -229,17 +229,19 @@ class Map(MiniMap, BigMap, MapConverter):
         return self.rotation
 
     def check_bigmap_scaling(self) -> None:
+        # origin_page = ui_control.get_page()
+        ui_control.ensure_page(UIPage.page_bigmap)
         if not itt.get_img_existence(asset.IconBigMapScaling):
-            origin_page = ui_control.get_page()
+            # ui_control.ui_goto(UIPage.page_bigmap)
             while not itt.appear_then_click(asset.ButtonBigmapSwitchMap): siw()
             while not itt.appear_then_click(asset.MapAreaCYJY): siw()
             while not itt.appear_then_click(asset.ButtonBigmapSwitchMap): siw()
             while not itt.appear_then_click(asset.MapAreaLY): siw()
-            if origin_page == UIPage.page_main:
-                ui_control.ui_goto(UIPage.page_main)
-            elif origin_page == UIPage.page_bigmap:
-                ui_control.ui_goto(UIPage.page_main)
-                ui_control.ui_goto(UIPage.page_bigmap)
+            # if origin_page == UIPage.page_main:
+            #     ui_control.ui_goto(UIPage.page_main)
+            # elif origin_page == UIPage.page_bigmap:
+            #     ui_control.ui_goto(UIPage.page_main)
+            #     ui_control.ui_goto(UIPage.page_bigmap)
     
     def get_bigmap_posi(self, is_upd=True) -> GIMAPPosition:
         self.check_bigmap_scaling()
@@ -351,6 +353,7 @@ class Map(MiniMap, BigMap, MapConverter):
         return min_teleporter
 
     def _switch_to_area(self, tp_region):
+        
         while 1:
             siw()
             itt.appear_then_click(asset.ButtonBigmapSwitchMap)
@@ -382,13 +385,13 @@ class Map(MiniMap, BigMap, MapConverter):
         """
         if tp_type == None:
             tp_type = ["Teleporter", "Statue", "Domain"]
-        ui_control.ui_goto(UIPage.page_bigmap)
+        ui_control.ensure_page(UIPage.page_bigmap)
         if tp_mode == 0:
             target_teleporter = self._find_closest_teleporter(posi, tp_type=tp_type)
         tp_posi = self.convert_GIMAP_to_cvAutoTrack(target_teleporter.position)
         tp_type = target_teleporter.tp
         tp_region = target_teleporter.region
-
+        ui_control.ensure_page(UIPage.page_bigmap)
         self.check_bigmap_scaling()
 
         self._switch_to_area(tp_region)

@@ -47,7 +47,8 @@ class Page:
             "CombatSettingPage": t2t("CombatSetting"),
             "CollectorSettingPage": t2t("CollectorSetting"),
             "MissionPage": t2t("MissionPage"),
-            "MissionDownloadPage": t2t("MissionDownloadPage")
+            "MissionDownloadPage": t2t("MissionDownloadPage"),
+            "convert kongying Tavern's route to mission": t2t('convert kongying Tavern\'s route to mission')
         }
         for i in range(len(l1)):
             if l1[i] in replace_dict:

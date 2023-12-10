@@ -56,7 +56,7 @@ class MissionDownloadPage(AdvancePage):
     NAME_PROCESSBAR_ApplyAndSave = "PROCESSBAR_ApplyAndSave"
     NAME_PROCESSBAR_MissionRebuild = 'PROCESSBAR_MissionRebuild'
     def __init__(self) -> None:
-        super().__init__()
+        super().__init__(document_link=f'https://genshinimpactassistant.github.io/GIA-Document/#/{GLOBAL_LANG}/gui')
         self.REMOTE_REPO = "https://github.com/GenshinImpactAssistant/GIA-Missions"
         
         self.INDEX_SOURCE = {
