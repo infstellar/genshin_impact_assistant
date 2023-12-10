@@ -36,7 +36,9 @@ def upd_message():
             ret_message += "添加了游戏内辅助功能\n"
         if version_num < 1158:
             ret_message += "角色支持增加到4.2\n"\
-                           "增加对那维莱特转圈圈的适配"
+                           "增加对那维莱特转圈圈的适配\n"
+        if version_num < 1176:
+            ret_message += "添加新自定义任务创建方式\n"
 
     x = load_json()
     x["Version"] = GIA_VERSION
