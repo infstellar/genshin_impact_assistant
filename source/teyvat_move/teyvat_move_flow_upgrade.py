@@ -17,7 +17,7 @@ from source.teyvat_move.teyvat_move_optimizer import B_SplineCurve_GuidingHead_O
 from source.funclib.combat_lib import CSDL
 
 
-ENABLE_OPTIMIZER = True
+
 
 
 class TeyvatMoveFlowConnector(FlowConnector):
@@ -362,6 +362,7 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
     """
     
     IS_NAHIDA = False
+    ENABLE_OPTIMIZER = True
     
     def __init__(self, upper: TeyvatMoveFlowConnector):
         FlowTemplate.__init__(self, upper, flow_id=ST.INIT_TEYVAT_MOVE, next_flow_id=ST.END_TEYVAT_MOVE_PASS)
@@ -429,13 +430,14 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
         nx,ny,nz = self.TDO.predict_nearest_point(curr_posi[0], curr_posi[1], self.curr_break_point_index)
         nz = max(0,nz)
         r_posi = self.TDO.predict_guiding_head_position(nz)
-        print(
-            f"curr posi: {curr_posi}"
-            "\n"
-            f"target posi: {target_posi}"
-            "\n"
-            f"guiding head posi: {r_posi}"
-        )
+        if DEBUG_MODE:
+            logger.trace(
+                f"curr posi: {curr_posi}"
+                "\n"
+                f"target posi: {target_posi}"
+                "\n"
+                f"guiding head posi: {r_posi}"
+            )
         self.curr_break_point_index = int(self._low8up9(nz))
         if self.curr_break_point_index > len(self.curr_breaks)-1:
             logger.info('index out of range')
@@ -493,6 +495,9 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
         
         if 'kyt2m_version' in self.additional_info.keys():
             self.curr_break_point_index = 1
+            self.ENABLE_OPTIMIZER = False
+        else:
+            self.ENABLE_OPTIMIZER = True
         
         self._next_rfc()
     
@@ -573,7 +578,7 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
             # if special_key != None: 
             #     self._exec_special_key(special_key)
             # 检测是否要切换到下一个BP
-            if not ENABLE_OPTIMIZER:
+            if not self.ENABLE_OPTIMIZER:
                 if euclidean_distance(target_posi, curr_posi) <= offset: 
                     if len(self.curr_breaks) - 1 > self.curr_break_point_index:
                         # if not self.curr_break_point_index == 0:
@@ -721,7 +726,7 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
         # delta_distance = self.CalculateTheDistanceBetweenTheAngleExtensionLineAndTheTarget(curr_posi,target_posi)
         
         # 移动视角
-        if not ENABLE_OPTIMIZER:
+        if not self.ENABLE_OPTIMIZER:
             target_degree = movement.calculate_posi2degree(target_posi)
         else:
             target_degree = movement.calculate_posi2degree(self.predict_tdo_position(curr_posi, target_posi))

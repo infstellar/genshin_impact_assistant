@@ -2,8 +2,8 @@ from source.util import *
 from pywebio import output
 
 
-def toast_succ(text="succ!", duration=2):
-    output.toast(text, position='center', color='#2188ff', duration=duration)
+def toast_succ(text="success!", duration=2):
+    output.toast(text, position='center', color='success', duration=duration)
 
 def get_name(x):
     (filename, line_number, function_name, text) = x
