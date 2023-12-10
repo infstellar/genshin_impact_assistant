@@ -18,7 +18,7 @@ class MissionPage(AdvancePage):
     MISSION_META = load_json('mission_internal_meta.json', fr"{ROOT_PATH}/source/mission")
     NAME_PROCESSBAR_MissionRebuild = 'PROCESSBAR_MissionRebuild'
     def __init__(self) -> None:
-        super().__init__()
+        super().__init__(document_link=f'https://genshinimpactassistant.github.io/GIA-Document/#/{GLOBAL_LANG}/mission')
         self.missions = self.MISSION_INDEX
         self._create_default_settings()
         self.process_i = 1

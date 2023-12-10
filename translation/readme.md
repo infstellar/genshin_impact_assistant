@@ -18,3 +18,4 @@ python translation/generate_pot.py
 
 ## Generate mo file
 
+it will be auto generated when program starting.

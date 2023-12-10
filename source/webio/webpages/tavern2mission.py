@@ -26,7 +26,7 @@ class Tavern2Mission(AdvancePage):
     BUTTON_UPLOAD_FILE = t2t('Analyze curve')
     
     def __init__(self) -> None:
-        super().__init__()
+        super().__init__(document_link='https://genshinimpactassistant.github.io/GIA-Document/#/convert_tavern_route_to_mission')
         self.file_last_modify_time = 0
         self.route_dict = {}
     
@@ -41,7 +41,7 @@ class Tavern2Mission(AdvancePage):
                     output.put_text("")
                 ])
             pin.pin_on_change(self.INPUT_COLLECTION_NAME, onchange=self._onchange_collection_name, clear=False, init_run=True)
-            pin.put_input(self.INPUT_MISSION_FILE_NAME, help_text=t2t('input mission file name, it should be `AuthorName`_`MissionName` '))
+            pin.put_input(self.INPUT_MISSION_FILE_NAME, help_text=t2t('input mission file name, it should be `AuthorName`_`MissionName`_`id(1,2,3,etc.)` '))
             pin.put_input(self.INPUT_MISSION_NAME, help_text=t2t('input mission name'))
             pin.put_input(self.INPUT_AUTHOR, help_text=t2t('input author'))
             pin.put_input(self.INPUT_DESCRIPTION, help_text=t2t('input description'))
@@ -59,7 +59,7 @@ class Tavern2Mission(AdvancePage):
         ITA = collector_lib.load_all_dict()
         for p in plist:
             tl_p = MapConverter.convert_kongying_curve_to_cvAutoTrack(p)
-            features_list = collector_lib.predict_feature_by_position(tl_p, ITA)
+            features_list = collector_lib.predict_feature_by_position(tl_p, ITA, threshold=35)
             rlist = []
             for i in features_list:
                 rlist.append(i['markerTitle'])
@@ -83,7 +83,7 @@ class Tavern2Mission(AdvancePage):
             name = f"{self.route_dict['curveName']}"
             buttons = []
             for curve in self.route_dict['curve_list']:
-                lineName = f"{t2t('From')} {curve['lineName']} {t2t('to generate `collect` mission')}"
+                lineName = t2t('From') + f" {curve['lineName']} " + t2t('to generate `collect` mission')
                 buttons.append([lineName, curve['curve_poi']])
                 curve_poi = curve['curve_poi']
             
@@ -93,7 +93,7 @@ class Tavern2Mission(AdvancePage):
                     if self.is_real_index(pii):
                           ky_posi.append([curve_poi[pii]['x'], curve_poi[pii]['y']])
                 d = self._summarize_collection(ky_posi)
-                output.put_text(f"{t2t('Collections along the way: ')} {d}")
+                output.put_text(t2t('Collections along the way: ') + f" {d}")
                 output.put_button(i[0], onclick=functools.partial(self._generate_mission, i[1]))
                 
                 # output.put_buttons(buttons=[i[0] for i in buttons], onclick=[functools.partial(self._generate_mission, i[1]) for i in buttons])
@@ -149,7 +149,7 @@ class Tavern2Mission(AdvancePage):
         
         ita = collector_lib.load_items_position(pin.pin[self.INPUT_COLLECTION_NAME], ret_mode=2)
         for p in tianli_posi_list:
-            rita = collector_lib.predict_feature_by_position(p, ita, threshold=35)
+            rita = collector_lib.predict_feature_by_position(p, ita, threshold=15)
             if len(rita) > 0:
                 for i in rita:
                     adsorptive_position.append(list(MapConverter.convert_kongying_to_cvAutoTrack(np.array( list(map(float,i["position"].split(',')))), decimal=2)))
