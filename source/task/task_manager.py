@@ -3,6 +3,8 @@ from source.interaction.interaction_core import itt
 from source.task.task_template import TaskTemplate
 from source.common.base_threading import BaseThreading
 from source.exceptions.util import *
+from source.ui.ui import ui_control
+from source.ui import page as UIPage
 
 COLLECTION_PATH_TASK = "CollectionPathTask"
 DOMAIN_TASK = "DomainTask"
@@ -45,8 +47,8 @@ class TaskManager(BaseThreading):
     def clear_task_list(self):
         self.task_list = []
 
-    def stop_tasklist(self):
-        self.start_tasklist_flag = False
+    # def stop_tasklist(self):
+    #     self.start_tasklist_flag = False
     
     def get_task_statement(self):
         if not self.start_tasklist_flag:
@@ -70,6 +72,8 @@ class TaskManager(BaseThreading):
     def stop_tasklist(self):
         if self.start_tasklist_flag:
             logger.info(t2t('stopping tasks'))
+            logger.info(t2t('switch ui to bigmap'))
+            ui_control.ui_goto(UIPage.page_bigmap)
             self.start_tasklist_flag = False
             self.curr_task.stop_threading()
     
