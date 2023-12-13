@@ -25,7 +25,7 @@ class TaskManager(BaseThreading):
         # if 'stop_task_flag' in args.exc_value.__dict__:
         exception_instance = args.exc_value
         logger.exception(exception_instance)
-        if isinstance(GIABaseException, exception_instance):
+        if isinstance(exception_instance, GIABaseException):
             if args.exc_value.stop_task_flag:
                 self.stop_tasklist()
             if len(exception_instance.POSSIBLE_REASONS) > 0:
@@ -33,7 +33,7 @@ class TaskManager(BaseThreading):
                 for pr in exception_instance.POSSIBLE_REASONS:
                     i+=1
                     logger.error(f'{t2t("Possible Reason")} {i}: {pr}')
-        if isinstance(SnapshotException, exception_instance):
+        if isinstance(exception_instance, SnapshotException):
             exception_instance.save_snapshot(itt.capture(jpgmode=FOUR_CHANNELS))
     
     def append_task(self, task_name):
