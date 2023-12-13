@@ -15,7 +15,7 @@ with open(os.path.join(ROOT_PATH,r"source/config/config_generated.py"), "w", enc
     f.write("\"\"\"This file is generated automatically. Do not manually modify it.\"\"\"\n")
     f.write("class GeneratedConfig:\n")
     for jsonname in CONFIG_FILE_NAMES:
-        j = load_json(json_name=f"{jsonname}.jsontemplate", default_path=fr"{CONFIG_PATH}/json_template")
+        j = load_json(json_name=f"{jsonname}.jsontemplate", folder_path=fr"{CONFIG_PATH}/json_template")
         for k in j:
             value = j[k]
             if isinstance(j[k], str):

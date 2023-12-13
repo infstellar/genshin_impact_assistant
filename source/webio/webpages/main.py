@@ -12,14 +12,29 @@ from source.common import timer_module
 from source.webio.update_notice import upd_message
 from source.config.cvars import *
 from source.generic_event import generic_event
+import psutil
+from source.cvars import PROCESS_NAME
 
+
+def get_yuanshen_exe_path():
+    for process in psutil.process_iter():
+        if process.name() in PROCESS_NAME:
+            return f'{process.exe()}'
+    return ""
+
+
+def is_yuanshen_started():
+    for process in psutil.process_iter():
+        if process.name() in PROCESS_NAME:
+            return True
+    return False
 
 
 class MainPage(AdvancePage):
-    
     PROCESSBAR_PERFORMANCE = AN()
     SCOPE_PERFORMANCE = AN()
-    
+    CHECKBOX_IS_AUTOSTART_GENSHIN = AN()
+
     def __init__(self):
         super().__init__()
         self.log_list = []
@@ -56,27 +71,28 @@ class MainPage(AdvancePage):
                 #     f'color: black; font_size: 20px')
                 # self.log_list_lock.release()
                 # listening.call_you_import_module()
-                                # if pin.pin["MissionSelect"] != self.ui_mission_select:
-                                #     self.ui_mission_select = pin.pin["MissionSelect"]
-                                #     output.clear_scope("SCOPEMissionIntroduction")
-                                #     if self.ui_mission_select is None:
-                                #         continue
-                                    # output.put_text(self._get_mission_groups_dict()["introduction"][GLOBAL_LANG],scope="SCOPEMissionIntroduction")
-            
+                # if pin.pin["MissionSelect"] != self.ui_mission_select:
+                #     self.ui_mission_select = pin.pin["MissionSelect"]
+                #     output.clear_scope("SCOPEMissionIntroduction")
+                #     if self.ui_mission_select is None:
+                #         continue
+                # output.put_text(self._get_mission_groups_dict()["introduction"][GLOBAL_LANG],scope="SCOPEMissionIntroduction")
+
             # Output log
-            
+
             self.log_list_lock.acquire()
             for text, color in self.log_list:
                 if text == "$$end$$":
                     output.put_text("", scope='LogArea')
                 else:
-                    output.put_text(text, scope='LogArea', inline=True).style(f'color: {color}; font_size: 20px') # ; background: aqua
-            
+                    output.put_text(text, scope='LogArea', inline=True).style(
+                        f'color: {color}; font_size: 20px')  # ; background: aqua
+
             self.log_list.clear()
             self.log_list_lock.release()
 
             # refresh task state
-            
+
             if self.refresh_flow_info_timer.get_diff_time() >= 0.2:
                 self.refresh_flow_info_timer.reset()
                 if listening.TASK_MANAGER.get_task_statement() != self.ui_statement:
@@ -91,102 +107,112 @@ class MainPage(AdvancePage):
                 if listening.TASK_MANAGER.start_tasklist_flag != self.is_task_start:
                     self.is_task_start = listening.TASK_MANAGER.start_tasklist_flag
                     output.clear('Button_StartStop')
-                    output.put_button(label={False:t2t("启动任务"),True:t2t("运行中,点击停止任务")}[listening.TASK_MANAGER.start_tasklist_flag], onclick=self.on_click_startstop,
-                          scope='Button_StartStop')
+                    output.put_button(label={False: t2t("启动任务"), True: t2t("运行中,点击停止任务")}[
+                        listening.TASK_MANAGER.start_tasklist_flag], onclick=self.on_click_startstop,
+                                      scope='Button_StartStop')
 
             # refresh performance bar
-            
-            
-            output.set_progressbar(name=self.PROCESSBAR_PERFORMANCE, value=generic_event.dilation_rate, label=f'{generic_event.dilation_rate_note}     {t2t("running speed")}: {round(generic_event.dilation_rate,2)*100}%')
+
+            output.set_progressbar(name=self.PROCESSBAR_PERFORMANCE, value=generic_event.dilation_rate,
+                                   label=f'{generic_event.dilation_rate_note}     {t2t("running speed")}: {round(generic_event.dilation_rate, 2) * 100}%')
             # output.clear(self.SCOPE_PERFORMANCE)
-            if generic_event.dilation_rate<=0.6:
-                output.toast(t2t("Warning: Extremely low performance, if you see this message for a long time, please check if your computer meets the lowest requirements."), color='red')
+            if generic_event.dilation_rate <= 0.6:
+                output.toast(
+                    t2t("Warning: Extremely low performance, if you see this message for a long time, please check if your computer meets the lowest requirements."),
+                    color='red')
                 time.sleep(0.5)
-                
+
             time.sleep(0.1)
-    
+
     def _load(self):
         # 标题
         # 获得链接按钮
         with output.use_scope(self.main_scope):
             output.put_row([
                 output.put_button(label=t2t("Get IP address"), onclick=self.on_click_ip_address, scope=self.main_scope),
-                output.put_button(label=t2t("Open log folder"), onclick=self._onclick_open_log_folder, scope=self.main_scope),
-                output.put_processbar(name=self.PROCESSBAR_PERFORMANCE, init = 1),
+                output.put_button(label=t2t("Open log folder"), onclick=self._onclick_open_log_folder,
+                                  scope=self.main_scope),
+                output.put_processbar(name=self.PROCESSBAR_PERFORMANCE, init=1),
                 output.put_scope(name=self.SCOPE_PERFORMANCE),
-                output.put_link(t2t('View Document'), url='https://genshinimpactassistant.github.io/GIA-Document', new_window = True).style('font-size: 20px')
+                output.put_link(t2t('View Document'), url='https://genshinimpactassistant.github.io/GIA-Document',
+                                new_window=True).style('font-size: 20px')
             ])
-            
 
             task_options = [
-                    {
-                        "label":t2t("Launch genshin"),
-                        "value":"LaunchGenshinTask"
-                    },
-                    {
-                        "label":t2t("Domain Task"),
-                        "value":"DomainTask"
-                    },
-                    {
-                        "label":t2t("Daily Commission"),
-                        "value":"CommissionTask"
-                    },
-                    {
-                        "label":t2t("Claim Reward"),
-                        "value":"ClaimRewardTask"
-                    },
-                    {
-                        "label":t2t("Ley Line Outcrop"),
-                        "value":"LeyLineOutcropTask"
-                    },
-                    {
-                        "label":t2t("Mission"),
-                        "value":"MissionTask"
-                    }
-                ]
+                {
+                    "label": t2t("Launch genshin"),
+                    "value": "LaunchGenshinTask"
+                },
+                {
+                    "label": t2t("Domain Task"),
+                    "value": "DomainTask"
+                },
+                {
+                    "label": t2t("Daily Commission"),
+                    "value": "CommissionTask"
+                },
+                {
+                    "label": t2t("Claim Reward"),
+                    "value": "ClaimRewardTask"
+                },
+                {
+                    "label": t2t("Ley Line Outcrop"),
+                    "value": "LeyLineOutcropTask"
+                },
+                {
+                    "label": t2t("Mission"),
+                    "value": "MissionTask"
+                }
+            ]
             output.put_row([  # 横列
                 output.put_column([  # 左竖列
-                    output.put_markdown('## '+t2t("Task List")),
+                    output.put_markdown('## ' + t2t("Task List")),
                     output.put_markdown(t2t("Can only be activated from the button")),
                     pin.put_checkbox(name="task_list", options=task_options),
-                    output.put_row([output.put_text(t2t('启动/停止Task')), None, output.put_scope('Button_StartStop')],size='40% 10px 60%'),
-                    
+                    output.put_row([output.put_text(t2t('启动/停止Task')), None, output.put_scope('Button_StartStop')],
+                                   size='40% 10px 60%'),
+
+                    pin.put_checkbox(name=self.CHECKBOX_IS_AUTOSTART_GENSHIN, options=[
+                        {'label': t2t('is auto start genshin'), 'value':'is_auto_start_genshin', 'selected':True}]),
+
                     output.put_markdown(t2t('## Statement')),
-                    output.put_row([output.put_text(t2t('任务状态')), None, output.put_scope('StateArea')],size='40% 10px 60%'),
+                    output.put_row([output.put_text(t2t('任务状态')), None, output.put_scope('StateArea')],
+                                   size='40% 10px 60%'),
                     output.put_markdown(t2t('## Semi-automatic Functions')),
                     output.put_markdown(t2t("Can only be activated from the hotkey \'[\'")),
                     output.put_text(t2t('Do not enable semi-automatic functions and tasks at the same time')),
                     output.put_row([  # FlowMode
                         output.put_text(t2t('Semi-automatic Functions')),
-                        
+
                         pin.put_select(('FlowMode'), [
                             {'label': t2t('Idle'), 'value': "idle"},
                             {'label': t2t('Auto Combat'), 'value': "semiauto_combat"}
                         ])
-                        ],
+                    ],
                     ),
                     output.put_markdown(t2t('## Ingame assist')),
                     output.put_row([
                         output.put_button(t2t('apply'), onclick=self._onclick_apply_ingame_assist),
                         pin.put_checkbox(name="ingame_assist", options=[
                             {
-                                'label':t2t('Pickup assist'),
-                                'value':'pickup_assist'
+                                'label': t2t('Pickup assist'),
+                                'value': 'pickup_assist'
                             },
                             {
-                                'label':t2t('Auto story assist'),
-                                'value':'story_skip_assist'
+                                'label': t2t('Auto story assist'),
+                                'value': 'story_skip_assist'
                             }]
-                        )
-                        ]),
+                                         )
+                    ]),
                 ], size='auto'), None,
                 output.put_scope('Log')
 
             ], scope=self.main_scope, size='40% 10px 60%')
 
             # Button_StartStop
-            output.put_button(label={False:t2t("启动任务"),True:t2t("运行中,点击停止任务")}[listening.TASK_MANAGER.start_tasklist_flag], onclick=self.on_click_startstop,
-                            scope='Button_StartStop')
+            output.put_button(label={False: t2t("启动任务"), True: t2t("运行中,点击停止任务")}[
+                listening.TASK_MANAGER.start_tasklist_flag], onclick=self.on_click_startstop,
+                              scope='Button_StartStop')
 
             # Log
             output.put_markdown(t2t('## Log'), scope='Log')
@@ -195,9 +221,9 @@ class MainPage(AdvancePage):
             self.main_pin_change_thread.start()'''
 
             m = upd_message()
-            if m!="":
+            if m != "":
                 output.popup(t2t('Update Notice'), m, implicit_close=False)
-        
+
     # def _get_mission_groups_config(self):
     #     jsons = load_json_from_folder(f"{CONFIG_PATH}\\mission_groups")
     #     r = [i["label"] for i in jsons]
@@ -208,9 +234,26 @@ class MainPage(AdvancePage):
     #     if jsonname is None:
     #         raise FileNotFoundError
     #     return load_json(str(jsonname),default_path=f"{CONFIG_PATH}\\mission_groups")
-    
+
     def on_click_startstop(self):
         # listening.MISSION_MANAGER.set_mission_list(list(pin.pin["MissionSelect"]))
+        if 'is_auto_start_genshin' in pin.pin[self.CHECKBOX_IS_AUTOSTART_GENSHIN]:
+            if not is_yuanshen_started():
+                if os.path.exists(GIAconfig.General_GenshinEXEPath):
+                    os.popen(f'"{GIAconfig.General_GenshinEXEPath}"')
+                    output.toast(t2t('Genshin, Start!'), color='success')
+                else:
+                    output.toast(
+                        t2t('The path to the Genshin execution file was not found. You should run it once manually to recognize the Genshin executable path.'))
+            else:
+                if GIAconfig.General_GenshinEXEPath == "":
+                    path = get_yuanshen_exe_path()
+                    if path != "":
+                        if path != GIAconfig.General_GenshinEXEPath:
+                            logger.debug(f'genshin exe path setted as {path}')
+                            j = load_json()
+                            j['GenshinEXEPath'] = path
+                            save_json(j)
         listening.TASK_MANAGER.set_tasklist(pin.pin["task_list"])
         listening.TASK_MANAGER.start_stop_tasklist()
         # if pin.pin["MissionSelect"] != None and pin.pin["MissionSelect"] != "":
@@ -221,7 +264,8 @@ class MainPage(AdvancePage):
 
         time.sleep(0.2)
         output.clear('Button_StartStop')
-        output.put_button(label={False:t2t("启动任务"),True:t2t("运行中,点击停止任务")}[listening.TASK_MANAGER.start_tasklist_flag], onclick=self.on_click_startstop,
+        output.put_button(label={False: t2t("启动任务"), True: t2t("运行中,点击停止任务")}[
+            listening.TASK_MANAGER.start_tasklist_flag], onclick=self.on_click_startstop,
                           scope='Button_StartStop')
 
     def on_click_ip_address(self):

@@ -12,5 +12,6 @@
   "DeterminingStrictWeight":0.9,
   "InteractionMode": "Desktop",
   "Python32Path": "",
-  "Version":"v0.9.1.1128"
+  "Version":"v0.9.1.1128",
+  "GenshinEXEPath":""
 }
