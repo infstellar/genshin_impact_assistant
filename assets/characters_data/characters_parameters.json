@@ -853,5 +853,17 @@
         "vision": "Dendro",
         "trigger": "e_ready",
         "position": "Shield"
+    },
+    "Charlotte": {
+        "E_short_cd_time": 12,
+        "E_long_cd_time": 18,
+        "Elast_time": 12,
+        "Epress_time": 1.8,
+        "Qcd_time": 20,
+        "Qlast_time": 4,
+        "tactic_group": "e?e~:none;q?q:none;",
+        "vision": "Cryo",
+        "trigger": "e_ready",
+        "position": "Normal"
     }
 }

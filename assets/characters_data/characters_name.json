@@ -961,5 +961,15 @@
         "character-main"
       ],
       "zhCN": "芙宁娜"
+    },
+    {
+      "en": "Charlotte",
+      "ja": "シャルロット",
+      "notes": "英語の発音は「シャーロット」。タグのプレイアブル・NPC 分類は仮。",
+      "tags": [
+        "fontaine",
+        "character-main"
+      ],
+      "zhCN": "夏洛蒂"
     }
-  ]
+]
