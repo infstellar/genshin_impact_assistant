@@ -37,7 +37,7 @@ def main():
     webio.manager.reg_page('MainPage', MainPage())
     webio.manager.reg_page('SettingPage', SettingPage())
     webio.manager.reg_page('CombatSettingPage', CombatSettingPage())
-    webio.manager.reg_page("CollectorSettingPage", CollectorSettingPage())
+    # webio.manager.reg_page("CollectorSettingPage", CollectorSettingPage())
     webio.manager.reg_page("MissionPage", MissionPage())
     webio.manager.reg_page("MissionDownloadPage", MissionDownloadPage())
     webio.manager.reg_page("convert kongying Tavern's route to mission", Tavern2Mission())

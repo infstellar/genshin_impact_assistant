@@ -113,7 +113,7 @@ class MainPage(AdvancePage):
 
             # refresh performance bar
 
-            output.set_progressbar(name=self.PROCESSBAR_PERFORMANCE, value=generic_event.dilation_rate,
+            output.set_processbar(name=self.PROCESSBAR_PERFORMANCE, value=generic_event.dilation_rate,
                                    label=f'{generic_event.dilation_rate_note}     {t2t("running speed")}: {round(generic_event.dilation_rate, 2) * 100}%')
             # output.clear(self.SCOPE_PERFORMANCE)
             if generic_event.dilation_rate <= 0.6:
