@@ -4,7 +4,7 @@ from source.common.base_threading import AdvanceThreading
 from source.mission.index_generator import generate_mission_index
 generate_mission_index()
 logger.debug(f"generate mission index succ")
-import missions.mission_index
+import missions.mission_index as MI
     
 
 class MissionManager(AdvanceThreading):
@@ -16,10 +16,13 @@ class MissionManager(AdvanceThreading):
         self.missions_list = mission_list
 
     def exec_mission(self, mission_name):
-        mission = missions.mission_index.get_mission_object(mission_name)
-        self._add_sub_threading(mission, start=False)
-        self.blocking_startup(mission)
-        mission.stop_threading()
+        mission = MI.get_mission_object(mission_name)
+        if mission != None:
+            self._add_sub_threading(mission, start=False)
+            self.blocking_startup(mission)
+            mission.stop_threading()
+        else:
+            logger.warning(t2t('Cannot find mission: ')+str(mission_name))
     
     def start_missions(self):
         # self.sub_threading_list = []

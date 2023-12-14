@@ -18,6 +18,8 @@ from source.webio.webpages.tavern2mission import Tavern2Mission
 status = True
 global first_run
 first_run = False
+
+
 def get_branch_commit_id():
     res = subprocess.Popen('git rev-parse --short HEAD', shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                            stderr=subprocess.PIPE)
@@ -29,7 +31,9 @@ def get_branch_commit_id():
                            stderr=subprocess.PIPE)
     res.wait()
     branch = res.stdout.read().decode('utf8').replace('\n', '')
-    return branch,commit_id
+    return branch, commit_id
+
+
 def main():
     global first_run
     pywebio.session.set_env(output_max_width='80%', title=f"GIA {GIA_VERSION} {get_branch_commit_id()[1]}")
