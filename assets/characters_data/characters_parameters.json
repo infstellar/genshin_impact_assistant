@@ -834,13 +834,13 @@
         "E_short_cd_time": 20,
         "E_long_cd_time": 20,
         "Elast_time": 30,
-        "Epress_time": 0,
+        "Epress_time": 2,
         "Qcd_time": 15,
         "Qlast_time": 18,
-        "tactic_group": "e?e~:none;q?q:none;",
+        "tactic_group": "e?e:none;q?q:none;",
         "vision": "Hydro",
         "trigger": "e_ready",
-        "position": "Recovery"
+        "position": "Support"
     },
     "Kirara": {
         "E_short_cd_time": 8,
@@ -861,9 +861,9 @@
         "Epress_time": 1.8,
         "Qcd_time": 20,
         "Qlast_time": 4,
-        "tactic_group": "e?e~:none;q?q:none;",
+        "tactic_group": "e?e:none;#@e?a:none;q?q:none;",
         "vision": "Cryo",
         "trigger": "e_ready",
-        "position": "Normal"
+        "position": "Recovery"
     }
 }

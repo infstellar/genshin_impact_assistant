@@ -25,8 +25,8 @@ class UI():
         """
         Handle all annoying popups during UI switching.
         """
-        if page_loading.is_current_page():
-            while page_loading.is_current_page():
+        if page_loading.is_current_page(itt):
+            while page_loading.is_current_page(itt):
                 itt.delay(1, comment='genshin is loading...')
 
         pass

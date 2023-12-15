@@ -386,6 +386,6 @@ class ConfigPage(AdvancePage):
                 elif type(v) == list:
                     self._show_list(level, display_name, scope_name, component_name, doc, v, doc_special)
             if doc_annotation != None:
-                    output.put_text(doc_annotation, scope=scope_name)
+                    output.put_markdown(doc_annotation, scope=scope_name)
                     output.put_text("\n", scope=scope_name).style("font-size: 1px")
 
