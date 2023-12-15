@@ -1,4 +1,4 @@
-GIA_VERSION = "v1.0.0.1178"
+GIA_VERSION = "v1.0.0.1190"
 """Constants."""
 
 # Devices
