@@ -61,6 +61,8 @@ class MainPage(AdvancePage):
             except SessionClosedException:
                 logger.info(t2t("未找到会话，可能由于窗口关闭。请刷新页面重试。"))
                 return
+            except AssertionError:
+                pass
             if pin.pin['FlowMode'] != listening.SEMIAUTO_FUNC_MANAGER.last_d:  # 比较变更是否被应用
                 listening.SEMIAUTO_FUNC_MANAGER.last_d = pin.pin['FlowMode']  # 应用变更
                 listening.SEMIAUTO_FUNC_MANAGER.apply_change(pin.pin['FlowMode'])

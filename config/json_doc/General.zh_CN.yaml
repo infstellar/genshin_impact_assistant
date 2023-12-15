@@ -7,7 +7,7 @@ BorderlessWindow:
   annotation: 全屏或无边窗窗口化时设置为True，窗口化时设置为False。
 
 DEBUG: 
- doc: 调试模式
+ doc: 调试模式(DEBUG_MODE)
 
 CorrDegree:
   doc: 视角校准

@@ -32,7 +32,7 @@ class Tavern2Mission(AdvancePage):
     
     def _load(self):
         with output.use_scope(self.main_scope):
-            pin.put_file_upload(self.FILE_UPLOAD_ROUTE, label=t2t('upload route json file'), accept='.json')
+            pin.put_pin_upload(self.FILE_UPLOAD_ROUTE, label=t2t('upload route json file'), accept='.json')
             output.put_button(self.BUTTON_UPLOAD_FILE, onclick=self._upload_file)
             # output.put_button('load file', onclick=self._)
             output.put_scope(self.SCOPE_POSSIBLE_ROUTE)

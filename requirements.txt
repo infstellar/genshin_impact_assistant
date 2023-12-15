@@ -22,7 +22,7 @@ scipy
 py7zr
 
 PyAutoGUI==0.9.53
-pywebio
+pywebio==1.8.3
 pydirectinput
 
 

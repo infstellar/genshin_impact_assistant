@@ -2,6 +2,7 @@
 from source.path_lib import *
 from source.config.util import *
 from source.config.config_generated import GeneratedConfig
+from source.logger import logger
 
 
 
@@ -39,6 +40,12 @@ class GIAConfig(GeneratedConfig):
                 j_config = {}
             else:
                 j_config = load_json(json_name=f"{jsonname}.json", folder_path=fr"{CONFIG_PATH}/settings")
+            keys = list(j_config.keys())
+            for k in keys:
+                if j_config[k] is None:
+                    logger.warning(f'The key of {k} is None')
+                    j_config.pop(k)
+
             j_template.update(j_config)
             # for k in j_template:
             #     if k in j_config:

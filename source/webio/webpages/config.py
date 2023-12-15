@@ -11,6 +11,7 @@ from source.config.cvars import *
 
 class ConfigPage(AdvancePage):
     def __init__(self, config_file_name):
+        pin.pin.use_strict()
         super().__init__(document_link=f'https://genshinimpactassistant.github.io/GIA-Document/#/{GLOBAL_LANG}/gui')
 
         # self.main_scope = "SettingPage"
@@ -84,6 +85,8 @@ class ConfigPage(AdvancePage):
             except SessionNotFoundException:
                 logger.info(t2t("未找到会话，可能由于窗口关闭。请刷新页面重试。"))
                 return
+            except AssertionError:
+                pass
                 
             if pin.pin['file'] != self.last_file:  # 当下拉框被更改时
                 self.last_file = pin.pin['file']
@@ -199,7 +202,12 @@ class ConfigPage(AdvancePage):
                 else:
                     rt_json[k] = list_text2list(pin.pin['{}-{}'.format(add_name, k_sha1)])
             else:
-                rt_json[k] = pin.pin['{}-{}'.format(add_name, k_sha1)]
+                try:
+                    pin_value = pin.pin['{}-{}'.format(add_name, k_sha1)]
+                    rt_json[k] = pin_value
+                except AssertionError:
+                    logger.debug(f'the value of {k} is empty, probably it is hidden.')
+                    rt_json[k] = j[k]
 
         return rt_json
 
@@ -336,6 +344,7 @@ class ConfigPage(AdvancePage):
             doc_special = None
             doc_annotation = None
             doc_type = None
+            doc_conceal = False
             if k in doc:
                 # 判断doc的类型
                 if type(doc[k]) == dict:
@@ -351,6 +360,8 @@ class ConfigPage(AdvancePage):
                         doc_annotation = doc[k]['annotation']
                     if 'type' in doc[k]:
                         doc_type = doc[k]['type']
+                    if 'conceal' in doc[k]:
+                        doc_conceal = True
                 if type(doc[k]) == str:
                     doc_now = doc[k]
             # 取显示名称
@@ -358,7 +369,8 @@ class ConfigPage(AdvancePage):
 
             k_sha1 = hashlib.sha1(k.encode('utf8')).hexdigest()
             component_name = '{}-{}'.format(add_name, k_sha1)
-            
+            if doc_conceal:
+                continue
             if doc_type != None:
                 if doc_type == 'int':
                     self._show_int(doc_items, component_name, display_name, scope_name, v, doc_special)
