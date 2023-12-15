@@ -1,4 +1,3 @@
-
 # from source.interaction import *
 
 from source.util import *
@@ -15,8 +14,6 @@ MODE_NORMAL = 'Normal'
 MODE_SHIELD = 'Shield'
 MODE_CORE = "Core"
 MODE_RECOVER = 'Recover'
-
-
 
 
 def sort_flag_1(x: character.Character):
@@ -42,7 +39,7 @@ class CombatController(AdvanceThreading):
         self.mode = "Normal"
         self.sco.mode = self.mode
         # self.super_stop_func=super_stop_func
-    
+
     def loop(self):
         if self.is_check_died:
             if itt.get_img_existence(asset.IconCombatCharacterDied):
@@ -72,7 +69,6 @@ class CombatController(AdvanceThreading):
         if self.pause_threading_flag != True:
             self.pause_threading_flag = True
             self.sco.pause_threading()
-
 
     def checkup_trapped(self):
         pass

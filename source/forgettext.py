@@ -1,4 +1,4 @@
-from source.util import *
+from source.util import t2t
 t2t("day(s)")
 t2t("success rate")
 t2t("total num")

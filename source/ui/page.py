@@ -1,16 +1,21 @@
 import traceback
-from source.manager import asset, img_manager
+from typing import List, Union
 
+from source.manager import asset, img_manager
+from source.assets.ui import *
 
 class UIPage():
     parent = None
 
-    def __init__(self, check_icon: img_manager.ImgIcon):
+    def __init__(self, check_icon: Union[img_manager.ImgIcon, List]):
         self.links = {}
         (filename, line_number, function_name, text) = traceback.extract_stack()[-2]
         self.name = text[:text.find('=')].strip()
         self.check_icon_list = []
-        self.check_icon_list.append(check_icon)
+        if isinstance(check_icon, List):
+            self.check_icon_list = check_icon
+        elif isinstance(check_icon, img_manager.ImgIcon):
+            self.check_icon_list.append(check_icon)
 
     def __eq__(self, other):
         return self.name == other.name
@@ -45,6 +50,7 @@ page_domain = UIPage(check_icon=asset.IconUIInDomain)
 page_bigmap = UIPage(check_icon=asset.IconUIBigmap)
 page_time = UIPage(check_icon=asset.IconUITimeMenuCore)
 page_configure_team = UIPage(check_icon=asset.IconUIPartySetup)
+page_loading = UIPage(check_icon=[IconUILoading1, IconUILoading2])
 
 page_main.link('m', page_bigmap)
 page_main.link('esc', page_esc)
@@ -54,3 +60,4 @@ page_esc.link(asset.ButtonUIEnterPartySetup, page_configure_team)
 page_time.link(asset.ButtonGeneralExit, page_esc)
 page_bigmap.link('m', page_main)
 page_configure_team.link('esc', page_esc)
+
