@@ -663,5 +663,12 @@
       "フリーナ"
     ],
     "standard_name": "Furina"
+  },
+  {
+    "alias": [
+      "夏洛蒂",
+      "シャルロット"
+    ],
+    "standard_name": "Charlotte"
   }
 ]

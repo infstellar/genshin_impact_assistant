@@ -9,9 +9,11 @@ DeviceTorch:
 
 CaptureMode:
   select_items: [fast]
+  conceal: true
 
 InteractionMode:
-  select_items: [Desktop, Emulator, DesktopBackground]
+  select_items: [Desktop]
+  conceal: true
 
 Resin: 
   select_items: [20,40]
@@ -21,5 +23,18 @@ BlossomType:
 
 DomainName:
   special_index: $INPUT_VERIFY$#domain_name
+
+CloudGenshin:
+  conceal: true
+
+CheckImport:
+  conceal: true
+
+Python32Path:
+  conceal: true
+
+UsingAlphaChannel:
+  conceal: true
+
 
 

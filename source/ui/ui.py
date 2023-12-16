@@ -5,9 +5,9 @@ from source.ui.page import *
 from threading import Lock
 
 from source.interaction.interaction_core import itt
+from source.exceptions.ui import *
 
-class PageNotFoundError(Exception):
-    pass
+
 
 class UI():
     
@@ -25,10 +25,19 @@ class UI():
         """
         Handle all annoying popups during UI switching.
         """
+        if page_loading.is_current_page(itt):
+            while page_loading.is_current_page(itt):
+                itt.delay(1, comment='genshin is loading...')
+
         pass
     
-    def get_page(self):
+    def get_page(self, retry_times=0):
         ret_page = None
+
+        # when ui_addition is complete, enable it
+        # if retry_times >= 20:
+        #     raise PageNotFoundError
+
         for page in self.ui_pages:
             if page.is_current_page(itt, print_log = True):
                 if ret_page is None:
@@ -39,7 +48,7 @@ class UI():
             logger.warning(t2t("未知Page, 重新检测"))
             self.ui_additional()
             time.sleep(1)
-            ret_page = self.get_page()  
+            ret_page = self.get_page(retry_times=retry_times+1)
         return ret_page
 
     def verify_page(self, page:UIPage) -> bool:
@@ -75,6 +84,7 @@ class UI():
 
         logger.info(f"UI goto {destination}")
         confirm_timer = AdvanceTimer(confirm_wait, count=1)
+        timeout_timer = AdvanceTimer(5)
         while 1:
             # GOTO_MAIN.clear_offset()
             # if skip_first_screenshot:

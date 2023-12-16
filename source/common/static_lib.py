@@ -14,12 +14,17 @@ def get_handle():
         _type_: _description_
     """
     if not GIAconfig.General_CloudGenshin:
+        if GLOBAL_LANG == 'zh_CN':
+            handle = ctypes.windll.user32.FindWindowW(None, '原神')
+            if handle != 0:
+                return handle
         handle = ctypes.windll.user32.FindWindowW(None, 'Genshin Impact')
         if handle != 0:
             return handle
         handle = ctypes.windll.user32.FindWindowW(None, '原神')
         if handle != 0:
             return handle
+        
     else:
         handle = ctypes.windll.user32.FindWindowW("Qt5152QWindowIcon", '云·原神')
         if handle != 0:

@@ -5,7 +5,7 @@ def upd_message():
     ret_message = ""
     version_num = int(GIAconfig.General_Version.split('.')[-1])
     if version_num != int(GIA_VERSION.split(".")[-1]):
-        ret_message += t2t("GIA 已升级到") + f"{GIA_VERSION}. \n"
+        ret_message += "# " + t2t("GIA 已升级到") + f"{GIA_VERSION} \n"
 
     if version_num == 0:
         ret_message = t2t("Welcome to GIA!") + '\n\n'
@@ -38,7 +38,23 @@ def upd_message():
             ret_message += "角色支持增加到4.2\n"\
                            "增加对那维莱特转圈圈的适配\n"
         if version_num < 1176:
-            ret_message += "添加新自定义任务创建方式\n"
+            ret_message += t2t('''
+## v1.0.0.1176 新内容：
+- 添加新自定义任务创建方式          
+''')
+        if version_num < 1190:
+            ret_message += t2t('''
+## v1.0.0.1190 新内容：
+- 自动启动原神  
+- 修复OCR坐标展开错误
+- 适配夏洛蒂  
+- 修复芙宁娜的战斗策略  
+- 暂时禁用通用采集  
+- 自动忽略无效任务名    
+- 识别加载页面  
+- 自动修复无效config参数  
+- 已知bug修复  
+''')
 
     x = load_json()
     x["Version"] = GIA_VERSION
