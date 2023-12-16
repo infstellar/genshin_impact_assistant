@@ -34,7 +34,17 @@ class ClaimRewardMission(MissionExecutor, Talk):
                 rewards.append("Commission")
         logger.info(rewards)
         return rewards
-    
+
+    def claim_battle_path(self):
+        itt.key_press('F4')
+        itt.delay('2animation')
+        itt.appear_then_click(ButtonSwitchToBattlePathDailyMission)
+        itt.delay('2animation')
+        itt.appear_then_click(ButtonClaimBattlePathDailyMission)
+        itt.delay('2animation')
+        itt.key_press('esc')
+        itt.delay('2animation')
+
     def _exec_dispatch(self):
         def reset_character():
             while 1:
@@ -82,6 +92,9 @@ class ClaimRewardMission(MissionExecutor, Talk):
                 self.talk_switch(DispatchCharacterOnExpedition)
                 self._exec_dispatch()
                 self.exit_talk()
+        ui_control.ensure_page(UIPage.page_main)
+        if itt.appear(IconBattlePathExclamation):
+            self.claim_battle_path()
         
 class ClaimRewardTask(TaskTemplate):
     def __init__(self):
