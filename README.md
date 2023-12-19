@@ -1,5 +1,5 @@
 # 原神小助手 Genshin Impact Assistant 
-**|[Chinese](https://genshinimpactassistant.github.io/GIA-Document/#/)|[English](https://genshinimpactassistant.github.io/GIA-Document/#/en_US/)|**
+**|[Chinese](https://genshinimpactassistant.github.io/GIA-Document/#/zh_CN/)|[English](https://genshinimpactassistant.github.io/GIA-Document/#/en_US/)|**
 <div align="center">
 
 基于图像识别和模拟按键的多功能原神自动辅助操作,包括自动战斗,自动刷秘境,自动刷大世界材料。  
@@ -27,7 +27,7 @@ To没用过github的小伙伴: 描述文档中的蓝色文字是链接,可以打
 
 ## 详细信息 Complete Documentation 
 
-**[中文文档](https://genshinimpactassistant.github.io/GIA-Document/#/)** **如果喜欢，点个星星~** ⭐  
+**[中文文档](https://genshinimpactassistant.github.io/GIA-Document/#/zh_CN/)** **如果喜欢，点个星星~** ⭐  
 **[English Document](https://genshinimpactassistant.github.io/GIA-Document/#/en_US/)** **star~** ⭐  
 
 ## 演示视频 Demo Video 
@@ -45,7 +45,7 @@ Functions currently available
 ### 4. 每日委托(仅部分委托) Auto Daily Commission Assist 
 ### 5. 领取日常奖励 Claim Daily Reward 
 ### 6. 自动地脉衍出辅助 Auto Lay Line Outcrop Assist 
-更多信息，查阅 **[中文文档](https://genshinimpactassistant.github.io/GIA-Document/#/)**  
+更多信息，查阅 **[中文文档](https://genshinimpactassistant.github.io/GIA-Document/#/zh_CN/)**  
 For more details, see **[English Document](https://genshinimpactassistant.github.io/GIA-Document/#/en_US/)**  
 
 
