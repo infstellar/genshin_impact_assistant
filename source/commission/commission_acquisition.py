@@ -11,16 +11,6 @@ example: ASmallStepForHilichurlsN1000P1000
 commission name: 
 thanks for https://genshin-dictionary.com/
 
-IncreasingDanger IcD
-ASmallStepForHilichurls AASFH
-PudgyPyrotechnicians PP
-IcyIssues II
-BigPudgyProblem BPP
-RulesOfSafeTransportation ROST
-DangerousHaul DH
-ImpregnableDefense IpD
-etc.
-
 commission position: where commission located 
 format: (P/N)xxxC(P/N)xxx
 P:+ N:- 
