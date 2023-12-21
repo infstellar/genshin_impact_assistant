@@ -46,36 +46,40 @@ class ClaimRewardMission(MissionExecutor, Talk):
         itt.delay('2animation')
 
     def _exec_dispatch(self):
-        def reset_character():
-            while 1:
-                cap = itt.capture(jpgmode=NORMAL_CHANNELS)
-                complete_posi = match_multiple_img(cap, IconExpeditionComplete.image, ignore_close=True)
-                complete_posi += match_multiple_img(cap, IconExpeditionComplete2.image, ignore_close=True)
-                if len(complete_posi)==0:
-                    return
-                chara_head_posi = np.array(complete_posi)+np.array([80,80])
-                for posi in chara_head_posi:
-                    itt.move_and_click(posi)
-                    itt.delay("2animation")
-                    r1 = itt.appear_then_click(ButtonExpeditionClaim)
-                    itt.delay("2animation")
-                    itt.move_and_click(ButtonExpeditionClaim.click_position())
-                    itt.delay("2animation")
-                    itt.appear_then_click(ButtonExpeditionSelectCharacters)
-                    itt.delay("2animation")
-                    i=0
-                    while 1:
-                        cp = ButtonExpeditionFirstCharacter.click_position()
-                        itt.move_and_click([cp[0],cp[1]+i])
-                        itt.delay("2animation")
-                        if itt.get_img_existence(IconClaimRewardExpedition):
-                            break
-                        i+=80
-        for area in [ButtonExpeditionMD, ButtonExpeditionLY, ButtonExpeditionDQ, ButtonExpeditionXM]:   
-            r = itt.appear_then_click(area)
-            if not r: continue
-            itt.delay("2animation")
-            reset_character()
+        itt.appear_then_click(ButtonExpeditionClaimAll)
+        itt.delay(1)
+        itt.appear_then_click(ButtonExpeditionRestart)
+        itt.delay(1)
+        # def reset_character():
+        #     while 1:
+        #         cap = itt.capture(jpgmode=NORMAL_CHANNELS)
+        #         complete_posi = match_multiple_img(cap, IconExpeditionComplete.image, ignore_close=True)
+        #         complete_posi += match_multiple_img(cap, IconExpeditionComplete2.image, ignore_close=True)
+        #         if len(complete_posi)==0:
+        #             return
+        #         chara_head_posi = np.array(complete_posi)+np.array([80,80])
+        #         for posi in chara_head_posi:
+        #             itt.move_and_click(posi)
+        #             itt.delay("2animation")
+        #             r1 = itt.appear_then_click(ButtonExpeditionClaim)
+        #             itt.delay("2animation")
+        #             itt.move_and_click(ButtonExpeditionClaim.click_position())
+        #             itt.delay("2animation")
+        #             itt.appear_then_click(ButtonExpeditionSelectCharacters)
+        #             itt.delay("2animation")
+        #             i=0
+        #             while 1:
+        #                 cp = ButtonExpeditionFirstCharacter.click_position()
+        #                 itt.move_and_click([cp[0],cp[1]+i])
+        #                 itt.delay("2animation")
+        #                 if itt.get_img_existence(IconClaimRewardExpedition):
+        #                     break
+        #                 i+=80
+        # for area in [ButtonExpeditionMD, ButtonExpeditionLY, ButtonExpeditionDQ, ButtonExpeditionXM]:
+        #     r = itt.appear_then_click(area)
+        #     if not r: continue
+        #     itt.delay("2animation")
+        #     reset_character()
 
     def exec_mission(self):
         self.available_rewards = self.get_available_reward()
