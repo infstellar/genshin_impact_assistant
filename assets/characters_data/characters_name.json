@@ -971,5 +971,15 @@
         "character-main"
       ],
       "zhCN": "夏洛蒂"
+    },
+    {
+      "en": "Navia",
+      "ja": "ナヴィア",
+      "notes": "タグのプレイアブル・NPC 分類は仮",
+      "tags": [
+        "fontaine",
+        "character-main"
+      ],
+      "zhCN": "娜维娅"
     }
 ]

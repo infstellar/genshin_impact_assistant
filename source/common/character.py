@@ -72,6 +72,7 @@ class Character:
         
         # self._init_log()
         self.trigger_list = []
+        self.trigger_dict = {}
         self._trigger_analyses()
 
     def _get_position_tactic(self):
@@ -95,9 +96,11 @@ class Character:
         else:
             return False
 
-    @staticmethod
-    def _trigger_idle():
+    def _trigger_idle(self):
         return True
+
+    def _trigger_disable(self):
+        return False
 
     def _trigger_analyses(self):
         """
@@ -110,12 +113,21 @@ class Character:
         # elif self.triggers == 'idle':
         #     self.trigger = self._trigger_idle
         c_triggers = self.triggers.split(',')
-        if 'e_ready' in c_triggers:
-            self.trigger_list.append(self._trigger_e_ready)
-        elif 'q_ready' in c_triggers:
-            self.trigger_list.append(self._trigger_q_ready)
-        elif 'idle' in c_triggers:
-            self.trigger_list.append(self._trigger_idle)
+        for trigger_strs in c_triggers:
+            if ':' in trigger_strs:
+                trigger_str, trigger_priority = trigger_strs.split(':')
+                trigger_priority = int(trigger_priority)
+            else:
+                trigger_str = trigger_strs
+                trigger_priority = self.priority
+            if 'e_ready' in trigger_str:
+                self.trigger_list.append(self._trigger_e_ready)
+            elif 'q_ready' in trigger_str:
+                self.trigger_list.append(self._trigger_q_ready)
+            elif 'idle' in trigger_str:
+                self.trigger_list.append(self._trigger_idle)
+            elif 'disable' in trigger_str:
+                self.trigger_list.append(self._trigger_disable)
 
         self.trigger = self._is_trigger
         

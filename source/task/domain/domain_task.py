@@ -1,3 +1,4 @@
+from source.exceptions.domain_task import UnknownEnterPageError
 from source.util import *
 from source.task.domain.domain_flow_upgrade import DomainFlowController
 from source.teyvat_move.teyvat_move_flow_upgrade import TeyvatMoveFlowController
@@ -130,7 +131,10 @@ class DomainTask(TaskTemplate):
             self.flow_mode = TI.DT_MOVE_TO_DOMAIN
         else:
             logger.info(t2t("Unknown UI page"))
-            ui_control.ui_goto(UIPage.page_main)
+            if ui_control.is_valid_page():
+                ui_control.ui_goto(UIPage.page_main)
+            else:
+                raise UnknownEnterPageError
 
     def loop(self):
         if self.flow_mode == TI.DT_INIT:

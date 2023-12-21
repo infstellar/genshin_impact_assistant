@@ -160,7 +160,7 @@ class SwitchCharacterOperator(BaseThreading):
             _type_: _description_
         """
         for chara in self.chara_list:
-            logger.debug('check up in: ' + chara.name)
+            logger.debug('check up character in: ' + chara.name)
             if self.checkup_stop_func():
                 return 0
             if chara.n in self.died_character:  # died
@@ -253,6 +253,7 @@ class SwitchCharacterOperator(BaseThreading):
             logger.info(f"SCO is getting the character list")
             self.chara_list = combat_lib.get_chara_list()
             self.chara_list.sort(key=sort_flag_1, reverse=False)
+            self.chara_trigger_list = self.chara_list
             self.pause_threading_flag = False
             self.tactic_operator.set_parameter(None, None)
             self.tactic_operator.continue_threading()

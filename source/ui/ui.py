@@ -30,13 +30,20 @@ class UI():
                 itt.delay(1, comment='genshin is loading...')
 
         pass
-    
-    def get_page(self, retry_times=0):
+
+    def is_valid_page(self):
+        if self.get_page(raise_exception=False, max_retry=2) is not None:
+            return True
+        else:
+            return False
+
+    def get_page(self, retry_times=0, raise_exception = True, max_retry=5):
         ret_page = None
 
         # when ui_addition is complete, enable it
-        # if retry_times >= 20:
-        #     raise PageNotFoundError
+        if raise_exception and False:
+            if retry_times >= max_retry:
+                raise PageNotFoundError
 
         for page in self.ui_pages:
             if page.is_current_page(itt, print_log = True):
@@ -47,7 +54,7 @@ class UI():
         if ret_page is None:
             logger.warning(t2t("未知Page, 重新检测"))
             self.ui_additional()
-            time.sleep(1)
+            time.sleep(3)
             ret_page = self.get_page(retry_times=retry_times+1)
         return ret_page
 

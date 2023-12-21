@@ -865,5 +865,18 @@
         "vision": "Cryo",
         "trigger": "e_ready",
         "position": "Recovery"
+    },
+    "Navia": {
+        "E_short_cd_time": 4.5,
+        "E_long_cd_time": 9,
+        "Elast_time": 5,
+        "Epress_time": 2,
+        "Qcd_time": 15,
+        "Qlast_time": 12,
+        "tactic_group": "e?e:none;q?q:none;",
+        "vision": "Cryo",
+        "trigger": "e_ready",
+        "position": "Recovery",
+        "long_attack_time": 3
     }
 }

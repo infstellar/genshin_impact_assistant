@@ -670,5 +670,12 @@
       "シャルロット"
     ],
     "standard_name": "Charlotte"
+  },
+  {
+    "alias":[
+      "娜维娅",
+      "ナヴィア"
+    ],
+    "standard_name": "Navia"
   }
 ]
