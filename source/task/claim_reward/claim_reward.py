@@ -42,8 +42,9 @@ class ClaimRewardMission(MissionExecutor, Talk):
         itt.delay('2animation')
         itt.appear_then_click(ButtonClaimBattlePathDailyMission)
         itt.delay('2animation')
-        itt.key_press('esc')
-        itt.delay('2animation')
+        while not ui_control.verify_page(UIPage.page_main):
+            itt.key_press('esc')
+            itt.delay('2animation')
 
     def _exec_dispatch(self):
         itt.appear_then_click(ButtonExpeditionClaimAll)

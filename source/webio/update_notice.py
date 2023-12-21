@@ -55,6 +55,18 @@ def upd_message():
 - 自动修复无效config参数  
 - 已知bug修复  
 ''')
+        if version_num < 1204:
+            ret_message += t2t('''
+        ## v1.0.0.1204 新内容：
+        - 适配4.3探索派遣  
+        - 自动领取每日纪行任务奖励  
+        - 适配娜维娅  
+        - 新增`禁用`型触发器，自动战斗时，使用该触发器的角色将不会被切换上场。  
+        
+        ## 修复：  
+        - 识别未知UI页面
+        ''')
+
 
     x = load_json()
     x["Version"] = GIA_VERSION
