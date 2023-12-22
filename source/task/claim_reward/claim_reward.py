@@ -47,6 +47,7 @@ class ClaimRewardMission(MissionExecutor, Talk):
             itt.delay('2animation')
 
     def _exec_dispatch(self):
+        itt.delay(3)
         itt.appear_then_click(ButtonExpeditionClaimAll)
         itt.delay(1)
         itt.appear_then_click(ButtonExpeditionRestart)
