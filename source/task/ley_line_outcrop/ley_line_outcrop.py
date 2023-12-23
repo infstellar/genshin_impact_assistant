@@ -137,10 +137,10 @@ class LeyLineOutcropMission(MissionExecutor):
                     itt.key_press('f')
                 itt.delay("2animation")
                 while 1:
-                    if self.checkup_stop_func():return
+                    if self.checkup_stop_func(): return
+                    itt.appear_then_click(ButtonGeneralUseOriginResin)
                     if ui_control.verify_page(UIPage.page_main):
                         break
-                    itt.appear_then_click(ButtonGeneralUseOriginResin)
             except HandleExceptionInMission as e:
                 logger.error(t2t("HandleExceptionInMission")+f": {e}")
                 logger.error(str(e))
@@ -164,6 +164,7 @@ if __name__ == '__main__':
     # llom = LeyLineOutcropMission()
     # r = llom.touch_the_ley_line_blossom() # 3800 -6790 [ 3817.3453 -6775.5386]
     # print(r)
-    llot = LeyLineOutcropTask()
-    llot.start()
+    # llot = LeyLineOutcropTask()
+    # llot.start()
+    itt.appear_then_click(ButtonGeneralUseOriginResin)
     while 1: time.sleep(1)
