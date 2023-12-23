@@ -13,8 +13,8 @@ from source.ui.ui import ui_control
 from source.ui import page as UIPage
 
 SHIELD = 'Shield'
-CORE = 'Core'
-SUB_CORE = 'SubCore'
+# CORE = 'Core'
+# SUB_CORE = 'SubCore'
 ASSIST = "Assist"
 
 
@@ -84,8 +84,11 @@ class SwitchCharacterOperator(BaseThreading):
                         self.switch_character(switch_type="SHIELD")
                 else:
                     logger.debug("switch_character TRIGGER")
-                    self.switch_character(switch_type="TRIGGER")
-                    time.sleep(0.4)
+                    is_battled = self.switch_character(switch_type="TRIGGER")
+                    if is_battled:
+                        time.sleep(0.4)
+                    else:
+                        self.switch_character(switch_type="MAIN")
 
     def _check_and_reborn(self, x) -> bool:
         """重生角色
@@ -157,7 +160,7 @@ class SwitchCharacterOperator(BaseThreading):
             
 
         Returns:
-            _type_: _description_
+            bool: Whether the tactic is implemented
         """
         for chara in self.chara_list:
             logger.debug('check up character in: ' + chara.name)
@@ -171,6 +174,9 @@ class SwitchCharacterOperator(BaseThreading):
                 tg = chara.tactic_group
             elif switch_type in ["CORE", "SHIELD"] and chara.is_position_ready(switch_type):
                 tg = chara.tactic_group
+            elif switch_type == "MAIN":
+                if chara.position == 'Main':
+                    tg = 'a,a,a,a,a'
             if tg != None:
                 self.current_character_num = combat_lib.get_current_chara_num(self.checkup_stop_func)
                 logger.debug(
@@ -184,6 +190,7 @@ class SwitchCharacterOperator(BaseThreading):
                 self.tactic_operator.restart_executor()
                 self.tactic_operator.continue_threading()
                 return True
+        return False
 
     def _switch_character(self, x: int) -> bool:
         """_summary_
