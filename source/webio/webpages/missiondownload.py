@@ -395,7 +395,7 @@ class MissionDownloadPage(AdvancePage):
         # NOTE: Multi thread may be needed here.
         url = self.INDEX_URL
         try:
-            r = requests.get(url, headers=self.requests_headers)
+            r = requests.get(url, headers=self.requests_headers, verify=False)
             if r.status_code == 200:
                 result = r.text
                 self.available_missions = json.loads(result)
@@ -431,7 +431,7 @@ class MissionDownloadPage(AdvancePage):
         file_path = self._get_file_path(name)
         url = self._convert_url_to_download_link(url)
         try:
-            r = requests.get(url, headers=self.requests_headers)
+            r = requests.get(url, headers=self.requests_headers, verify=False)
             if r.status_code == 200:
                 # If the mission is already exist, it will be put into the backup folder.
                 if os.path.exists(file_path):
