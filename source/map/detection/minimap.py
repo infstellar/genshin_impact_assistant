@@ -5,7 +5,7 @@ from cached_property import cached_property
 from source.map.detection.resource import MiniMapResource
 from source.map.detection.utils import *
 from source.map.extractor.convert import MapConverter
-from source.funclib.small_map import jwa_3, posi_map
+from source.funclib.small_map import jwa_4, posi_map
 from source.util import *
 from source.interaction.interaction_core import itt
 # ONE_CHANNEL = 1
@@ -360,7 +360,7 @@ class MiniMap(MiniMapResource):
             return degree
         else:
             self.rotation_confidence = 0.9
-            degree = jwa_3(itt.capture(posi=posi_map, jpgmode=FOUR_CHANNELS))
+            degree = jwa_4(itt.capture(posi=posi_map, jpgmode=FOUR_CHANNELS))
             self.rotation = degree
             self.degree = degree
             return degree
@@ -372,7 +372,7 @@ class MiniMap(MiniMapResource):
         #     use_alpha = (self.scene == 'city')
         # else:
         #     use_alpha = False
-        use_alpha = False
+        use_alpha = True
         # minimap = self._get_minimap(image, radius=self.MINIMAP_RADIUS)
         # minimap = rgb2luma(minimap)
         if not use_alpha:

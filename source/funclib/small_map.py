@@ -5,7 +5,7 @@ from source.util import *
 itt = itt
 dx = 25
 dy = 25
-posi_map = [57 + dy, 15 + dx,278 - dy, 236 - dy ]
+posi_map = [57 + dy, 15 + dx, 278 - dy, 236 - dy]
 posi_teyvat_map = [57, 15, 278, 236]
 
 
@@ -35,7 +35,7 @@ def line2angle(p):
     return res
 
 
-def jwa_3(imsrc, alpha_threshold = 503): # 503
+def jwa_3(imsrc, alpha_threshold=503):  # 503
     alpha = imsrc[:, :, 3:]
     alpha = 255.0 - alpha
     # alpha = alpha[:360,:286:,:]
@@ -114,9 +114,137 @@ def jwa_3(imsrc, alpha_threshold = 503): # 503
 
     if degree > 180:
         degree -= 360
+    # cv2.imshow('123', cv2.drawMarker(alpha, position=(int(p[0]), int(p[1])), color=(255, 0, 255), markerSize=1,
+    #                                  markerType=cv2.MARKER_CROSS, thickness=5))
+    # cv2.waitKey(1)
+    # print(degree)
+    return degree
+
+    # logger.debug(str(p)+' '+str(Line2Angle(p)))
+    # alpha =cv2.circle(alpha, p, 3, (255, 0, 0))
+    # alpha =cv2.line(alpha, p, (120, 170), (0, 255, 0))
+    # cv2.imshow("Img", alpha)
+    # cv2.waitKey(0)
+    # p = p - (img_object.cols / 2, img_object.rows / 2)
+    # return p,Line2Angle(p)
+
+
+def jwa_4(imsrc, alpha_threshold=503):  # 503
+    alpha = imsrc[:, :, 3:]
+    alpha = 255.0 - alpha
+    # alpha = alpha[:360,:286:,:]
+    # alpha[:,303:,:]=0
+    # qshow(alpha)
+    alpha = alpha * 2
+    _, alpha = cv2.threshold(alpha, alpha_threshold, 0, cv2.THRESH_TOZERO_INV)
+    _, alpha = cv2.threshold(alpha, 50, 0, cv2.THRESH_TOZERO)
+    _, alpha = cv2.threshold(alpha, 50, 255, cv2.THRESH_BINARY)
+
     if CV_DEBUG_MODE:
-        cv2.imshow('123', cv2.drawMarker(alpha, position=(int(p[0]), int(p[1])), color=(255, 0, 255), markerSize=1,
-                                         markerType=cv2.MARKER_CROSS, thickness=5))
+        cv2.imshow('qs1', alpha)
+        cv2.waitKey(1)
+    # qshow(alpha)
+    cv2.circle(alpha,
+               (int(alpha.shape[0] / 2), int(alpha.shape[1] / 2)),
+               int((min(int(alpha.shape[0] / 2), int(alpha.shape[1] / 2)) * 1.20)),  # 1.21
+               (0, 0, 0), int((min(int(alpha.shape[0] / 2), int(alpha.shape[1] / 2)) * 0.6)))  # 0.42
+    if CV_DEBUG_MODE:
+        cv2.imshow('qs2', alpha)
+        cv2.waitKey(1)
+    cv2.circle(alpha,
+               (int(alpha.shape[0] / 2), int(alpha.shape[1] / 2)),
+               int((min(int(alpha.shape[0] / 2), int(alpha.shape[1] / 2)) * 0.6)), (0, 0, 0), -1)
+    if CV_DEBUG_MODE:
+        cv2.imshow('qs3', alpha)
+        cv2.waitKey(1)
+    # dilate_element = cv2.getStructuringElement(cv2.MORPH_RECT, (4, 4))
+    # alpha = cv2.dilate(alpha, dilate_element)
+    # erode_element = cv2.getStructuringElement(cv2.MORPH_RECT, (4, 4))
+    # alpha = cv2.erode(alpha, erode_element)
+
+    # erode_element = cv2.getStructuringElement(cv2.MORPH_RECT, (4, 4))
+    # alpha = cv2.erode(alpha, erode_element)
+    # dilate_element = cv2.getStructuringElement(cv2.MORPH_RECT, (4, 4))
+    # alpha = cv2.dilate(alpha, dilate_element)
+    alpha = alpha.astype('uint8')
+    # return alpha
+    contours, hierarcy = cv2.findContours(alpha, 0, 1)
+    if CV_DEBUG_MODE:
+        cv2.imshow('qs4', alpha)
+        cv2.waitKey(1)
+
+    maxBlack = 0
+    max_pixel = 0
+    max_id = 0
+    maxId = 0
+    boundRect = []
+    for i in range(len(contours)):
+        boundRect.append([])
+        if len(contours[i]) > maxBlack:
+            maxBlack = len(contours[i])
+            maxId = i
+        boundRect[i] = cv2.boundingRect(cv2.Mat(contours[i]))
+    if len(boundRect) == 0:
+        logger.warning('找不到小地图')
+        return -1
+    i = 0
+    for x, y, w, h in boundRect:
+        imagew = alpha[y:y + h, x:x + w]
+        pixel = len(imagew.astype(np.int8)[imagew == 0])
+        if pixel > max_pixel:
+            max_id = i
+            max_pixel = pixel
+            if CV_DEBUG_MODE:
+                cv2.imshow('qs5', imagew)
+                cv2.waitKey(1)
+        i += 1
+
+    x, y, w, h = boundRect[max_id]
+
+    p = [x + w / 2, y + h / 2]
+
+    origin_point = [int(alpha.shape[0] / 2) + 1, int(alpha.shape[1] / 2) + 1]
+    point = [p[0] - origin_point[0], -p[1] + origin_point[1]]
+
+    if point[0] == 0:
+        point[0] += 0.1
+    if point[1] == 0:
+        point[1] += 0.1
+
+    degree = math.degrees(math.atan((point[1]) / (point[0])))
+
+    if point[0] > 0 and point[1] > 0:
+        quadrant = 1
+        degree = degree
+    elif point[0] < 0 < point[1]:
+        quadrant = 2
+        degree += 180
+    elif point[0] < 0 and point[1] < 0:
+        quadrant = 3
+        degree += 180
+    elif point[0] > 0 > point[1]:
+        quadrant = 4
+        degree += 360
+
+    # degree = math.atan((point[1]/hypotenuse_length)/(point[0]/hypotenuse_length))*(180 / math.pi)
+    degree -= 90
+
+    if degree > 180:
+        degree -= 360
+    if CV_DEBUG_MODE:
+        # alpha.astype
+        # cv2.imshow('123', cv2.drawMarker(alpha, position=(int(p[0]), int(p[1])), color=(255, 0, 255), markerSize=1,
+        #                                  markerType=cv2.MARKER_CROSS, thickness=5))
+        # cv2.waitKey(1)
+        # print(degree)
+        ang = degree
+        img = alpha.copy()
+        if ang is not None:
+            # img = cv2.line(img, (img.shape[0] // 2, img.shape[0] // 2),
+            #                (int(img.shape[0] // 2 + 1000 * np.cos(ang)), int(img.shape[0] // 2 + 1000 * np.sin(ang))),
+            #                (255, 255, 0), 2)
+            img = cv2.line(img, origin_point, [int(x + w / 2), int(y + h / 2)], color=[255, 255, 255])
+        cv2.imshow('result213', img)
         cv2.waitKey(1)
         print(degree)
     return degree
@@ -180,10 +308,13 @@ def teyvat_smallmap_crusade_target_search(itt: interaction_core.InteractionBGD, 
 
 if __name__ == '__main__':
     # qshow(itt.capture(posi=posi_map))
+    # i=60
     while 1:
-        # r = jwa_3(itt.capture(posi=posi_map, jpgmode=FOUR_CHANNELS))
+        # i-=2
+        r = jwa_3(itt.capture(posi=posi_map, jpgmode=FOUR_CHANNELS))  # , alpha_threshold=i)
         # print(r)
-        teyvat_smallmap_crusade_target_search(itt)
+        # teyvat_smallmap_crusade_target_search(itt)
         time.sleep(0.1)
+        # print(i)
     # cv2.imshow('123', img1)
     # cv2.waitKey(0)
