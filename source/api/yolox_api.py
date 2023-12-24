@@ -301,9 +301,9 @@ def image_demo(predictor: Predictor, vis_folder, path, current_time, save_result
 
             logger.debug("Saving detection result in {}".format(save_file_name))
             cv2.imwrite(save_file_name, result_image)
-        ch = cv2.waitKey(0)
-        if ch == 27 or ch == ord("q") or ch == ord("Q"):
-            break
+        # ch = cv2.waitKey(0)
+        # if ch == 27 or ch == ord("q") or ch == ord("Q"):
+        #     break
         return addition_info, result_image
 
 

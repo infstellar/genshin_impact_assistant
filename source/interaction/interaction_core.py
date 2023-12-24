@@ -264,7 +264,7 @@ class InteractionBGD:
         elif isinstance(obj, img_manager.ImgIcon): # Button is also an Icon
             return self.get_img_existence(obj, use_cache=use_cache)
 
-    def appear_then_click(self, inputvar, is_gray=False, is_log = False):
+    def appear_then_click(self, inputvar, is_gray=False, is_log = DEBUG_MODE):
         """appear then click
 
         Args:

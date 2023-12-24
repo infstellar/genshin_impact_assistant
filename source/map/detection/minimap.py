@@ -5,7 +5,7 @@ from cached_property import cached_property
 from source.map.detection.resource import MiniMapResource
 from source.map.detection.utils import *
 from source.map.extractor.convert import MapConverter
-from source.funclib.small_map import jwa_3, posi_map
+from source.funclib.small_map import jwa_4, posi_map
 from source.util import *
 from source.interaction.interaction_core import itt
 # ONE_CHANNEL = 1
@@ -359,27 +359,35 @@ class MiniMap(MiniMapResource):
             self.rotation_confidence = round(peak_confidence(result), 3)
             return degree
         else:
-            return jwa_3(itt.capture(posi=posi_map, jpgmode=FOUR_CHANNELS))
+            self.rotation_confidence = 0.9
+            degree = jwa_4(itt.capture(posi=posi_map, jpgmode=FOUR_CHANNELS))
+            self.rotation = degree
+            self.degree = degree
+            return degree
+
 
     def update_rotation(self, image, layer=MapConverter.LAYER_Teyvat, update_position=True):
-        if image.shape[2]==4:
-            image = image[:,:,:3]
-            use_alpha = (self.scene == 'city')
-        else:
-            use_alpha = False
-        # use_alpha = False
+        # if image.shape[2]==4:
+        #     image = image[:,:,:3]
+        #     use_alpha = (self.scene == 'city')
+        # else:
+        #     use_alpha = False
+        use_alpha = True
         # minimap = self._get_minimap(image, radius=self.MINIMAP_RADIUS)
         # minimap = rgb2luma(minimap)
-        if layer == MapConverter.LAYER_Domain:
-            minimap = self._get_minimap(image, radius=self.MINIMAP_RADIUS)
-            minimap = rgb2luma(minimap)
+        if not use_alpha:
+            if layer == MapConverter.LAYER_Domain:
+                minimap = self._get_minimap(image, radius=self.MINIMAP_RADIUS)
+                minimap = rgb2luma(minimap)
+            else:
+                minimap = self._get_minimap_subtract(image, update_position=update_position)
+            self.rotation = self._predict_rotation(minimap, use_alpha=False)
+            if CV_DEBUG_MODE:
+                self.show_rotation(minimap, self.degree)
         else:
-            minimap = self._get_minimap_subtract(image, update_position=update_position)
+            minimap = None
+            self.rotation = self._predict_rotation(minimap, use_alpha=True)
 
-        self.rotation = self._predict_rotation(minimap, use_alpha=use_alpha)
-
-        # Uncomment this to debug
-        # self.show_rotation(minimap, self.degree)
 
         return self.rotation
 
@@ -454,7 +462,7 @@ class MiniMap(MiniMapResource):
         diff = (self.rotation - rotation) % 360
         return diff <= threshold or diff >= 360 - threshold
 
-if __name__ == '__main__':
+if __name__ == '__main__' and False:
     """
     MiniMap 模拟器监听测试
     """
@@ -483,15 +491,24 @@ if __name__ == '__main__':
     import time
     device = WindowsCapture()
     minimap = MiniMap(MiniMap.DETECT_Desktop_1080p)
-    # 坐标位置是 GIMAP 的图片坐标
-    minimap.init_position(MapConverter.convert_cvAutoTrack_to_GIMAP([1334,-4057]))
-    # 你可以移动人物，GIA会持续监听小地图位置和角色朝向
-    while 1:
-        image = itt.capture(jpgmode=FOUR_CHANNELS)
-        image = cv2.cvtColor(image, cv2.COLOR_BGRA2RGBA)
-        # if image.shape != (1080, 1920, 3):
-        #     time.sleep(0.3)
-        #     continue
 
-        minimap.update_minimap(image)
-        time.sleep(0.3)
+
+    if False:
+        # 坐标位置是 GIMAP 的图片坐标
+        minimap.init_position(MapConverter.convert_cvAutoTrack_to_GIMAP([1334,-4057]))
+        # 你可以移动人物，GIA会持续监听小地图位置和角色朝向
+        while 1:
+            image = itt.capture(jpgmode=FOUR_CHANNELS)
+            image = cv2.cvtColor(image, cv2.COLOR_BGRA2RGBA)
+            # if image.shape != (1080, 1920, 3):
+            #     time.sleep(0.3)
+            #     continue
+
+            minimap.update_minimap(image)
+            time.sleep(0.3)
+    if True:
+        while 1:
+            time.sleep(0.1)
+            minimap.update_rotation(itt.capture(),update_position=False)
+            print(minimap.rotation)
+            # minimap.show_rotation(minimap.rotation)

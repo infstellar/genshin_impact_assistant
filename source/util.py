@@ -28,7 +28,8 @@ traceback
 Union
 
 DEBUG_MODE = GIAconfig.General_DEBUG
-DEMO_MODE = False
+DEMO_MODE = CV_DEBUG_MODE = os.path.exists(os.path.join(ROOT_PATH, 'demomode.giamode'))
+CV_DEBUG_MODE = os.path.exists(os.path.join(ROOT_PATH, 'cvdebugmode.giamode'))
 INTERACTION_MODE = GIAconfig.General_InteractionMode
 IS_DEVICE_PC = True
 
