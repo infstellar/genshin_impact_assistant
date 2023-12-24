@@ -180,9 +180,9 @@ def jwa_4(imsrc, alpha_threshold=503):  # 503
     boundRect = []
     for i in range(len(contours)):
         boundRect.append([])
-        if len(contours[i]) > maxBlack:
-            maxBlack = len(contours[i])
-            maxId = i
+        # if len(contours[i]) > maxBlack:
+        #     maxBlack = len(contours[i])
+        #     maxId = i
         boundRect[i] = cv2.boundingRect(cv2.Mat(contours[i]))
     if len(boundRect) == 0:
         logger.warning('找不到小地图')
