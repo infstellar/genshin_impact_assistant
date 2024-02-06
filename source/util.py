@@ -6,7 +6,8 @@ from numpy import ndarray
 import cv2, yaml
 from PIL import Image, ImageDraw, ImageFont
 from collections import OrderedDict
-from typing import Union, List, Tuple 
+from typing import Union, List, Tuple
+import typing as t
 
 ROOT_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SOURCE_PATH = ROOT_PATH + '\\source'
@@ -26,6 +27,7 @@ shutil
 pickle
 traceback
 Union
+t
 
 DEBUG_MODE = GIAconfig.General_DEBUG
 DEMO_MODE = CV_DEBUG_MODE = os.path.exists(os.path.join(ROOT_PATH, 'demomode.giamode'))
@@ -372,7 +374,16 @@ def is_number(s):
 
     return False
 
+def float2str(n, decimal=3):
+    """
+    Args:
+        n (float):
+        decimal (int):
 
+    Returns:
+        str:
+    """
+    return str(round(n, decimal)).ljust(decimal + 2, "0")
 
 def get_active_window_process_name():
     """_summary_

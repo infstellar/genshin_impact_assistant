@@ -57,7 +57,7 @@ if DEBUG_MODE:
 else:
     logger.add(sys.stdout, level="INFO", backtrace=True)
 
-def hr(title, level=3):
+def hr(self, title, level=3):
     title = str(title).upper()
     if level == 1:
         logger.info('=' * 20 + ' ' + title + ' ' + '=' * 20)
@@ -73,20 +73,20 @@ def hr(title, level=3):
         logger.info(border)
 
 
-def attr(name, text):
+def attr(self, name, text):
     logger.info('[%s] %s' % (str(name), str(text)))
 
 
-def attr_align(name, text, front='', align=22):
+def attr_align(self, name, text, front='', align=22):
     name = str(name).rjust(align)
     if front:
         name = front + name[len(front):]
     logger.info('%s: %s' % (name, str(text)))
 
 
-logger.hr = hr
-logger.attr = attr
-logger.attr_align = attr_align
+logger.hr = types.MethodType(hr, logger)
+logger.attr = types.MethodType(attr, logger)
+logger.attr_align = types.MethodType(attr_align, logger)
 
 def add_logger_to_GUI(cb_func):
     logger.add(cb_func, level="INFO", backtrace=True, colorize=True)
