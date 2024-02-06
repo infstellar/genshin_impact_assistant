@@ -14,7 +14,7 @@ class GeneratedConfig:
    General_DeterminingStrictWeight = 0.9
    General_InteractionMode = 'Desktop'
    General_Python32Path = ''
-   General_Version = 'v0.9.1.1128'
+   General_Version = 'v0.9.1.1158'
    General_GenshinEXEPath = ''
    Collector_CollectionName = '史莱姆'
    Collector_CollectionType = 'ENEMY'

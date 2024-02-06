@@ -1,6 +1,6 @@
-import os.path
 import subprocess
-import sys
+import os, sys
+ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 
 sys.argv.pop(0)
 
@@ -23,3 +23,9 @@ if len(sys.argv) == 1:
         import installer_setup
 
         installer_setup.auto_setup()
+
+    elif sys.argv[0] == 'build':
+        import source.config.config_updater
+        import source.manager.asset_index_generator
+
+

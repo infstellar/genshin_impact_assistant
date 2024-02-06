@@ -26,7 +26,7 @@ class Ocr:
             lang: If None, use in-game language
         """
         if lang is None:
-            lang = 'zh_CN'
+            lang = GLOBAL_LANG
 
         self.name: str = 'testname1'
         self.lang: str = lang
