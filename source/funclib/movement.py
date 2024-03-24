@@ -184,7 +184,8 @@ def change_view_to_angle(tangle, stop_func=lambda: False, maxloop=25, offset=5, 
         if i > 0:
             CVDC.append_angle_result(dangle, calculate_delta_angle(cangle, old_angle))
         dangle = calculate_delta_angle(cangle, tangle)
-        dangle = CVDC.predict_target(dangle)  # 根据历史角度移动记录自适应角度移动大小。理论上这个模块应该加载到cview函数里，但是cview不能调用genshin_map，所以先这样吧。
+        # 感觉有问题，先禁用
+        # dangle = CVDC.predict_target(dangle)  # 根据历史角度移动记录自适应角度移动大小。理论上这个模块应该加载到cview函数里，但是cview不能调用genshin_map，所以先这样吧。
         if abs(dangle) < offset:
             break
         rate = min((0.6 / 50) * abs(dangle) + 0.4, 1)
