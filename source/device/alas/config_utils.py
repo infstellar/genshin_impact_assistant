@@ -6,6 +6,12 @@ from filelock import FileLock
 
 from source.device.alas.atomicwrites import atomic_write
 
+from pydantic import BaseModel,VERSION
+
+if VERSION.startswith('1.'):
+    from pydantic.main import ModelMetaclass
+else:
+    from pydantic._internal._model_construction import ModelMetaclass
 
 # https://stackoverflow.com/questions/8640959/how-can-i-control-what-scalar-form-pyyaml-uses-for-my-data/15423007
 def str_presenter(dumper, data):
@@ -201,3 +207,27 @@ def deep_iter(data, depth=0, current_depth=1):
                 yield [key] + child_path, child_value
     else:
         yield [], data
+
+
+class V2CompatMeta(ModelMetaclass): # type: ignore
+    def __new__(cls, name, bases, namespace, **kwargs):
+        if VERSION.startswith('1.'):
+            return super().__new__(cls, name, bases, namespace, **kwargs)
+        
+        # need to rename keep_untouched to ignored_types
+        configCls = namespace.get('Config', None)
+        if not configCls:
+            return super().__new__(cls, name, bases, namespace, **kwargs)
+        
+        ignored_types = getattr(configCls, 'keep_untouched', None)
+        if not ignored_types:
+            return super().__new__(cls, name, bases, namespace, **kwargs)
+        
+        # del 
+        delattr(configCls, 'keep_untouched')
+        setattr(configCls, 'ignored_types', ignored_types)
+
+        return super().__new__(cls, name, bases, namespace, **kwargs)
+
+class V2CompatBaseModel(BaseModel,metaclass=V2CompatMeta):
+    pass

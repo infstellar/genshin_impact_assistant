@@ -8,7 +8,7 @@ from source.device.alas.config_utils import *
 from source.map.extractor.convert import MapConverter
 
 from source.en_tools.poi_json_api import zh2en
-
+from source.device.alas.config_utils import V2CompatBaseModel
 
 class PointItemModel(BaseModel):
     count: int
@@ -16,7 +16,7 @@ class PointItemModel(BaseModel):
     itemId: int
 
 
-class PointInfoModel(BaseModel):
+class PointInfoModel(V2CompatBaseModel):
     content: str
     hiddenFlag: int
     id: int
