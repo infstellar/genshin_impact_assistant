@@ -8,9 +8,9 @@ class GuyInTheBackground_P2588N5905(Commission):
         super().__init__("GuyInTheBackground", [2588, -5905], is_CFCF=True, is_TMCF=True)
         
     def exec_mission(self):
-        # self.move_along(TLPP1,is_precise_arrival=True)
-        # self.talk_with_npc(Guy)
-        # self.talk_skip()
+        self.move_along(TLPP1,is_precise_arrival=True)
+        self.talk_with_npc(Guy)
+        self.talk_skip()
         self.move_along(TLPP2,is_precise_arrival=True)
         self.talk_with_npc(Tunner)
         self.talk_skip()
