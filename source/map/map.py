@@ -4,6 +4,7 @@ import source.ui.page as UIPage
 from source.interaction.interaction_core import itt
 from source.manager import asset
 from source.util import *
+
 if GLOBAL_LANG == 'zh_CN':
     from source.map.data.teleporter_zh_CN import DICT_TELEPORTER
 elif GLOBAL_LANG == 'en_US':
@@ -27,7 +28,7 @@ COORDINATE_KONGYING = "KongYing"
 
 
 class Map(MiniMap, BigMap, MapConverter):
-    
+
     def __init__(self):
         if IS_DEVICE_PC:
             super().__init__(device_type=MiniMap.DETECT_Desktop_1080p)
@@ -40,18 +41,16 @@ class Map(MiniMap, BigMap, MapConverter):
         self.BIGMAP_MOVE_MAX = 130  # 最大移动力度
         self.TP_RANGE = 350  # 在该像素范围内可tp
         self.MINIMAP_UPDATE_LIMIT = 0.1  # minimap更新最短时间
-        self.MINIMAP_ERROR_BASE_LIMIT = 20 # minimap基本更新误差
-        self.METER_PER_SECOND = 25 # 移动速度，m/s
+        self.MINIMAP_ERROR_BASE_LIMIT = 20  # minimap基本更新误差
+        self.METER_PER_SECOND = 25  # 移动速度，m/s
 
         self.smallmap_upd_timer = timer_module.Timer(10)
         self.small_map_init_flag = False
         self.lock = threading.Lock()
         self.check_bigmap_timer = timer_module.Timer(5)
         self.init_timer = timer_module.AdvanceTimer(5)
-        self.last_valid_position = [0,0]
+        self.last_valid_position = [0, 0]
         self.history_position_list = []
-        
-        
 
     def _upd_smallmap(self) -> None:
         # self.lock.acquire()
@@ -74,20 +73,20 @@ class Map(MiniMap, BigMap, MapConverter):
         """
         # print(self.check_bigmap_timer.get_diff_time())
         curr_posi = self.get_position()
-        if self.check_bigmap_timer.get_diff_time()<5:
-            offset_rate = min(1, (self.check_bigmap_timer.get_diff_time())*0.1+0.5)
+        if self.check_bigmap_timer.get_diff_time() < 5:
+            offset_rate = min(1, (self.check_bigmap_timer.get_diff_time()) * 0.1 + 0.5)
         else:
-            offset_rate=1
-        print(offset_rate, 5-self.check_bigmap_timer.get_diff_time())
+            offset_rate = 1
+        print(offset_rate, 5 - self.check_bigmap_timer.get_diff_time())
         if not self.is_similarity_qualified(offset_rate):
             logger.error(f"Please waiting, similarity too low.")
             logger.info(f"{self.position_similarity} {self.position_similarity_local}")
-            i=0
+            i = 0
             itt.freeze_key('w', 'up')
             while 1:
                 time.sleep(0.05)
                 curr_posi = self.get_position()
-                if i>=20:
+                if i >= 20:
                     logger.warning(f"fail to get minimap position, try using bigmap instead.")
                     ui_control.ensure_page(UIPage.page_bigmap)
                     pp = self.get_bigmap_posi()
@@ -100,12 +99,12 @@ class Map(MiniMap, BigMap, MapConverter):
                 if self.is_similarity_qualified():
                     logger.info(f"Continue.")
                     break
-                i+=1
+                i += 1
             itt.unfreeze_key('w')
             self.check_bigmap_timer.reset()
         # print(self.check_bigmap_timer.get_diff_time())
         return curr_posi
-    
+
     def _is_reset_position(self, curr_posi, threshold=0.8):
         """如果有threshold％的数据超过150，则返回True。
 
@@ -121,10 +120,10 @@ class Map(MiniMap, BigMap, MapConverter):
             for i in self.history_position_list:
                 if euclidean_distance(i, curr_posi) >= 150:
                     over_times += 1
-            return over_times/20 > threshold
+            return over_times / 20 > threshold
         return False
-    
-    def get_position(self, is_verify_position = False):
+
+    def get_position(self, is_verify_position=False):
         """get current character position
 
         Returns:
@@ -143,23 +142,25 @@ class Map(MiniMap, BigMap, MapConverter):
             if self._is_reset_position(self.position):
                 self.history_position_list = []
             else:
-                last_dist = euclidean_distance(self.last_valid_position,self.convert_GIMAP_to_cvAutoTrack(self.position))
-                error_limit = self.MINIMAP_ERROR_BASE_LIMIT + self.smallmap_upd_timer.get_diff_time()*self.METER_PER_SECOND
+                last_dist = euclidean_distance(self.last_valid_position,
+                                               self.convert_GIMAP_to_cvAutoTrack(self.position))
+                error_limit = self.MINIMAP_ERROR_BASE_LIMIT + self.smallmap_upd_timer.get_diff_time() * self.METER_PER_SECOND
                 if last_dist > error_limit:
-                    logger.warning(f"migration of position {round(last_dist,2)} over limit {round(error_limit,2)}, give up position")
+                    logger.warning(
+                        f"migration of position {round(last_dist, 2)} over limit {round(error_limit, 2)}, give up position")
                     self.minimap_print_log()
                     return self.last_valid_position
-            
+
         self.smallmap_upd_timer.reset()
         r_posi = self.convert_GIMAP_to_cvAutoTrack(self.position)
         self.last_valid_position = r_posi
-        if len(self.history_position_list)>20:
+        if len(self.history_position_list) > 20:
             self.history_position_list.pop(0)
         return r_posi
 
     def is_similarity_qualified(self, offset_rate=1):
-        return self.position_similarity>=0.4*offset_rate and self.position_similarity_local>=0.05*offset_rate
-    
+        return self.position_similarity >= 0.4 * offset_rate and self.position_similarity_local >= 0.05 * offset_rate
+
     def reinit_smallmap(self) -> None:
         if ui_control.verify_page(UIPage.page_main):
             if self.init_timer.reached_and_reset():
@@ -175,7 +176,7 @@ class Map(MiniMap, BigMap, MapConverter):
 
     def get_smallmap_from_teleporter(self, area=None):
         if area == None:
-            area = ['Inazuma',"Liyue","Mondstadt"]
+            area = ['Inazuma', "Liyue", "Mondstadt"]
         tpers_dict = []
         rlist = []
         rd = []
@@ -186,24 +187,25 @@ class Map(MiniMap, BigMap, MapConverter):
                 tper = DICT_TELEPORTER[i]
                 if not tper.region in area:
                     continue
-                
+
                 # logger.info(f"init_position:{tper.position}")
                 self.init_position(tper.position)
                 self.get_position(is_verify_position=False)
-                d = euclidean_distance(self.get_position(is_verify_position=False), self.convert_GIMAP_to_cvAutoTrack(tper.position))
-                if d<=md:
+                d = euclidean_distance(self.get_position(is_verify_position=False),
+                                       self.convert_GIMAP_to_cvAutoTrack(tper.position))
+                if d <= md:
                     if tper in added:
                         continue
                     tpers_dict.append(
                         {
-                            'tper':tper,
-                            'd':d
+                            'tper': tper,
+                            'd': d
                         }
                     )
                     # logger.info(f"id {len(rlist)-1} position {tper.position} {tper.name} {tper.region}, d={d}")
                     added.append(tper)
-        tpers_dict.sort(key=lambda x:x['d'])
-        return [i['tper'] for i in tpers_dict], [i['d'] for i in tpers_dict]         
+        tpers_dict.sort(key=lambda x: x['d'])
+        return [i['tper'] for i in tpers_dict], [i['d'] for i in tpers_dict]
         # self.init_position(tuple(list(map(int,max_position))))
         # logger.info(f"init_smallmap_from_teleporter:{max_n} {max_position} {max_tper.name}")
 
@@ -211,19 +213,19 @@ class Map(MiniMap, BigMap, MapConverter):
         self.reinit_smallmap()
 
     def get_direction(self) -> float:
-        imsrc = cv2.cvtColor(itt.capture(jpgmode=NORMAL_CHANNELS),cv2.COLOR_BGR2RGB)
+        imsrc = cv2.cvtColor(itt.capture(jpgmode=NORMAL_CHANNELS), cv2.COLOR_BGR2RGB)
         # self.lock.acquire()
         self.update_direction(imsrc)
         # self.lock.release()
         # print(self.direction)
         return self.direction
-    
+
     def get_rotation(self) -> float:
         # self.lock.acquire()
         pt = time.time()
         self.update_rotation(itt.capture(jpgmode=NORMAL_CHANNELS))
-        if time.time()-pt>0.1:
-            logger.info(f"get_rotation spent too long: {time.time()-pt}")
+        if time.time() - pt > 0.1:
+            logger.info(f"get_rotation spent too long: {time.time() - pt}")
         # print(self.direction)
         # self.lock.release()
         return self.rotation
@@ -242,7 +244,7 @@ class Map(MiniMap, BigMap, MapConverter):
             # elif origin_page == UIPage.page_bigmap:
             #     ui_control.ui_goto(UIPage.page_main)
             #     ui_control.ui_goto(UIPage.page_bigmap)
-    
+
     def get_bigmap_posi(self, is_upd=True) -> GIMAPPosition:
         self.check_bigmap_scaling()
         if is_upd:
@@ -250,8 +252,7 @@ class Map(MiniMap, BigMap, MapConverter):
         logger.debug(f"bigmap posi: {self.convert_GIMAP_to_cvAutoTrack(self.bigmap)}")
         return GIMAPPosition(self.bigmap)
 
-
-    def _move_bigmap(self, target_posi, float_posi=0, force_center = False, csf=lambda:False) -> list:
+    def _move_bigmap(self, target_posi, float_posi=0, force_center=False, csf=lambda: False) -> list:
         """move bigmap center to target position
 
         Args:
@@ -279,7 +280,7 @@ class Map(MiniMap, BigMap, MapConverter):
 
         if csf():
             return
-        
+
         itt.move_to(screen_center_x + float_posi, screen_center_y + float_posi)  # screen center
 
         itt.left_down()
@@ -292,7 +293,7 @@ class Map(MiniMap, BigMap, MapConverter):
                 itt.move_to(-10, -10, relative=True)
                 if i % 2 == 0:
                     itt.left_down()
-        
+
         curr_posi = self.get_bigmap_posi().tianli
         dx = min((curr_posi[0] - target_posi[0]) * self.MAP_POSI2MOVE_POSI_RATE, self.BIGMAP_MOVE_MAX)
         dx = max(dx, -self.BIGMAP_MOVE_MAX)
@@ -311,7 +312,7 @@ class Map(MiniMap, BigMap, MapConverter):
         after_move_posi = self.get_bigmap_posi().tianli
         if not force_center:
             if euclidean_distance(self.convert_cvAutoTrack_to_InGenshinMapPX(after_move_posi),
-                                self.convert_cvAutoTrack_to_InGenshinMapPX(target_posi)) <= self.TP_RANGE:
+                                  self.convert_cvAutoTrack_to_InGenshinMapPX(target_posi)) <= self.TP_RANGE:
                 return list(
                     (self.convert_cvAutoTrack_to_InGenshinMapPX(target_posi))
                     -  # type: ignore
@@ -353,25 +354,35 @@ class Map(MiniMap, BigMap, MapConverter):
         return min_teleporter
 
     def _switch_to_area(self, tp_region):
-        
+
         while 1:
             siw()
+
             itt.appear_then_click(asset.ButtonBigmapSwitchMap)
-            if not itt.get_img_existence(asset.IconUIBigmap): break
+            if not itt.appear(asset.IconUIBigmap):
+                break
         if tp_region == "Mondstadt":
-            while not itt.appear_then_click(asset.MapAreaMD): siw()
+            tp_icon = asset.MapAreaMD
         elif tp_region == "Liyue":
-            while not itt.appear_then_click(asset.MapAreaLY): siw()
+            tp_icon = asset.MapAreaLY
         elif tp_region == "Inazuma":
-            while not itt.appear_then_click(asset.MapAreaDQ): siw()
+            tp_icon = asset.MapAreaDQ
         elif tp_region == "Sumeru":
-            while not itt.appear_then_click(asset.MapAreaXM): siw()
+            tp_icon = asset.MapAreaXM
+        else:
+            logger.error(t2t("Unknown region"))
         while 1:
-            time.sleep(0.1)
-            if itt.get_img_existence(asset.IconUIBigmap): break
+            siw()
+            itt.appear_then_click(tp_icon)
+            if itt.appear(asset.IconUIBigmap):
+                break
+        while 1:
+            siw()
+            if itt.appear(asset.IconUIBigmap):
+                break
             itt.appear_then_click(asset.ButtonBigmapCloseMarkTableInTP)
-            
-    def bigmap_tp(self, posi: list, tp_mode=0, tp_type: list = None, csf=lambda:False) -> TianLiPosition:
+
+    def bigmap_tp(self, posi: list, tp_mode=0, tp_type: list = None, csf=lambda: False) -> TianLiPosition:
         """传送到指定坐标。
 
         Args:
@@ -398,7 +409,7 @@ class Map(MiniMap, BigMap, MapConverter):
 
         click_posi = self._move_bigmap(tp_posi, csf=csf)
 
-        if tp_type == "Domain": # 部分domain有特殊名字
+        if tp_type == "Domain":  # 部分domain有特殊名字
             logger.debug("tp to Domain")
             itt.appear_then_click(asset.ButtonBigmapSwitchDomainModeOn)
             itt.delay(0.2)
@@ -406,19 +417,18 @@ class Map(MiniMap, BigMap, MapConverter):
         else:
             itt.appear_then_click(asset.ButtonBigmapSwitchDomainModeOff)
 
-        
-
         tp_timeout_1 = timer_module.TimeoutTimer(15)
         tp_timeout_1.reset()
         tp_timeout_2 = timer_module.TimeoutTimer(5)
         tp_timeout_2.reset()
-        
-        if not (itt.get_text_existence(asset.CSMD) or itt.get_text_existence(asset.QTSX) or itt.get_img_existence(asset.ButtonBigmapTP)):
+
+        if not (itt.get_text_existence(asset.CSMD) or itt.get_text_existence(asset.QTSX) or itt.get_img_existence(
+                asset.ButtonBigmapTP)):
             itt.move_and_click(click_posi)
-        
+
         while 1:
             if itt.appear_then_click(asset.ButtonBigmapTP): break
-            
+
             if tp_type == "Teleporter":
                 logger.debug("tp to Teleporter")
                 r = itt.appear_then_click(asset.CSMD)
@@ -443,7 +453,7 @@ class Map(MiniMap, BigMap, MapConverter):
             time.sleep(0.2)
 
         self.reinit_smallmap()
-        
+
         return TianLiPosition(tp_posi)
 
 
@@ -460,4 +470,3 @@ if __name__ == '__main__':
         # input()
         # itt.key_down('w')
         # print(genshin_map.get_and_verify_position())
-    

@@ -4,7 +4,7 @@ from source.config.util import *
 
 
 """
-生成commission index，提供导入。
+生成
 """
 
 commission_list = []
