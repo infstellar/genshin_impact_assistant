@@ -5,8 +5,6 @@ from source.ui import page as UIPages
 from source.commission.util import *
 from source.interaction.interaction_core import itt
 from source.manager import asset
-from source.commission.commission_index import COMMISSION_INDEX
-from source.commission.commission_acquisition import get_commission_object
 from source.api.pdocr_complete import ocr
 from source.common.timer_module import FileTimer
 
