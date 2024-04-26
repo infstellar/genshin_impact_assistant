@@ -47,5 +47,5 @@ def del_files():
             elif os.path.isdir(filePath):
                 shutil.rmtree(filePath) # 删除文件夹
 
-# del_files()
+del_files()
 copy_from_to(path1)
