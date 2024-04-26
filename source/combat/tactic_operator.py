@@ -526,6 +526,8 @@ class TacticOperator(BaseThreading):
                         self.estimate_lock_q_ready(tas)
                     else:
                         logger.warning(t2t("Unknown tactic key: ") + str(tas1))
+                elif tas == '':
+                    logger.debug('tactic key: null')
                 else:
                     logger.warning(t2t("Unknown tactic key: ")+str(tas))
 

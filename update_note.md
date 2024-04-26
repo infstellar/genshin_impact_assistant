@@ -1,4 +1,6 @@
 ## TODO：
+- Button增加点完之后的检测
+- 启动时检查python版本
 - commission set time
 - tlpp添加ENABLE_OPT选项
 - ui切完再检查一次

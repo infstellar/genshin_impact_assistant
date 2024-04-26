@@ -1,7 +1,8 @@
 from source.manager.util import *
 
+
 class TextTemplate(AssetBase):
-    def __init__(self, text:dict, cap_area=None, name=None) -> None:
+    def __init__(self, text:dict, cap_area=None, name=None, match_mode=CONTAIN_MATCHING) -> None:
         if name is None:
             super().__init__(get_name(traceback.extract_stack()[-2]))
         else:
@@ -15,7 +16,7 @@ class TextTemplate(AssetBase):
         self.origin_text = text
         self.cap_area = cap_area
         self.text = self.origin_text[GLOBAL_LANG]
-        
+        self.match_mode = match_mode
     def gettext(self):
         return self.origin_text[GLOBAL_LANG]
 

@@ -3,7 +3,7 @@ from source.util import *
 
 logger.info(t2t('Creating ocr object.'))
 from source.common.timer_module import Timer
-
+from source.api.utils import *
 pdocr_timer_performance = Timer()
 pdocr_timer_performance.reset()
 import inspect
@@ -27,19 +27,7 @@ logger.info(f"import pdocr time: {round(pdocr_timer_performance.get_diff_time(),
 
 #     paddle.fluid.install_check.run_check()
 #     globaldevice = 'cpu'
-CONTAIN_MATCHING = 0
-ACCURATE_MATCHING = 1
-TWICE_AND_MATCHING = 3
-TWICE_OR_MATCHING = 5
-TWICE_FRONTANDBACK_MATCHING = 4
-TWICE_FRONTANDBACK_SEQUENTIAL_MATCHING = 6
-REPEATLY_MATCHING = 7
-SHAPE_MATCHING = 8
 
-CHANNEL_RED = 2
-RETURN_TEXT = 1
-RETURN_POSITION = 0
-RETURN_POINT = 3
 
 REPLACE_DICT = {
             "惊垫":"惊蛰",
@@ -193,14 +181,14 @@ class PaddleOcrFastDeploy():
                      inspect.getframeinfo(inspect.currentframe().f_back)[2])
         return ret1, ret2
 
-if __name__ == '__main__':
-    ocr = PaddleOcrFastDeploy()
-    # imsrc = cv2.imread("D:\\test2.jpg")
-    # r = ocr.get_text_position(imsrc, "VsCode")
-    # print(r)# boxes, rec_scores, text
-    # imsrc = cv2.imread("D:\\test.jpg")
-    # r = ocr.get_text_position(imsrc, "VsCode")
-    print(ocr._replace_texts('纳西姐'))# boxes, rec_scores, text
+# if __name__ == '__main__':
+#     ocr = PaddleOcrFastDeploy()
+#     # imsrc = cv2.imread("D:\\test2.jpg")
+#     # r = ocr.get_text_position(imsrc, "VsCode")
+#     # print(r)# boxes, rec_scores, text
+#     # imsrc = cv2.imread("D:\\test.jpg")
+#     # r = ocr.get_text_position(imsrc, "VsCode")
+#     print(ocr._replace_texts('纳西姐'))# boxes, rec_scores, text
 
 
 
