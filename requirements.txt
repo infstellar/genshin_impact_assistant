@@ -21,8 +21,8 @@ keyboard
 scipy
 py7zr
 
-PyAutoGUI
-pywebio
+PyAutoGUI==0.9.53
+pywebio==1.8.3
 pydirectinput
 
 
@@ -31,8 +31,8 @@ uiautomator2
 uiautomator2cache
 filelock
 lxml
-pydantic
-gimap
+pydantic==1.10.11
+gimap==3.4.6
 giadep
 giaocr
 giayolo
@@ -48,7 +48,3 @@ scikit-learn
 requests
 dataclasses
 psutil
-
-pponnxcr
-pynput
-websockets
