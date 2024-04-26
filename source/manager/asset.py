@@ -3,6 +3,7 @@ from source.manager.img_manager import LOG_WHEN_TRUE, LOG_ALL, LOG_NONE, LOG_WHE
 from source.manager.button_manager import Button
 from source.manager.text_manager import TextTemplate, Text
 from source.manager.posi_manager import PosiTemplate, Area
+from source.api.utils import *
 
 # Button&ImgIcon&Area
 ButtonUISwitchToTimeMenu = Button(black_offset = 15, print_log=LOG_WHEN_TRUE)
@@ -80,10 +81,10 @@ BigIceColdCrisis = TextTemplate(text={"zh_CN":"冰凉凉的大团危机", "en_US
 SpreadingEvil = TextTemplate(text={"zh_CN":"邪恶的扩张", "en_US": "Spreading Evil"})
 BigPudgyProblem = TextTemplate(text={"zh_CN":"圆滚滚的大团骚乱", "en_US": "Big Pudgy Problem"})
 PudgyPyrotechnicians = TextTemplate(text={"zh_CN":"圆滚滚的易爆品", "en_US": "Pudgy Pyrotechnicians"})
-MapAreaMD = TextTemplate(text={"zh_CN":"蒙德", "en_US":"Mondstadt"}, cap_area = AreaBigmapSwitchMap.position)
-MapAreaLY = TextTemplate(text={"zh_CN":"璃月", "en_US":"Liyue"}, cap_area = AreaBigmapSwitchMap.position)
-MapAreaDQ = TextTemplate(text={"zh_CN":"稻妻", "en_US":"Inazuma"}, cap_area = AreaBigmapSwitchMap.position)
-MapAreaXM = TextTemplate(text={"zh_CN":"须弥", "en_US":"Sumeru"}, cap_area = AreaBigmapSwitchMap.position)
+MapAreaMD = TextTemplate(text={"zh_CN":"蒙德", "en_US":"Mondstadt"}, cap_area = AreaBigmapSwitchMap.position, match_mode = ACCURATE_MATCHING)
+MapAreaLY = TextTemplate(text={"zh_CN":"璃月", "en_US":"Liyue"}, cap_area = AreaBigmapSwitchMap.position, match_mode = ACCURATE_MATCHING)
+MapAreaDQ = TextTemplate(text={"zh_CN":"稻妻", "en_US":"Inazuma"}, cap_area = AreaBigmapSwitchMap.position, match_mode = ACCURATE_MATCHING)
+MapAreaXM = TextTemplate(text={"zh_CN":"须弥", "en_US":"Sumeru"}, cap_area = AreaBigmapSwitchMap.position, match_mode = ACCURATE_MATCHING)
 MapAreaCYJY = TextTemplate(text={"zh_CN":"层岩巨渊", "en_US":"The Chasm"}, cap_area = AreaBigmapSwitchMap.position)
 claim_rewards = TextTemplate(text={'zh_CN': '领取奖励',"en_US": "Claim Rewards"})
 use_20x2resin = TextTemplate(text={'zh_CN': '使用浓缩树脂',"en_US": "Use Condensed Resin"})

@@ -350,8 +350,9 @@ class InteractionBGD:
             
         elif isinstance(inputvar, text_manager.TextTemplate):
             from source.api.pdocr_complete import ocr
+
             upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
-            p1 = ocr.get_text_position(self.capture(jpgmode=NORMAL_CHANNELS, posi=inputvar.cap_area), inputvar.text, cap_posi_leftup=inputvar.cap_area[:2])
+            p1 = ocr.get_text_position(self.capture(jpgmode=NORMAL_CHANNELS, posi=inputvar.cap_area), inputvar.text, cap_posi_leftup=inputvar.cap_area[:2], mode=inputvar.match_mode)
             if is_log:
                 logger.debug('text: ' + inputvar.text + 'position: ' + str(p1) + ' |function name: ' + upper_func_name)
             if p1 != -1:
