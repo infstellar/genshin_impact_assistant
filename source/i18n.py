@@ -28,6 +28,7 @@ def get_local_lang():
     lang = locale.getdefaultlocale()[0]
     print(lang)
     # 反正英文也用不了，摆！
+    # TODO: Remove it in due course
     return "zh_CN"
     if lang in ["zh_CN", "zh_SG", "zh_MO", "zh_HK", "zh_TW"]:
         return "zh_CN"
