@@ -1,5 +1,5 @@
 from source.util import *
-
+MAX_INDEX = 27
 
 # save_json(load_json(json_name="icon.json", default_path="assets\\POI_JSON_API"),json_name="icon.json", default_path="assets\\POI_JSON_API")
 LANG = 'en_US'
@@ -30,7 +30,7 @@ def replace_str(d):
         return d
 
 def reshape_json():
-    for i in list(range(1,15))+["area", "icon", "id_stamp", "item", "type"]:
+    for i in list(range(1,MAX_INDEX))+["area", "icon", "id_stamp", "item", "type"]:
         s = load_json(json_name=str(i)+".json", folder_path=f"assets\\POI_JSON_API\\{LANG}\\dataset")
         s = replace_str(s)
         save_json(s,json_name=str(i)+".json", default_path=f"assets\\POI_JSON_API\\{LANG}\\dataset")
@@ -38,7 +38,7 @@ def reshape_json():
 
 def create_indexes():
     s = {}
-    for ii in range(1,15):
+    for ii in range(1,MAX_INDEX):
         j = load_json(json_name=str(ii)+".json", folder_path=f"assets\\POI_JSON_API\\{LANG}\\dataset")
         for i in j:
             s.setdefault(i["markerTitle"], []).append(str(ii))
@@ -52,7 +52,7 @@ def create_indexes():
 
 def create_name():
     s = []
-    for ii in range(1,15):
+    for ii in range(1,MAX_INDEX):
         j = load_json(json_name=str(ii)+".json", folder_path=f"assets\\POI_JSON_API\\{LANG}\\dataset")
         for i in j:
             s.append(i["markerTitle"])
@@ -62,7 +62,7 @@ def create_name():
 
 def create_refreshTime():
     s = {}
-    for ii in range(1,15):
+    for ii in range(1,MAX_INDEX):
         j = load_json(json_name=str(ii)+".json", folder_path=f"assets\\POI_JSON_API\\{LANG}\\dataset")
         for i in j:
             if int(i["refreshTime"]) not in [-1,0]:
@@ -72,7 +72,7 @@ def create_refreshTime():
 
 def get_all_position():
     rl = []
-    for ii in range(1,15):
+    for ii in range(1,MAX_INDEX):
         j = load_json(json_name=str(ii)+".json", folder_path=f"assets\\POI_JSON_API\\{LANG}\\dataset")
         for i in j:
             rl.append(list(map(float,i['position'].split(',') )))

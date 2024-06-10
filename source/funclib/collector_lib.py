@@ -130,10 +130,10 @@ def get_item_id(item_name:str, area_id:list, match_mode = 0) -> list:
         if int(i["areaId"]) in area_id:
             if match_mode == 0:
                 if i["name"] == item_name:
-                    ret_id.append(i["itemId"])
+                    ret_id.append(i["id"])
             elif match_mode == 1:
                 if i["name"] in item_name:
-                    ret_id.append(i["itemId"])
+                    ret_id.append(i["id"])
     ret_id = list(set(ret_id))
     return ret_id
     if len(ret_id) == 1:
@@ -176,7 +176,7 @@ def load_items_position(marker_title:str, mode=0, area_id=None, blacklist_id=Non
     if match_mode == 0:
         id_index = load_json("ID_INDEX.json", f"assets\\POI_JSON_API\\{GLOBAL_LANG}")[marker_title]
     elif match_mode == 1:
-        id_index = list(range(1,14))
+        id_index = list(range(1,27))
     ita = []
     for i in id_index:
         ita += load_json(str(i)+".json", f"assets\\POI_JSON_API\\{GLOBAL_LANG}\\dataset")
@@ -188,7 +188,7 @@ def load_items_position(marker_title:str, mode=0, area_id=None, blacklist_id=Non
         item_id = get_item_id(marker_title, area_id, match_mode=match_mode)
         for i in ita:
             if len(i["itemList"])>0:
-                if i["itemList"][0]["itemId"] in item_id:
+                if i["itemList"][0]["id"] in item_id:
                     common_name.append(i)
     if mode == 1:
         for i in ita:
@@ -226,7 +226,7 @@ def load_items_position(marker_title:str, mode=0, area_id=None, blacklist_id=Non
     return ret_dict  
 
 def load_all_dict():
-    id_index = list(range(1,14))
+    id_index = list(range(1,27))
     ita = []
     for i in id_index:
         ita += load_json(str(i)+".json", f"assets\\POI_JSON_API\\{GLOBAL_LANG}\\dataset")
