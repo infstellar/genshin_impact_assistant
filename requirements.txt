@@ -1,4 +1,5 @@
 # TODO: Update with exact module version
+pyzstd==0.15.4
 numpy
 torch
 loguru
