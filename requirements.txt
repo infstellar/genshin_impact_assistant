@@ -7,7 +7,6 @@ torchvision
 tabulate
 
 paddleocr
-paddlepaddle
 
 thop
 
