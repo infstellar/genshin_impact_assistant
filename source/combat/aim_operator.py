@@ -222,7 +222,7 @@ class AimOperator(BaseThreading):
         while 1:
             # move view to blood bar exist or arrow no exist, where is the enemy located.
             if self.checkup_stop_func():return
-            movement.cview(20)
+            movement.cview(30)
             # itt.delay(0.1)
             r = combat_lib.combat_statement_detection()
             if r[0] or not r[1]:
@@ -358,7 +358,7 @@ class AimOperator(BaseThreading):
             return False
         return px < 6
     
-    def _keep_distance_with_enemy(self):  # 期望敌方血条像素高度为7px # 与敌人保持距离
+    def _keep_distance_with_enemy(self):  # 期望敌方血条像素高度为7px # TODO:与敌人保持距离
         target_px = 7
         if self.enemy_flag:
             px = self.get_enemy_feature(ret_mode=2)

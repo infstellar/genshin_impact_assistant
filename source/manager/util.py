@@ -38,3 +38,25 @@ class AssetBase():
                     return os.path.abspath(os.path.join(root, comp_filename))
             logger.error(f"SearchPathError:{comp_filename}")
             return None
+
+
+class Bbox():
+    def __init__(self,x1,y1,x2,y2):
+        self.x1 = x1
+        self.x2 = x2
+        self.y1 = y1
+        self.y2 = y2
+        self.center = [(x1+x2)/2,(y1+y2)/2]
+        pass
+
+    def get_center_posi(self):
+        pass
+
+class TextReplaceRule():
+    #TODO: add more modes
+    rep_rules = {}
+    def __init__(self):
+        pass
+
+    def rep(self, x):
+        return self.rep_rules[x]
