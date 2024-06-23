@@ -22,14 +22,13 @@ uiautomator2
 uiautomator2cache
 filelock
 lxml
-pydantic==1.10.11
+pydantic>2.0.0
 gimap==3.4.6
 giadep
 giaocr
 giayolo
 pyyaml
 urllib3
-fastdeploy-python
 json5
 sortedcontainers
 pytz
