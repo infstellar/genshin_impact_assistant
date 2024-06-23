@@ -211,6 +211,7 @@ class PoiJsonApi:
         # 6553: TeleporterModel(id=6553, region='Mondstadt', tp='Domain', item_id=53, name='深入风龙废墟', position=(4685.808, 458.988)),
         # 6548: TeleporterModel(id=6548, region='Mondstadt', tp='Domain', item_id=53, name='西风之鹰的庙宇', position=(5709.468, 862.586)),
         # 6561: TeleporterModel(id=6561, region='Mondstadt', tp='Domain', item_id=53, name='鹰之门', position=(6253.954, 1497.608)),
+        56363,56364,56365 # 名字里带神像，但他不是神像
 
     ]
 
@@ -263,7 +264,7 @@ class PoiJsonApi:
 
 
 if __name__ == '__main__':
-    lang='zh_CN'
-    self = PoiJsonApi()
-    self.save_teleporter(lang=lang)
+    for lang in ['zh_CN', 'en_US']:
+        self = PoiJsonApi()
+        self.save_teleporter(lang=lang)
     
