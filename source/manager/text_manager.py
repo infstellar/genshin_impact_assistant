@@ -26,7 +26,7 @@ class TextTemplate(AssetBase):
             res = [res]
         for inp in res:
             #TODO: add match rules
-            if inp == self.text:
+            if inp in self.text or self.text in inp:
                 return True
             else:
                 return False

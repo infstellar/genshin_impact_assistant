@@ -91,6 +91,7 @@ class SwitchCharacterOperator(BaseThreading):
                         self.switch_character(switch_type="MAIN")
 
     def _check_and_reborn(self, x) -> bool:
+        #TODO: Optimize
         """重生角色
 
         Returns:

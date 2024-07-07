@@ -182,7 +182,7 @@ def reset_map_size():
         ui_control.ui_goto(UIPage.page_bigmap)
         time.sleep(2)
         
-    
+    #TODO: refactor it. wtf is that?
     for i in range(8):        
         itt.move_and_click(position=posi_manager.posi_suoxiaoditu, delay=0.2)
     time.sleep(1)

@@ -4,7 +4,13 @@ from source.manager.button_manager import Button
 from source.manager.text_manager import TextTemplate, Text
 from source.manager.posi_manager import PosiTemplate, Area
 from source.api.utils import *
+"""
+OLD
 
+DO NOT ADD ANY NEW ASSET HERE. 
+USE SOURCE/ASSETS INSTEAD.
+
+"""
 # Button&ImgIcon&Area
 ButtonUISwitchToTimeMenu = Button(black_offset = 15, print_log=LOG_WHEN_TRUE)
 ButtonGeneralExit = Button(print_log=LOG_WHEN_TRUE)
@@ -100,6 +106,3 @@ LEY_LINE_DISORDER = TextTemplate(text={'zh_CN': '地脉异常',"en_US": "Ley Lin
 # ImgIcon&Button which based on text
 IconCombatCharacterDied = ImgIcon(win_text = use_revival_item.text, threshold=0.98, print_log=LOG_WHEN_TRUE)
 ButtonGeneralAllCharacterDied = Button(threshold=0.988, win_text=revival.text, print_log=LOG_WHEN_TRUE)
-
-if __name__ == '__main__':
-    ButtonUIEnterPartySetup.show_image()

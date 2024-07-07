@@ -296,9 +296,11 @@ class InteractionBGD:
             return matching_rate
         
     def get_text_existence(self, textobj: text_manager.TextTemplate, is_gray=False, is_log:bool = None, ret_mode = IMG_BOOL, show_res = False, use_cache = False):
+        from source.api.pdocr_complete import ocr
         if is_log is None: is_log = textobj.is_log
         cap = self.capture(posi = textobj.cap_area, jpgmode=NORMAL_CHANNELS, recapture_limit=(self.RECAPTURE_LIMIT if use_cache else 0))
-        res = LOCAL_OCR_MODEL.ocr_lines(cap)
+        # res = LOCAL_OCR_MODEL.ocr_lines(cap)
+        res = ocr.get_all_texts(cap)
         is_exist = textobj.match_results(res)
         if is_exist:
             if is_log:

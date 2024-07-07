@@ -375,7 +375,7 @@ class MiniMap(MiniMapResource):
         use_alpha = True
         # minimap = self._get_minimap(image, radius=self.MINIMAP_RADIUS)
         # minimap = rgb2luma(minimap)
-        if not use_alpha:
+        if (not use_alpha) or (self.scene != 'city'):
             if layer == MapConverter.LAYER_Domain:
                 minimap = self._get_minimap(image, radius=self.MINIMAP_RADIUS)
                 minimap = rgb2luma(minimap)
