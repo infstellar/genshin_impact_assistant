@@ -45,7 +45,7 @@ class PosiTemplate(AssetBase):
         else:
             # self.origin_path = img_path
             image = cv2.imread(img_path)
-            position = get_bbox(image, black_offset=18)
+            position = asset_get_bbox(image, black_offset=18)
         self.posi_list.append(position)
         
         if len(self.posi_list) <= 1:

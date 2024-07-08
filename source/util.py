@@ -449,7 +449,7 @@ def get_color(image, area):
     return color[:3]
 
 
-def get_bbox(image, black_offset=15):
+def asset_get_bbox(image, black_offset=15):
     """
     A numpy implementation of the getbbox() in pillow.
     Args:
