@@ -41,8 +41,11 @@ class UI():
         ret_page = None
 
         # when ui_addition is complete, enable it
+        if retry_times >= max_retry:
+            logger.info(f"Unknown page, try pressing esc")
+            itt.key_press('esc')
         if raise_exception and False:
-            if retry_times >= max_retry:
+            if retry_times >= max_retry+3:
                 raise PageNotFoundError
 
         for page in self.ui_pages:
