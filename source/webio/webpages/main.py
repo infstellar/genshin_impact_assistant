@@ -248,7 +248,7 @@ class MainPage(AdvancePage):
                     output.toast(
                         t2t('The path to the Genshin execution file was not found. You should run it once manually to recognize the Genshin executable path.'))
             else:
-                if GIAconfig.General_GenshinEXEPath == "":
+                if GIAconfig.General_GenshinEXEPath == "" or (not os.path.exists(GIAconfig.General_GenshinEXEPath)):
                     path = get_yuanshen_exe_path()
                     if path != "":
                         if path != GIAconfig.General_GenshinEXEPath:
