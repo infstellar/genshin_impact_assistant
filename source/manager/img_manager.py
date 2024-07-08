@@ -82,7 +82,7 @@ class ImgIcon(AssetBase):
         self.is_bbg = is_bbg
         self.alpha = alpha
         if self.is_bbg and bbg_posi is None:
-            self.bbg_posi = get_bbox(self.raw_image)
+            self.bbg_posi = asset_get_bbox(self.raw_image)
         else:
             self.bbg_posi = bbg_posi
         if cap_posi == 'bbg':

@@ -12,7 +12,7 @@ class TextTemplate(AssetBase):
             cap_area = [0,0,1920,1080]
         elif isinstance(cap_area, str):
             path = self.get_img_path()
-            cap_area = get_bbox(cv2.imread(os.path.join(ROOT_PATH, path)))
+            cap_area = asset_get_bbox(cv2.imread(os.path.join(ROOT_PATH, path)))
         self.origin_text = text
         self.cap_area = cap_area
         self.text = self.origin_text[GLOBAL_LANG]
