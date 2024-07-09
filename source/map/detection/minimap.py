@@ -1,5 +1,6 @@
 import typing as t
 
+import cv2
 from cached_property import cached_property
 
 from source.map.detection.resource import MiniMapResource
@@ -62,6 +63,9 @@ class MiniMap(MiniMapResource):
         search_area = np.array(search_area).astype(np.int64)
         # if channel == ONE_CHANNEL:
         search_image = crop(self.GIMAP, search_area)
+        if CV_DEBUG_MODE:
+            cv2.imshow('search_image', search_image)
+            cv2.waitKey(1)
         # elif channel == THREE_CHANNEL:
         #     search_image = crop(self.TChannelGIMAP, search_area)
         
@@ -128,9 +132,11 @@ class MiniMap(MiniMapResource):
         image_one = image.copy()
         image_one = rgb2luma(image)
         image_one &= self._minimap_mask
-
-        image_three = image.copy()
-        image_three &= np.expand_dims(self._minimap_mask,axis=2).repeat(3,axis=2)
+        if CV_DEBUG_MODE:
+            cv2.imshow('image_one', image_one)
+            cv2.waitKey(1)
+        # image_three = image.copy()
+        # image_three &= np.expand_dims(self._minimap_mask,axis=2).repeat(3,axis=2)
 
         best_sim = -1.
         best_local_sim = -1.
@@ -372,7 +378,7 @@ class MiniMap(MiniMapResource):
         #     use_alpha = (self.scene == 'city')
         # else:
         #     use_alpha = False
-        use_alpha = True
+        use_alpha = False
         # minimap = self._get_minimap(image, radius=self.MINIMAP_RADIUS)
         # minimap = rgb2luma(minimap)
         if (not use_alpha) or (self.scene != 'city'):
@@ -493,9 +499,9 @@ if __name__ == '__main__':
     minimap = MiniMap(MiniMap.DETECT_Desktop_1080p)
 
 
-    if False:
+    if True:
         # 坐标位置是 GIMAP 的图片坐标
-        minimap.init_position(MapConverter.convert_cvAutoTrack_to_GIMAP([1334,-4057]))
+        minimap.init_position(MapConverter.convert_cvAutoTrack_to_GIMAP([0,0])) # 1334, -4057
         # 你可以移动人物，GIA会持续监听小地图位置和角色朝向
         while 1:
             image = itt.capture(jpgmode=FOUR_CHANNELS)

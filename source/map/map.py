@@ -4,6 +4,7 @@ import source.ui.page as UIPage
 from source.interaction.interaction_core import itt
 from source.manager import asset
 from source.util import *
+from source.cvars import *
 
 if GLOBAL_LANG == 'zh_CN':
     from source.map.data.teleporter_zh_CN import DICT_TELEPORTER
@@ -16,15 +17,7 @@ from source.map.position.position import *
 
 import threading
 
-REGION_TEYVAT = [
-    "Inazuma",
-    "Liyue",
-    "Mondstadt",
-    "Sumeru"
-]
-COORDINATE_TIANLI = "TianLi"
-COORDINATE_GIMAP = "GIMAP"
-COORDINATE_KONGYING = "KongYing"
+
 
 
 class Map(MiniMap, BigMap, MapConverter):
@@ -369,6 +362,8 @@ class Map(MiniMap, BigMap, MapConverter):
             tp_icon = asset.MapAreaDQ
         elif tp_region == "Sumeru":
             tp_icon = asset.MapAreaXM
+        elif tp_region == "Fontaine":
+            tp_icon = asset.MapAreaFD
         else:
             logger.error(t2t("Unknown region"))
         while 1:
@@ -394,6 +389,7 @@ class Map(MiniMap, BigMap, MapConverter):
         Returns:
             TianLiPosition: _description_
         """
+        logger.debug(f'bigmap tp to: {posi}')
         if tp_type == None:
             tp_type = ["Teleporter", "Statue", "Domain"]
         ui_control.ensure_page(UIPage.page_bigmap)

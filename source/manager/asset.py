@@ -91,6 +91,7 @@ MapAreaMD = TextTemplate(text={"zh_CN":"蒙德", "en_US":"Mondstadt"}, cap_area 
 MapAreaLY = TextTemplate(text={"zh_CN":"璃月", "en_US":"Liyue"}, cap_area = AreaBigmapSwitchMap.position, match_mode = ACCURATE_MATCHING)
 MapAreaDQ = TextTemplate(text={"zh_CN":"稻妻", "en_US":"Inazuma"}, cap_area = AreaBigmapSwitchMap.position, match_mode = ACCURATE_MATCHING)
 MapAreaXM = TextTemplate(text={"zh_CN":"须弥", "en_US":"Sumeru"}, cap_area = AreaBigmapSwitchMap.position, match_mode = ACCURATE_MATCHING)
+MapAreaFD = TextTemplate(text={"zh_CN":"枫丹", "en_US":"Fontaine"}, cap_area = AreaBigmapSwitchMap.position, match_mode = ACCURATE_MATCHING)
 MapAreaCYJY = TextTemplate(text={"zh_CN":"层岩巨渊", "en_US":"The Chasm"}, cap_area = AreaBigmapSwitchMap.position)
 claim_rewards = TextTemplate(text={'zh_CN': '领取奖励',"en_US": "Claim Rewards"})
 use_20x2resin = TextTemplate(text={'zh_CN': '使用浓缩树脂',"en_US": "Use Condensed Resin"})

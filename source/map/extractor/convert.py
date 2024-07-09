@@ -37,6 +37,8 @@ class MapConverter:
     TP_Domain = 'Domain'
     TP_Instance = 'Instance'
 
+
+
     @classmethod
     def convert_REGION_to_LAYER(cls, region: str) -> str:
         if region == cls.REGION_GoldenAppleArchipelago:
@@ -84,7 +86,9 @@ class MapConverter:
     @classmethod
     def convert_cvAutoTrack_to_GIMAP(cls, points, layer=LAYER_Teyvat) -> np.ndarray:
         points = np.array(points)
+
         points = points / 2.557 + (4480, 3015.5)
+        points += (799, 1130)
         return points
 
     @classmethod

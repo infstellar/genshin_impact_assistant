@@ -45,3 +45,15 @@ LOG_ALL = 3
 
 TEXT_MATCH_CONTAIN_RESULT = 0
 TEXT_MATCH_INCLUDED_BY_RESULT = 1
+
+# map
+REGION_TEYVAT = [
+    "Inazuma",
+    "Liyue",
+    "Mondstadt",
+    "Sumeru",
+    "Fontaine"
+]
+COORDINATE_TIANLI = "TianLi"
+COORDINATE_GIMAP = "GIMAP"
+COORDINATE_KONGYING = "KongYing"

@@ -19,6 +19,8 @@ class PointItemModel(BaseModel):
 #     id: int
 #     name: str
 
+DOMAIN_IDS = [52, 161, 339, 447, 558, 759, 871, 1285, 1437, 1513, 1937, 2156, 2399, 2564, 2802, 3065]# generate manually.
+
 class PointInfoModel(BaseModel):
     content: str
     hiddenFlag: int
@@ -51,7 +53,10 @@ class PointInfoModel(BaseModel):
             return self
         if self.markerTitle == '副本':
             return self
-        if self.markerTitle == '秘境':
+        # if self.markerTitle == '秘境':
+        #     return self
+        if self.itemList[0].itemId in DOMAIN_IDS:
+            self.markerTitle = '秘境'
             return self
         if '神像' in self.markerTitle:
             self.markerTitle='七天神像'
@@ -295,9 +300,10 @@ class PoiJsonApi:
 
 
 if __name__ == '__main__':
-    self = PoiJsonApi()
-    self.get_domains
-    # for lang in ['zh_CN', 'en_US']:
-    #     self = PoiJsonApi()
-    #     self.save_teleporter(lang=lang)
+    # self = PoiJsonApi(lang='zh_CN')
+    # self.
+    # self.get_domains
+    for lang in ['zh_CN', 'en_US']:
+        self = PoiJsonApi(lang=lang)
+        self.save_teleporter()
     

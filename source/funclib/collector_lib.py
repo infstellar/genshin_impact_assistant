@@ -179,7 +179,7 @@ def get_item_position_new(marker_title: str,ret_mode=RETURN_POSITIONS, area=AREA
             pos = pos.split(',')
             pos = [float(pos[0]),float(pos[1])]
             if ret_mode == RETURN_POSITIONS:
-                ret_list.append(MapConverter.convert_kongying_curve_to_cvAutoTrack(pos))
+                ret_list.append(list(MapConverter.convert_kongying_curve_to_cvAutoTrack(pos)))
             elif ret_mode == RETURN_ALL:
                 ret_list.append(i.model_copy())
     return ret_list
