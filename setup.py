@@ -27,5 +27,6 @@ if len(sys.argv) == 1:
     elif sys.argv[0] == 'build':
         import source.config.config_updater
         import source.manager.asset_index_generator
+        from source.map.extractor.get_domain_list import *
 
 

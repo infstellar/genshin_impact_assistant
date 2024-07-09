@@ -1,13 +1,13 @@
 # TODO: Update with exact module version
 urllib3<2.0.0
-numpy
-torch
+numpy==1.21.6
+torch==1.13.1
 loguru
 tqdm
 torchvision
 tabulate
 thop
-fastdeploy_python
+fastdeploy-python
 opencv-python
 Pillow
 pypiwin32

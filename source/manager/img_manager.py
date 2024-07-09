@@ -9,15 +9,7 @@ from copy import deepcopy
 # USE_20RESIN_DOBLE_CHOICES = "USE_20RESIN_DOBLE_CHOICES"
 # USE_20X2RESIN_DOBLE_CHOICES = "USE_20X2RESIN_DOBLE_CHOICES"
 # F_BUTTON = 'F_BUTTON'
-IMG_RATE = 0
-IMG_POSI = 1
-IMG_POINT = 2
-IMG_RECT = 3
 
-LOG_NONE = 0
-LOG_WHEN_TRUE = 1
-LOG_WHEN_FALSE = 2
-LOG_ALL = 3
 
 def qshow(img1):
     cv2.imshow('123', img1)
@@ -137,17 +129,7 @@ class ImgIcon(AssetBase):
         cv2.imshow('123', self.image)
         cv2.waitKey(0)
         
-    def is_print_log(self, b:bool):
-        if b:
-            if self.print_log == LOG_WHEN_TRUE or self.print_log == LOG_ALL:
-                return True
-            else:
-                return False
-        else:
-            if self.print_log == LOG_WHEN_FALSE or self.print_log == LOG_ALL:
-                return True
-            else:
-                return False
+
 
 def get_rect(im_src, origin_img, ret_mode=0):
     # if origin_img==None:

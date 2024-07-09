@@ -295,20 +295,15 @@ class InteractionBGD:
         elif ret_mode == IMG_RATE:
             return matching_rate
         
-    def get_text_existence(self, textobj: text_manager.TextTemplate, is_gray=False, is_log:bool = None, ret_mode = IMG_BOOL, show_res = False, use_cache = False):
+    def get_text_existence(self, textobj: text_manager.TextTemplate, is_gray=False, ret_mode = IMG_BOOL, show_res = False, use_cache = False):
         from source.api.pdocr_complete import ocr
-        if is_log is None: is_log = textobj.is_log
         cap = self.capture(posi = textobj.cap_area, jpgmode=NORMAL_CHANNELS, recapture_limit=(self.RECAPTURE_LIMIT if use_cache else 0))
         # res = LOCAL_OCR_MODEL.ocr_lines(cap)
         res = ocr.get_all_texts(cap)
         is_exist = textobj.match_results(res)
-        if is_exist:
-            if is_log:
-                logger.debug(f"get_text_existence: text: {textobj.text} Found")
-            return True
-        else:
-            logger.debug(f"get_text_existence: text: {textobj.text} Not Found")
-            return False
+        if textobj.is_print_log(is_exist):
+            logger.debug(f"get_text_existence: text: {textobj.text} {'Found' if is_exist else 'Not Found'}")
+        return is_exist
 
     def appear(self, obj, use_cache=False):
         if isinstance(obj, text_manager.TextTemplate):

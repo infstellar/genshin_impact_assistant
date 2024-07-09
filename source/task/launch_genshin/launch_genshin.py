@@ -18,3 +18,4 @@ class LaunchGenshin(TaskTemplate):
             itt.appear_then_click(ClickToEnter)
             if ui_control.verify_page(UIPage.page_main):
                 break
+            if self.checkup_stop_func():break

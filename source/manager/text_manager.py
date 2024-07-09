@@ -2,7 +2,7 @@ from source.manager.util import *
 
 
 class TextTemplate(AssetBase):
-    def __init__(self, text:dict, cap_area=None, name=None, match_mode=CONTAIN_MATCHING, is_log:bool=False) -> None:
+    def __init__(self, text:dict, cap_area=None, name=None, match_mode=CONTAIN_MATCHING, print_log=LOG_WHEN_TRUE):
         if name is None:
             super().__init__(get_name(traceback.extract_stack()[-2]))
         else:
@@ -17,7 +17,7 @@ class TextTemplate(AssetBase):
         self.cap_area = cap_area
         self.text = self.origin_text[GLOBAL_LANG]
         self.match_mode = match_mode
-        self.is_log = is_log
+        self.print_log = print_log
     def gettext(self):
         return self.origin_text[GLOBAL_LANG]
 
@@ -26,13 +26,15 @@ class TextTemplate(AssetBase):
             res = [res]
         for inp in res:
             #TODO: add match rules
-            if inp in self.text or self.text in inp:
-                return True
-            else:
+            if res == '':
                 return False
+            if self.match_mode == CONTAIN_MATCHING:
+                return self.text in res
+            elif self.match_mode == ACCURATE_MATCHING:
+                return self.text == res
 
 class Text(TextTemplate):
-    def __init__(self, name=None, cap_area=None, zh=None,en=None) -> None:
+    def __init__(self, name=None, cap_area=None, zh=None,en=None, print_log = LOG_WHEN_TRUE) -> None:
         if name is None:
             name = get_name(traceback.extract_stack()[-2])
         d={}
@@ -40,7 +42,7 @@ class Text(TextTemplate):
             d["zh_CN"]=zh
         if en != None:
             d["en_US"]=en
-        super().__init__(d, cap_area=cap_area, name=name)
+        super().__init__(d, cap_area=cap_area, name=name, print_log=print_log)
 
 
 # if __name__ == '__main__':  

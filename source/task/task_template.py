@@ -32,10 +32,11 @@ class TaskTemplate(AdvanceThreading):
         该函数只会运行一次。函数结束后任务结束。
         """
         pass
+
     
     def loop(self):
         """
-        如果你已经了解了GIA的线程架构，你可以重写此方法以执行任务。
+        如果你已经了解了GIA的（很垃圾的）线程架构，你可以重写此方法以执行任务。
         当然，在task_run中写个while 1也不费事（
         """
         self.task_run()
