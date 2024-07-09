@@ -53,21 +53,29 @@ class MapConverter:
         return cls.LAYER_Teyvat
 
     @classmethod
+    def old_gimap_to_new(cls, points:np.ndarray):
+        return points + (799, 1130)
+
+    @classmethod
+    def new_gimap_to_old(cls, points:np.ndarray):
+        return points - (799, 1130)
+
+    @classmethod
     def convert_GIMAP_to_LAYER(cls, points) -> str:
         """
         Get LAYER name from the position.
         If `points` contains multiple position, the first one will be used.
         """
-        points = np.array(points)
-        if points.ndim > 1:
-            point = points
-        else:
-            point = points
-
-        if point_in_area(point, area=(0, 0, 2389, 1730), threshold=0):
-            return cls.LAYER_TheChasm
-        if point_in_area(point, area=(0, 5731, 2391, 7944), threshold=0):
-            return cls.LAYER_Enkanomiya
+        # points = np.array(points)
+        # if points.ndim > 1:
+        #     point = points
+        # else:
+        #     point = points
+        #
+        # if point_in_area(point, area=(0, 0, 2389, 1730), threshold=0):
+        #     return cls.LAYER_TheChasm
+        # if point_in_area(point, area=(0, 5731, 2391, 7944), threshold=0):
+        #     return cls.LAYER_Enkanomiya
 
         return cls.LAYER_Teyvat
 
@@ -80,6 +88,7 @@ class MapConverter:
         cvAutoTrack is a kind of mess in Enkanomiya and The Chasm, so no converts
         """
         points = np.array(points)
+        points = cls.new_gimap_to_old(points)
         points = (points - (4480, 3015.5)) * 2.557
         return points
 
@@ -88,7 +97,7 @@ class MapConverter:
         points = np.array(points)
 
         points = points / 2.557 + (4480, 3015.5)
-        points += (799, 1130)
+        points = cls.old_gimap_to_new(points)
         return points
 
     @classmethod
