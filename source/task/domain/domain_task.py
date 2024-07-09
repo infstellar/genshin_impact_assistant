@@ -3,7 +3,7 @@ from source.util import *
 from source.task.domain.domain_flow_upgrade import DomainFlowController
 from source.teyvat_move.teyvat_move_flow_upgrade import TeyvatMoveFlowController
 from source.task.task_template import TaskTemplate
-from source.funclib.collector_lib import load_items_position
+from source.funclib.collector_lib import get_item_position_new
 from source.funclib.generic_lib import f_recognition
 from source.ui.ui import ui_control
 import source.ui.page as UIPage
@@ -27,7 +27,7 @@ class DomainTask(TaskTemplate):
         
         self.domain_name = GIAconfig.Domain_DomainName
         self.domain_stage_name = GIAconfig.Domain_DomainStageName
-        self.domain_posi = load_items_position(self.domain_name,mode=1, ret_mode=1)[0]
+        self.domain_posi = get_item_position_new(self.domain_name)[0]
         self.TMFCF.set_parameter(stop_rule = STOP_RULE_F, MODE = "AUTO", target_posi = self.domain_posi, is_tp=True, tp_type=["Domain"])
         self.TMFCF.set_target_posi(self.domain_posi)
         self.last_domain_times = int(GIAconfig.Domain_ChallengeTimes)

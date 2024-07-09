@@ -6,7 +6,7 @@ from source.task.task_template import TaskTemplate
 from source.map.position.position import *
 from source.funclib import movement
 from source.funclib.generic_lib import f_recognition
-from source.funclib.collector_lib import load_items_position
+from source.funclib.collector_lib import get_item_position_new
 
 
 
@@ -105,7 +105,7 @@ class LeyLineOutcropMission(MissionExecutor):
             try:
                 self.target_posi = self.traverse_mondstant() # 获得坐标
                 # 从数据库获得所有地脉衍出坐标，如果当前坐标与数据库坐标差值小于阈值，使用数据库坐标修正。
-                ley_line_opt_position = load_items_position(marker_title="地脉衍出", ret_mode=1, match_mode=1)
+                ley_line_opt_position = get_item_position_new(marker_title="地脉衍出")
                 distances = euclidean_distance_plist(self.target_posi, ley_line_opt_position)
                 logger.debug(f"min distances: {min(distances)}")
                 min_index = np.argmin(distances)
