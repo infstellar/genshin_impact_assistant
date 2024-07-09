@@ -65,7 +65,7 @@ class MainPage(AdvancePage):
                 pass
             if pin.pin['FlowMode'] != listening.SEMIAUTO_FUNC_MANAGER.last_d:  # 比较变更是否被应用
                 listening.SEMIAUTO_FUNC_MANAGER.last_d = pin.pin['FlowMode']  # 应用变更
-                listening.SEMIAUTO_FUNC_MANAGER.apply_change(pin.pin['FlowMode'])
+
                 # self.log_list_lock.acquire()
                 # output.put_text(t2t("正在导入模块, 可能需要一些时间。"), scope='LogArea').style(
                 #     f'color: black; font_size: 20px')
@@ -165,6 +165,11 @@ class MainPage(AdvancePage):
                     "label": t2t("Mission"),
                     "value": "MissionTask"
                 }
+                # ,
+                # {
+                #     "label": t2t("Collect Images(Dev)"),
+                #     "value": "CollectImage"
+                # }
             ]
             output.put_row([  # 横列
                 output.put_column([  # 左竖列
@@ -188,7 +193,8 @@ class MainPage(AdvancePage):
 
                         pin.put_select(('FlowMode'), [
                             {'label': t2t('Idle'), 'value': "idle"},
-                            {'label': t2t('Auto Combat'), 'value': "semiauto_combat"}
+                            {'label': t2t('Auto Combat'), 'value': "semiauto_combat"},
+                            {'label': t2t('Collect Images(Dev)'), 'value': "collect_image"}
                         ])
                     ],
                     ),
@@ -242,7 +248,7 @@ class MainPage(AdvancePage):
         if 'is_auto_start_genshin' in pin.pin[self.CHECKBOX_IS_AUTOSTART_GENSHIN]:
             if not is_yuanshen_started():
                 if os.path.exists(GIAconfig.General_GenshinEXEPath):
-                    os.popen(f'"{GIAconfig.General_GenshinEXEPath}"')
+                    os.system(f'"explorer {GIAconfig.General_GenshinEXEPath}"')
                     output.toast(t2t('Genshin, Start!'), color='success')
                 else:
                     output.toast(
@@ -277,7 +283,7 @@ class MainPage(AdvancePage):
         output.popup(f'ip address', output_text, size=output.PopupSize.SMALL)
 
     def _onclick_apply_ingame_assist(self):
-        listening.INGAME_ASSIST_MANAGER.apply_change(pin.pin['ingame_assist'])
+        listening.INGAME_ASSIST_MANAGER.apply_change()
 
     @logger.catch
     def _onclick_open_log_folder(self):
