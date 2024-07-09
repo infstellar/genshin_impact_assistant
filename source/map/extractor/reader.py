@@ -4,6 +4,7 @@ import typing as t
 from cached_property import cached_property
 from pydantic import BaseModel
 
+from i18n import GLOBAL_LANG
 from source.device.alas.config_utils import *
 from source.map.extractor.convert import MapConverter
 
@@ -12,9 +13,11 @@ from source.en_tools.poi_json_api import zh2en
 
 class PointItemModel(BaseModel):
     count: int
-    # iconTag: str
     itemId: int
 
+# class ItemModel(BaseModel):
+#     id: int
+#     name: str
 
 class PointInfoModel(BaseModel):
     content: str
@@ -136,12 +139,15 @@ class TeleporterModel(BaseModel):
 
 
 class PoiJsonApi:
-    def __init__(self, path='./assets/POI_JSON_API/zh_CN/dataset'):
+    def __init__(self, path=None, lang=GLOBAL_LANG):
         """
         Args:
             path (str): Path to POI_JSON_API/zh_CN/dataset
         """
+        if path is None:
+            path = f'./assets/POI_JSON_API/{lang}/dataset'
         self.path = path
+        self.lang=lang
 
     @classmethod
     def read_json(cls, data, model, attr: str):
@@ -199,6 +205,8 @@ class PoiJsonApi:
         34: MapConverter.REGION_Liyue,
     }
 
+    LIST_AREA_TEYVAT = [1,2,3,5,6,11,12,13,14,15,17,18,19,20,21,22,23,27,28,29,30,34]
+
     IGNORE_ID = [
         13408,#TeleporterModel(id=13408, region='Inazuma', tp='Statue', item_id=336, name='离岛', position=(7842.925, 4429.069))
         13407,#TeleporterModel(id=13407, region='Inazuma', tp='Statue', item_id=336, name='踏鞴砂', position=(7324.447, 5295.089))
@@ -215,7 +223,8 @@ class PoiJsonApi:
 
     ]
 
-    def iter_teleporter(self, lang='zh_CN'):
+    def iter_teleporter(self):
+        lang=self.lang
         for id_, row in self.data.items():
             if row.first_item is None:
                 continue
@@ -225,10 +234,11 @@ class PoiJsonApi:
             # region = self.DICT_AREA_ID.get(1)
             layer = MapConverter.convert_REGION_to_LAYER(region)
             position = MapConverter.convert_kongying_to_GIMAP(row.position_tuple, layer=layer).round(3)
-            if lang=='en_US':
-                name = zh2en(row.teleporter_name)
-            else:
-                name = row.teleporter_name
+            # if lang=='en_US':
+            #     name = zh2en(row.teleporter_name)
+            # else:
+            #     name = row.teleporter_name
+            name = row.teleporter_name
             if region is None:
                 print(f'none region: id={row.id}, itemId={item_id}, areaid={area_id}')
                 continue
@@ -243,9 +253,10 @@ class PoiJsonApi:
             )
             yield tp
 
-    def save_teleporter(self,lang='zh_CN'):
+    def save_teleporter(self):
+        lang = self.lang
         from source.device.alas.map_grids import SelectedGrids
-        tp = SelectedGrids(list(self.iter_teleporter(lang=lang)))
+        tp = SelectedGrids(list(self.iter_teleporter()))
         tp = tp.sort('region', 'item_id', 'name', 'id')
 
         from source.device.alas.code_generator import CodeGenerator
@@ -263,8 +274,30 @@ class PoiJsonApi:
         gen.write(f'./source/map/data/teleporter_{lang}.py')
 
 
+    @cached_property
+    def get_domain_ids(self):
+        domain_ids = []
+        for i in range(1,len(self.item)+1):
+            if not (i in self.item): continue
+            if self.item[i].name == ('秘境' if self.lang == 'zh_CN' else 'Domains'):
+                domain_ids.append(i)
+        print(domain_ids)
+        return domain_ids
+
+    @cached_property
+    def get_domains(self):
+        domains = []
+        for i in range(1,len(self.data)+1):
+            if not (i in self.data): continue
+            if self.data[i].itemList[0].itemId in self.get_domain_ids:
+                domains.append(self.data[i].markerTitle)
+        return domains
+
+
 if __name__ == '__main__':
-    for lang in ['zh_CN', 'en_US']:
-        self = PoiJsonApi()
-        self.save_teleporter(lang=lang)
+    self = PoiJsonApi()
+    self.get_domains
+    # for lang in ['zh_CN', 'en_US']:
+    #     self = PoiJsonApi()
+    #     self.save_teleporter(lang=lang)
     
