@@ -158,7 +158,8 @@ class TeyvatMoveCommon():
                 return True
         elif stop_rule == STOP_RULE_F:
             if stop_offset is None:
-                threshold = 25
+                # TODO: fine tuning it
+                threshold = 50
             else:
                 threshold = stop_offset
             if euclidean_distance(target_posi, curr_posi) <= threshold:

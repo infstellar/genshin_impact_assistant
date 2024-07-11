@@ -90,7 +90,7 @@ while success:
             cv2.waitKey(0)
     elif k & 0xFF == ord('b'):
         posi = input("please input GIMAP posi")
-        p = genshin_map.convert_GIMAP_to_cvAutoTrack(list(map(int,posi.split(','))))
+        p = list(map(int,posi.split(',')))
         pp = tuple(list(map(int,genshin_map._find_closest_teleporter(p).position)))
         genshin_map.init_position(pp)
         logger.info(f"position init as {pp}, press any key to continue.")

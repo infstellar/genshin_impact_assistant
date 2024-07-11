@@ -44,6 +44,10 @@ class MiniMapConst:
     # Pad 600px, cause camera sight in game is larger than GIMAP
     BIGMAP_BORDER_PAD = int(600 * BIGMAP_SEARCH_SCALE)
 
+    # character move speed (maximum, include sprint)
+    # TODO: fine tuning MOVE_SPEED
+    MOVE_SPEED = 12
+
     def __init__(self, device_type):
         # 'wild' or 'city'
         self.scene = 'wild'

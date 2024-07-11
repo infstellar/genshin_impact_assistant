@@ -9,14 +9,23 @@ from source.map.extractor.convert import MapConverter
 from source.funclib.small_map import jwa_4, posi_map
 from source.util import *
 from source.interaction.interaction_core import itt
+from source.common.timer_module import Timer
+
+
 # ONE_CHANNEL = 1
 # THREE_CHANNEL = 3
 
 class MiniMap(MiniMapResource):
 
+    pos_change_timer = Timer(diff_start_time=30)
+
     def init_position(self, position: t.Tuple[int, int]):
         # logger.info(f"init_position:{position}")
         self.position = position
+
+        # if CV_DEBUG_MODE:
+        #     cv2.imshow('search_image', itt.capture())
+        #     cv2.waitKey(1)
 
     def _get_minimap(self, image, radius):
         area = area_offset((-radius, -radius, radius, radius), offset=self.MINIMAP_CENTER)
@@ -40,7 +49,7 @@ class MiniMap(MiniMapResource):
         search_area = np.array(search_area).astype(np.int64)
         search_image = crop(self.TChannelGIMAP, search_area)
         return search_image
-    
+
     def _predict_position(self, image, scale):
         """
         Args:
@@ -60,15 +69,19 @@ class MiniMap(MiniMapResource):
         search_size = (search_size // 2 * 2).astype(np.int64)
         search_area = area_offset((0, 0, *search_size), offset=(-search_size // 2).astype(np.int64))
         search_area = area_offset(search_area, offset=np.multiply(search_position, self.POSITION_SEARCH_SCALE))
+        # search_size = [212,212]
+        # search_area = [search_position[0]-search_size[0]/2,search_position[1]-search_size[1]/2,search_position[0]+search_size[0]/2,search_position[1]+search_size[1]/2,]
+
         search_area = np.array(search_area).astype(np.int64)
         # if channel == ONE_CHANNEL:
         search_image = crop(self.GIMAP, search_area)
         if CV_DEBUG_MODE:
-            cv2.imshow('search_image', search_image)
+            # cv2.destroyWindow('search_image')
+            cv2.imshow('search_image', search_image.copy())
             cv2.waitKey(1)
         # elif channel == THREE_CHANNEL:
         #     search_image = crop(self.TChannelGIMAP, search_area)
-        
+
         result = cv2.matchTemplate(search_image, local, cv2.TM_CCOEFF_NORMED)
         _, sim, _, loca = cv2.minMaxLoc(result)
         # result[result <= 0] = 0
@@ -128,7 +141,7 @@ class MiniMap(MiniMapResource):
         # else:
         image = origin_image
         image = self._get_minimap(image, self.MINIMAP_POSITION_RADIUS)
-        
+
         image_one = image.copy()
         image_one = rgb2luma(image)
         image_one &= self._minimap_mask
@@ -142,13 +155,15 @@ class MiniMap(MiniMapResource):
         best_local_sim = -1.
         best_loca = (0, 0)
         best_scene = 'wild'
-        for scene, scale in self._position_scale_dict.items():
+        for scene, scale in self._position_scale_dict.items(): # : ['city','wild']
             # if scene == 'wild':
             inp_img = image_one
             # channel = ONE_CHANNEL
             # else:
             #     inp_img = image_three
             #     channel = THREE_CHANNEL
+            if CV_DEBUG_MODE:
+                print(scene)
             similarity, local_sim, location = self._predict_position(inp_img, scale)
             # print(scene, scale, similarity, location)
             if similarity > best_sim:
@@ -157,14 +172,30 @@ class MiniMap(MiniMapResource):
                 best_loca = location
                 best_scene = scene
                 # best_channel = channel
-
-        self.position_similarity = round(best_sim, 5)
-        self.position_similarity_local = round(best_local_sim, 5)
-        self.position = tuple(np.round(best_loca, 1))
-        self.scene = best_scene
+        if self.verify_position(tuple(np.round(best_loca, 1))):
+            self.position_similarity = round(best_sim, 5)
+            self.position_similarity_local = round(best_local_sim, 5)
+            self.position = tuple(np.round(best_loca, 1))
+            self.scene = best_scene
         # self.channel = best_channel
         # logger.trace(f'P:({float2str(self.position[0], 4)}, {float2str(self.position[1], 4)}) ')
         return self.position
+
+
+
+    def verify_position(self, pos):
+        dt = self.pos_change_timer.get_diff_time()
+        if dt > 20:
+            self.pos_change_timer.reset()
+            return True
+        else:
+            if euclidean_distance(pos, self.position) >= self.MOVE_SPEED * dt:
+                logger.warning(f'position change above limit: {euclidean_distance(pos, self.position)} >= {self.MOVE_SPEED * dt}. result will be abandon.')
+                return False
+            else:
+                self.pos_change_timer.reset()
+                return True
+
 
     def update_direction(self, image):
         """
@@ -174,8 +205,8 @@ class MiniMap(MiniMapResource):
         - direction_similarity
         - direction
         """
-        if image.shape[2]==4:
-            image = image[:,:,:3]
+        if image.shape[2] == 4:
+            image = image[:, :, :3]
         image = self._get_minimap(image, self.DIRECTION_RADIUS)
 
         image = color_similarity_2d(image, color=(0, 229, 255))
@@ -224,8 +255,8 @@ class MiniMap(MiniMapResource):
         self.direction_similarity = round(precise_sim, 3)
         self.direction = precise_loca % 360
         # Convert
-        if self.direction >180:
-            self.direction = 360-self.direction
+        if self.direction > 180:
+            self.direction = 360 - self.direction
         else:
             self.direction = -self.direction
         return self.direction
@@ -278,14 +309,15 @@ class MiniMap(MiniMapResource):
         image = image.astype(np.uint8)
         return image
 
-    def _predict_rotation(self, image, use_alpha = False):
+    def _predict_rotation(self, image, use_alpha=False):
         if not use_alpha:
             d = self.MINIMAP_RADIUS * 2
             # Upscale image and apply Gaussian filter for smother results
             scale = 2
             image = cv2.GaussianBlur(image, (3, 3), 0)
             # Expand circle into rectangle
-            remap = cv2.remap(image, *self.RotationRemapData, cv2.INTER_LINEAR)[d * 1 // 10:d * 5 // 10].astype(np.float32)
+            remap = cv2.remap(image, *self.RotationRemapData, cv2.INTER_LINEAR)[d * 1 // 10:d * 5 // 10].astype(
+                np.float32)
             remap = cv2.resize(remap, None, fx=scale, fy=scale, interpolation=cv2.INTER_LINEAR)
             # Find derivative
             gradx = cv2.Scharr(remap, cv2.CV_32F, 1, 0)
@@ -371,7 +403,6 @@ class MiniMap(MiniMapResource):
             self.degree = degree
             return degree
 
-
     def update_rotation(self, image, layer=MapConverter.LAYER_Teyvat, update_position=True):
         # if image.shape[2]==4:
         #     image = image[:,:,:3]
@@ -393,7 +424,6 @@ class MiniMap(MiniMapResource):
         else:
             minimap = None
             self.rotation = self._predict_rotation(minimap, use_alpha=True)
-
 
         return self.rotation
 
@@ -422,7 +452,7 @@ class MiniMap(MiniMapResource):
         # MiniMap P:(4451.5, 3113.0) (0.184|0.050), S:wild, D:259.5 (0.949), R:180 (0.498)
 
         self.minimap_print_log()
-        
+
     def minimap_print_log(self):
         logger.trace(
             f'MiniMap '
@@ -432,7 +462,6 @@ class MiniMap(MiniMapResource):
             f'D:{float2str(self.direction, 3)} ({float2str(self.direction_similarity, 3)}), '
             # f'C:{self.channel}, '
             f'R:{self.rotation} ({float2str(self.rotation_confidence)})')
-
 
     def update_minimap_domain(self, image):
         """
@@ -468,17 +497,28 @@ class MiniMap(MiniMapResource):
         diff = (self.rotation - rotation) % 360
         return diff <= threshold or diff >= 360 - threshold
 
+    benchmark_sim = []
+    benchmark_loc_sim = []
+    def position_benchmark(self):
+        self.update_position(itt.capture())
+        self.benchmark_sim.append(self.position_similarity)
+        self.benchmark_loc_sim.append(self.position_similarity_local)
+        logger.trace(f'minimap position benchmark: sim: {round(sum(self.benchmark_sim)/len(self.benchmark_sim),3)},'
+                     f'local sim: {round(sum(self.benchmark_loc_sim)/len(self.benchmark_loc_sim),3)}')
+
+
 if __name__ == '__main__' and False:
     """
     MiniMap 模拟器监听测试
     """
     from source.device.genshin.genshin import Genshin
+
     device = Genshin('127.0.0.1:16384')
     device.disable_stuck_detection()
     device.screenshot_interval_set(0.3)
     device.screenshot()
-    cv2.imshow('123',device.image)
-    cv2.waitKey(0)
+    cv2.imshow('123', device.image)
+    cv2.waitKey(1)
     minimap = MiniMap(MiniMap.DETECT_Mobile_720p)
     # 从璃月港传送点出发，初始坐标大概大概50px以内就行
     # 坐标位置是 GIMAP 的图片坐标
@@ -487,7 +527,6 @@ if __name__ == '__main__' and False:
     while 1:
         device.screenshot()
         minimap.update_minimap(device.image)
-
 
 if __name__ == '__main__':
     """
@@ -501,20 +540,20 @@ if __name__ == '__main__':
 
     if True:
         # 坐标位置是 GIMAP 的图片坐标
-        minimap.init_position(MapConverter.convert_cvAutoTrack_to_GIMAP([0,0])) # 1334, -4057
+        minimap.init_position((2985*2, 2638*2))  # cvat 1334, -4057
         # 你可以移动人物，GIA会持续监听小地图位置和角色朝向
         while 1:
-            image = itt.capture(jpgmode=FOUR_CHANNELS)
-            image = cv2.cvtColor(image, cv2.COLOR_BGRA2RGBA)
+            image = itt.capture()
+            image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
             # if image.shape != (1080, 1920, 3):
             #     time.sleep(0.3)
             #     continue
-
             minimap.update_minimap(image)
+            # minimap.position_benchmark()
             time.sleep(0.3)
-    if True:
+    if False:
         while 1:
             time.sleep(0.1)
-            minimap.update_rotation(itt.capture(),update_position=False)
+            minimap.update_rotation(itt.capture(), update_position=False)
             print(minimap.rotation)
             # minimap.show_rotation(minimap.rotation)

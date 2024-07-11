@@ -14,6 +14,7 @@ class MapConverter:
     cvAutoTrack: https://github.com/GengGode/cvAutoTrack
     GIMAP: Raw map image file in cvAutoTrack, named `GIMAP.png`
     kongying: https://v3.yuanshen.site/
+    GenshinMap: The official coordinate system of the Genshin
     """
     LAYER_Domain = 'Domain'
     LAYER_Teyvat = 'Teyvat'
@@ -53,12 +54,28 @@ class MapConverter:
         return cls.LAYER_Teyvat
 
     @classmethod
+    def convert_GenshinMap_to_cvAutoTrack(cls, posi: list):
+        posi = np.array(posi)
+        posi = np.array([posi[1], posi[0]])
+        posi *= -1.998
+        posi += [793.9, -1237.8]
+        return posi
+
+    @classmethod
+    def convert_cvAutoTrack_to_GenshinMap(cls, posi: list):
+        posi = np.array(posi)
+        posi = np.array([posi[1], posi[0]])
+        posi -= [-1237.8, 793.9]
+        posi /= -1.998
+        return posi
+
+    @classmethod
     def old_gimap_to_new(cls, points:np.ndarray):
-        return points + (799, 1130)
+        return points + (799*2, 1130*2)
 
     @classmethod
     def new_gimap_to_old(cls, points:np.ndarray):
-        return points - (799, 1130)
+        return points - (799*2, 1130*2)
 
     @classmethod
     def convert_GIMAP_to_LAYER(cls, points) -> str:
