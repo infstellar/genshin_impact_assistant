@@ -15,6 +15,7 @@ from source.funclib import combat_lib
 from source.flow.utils.cvars import *
 from source.teyvat_move.teyvat_move_optimizer import B_SplineCurve_GuidingHead_Optimizer
 from source.funclib.combat_lib import CSDL
+from source.combat.switch_character_operator import SwitchCharacterOperator, SHIELD
 
 
 class TeyvatMoveFlowConnector(FlowConnector):
@@ -37,7 +38,10 @@ class TeyvatMoveFlowConnector(FlowConnector):
         self.stop_offset = None
         self.is_tianli_navigation = True
         self.is_auto_pickup = False
+        self.is_use_shield = True
         self.PUO = PickupOperator()
+        self.SCO = SwitchCharacterOperator()
+
 
         self.motion_state = IN_MOVE
         self.jump_timer = Timer()
@@ -97,7 +101,7 @@ class TeyvatTeleport(FlowTemplate):
 
 
 class TeyvatMoveCommon():
-    def __init__(self):
+    def __init__(self, upper: TeyvatMoveFlowConnector):
         self.motion_state = IN_MOVE
         self.jil = movement.JumpInLoop(2)
         self.jump_timer3 = Timer()
@@ -105,6 +109,7 @@ class TeyvatMoveCommon():
         self.history_position_timer = AdvanceTimer(limit=1).start()
         self.last_w_position = [0, 0]
         self.press_w_timer = AdvanceTimer(limit=1).start()
+        self.upper = upper
 
     def switch_motion_state(self, jump=True):
         self.motion_state = movement.get_current_motion_state()
@@ -184,6 +189,14 @@ class TeyvatMoveCommon():
                     return True
         return False
 
+    def start_shield_if_needed(self):
+        if self.upper.is_use_shield:
+            self.upper.SCO.mode = SHIELD
+            self.upper.SCO.continue_threading()
+
+    def stop_shield_if_needed(self):
+        if self.upper.is_use_shield:
+            self.upper.SCO.pause_threading()
 
 class Navigation(TianliNavigator):
     def __init__(self, start, end) -> None:
@@ -247,7 +260,7 @@ class Navigation(TianliNavigator):
 class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon, Navigation):
     def __init__(self, upper: TeyvatMoveFlowConnector):
         FlowTemplate.__init__(self, upper, flow_id=ST.INIT_TEYVAT_MOVE, next_flow_id=ST.END_TEYVAT_MOVE_PASS)
-        TeyvatMoveCommon.__init__(self)
+        TeyvatMoveCommon.__init__(self, upper=upper)
         Navigation.__init__(self, genshin_map.get_position(), self.upper.target_posi)
         self.upper = upper
         self.auto_move_timeout = AdvanceTimer(limit=300).start()
@@ -297,6 +310,7 @@ class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon, Navigation):
         else:
             self.posi_list = [self.upper.target_posi]
 
+        self.start_shield_if_needed()
         self._next_rfc()
 
     def state_in(self):
@@ -365,7 +379,7 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
 
     def __init__(self, upper: TeyvatMoveFlowConnector):
         FlowTemplate.__init__(self, upper, flow_id=ST.INIT_TEYVAT_MOVE, next_flow_id=ST.END_TEYVAT_MOVE_PASS)
-        TeyvatMoveCommon.__init__(self)
+        TeyvatMoveCommon.__init__(self, upper=upper)
 
         self.upper = upper
         self.curr_path_index = 0
@@ -496,6 +510,8 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
             self.ENABLE_OPTIMIZER = False
         else:
             self.ENABLE_OPTIMIZER = True
+
+        self.start_shield_if_needed()
 
         self._next_rfc()
 
@@ -840,13 +856,15 @@ class TeyvatMovePass(EndFlowTemplate):
 
 class TeyvatMoveFlowController(FlowController):
     def __init__(self):
-        super().__init__(flow_connector=TeyvatMoveFlowConnector(),
+        flow_connector = TeyvatMoveFlowConnector()
+        super().__init__(flow_connector=flow_connector,
                          current_flow_id=ST.INIT_TEYVAT_TELEPORT,
                          flow_name="TeyvatMoveFlow")
-        self.flow_connector = self.flow_connector  # type: TeyvatMoveFlowConnector
+        self.flow_connector = flow_connector
         self.get_while_sleep = self.flow_connector.get_while_sleep
         self.append_flow(TeyvatTeleport(self.flow_connector))
         self._add_sub_threading(self.flow_connector.PUO)
+        self._add_sub_threading(self.flow_connector.SCO)
 
     def start_flow(self):
         self.flow_dict = {}
@@ -859,8 +877,7 @@ class TeyvatMoveFlowController(FlowController):
         self.append_flow(TeyvatMoveStuck(self.flow_connector))
         self.append_flow(TeyvatMovePass(self.flow_connector))
 
-        if self.flow_connector.is_tp and self.flow_connector.target_posi == [0,
-                                                                             0] and self.flow_connector.MODE == "PATH":
+        if self.flow_connector.is_tp and self.flow_connector.target_posi == [0, 0] and self.flow_connector.MODE == "PATH":
             self.flow_connector.target_posi = self.flow_connector.path_dict["start_position"]
 
         self.continue_threading()
@@ -893,7 +910,8 @@ class TeyvatMoveFlowController(FlowController):
                       is_reinit: bool = None,
                       is_precise_arrival: bool = None,
                       stop_offset=None,
-                      is_auto_pickup: bool = None):
+                      is_auto_pickup: bool = None,
+                      is_use_shield: bool = None):
         """设置参数，如果不填则使用上次的设置。
 
         Args:
@@ -937,6 +955,8 @@ class TeyvatMoveFlowController(FlowController):
             self.flow_connector.stop_offset = stop_offset
         if is_auto_pickup != None:
             self.flow_connector.is_auto_pickup = is_auto_pickup
+        if is_use_shield != None:
+            self.flow_connector.is_use_shield = is_use_shield
 
 
 if __name__ == '__main__':
