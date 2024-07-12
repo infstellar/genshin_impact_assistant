@@ -158,11 +158,13 @@ def get_item_id(item_name: str, area_id: list, match_mode=0) -> list:
 
 from source.map.extractor.convert import MapConverter
 from source.map.extractor.reader import PoiJsonApi
+#TODO: move constant
 RETURN_POSITIONS = 0
 RETURN_ALL = 1
 AREA_TEYVAT = 0
 AREA_ALL_GENSHIN = 1
 
+#TODO: add feat
 def get_item_position_new(marker_title: str,ret_mode=RETURN_POSITIONS, area=AREA_TEYVAT):
     poiapi = PoiJsonApi()
     ret_list = []

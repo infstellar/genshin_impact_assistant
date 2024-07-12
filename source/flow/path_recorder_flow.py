@@ -98,6 +98,7 @@ class PathRecorderCore(FlowTemplate):
         self.force_add_flag = False
         if self.upper.coll_name != "":
             # self.COLLECTION_POSITION = collector_lib.load_items_position(self.upper.coll_name)
+            #TODO: get_item_position_new need upd
             self.COLLECTION_POSITION = collector_lib.get_item_position_new(self.upper.coll_name)# [i['position'] for i in self.COLLECTION_POSITION]
             self.force_add_flag = True
         self.enter_flag = False
