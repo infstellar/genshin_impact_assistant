@@ -124,6 +124,9 @@ class Challenge(FlowTemplate):
             if itt.get_text_existence(asset.LEAVING_IN):
                 self.rfc = FC.AFTER
                 return
+
+
+
         self.rfc = FC.IN
     
     def state_after(self):
