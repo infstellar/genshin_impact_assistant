@@ -166,6 +166,7 @@ class MissionExecutor(BaseThreading):
         self.TMCF.start_flow()
         while 1:
             time.sleep(0.6)
+            if self.checkup_stop_func(): return
             if self.TMCF.pause_threading_flag:
                 break
             if self._is_exception():

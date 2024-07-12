@@ -7,7 +7,7 @@ from source.util import *
 from source.ui.ui import ui_control
 from source.ui import page as UIPage
 from source.map.map import genshin_map
-
+DEBUGING_THIS_MODULE = False
 
 red_num = 245
 BG_num = 100
@@ -85,11 +85,16 @@ class AimOperator(BaseThreading):
                     if self.checkup_stop_func():continue
                     if r: # 找到了，退出
                         self.enemy_flag = True
+                        self.sco_blocking_request.send_request('find_enemy_behind_barrier')  # 向SCO申请暂停Tactic执行
+                        if not DEBUGING_THIS_MODULE: # set to False when debug this module
+                            print(self.sco_blocking_request.waiting_until_reply(stop_func=self.checkup_stop_func, timeout=60))
+                        self.find_enemy_behind_barrier()
+                        self.sco_blocking_request.recovery_request()
                     else: # 没找到，根据红色箭头移动寻找
                         if self.checkup_stop_func():continue
                         if not self.aim_timeout_retry_timer.reached(): continue # 超时后6秒内不寻找
                         self.sco_blocking_request.send_request('_moving_find_enemy') # 向SCO申请暂停Tactic执行
-                        if True: # set to False when debug this module
+                        if not DEBUGING_THIS_MODULE: # set to False when debug this module
                             print(self.sco_blocking_request.waiting_until_reply(stop_func=self.checkup_stop_func, timeout=60))
                         r = self._moving_find_enemy()
                         self.sco_blocking_request.recovery_request() # 解除申请
@@ -103,7 +108,7 @@ class AimOperator(BaseThreading):
                         if self.checkup_stop_func():continue
                         if self.keep_distance_timer.reached_and_reset():
                             self.sco_blocking_request.send_request('_keep_distance_with_enemy')
-                            if True: # set to False when debug this module
+                            if not DEBUGING_THIS_MODULE: # set to False when debug this module
                                 print(self.sco_blocking_request.waiting_until_reply(stop_func=self.checkup_stop_func, timeout=60))
                             self._keep_distance_with_enemy()
                             self.sco_blocking_request.recovery_request() # 解除申请
@@ -126,10 +131,10 @@ class AimOperator(BaseThreading):
     def _lock_on_enemy(self):
         ret_points = self.get_enemy_feature() # 获得敌方血条坐标
         if ret_points is None:
-            return False
+            return 0
         points_length = []
         if len(ret_points) == 0:
-            return False
+            return 0
         else:
             for point in ret_points:
                 mx, my = SCREEN_CENTER_X,SCREEN_CENTER_Y
@@ -138,26 +143,60 @@ class AimOperator(BaseThreading):
             px, py = closest_point
             mx, my = SCREEN_CENTER_X,SCREEN_CENTER_Y
             px = (px - mx) / (2.4*self.corr_rate)
-            py = (py - my) / (2*self.corr_rate) + 35 # 获得鼠标坐标偏移量
+            py = (py - my) / (2*self.corr_rate) + 50 # 获得鼠标坐标偏移量
             # print(px,py)
             px=maxmin(px,200,-200)
             py=maxmin(py,200,-200)
             self.itt.move_to(px, py, relative=True)
-            return True
+            py-=50
+            return px+py
     
+    # def _circle_find_enemy(self) -> float:
+    #     bloodbar_exist_rotations = []
+    #     if self.circle_search_timer.reached_and_reset():
+    #         logger.debug(f"circle_search_timer reached, skip")
+    #         return False
+    #     else:
+    #         movement.reset_view() # 重置视角
+    #         logger.debug(f" finding_enemy ")
+    #     # while self.enemy_loops < self.max_number_of_enemy_loops: # 当搜索敌人次数小于最大限制次数时，开始搜索
+    #     for i in range(8):
+    #         if i%4==0:
+    #             if self.checkup_stop_func():return
+    #         combat_lib.chara_waiting(self.checkup_stop_func)
+    #         movement.cview(90)
+    #         ret_points = self.get_enemy_feature()
+    #         if ret_points is None:
+    #             continue
+    #         if len(ret_points) != 0:
+    #             # self._reset_enemy_loops()
+    #             if self._is_blood_bar_exist():
+    #                 bloodbar_exist_rotations.append(genshin_map.get_rotation())
+    #
+    #     if len(bloodbar_exist_rotations)>0:
+    #         self.circle_search_timer.reset()
+    #         l = np.array(bloodbar_exist_rotations)
+    #         l+=180
+    #         angle = np.average(l)
+    #         angle-=180
+    #         logger.debug(f'enemy exist angle: {angle}')
+    #         return angle
+    #     else:
+    #         return -1
+
     def _circle_find_enemy(self):
         if self.circle_search_timer.reached_and_reset():
             logger.debug(f"circle_search_timer reached, skip")
             return False
         else:
-            movement.reset_view() # 重置视角
+            movement.reset_view()  # 重置视角
             logger.debug(f" finding_enemy ")
         # while self.enemy_loops < self.max_number_of_enemy_loops: # 当搜索敌人次数小于最大限制次数时，开始搜索
         for i in range(15):
-            if i%4==0:
-                if self.checkup_stop_func():return
+            if i % 4 == 0:
+                if self.checkup_stop_func(): return
             combat_lib.chara_waiting(self.checkup_stop_func)
-            movement.cview(15)
+            movement.cview(30)
             ret_points = self.get_enemy_feature()
             if ret_points is None:
                 continue
@@ -166,11 +205,11 @@ class AimOperator(BaseThreading):
                 if self._is_blood_bar_exist():
                     self.circle_search_timer.reset()
                     return True
-                
 
             # self.enemy_loops += 1
         return False
-   
+
+
     def _is_blood_bar_exist(self):
         t = AdvanceTimer(1)
         logger.debug("_is_blood_bar_exist")
@@ -192,7 +231,39 @@ class AimOperator(BaseThreading):
                 if r[0] or r[1]:
                     return True
             return False
-    
+
+    def find_enemy_behind_barrier(self):
+        logger.debug(f"find_enemy_behind_barrier Start")
+        self._circle_find_enemy()
+        st = time.time()
+        while 1:
+            r = self._lock_on_enemy()
+            if time.time() - st > 3:
+                logger.debug(f"find_enemy_behind_barrier fail: lock on enemy timeout")
+                return False
+            if 0 < r < 30:
+                logger.debug(f"find_enemy_behind_barrier:lock enemy success: {r}")
+                return True
+            if not r:
+                itt.key_down('w')
+
+                if not DEBUGING_THIS_MODULE:  # set to False when debug this module
+                    print(self.sco_blocking_request.waiting_until_reply(stop_func=self.checkup_stop_func, timeout=60))
+                barrier_finder_move_limit_timer = AdvanceTimer(4).start()
+                while 1:
+                    if self.checkup_stop_func():
+                        itt.key_up('w')
+                        return
+                    if self._is_blood_bar_exist():
+                        logger.debug(f"find_enemy_behind_barrier success")
+                        itt.delay(0.5, comment='find_enemy_behind_barrier delay')
+                        itt.key_up('w')
+                        return True
+                    if barrier_finder_move_limit_timer.reached():
+                        logger.debug(f"find_enemy_behind_barrier fail: move timeout")
+                        itt.key_up('w')
+                        return False
+
     def _moving_find_enemy(self):
         # enemy_possible_rotation = []
         # origin_rotation = genshin_map.get_rotation()
@@ -222,7 +293,7 @@ class AimOperator(BaseThreading):
         while 1:
             # move view to blood bar exist or arrow no exist, where is the enemy located.
             if self.checkup_stop_func():return
-            movement.cview(20)
+            movement.cview(30)
             # itt.delay(0.1)
             r = combat_lib.combat_statement_detection()
             if r[0] or not r[1]:
@@ -232,6 +303,8 @@ class AimOperator(BaseThreading):
         move_timer = AdvanceTimer(15).start()
         move_timer.start()
         combat_lib.CSDL.freeze_state()
+
+
         while 1:
             time.sleep(0.1)
             if self.checkup_stop_func():
@@ -259,11 +332,25 @@ class AimOperator(BaseThreading):
                         itt.key_up('w')
                         combat_lib.CSDL.unfreeze_state()
                         return self._moving_find_enemy()
+                        # logger.debug(f"_moving_find_enemy: refind enemy: keep distance fail")
+                        # itt.key_up('w')
+                        # r = self._circle_find_enemy()
+                        # if r:
+                        #     r = self.find_enemy_behind_barrier()
+                        #     if r: return True
+                        #     else:
+                        #         combat_lib.CSDL.unfreeze_state()
+                        #         logger.debug(f"_moving_find_enemy: refind enemy: enemy missing! 1")
+                        #         return self._moving_find_enemy()
+                        # else:
+                        #     logger.debug(f"_moving_find_enemy: refind enemy: enemy missing! 2")
+                        #     combat_lib.CSDL.unfreeze_state()
+                        #     return self._moving_find_enemy()
                 else:
                     itt.key_down('w')
-            if combat_lib.combat_statement_detection()[1]:
+            if combat_lib.combat_statement_detection()[1]: # arrow
                 itt.key_up('w')
-                logger.info(f"_moving_find_enemy: refind enemy")
+                logger.info(f"_moving_find_enemy: refind enemy: only find arrow")
                 combat_lib.CSDL.unfreeze_state()
                 return self._moving_find_enemy()
         combat_lib.CSDL.unfreeze_state()
@@ -358,7 +445,7 @@ class AimOperator(BaseThreading):
             return False
         return px < 6
     
-    def _keep_distance_with_enemy(self):  # 期望敌方血条像素高度为7px # 与敌人保持距离
+    def _keep_distance_with_enemy(self):  # 期望敌方血条像素高度为7px # TODO:与敌人保持距离
         target_px = 7
         if self.enemy_flag:
             px = self.get_enemy_feature(ret_mode=2)
@@ -394,10 +481,11 @@ class AimOperator(BaseThreading):
 if __name__ == '__main__':
     # movement.change_view_to_angle(0, angle_function=combat_lib.get_enemy_arrow_direction)
     ao = AimOperator()
-    ao._keep_distance_with_enemy()
-    # ao.start()
+   #  ao._keep_distance_with_enemy()
+    ao.start()
     # ao.get_enemy_feature(ret_mode=2)
     while 1:
         # ao.keep_distance_with_enemy()
         time.sleep(1)
-        ao._keep_distance_with_enemy()
+        # print(genshin_map.get_rotation())
+        # ao._circle_find_enemy()

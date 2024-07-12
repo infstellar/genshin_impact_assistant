@@ -38,6 +38,7 @@ class PathRecorderCore(FlowTemplate):
     def __init__(self, upper: PathRecorderConnector):
         super().__init__(upper,flow_id=ST.PATH_RECORDER ,next_flow_id=ST.PATH_RECORDER_END)
 
+        self.force_add_flag = None
         keyboard.add_hotkey('\\', self._start_stop_recording)
         self.COLLECTION_POSITION = []
         for i in load_json("all_position.json", fr"{ROOT_PATH}/assets/POI_JSON_API"):
@@ -96,8 +97,9 @@ class PathRecorderCore(FlowTemplate):
         }
         self.force_add_flag = False
         if self.upper.coll_name != "":
-            self.COLLECTION_POSITION = collector_lib.load_items_position(self.upper.coll_name)
-            self.COLLECTION_POSITION = [i['position'] for i in self.COLLECTION_POSITION]
+            # self.COLLECTION_POSITION = collector_lib.load_items_position(self.upper.coll_name)
+            #TODO: get_item_position_new need upd
+            self.COLLECTION_POSITION = collector_lib.get_item_position_new(self.upper.coll_name)# [i['position'] for i in self.COLLECTION_POSITION]
             self.force_add_flag = True
         self.enter_flag = False
         self.used_collection_position = []

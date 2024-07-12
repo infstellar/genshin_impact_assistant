@@ -3,7 +3,7 @@ from source.util import *
 from source.task.domain.domain_flow_upgrade import DomainFlowController
 from source.teyvat_move.teyvat_move_flow_upgrade import TeyvatMoveFlowController
 from source.task.task_template import TaskTemplate
-from source.funclib.collector_lib import load_items_position
+from source.funclib.collector_lib import get_item_position_new
 from source.funclib.generic_lib import f_recognition
 from source.ui.ui import ui_control
 import source.ui.page as UIPage
@@ -13,6 +13,7 @@ from source.task import task_id as TI
 from source.funclib.err_code_lib import ERR_NONE, ERR_STUCK, ERR_PASS
 from source.common import timer_module
 from source.flow.utils.cvars import *
+from source.assets.domain import *
 
 
 class DomainTask(TaskTemplate):
@@ -27,7 +28,7 @@ class DomainTask(TaskTemplate):
         
         self.domain_name = GIAconfig.Domain_DomainName
         self.domain_stage_name = GIAconfig.Domain_DomainStageName
-        self.domain_posi = load_items_position(self.domain_name,mode=1, ret_mode=1)[0]
+        self.domain_posi = get_item_position_new(self.domain_name)[0]
         self.TMFCF.set_parameter(stop_rule = STOP_RULE_F, MODE = "AUTO", target_posi = self.domain_posi, is_tp=True, tp_type=["Domain"])
         self.TMFCF.set_target_posi(self.domain_posi)
         self.last_domain_times = int(GIAconfig.Domain_ChallengeTimes)
@@ -142,6 +143,10 @@ class DomainTask(TaskTemplate):
             # self.flow_mode = TI.DT_MOVE_TO_DOMAIN
 
         if self.flow_mode == TI.DT_MOVE_TO_DOMAIN:
+            self.TMFCF.set_parameter(stop_rule=STOP_RULE_F, MODE="AUTO", target_posi=self.domain_posi, is_tp=True,
+                                     tp_type=["Domain"])
+            self.TMFCF.set_target_posi(self.domain_posi)
+            # self.TMFCF.start_threading()
             self.TMFCF.start_flow()
             while 1:
                 if self.checkup_stop_func():return
@@ -155,6 +160,7 @@ class DomainTask(TaskTemplate):
             self.flow_mode = TI.DT_IN_DOMAIN
             
         if self.flow_mode == TI.DT_IN_DOMAIN:
+            # self.dfc.start_threading()
             self.dfc.start_flow()
             # time.sleep(1)
             while 1:
@@ -162,13 +168,49 @@ class DomainTask(TaskTemplate):
                 time.sleep(0.2)
                 if self.dfc.pause_threading_flag:
                     break
-            
+                # detect challenge failure
+                if itt.appear(ButtonDomainFailure) or itt.appear(ButtonDomainRetry):
+                    # challenge fail
+                    logger.warning(f"challenge fail, try rechallenging")
+                    self.dfc.pause_threading()
+                    # self.TMFCF.stop_threading()
+                    while 1:
+                        siw()
+                        if self.checkup_stop_func(): return
+                        if self.dfc.is_thread_paused(): break
+                        # if (not self.TMFCF.is_alive()) and (not self.dfc.is_alive()):
+                        #     break
+
+                    if itt.appear(ButtonDomainFailure):
+                        while 1:
+                            siw()
+                            if self.checkup_stop_func():return
+                            itt.appear_then_click(ButtonDomainFailure)
+                            if not itt.appear(ButtonDomainFailure): break
+                    elif itt.appear(ButtonDomainRetry):
+                        while 1:
+                            siw()
+                            if self.checkup_stop_func():return
+                            itt.appear_then_click(ButtonDomainRetry)
+                            if not itt.appear(ButtonDomainRetry): break
+                    else:
+                        logger.error("WHAT")
+
+                    while 1:
+                        siw()
+                        if self.checkup_stop_func(): return
+                        if ui_control.get_page() in [UIPage.page_domain, UIPage.page_main]:
+                            break
+                    self.flow_mode = TI.DT_INIT
+                    return
             self._end_domain()
             
             
 if __name__ == '__main__':
     dmt = DomainTask()
-    dmt._enter_domain()
+    dmt.flow_mode = TI.DT_IN_DOMAIN
+    dmt.start()
+    # dmt._enter_domain()
     # dmt.flow_mode = TI.DT_IN_DOMAIN
     while 1:
         time.sleep(0.2)

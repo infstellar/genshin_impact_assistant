@@ -45,7 +45,7 @@ class PosiTemplate(AssetBase):
         else:
             # self.origin_path = img_path
             image = cv2.imread(img_path)
-            position = get_bbox(image, black_offset=18)
+            position = asset_get_bbox(image, black_offset=18)
         self.posi_list.append(position)
         
         if len(self.posi_list) <= 1:
@@ -58,30 +58,34 @@ class Area(PosiTemplate):
         name = get_name(traceback.extract_stack()[-2])
         super().__init__(name)
 
-posi_charalist_q = [[339 - ly + dy, 1591 + dx, 339 - ly + 55, 1591 + 55], [339 + dy, 1591 + dx, 339 + 55, 1591 + 55],
-                    [339 + ly + dy, 1591 + dx, 339 + ly + 55, 1591 + 55],
-                    [339 + 2 * ly + dy, 1591 + dx, 339 + 2 * ly + 55, 1591 + 55]]
+"""
+amazing. how could i add so many positions manually here?
+use Area with bbg-format img to create area. Don't do that...
+"""
+# posi_charalist_q = [[339 - ly + dy, 1591 + dx, 339 - ly + 55, 1591 + 55], [339 + dy, 1591 + dx, 339 + 55, 1591 + 55],
+#                     [339 + ly + dy, 1591 + dx, 339 + ly + 55, 1591 + 55],
+#                     [339 + 2 * ly + dy, 1591 + dx, 339 + 2 * ly + 55, 1591 + 55]]
 posi_charalist_q_point = [
     [272, 1623],
     [358, 1616],
     [463, 1616],
     [560, 1616]
 ]
-hp_charalist_posi = [[283, 1698], [379, 1698], [475, 1698], [571, 1698]]
+# hp_charalist_posi = [[283, 1698], [379, 1698], [475, 1698], [571, 1698]]
 chara_head_list_point = [[270, 1818], [366, 1818], [461, 1818], [557, 1818]]
 chara_num_list_point = [[269, 1862], [366, 1862], [460, 1862], [557, 1862]]
-posi_chara_list = [[218, 1779, 218 + 68, 1779 + 61], [218 + ly, 1779, 218 + ly + 68, 1779 + 61],
-                   [218 + 2 * ly, 1779, 218 + 2 * ly + 68, 1779 + 61],
-                   [218 + 3 * ly, 1779, 218 + 3 * ly + 68, 1779 + 61]]
+# posi_chara_list = [[218, 1779, 218 + 68, 1779 + 61], [218 + ly, 1779, 218 + ly + 68, 1779 + 61],
+#                    [218 + 2 * ly, 1779, 218 + 2 * ly + 68, 1779 + 61],
+#                    [218 + 3 * ly, 1779, 218 + 3 * ly + 68, 1779 + 61]]
 # posi_chara_q=[915+d2x,1766+d2y,1015,1866]
-posi_chara_q = [1788,943, 1845, 1002 ]
+# posi_chara_q = [1788,943, 1845, 1002 ]
 posi_complete_chara_q = [1763,916, 1876, 1026 ]
-posi_chara_q_point = [981, 1812]
+# posi_chara_q_point = [981, 1812]
 posi_chara_e = [1666,965, 1716, 1015 ]
 posi_chara_smaller_e = [1671,974, 1710, 1013 ]
 posi_coming_out_by_space = [1379,505, 1447, 568 ]
-posi_F_button_list = [1079,350,1162, 751 ]
-posi_F_button_text = [1152,505, 1503,572 ]
+# posi_F_button_list = [1079,350,1162, 751 ]
+# posi_F_button_text = [1152,505, 1503,572 ]
 posi_fangdaditu = [48, 429]
 posi_suoxiaoditu = [48, 653]
 # posi_chara_e_point=[]

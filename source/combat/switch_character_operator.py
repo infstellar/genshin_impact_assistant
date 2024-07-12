@@ -74,7 +74,7 @@ class SwitchCharacterOperator(BaseThreading):
                 if self.aim_operator.sco_blocking_request.is_blocking():
                     self.aim_operator.sco_blocking_request.reply_request()
                     logger.debug("sco_blocking_request")
-                    self.switch_character(switch_type="SHIELD")
+                    self.switch_character(switch_type="AFK")
                     time.sleep(0.2)
                     continue
                 if self.tactic_operator.get_working_statement():  # tactic operator working
@@ -91,6 +91,7 @@ class SwitchCharacterOperator(BaseThreading):
                         self.switch_character(switch_type="MAIN")
 
     def _check_and_reborn(self, x) -> bool:
+        #TODO: Optimize
         """重生角色
 
         Returns:
@@ -177,6 +178,12 @@ class SwitchCharacterOperator(BaseThreading):
             elif switch_type == "MAIN":
                 if chara.position == 'Main':
                     tg = 'a,a,a,a,a'
+            elif switch_type == 'AFK':
+                if chara.is_position_ready('SHIELD'):
+                    tg = chara.tactic_group
+                    tg+=';a'
+                elif chara.position == 'Main':
+                    tg = 'a;2000;a;1000'
             if tg != None:
                 self.current_character_num = combat_lib.get_current_chara_num(self.checkup_stop_func)
                 logger.debug(

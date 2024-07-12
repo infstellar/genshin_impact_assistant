@@ -14,6 +14,7 @@ class MapConverter:
     cvAutoTrack: https://github.com/GengGode/cvAutoTrack
     GIMAP: Raw map image file in cvAutoTrack, named `GIMAP.png`
     kongying: https://v3.yuanshen.site/
+    GenshinMap: The official coordinate system of the Genshin
     """
     LAYER_Domain = 'Domain'
     LAYER_Teyvat = 'Teyvat'
@@ -30,11 +31,14 @@ class MapConverter:
     REGION_ThreeRealmsGatewayOffering = 'ThreeRealmsGatewayOffering'
     REGION_Enkanomiya = 'Enkanomiya'
     REGION_Sumeru = 'Sumeru'
+    REGION_Fontaine = 'Fontaine'
 
     TP_Statue = 'Statue'
     TP_Teleporter = 'Teleporter'
     TP_Domain = 'Domain'
     TP_Instance = 'Instance'
+
+
 
     @classmethod
     def convert_REGION_to_LAYER(cls, region: str) -> str:
@@ -50,21 +54,45 @@ class MapConverter:
         return cls.LAYER_Teyvat
 
     @classmethod
+    def convert_GenshinMap_to_cvAutoTrack(cls, posi: list):
+        posi = np.array(posi)
+        posi = np.array([posi[1], posi[0]])
+        posi *= -1.998
+        posi += [793.9, -1237.8]
+        return posi
+
+    @classmethod
+    def convert_cvAutoTrack_to_GenshinMap(cls, posi: list):
+        posi = np.array(posi)
+        posi = np.array([posi[1], posi[0]])
+        posi -= [-1237.8, 793.9]
+        posi /= -1.998
+        return posi
+
+    @classmethod
+    def old_gimap_to_new(cls, points:np.ndarray):
+        return points + (798*2, 1131.5*2)
+
+    @classmethod
+    def new_gimap_to_old(cls, points:np.ndarray):
+        return points - (798*2, 1131.5*2)
+
+    @classmethod
     def convert_GIMAP_to_LAYER(cls, points) -> str:
         """
         Get LAYER name from the position.
         If `points` contains multiple position, the first one will be used.
         """
-        points = np.array(points)
-        if points.ndim > 1:
-            point = points
-        else:
-            point = points
-
-        if point_in_area(point, area=(0, 0, 2389, 1730), threshold=0):
-            return cls.LAYER_TheChasm
-        if point_in_area(point, area=(0, 5731, 2391, 7944), threshold=0):
-            return cls.LAYER_Enkanomiya
+        # points = np.array(points)
+        # if points.ndim > 1:
+        #     point = points
+        # else:
+        #     point = points
+        #
+        # if point_in_area(point, area=(0, 0, 2389, 1730), threshold=0):
+        #     return cls.LAYER_TheChasm
+        # if point_in_area(point, area=(0, 5731, 2391, 7944), threshold=0):
+        #     return cls.LAYER_Enkanomiya
 
         return cls.LAYER_Teyvat
 
@@ -77,13 +105,16 @@ class MapConverter:
         cvAutoTrack is a kind of mess in Enkanomiya and The Chasm, so no converts
         """
         points = np.array(points)
+        points = cls.new_gimap_to_old(points)
         points = (points - (4480, 3015.5)) * 2.557
         return points
 
     @classmethod
     def convert_cvAutoTrack_to_GIMAP(cls, points, layer=LAYER_Teyvat) -> np.ndarray:
         points = np.array(points)
+
         points = points / 2.557 + (4480, 3015.5)
+        points = cls.old_gimap_to_new(points)
         return points
 
     @classmethod

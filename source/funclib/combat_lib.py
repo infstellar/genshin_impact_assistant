@@ -237,7 +237,7 @@ def get_enemy_blood_bar_img(img):
     im_src[:, :, 2][im_src[:, :, 1] != bg_num] = 0
     # _, imsrc2 = cv2.threshold(imsrc[:, :, 2], 1, 255, cv2.THRESH_BINARY)
     blood_bar_img = im_src[:, :, 2]
-    if False:
+    if CV_DEBUG_MODE:
         # cv2.imshow("mask",mask)
         cv2.imshow("21312231", im_src)
         cv2.imshow("2131231", blood_bar_img)
@@ -652,8 +652,9 @@ if __name__ == '__main__':
     print()
     # set_party_setup("Lisa")
     while 1:
-        time.sleep(1)
-        print(get_characters_name())
+        time.sleep(0.1)
+        get_enemy_blood_bar_img(itt.capture(jpgmode=FOUR_CHANNELS))
+        # print(get_characters_name())
         # print(is_character_busy())
         # print(unconventionality_situation_detection())
         # print(combat_statement_detection())

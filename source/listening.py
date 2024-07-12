@@ -14,6 +14,7 @@ SEMIAUTO_FUNC_MANAGER = SemiautoFuncManager()
 threading.excepthook = TASK_MANAGER.task_excepthook
 TASK_MANAGER.setDaemon(True)
 TASK_MANAGER.start()
+keyboard.add_hotkey(GIAconfig.Keymap_StartStop, SEMIAUTO_FUNC_MANAGER.apply_change)
 # keyboard.add_hotkey(load_json("keymap.json", f"{CONFIG_PATH_SETTING}")["task"], TASK_MANAGER.start_stop_tasklist)
 
 @logger.catch

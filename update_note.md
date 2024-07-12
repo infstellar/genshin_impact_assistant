@@ -1,6 +1,7 @@
 ## TODO：
 - Button增加点完之后的检测
-- 启动时检查python版本
+- 小地图视角检测问题
+- 启动时检查python版本和截图是否有效
 - commission set time
 - tlpp添加ENABLE_OPT选项
 - ui切完再检查一次

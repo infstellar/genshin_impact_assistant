@@ -8,7 +8,7 @@ CLICK_DYNAMIC = 1
 
 def get_cap_posi(path, black_offset):
     raw_file = cv2.imread(os.path.join(ROOT_PATH, path))
-    bbg_posi = get_bbox(raw_file, black_offset=black_offset)
+    bbg_posi = asset_get_bbox(raw_file, black_offset=black_offset)
     return bbg_posi
 
 class Button(ImgIcon):
@@ -21,19 +21,6 @@ class Button(ImgIcon):
             self.click_offset=np.array([0,0])
         else:
             self.click_offset=np.array(click_offset)
-        # self.path = path.replace("$lang$", global_lang)
-        # self.raw_file = cv2.imread(os.path.join(root_path, self.path))
-        # self.raw_name = name
-        
-        # self.area = bbg_posi
-        # if button is None:
-        #     self.button = self.area
-        # else:
-        #     self.button = button
-        
-        # qshow(self.image)
-        # image_gray = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
-        # ___, self.image_binary = cv2.threshold(image_gray, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
         if self.is_bbg:
             self.center_point = [self.bbg_posi[0]+self.image.shape[1]/2, self.bbg_posi[1]+self.image.shape[0]/2]
         self.click_retry_timer = AdvanceTimer(3).start()

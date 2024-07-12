@@ -1,6 +1,6 @@
 from source.util import *
 import source.astar as astar
-import gimap
+import gimapdev as gimap
 import matplotlib.pyplot as plt
 from matplotlib.offsetbox import OffsetImage, AnnotationBbox
 from source.map.extractor.convert import MapConverter

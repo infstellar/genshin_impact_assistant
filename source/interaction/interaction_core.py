@@ -9,9 +9,11 @@ import numpy as np
 import win32api
 import win32gui
 from source.common import static_lib
-from source.manager import img_manager, text_manager, button_manager
+from source.manager import img_manager, text_manager, button_manager, Bbox
 from source.common.timer_module import timer
 from source.common.timer_module import TimeoutTimer, Timer, AdvanceTimer
+from source.ocr.models import LOCAL_OCR_MODEL
+from pponnxcr.predict_system import BoxedResult
 
 
 IMG_RATE = 0
@@ -156,7 +158,53 @@ class InteractionBGD:
 
     # @timer
 
+    def ocr_single_line(self, imgicon: img_manager.ImgIcon) -> str:
+        upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
+        cap = self.capture(posi=imgicon.cap_posi, jpgmode=imgicon.jpgmode)
+        r_text = LOCAL_OCR_MODEL.ocr_single_line(cap)
+        if imgicon.is_print_log(1 >= imgicon.threshold):
+            logger.debug('imgname: ' + imgicon.name + 'text result: ' + r_text + ' |function name: ' + upper_func_name)
+        return r_text
+
+    def ocr_lines(self,imgicon: img_manager.ImgIcon) -> list:
+        upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
+        cap = self.capture(posi=imgicon.cap_posi, jpgmode=imgicon.jpgmode)
+        r_texts = LOCAL_OCR_MODEL.ocr_lines(cap)
+        if imgicon.is_print_log(1 >= imgicon.threshold):
+            logger.debug('imgname: ' + imgicon.name + 'text result: ' + r_texts + ' |function name: ' + upper_func_name)
+        return r_texts
+
+    def detect_and_ocr(self, imgicon: img_manager.ImgIcon):
+        r : t.List[BoxedResult]
+        r = LOCAL_OCR_MODEL.detect_and_ocr(imgicon.image)
+
+
+    def get_img_bbox(self, imgicon: img_manager.ImgIcon) -> Bbox:
+        upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
+        cap = self.capture(posi=imgicon.cap_posi, jpgmode=imgicon.jpgmode)
+        matching_rate, max_loc = similar_img(cap, imgicon.image, ret_mode=IMG_POSI)
+        bbox = Bbox(imgicon.cap_posi[0], imgicon.cap_posi[1], imgicon.cap_posi[0]+max_loc[0], imgicon.cap_posi[1]+max_loc[1])
+        #TODO: a better way to detect text
+
+        # if matching_rate >= imgicon.threshold:
+        #     if imgicon.win_text != None:
+        #         from source.api.pdocr_complete import ocr
+        #         r = ocr.get_text_position(cap, imgicon.win_text)
+        #         if r==-1:
+        #             matching_rate = -1
+        if imgicon.is_print_log(matching_rate >= imgicon.threshold):
+            logger.debug('imgname: ' + imgicon.name + 'max_loc: ' + str(max_loc) + ' |function name: ' + upper_func_name)
+
+        if matching_rate >= imgicon.threshold:
+            return bbox
+        else:
+            return None
+
+
+
+
     def get_img_position(self, imgicon: img_manager.ImgIcon, is_gray=False, is_log=False):
+        # Abandoned. Please use "get_img_bbox" instead.
         """获得图片在屏幕上的坐标
 
         Args:
@@ -247,16 +295,15 @@ class InteractionBGD:
         elif ret_mode == IMG_RATE:
             return matching_rate
         
-    def get_text_existence(self, textobj: text_manager.TextTemplate, is_gray=False, is_log = True, ret_mode = IMG_BOOL, show_res = False, use_cache = False):
+    def get_text_existence(self, textobj: text_manager.TextTemplate, is_gray=False, ret_mode = IMG_BOOL, show_res = False, use_cache = False):
         from source.api.pdocr_complete import ocr
         cap = self.capture(posi = textobj.cap_area, jpgmode=NORMAL_CHANNELS, recapture_limit=(self.RECAPTURE_LIMIT if use_cache else 0))
-        if ocr.get_text_position(cap, textobj.text) != -1:
-            if is_log:
-                logger.debug(f"get_text_existence: text: {textobj.text} Found")
-            return True
-        else:
-            logger.debug(f"get_text_existence: text: {textobj.text} Not Found")
-            return False
+        # res = LOCAL_OCR_MODEL.ocr_lines(cap)
+        res = ocr.get_all_texts(cap)
+        is_exist = textobj.match_results(res)
+        if textobj.is_print_log(is_exist):
+            logger.debug(f"get_text_existence: text: {textobj.text} {'Found' if is_exist else 'Not Found'}")
+        return is_exist
 
     def appear(self, obj, use_cache=False):
         if isinstance(obj, text_manager.TextTemplate):
@@ -280,11 +327,13 @@ class InteractionBGD:
             upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
 
             if not inputvar.click_retry_timer.reached():
+                logger.trace(f'appear_then_click: click_retry_timer not reach, return false')
                 return False
             
             if inputvar.click_fail_timer.reached_and_reset():
-                logger.error(t2t("appear then click fail"))
+                logger.error(t2t("!!!appear then click fail!!!"))
                 logger.info(f"{inputvar.name} {inputvar.click_position}")
+                # TODO: raise exception
                 return False
             
             cap = self.capture(posi=imgicon.cap_posi, jpgmode=imgicon.jpgmode)
@@ -362,21 +411,21 @@ class InteractionBGD:
             else:
                 return False
     
-    def appear_then_click_groups(self, verify_img:img_manager.ImgIcon, inputvar_list:list, stop_func, verify_mode=False):
-        """
-        Click each inputvar in list.
-        
-        """
-        succ_flags=[False for i in len(inputvar_list)]
-        while 1:
-            time.sleep(0.1)
-            if stop_func:return False
-            if all(succ_flags):
-                if self.get_img_existence(verify_img) == verify_mode:
-                    return True
-            for i in len(inputvar_list):
-                r = self.appear_then_click(inputvar_list[i])
-                if r: succ_flags[i]=True
+    # def appear_then_click_groups(self, verify_img:img_manager.ImgIcon, inputvar_list:list, stop_func, verify_mode=False):
+    #     """
+    #     Click each inputvar in list.
+    #
+    #     """
+    #     succ_flags=[False for i in len(inputvar_list)]
+    #     while 1:
+    #         time.sleep(0.1)
+    #         if stop_func:return False
+    #         if all(succ_flags):
+    #             if self.get_img_existence(verify_img) == verify_mode:
+    #                 return True
+    #         for i in len(inputvar_list):
+    #             r = self.appear_then_click(inputvar_list[i])
+    #             if r: succ_flags[i]=True
                 
 
     def appear_then_press(self, imgicon: img_manager.ImgIcon, key_name, is_gray=False):

@@ -1,11 +1,20 @@
 from source.map.detection.resource import MiniMapResource
 from source.map.detection.utils import *
 from source.map.extractor.convert import MapConverter
-from source.util import logger, NORMAL_CHANNELS
+from source.util import logger, NORMAL_CHANNELS, CV_DEBUG_MODE
 
 
 class BigMap(MiniMapResource):
     def _predict_bigmap(self, image, layer=MapConverter.LAYER_Teyvat):
+        """
+
+        Args:
+            image:
+            layer:
+
+        Returns: (new)GIMAP format position
+
+        """
         if layer in [
             MapConverter.LAYER_Enkanomiya,
             MapConverter.LAYER_ThreeRealmsGatewayOffering,
@@ -39,10 +48,21 @@ class BigMap(MiniMapResource):
         precise_loca -= 5
 
         global_loca = (loca + precise_loca + center - self.BIGMAP_BORDER_PAD) \
-                      / self.BIGMAP_SEARCH_SCALE / self.POSITION_SEARCH_SCALE
+                      / self.BIGMAP_SEARCH_SCALE / self.POSITION_SEARCH_SCALE #
+        global_loca += [0,6]  # magic number-GIMAP 4.6.0
         self.bigmap_similarity = sim
         self.bigmap_similarity_local = local_sim
         self.bigmap = global_loca
+
+        if CV_DEBUG_MODE:
+            cv2.imshow("image",image)
+            # loca = global_loca/8
+            loca = loca + precise_loca + center
+            close_area = crop(self.GIBigmap, [loca[0]-200,loca[1]-200,loca[0]+200,loca[1]+200])
+            cv2.imshow("bigmap_nearby", close_area)
+            cv2.waitKey(1)
+
+
         return sim, global_loca
 
     def update_bigmap(self, image, layer=MapConverter.LAYER_Teyvat):
@@ -73,7 +93,7 @@ if __name__ == '__main__':
         time.sleep(0.1)
 
 
-# if __name__ == '__main__':
+# if __name__ == '__main__': 6080 5250
 #     from source.device.genshin.genshin import Genshin
 
 #     device = Genshin('127.0.0.1:7555')

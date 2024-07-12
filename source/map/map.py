@@ -4,6 +4,7 @@ import source.ui.page as UIPage
 from source.interaction.interaction_core import itt
 from source.manager import asset
 from source.util import *
+from source.cvars import *
 
 if GLOBAL_LANG == 'zh_CN':
     from source.map.data.teleporter_zh_CN import DICT_TELEPORTER
@@ -16,15 +17,7 @@ from source.map.position.position import *
 
 import threading
 
-REGION_TEYVAT = [
-    "Inazuma",
-    "Liyue",
-    "Mondstadt",
-    "Sumeru"
-]
-COORDINATE_TIANLI = "TianLi"
-COORDINATE_GIMAP = "GIMAP"
-COORDINATE_KONGYING = "KongYing"
+
 
 
 class Map(MiniMap, BigMap, MapConverter):
@@ -36,10 +29,10 @@ class Map(MiniMap, BigMap, MapConverter):
             super().__init__(device_type=MiniMap.DETECT_Mobile_720p)
 
         # Set bigmap tp arguments
-        self.MAP_POSI2MOVE_POSI_RATE = 0.2  # 移动距离与力度的比例
-        self.BIGMAP_TP_OFFSET = 100  # 距离目标小于该误差则停止
+        self.MAP_POSI2MOVE_POSI_RATE = 0.3  # 移动距离与力度的比例
+        self.BIGMAP_TP_OFFSET = 20  # 距离目标小于该误差则停止
         self.BIGMAP_MOVE_MAX = 130  # 最大移动力度
-        self.TP_RANGE = 350  # 在该像素范围内可tp
+        self.TP_RANGE = 200  # 在该像素范围内可tp
         self.MINIMAP_UPDATE_LIMIT = 0.1  # minimap更新最短时间
         self.MINIMAP_ERROR_BASE_LIMIT = 20  # minimap基本更新误差
         self.METER_PER_SECOND = 25  # 移动速度，m/s
@@ -249,14 +242,14 @@ class Map(MiniMap, BigMap, MapConverter):
         self.check_bigmap_scaling()
         if is_upd:
             self._upd_bigmap()
-        logger.debug(f"bigmap posi: {self.convert_GIMAP_to_cvAutoTrack(self.bigmap)}")
+        logger.debug(f"bigmap cvat posi: {self.convert_GIMAP_to_cvAutoTrack(self.bigmap)}")
         return GIMAPPosition(self.bigmap)
 
     def _move_bigmap(self, target_posi, float_posi=0, force_center=False, csf=lambda: False) -> list:
         """move bigmap center to target position
 
         Args:
-            target_posi (_type_): 目标坐标
+            target_posi (_type_): 目标坐标 GIMAP
             float_posi (int, optional): 如果点到了什么东东导致移动失败，自动增加该值. Defaults to 0.
 
         Returns:
@@ -294,7 +287,7 @@ class Map(MiniMap, BigMap, MapConverter):
                 if i % 2 == 0:
                     itt.left_down()
 
-        curr_posi = self.get_bigmap_posi().tianli
+        curr_posi = self.get_bigmap_posi().position
         dx = min((curr_posi[0] - target_posi[0]) * self.MAP_POSI2MOVE_POSI_RATE, self.BIGMAP_MOVE_MAX)
         dx = max(dx, -self.BIGMAP_MOVE_MAX)
         dy = min((curr_posi[1] - target_posi[1]) * self.MAP_POSI2MOVE_POSI_RATE, self.BIGMAP_MOVE_MAX)
@@ -309,26 +302,26 @@ class Map(MiniMap, BigMap, MapConverter):
         # if itt.get_img_existence(asset.confirm):
         # itt.key_press('esc')
 
-        after_move_posi = self.get_bigmap_posi().tianli
+        after_move_posi = self.get_bigmap_posi().position
         if not force_center:
-            if euclidean_distance(self.convert_cvAutoTrack_to_InGenshinMapPX(after_move_posi),
-                                  self.convert_cvAutoTrack_to_InGenshinMapPX(target_posi)) <= self.TP_RANGE:
+            if euclidean_distance(self.convert_GIMAP_to_InGenshinMapPX(after_move_posi),
+                                  self.convert_GIMAP_to_InGenshinMapPX(target_posi)) <= self.TP_RANGE:
                 return list(
-                    (self.convert_cvAutoTrack_to_InGenshinMapPX(target_posi))
+                    (self.convert_GIMAP_to_InGenshinMapPX(target_posi))
                     -  # type: ignore
-                    (self.convert_cvAutoTrack_to_InGenshinMapPX(after_move_posi))
+                    (self.convert_GIMAP_to_InGenshinMapPX(after_move_posi))
                     +
                     np.array([screen_center_x, screen_center_y])
                 )
 
-        if euclidean_distance(self.get_bigmap_posi(is_upd=False).tianli, target_posi) <= self.BIGMAP_TP_OFFSET:
+        if euclidean_distance(self.get_bigmap_posi(is_upd=False).position, target_posi) <= self.BIGMAP_TP_OFFSET:
             if IS_DEVICE_PC:
                 return list([1920 / 2, 1080 / 2])  # screen center
             else:
                 return list([1024 / 2, 768 / 2])
         else:
             itt.delay(0.2, comment="wait for a moment")
-            if euclidean_distance(self.get_bigmap_posi(is_upd=False).tianli, curr_posi) <= self.BIGMAP_TP_OFFSET:
+            if euclidean_distance(self.get_bigmap_posi(is_upd=False).position, curr_posi) <= self.BIGMAP_TP_OFFSET:
                 return self._move_bigmap(target_posi=target_posi, float_posi=float_posi + 45)
             else:
                 return self._move_bigmap(target_posi=target_posi)
@@ -337,7 +330,7 @@ class Map(MiniMap, BigMap, MapConverter):
         """
         return closest teleporter position: 
         
-        input: TianLi format position;
+        input:  GIMAP format position;
         return: GIMAP format position.
         """
         if tp_type is None:
@@ -346,7 +339,7 @@ class Map(MiniMap, BigMap, MapConverter):
         min_teleporter = None
         for i in DICT_TELEPORTER:
             if (DICT_TELEPORTER[i].region in regions) and (DICT_TELEPORTER[i].tp in tp_type):
-                i_posi = self.convert_GIMAP_to_cvAutoTrack(DICT_TELEPORTER[i].position)
+                i_posi = DICT_TELEPORTER[i].position
                 i_dist = euclidean_distance(posi, i_posi)
                 if i_dist < min_dist:
                     min_teleporter = DICT_TELEPORTER[i]
@@ -369,6 +362,8 @@ class Map(MiniMap, BigMap, MapConverter):
             tp_icon = asset.MapAreaDQ
         elif tp_region == "Sumeru":
             tp_icon = asset.MapAreaXM
+        elif tp_region == "Fontaine":
+            tp_icon = asset.MapAreaFD
         else:
             logger.error(t2t("Unknown region"))
         while 1:
@@ -386,7 +381,7 @@ class Map(MiniMap, BigMap, MapConverter):
         """传送到指定坐标。
 
         Args:
-            posi (list): _description_
+            posi (list): CVAT
             tp_mode (int, optional): 0: 自动选择最近的可传送目标传送. Defaults to 0.
             tp_type (list, optional): _description_. Defaults to None.
             csf (_type_, optional): checkup stop func. Defaults to lambda:False.
@@ -394,21 +389,23 @@ class Map(MiniMap, BigMap, MapConverter):
         Returns:
             TianLiPosition: _description_
         """
+        logger.debug(f'bigmap tp to: {posi}')
         if tp_type == None:
             tp_type = ["Teleporter", "Statue", "Domain"]
         ui_control.ensure_page(UIPage.page_bigmap)
+        target_teleporter = self._find_closest_teleporter(list(MapConverter.convert_cvAutoTrack_to_GIMAP(posi)), tp_type=tp_type)
         if tp_mode == 0:
-            target_teleporter = self._find_closest_teleporter(posi, tp_type=tp_type)
-        tp_posi = self.convert_GIMAP_to_cvAutoTrack(target_teleporter.position)
-        tp_type = target_teleporter.tp
+            tp_posi = target_teleporter.position # self.convert_GIMAP_to_cvAutoTrack(target_teleporter.position)
+            tp_type = target_teleporter.tp
         tp_region = target_teleporter.region
+
+
         ui_control.ensure_page(UIPage.page_bigmap)
         self.check_bigmap_scaling()
 
         self._switch_to_area(tp_region)
 
         click_posi = self._move_bigmap(tp_posi, csf=csf)
-
         if tp_type == "Domain":  # 部分domain有特殊名字
             logger.debug("tp to Domain")
             itt.appear_then_click(asset.ButtonBigmapSwitchDomainModeOn)
@@ -462,10 +459,15 @@ logger.info(f"genshin map object created")
 
 if __name__ == '__main__':
     # genshin_map.bigmap_tp(genshin_map.convert_GIMAP_to_cvAutoTrack([6642.003, 5485.38]),
-    #                       tp_type=["Domain"])  # tp to *染之庭
+     #                      tp_type=["Domain"])  # tp to *染之庭
+    # genshin_map.reinit_smallmap()
+    # r = MapConverter.convert_cvAutoTrack_to_GIMAP([0,0])
+    genshin_map.bigmap_tp([0,0])# MapConverter.convert_GIMAP_to_cvAutoTrack([3639*2, 1564*2]))
     genshin_map.reinit_smallmap()
     while 1:
         time.sleep(0.2)
+
+        logger.info(genshin_map.get_position())
         # print(genshin_map.get_rotation())
         # input()
         # itt.key_down('w')

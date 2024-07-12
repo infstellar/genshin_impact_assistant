@@ -13,6 +13,7 @@ COMMISSION_TASK = "CommissionTask"
 CLAIM_REWARD_TASK = "ClaimRewardTask"
 LEY_LINE_OUTCROP_TASK = "LeyLineOutcropTask"
 LAUNCH_GENSHIN_TASK = "LaunchGenshinTask"
+COLLECT_IMAGE = "CollectImage"
 
 class TaskManager(BaseThreading):
     def __init__(self) -> None:
@@ -103,6 +104,9 @@ class TaskManager(BaseThreading):
             elif task_name == LAUNCH_GENSHIN_TASK:
                 from source.task.launch_genshin.launch_genshin import LaunchGenshin
                 self.curr_task = LaunchGenshin()
+            elif task_name == COLLECT_IMAGE:
+                from source.task.collect_image.collect_image import CollectImage
+                self.curr_task = CollectImage()
             elif task_name == 'CollectorTask':
                 pass
             logger.info(t2t("Task") + task_name + t2t(" Start."))

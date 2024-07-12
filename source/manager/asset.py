@@ -4,7 +4,13 @@ from source.manager.button_manager import Button
 from source.manager.text_manager import TextTemplate, Text
 from source.manager.posi_manager import PosiTemplate, Area
 from source.api.utils import *
+"""
+OLD
 
+DO NOT ADD ANY NEW ASSET HERE. 
+USE SOURCE/ASSETS INSTEAD.
+
+"""
 # Button&ImgIcon&Area
 ButtonUISwitchToTimeMenu = Button(black_offset = 15, print_log=LOG_WHEN_TRUE)
 ButtonGeneralExit = Button(print_log=LOG_WHEN_TRUE)
@@ -85,6 +91,7 @@ MapAreaMD = TextTemplate(text={"zh_CN":"蒙德", "en_US":"Mondstadt"}, cap_area 
 MapAreaLY = TextTemplate(text={"zh_CN":"璃月", "en_US":"Liyue"}, cap_area = AreaBigmapSwitchMap.position, match_mode = ACCURATE_MATCHING)
 MapAreaDQ = TextTemplate(text={"zh_CN":"稻妻", "en_US":"Inazuma"}, cap_area = AreaBigmapSwitchMap.position, match_mode = ACCURATE_MATCHING)
 MapAreaXM = TextTemplate(text={"zh_CN":"须弥", "en_US":"Sumeru"}, cap_area = AreaBigmapSwitchMap.position, match_mode = ACCURATE_MATCHING)
+MapAreaFD = TextTemplate(text={"zh_CN":"枫丹", "en_US":"Fontaine"}, cap_area = AreaBigmapSwitchMap.position, match_mode = ACCURATE_MATCHING)
 MapAreaCYJY = TextTemplate(text={"zh_CN":"层岩巨渊", "en_US":"The Chasm"}, cap_area = AreaBigmapSwitchMap.position)
 claim_rewards = TextTemplate(text={'zh_CN': '领取奖励',"en_US": "Claim Rewards"})
 use_20x2resin = TextTemplate(text={'zh_CN': '使用浓缩树脂',"en_US": "Use Condensed Resin"})
@@ -100,6 +107,3 @@ LEY_LINE_DISORDER = TextTemplate(text={'zh_CN': '地脉异常',"en_US": "Ley Lin
 # ImgIcon&Button which based on text
 IconCombatCharacterDied = ImgIcon(win_text = use_revival_item.text, threshold=0.98, print_log=LOG_WHEN_TRUE)
 ButtonGeneralAllCharacterDied = Button(threshold=0.988, win_text=revival.text, print_log=LOG_WHEN_TRUE)
-
-if __name__ == '__main__':
-    ButtonUIEnterPartySetup.show_image()
