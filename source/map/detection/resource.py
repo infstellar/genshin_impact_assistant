@@ -1,4 +1,4 @@
-import gimap
+import gimapdev as gimap
 from cached_property import cached_property
 
 from source.map.detection.resource_const import MiniMapConst
