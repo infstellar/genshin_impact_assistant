@@ -69,7 +69,7 @@ class LeyLineOutcropMission(MissionExecutor):
                 target_tianli_posi = GIMAPPosition(target_gimap_posi).tianli
                 return target_tianli_posi
             genshin_map.get_bigmap_posi()
-            genshin_map._move_bigmap(posi.tianli, force_center = True)
+            genshin_map._move_bigmap(posi.gimap, force_center = True)
     
     def touch_the_ley_line_blossom(self):
         """

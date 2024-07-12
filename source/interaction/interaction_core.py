@@ -327,11 +327,13 @@ class InteractionBGD:
             upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
 
             if not inputvar.click_retry_timer.reached():
+                logger.trace(f'appear_then_click: click_retry_timer not reach, return false')
                 return False
             
             if inputvar.click_fail_timer.reached_and_reset():
-                logger.error(t2t("appear then click fail"))
+                logger.error(t2t("!!!appear then click fail!!!"))
                 logger.info(f"{inputvar.name} {inputvar.click_position}")
+                # TODO: raise exception
                 return False
             
             cap = self.capture(posi=imgicon.cap_posi, jpgmode=imgicon.jpgmode)
