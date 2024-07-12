@@ -7,11 +7,11 @@ import source.util
 import time
 
 if not source.util.DEBUG_MODE:
-    import giadep
+    # import giadep
     import giaocr
     import giayolo
     pt = time.time()
-    giadep.install_gia_dependence(source.util.ROOT_PATH)
+    # giadep.install_gia_dependence(source.util.ROOT_PATH)
     giaocr.install_gia_dependence(source.util.ROOT_PATH)
     giayolo.install_gia_dependence(source.util.ROOT_PATH)
     print(f"sha-1 verify cost: {time.time()-pt}")
