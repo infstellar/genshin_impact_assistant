@@ -7,7 +7,7 @@ class FightOnlyGeneral(Commission):
         super().__init__(commission_type, commission_position)
 
     def exec_mission(self):
-        r = self.move_straight(self.commission_position, is_tp=True, stop_rule=STOP_RULE_COMBAT)
+        r = self.move_straight(self.commission_position, is_tp=True, stop_rule=STOP_RULE_ARRIVE)
         self.handle_tmf_stuck_then_raise(r)
         
         self.circle_search(self.commission_position, stop_rule=STOP_RULE_COMBAT)
