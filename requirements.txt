@@ -40,6 +40,5 @@ requests
 dataclasses
 psutil
 pponnxcr
-pynput
 websockets
 
