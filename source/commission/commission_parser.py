@@ -39,7 +39,7 @@ class CommissionParser():
             ui_control.ensure_page(UIPages.page_bigmap)
             # genshin_map._switch_to_area("Mondstadt")
             genshin_map.get_bigmap_posi()
-            genshin_map._move_bigmap(posi.tianli, force_center = True)
+            genshin_map._move_bigmap(posi.gimap, force_center = True)
             cap_posi = [220,240,1920-200,1080-150]
             img = itt.capture(jpgmode=NORMAL_CHANNELS)
             img = crop(img, cap_posi)

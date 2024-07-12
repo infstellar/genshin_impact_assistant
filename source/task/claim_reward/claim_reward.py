@@ -112,8 +112,8 @@ class ClaimRewardTask(TaskTemplate):
         self.blocking_startup(self.CRM)
         
 if __name__ == '__main__':
-    crm = ClaimRewardMission()
-    r = crm._exec_dispatch()
-    print()
+    # crm = ClaimRewardMission()
+    # r = crm._exec_dispatch()
+    # print()
     crt = ClaimRewardTask()
     crt.start()

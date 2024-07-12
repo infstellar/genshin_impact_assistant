@@ -71,11 +71,11 @@ class MapConverter:
 
     @classmethod
     def old_gimap_to_new(cls, points:np.ndarray):
-        return points + (799*2, 1130*2)
+        return points + (798*2, 1131.5*2)
 
     @classmethod
     def new_gimap_to_old(cls, points:np.ndarray):
-        return points - (799*2, 1130*2)
+        return points - (798*2, 1131.5*2)
 
     @classmethod
     def convert_GIMAP_to_LAYER(cls, points) -> str:
