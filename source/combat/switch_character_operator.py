@@ -183,7 +183,7 @@ class SwitchCharacterOperator(BaseThreading):
                     tg = chara.tactic_group
                     tg+=';a'
                 elif chara.position == 'Main':
-                    tg = 'a;2000;a;1000'
+                    tg = '2000;a;4000'
             if tg != None:
                 self.current_character_num = combat_lib.get_current_chara_num(self.checkup_stop_func)
                 logger.debug(
