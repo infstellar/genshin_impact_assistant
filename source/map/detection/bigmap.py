@@ -49,7 +49,7 @@ class BigMap(MiniMapResource):
 
         global_loca = (loca + precise_loca + center - self.BIGMAP_BORDER_PAD) \
                       / self.BIGMAP_SEARCH_SCALE / self.POSITION_SEARCH_SCALE #
-        global_loca += [0,6]  # magic number-GIMAP 4.6.0
+        # global_loca += [0,6]  # magic number-GIMAP 4.6.2
         self.bigmap_similarity = sim
         self.bigmap_similarity_local = local_sim
         self.bigmap = global_loca

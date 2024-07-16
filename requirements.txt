@@ -25,7 +25,7 @@ uiautomator2cache
 filelock
 lxml
 pydantic>2.0.0
-gimapdev==4.6.1
+gimapdev==4.6.2
 giadep
 giaocr
 giayolo
@@ -41,4 +41,6 @@ dataclasses
 psutil
 pponnxcr
 websockets
-
+qtpy
+PyQtWebEngine
+PyQt5
