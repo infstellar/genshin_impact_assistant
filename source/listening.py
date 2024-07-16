@@ -1,3 +1,5 @@
+
+
 try:
     from source.util import *
 except:
@@ -6,9 +8,10 @@ import time
 import keyboard
 from source.task import task_manager
 import threading
-from source.ingame_ui.ingame_ui import run_ingame_ui
+from source.ingame_ui.ingame_ui import run_ingame_ui, win_ingame_ui
 from source.ingame_assist.manager import IngameAssistManager
 from source.semiauto_funcs.manager import SemiautoFuncManager
+from source.logger import add_logger_to_GUI
 TASK_MANAGER = task_manager.TASK_MANAGER
 INGAME_ASSIST_MANAGER = IngameAssistManager()
 SEMIAUTO_FUNC_MANAGER = SemiautoFuncManager()
@@ -21,6 +24,7 @@ keyboard.add_hotkey(GIAconfig.Keymap_StartStop, SEMIAUTO_FUNC_MANAGER.apply_chan
 
 @logger.catch
 def listening():
+    add_logger_to_GUI(win_ingame_ui.log_poster)
     run_ingame_ui()
     logger.error('pyqt exit')
     # ingame_app.start("python", ["source\\ingame_ui\\ingame_ui.py"])

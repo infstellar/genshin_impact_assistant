@@ -8,14 +8,17 @@ from PyQt5.QtGui import QTextCursor
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from source.config.config import GIAconfig
-from source.common import static_lib
+from source.common import static_lib, timer_module
 from source.cvars import PROCESS_NAME
 from source.util import DEMO_MODE, ansl_code2col
 from source.logger import add_logger_to_GUI, logger
-K = 15
+from source.interaction.interaction_core import itt
+K = 5
 
 
 class IngameUI(QWidget):
+
+
     def __init__(self):
         super().__init__()
         self.setWindowTitle("IngameUI")
@@ -23,12 +26,14 @@ class IngameUI(QWidget):
         self.QTextEdit_log_output.setGeometry(0, 850, 550, 230)
         # self.log_output.setHtml("QTextEdit Demo!<font color='blue' size='8'><red>Hello PyQt5!</font>")
         self.QTextEdit_log_output.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.label = QLabel(self)
+        self.notice_label = QLabel(self)
+        self.notice_label.setAlignment(Qt.AlignCenter)
+        self.notice_label.setGeometry(0,130,1920,170)
         # self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
         # layout = QLayout(self)
         # layout.addWidget(self.label, 1, 3)
         # self.setLayout(layout)
-        self.label.setText(f'<font color=white size=32><b>123456<br>test</b>')
+        self.notice_label.setText(f'<font color=white size=32><b>123456<br>test</b>')
         self.setWindowFlags(Qt.Window | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint) # Qt.Tool
         self.timer = QTimer()
         self.timer.timeout.connect(self.update_time)
@@ -43,12 +48,16 @@ class IngameUI(QWidget):
         hwnd = int(self.winId())
         win32gui.SetWindowLong(hwnd, win32con.GWL_EXSTYLE,
                                win32gui.GetWindowLong(hwnd, win32con.GWL_EXSTYLE) | win32con.WS_EX_TRANSPARENT)
-        self.label.setText(f'<font color=black size=64><b>123456<br>test</b>')
-        self.label.setText(f'<font color=black size=64><b></b>')
+        self.notice_label.setText(f'')
         self.stop_output_flag = False
 
+
+        # MISC
         self.last_bbox = 0
         self.log_history = []
+        self.notice_text = ''
+        self.last_notice_text = '1'
+        self.notice_timer = timer_module.AdvanceTimer(9999999999999999999999999999)
 
     def mousePressEvent(self, event):
         # 不处理鼠标点击事件
@@ -79,6 +88,8 @@ class IngameUI(QWidget):
                 self.stop_output_flag = True
 
         if self.isVisible():
+            if not itt.is_vaild_handel():
+                return
             win_bbox = win32gui.GetWindowRect(static_lib.HANDLE) # wx, wy, w, h.
             if self.last_bbox != win_bbox:
                 dy = 0
@@ -89,6 +100,17 @@ class IngameUI(QWidget):
             self.QTextEdit_log_output.setHtml(self.generate_log_html())
             self.QTextEdit_log_output.moveCursor(QTextCursor.End)
 
+            if self.last_notice_text != self.notice_text:
+                self.notice_label.setText(self.notice_text)
+                self.last_notice_text = self.notice_text
+                if self.notice_text == '':
+                    self.notice_label.hide()
+                else:
+                    self.notice_label.show()
+
+            if self.notice_text != '' and self.notice_timer.reached():
+                self.notice_text = ''
+                self.notice_timer = timer_module.AdvanceTimer(9999999999999999999999999)
 
             # self.label.setText(f'<font color=white size=32><b>{time.time()}<br>test</b>')
 
@@ -109,7 +131,7 @@ class IngameUI(QWidget):
             self.logout(text, color=color)
         self.logout("<br>", color='white')
     def logout(self, text, color):
-        html_str = f"<font color={color} size='6'>{text}</font>"
+        html_str = f"<font color={color} size='5'>{text}</font>"
         self.log_history.append(html_str)
         # logger.info(html_str) # I was going to try to see if it would dead loop, but the clever loguru detected the deadlock :)
 
@@ -127,17 +149,37 @@ class IngameUI(QWidget):
 
 ingame_ui_app = QApplication(sys.argv)
 win_ingame_ui = IngameUI()
-_style = """QTextEdit {
+_style = """
+QTextEdit {
     border: none;
     background-color: rgba(0, 0, 0, 150);
-}"""
+}
+QLabel {
+    border: none;
+    background-color: rgba(0, 0, 0, 150);
+}
+
+
+"""
 
 ingame_ui_app.setStyleSheet(_style)
-add_logger_to_GUI(win_ingame_ui.log_poster)
+
 
 def run_ingame_ui():
+
     win_ingame_ui.show()
     ingame_ui_app.exec_()
+
+def append_notice(info:str, color:str='white', size:int='32', end='<br>'):
+    win_ingame_ui.notice_text+=(f'<font color={color} size={size}><b>{info}</b>{end}')
+def clean_notice():
+    win_ingame_ui.notice_text = ''
+
+def set_notice(info:str, color:str='white', size:int='32', end='<br>', timeout = 999, is_log = True):
+    if is_log:
+        logger.info(f'set_notice: {info}')
+    win_ingame_ui.notice_text = (f'<font color={color} size={size}><b>{info}</b>{end}')
+    win_ingame_ui.notice_timer = timer_module.AdvanceTimer(timeout).start()
 
 #
 # class IngameUIRunner(AdvanceThreading):
@@ -159,7 +201,7 @@ if __name__ == '__main__':
             win_ingame_ui.logout("test1", 'white')
             win_ingame_ui.logout("test1", 'white')
             win_ingame_ui.logout("<br>", 'white')
-    threading.Thread(target=func1).start()
+    # threading.Thread(target=func1).start()
     run_ingame_ui()
 
     print('running')
