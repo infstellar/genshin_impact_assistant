@@ -43,7 +43,7 @@ class JsonIntegrationApi():
     def data(self) -> t.Dict[str, t.List[PositionJson]]:
         data = {}
         row:dict
-        row = read_file(f"{ROOT_PATH}\\assets\\integration_json\\preprocessing_integration_json.json")
+        row = read_file(f"{ROOT_PATH}\\assets\\POI_JSON_API\\integration_json\\preprocessing_integration_json.json")
         for k in row.keys():
             data[k]=[]
             for i in row[k]:
@@ -51,7 +51,7 @@ class JsonIntegrationApi():
 
         return data
 
-    def preprocessing_data(self, save_in=f"{ROOT_PATH}\\assets\\integration_json"):
+    def preprocessing_data(self, save_in=f"{ROOT_PATH}\\assets\\POI_JSON_API\\integration_json"):
         logger.info(t2t("loading data"))
         pt = time.time()
         times = 0
