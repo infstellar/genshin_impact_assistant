@@ -59,6 +59,8 @@ class IngameUI(QWidget):
         self.last_notice_text = '1'
         self.notice_timer = timer_module.AdvanceTimer(9999999999999999999999999999)
 
+        self.handle_settled = False
+
     def mousePressEvent(self, event):
         # 不处理鼠标点击事件
         pass
@@ -78,19 +80,26 @@ class IngameUI(QWidget):
         self.show()
 
     def update_time(self):
+
+
+
         if not static_lib.get_active_window_process_name() in PROCESS_NAME:
             if self.isVisible():
                 self.hide()
         else:
+            if not self.handle_settled:
+                if not itt.is_vaild_handel():
+                    return
+                else:
+                    static_lib.HANDLE = static_lib.get_handle()
+                    self.handle_settled = True
             if not self.isVisible():
                 self.stop_output_flag = False
                 self.show_win()
                 self.stop_output_flag = True
 
         if self.isVisible():
-            if not itt.is_vaild_handel():
-                return
-            win_bbox = win32gui.GetWindowRect(static_lib.HANDLE) # wx, wy, w, h.
+            win_bbox = win32gui.GetWindowRect(static_lib.HANDLE)  # wx, wy, w, h.
             if self.last_bbox != win_bbox:
                 dy = 0
                 if not GIAconfig.General_BorderlessWindow:
