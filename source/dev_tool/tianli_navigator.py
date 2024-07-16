@@ -1,3 +1,5 @@
+import uuid
+
 from source.util import *
 import source.astar as astar
 import gimapdev as gimap
@@ -74,7 +76,7 @@ class TianliNavigator(astar.AStar, MapConverter):
 class TianLiNavigatorDev(TianliNavigator):
     def __init__(self) -> None:
         import gimapdev
-        self.GIMAP_RAWIMG = gimapdev.GIMAP
+        self.GIMAP_RAWIMG = cv2.imread(gimapdev.get_file('GIMAP.png'))
         super().__init__()
         plt.title("title")
         plt.ion()
@@ -113,6 +115,7 @@ class TianLiNavigatorDev(TianliNavigator):
             plt.clf()
         logger.debug(f"reshow GIMAP")
         plt.imshow(cv2.cvtColor(self.GIMAP_RAWIMG, cv2.COLOR_BGRA2RGB))
+        # .show()
         # print(xlim, ylim)
         logger.debug(f"drawing points and links")
         for k in self.NAVIGATION_POINTS.items():
@@ -134,6 +137,21 @@ class TianLiNavigatorDev(TianliNavigator):
     def _get_latest_id(self) -> str:
         return str(max([int(i[0]) for i in self.navigation_dict.items()]) + 1)
 
+    def _remapping(self, x):
+        times=0
+        ret_x = ''
+        if len(x) == 36:
+            return x
+        for i in self.navigation_dict.keys():
+            if x in i:
+                ret_x = i
+                times+=1
+        if times!=1:
+            print(f'found {times} key(s)')
+            print(t2t('remap fail, may due to incorrect input or duplicate values exist'))
+            return False
+        else:
+            return ret_x
     def exec_command(self, x: str):
         """
         exec command when using
@@ -158,7 +176,7 @@ class TianLiNavigatorDev(TianliNavigator):
                 logger.info(f"link {cmd[1]} -> {cmd[2]}")
                 self.link_points(cmd[1], cmd[2])
             elif cmd[0] == 'add':
-                kid = self._get_latest_id()
+                kid = str(uuid.uuid4())
                 upper_link = ''
                 full_link = ''
                 for c in cmd:
@@ -168,7 +186,9 @@ class TianLiNavigatorDev(TianliNavigator):
                         elif 'fl' == c.split('=')[0]:
                             full_link = c.split('=')[1]
                             if full_link == '' or full_link == " ":
-                                full_link = str(int(kid) - 1)
+                                print('add fail due to no fl')
+                                return
+                                # full_link = str(int(kid) - 1)
                         elif 'redraw' == c.split('=')[0]:
                             redraw = bool(int(c.split('=')[1]))
                             logger.info(f"redraw: {redraw}")
@@ -200,6 +220,8 @@ class TianLiNavigatorDev(TianliNavigator):
                     self.del_point(str(i))
                 self.link_points(str(start), str(end))
                 self.link_points(str(end), str(start))
+            else:
+                logger.warning('unknown command')
 
         if redraw:
             self._build_navigation_points()
@@ -216,7 +238,7 @@ class TianLiNavigatorDev(TianliNavigator):
         upper_link = None
         for i in path_json["break_position"]:
             posi = self.convert_cvAutoTrack_to_GIMAP(i)
-            curr_id = self._get_latest_id()
+            curr_id = str(uuid.uuid4())
             if upper_link != None:
                 full_link = upper_link
             else:
@@ -229,7 +251,8 @@ class TianLiNavigatorDev(TianliNavigator):
         """
         del point by id
         """
-
+        x = self._remapping(x)
+        if not x: return
         for i in self.navigation_dict.items():
             if x in i[1]['links']:
                 logger.info(f"del {i[0]} {i[1]['links']}.pop{i[1]['links'].index(x)}")
@@ -243,24 +266,38 @@ class TianLiNavigatorDev(TianliNavigator):
         # self.NAVIGATION_POINTS.pop(x)
 
     def link_points(self, x, y):
+        x = self._remapping(x)
+        if not x: return
+        y = self._remapping(y)
+        if not y: return
         self.navigation_dict[x]['links'].append(y)
 
     def move_point(self, x, delta: list):
         """
         move point by id and list[x,y]
         """
+        x = self._remapping(x)
+        if not x: return
         self.navigation_dict[x]['position'] = list(np.array(self.navigation_dict[x]['position']) + np.array(delta))
 
     def add_point(self, posi: list, id: str, upper_link: str = '', full_link: str = ''):
         posi = list(self.convert_GIMAP_to_cvAutoTrack(posi))
+        id = self._remapping(id)
+        if not id: return
+        
+        
         self.navigation_dict[id] = {
             "position": posi,
             "links": []
         }
         if upper_link != '':
+            upper_link = self._remapping(upper_link)
+            if not upper_link: return
             for upper_id in upper_link.split(','):
                 self.navigation_dict[upper_id]['links'].append(id)
         if full_link != '':
+            full_link = self._remapping(full_link)
+            if not full_link: return
             for upper_id in full_link.split(','):
                 self.navigation_dict[upper_id]['links'].append(id)
                 self.navigation_dict[id]['links'].append(upper_id)
@@ -279,6 +316,7 @@ class TianLiNavigatorDev(TianliNavigator):
     def run(self):
         self.draw_navigation_in_gimap(refresh=False)
         while 1:
+            time.sleep(0.2)
             try:
                 self.exec_command(input("command:"))
             except Exception as e:
@@ -291,5 +329,4 @@ if __name__ == '__main__':
     tlnd.run()
     # print([f"{i.id}" for i in tn.astar(tn.NAVIGATION_POINTS['1'], tn.NAVIGATION_POINTS['5'])])
     print()
-
 
