@@ -14,7 +14,7 @@ class GeneratedConfig:
    General_DeterminingStrictWeight = 0.9
    General_InteractionMode = 'Desktop'
    General_Python32Path = ''
-   General_Version = 'v0.9.1.1158'
+   General_Version = 'v1.1.0.1279'
    General_GenshinEXEPath = ''
    Collector_CollectionName = '史莱姆'
    Collector_CollectionType = 'ENEMY'
@@ -33,3 +33,5 @@ class GeneratedConfig:
    Keymap_StartStop = '['
    LeyLineOutcrop_BlossomType = 'Wealth'
    LeyLineOutcrop_CollectionTimes = 2
+   Dev_RecordPath_CollectionType = 'Plant'
+   Dev_RecordPath_CollectionName = ''
