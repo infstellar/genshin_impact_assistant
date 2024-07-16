@@ -55,6 +55,8 @@ class MapConverter:
 
     @classmethod
     def convert_GenshinMap_to_cvAutoTrack(cls, posi: list):
+        if len(posi) == 3:
+            posi = [posi[0], posi[2]]
         posi = np.array(posi)
         posi = np.array([posi[1], posi[0]])
         posi *= -1.998
@@ -71,11 +73,11 @@ class MapConverter:
 
     @classmethod
     def old_gimap_to_new(cls, points:np.ndarray):
-        return points + (798*2, 1131.5*2)
+        return points + (798*2 + 13, 1131.5*2 + 5)
 
     @classmethod
     def new_gimap_to_old(cls, points:np.ndarray):
-        return points - (798*2, 1131.5*2)
+        return points - (798*2 + 13, 1131.5*2 + 5)
 
     @classmethod
     def convert_GIMAP_to_LAYER(cls, points) -> str:

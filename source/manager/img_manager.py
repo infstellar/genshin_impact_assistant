@@ -36,7 +36,7 @@ class ImgIcon(AssetBase):
                  bbg_posi=None,
                  cap_posi = None,
                  jpgmode=2,
-                 threshold:Union[float, Tuple[float,float,float]]=0.91,
+                 threshold:Union[float, Tuple[float,float,float]]=0.91, #TODO
                  win_text = None,
                  offset = 0,
                  print_log = LOG_NONE):

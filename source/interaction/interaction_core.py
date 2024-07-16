@@ -158,6 +158,10 @@ class InteractionBGD:
 
     # @timer
 
+    def is_vaild_handel(self):
+        d = itt.capture_obj
+        return d._check_shape(d._cover_privacy(d._get_capture()))
+
     def ocr_single_line(self, imgicon: img_manager.ImgIcon) -> str:
         upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
         cap = self.capture(posi=imgicon.cap_posi, jpgmode=imgicon.jpgmode)

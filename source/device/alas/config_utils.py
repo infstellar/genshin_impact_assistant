@@ -14,7 +14,7 @@ def str_presenter(dumper, data):
     return dumper.represent_scalar('tag:yaml.org,2002:str', data)
 
 
-def read_file(file):
+def read_file(file, is_print = True):
     """
     Read a file, support both .yaml and .json format.
     Return empty dict if file not exists.
@@ -35,7 +35,8 @@ def read_file(file):
     _, ext = os.path.splitext(file)
     lock = FileLock(f"{file}.lock")
     with lock:
-        print(f'read: {file}')
+        if is_print:
+            print(f'read: {file}')
         if ext == '.yaml':
             with open(file, mode='r', encoding='utf-8') as f:
                 s = f.read()
