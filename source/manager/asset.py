@@ -98,7 +98,7 @@ use_20x2resin = TextTemplate(text={'zh_CN': '使用浓缩树脂',"en_US": "Use C
 use_20resin = TextTemplate(text={'zh_CN': '使用原粹树脂',"en_US": "Use Original Resin"})
 conti_challenge = TextTemplate(text={'zh_CN': '继续挑战',"en_US": "Continue Challenge"})
 exit_challenge = TextTemplate(text={'zh_CN': '退出秘境',"en_US": "Leave Domain"})
-domain_obtain = TextTemplate(text={'zh_CN': '获得',"en_US": "Obtained"})
+TextDomainObtain = TextTemplate(text={'zh_CN': '获得', "en_US": "Obtained"})
 use_revival_item = TextTemplate(text={'zh_CN': '用道具',"en_US": "revival item"})
 revival = Text(zh="复苏", en="Revive")
 LEAVING_IN = TextTemplate(text={'zh_CN': '自动退出',"en_US": 'Leaving in'}, cap_area = AreaDomainLeaveIn.position)

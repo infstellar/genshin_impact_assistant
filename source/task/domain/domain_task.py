@@ -171,6 +171,8 @@ class DomainTask(TaskTemplate):
                 # detect challenge failure
                 if itt.appear(ButtonDomainFailure) or itt.appear(ButtonDomainRetry):
                     # challenge fail
+                    if itt.get_text_existence(asset.TextDomainObtain):
+                        continue
                     logger.warning(f"challenge fail, try rechallenging")
                     self.dfc.pause_threading()
                     # self.TMFCF.stop_threading()
