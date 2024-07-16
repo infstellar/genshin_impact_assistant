@@ -276,7 +276,7 @@ class AttainReward(FlowTemplate):
         elif str(self.upper.resin_mode) == '20':
             itt.appear_then_click(asset.ButtonGeneralUseOriginResin)
 
-        if itt.get_text_existence(asset.domain_obtain):
+        if itt.get_text_existence(asset.TextDomainObtain):
             self._next_rfc()
 
 class DomainFlowEnd(EndFlowTemplate):

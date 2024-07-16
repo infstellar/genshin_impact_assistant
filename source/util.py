@@ -35,6 +35,7 @@ CV_DEBUG_MODE = os.path.exists(os.path.join(ROOT_PATH, 'cvdebugmode.giamode'))
 INTERACTION_MODE = GIAconfig.General_InteractionMode
 IS_DEVICE_PC = True
 
+
 # load config file
 def load_json(json_name='General.json', folder_path='config\\settings', auto_create = False) -> Union[dict,list]:
     """加载json.
@@ -331,15 +332,15 @@ def quick_euclidean_distance_plist(p1, plist, max_points_num = 50)-> np.ndarray:
     nearly_pp_arg = np.argsort(md)
     ed = md.copy()
     # 计算当前点到距离最近的50个优先点的欧拉距离
-    # cache_num = min(max_points_num, len(nearly_pp_arg))
-    i = 0
+    cache_num = min(max_points_num, len(nearly_pp_arg))
+    times = 0
     for i in nearly_pp_arg:
         ed[i] = euclidean_distance(plist[i], p1)
-        i += 1
-        if i >= max_points_num:
+        times += 1
+        if times >= max_points_num:
             break
-    # nearly_pp = plist[nearly_pp_arg[:cache_num]]
-    # ed = euclidean_distance_plist(p1, nearly_pp)
+    nearly_pp = plist[nearly_pp_arg[:cache_num]]
+    ed = euclidean_distance_plist(p1, nearly_pp)
     return ed
 
     # 将点按欧拉距离升序排序
@@ -352,6 +353,47 @@ def quick_euclidean_distance_plist(p1, plist, max_points_num = 50)-> np.ndarray:
 
     return np.sqrt((p1[0] - plist[:,0]) ** 2 + (p1[1] - plist[:,1]) ** 2)
 
+
+def quick_sort_euclidean_distance_plist(p1, plist, max_points_num=50, reserve = False) -> np.ndarray:
+    """快速欧氏距离.使用曼哈顿算法快速计算,后计算当前点到距离最近的max_points_num个优先点的欧拉距离
+
+    Args:
+        p1 (_type_): 同euclidean_distance_plist
+        plist (_type_): 同euclidean_distance_plist
+        max_points_num (int, optional): _description_. Defaults to 50.
+
+    Returns:
+        np.ndarray: _description_
+    """
+    if not isinstance(p1, np.ndarray):
+        p1 = np.array(p1)
+    if not isinstance(plist, np.ndarray):
+        plist = np.array(plist)
+    # 计算当前点到所有优先点的曼哈顿距离
+    md = manhattan_distance_plist(p1, plist)
+    nearly_pp_arg = np.argsort(md)
+    if reserve:
+        nearly_pp_arg=nearly_pp_arg[::-1]
+    ed = md.copy()
+    # 计算当前点到距离最近的50个优先点的欧拉距离
+    cache_num = min(max_points_num, len(nearly_pp_arg))
+    times = 0
+    for i in nearly_pp_arg:
+        ed[i] = euclidean_distance(plist[i], p1)
+        times += 1
+        if times >= max_points_num:
+            break
+    nearly_pp = plist[nearly_pp_arg[:cache_num]]
+    ed = euclidean_distance_plist(p1, nearly_pp)
+    # return ed
+
+    # 将点按欧拉距离升序排序
+    nearly_pp_arg = np.argsort(ed)
+    nearly_pp = nearly_pp[nearly_pp_arg]
+    # print(currentp, closest_pp)
+    return nearly_pp
+
+    return np.sqrt((p1[0] - plist[:, 0]) ** 2 + (p1[1] - plist[:, 1]) ** 2)
 
 
 def is_number(s):
@@ -867,9 +909,38 @@ def match_multiple_img(img, template, is_gray=False, is_show_res: bool = False, 
 
     return matched_coordinates
 
+
+def ansl_code2col(ansl_code ,reserve = True):
+    if ansl_code == "0":
+        if not reserve:
+            return 'white'
+        else:
+            return 'black'
+    elif ansl_code == "31":
+        return "red"
+    elif ansl_code == "32":
+        return "green"
+    elif ansl_code == "33":
+        return "olive"
+    elif ansl_code == "34":
+        return "blue"
+    elif ansl_code == "35":
+        return "green"
+    elif ansl_code == "36":  # cyan
+        return "#0099CC"
+    elif ansl_code == "37":  # white
+        if reserve:
+            return "black"
+        else:
+            return "white"
+
+    return "NO_COL"
+
 if __name__ == '__main__':
     # a = load_jsons_from_folder(os.path.join(root_path, "config\\tactic"))
-    print(load_json("team_example_1.json", fr"{CONFIG_PATH}/tactic"))
-    print()
+    # print(load_json("team_example_1.json", fr"{CONFIG_PATH}/tactic"))
+    a = quick_euclidean_distance_plist([0,0], [[1,2],[2,3],[4,5],[100,201],[-1,-1],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201],[100,201]])
+    print(a)
+    print(len(a))
     pass
     # load_jsons_from_floder((root_path, "config\\tactic"))

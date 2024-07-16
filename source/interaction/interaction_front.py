@@ -71,7 +71,7 @@ class InteractionNormal(InteractionTemplate):
             if isBorderlessWindow:
                 y += wy
             else:
-                y = y + wy + 26
+                y = y + wy + 31  # testing, origin: 26
             pydirectinput.moveTo(x,y) 
             # win32api.SetCursorPos((x, y))
             

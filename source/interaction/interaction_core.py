@@ -9,7 +9,7 @@ import numpy as np
 import win32api
 import win32gui
 from source.common import static_lib
-from source.manager import img_manager, text_manager, button_manager, Bbox
+from source.manager import img_manager, text_manager, button_manager, Bbox, text_icon
 from source.common.timer_module import timer
 from source.common.timer_module import TimeoutTimer, Timer, AdvanceTimer
 from source.ocr.models import LOCAL_OCR_MODEL
@@ -158,6 +158,10 @@ class InteractionBGD:
 
     # @timer
 
+    def is_vaild_handel(self):
+        d = itt.capture_obj
+        return d._check_shape(d._cover_privacy(d._get_capture()))
+
     def ocr_single_line(self, imgicon: img_manager.ImgIcon) -> str:
         upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
         cap = self.capture(posi=imgicon.cap_posi, jpgmode=imgicon.jpgmode)
@@ -227,8 +231,8 @@ class InteractionBGD:
         if matching_rate >= imgicon.threshold:
             if imgicon.win_text != None:
                 from source.api.pdocr_complete import ocr
-                r = ocr.get_text_position(cap, imgicon.win_text)
-                if r==-1:
+                r = ocr.get_text_position_v2(cap, imgicon.win_text)
+                if len(r)==0:
                     matching_rate = -1
             # if imgicon.win_page != 'all':
             #     pn = scene_lib.get_current_pagename()
@@ -266,8 +270,8 @@ class InteractionBGD:
         if matching_rate >= imgicon.threshold:
             if imgicon.win_text != None:
                 from source.api.pdocr_complete import ocr
-                r = ocr.get_text_position(cap, imgicon.win_text)
-                if r==-1:
+                r = ocr.get_text_position_v2(cap, imgicon.win_text)
+                if len(r)==0:
                     matching_rate = 0
             # if imgicon.win_page != 'all':
             #     pn = scene_lib.get_current_pagename()
@@ -294,7 +298,7 @@ class InteractionBGD:
                 return False
         elif ret_mode == IMG_RATE:
             return matching_rate
-        
+
     def get_text_existence(self, textobj: text_manager.TextTemplate, is_gray=False, ret_mode = IMG_BOOL, show_res = False, use_cache = False):
         from source.api.pdocr_complete import ocr
         cap = self.capture(posi = textobj.cap_area, jpgmode=NORMAL_CHANNELS, recapture_limit=(self.RECAPTURE_LIMIT if use_cache else 0))
@@ -305,11 +309,23 @@ class InteractionBGD:
             logger.debug(f"get_text_existence: text: {textobj.text} {'Found' if is_exist else 'Not Found'}")
         return is_exist
 
+    def get_text_icon_existence(self, textobj: text_icon.TextIconTemplate, is_gray=False, ret_mode = IMG_BOOL, show_res = False, use_cache = False):
+        cap = self.capture(posi = textobj.cap_area, jpgmode=NORMAL_CHANNELS, recapture_limit=(self.RECAPTURE_LIMIT if use_cache else 0))
+        res = LOCAL_OCR_MODEL.ocr_lines(cap)
+        is_exist = textobj.match_results(res)
+        if textobj.is_print_log(is_exist):
+            logger.debug(f"get_text_icon_existence: text: {textobj.text} {'Found' if is_exist else 'Not Found'}")
+        return is_exist
+
     def appear(self, obj, use_cache=False):
-        if isinstance(obj, text_manager.TextTemplate):
+        if isinstance(obj, text_icon.TextIconTemplate):
+            return self.get_text_icon_existence(obj, use_cache=use_cache)
+        elif isinstance(obj, text_manager.TextTemplate):
             return self.get_text_existence(obj, use_cache=use_cache)
         elif isinstance(obj, img_manager.ImgIcon): # Button is also an Icon
             return self.get_img_existence(obj, use_cache=use_cache)
+
+
 
     def appear_then_click(self, inputvar, is_gray=False, is_log = DEBUG_MODE):
         """appear then click
@@ -347,8 +363,8 @@ class InteractionBGD:
             if matching_rate >= imgicon.threshold:
                 if imgicon.win_text != None:
                     from source.api.pdocr_complete import ocr
-                    r = ocr.get_text_position(cap, imgicon.win_text)
-                    if r==-1:
+                    r = ocr.get_text_position_v2(cap, imgicon.win_text)
+                    if len(r)==0:
                         matching_rate = 0
             
             if imgicon.is_print_log(matching_rate >= imgicon.threshold) or is_log:
@@ -381,8 +397,8 @@ class InteractionBGD:
             if matching_rate >= imgicon.threshold:
                 if imgicon.win_text != None:
                     from source.api.pdocr_complete import ocr
-                    r = ocr.get_text_position(cap, imgicon.win_text)
-                    if r==-1:
+                    r = ocr.get_text_position_v2(cap, imgicon.win_text)
+                    if len(r)==0:
                         matching_rate = 0
             
             if imgicon.is_print_log(matching_rate >= imgicon.threshold) or is_log:
@@ -401,11 +417,13 @@ class InteractionBGD:
             from source.api.pdocr_complete import ocr
 
             upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
-            p1 = ocr.get_text_position(self.capture(jpgmode=NORMAL_CHANNELS, posi=inputvar.cap_area), inputvar.text, cap_posi_leftup=inputvar.cap_area[:2], mode=inputvar.match_mode)
+            p1 = ocr.get_text_position_v2(self.capture(jpgmode=NORMAL_CHANNELS, posi=inputvar.cap_area), inputvar.text, cap_posi_leftup=inputvar.cap_area[:2], mode=inputvar.match_mode)
             if is_log:
                 logger.debug('text: ' + inputvar.text + 'position: ' + str(p1) + ' |function name: ' + upper_func_name)
-            if p1 != -1:
-                self.move_and_click([p1[0] + 5, p1[1] + 5], delay=1)
+            if len(p1)>0:
+                #TODO: more
+                p1 = p1[0]
+                self.move_and_click([(p1[0]+p1[2])/2, (p1[1]+p1[3])/2], delay=1)
                 logger.debug(f"appear then click: True: {inputvar.text} func: {upper_func_name}")
                 return True
             else:
@@ -449,8 +467,8 @@ class InteractionBGD:
         if matching_rate >= imgicon.threshold:
             if imgicon.win_text != None:
                 from source.api.pdocr_complete import ocr
-                r = ocr.get_text_position(cap, imgicon.win_text)
-                if r==-1:
+                r = ocr.get_text_position_v2(cap, imgicon.win_text)
+                if len(r)==0:
                     matching_rate = 0
             # if imgicon.win_page != 'all':
             #     pn = scene_lib.get_current_pagename()

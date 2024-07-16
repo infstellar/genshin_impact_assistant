@@ -14,6 +14,7 @@ from source.config.cvars import *
 from source.generic_event import generic_event
 import psutil
 from source.cvars import PROCESS_NAME
+from source.ingame_ui.ingame_ui import set_notice
 
 
 def get_yuanshen_exe_path():
@@ -118,11 +119,12 @@ class MainPage(AdvancePage):
             output.set_processbar(name=self.PROCESSBAR_PERFORMANCE, value=generic_event.dilation_rate,
                                    label=f'{generic_event.dilation_rate_note}     {t2t("running speed")}: {round(generic_event.dilation_rate, 2) * 100}%')
             # output.clear(self.SCOPE_PERFORMANCE)
-            if generic_event.dilation_rate <= 0.6:
-                output.toast(
-                    t2t("Warning: Extremely low performance, if you see this message for a long time, please check if your computer meets the lowest requirements."),
-                    color='red')
+            if generic_event.dilation_rate <= 0.65:
+                tip = t2t("Warning: Extremely low performance, if you see this message for a long time, please check if your computer meets the lowest requirements.")
+                output.toast(tip,color='red')
+                set_notice(tip, timeout=1)
                 time.sleep(0.5)
+
 
             time.sleep(0.1)
 
@@ -194,7 +196,8 @@ class MainPage(AdvancePage):
                         pin.put_select(('FlowMode'), [
                             {'label': t2t('Idle'), 'value': "idle"},
                             {'label': t2t('Auto Combat'), 'value': "semiauto_combat"},
-                            {'label': t2t('Collect Images(Dev)'), 'value': "collect_image"}
+                            {'label': t2t('Collect Images(Dev)'), 'value': "collect_image"},
+                            {'label': t2t('Record Path'), 'value': "record_path"}
                         ])
                     ],
                     ),

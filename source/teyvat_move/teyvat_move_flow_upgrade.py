@@ -99,6 +99,33 @@ class TeyvatTeleport(FlowTemplate):
         ui_control.ui_goto(UIPage.page_main)
         return super().state_end()
 
+from source.common.base_threading import AdvanceThreading
+class MoveController(AdvanceThreading):
+    def __init__(self):
+        super().__init__()
+        self.while_sleep = 0.05
+        self.move_ahead_timer = AdvanceTimer(1).start()
+
+    def move_ahead(self, duration: float = 1):
+        self.move_ahead_timer = AdvanceTimer(duration).start()
+        itt.key_down('w')
+
+    def switch_w(self, mode = 'all'):
+        logger.trace('mc switching')
+        if self.move_ahead_timer.reached():
+            if mode in ['all', 'stop']:
+                itt.key_up('w')
+        else:
+            if mode in ['all', 'start']:
+                itt.key_down('w')
+
+    def stop_move_ahead(self):
+        self.move_ahead_timer = AdvanceTimer(0).start()
+        itt.key_up('w')
+
+    def loop(self):
+
+        self.switch_w()
 
 class TeyvatMoveCommon():
     def __init__(self, upper: TeyvatMoveFlowConnector):
@@ -110,6 +137,10 @@ class TeyvatMoveCommon():
         self.last_w_position = [0, 0]
         self.press_w_timer = AdvanceTimer(limit=1).start()
         self.upper = upper
+        self.mc = MoveController()
+
+
+
 
     def switch_motion_state(self, jump=True):
         self.motion_state = movement.get_current_motion_state()
@@ -189,14 +220,28 @@ class TeyvatMoveCommon():
                     return True
         return False
 
+    def use_shield_if_needed(self):
+        if self.upper.is_use_shield:
+            if self.motion_state == IN_MOVE:
+                self.upper.SCO.continue_threading()
+                # self.upper.SCO.switch_character(SHIELD)
+            else:
+                self.upper.SCO.pause_threading()
+
     def start_shield_if_needed(self):
         if self.upper.is_use_shield:
             self.upper.SCO.mode = SHIELD
-            self.upper.SCO.continue_threading()
+            self.upper.SCO.start_threading()
 
-    def stop_shield_if_needed(self):
-        if self.upper.is_use_shield:
-            self.upper.SCO.pause_threading()
+    def move_ahead(self, duration: float = 1):
+        self.mc.move_ahead(duration=duration)
+
+    def switch_w(self, mode = 'all'):
+        if self.mc.pause_threading_flag:
+            self.mc.continue_threading()
+
+    def stop_move_ahead(self):
+        self.mc.stop_move_ahead()
 
 class Navigation(TianliNavigator):
     def __init__(self, start, end) -> None:
@@ -311,6 +356,7 @@ class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon, Navigation):
             self.posi_list = [self.upper.target_posi]
 
         self.start_shield_if_needed()
+
         self._next_rfc()
 
     def state_in(self):
@@ -342,7 +388,8 @@ class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon, Navigation):
         if r:
             self._next_rfc()
 
-        self.auto_w(self.current_posi)
+        self.use_shield_if_needed()
+        self.move_ahead(duration=1)
 
         # if len(genshin_map.history_posi) >= 29:
         #     p1 = genshin_map.history_posi[0][1:]
@@ -358,7 +405,10 @@ class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon, Navigation):
         if self.motion_state == IN_FLY:
             logger.info(f"landing")
             itt.left_click()
+        self.mc.pause_threading()
         self._next_rfc()
+
+
 
 
 class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
@@ -445,11 +495,16 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
         r_posi = self.TDO.predict_guiding_head_position(nz)
         if DEBUG_MODE:
             logger.trace(
+                "\n"
                 f"curr posi: {curr_posi}"
                 "\n"
                 f"target posi: {target_posi}"
                 "\n"
                 f"guiding head posi: {r_posi}"
+                "\n"
+                f"nz: {nz}"
+                "\n"
+                f"bp_index: {self.curr_break_point_index}"
             )
         self.curr_break_point_index = int(self._low8up9(nz))
         if self.curr_break_point_index > len(self.curr_breaks) - 1:
@@ -499,7 +554,7 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
         if self.upper.is_reinit:
             genshin_map.reinit_smallmap()
         self.upper.while_sleep = 0
-        self.TDO = B_SplineCurve_GuidingHead_Optimizer(self.upper.path_dict)
+
         if self.upper.is_auto_pickup:
             self.upper.PUO.continue_threading()
 
@@ -511,8 +566,18 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
         else:
             self.ENABLE_OPTIMIZER = True
 
-        self.start_shield_if_needed()
+        if len(self.curr_breaks) < 6:
+            logger.info('bp too little, disable optimizer.')
+            self.ENABLE_OPTIMIZER = False
+        if 'generate_from' in self.upper.path_dict.keys():
+            if self.upper.path_dict['generate_from'] == 'path recorder 1.0':
+                self.ENABLE_OPTIMIZER = False
 
+        if self.ENABLE_OPTIMIZER:
+            self.TDO = B_SplineCurve_GuidingHead_Optimizer(self.upper.path_dict)
+
+        self.start_shield_if_needed()
+        self.mc.start_threading()
         self._next_rfc()
 
     def _land(self, enforce=False):
@@ -544,14 +609,19 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
 
     # any_jump_timer = AdvanceTimer()
 
+
+
+
     def state_in(self):
+        print(f"re in cost {self.in_pt.get_diff_time()}")
+        self.switch_w(mode='stop')
         self.in_pt.reset()
         # print(f"time0: {self.in_pt.get_diff_time()}")
         # 如果循环太慢而走的太快就会回头 可能通过量化移动时间和距离解决
 
         # 更新BP和CP
         while 1:
-            print(f"time0.1: {self.in_pt.get_diff_time()}")
+            # print(f"time0.1: {self.in_pt.get_diff_time()}")
             target_posi = self.curr_breaks[self.curr_break_point_index]
             curr_posi = genshin_map.get_position()
 
@@ -646,7 +716,7 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
 
             # print(f"time0.3: {self.in_pt.get_diff_time()}")
 
-        print(f"time1: {self.in_pt.get_diff_time()}")
+        logger.trace(f"time: refresh bp: {self.in_pt.get_diff_time()}")
 
         # 动作识别
         is_jump = False
@@ -684,7 +754,7 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
         if self.curr_path[self.curr_path_index]["motion"] == "ANY":
             movement.jump_in_loop()
 
-        print(f"time2: {self.in_pt.get_diff_time()}")
+        logger.trace(f"time2: switch motion: {self.in_pt.get_diff_time()}")
 
         def is_ads(threshold):
             return min(euclidean_distance_plist(curr_posi, self.adsorptive_position)) < threshold
@@ -708,7 +778,7 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
         # self._exec_active_pickup()
         curr_posi = genshin_map.get_position()
 
-        print(f"time3: {self.in_pt.get_diff_time()}")
+        logger.trace(f"time3: check absorptive position {self.in_pt.get_diff_time()}")
 
         # 自动拾取
         if self.upper.is_auto_pickup:
@@ -735,12 +805,16 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
                                   self.upper.path_dict["end_position"], curr_posi, self.upper.stop_offset)
         if r:
             self._next_rfc()
+        self.use_shield_if_needed()
 
-        print(f"time4: {self.in_pt.get_diff_time()}")
+        logger.trace(f"time4: pickup, stuck checks, shield and ready_to_end check: {self.in_pt.get_diff_time()}")
 
         # 输出日志
-        logger.debug(f"next break position distance: {euclidean_distance(target_posi, curr_posi)}")
-        self.in_pt.output_log(mess='TMF Path Performance:')
+        distance = euclidean_distance(target_posi, curr_posi)
+        move_duration =  min(distance*0.05 , 0.8)  # estimate loop time: 0.1s estimate move speed: 10m/s when walking
+        logger.trace(f"move_duration: {move_duration}")
+        logger.debug(f"next break position distance: {distance}")
+
         # delta_distance = self.CalculateTheDistanceBetweenTheAngleExtensionLineAndTheTarget(curr_posi,target_posi)
 
         # 移动视角
@@ -751,20 +825,22 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
             # target_degree = self.predict_tdo_degree(curr_posi, target_posi)
         delta_degree = abs(movement.calculate_delta_angle(genshin_map.get_rotation(), target_degree))
         if delta_degree >= 45:
-            itt.key_up('w')
+            self.stop_move_ahead()
             # movement.change_view_to_posi(target_posi, stop_func = self.upper.checkup_stop_func)
             movement.change_view_to_angle(target_degree, offset=15)
             if not self.ready_to_end:
-                itt.key_down('w')
+                self.move_ahead(duration=move_duration)
             else:
-                movement.move(movement.MOVE_AHEAD, 1.5)
+                self.move_ahead(duration=move_duration*0.5)
         else:
             # movement.change_view_to_posi(target_posi, stop_func = self.upper.checkup_stop_func, max_loop=4, offset=2, print_log = False)
             movement.change_view_to_angle(target_degree, loop_sleep=0, maxloop=4)
             if self.ready_to_end:
-                movement.move(movement.MOVE_AHEAD, 1.5)
+                self.move_ahead(duration=move_duration*0.5)
+            else:
+                self.move_ahead(duration=move_duration)
         if self.init_start == False:
-            itt.key_down('w')
+            # itt.key_down('w')
             self.init_start = True
 
         # 冲
@@ -776,9 +852,11 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
         #             self.sprint_timer.reset()
 
         # w
-        self.auto_w(curr_posi)
+        # self.auto_w(curr_posi)
+        # self.switch_w()
 
-        print(f"time5: {self.in_pt.get_diff_time()}")
+        print(f"time5: a loop cost {self.in_pt.get_diff_time()}")
+        self.in_pt.output_log(mess='TMF Path Performance:')
 
     def state_after(self):
         self.next_flow_id = self.flow_id
@@ -792,6 +870,7 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
         self.upper.while_sleep = 0.2
         if self.upper.is_auto_pickup:
             self.upper.PUO.pause_threading()
+        self.mc.pause_threading()
         self._next_rfc()
 
     def state_end(self):
@@ -870,9 +949,13 @@ class TeyvatMoveFlowController(FlowController):
         self.flow_dict = {}
         self.append_flow(TeyvatTeleport(self.flow_connector))
         if self.flow_connector.MODE == "AUTO":
-            self.append_flow(TeyvatMove_Automatic(self.flow_connector))
+            tma = TeyvatMove_Automatic(self.flow_connector)
+            self.append_flow(tma)
+            self._add_sub_threading(tma.mc, start=False)
         else:
-            self.append_flow(TeyvatMove_FollowPath(self.flow_connector))
+            tfp = TeyvatMove_FollowPath(self.flow_connector)
+            self.append_flow(tfp)
+            self._add_sub_threading(tfp.mc, start=False)
 
         self.append_flow(TeyvatMoveStuck(self.flow_connector))
         self.append_flow(TeyvatMovePass(self.flow_connector))

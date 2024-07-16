@@ -1,27 +1,9 @@
 from typing import TextIO
 
 from source.webio import manager
-from source.util import DEMO_MODE
+from source.util import DEMO_MODE, ansl_code2col
 
-def ansl_code2col(ansl_code):
-    if ansl_code == "0":
-        return 'black'
-    elif ansl_code == "31":
-        return "red"
-    elif ansl_code == "32":
-        return "green"
-    elif ansl_code == "33":
-        return "olive"
-    elif ansl_code == "34":
-        return "blue"
-    elif ansl_code == "35":
-        return "green"
-    elif ansl_code == "36": # cyan
-        return "#0099CC"
-    elif ansl_code == "37": # white
-        return "black"
-    
-    return "NO_COL"
+
 
 def webio_poster(record:str):
     if DEMO_MODE:

@@ -189,8 +189,8 @@ class MiniMap(MiniMapResource):
             self.pos_change_timer.reset()
             return True
         else:
-            if euclidean_distance(pos, self.position) >= self.MOVE_SPEED * dt:
-                logger.warning(f'position change above limit: {euclidean_distance(pos, self.position)} >= {self.MOVE_SPEED * dt}. result will be abandon.')
+            if euclidean_distance(pos, self.position) >= self.MOVE_SPEED * dt + 1:
+                logger.warning(f'position change above limit: {euclidean_distance(pos, self.position)} >= {self.MOVE_SPEED * dt + 1}. result will be abandon.')
                 return False
             else:
                 self.pos_change_timer.reset()

@@ -59,7 +59,8 @@ class ConfigPage(AdvancePage):
             "collection_blacklist.json": t2t("collection_blacklist.json"),
             "collection_log.json": t2t("collection_log.json"),
             "Collector.json": t2t("Collector.json"),
-            "LeyLineOutcrop.json": t2t("LeyLineOutcrop.json")
+            "LeyLineOutcrop.json": t2t("LeyLineOutcrop.json"),
+            "Dev.json": t2t("Dev.json")
         }
         
         for i in range(len(l1)):

@@ -36,5 +36,8 @@ Python32Path:
 UsingAlphaChannel:
   conceal: true
 
+RecordPath_CollectionType:
+  select_items:
+  - Plant
 
 

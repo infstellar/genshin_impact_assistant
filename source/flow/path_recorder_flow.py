@@ -5,11 +5,12 @@ import source.flow.utils.flow_code as FC, source.flow.utils.flow_state as ST
 from source.interaction.minimap_tracker import tracker
 from source.funclib import movement, generic_lib, collector_lib
 from source.funclib.err_code_lib import *
-from source.interaction.interaction_core import itt
 import pytz, datetime
 from source.ui.ui import ui_control
 from source.ui import page as UIPage
 from source.common.timer_module import AdvanceTimer, Timer
+from source.ingame_ui.ingame_ui import set_notice
+from source.integration_json.funclib import correction_collection_position
 
 
 class PathRecorderConnector(FlowConnector):
@@ -19,19 +20,19 @@ class PathRecorderConnector(FlowConnector):
 
         # self.total_collection_list = []
         self.checkup_stop_func = None
-        self.collection_path_dict = {
-            "time":"",
-            "name":"",
-            "start_position":[],
-            "end_position":[],
-            "break_position":[],
-            "position_list":[]
-        }
+        self.collection_path_dict = {}
 
         self.min_distance = 1
         self.path_name = ""
         self.last_direction = 999
         self.is_pickup_mode = False
+        self.coll_name = ""
+        self.start_as_ingame_func = False
+        self.generator = ''
+
+    def reset(self):
+        self.path_name = ""
+        self.last_direction = 999
         self.coll_name = ""
 
 class PathRecorderCore(FlowTemplate):
@@ -52,6 +53,7 @@ class PathRecorderCore(FlowTemplate):
         self.position_migration_timer = Timer()
         self.used_collection_position = []
         self.ENFORCE_FIX_LIMIT = 6
+
         # self.all_position = []
 
     def _add_posi_to_dict(self, posi:list):
@@ -76,7 +78,7 @@ class PathRecorderCore(FlowTemplate):
         for i in posi_dict["position_list"]:
             all_posi.append(i["position"])
         return all_posi
-    
+
     def state_init(self):
         pass
         # self._next_rfc()
@@ -93,24 +95,33 @@ class PathRecorderCore(FlowTemplate):
             "additional_info":{
                 "pickup_points":[]
             },
-            "adsorptive_position":[]
+            "adsorptive_position":[],
+            "generate_from":self.upper.generator
         }
         self.force_add_flag = False
         if self.upper.coll_name != "":
             # self.COLLECTION_POSITION = collector_lib.load_items_position(self.upper.coll_name)
-            #TODO: get_item_position_new need upd
+            #TODO: get_item_position_new need upd?
             self.COLLECTION_POSITION = collector_lib.get_item_position_new(self.upper.coll_name)# [i['position'] for i in self.COLLECTION_POSITION]
             self.force_add_flag = True
+
         self.enter_flag = False
         self.used_collection_position = []
         self.record_index=0
         self.pickup_icon_timer = AdvanceTimer(1).reset().start()
         self.position_migration_times = 0
-        # if not 
-        # tracker.reinit_smallmap()
+        # if not
+        if self.upper.start_as_ingame_func:
+            self._reinit_smallmap()
         curr_posi = tracker.get_position()
         self._add_break_position(curr_posi)
         self._next_rfc()
+
+    def _reinit_smallmap(self):
+        set_notice(t2t("Please take your hands off the keyboard and mouse while the position are being calibrated"))
+        time.sleep(1)
+        tracker.reinit_smallmap()
+        set_notice(t2t("Position calibration complete. Happy recording"), timeout=4)
 
     def _start_stop_recording(self):
         if self.rfc == FC.INIT:
@@ -135,7 +146,7 @@ class PathRecorderCore(FlowTemplate):
             if min(ed_list)<15:
                 logger.info(f"position refix fail: {p} {self.COLLECTION_POSITION[np.argmin(ed_list)]} 9<{min(ed_list)}<15")
             return p,False
-    
+
     def _add_break_position(self, posi, f_exist=False, is_end = False):
         # 添加BP
         posi[0] = round(posi[0],3)
@@ -152,7 +163,7 @@ class PathRecorderCore(FlowTemplate):
                         f_exist = True
             self.upper.collection_path_dict["break_position"].append(list(posi))
             logger.info(f"break position added {posi}")
-            
+
             if self.upper.is_pickup_mode and f_exist:
                 self.upper.collection_path_dict["additional_info"]["pickup_points"].append(bpindex)
                 logger.info(f"pickup bp added: {bpindex}")
@@ -170,9 +181,11 @@ class PathRecorderCore(FlowTemplate):
                     if bpindex-1 not in self.upper.collection_path_dict["additional_info"]["pickup_points"]:
                         self.upper.collection_path_dict["additional_info"]["pickup_points"].append(bpindex-1)
                         logger.info(f"pickup bp added to bp-1: {bpindex-1}")
-    
+
     def state_in(self):
         # 验证UI界面
+        # if self.upper.start_as_ingame_func:
+        #     set_notice(t2t("Recording..."), timeout=3)
         if not ui_control.verify_page(UIPage.page_main):
             return super().state_in()
         # 获得所有position
@@ -181,28 +194,34 @@ class PathRecorderCore(FlowTemplate):
         # 识别当前角色方向
         curr_direction = tracker.get_direction()
         # 修正坐标偏移过大问题
-        migration_flag = False
-        
-        if len(self.upper.collection_path_dict["position_list"])>0:
-            last_position = self.upper.collection_path_dict["position_list"][-1]["position"]
-            if self.position_migration_times == 0:
-                migration_offset = 10
-            else:
-                migration_offset = 10+min(self.ENFORCE_FIX_LIMIT,self.position_migration_timer.get_diff_time())*10 # 考虑时间与距离关系，*6不一定准确，Max=10+10*ENFORCE_FIX_LIMIT
-            if euclidean_distance(curr_posi, last_position)>=migration_offset:
-                migration_flag = True # 偏移过大
-                logger.warning(f"坐标偏移过大: offset: {round(migration_offset,2)} current: {round(euclidean_distance(curr_posi, last_position),2)} time: {round(self.position_migration_timer.get_diff_time(),2)}")
-                if self.position_migration_times >= 2:
-                    if self.position_migration_timer.get_diff_time()>=self.ENFORCE_FIX_LIMIT: # 偏移超过ENFORCE_FIX_LIMIT，强制修正
-                        logger.warning(f"Position migration>28 within {self.ENFORCE_FIX_LIMIT}, reset position {last_position} -> {curr_posi}")
-                        self.position_migration_times = 0
-                        migration_flag = False # 强制修正坐标
+
+        if not self.upper.start_as_ingame_func:  # 游戏内运行不需要验证坐标识别错误，这是为Video2Path服务的。
+            migration_flag = False
+
+            if len(self.upper.collection_path_dict["position_list"])>0:
+                last_position = self.upper.collection_path_dict["position_list"][-1]["position"]
                 if self.position_migration_times == 0:
-                    self.position_migration_timer.reset() # 重置计时器
-                self.position_migration_times += 1
-        if migration_flag:return super().state_in()
-        self.position_migration_timer.reset()
-        
+                    migration_offset = 10
+                else:
+                    migration_offset = 10+min(self.ENFORCE_FIX_LIMIT,self.position_migration_timer.get_diff_time())*10 # 考虑时间与距离关系，*6不一定准确，Max=10+10*ENFORCE_FIX_LIMIT
+
+
+                if euclidean_distance(curr_posi, last_position)>=migration_offset:
+                    migration_flag = True # 偏移过大
+                    logger.warning(f"坐标偏移过大: offset: {round(migration_offset,2)} current: {round(euclidean_distance(curr_posi, last_position),2)} time: {round(self.position_migration_timer.get_diff_time(),2)}")
+                    if self.position_migration_times >= 2:
+                        if self.position_migration_timer.get_diff_time()>=self.ENFORCE_FIX_LIMIT: # 偏移超过ENFORCE_FIX_LIMIT，强制修正
+                            logger.warning(f"Position migration>28 within {self.ENFORCE_FIX_LIMIT}, reset position {last_position} -> {curr_posi}")
+                            self.position_migration_times = 0
+                            migration_flag = False # 强制修正坐标
+                    if self.position_migration_times == 0:
+                        self.position_migration_timer.reset() # 重置计时器
+                    self.position_migration_times += 1
+
+            if migration_flag:return super().state_in()
+            self.position_migration_timer.reset()
+        # migration verify end.
+
         # 添加position用于记录motion
         if len(all_posi)>10:
             min_dist = quick_euclidean_distance_plist(curr_posi, all_posi[-10:-1]).min()
@@ -222,19 +241,24 @@ class PathRecorderCore(FlowTemplate):
         if self.upper.is_pickup_mode:
             ed_list = quick_euclidean_distance_plist(curr_posi, self.COLLECTION_POSITION)
             if min(ed_list)<12:
-                rp = self.COLLECTION_POSITION[np.argmin(ed_list)]
-                if list(rp) not in self.upper.collection_path_dict["adsorptive_position"]:
-                    logger.info(f"add adsorptive position succ: {rp}")
-                    self.upper.collection_path_dict["adsorptive_position"].append(list(rp))
-        
+                rp = list(self.COLLECTION_POSITION[np.argmin(ed_list)])
+                rp2 = list(correction_collection_position(rp))
+                if rp != rp2:
+                    logger.info(f'correction position: genshin coordinate: {rp} -> {rp2}')
+                else:
+                    logger.info(f'correction position: genshin coordinate {rp2} fail.')
+                if list(rp2) not in self.upper.collection_path_dict["adsorptive_position"]:
+                    logger.info(f"add adsorptive position succ: {rp2}")
+                    self.upper.collection_path_dict["adsorptive_position"].append(rp2)
+
         # 计算视角朝向并添加BP
         if abs(movement.calculate_delta_angle(curr_direction, self.upper.last_direction)) >= 3.5:
             self._add_break_position(curr_posi)
             self.upper.last_direction = curr_direction
-        
+
         # 第一次运行时初始化
         if not self.enter_flag:
-            logger.info(t2t("start recording"))
+            self.logger_or_notice(t2t("start recording"))
             self.enter_flag = True
             self.upper.collection_path_dict["start_position"]=list(tracker.get_position())
         return super().state_in()
@@ -245,7 +269,13 @@ class PathRecorderCore(FlowTemplate):
         self.upper.collection_path_dict["break_position"]   \
         [:self.upper.collection_path_dict["additional_info"]["pickup_points"][-1]+1]
         return True
-    
+
+    def logger_or_notice(self, x:str):
+        if self.upper.start_as_ingame_func:
+            set_notice(x, timeout=3)
+        else:
+            logger.info(x)
+
     def state_after(self):
         # self.upper.total_collection_list.append(self.upper.collection_path_dict)
         curr_posi = tracker.get_position()
@@ -258,10 +288,19 @@ class PathRecorderCore(FlowTemplate):
         self.record_index+=1
         # if self.upper.is_pickup_mode:
         #     self._fix_bps() # 这个功能好像与is_end=True功能冲突...
-        with open(fr"{ROOT_PATH}/dev_assets/tlpp/{jsonname}.pydict", 'w') as f:
-            f.write(f"{jsonname} = "+str(self.upper.collection_path_dict))
+        save_path = fr"{ROOT_PATH}/dev_assets/tlpp/{jsonname}.py"
+        with open(save_path, 'w', encoding='utf-8') as f:
+            f.write(f"{jsonname} = "+str(self.upper.collection_path_dict) + f"""
+\n
+import time\n
+from source.mission.template.mission_just_collect import MissionJustCollect\n
+if __name__ == '__main__':\n
+    MissionJustCollect({jsonname}, 'tlpp_test').start_threading()\n
+    while 1:\n
+        time.sleep(0.2)\n
+""")
         # save_json(self.upper.collection_path_dict,json_name=jsonname,default_path=f"assets\\TeyvatMovePath")
-        logger.info(f"recording save as {jsonname}")
+        self.logger_or_notice(f"recording save in {save_path}, " + t2t("Record end."))
         self.rfc = FC.INIT
 
 
@@ -277,11 +316,11 @@ class PathRecorderController(FlowController):
 
         self.pc = PathRecorderCore(self.flow_connector)
 
-        self.append_flow(self.pc)   
+        self.append_flow(self.pc)
         self.append_flow(PathRecorderEnd(self.flow_connector))
 
     def reset(self):
-        pass
+        super().reset()
 
 if __name__ == '__main__':
     pn = input("input your path name")

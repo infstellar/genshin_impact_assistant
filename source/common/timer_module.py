@@ -20,9 +20,9 @@ class Timer:
     #     self.stop()
     #     return self.end_time - self.start_time
 
-    def get_diff_time(self):  # new
+    def get_diff_time(self, r=2):  # new
         self.stop()
-        return self.end_time - self.start_time
+        return round(self.end_time - self.start_time, r)
 
     def reset_and_get(self):
         t = self.get_diff_time()

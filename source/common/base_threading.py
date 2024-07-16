@@ -60,7 +60,8 @@ class BaseThreading(threading.Thread):
             self.pause_threading_flag = False
 
     def start_threading(self):
-        self.start()
+        if not self.is_alive():
+            self.start()
         self.continue_threading()
 
     def stop_threading(self):
