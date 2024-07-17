@@ -44,4 +44,3 @@ websockets
 PyQt5-sip == 12.12.2
 PyQt5==5.15.9
 qtpy==2.4.1
-PyQtWebEngine
