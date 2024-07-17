@@ -42,5 +42,4 @@ psutil
 pponnxcr
 websockets
 qtpy
-PyQtWebEngine
 PyQt5
