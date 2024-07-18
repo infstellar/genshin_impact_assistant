@@ -65,7 +65,6 @@ class PathRecorderCore(FlowTemplate):
                 "position":posi,
                 "motion":curr_motion,
                 "id":len(self.upper.collection_path_dict["position_list"])+1,
-                "special_key":None
             }
         )
         # self.upper.collection_path_dict["all_position"].append(posi)
@@ -289,6 +288,7 @@ class PathRecorderCore(FlowTemplate):
         # if self.upper.is_pickup_mode:
         #     self._fix_bps() # 这个功能好像与is_end=True功能冲突...
         save_path = fr"{ROOT_PATH}/dev_assets/tlpp/{jsonname}.py"
+        save_path2 = fr"{ROOT_PATH}/dev_assets/tlpp"
         with open(save_path, 'w', encoding='utf-8') as f:
             f.write(f"{jsonname} = "+str(self.upper.collection_path_dict) + f"""
 \n
@@ -299,6 +299,7 @@ if __name__ == '__main__':\n
     while 1:\n
         time.sleep(0.2)\n
 """)
+        save_json(self.upper.collection_path_dict, f"{jsonname}.json", save_path2)
         # save_json(self.upper.collection_path_dict,json_name=jsonname,default_path=f"assets\\TeyvatMovePath")
         self.logger_or_notice(f"recording save in {save_path}, " + t2t("Record end."))
         self.rfc = FC.INIT

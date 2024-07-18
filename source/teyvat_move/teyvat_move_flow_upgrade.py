@@ -519,6 +519,7 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
             special_key (_type_): _description_
         """
         # key_name = special_key
+
         itt.key_press(special_key)
         logger.info(f"key {special_key} exec.")
 
@@ -657,6 +658,8 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
                     logger.trace(f"BPs too close <1: dist: {dist}")
                     offset = 1
                     logger.trace(f"offset: {offset}")
+            if offset < 1.5:
+                offset = 2
 
             # print(f"time0.2: {self.in_pt.get_diff_time()}")
 
@@ -723,8 +726,9 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
         is_nearby = euclidean_distance(curr_posi, target_posi) < 2
         check_jump = self.curr_path[self.curr_path_index:min(self.curr_path_index + 5, len(self.curr_path) - 1)]  # 起跳
         for i in check_jump:
-            if i["special_key"] == "space":
-                is_jump = True
+            if 'special_key' in i:
+                if i["special_key"] == "space":
+                    is_jump = True
 
         self.switch_motion_state(jump=((not self.ready_to_end) and is_jump))
         fly_flag = False
@@ -734,8 +738,7 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
                 self.try_fly()
                 fly_flag = True
 
-        if self.motion_state == IN_FLY and self.curr_path[self.curr_path_index]["motion"] == "WALKING" and (
-        not fly_flag):  # 降落
+        if self.motion_state == IN_FLY and self.curr_path[self.curr_path_index]["motion"] == "WALKING" and (not fly_flag):  # 降落
             self._land()
             # if self.landing_timer.get_diff_time()>2:
             #     if self.landing_timer.get_diff_time()<5:
@@ -761,7 +764,7 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
 
         # 吸附模式: 当当前距离小于允许吸附距离，开始向目标吸附点移动
         if len(self.adsorptive_position) > 0:
-            adsorptive_threshold = 15
+            adsorptive_threshold = 10
             if is_ads(adsorptive_threshold):
                 if self.motion_state == IN_FLY:
                     self._land()
@@ -894,12 +897,15 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
                     pickup_item_num = len(self.upper.PUO.pickup_item_list)
                 for i in range(15):
                     if CSDL.get_combat_state():
-                        break
+                        if not self.upper.is_use_shield:
+                            break
+                    else:
+                        self.upper.SCO.pause_threading()
                     if movement.move_to_posi_LoopMode(adsorb_p, self.upper.checkup_stop_func, threshold=0.5): break
                     if self.upper.PUO.auto_pickup() > 0:
                         logger.info("adsorption: finding blink: start")
                         while 1:
-                            movement.move(direction=movement.MOVE_AHEAD, distance=2)
+                            movement.move(direction=movement.MOVE_AHEAD, distance=1)
                             if self.upper.PUO.auto_pickup() == 0: break
                         logger.info("adsorption: finding blink: end")
                     if self.upper.is_auto_pickup:
@@ -918,6 +924,7 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
                     if i % 5 == 0:
                         logger.debug(f"adsorption: {i}")
                 logger.info(f"adsorption: {adsorb_p} end")
+                self.use_shield_if_needed()
                 # self.climb_until_walk_to_ads_flag = False
                 self.adsorptive_position.pop(self.adsorptive_position.index(adsorb_p))
                 break

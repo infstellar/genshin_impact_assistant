@@ -1,8 +1,8 @@
 from source.util import *
+from source.cvars import *
 from pydantic import BaseModel
 
-LOCA_TEYVAT = 'Teyvat'
-COLL_TYPE_PLANT = 'Plant'
+
 
 
 class PositionJson(BaseModel):

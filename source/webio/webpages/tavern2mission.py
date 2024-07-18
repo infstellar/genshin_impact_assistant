@@ -146,13 +146,17 @@ class Tavern2Mission(AdvancePage):
             i+=1
         adsorptive_position=[]
         pickup_points=[]
-        
-        ita = collector_lib.load_items_position(pin.pin[self.INPUT_COLLECTION_NAME], ret_mode=2)
+
+        from source.integration_json.funclib import correction_collection_position
+        # ita = collector_lib.load_items_position(pin.pin[self.INPUT_COLLECTION_NAME], ret_mode=2)
         for p in tianli_posi_list:
-            rita = collector_lib.predict_feature_by_position(p, ita, threshold=15)
-            if len(rita) > 0:
-                for i in rita:
-                    adsorptive_position.append(list(MapConverter.convert_kongying_to_cvAutoTrack(np.array( list(map(float,i["position"].split(',')))), decimal=2)))
+            possible_collection = collector_lib.predict_feature_by_pos_v2(p, pin.pin[self.INPUT_COLLECTION_NAME], threshold=15)
+            # rita = collector_lib.predict_feature_by_position(p, ita, threshold=15)
+            if len(possible_collection) > 0:
+                for i in possible_collection:
+                    pos = collector_lib.conv_kongying_str_pos_to_cvat_pos(i.position)
+                    pos = correction_collection_position(pos, name=pin.pin[self.INPUT_COLLECTION_NAME])
+                    adsorptive_position.append(list(pos))
                 pickup_points.append(tianli_posi_list.index(p))
         
         # 修正空荧酒馆误差
@@ -198,7 +202,8 @@ class Tavern2Mission(AdvancePage):
                 "break_position": tianli_posi_list,
                 "time": "",
                 "additional_info":additional_info,
-                "adsorptive_position":adsorptive_position
+                "adsorptive_position":adsorptive_position,
+                "generate_from":"kyt2m v1.0"
             }
             s = \
 f'''from source.mission.template.mission_just_collect import MissionJustCollect

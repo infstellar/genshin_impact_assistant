@@ -157,7 +157,7 @@ def get_item_id(item_name: str, area_id: list, match_mode=0) -> list:
 
 
 from source.map.extractor.convert import MapConverter
-from source.map.extractor.reader import PoiJsonApi
+from source.map.extractor.reader import PoiJsonApi, PointInfoModel
 #TODO: move constant
 RETURN_POSITIONS = 0
 RETURN_ALL = 1
@@ -165,23 +165,27 @@ AREA_TEYVAT = 0
 AREA_ALL_GENSHIN = 1
 
 #TODO: add feat
+
+def conv_kongying_str_pos_to_cvat_pos(x: str):
+    pos = x.split(',')
+    pos = [float(pos[0]), float(pos[1])]
+    return list(MapConverter.convert_kongying_to_cvAutoTrack(pos, decimal=2))
+POIAPI = PoiJsonApi()
 def get_item_position_new(marker_title: str,ret_mode=RETURN_POSITIONS, area=AREA_TEYVAT):
-    poiapi = PoiJsonApi()
     ret_list = []
     area_list = []
     if area==AREA_TEYVAT:
-        area_list = poiapi.LIST_AREA_TEYVAT
+        area_list = POIAPI.LIST_AREA_TEYVAT
     elif area==AREA_ALL_GENSHIN:
         area_list = range(1,100)
-    for i in poiapi.data.values():
-        if poiapi.item[i.itemList[0].itemId].areaId not in area_list:
+    for i in POIAPI.data.values():
+        i: PointInfoModel
+        if POIAPI.item[i.itemList[0].itemId].areaId not in area_list:
             continue
         if i.markerTitle == marker_title:
             pos = i.position
-            pos = pos.split(',')
-            pos = [float(pos[0]),float(pos[1])]
             if ret_mode == RETURN_POSITIONS:
-                ret_list.append(list(MapConverter.convert_kongying_to_cvAutoTrack(pos)))
+                ret_list.append(conv_kongying_str_pos_to_cvat_pos(pos))
             elif ret_mode == RETURN_ALL:
                 ret_list.append(i.model_copy())
     return ret_list
@@ -231,7 +235,7 @@ def load_items_position(marker_title: str, mode=0, area_id=None, blacklist_id=No
         item_id = get_item_id(marker_title, area_id, match_mode=match_mode)
         for i in ita:
             if len(i["itemList"]) > 0:
-                if i["itemList"][0]["id"] in item_id:
+                if i["itemList"][0]["itemId"] in item_id:
                     common_name.append(i)
     if mode == 1:
         for i in ita:
@@ -285,6 +289,15 @@ def predict_feature_by_position(posi, ita, threshold=15):
             ret_list.append(i)
     return ret_list
 
+def predict_feature_by_pos_v2(pos:list, name: str, threshold = 15):
+    res = get_item_position_new(name,ret_mode=RETURN_ALL)
+    ret = []
+    for i in res:
+        i: PointInfoModel
+        p = conv_kongying_str_pos_to_cvat_pos(i.position)
+        if euclidean_distance(p, pos)<threshold:
+            ret.append(i.model_copy())
+    return ret
 
 # def load_feature_position(text, blacklist_id=None, ret_mode = 0, check_mode = 0):
 #     """_summary_
@@ -329,6 +342,7 @@ if __name__ == '__main__':
     # pt=time.time()
     # s = predict_feature_by_position([0,0], load_all_dict())
     # print(time.time()-pt)
+    print(load_items_position('甜甜花'))
     print(get_item_position_new("地脉衍出"))
     # s = load_items_position(marker_title="地脉衍出", ret_mode=1, match_mode=1)
     # print()
