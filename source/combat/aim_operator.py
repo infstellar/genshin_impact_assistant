@@ -39,6 +39,7 @@ class AimOperator(BaseThreading):
         self.kdwe_timer = Timer()
         self.circle_search_timer = AdvanceTimer(4,count=3).start() # call 3 times and continue 4 sec.
         self.keep_distance_timer = AdvanceTimer(3,count=3).start()
+        self.find_enemy_behind_barrier_timeout_timer = AdvanceTimer(10).start()  # 失败太多就别搞了，冷却一下
         self.aim_timeout_retry_timer = AdvanceTimer(6).start()
         self.corr_rate = 1
         self.sco_blocking_request = ThreadBlockingRequest()
@@ -85,11 +86,8 @@ class AimOperator(BaseThreading):
                     if self.checkup_stop_func():continue
                     if r: # 找到了，退出
                         self.enemy_flag = True
-                        self.sco_blocking_request.send_request('find_enemy_behind_barrier')  # 向SCO申请暂停Tactic执行
-                        if not DEBUGING_THIS_MODULE: # set to False when debug this module
-                            print(self.sco_blocking_request.waiting_until_reply(stop_func=self.checkup_stop_func, timeout=60))
-                        self.find_enemy_behind_barrier()
-                        self.sco_blocking_request.recovery_request()
+                        if self.find_enemy_behind_barrier_timeout_timer.reached():
+                            self.find_enemy_behind_barrier()
                     else: # 没找到，根据红色箭头移动寻找
                         if self.checkup_stop_func():continue
                         if not self.aim_timeout_retry_timer.reached(): continue # 超时后6秒内不寻找
@@ -245,23 +243,29 @@ class AimOperator(BaseThreading):
                 logger.debug(f"find_enemy_behind_barrier:lock enemy success: {r}")
                 return True
             if not r:
+                self.sco_blocking_request.send_request('find_enemy_behind_barrier')  # 向SCO申请暂停Tactic执行
+                if not DEBUGING_THIS_MODULE:  # set to False when debug this module
+                    print(self.sco_blocking_request.waiting_until_reply(stop_func=self.checkup_stop_func, timeout=60))
                 itt.key_down('w')
-
                 if not DEBUGING_THIS_MODULE:  # set to False when debug this module
                     print(self.sco_blocking_request.waiting_until_reply(stop_func=self.checkup_stop_func, timeout=60))
                 barrier_finder_move_limit_timer = AdvanceTimer(4).start()
                 while 1:
                     if self.checkup_stop_func():
                         itt.key_up('w')
+                        self.sco_blocking_request.recovery_request()
                         return
                     if self._is_blood_bar_exist():
                         logger.debug(f"find_enemy_behind_barrier success")
                         itt.delay(0.5, comment='find_enemy_behind_barrier delay')
                         itt.key_up('w')
+                        self.sco_blocking_request.recovery_request()
                         return True
                     if barrier_finder_move_limit_timer.reached():
                         logger.debug(f"find_enemy_behind_barrier fail: move timeout")
                         itt.key_up('w')
+                        self.sco_blocking_request.recovery_request()
+                        self.find_enemy_behind_barrier_timeout_timer.reset().start()
                         return False
 
     def _moving_find_enemy(self):
