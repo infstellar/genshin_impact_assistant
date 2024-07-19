@@ -5,6 +5,7 @@ from source.common.base_threading import AdvanceThreading
 import source.flow.utils.flow_code as FC, source.flow.utils.flow_state as ST
 from source.util import *
 from source.ingame_ui.ingame_ui import set_notice
+from source.cvars import COLL_TYPE_PLANT
 
 class PathRecord(PRC):
     def __init__(self):
@@ -66,6 +67,10 @@ class PathRecord(PRC):
         self.flow_connector.path_name = 'record_'
         self.flow_connector.generator = 'path recorder 1.0'
         self.flow_connector.coll_name = GIAconfig.Dev_RecordPath_CollectionName
+        if GIAconfig.Dev_RecordPath_CollectionType in [COLL_TYPE_PLANT]:
+            self.flow_connector.is_pickup_mode = True
+        else:
+            self.flow_connector.is_pickup_mode = False
 
 
 if __name__ == '__main__':

@@ -18,3 +18,7 @@ ButtonSwitchToBattlePathDailyMission = asset.Button(threshold=0)
 IconBattlePathExclamation = asset.ImgIcon()
 ButtonExpeditionRestart = asset.Button(print_log=asset.LOG_ALL)
 ButtonExpeditionClaimAll = asset.Button(print_log=asset.LOG_ALL)
+
+ButtonCommissionUsePoints = asset.Button()
+ButtonCommissionSwitchToCommissionPage = asset.Button()
+IconCommissionDetailPage = asset.ImgIcon()

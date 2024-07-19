@@ -36,10 +36,10 @@ class ImgIcon(AssetBase):
                  bbg_posi=None,
                  cap_posi = None,
                  jpgmode=2,
-                 threshold:Union[float, Tuple[float,float,float]]=0.91, #TODO
+                 threshold=None, #TODOUnion[float, Tuple[float,float,float]]
                  win_text = None,
                  offset = 0,
-                 print_log = LOG_NONE):
+                 print_log = LOG_ALL if DEBUG_MODE else LOG_WHEN_TRUE):
         """创建一个img对象，用于图片识别等。
 
         Args:
@@ -62,8 +62,12 @@ class ImgIcon(AssetBase):
         
         if path is None:
             path = self.get_img_path()
-        
-        
+
+        if threshold is None:
+            if path[-4:] == '.png':
+                threshold = 0.98
+            else:
+                threshold = 0.91
         self.origin_path = path
         self.raw_image = cv2.imread(self.origin_path)
         if is_bbg == None:

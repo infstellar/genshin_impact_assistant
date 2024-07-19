@@ -148,12 +148,12 @@ class MainPage(AdvancePage):
                     "value": "LaunchGenshinTask"
                 },
                 {
-                    "label": t2t("Domain Task"),
-                    "value": "DomainTask"
-                },
-                {
                     "label": t2t("Daily Commission"),
                     "value": "CommissionTask"
+                },
+                {
+                    "label": t2t("Domain Task"),
+                    "value": "DomainTask"
                 },
                 {
                     "label": t2t("Claim Reward"),
@@ -286,7 +286,7 @@ class MainPage(AdvancePage):
         output.popup(f'ip address', output_text, size=output.PopupSize.SMALL)
 
     def _onclick_apply_ingame_assist(self):
-        listening.INGAME_ASSIST_MANAGER.apply_change()
+        listening.INGAME_ASSIST_MANAGER.apply_change(pin.pin['ingame_assist'])
 
     @logger.catch
     def _onclick_open_log_folder(self):

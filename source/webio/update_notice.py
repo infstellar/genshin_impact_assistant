@@ -111,7 +111,9 @@ def upd_message():
         
         ## 优化：
         - ui识别失败多次后尝试按esc退出
-        
+        ''')
+        if version_num < 1298:
+            ret_message += t2t('''
         ## v1.1.1.1298 
         
         ## 新内容：

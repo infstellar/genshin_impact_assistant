@@ -24,7 +24,7 @@ keyboard.add_hotkey(GIAconfig.Keymap_StartStop, SEMIAUTO_FUNC_MANAGER.apply_chan
 
 @logger.catch
 def listening():
-    add_logger_to_GUI(win_ingame_ui.log_poster)
+    add_logger_to_GUI(win_ingame_ui.log_poster, level= ('INFO' if not DEBUG_MODE else "DEBUG"))
     run_ingame_ui()
     logger.error('pyqt exit')
     # ingame_app.start("python", ["source\\ingame_ui\\ingame_ui.py"])

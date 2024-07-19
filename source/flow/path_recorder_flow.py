@@ -42,8 +42,11 @@ class PathRecorderCore(FlowTemplate):
         self.force_add_flag = None
         keyboard.add_hotkey('\\', self._start_stop_recording)
         self.COLLECTION_POSITION = []
-        for i in load_json("all_position.json", fr"{ROOT_PATH}/assets/POI_JSON_API"):
-            self.COLLECTION_POSITION.append(tracker.convert_kongying_to_cvAutoTrack(i))
+        # for i in load_json("all_position.json", fr"{ROOT_PATH}/assets/POI_JSON_API"):
+        from source.integration_json.reader import JIApi
+        for i in JIApi.data.values():
+            for j in i:
+                self.COLLECTION_POSITION.append(tracker.convert_GenshinMap_to_cvAutoTrack(j.position))
         self.upper = upper
         self.enter_flag = False
         self.upper.while_sleep = 0.05
@@ -65,7 +68,6 @@ class PathRecorderCore(FlowTemplate):
                 "position":posi,
                 "motion":curr_motion,
                 "id":len(self.upper.collection_path_dict["position_list"])+1,
-                "special_key":None
             }
         )
         # self.upper.collection_path_dict["all_position"].append(posi)
@@ -102,7 +104,7 @@ class PathRecorderCore(FlowTemplate):
         if self.upper.coll_name != "":
             # self.COLLECTION_POSITION = collector_lib.load_items_position(self.upper.coll_name)
             #TODO: get_item_position_new need upd?
-            self.COLLECTION_POSITION = collector_lib.get_item_position_new(self.upper.coll_name)# [i['position'] for i in self.COLLECTION_POSITION]
+            #  self.COLLECTION_POSITION = collector_lib.get_item_position_new(self.upper.coll_name)# [i['position'] for i in self.COLLECTION_POSITION]
             self.force_add_flag = True
 
         self.enter_flag = False
@@ -160,7 +162,7 @@ class PathRecorderCore(FlowTemplate):
                 posi,succ = self._fix_position(posi)
                 if self.force_add_flag:
                     if succ:
-                        f_exist = True
+                        f_exist = True # add  a variable
             self.upper.collection_path_dict["break_position"].append(list(posi))
             logger.info(f"break position added {posi}")
 
@@ -239,17 +241,26 @@ class PathRecorderCore(FlowTemplate):
                 self._add_break_position(curr_posi, f_exist=True)
         # 吸附采集点
         if self.upper.is_pickup_mode:
-            ed_list = quick_euclidean_distance_plist(curr_posi, self.COLLECTION_POSITION)
-            if min(ed_list)<12:
-                rp = list(self.COLLECTION_POSITION[np.argmin(ed_list)])
-                rp2 = list(correction_collection_position(rp))
-                if rp != rp2:
-                    logger.info(f'correction position: genshin coordinate: {rp} -> {rp2}')
-                else:
-                    logger.info(f'correction position: genshin coordinate {rp2} fail.')
-                if list(rp2) not in self.upper.collection_path_dict["adsorptive_position"]:
-                    logger.info(f"add adsorptive position succ: {rp2}")
-                    self.upper.collection_path_dict["adsorptive_position"].append(rp2)
+            if generic_lib.f_recognition():
+                ed_list = quick_euclidean_distance_plist(curr_posi, self.COLLECTION_POSITION)
+                if min(ed_list)<12:
+                    # rp = list(self.COLLECTION_POSITION[np.argmin(ed_list)])
+                    rp = list(curr_posi)
+                    rp2 = list(correction_collection_position(rp))
+                    if rp != rp2:
+                        logger.info(f'correction position: genshin coordinate: {rp} -> {rp2}')
+                    else:
+                        logger.info(f'correction position: genshin coordinate {rp2} fail.')
+                    if len(self.upper.collection_path_dict["adsorptive_position"]) != 0:
+                        dist = min(quick_euclidean_distance_plist(rp2, self.upper.collection_path_dict["adsorptive_position"]))
+                    else:
+                        dist = 999
+                    if dist > 5:
+                    # if list(rp2) not in self.upper.collection_path_dict["adsorptive_position"]:
+                        logger.info(f"add adsorptive position succ: {rp2}")
+                        self.upper.collection_path_dict["adsorptive_position"].append(rp2)
+                    else:
+                        logger.info(f'add ads fail: too close: {dist}')
 
         # 计算视角朝向并添加BP
         if abs(movement.calculate_delta_angle(curr_direction, self.upper.last_direction)) >= 3.5:
@@ -289,6 +300,7 @@ class PathRecorderCore(FlowTemplate):
         # if self.upper.is_pickup_mode:
         #     self._fix_bps() # 这个功能好像与is_end=True功能冲突...
         save_path = fr"{ROOT_PATH}/dev_assets/tlpp/{jsonname}.py"
+        save_path2 = fr"{ROOT_PATH}/dev_assets/tlpp"
         with open(save_path, 'w', encoding='utf-8') as f:
             f.write(f"{jsonname} = "+str(self.upper.collection_path_dict) + f"""
 \n
@@ -299,6 +311,7 @@ if __name__ == '__main__':\n
     while 1:\n
         time.sleep(0.2)\n
 """)
+        save_json(self.upper.collection_path_dict, f"{jsonname}.json", save_path2)
         # save_json(self.upper.collection_path_dict,json_name=jsonname,default_path=f"assets\\TeyvatMovePath")
         self.logger_or_notice(f"recording save in {save_path}, " + t2t("Record end."))
         self.rfc = FC.INIT

@@ -14,6 +14,7 @@ from source.webio.webpages.mission import MissionPage
 from source.webio.webpages.missiondownload import MissionDownloadPage
 from source.webio.webpages.video2path import VideoToPathPage
 from source.webio.webpages.tavern2mission import Tavern2Mission
+from source.webio.webpages.TLPath2mission import TLPath2Mission
 
 status = True
 global first_run
@@ -45,6 +46,7 @@ def main():
     webio.manager.reg_page("MissionPage", MissionPage())
     webio.manager.reg_page("MissionDownloadPage", MissionDownloadPage())
     webio.manager.reg_page("convert kongying Tavern's route to mission", Tavern2Mission())
+    webio.manager.reg_page("convert TianLi Path(Path recorder result) to mission", TLPath2Mission())
     webio.manager.reg_page("VideoToPathPage", VideoToPathPage())
     webio.manager.load_page('MainPage')
     if not first_run:

@@ -167,7 +167,7 @@ class InteractionBGD:
         cap = self.capture(posi=imgicon.cap_posi, jpgmode=imgicon.jpgmode)
         r_text = LOCAL_OCR_MODEL.ocr_single_line(cap)
         if imgicon.is_print_log(1 >= imgicon.threshold):
-            logger.debug('imgname: ' + imgicon.name + 'text result: ' + r_text + ' |function name: ' + upper_func_name)
+            logger.trace('imgname: ' + imgicon.name + 'text result: ' + r_text + ' |function name: ' + upper_func_name)
         return r_text
 
     def ocr_lines(self,imgicon: img_manager.ImgIcon) -> list:
@@ -175,7 +175,7 @@ class InteractionBGD:
         cap = self.capture(posi=imgicon.cap_posi, jpgmode=imgicon.jpgmode)
         r_texts = LOCAL_OCR_MODEL.ocr_lines(cap)
         if imgicon.is_print_log(1 >= imgicon.threshold):
-            logger.debug('imgname: ' + imgicon.name + 'text result: ' + r_texts + ' |function name: ' + upper_func_name)
+            logger.trace('imgname: ' + imgicon.name + 'text result: ' + r_texts + ' |function name: ' + upper_func_name)
         return r_texts
 
     def detect_and_ocr(self, imgicon: img_manager.ImgIcon):
@@ -197,7 +197,7 @@ class InteractionBGD:
         #         if r==-1:
         #             matching_rate = -1
         if imgicon.is_print_log(matching_rate >= imgicon.threshold):
-            logger.debug('imgname: ' + imgicon.name + 'max_loc: ' + str(max_loc) + ' |function name: ' + upper_func_name)
+            logger.trace('imgname: ' + imgicon.name + 'max_loc: ' + str(max_loc) + ' |function name: ' + upper_func_name)
 
         if matching_rate >= imgicon.threshold:
             return bbox
@@ -240,7 +240,7 @@ class InteractionBGD:
             #         matching_rate = -2
 
         if imgicon.is_print_log(matching_rate >= imgicon.threshold):
-            logger.debug('imgname: ' + imgicon.name + 'max_loc: ' + str(max_loc) + ' |function name: ' + upper_func_name)
+            logger.trace('imgname: ' + imgicon.name + 'max_loc: ' + str(max_loc) + ' |function name: ' + upper_func_name)
 
         if matching_rate >= imgicon.threshold:
             return max_loc
@@ -283,7 +283,7 @@ class InteractionBGD:
             cv2.waitKey(100)
 
         if imgicon.is_print_log(matching_rate >= imgicon.threshold) and is_log:
-            logger.debug(
+            logger.trace(
                 'imgname: ' + imgicon.name + 'matching_rate: ' + str(
                     matching_rate) + ' |function name: ' + upper_func_name)
         if ret_mode == IMG_BOOL:
@@ -306,7 +306,7 @@ class InteractionBGD:
         res = ocr.get_all_texts(cap)
         is_exist = textobj.match_results(res)
         if textobj.is_print_log(is_exist):
-            logger.debug(f"get_text_existence: text: {textobj.text} {'Found' if is_exist else 'Not Found'}")
+            logger.trace(f"get_text_existence: text: {textobj.text} {'Found' if is_exist else 'Not Found'}")
         return is_exist
 
     def get_text_icon_existence(self, textobj: text_icon.TextIconTemplate, is_gray=False, ret_mode = IMG_BOOL, show_res = False, use_cache = False):
@@ -314,7 +314,7 @@ class InteractionBGD:
         res = LOCAL_OCR_MODEL.ocr_lines(cap)
         is_exist = textobj.match_results(res)
         if textobj.is_print_log(is_exist):
-            logger.debug(f"get_text_icon_existence: text: {textobj.text} {'Found' if is_exist else 'Not Found'}")
+            logger.trace(f"get_text_icon_existence: text: {textobj.text} {'Found' if is_exist else 'Not Found'}")
         return is_exist
 
     def appear(self, obj, use_cache=False):
@@ -368,7 +368,7 @@ class InteractionBGD:
                         matching_rate = 0
             
             if imgicon.is_print_log(matching_rate >= imgicon.threshold) or is_log:
-                logger.debug(
+                logger.trace(
                 'imgname: ' + imgicon.name + 'matching_rate: ' + str(
                     matching_rate) + ' |function name: ' + upper_func_name)
 
@@ -378,7 +378,7 @@ class InteractionBGD:
                     self.move_and_click(position=imgicon.click_position())
                 else:
                     self.move_and_click(position=click_posi)
-                logger.debug(f"appear then click: True: {imgicon.name} func: {upper_func_name}")
+                logger.trace(f"appear then click: True: {imgicon.name} func: {upper_func_name}")
                 inputvar.click_fail_timer.reset()
                 inputvar.click_retry_timer.reset()
                 return True
@@ -402,13 +402,13 @@ class InteractionBGD:
                         matching_rate = 0
             
             if imgicon.is_print_log(matching_rate >= imgicon.threshold) or is_log:
-                logger.debug('imgname: ' + imgicon.name + 'matching_rate: ' + str(matching_rate) + ' |function name: ' + upper_func_name)
+                logger.trace('imgname: ' + imgicon.name + 'matching_rate: ' + str(matching_rate) + ' |function name: ' + upper_func_name)
 
             if matching_rate >= imgicon.threshold:
                 p = imgicon.cap_posi
                 center_p = [(p[0] + p[2]) / 2, (p[1] + p[3]) / 2]
                 self.move_and_click([center_p[0], center_p[1]])  
-                logger.debug(f"appear then click: True: {imgicon.name} func: {upper_func_name}")
+                logger.trace(f"appear then click: True: {imgicon.name} func: {upper_func_name}")
                 return True
             else:
                 return False
@@ -419,12 +419,12 @@ class InteractionBGD:
             upper_func_name = inspect.getframeinfo(inspect.currentframe().f_back)[2]
             p1 = ocr.get_text_position_v2(self.capture(jpgmode=NORMAL_CHANNELS, posi=inputvar.cap_area), inputvar.text, cap_posi_leftup=inputvar.cap_area[:2], mode=inputvar.match_mode)
             if is_log:
-                logger.debug('text: ' + inputvar.text + 'position: ' + str(p1) + ' |function name: ' + upper_func_name)
+                logger.trace('text: ' + inputvar.text + 'position: ' + str(p1) + ' |function name: ' + upper_func_name)
             if len(p1)>0:
                 #TODO: more
                 p1 = p1[0]
                 self.move_and_click([(p1[0]+p1[2])/2, (p1[1]+p1[3])/2], delay=1)
-                logger.debug(f"appear then click: True: {inputvar.text} func: {upper_func_name}")
+                logger.trace(f"appear then click: True: {inputvar.text} func: {upper_func_name}")
                 return True
             else:
                 return False
@@ -475,7 +475,7 @@ class InteractionBGD:
             #     if pn != imgicon.win_page:
             #         matching_rate = 0
         if imgicon.is_print_log(matching_rate >= imgicon.threshold):
-            logger.debug(
+            logger.trace(
                 'imgname: ' + imgicon.name + 'matching_rate: ' + str(
                     matching_rate) + 'key_name:' + key_name + ' |function name: ' + upper_func_name)
 
@@ -489,7 +489,7 @@ class InteractionBGD:
         timeout_timer = TimeoutTimer(timeout)
         last_cap = self.capture()
         pt = time.time()
-        t = AdvanceTimer(0.3, 1)
+        t = AdvanceTimer(0.5, 2)
         while 1:
             time.sleep(0.1)
             if timeout_timer.istimeout():
