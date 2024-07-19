@@ -1,3 +1,5 @@
+import time
+
 from source.util import *
 import source.flow.utils.flow_code as FC
 from source.flow.utils import flow_state as FlowState, flow_state as ST
@@ -88,7 +90,7 @@ class FlowTemplate():
         origin_rfc = self.rfc
         self.rfc = rfc
         while 1:
-            siw()
+            time.sleep(2)
             if self.upper.checkup_stop_func(): return
             if self.rfc == origin_rfc and self.rfc != rfc:
                 logger.info(f'reset rfc: {self.rfc} -> {rfc}')

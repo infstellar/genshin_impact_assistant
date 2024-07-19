@@ -88,8 +88,8 @@ logger.hr = types.MethodType(hr, logger)
 logger.attr = types.MethodType(attr, logger)
 logger.attr_align = types.MethodType(attr_align, logger)
 
-def add_logger_to_GUI(cb_func):
-    logger.add(cb_func, level="INFO", backtrace=True, colorize=True)
+def add_logger_to_GUI(cb_func, level='INFO'):
+    logger.add(cb_func, level=level, backtrace=True, colorize=True)
 
 if __name__ == "__main__":
     logger.warning_once("123")

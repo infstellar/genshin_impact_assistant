@@ -39,6 +39,18 @@ class MapConverter:
     TP_Instance = 'Instance'
 
 
+    @classmethod
+    def convert_REALcvAutoTrack_to_cvAutoTrack(cls, pos:list):
+        pos = np.array(pos)
+        pos -= (0, 5.99296875)
+        return pos
+
+    @classmethod
+    def convert_cvAutoTrack_to_REALcvAutoTrack(cls, pos: list):
+        pos = np.array(pos)
+        pos += (0, 5.99296875)
+        return pos
+
 
     @classmethod
     def convert_REGION_to_LAYER(cls, region: str) -> str:
@@ -54,21 +66,25 @@ class MapConverter:
         return cls.LAYER_Teyvat
 
     @classmethod
-    def convert_GenshinMap_to_cvAutoTrack(cls, posi: list):
+    def convert_GenshinMap_to_cvAutoTrack(cls, posi: list, decimal: int = -1):
         if len(posi) == 3:
             posi = [posi[0], posi[2]]
         posi = np.array(posi)
         posi = np.array([posi[1], posi[0]])
         posi *= -1.998
         posi += [793.9, -1237.8]
+        if decimal != -1:
+            posi = np.round(posi, decimal)
         return posi
 
     @classmethod
-    def convert_cvAutoTrack_to_GenshinMap(cls, posi: list):
+    def convert_cvAutoTrack_to_GenshinMap(cls, posi: list, decimal: int = -1):
         posi = np.array(posi)
         posi = np.array([posi[1], posi[0]])
         posi -= [-1237.8, 793.9]
         posi /= -1.998
+        if decimal != -1:
+            posi = np.round(posi, decimal)
         return posi
 
     @classmethod

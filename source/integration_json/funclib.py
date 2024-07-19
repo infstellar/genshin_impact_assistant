@@ -26,7 +26,7 @@ def correction_collection_position(pos:list, name:str='', threshold=15):
     possible_pos = []
     for i in possible_list:
         i: PositionJson
-        possible_pos.append(MapConverter.convert_GenshinMap_to_cvAutoTrack(i.position))
+        possible_pos.append(MapConverter.convert_GenshinMap_to_cvAutoTrack(i.position, decimal=2))
     logger.debug(f'{len(possible_pos)}')
     offset = threshold
     ed_value_list = quick_euclidean_distance_plist(pos, possible_pos)
@@ -34,7 +34,7 @@ def correction_collection_position(pos:list, name:str='', threshold=15):
         min_ed = quick_sort_euclidean_distance_plist(pos, possible_pos)[0]
         rp = min_ed
         logger.info(f"position correct succ: {pos} -> {rp}; name:{name}")
-        return rp
+        return list(rp)
     else:
         logger.info(f"position correct fail: {pos}; name:{name}")
         return pos
