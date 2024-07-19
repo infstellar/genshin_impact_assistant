@@ -148,12 +148,12 @@ class MainPage(AdvancePage):
                     "value": "LaunchGenshinTask"
                 },
                 {
-                    "label": t2t("Domain Task"),
-                    "value": "DomainTask"
-                },
-                {
                     "label": t2t("Daily Commission"),
                     "value": "CommissionTask"
+                },
+                {
+                    "label": t2t("Domain Task"),
+                    "value": "DomainTask"
                 },
                 {
                     "label": t2t("Claim Reward"),

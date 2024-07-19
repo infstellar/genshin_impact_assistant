@@ -4,6 +4,7 @@ from source.task.task_template import TaskTemplate
 from source.talk.talk import Talk
 from source.manager import asset
 from source.assets.claim_rewards import *
+from source.ui import page as UIPage
     
 
 class ClaimRewardMission(MissionExecutor, Talk):
@@ -84,7 +85,34 @@ class ClaimRewardMission(MissionExecutor, Talk):
         #     reset_character()
 
     def exec_mission(self):
+        itt.key_press('F1')
+        itt.wait_until_stable()
+        while 1:
+            itt.appear_then_click(ButtonCommissionSwitchToCommissionPage)
+            itt.wait_until_stable()
+            siw()
+            if self.checkup_stop_func(): return
+            if itt.appear(IconCommissionDetailPage):
+                break
+
+        if itt.appear(ButtonCommissionUsePoints):
+            while 1:
+                r = itt.appear_then_click(ButtonCommissionUsePoints)
+                itt.wait_until_stable()
+                if r: break
+                siw()
+                if self.checkup_stop_func(): return
+
+        while 1:
+            itt.key_press('esc')
+            itt.wait_until_stable()
+            siw()
+            if self.checkup_stop_func(): return
+            if ui_control.verify_page(UIPage.page_main): break
+
+
         self.available_rewards = self.get_available_reward()
+
         if "Expedition" in self.available_rewards or "Commission" in self.available_rewards:
             self.move_along("Katheryne20230408124320i0", is_precise_arrival=True, stop_rule = STOP_RULE_F)
             if "Commission" in self.available_rewards:
