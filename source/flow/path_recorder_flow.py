@@ -136,7 +136,8 @@ class PathRecorderCore(FlowTemplate):
     def _fix_position(self, p, offset=9.3):
         ed_list = quick_euclidean_distance_plist(p, self.COLLECTION_POSITION)
         if min(ed_list)<offset:
-            rp = self.COLLECTION_POSITION[np.argmin(ed_list)]
+            rp = quick_sort_euclidean_distance_plist(p, self.COLLECTION_POSITION)[0]
+            # rp = self.COLLECTION_POSITION[np.argmin(ed_list)]
             if list(rp) in self.used_collection_position:
                 logger.info(f"position refix fail: {rp} used.")
                 return p,False
