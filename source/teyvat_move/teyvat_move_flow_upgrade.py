@@ -1,3 +1,4 @@
+import logger
 from source.util import *
 from source.common.timer_module import *
 from source.funclib import generic_lib, movement
@@ -103,28 +104,34 @@ from source.common.base_threading import AdvanceThreading
 class MoveController(AdvanceThreading):
     def __init__(self):
         super().__init__()
-        self.while_sleep = 0.05
+        self.while_sleep = 0
         self.move_ahead_timer = AdvanceTimer(1).start()
+        self.w_pressed = False
 
     def move_ahead(self, duration: float = 1):
         self.move_ahead_timer = AdvanceTimer(duration).start()
         itt.key_down('w')
 
-    def switch_w(self, mode = 'all'):
+    def switch_w(self, mode = 'all', sleep=True):
         logger.trace('mc switching')
         if self.move_ahead_timer.reached():
             if mode in ['all', 'stop']:
-                itt.key_up('w')
+                if self.w_pressed:
+                    itt.key_up('w')
+                    self.w_pressed = False
+                if sleep:
+                    time.sleep(0.05)
         else:
             if mode in ['all', 'start']:
                 itt.key_down('w')
+                self.w_pressed = True
+                self.move_ahead_timer.wait(additional_time=-0.15)
 
     def stop_move_ahead(self):
         self.move_ahead_timer = AdvanceTimer(0).start()
         itt.key_up('w')
 
     def loop(self):
-
         self.switch_w()
 
 class TeyvatMoveCommon():
@@ -138,6 +145,8 @@ class TeyvatMoveCommon():
         self.press_w_timer = AdvanceTimer(limit=1).start()
         self.upper = upper
         self.mc = MoveController()
+        self.offset_timer = Timer()
+        self.offset_timer_flag = False
 
 
 
@@ -222,7 +231,7 @@ class TeyvatMoveCommon():
 
     def use_shield_if_needed(self):
         if self.upper.is_use_shield:
-            if self.motion_state == IN_MOVE:
+            if self.motion_state == IN_MOVE and CSDL.get_combat_state():
                 self.upper.SCO.continue_threading()
                 # self.upper.SCO.switch_character(SHIELD)
             else:
@@ -243,6 +252,26 @@ class TeyvatMoveCommon():
     def stop_move_ahead(self):
         self.mc.stop_move_ahead()
 
+    OFFSET_PRE_SECOND = 0.2
+    MIN_OFFSET_APPEND_TIME = 1.5
+
+    def _get_offset(self, diff:float, max_offset=6, min_offset=2):
+        offset = min_offset
+        if diff < max_offset:
+            if not self.offset_timer_flag:
+                self.offset_timer_flag = True
+                self.offset_timer = Timer()
+
+            dt = self.offset_timer.get_diff_time()
+            if dt > self.MIN_OFFSET_APPEND_TIME:
+                offset = min_offset + (dt-self.MIN_OFFSET_APPEND_TIME)*self.OFFSET_PRE_SECOND
+                logger.trace(f'{offset} = {min_offset} + {dt} - {self.MIN_OFFSET_APPEND_TIME}*{self.OFFSET_PRE_SECOND}')
+                return offset
+            else:
+                return offset
+        else:
+            self.offset_timer_flag = False
+            return offset
 class Navigation(TianliNavigator):
     def __init__(self, start, end) -> None:
         super().__init__()
@@ -635,32 +664,30 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
             #     offset = 6 # NO SK
             # else:
             #     offset = 6 # SK
-            offset = 6
+            offset = 2
             if self.curr_path[self.curr_path_index]["motion"] == "FLYING":
                 offset = 12
+            elif self.motion_state == SWIMMING:
+                offset = 8
             if "additional_info" in self.upper.path_dict.keys():
                 if "pickup_points" in self.upper.path_dict["additional_info"].keys():
                     if self.curr_break_point_index in self.upper.path_dict["additional_info"]["pickup_points"]:
                         logger.debug('bp is pp, o=3.5.')
-                        offset = 3.5
+                        offset = 2
             if self.ready_to_end:
-                offset = min(3, max(1, (self.end_times) / 10))
-            # 如果两个BP距离小于offset就会瞬移，排除一下。
+                offset = 1 # min(1, max(1, (self.end_times) / 10))
 
+            # 如果两个BP距离小于offset就会瞬移，排除一下。
             if self.curr_break_point_index < len(self.curr_breaks) - 1:
                 dist = euclidean_distance(self.curr_breaks[self.curr_break_point_index],
                                           self.curr_breaks[self.curr_break_point_index + 1])
-                if dist >= 1 and dist <= offset:
+                if dist <= offset:
                     logger.trace(f"BPs too close: dist: {dist}")
                     offset = dist / 2
                     logger.trace(f"offset: {offset}")
-                elif dist < 1:
-                    logger.trace(f"BPs too close <1: dist: {dist}")
-                    offset = 1
-                    logger.trace(f"offset: {offset}")
-            if offset < 1.5:
-                offset = 2
 
+            offset = self._get_offset(diff=euclidean_distance(target_posi, curr_posi), max_offset=6, min_offset=offset)
+            logger.trace(f"offset: {offset}")
             # print(f"time0.2: {self.in_pt.get_diff_time()}")
 
             # 执行SK
@@ -785,13 +812,20 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
 
         # 自动拾取
         if self.upper.is_auto_pickup:
-            while self.upper.PUO.pickup_recognize(): pass
-            curr_posi = genshin_map.get_position()
+            if generic_lib.f_recognition():
+                while self.upper.PUO.pickup_recognize(): pass
+                curr_posi = genshin_map.get_position()
+
+        logger.trace(f"time4.1:  {self.in_pt.get_diff_time()}")
 
         # 检测移动是否卡住
+        if self.is_stuck(curr_posi, threshold=10):
+            if self.motion_state == WALKING:
+                logger.debug(f"move stuck, try jumping")
+                itt.key_press('spacebar')
         if self.is_stuck(curr_posi, threshold=45):
             itt.key_press('spacebar')
-        if self.is_stuck(curr_posi, threshold=60):
+        elif self.is_stuck(curr_posi, threshold=60):
             self._set_nfid(ST.END_TEYVAT_MOVE_STUCK)
             self._set_rfc(FC.END)
 
@@ -804,10 +838,15 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
             self._set_nfid(ST.END_TEYVAT_MOVE_STUCK)
             self._set_rfc(FC.END)
 
+        logger.trace(f"time4.2:  {self.in_pt.get_diff_time()}")
+
         r = self.detect_stop_rule(self.upper.stop_rule, self.upper.is_precise_arrival,
                                   self.upper.path_dict["end_position"], curr_posi, self.upper.stop_offset)
         if r:
             self._next_rfc()
+
+        logger.trace(f"time4.3:  {self.in_pt.get_diff_time()}")
+
         self.use_shield_if_needed()
 
         logger.trace(f"time4: pickup, stuck checks, shield and ready_to_end check: {self.in_pt.get_diff_time()}")
@@ -821,27 +860,39 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
         # delta_distance = self.CalculateTheDistanceBetweenTheAngleExtensionLineAndTheTarget(curr_posi,target_posi)
 
         # 移动视角
+        logger.trace(f"time5.1.1: change_view_to_angle:  {self.in_pt.get_diff_time()}")
         if not self.ENABLE_OPTIMIZER:
             target_degree = movement.calculate_posi2degree(target_posi)
         else:
             target_degree = movement.calculate_posi2degree(self.predict_tdo_position(curr_posi, target_posi))
             # target_degree = self.predict_tdo_degree(curr_posi, target_posi)
         delta_degree = abs(movement.calculate_delta_angle(genshin_map.get_rotation(), target_degree))
+
+        def set_move():
+            if self.ready_to_end:
+                self.move_ahead(duration=move_duration * 0.5)
+            else:
+                self.move_ahead(duration=move_duration)
+
         if delta_degree >= 45:
+            logger.trace(f"time5.2.1: change_view_to_angle:  {self.in_pt.get_diff_time()}")
             self.stop_move_ahead()
             # movement.change_view_to_posi(target_posi, stop_func = self.upper.checkup_stop_func)
             movement.change_view_to_angle(target_degree, offset=15)
-            if not self.ready_to_end:
-                self.move_ahead(duration=move_duration)
-            else:
-                self.move_ahead(duration=move_duration*0.5)
-        else:
+            logger.trace(f"time5.2.2: change_view_to_angle:  {self.in_pt.get_diff_time()}")
+            set_move()
+        elif delta_degree >= 10:
             # movement.change_view_to_posi(target_posi, stop_func = self.upper.checkup_stop_func, max_loop=4, offset=2, print_log = False)
+            logger.trace(f"time5.3.1: change_view_to_angle:  {self.in_pt.get_diff_time()}")
             movement.change_view_to_angle(target_degree, loop_sleep=0, maxloop=4)
-            if self.ready_to_end:
-                self.move_ahead(duration=move_duration*0.5)
-            else:
-                self.move_ahead(duration=move_duration)
+            logger.trace(f"time5.3.2: change_view_to_angle:  {self.in_pt.get_diff_time()}")
+            set_move()
+        else:
+            set_move()
+            movement.change_view_to_angle(target_degree, loop_sleep=0, maxloop=2, precise_mode=False)
+
+
+
         if self.init_start == False:
             # itt.key_down('w')
             self.init_start = True
