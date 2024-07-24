@@ -1,3 +1,5 @@
+import os.path
+
 from source.interaction.interaction_core import itt
 from source.funclib import small_map
 from source.util import *
@@ -86,6 +88,9 @@ def angle2movex(angle):
     cvn = maxmin(angle * 10, 500, -500)  # 10: magic num, test from test246.py
     return cvn
 
+def angle2movex_v2(angle):
+    cvn = angle * 12  # 10: magic num, test from test246.py
+    return cvn
 
 def cview(angle=10, mode=HORIZONTAL, rate=0.9):  # left<0,right>0
     # logger.debug(f"cview: angle: {angle} mode: {mode}")
@@ -101,6 +106,8 @@ def cview(angle=10, mode=HORIZONTAL, rate=0.9):  # left<0,right>0
         else:
             itt.move_to(0, int(angle), relative=True)
 
+def direct_cview(angel=10):
+    itt.move_to(int(angel), 0, relative=True)
 
 def move_view_p(x, y):
     # x,y=point
@@ -124,7 +131,7 @@ def calculate_delta_angle(cangle, tangle):
 
 from sklearn.ensemble import IsolationForest
 
-
+@timer
 def discard_abnormal_data(data: list):
     if len(data) >= 3:
         predictions = IsolationForest().fit(np.array(data).reshape(-1, 1)).predict(np.array(data).reshape(-1, 1))
@@ -134,78 +141,130 @@ def discard_abnormal_data(data: list):
 
 
 class CViewDynamicCalibration:
-    AVAILABLE_ANGLES = list(range(30, 175, 5))
+    available_angles = list(range(0, 10, 1)) + list(range(10, 180, 5))
+    CVDC_CACHE = f'{CACHE_PATH}\\cvdc.json'
+    CVDC_PREPROCESSED_CACHE = f'{CACHE_PATH}\\cvdc_preprocessed.json'
+    append_times = 0
+
+    preprocessed_id = []
+    preprocessed_angles = {}
+
+    def __pre_isolation_forest(self, x):
+        if x not in self.preprocessed_id:
+            possible_angles = self.angles[x]
+            pb = discard_abnormal_data(possible_angles)
+            self.preprocessed_angles[x] = list(pb).copy()
+            self.preprocessed_id.append(x)
+        return self.preprocessed_angles[x]
+
+    def run_isolation_forest(self):
+        self.__load_CVDC_CACHE()
+        logger.info(t2t("Please waiting, CViewDynamicCalibration is loading."))
+        for x in self.available_angles:
+            x = str(x)
+            self.preprocessed_angles[x] = [].copy()
+            possible_angles = self.angles[x]
+            pb = discard_abnormal_data(possible_angles)
+            self.preprocessed_angles[x] = list(pb).copy()
+            if x not in self.preprocessed_id:
+                self.preprocessed_id.append(x)
+            logger.debug(f"run_isolation_forest {x}")
+        save_json(self.preprocessed_angles, all_path=self.CVDC_PREPROCESSED_CACHE)
+        logger.info(t2t("CViewDynamicCalibration is loaded."))
+
+    def __load_CVDC_CACHE(self):
+        if os.path.exists(self.CVDC_CACHE):
+            self.angles = load_json(all_path=self.CVDC_CACHE)
+            for i in self.available_angles:
+                if str(i) not in self.angles.keys():
+                    self.angles[str(i)] = []
+            # self.available_angles = list(range(0, 175, 1)) TODO:more opt
+        else:
+            for i in self.available_angles:
+                self.angles[str(i)] = []
 
     def __init__(self):
         self.angles = {}
-        for i in self.AVAILABLE_ANGLES:
-            self.angles[i] = []
+        self.__load_CVDC_CACHE()
+        if os.path.exists(self.CVDC_PREPROCESSED_CACHE):
+            self.preprocessed_angles = load_json(all_path=self.CVDC_PREPROCESSED_CACHE)
 
     def _closest_angle(self, x):
-        return self.AVAILABLE_ANGLES[np.argmin(abs(np.array(self.AVAILABLE_ANGLES) - x))]
+        return str(self.available_angles[np.argmin(abs(np.array(self.available_angles) - x))])
 
-    def append_angle_result(self, target, actual):
-        if not (30 < abs(actual) < 175):
+    # @timer
+    def append_angle_result(self, move_px, diff_angle):
+        if not (10 < abs(diff_angle) < 175):
             return
-        logger.trace(f"Append: {target} {actual}")
-        self.angles[self._closest_angle(abs(actual))].append(abs(target))
+        logger.trace(f"Append: {move_px} {diff_angle}")
+        self.angles[self._closest_angle(abs(diff_angle))].append(abs(move_px))
+        self.append_times += 1
+        if self.append_times%10==0:
+            save_json(self.angles, json_name="cvdc.json", default_path=CACHE_PATH)
 
-    def predict_target(self, target):
+    # @timer
+    def predict_target(self, target_angel):
         sign = 1
-        if target < 0:
+
+        if target_angel < 0:
             sign = -1
-        target = abs(target)
-        if not (30 < target < 175):
-            return target * sign
-        possible_angles = self.angles[self._closest_angle(target)]
-        pb = discard_abnormal_data(possible_angles)
+        target_angel = abs(target_angel)
+        if not (10 < target_angel < 175):
+            return angle2movex(target_angel) * sign
+        # possible_angles = self.angles[]
+        # pb = discard_abnormal_data(possible_angles)
+        pb = self.__pre_isolation_forest(self._closest_angle(target_angel))
         if len(pb) >= 3:
-            logger.trace(f"gpr: {target * sign} -> {np.mean(pb) * sign}")
+            logger.trace(f"gpr: {target_angel * sign} -> {np.mean(pb) * sign}")
             return np.mean(pb) * sign
         else:
-            return target * sign
+            return angle2movex_v2(target_angel) * sign
 
 
 CVDC = CViewDynamicCalibration()
 
 
-def change_view_to_angle(tangle, stop_func=lambda: False, maxloop=25, offset=5, print_log=True, loop_sleep=0):
+def change_view_to_angle(tangle, stop_func=lambda: False, maxloop=25, offset=5, print_log=True, loop_sleep=0, precise_mode = True):
     i = 0
-    dangle = old_angle = 0
+    dangle = 0
     loop_sleep = 0
-    while 1:
+
+    def get_rotation():
         last_angle = 99999
         for ii in range(10):  # 过滤不准确的角度
             cangle = genshin_map.get_rotation()
             if abs(cangle - last_angle) < 5 + i * 0.1:
                 break
             last_angle = cangle
-        # print(ii)
-        if i > 0:
-            CVDC.append_angle_result(dangle, calculate_delta_angle(cangle, old_angle))
-        dangle = calculate_delta_angle(cangle, tangle)
+            if not precise_mode:
+                break
+        return cangle
 
+    while 1:
+        cangle = get_rotation()
+        last_angle = cangle
+        # print(ii)
+        dangle = calculate_delta_angle(cangle, tangle)
         # 感觉有问题，先禁用
-        # dangle = CVDC.predict_target(dangle)  # 根据历史角度移动记录自适应角度移动大小。理论上这个模块应该加载到cview函数里，但是cview不能调用genshin_map，所以先这样吧。
         if abs(dangle) < offset:
             break
-        rate = min((0.6 / 50) * abs(dangle) + 0.4, 1)
-
-        """
-        rate: 
+        move_px = CVDC.predict_target(dangle)  # 根据历史角度移动记录自适应角度移动大小。理论上这个模块应该加载到cview函数里，但是cview不能调用genshin_map，所以先这样吧。
+        move_px = round(move_px, 2)
         
-        """
+        # rate = min((0.6 / 50) * abs(dangle) + 0.4, 1)
         time.sleep(loop_sleep)
         # print(cangle, dangle, rate)
-        cview(dangle, rate=rate)
+        # rate = 1
+        direct_cview(move_px)
         if i > maxloop:
             break
         if stop_func():
             break
         i += 1
-        if i > 1:
-            logger.trace(f"cangle {cangle} dangle {dangle} rate {rate}")
-        old_angle = cangle
+        logger.trace(f"cangle {cangle} dangle {dangle}") #  rate {rate}
+        changed_angle = get_rotation()
+        if precise_mode:
+            CVDC.append_angle_result(move_px, calculate_delta_angle(last_angle, changed_angle))
 
 
 def view_to_angle_domain(angle, stop_func, deltanum=0.65, maxloop=100, corrected_num=CORRECT_DEGREE):
@@ -333,7 +392,7 @@ def get_current_motion_state() -> str:
         logger.trace(f"get_current_motion_state: climb{round(r1, 2)} swim{round(r2, 2)} fly{round(r3, 2)}")
     if r1 > 0.85:
         return CLIMBING
-    if r2 > 0.85:
+    if r2 > 0.75:
         return SWIMMING
     if r3 > 0.6:
         return FLYING
@@ -363,11 +422,23 @@ def move_to_posi_LoopMode(target_posi, stop_func, threshold:float=6):
     else:
         change_view_to_posi(target_posi, stop_func=stop_func, max_loop=4, offset=2, print_log=False)
     return euclidean_distance(genshin_map.get_position(), target_posi) <= threshold
-
+if os.path.exists(CVDC.CVDC_PREPROCESSED_CACHE):
+    if time.time() - os.path.getmtime(CVDC.CVDC_PREPROCESSED_CACHE) > 86400:
+        CVDC.run_isolation_forest()
 
 # view_to_angle(-90)
 if __name__ == '__main__':
     # print(calibration_angle_shift(times=10))
+    # CVDC.run_isolation_forest()
+    genshin_map.reinit_smallmap()
+    for ts in range(5):
+        for i in range(0,1500,50):
+            direct_cview(i)
+            time.sleep(0.2)
+            change_view_to_angle(90)
+            logger.trace(f't: {ts} i: {i}')
+        print(CVDC.angles)
+
     while 1:
         time.sleep(0.2)
         change_view_to_angle(90)
