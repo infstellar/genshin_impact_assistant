@@ -47,7 +47,7 @@ def main():
     webio.manager.reg_page("MissionDownloadPage", MissionDownloadPage())
     webio.manager.reg_page("convert kongying Tavern's route to mission", Tavern2Mission())
     webio.manager.reg_page("convert TianLi Path(Path recorder result) to mission", TLPath2Mission())
-    webio.manager.reg_page("VideoToPathPage", VideoToPathPage())
+    # webio.manager.reg_page("VideoToPathPage", VideoToPathPage())
     webio.manager.load_page('MainPage')
     if not first_run:
         add_logger_to_GUI(source.webio.log_handler.webio_poster)

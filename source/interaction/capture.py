@@ -1,4 +1,6 @@
 import threading
+import time
+
 from source.util import *
 from source.common import timer_module
 import numpy as np
@@ -164,7 +166,9 @@ class WindowsCapture(Capture):
         cdc = self.CreateCompatibleDC(dc)
         bitmap = self.CreateCompatibleBitmap(dc, width, height)
         self.SelectObject(cdc, bitmap)
+        # pt = time.time()
         self.BitBlt(cdc, 0, 0, width, height, dc, 0, 0, self.SRCCOPY)
+        # logger.trace(f'cap t: {time.time()-pt}')
         # 截图是BGRA排列，因此总元素个数需要乘以4
         total_bytes = width * height * 4
         buffer = bytearray(total_bytes)

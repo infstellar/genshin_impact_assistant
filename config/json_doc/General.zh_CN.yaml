@@ -92,3 +92,6 @@ BlossomType:
 CollectionTimes:
   doc: 采集次数
 
+RecordPath_CollectionType:
+  doc: 采集物品类型。
+  annotation: Plant-植物；Artifact-圣遗物。

@@ -12,6 +12,7 @@ import typing as t
 ROOT_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SOURCE_PATH = ROOT_PATH + '\\source'
 ASSETS_PATH = ROOT_PATH + '\\assets'
+CACHE_PATH = ROOT_PATH + "\\cache"
 if sys.path[0] != ROOT_PATH:   sys.path.insert(0, ROOT_PATH)
 if sys.path[1] != SOURCE_PATH: sys.path.insert(1, SOURCE_PATH)
 
@@ -37,7 +38,9 @@ IS_DEVICE_PC = True
 
 
 # load config file
-def load_json(json_name='General.json', folder_path='config\\settings', auto_create = False) -> Union[dict,list]:
+
+
+def load_json(json_name='General.json', folder_path='config\\settings', auto_create = False, all_path:str=None) -> Union[dict,list]:
     """加载json.
 
     Args:
@@ -53,7 +56,8 @@ def load_json(json_name='General.json', folder_path='config\\settings', auto_cre
     """
     # if "$lang$" in default_path:
     #     default_path = default_path.replace("$lang$", GLOBAL_LANG)
-    all_path = os.path.join(ROOT_PATH, folder_path, json_name)
+    if all_path is None:
+        all_path = os.path.join(ROOT_PATH, folder_path, json_name)
     try:
         return json.load(open(all_path, 'r', encoding='utf-8'), object_pairs_hook=OrderedDict)
     except:
@@ -63,7 +67,7 @@ def load_json(json_name='General.json', folder_path='config\\settings', auto_cre
         else:
             json.dump({}, open(all_path, 'w', encoding='utf-8'))
             return json.load(open(all_path, 'r', encoding='utf-8'))
-        
+
 
 
 # try:
@@ -212,6 +216,9 @@ def points_angle(p1, target_posi, coordinate=ANGLE_NORMAL):
     if coordinate == ANGLE_NEGATIVE_Y:
         y = -y
         ty = -ty
+    if abs((tx - x)) <= 0.05: # in case of dividing by zero
+        tx = 0.05
+        x = 0
     k = (ty - y) / (tx - x)
     degree = math.degrees(math.atan(k))
     if degree < 0:
@@ -236,7 +243,7 @@ def add_angle(angle, delta):
         print(angle)
     return angle
 
-def save_json(x, json_name='General.json', default_path='config\\settings', sort_keys=True, auto_create=False):
+def save_json(x, json_name='General.json', default_path='config\\settings', sort_keys=True, auto_create=False, all_path:str=None):
     """保存json.
 
     Args:
@@ -248,10 +255,12 @@ def save_json(x, json_name='General.json', default_path='config\\settings', sort
     """
     if not os.path.exists(default_path):
         logger.error(f"CANNOT FIND PATH: {default_path}")
+    if all_path is None:
+        all_path = os.path.join(default_path, json_name)
     if sort_keys:
-        json.dump(x, open(os.path.join(default_path, json_name), 'w', encoding='utf-8'), sort_keys=True, indent=2,ensure_ascii=False)
+        json.dump(x, open(all_path, 'w', encoding='utf-8'), sort_keys=True, indent=2,ensure_ascii=False)
     else:
-        json.dump(x, open(os.path.join(default_path, json_name), 'w', encoding='utf-8'),
+        json.dump(x, open(all_path, 'w', encoding='utf-8'),
               ensure_ascii=False)
 
 def verify_path(root):
@@ -941,6 +950,8 @@ def ansl_code2col(ansl_code ,reserve = True):
             return "white"
 
     return "NO_COL"
+
+verify_path(CACHE_PATH)
 
 if __name__ == '__main__':
     # a = load_jsons_from_folder(os.path.join(root_path, "config\\tactic"))
