@@ -1,13 +1,14 @@
 import uuid
-
+import matplotlib
+matplotlib.use('TkAgg')
 from source.util import *
 import source.astar as astar
 import gimapdev as gimap
 import matplotlib.pyplot as plt
 from matplotlib.offsetbox import OffsetImage, AnnotationBbox
 from source.map.extractor.convert import MapConverter
-
 import matplotlib.image as mpimg
+
 
 
 class GenshinNavigationPoint():
