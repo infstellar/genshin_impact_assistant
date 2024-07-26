@@ -462,7 +462,7 @@ if __name__ == '__main__':
      #                      tp_type=["Domain"])  # tp to *染之庭
     # genshin_map.reinit_smallmap()
     # r = MapConverter.convert_cvAutoTrack_to_GIMAP([0,0])
-    genshin_map.bigmap_tp([0,0])# MapConverter.convert_GIMAP_to_cvAutoTrack([3639*2, 1564*2]))
+    # genshin_map.bigmap_tp([0,0])# MapConverter.convert_GIMAP_to_cvAutoTrack([3639*2, 1564*2]))
     genshin_map.reinit_smallmap()
     while 1:
         time.sleep(0.2)

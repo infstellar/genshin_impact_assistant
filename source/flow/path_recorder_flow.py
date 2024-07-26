@@ -47,6 +47,8 @@ class PathRecorderCore(FlowTemplate):
         for i in JIApi.data.values():
             for j in i:
                 self.COLLECTION_POSITION.append(tracker.convert_GenshinMap_to_cvAutoTrack(j.position))
+        self.KONGYING_TAVERN_COLLECTION_POSITION = collector_lib.get_item_position_new("圣遗物调查点")
+
         self.upper = upper
         self.enter_flag = False
         self.upper.while_sleep = 0.05
@@ -243,8 +245,9 @@ class PathRecorderCore(FlowTemplate):
         # 吸附采集点
         if self.upper.is_pickup_mode:
             if generic_lib.f_recognition():
-                ed_list = quick_euclidean_distance_plist(curr_posi, self.COLLECTION_POSITION)
-                if min(ed_list)<12:
+                ed_min = min(quick_euclidean_distance_plist(curr_posi, self.COLLECTION_POSITION))
+                ed_min2 = min(quick_euclidean_distance_plist(curr_posi, self.KONGYING_TAVERN_COLLECTION_POSITION))
+                if min(ed_min, ed_min2)<8:
                     # rp = list(self.COLLECTION_POSITION[np.argmin(ed_list)])
                     rp = list(curr_posi)
                     rp2 = list(correction_collection_position(rp))

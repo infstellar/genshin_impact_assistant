@@ -67,7 +67,7 @@ class PathRecord(PRC):
         self.flow_connector.path_name = 'record_'
         self.flow_connector.generator = 'path recorder 1.0'
         self.flow_connector.coll_name = GIAconfig.Dev_RecordPath_CollectionName
-        if GIAconfig.Dev_RecordPath_CollectionType in [COLL_TYPE_PLANT]:
+        if GIAconfig.Dev_RecordPath_CollectionType in [COLL_TYPE_PLANT, COLL_TYPE_ARTIFACT]:
             self.flow_connector.is_pickup_mode = True
         else:
             self.flow_connector.is_pickup_mode = False

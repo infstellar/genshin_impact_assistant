@@ -73,6 +73,7 @@ class MapConverter:
         posi = np.array([posi[1], posi[0]])
         posi *= -1.998
         posi += [793.9, -1237.8]
+        # posi = cls.convert_REALcvAutoTrack_to_cvAutoTrack(posi)
         if decimal != -1:
             posi = np.round(posi, decimal)
         return posi
@@ -83,17 +84,18 @@ class MapConverter:
         posi = np.array([posi[1], posi[0]])
         posi -= [-1237.8, 793.9]
         posi /= -1.998
+        # posi = cls.convert_cvAutoTrack_to_REALcvAutoTrack(posi)
         if decimal != -1:
             posi = np.round(posi, decimal)
         return posi
 
     @classmethod
     def old_gimap_to_new(cls, points:np.ndarray):
-        return points + (798*2 + 13, 1131.5*2 + 5)
+        return points + (798*2 + 14, 1131.5*2 + 5)
 
     @classmethod
     def new_gimap_to_old(cls, points:np.ndarray):
-        return points - (798*2 + 13, 1131.5*2 + 5)
+        return points - (798*2 + 14, 1131.5*2 + 5)
 
     @classmethod
     def convert_GIMAP_to_LAYER(cls, points) -> str:
