@@ -17,6 +17,7 @@ from source.flow.utils.cvars import *
 from source.teyvat_move.teyvat_move_optimizer import B_SplineCurve_GuidingHead_Optimizer
 from source.funclib.combat_lib import CSDL
 from source.combat.switch_character_operator import SwitchCharacterOperator, SHIELD
+from multiprocessing import Process
 
 
 class TeyvatMoveFlowConnector(FlowConnector):
@@ -113,7 +114,7 @@ class MoveController(AdvanceThreading):
         itt.key_down('w')
 
     def switch_w(self, mode = 'all', sleep=True):
-        logger.trace('mc switching')
+        # logger.trace('mc switching')
         if self.move_ahead_timer.reached():
             if mode in ['all', 'stop']:
                 if self.w_pressed:
@@ -390,7 +391,8 @@ class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon, Navigation):
 
     def state_in(self):
         self.current_posi = genshin_map.get_position()
-        if euclidean_distance(self.current_posi, self.upper.target_posi) <= 8:
+        distance = euclidean_distance(self.current_posi, self.upper.target_posi)
+        if distance <= 8:
             self.switch_motion_state(jump=False)
         else:
             self.switch_motion_state(jump=True)
@@ -418,7 +420,9 @@ class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon, Navigation):
             self._next_rfc()
 
         self.use_shield_if_needed()
-        self.move_ahead(duration=1)
+
+        move_duration = min(distance * 0.08, 0.8)
+        self.move_ahead(duration=move_duration)
 
         # if len(genshin_map.history_posi) >= 29:
         #     p1 = genshin_map.history_posi[0][1:]
@@ -860,11 +864,12 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
         # delta_distance = self.CalculateTheDistanceBetweenTheAngleExtensionLineAndTheTarget(curr_posi,target_posi)
 
         # 移动视角
+        tx, ty = curr_posi[0], curr_posi[1]
         logger.trace(f"time5.1.1: change_view_to_angle:  {self.in_pt.get_diff_time()}")
         if not self.ENABLE_OPTIMIZER:
-            target_degree = movement.calculate_posi2degree(target_posi)
+            target_degree = movement.calculate_posi2degree(target_posi, tx, ty)
         else:
-            target_degree = movement.calculate_posi2degree(self.predict_tdo_position(curr_posi, target_posi))
+            target_degree = movement.calculate_posi2degree(self.predict_tdo_position(curr_posi, target_posi), tx, ty)
             # target_degree = self.predict_tdo_degree(curr_posi, target_posi)
         delta_degree = abs(movement.calculate_delta_angle(genshin_map.get_rotation(), target_degree))
 
@@ -880,16 +885,14 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
             # movement.change_view_to_posi(target_posi, stop_func = self.upper.checkup_stop_func)
             movement.change_view_to_angle(target_degree, offset=15)
             logger.trace(f"time5.2.2: change_view_to_angle:  {self.in_pt.get_diff_time()}")
-            set_move()
-        elif delta_degree >= 10:
-            # movement.change_view_to_posi(target_posi, stop_func = self.upper.checkup_stop_func, max_loop=4, offset=2, print_log = False)
-            logger.trace(f"time5.3.1: change_view_to_angle:  {self.in_pt.get_diff_time()}")
-            movement.change_view_to_angle(target_degree, loop_sleep=0, maxloop=4)
-            logger.trace(f"time5.3.2: change_view_to_angle:  {self.in_pt.get_diff_time()}")
-            set_move()
+        # elif delta_degree >= 10:
+        #     # movement.change_view_to_posi(target_posi, stop_func = self.upper.checkup_stop_func, max_loop=4, offset=2, print_log = False)
+        #     logger.trace(f"time5.3.1: change_view_to_angle:  {self.in_pt.get_diff_time()}")
+        #     movement.change_view_to_angle(target_degree, loop_sleep=0, maxloop=4)
+        #     logger.trace(f"time5.3.2: change_view_to_angle:  {self.in_pt.get_diff_time()}")
         else:
-            set_move()
             movement.change_view_to_angle(target_degree, loop_sleep=0, maxloop=2, precise_mode=False)
+        set_move()
 
 
 

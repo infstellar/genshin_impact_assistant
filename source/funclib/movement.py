@@ -155,6 +155,7 @@ class CViewDynamicCalibration:
             pb = discard_abnormal_data(possible_angles)
             self.preprocessed_angles[x] = list(pb).copy()
             self.preprocessed_id.append(x)
+        save_json(self.preprocessed_angles, all_path=self.CVDC_PREPROCESSED_CACHE)
         return self.preprocessed_angles[x]
 
     def run_isolation_forest(self):
@@ -188,6 +189,9 @@ class CViewDynamicCalibration:
         self.__load_CVDC_CACHE()
         if os.path.exists(self.CVDC_PREPROCESSED_CACHE):
             self.preprocessed_angles = load_json(all_path=self.CVDC_PREPROCESSED_CACHE)
+            for i in self.preprocessed_angles.keys():
+                if len(self.preprocessed_angles[i]) >= 5:
+                    self.preprocessed_id.append(i)
 
     def _closest_angle(self, x):
         return str(self.available_angles[np.argmin(abs(np.array(self.available_angles) - x))])
@@ -229,6 +233,7 @@ def change_view_to_angle(tangle, stop_func=lambda: False, maxloop=25, offset=5, 
     dangle = 0
     loop_sleep = 0
 
+    @timer
     def get_rotation():
         last_angle = 99999
         for ii in range(10):  # 过滤不准确的角度
@@ -329,8 +334,9 @@ def view_to_imgicon(cap: np.ndarray, imgicon: asset.ImgIcon):
 #         if i > 1:
 #             logger.debug('last degree: ' + str(degree))
 
-def calculate_posi2degree(pl):
-    tx, ty = genshin_map.get_position()
+def calculate_posi2degree(pl, tx=None, ty=None):
+    if tx is None or ty is None:
+        tx, ty = genshin_map.get_position()
     degree = generic_lib.points_angle([tx, ty], pl, coordinate=generic_lib.NEGATIVE_Y)
     if abs(degree) < 1:
         return 0
