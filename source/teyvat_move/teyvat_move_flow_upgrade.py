@@ -410,18 +410,20 @@ class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon, Navigation):
             if self.upper.is_tianli_navigation:
                 self.print_TLPS_info(self.posi_index, self.current_posi)
         # movement.change_view_to_posi(p1, self.upper.checkup_stop_func)
-        if not self.in_flag:
-            itt.key_down('w')
-            self.in_flag = True
+        # if not self.in_flag:
+        #     itt.key_down('w')
+        #     self.in_flag = True
 
         r = self.detect_stop_rule(self.upper.stop_rule, self.upper.is_precise_arrival, self.upper.target_posi,
                                   self.current_posi, self.upper.stop_offset)
         if r:
             self._next_rfc()
+            return
 
         self.use_shield_if_needed()
 
         move_duration = min(distance * 0.08, 0.8)
+        logger.trace(f'Move Automatic: Duration: {move_duration}')
         self.move_ahead(duration=move_duration)
 
         # if len(genshin_map.history_posi) >= 29:

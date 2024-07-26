@@ -377,10 +377,12 @@ class MissionExecutor(BaseThreading):
         self.pause_threading()
     
 if __name__ == '__main__':
-    me = MissionExecutor(is_CCT=True)
+    me = MissionExecutor(is_CCT=True, is_TMCF=True)
     # me.exception_flag = True
     # me._handle_exception()
     # me.start_combat(mode="Shield")
-    me.circle_search([ 3834.9886,-6978.8201])
+    # me.circle_search([ 3834.9886,-6978.8201])
+    me._init_sub_threading('TMCF')
+    me._recover()
     while 1: time.sleep(1)
 
