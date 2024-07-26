@@ -16,6 +16,8 @@ from source.ocr.models import LOCAL_OCR_MODEL
 from pponnxcr.predict_system import BoxedResult
 
 
+
+
 IMG_RATE = 0
 IMG_POSI = 1
 IMG_POINT = 2
@@ -852,11 +854,31 @@ def itt_test(itt: InteractionBGD):
 
 itt = InteractionBGD()
 
+# class InteractionController(ProcessThreading):
+#     def __init__(self):
+#         ProcessThreading.__init__(self)
+#         self.key_press_dict:t.Dict[str, AdvanceTimer] = {}
+#
+#     def loop(self):
+#         for key in self.key_press_dict:
+#             if self.key_press_dict[key].reached():
+#                 self.key_up(key)
+#             else:
+#                 self.key_down(key)
+#
+#     def key_press_duration(self, key, duration: float):
+#         self.key_press_dict[key] = AdvanceTimer(duration).start()
+
+
+
 # ge = source.common.generic_event.GenericEvent()
 # ge.start()
 
 if __name__ == '__main__':
-    ib = InteractionBGD()
+    # ib = InteractionBGD()
+    # itc = InteractionController()
+    # itc.start()
+     #itc.continue_threading()
     # rootpath = "D:\\Program Data\\vscode\\GIA\\genshin_impact_assistant\\dist\\imgs"
     # ib.similar_img_pixel(cv2.imread(rootpath+"\\yunjin_q.png"),cv2.imread(rootpath+"\\zhongli_q.png"))
     # from source.manager import asset
@@ -885,8 +907,9 @@ if __name__ == '__main__':
         # print(ib.get_img_existence(img_manager.motion_flying), ib.get_img_existence(img_manager.motion_climbing),
         #       ib.get_img_existence(asset.motion_swimming))
         time.sleep(2)
+        # itc.key_press_duration('w', 0.5)
         # ib.move_and_click([100,100], type="left")
-        ib.wait_until_stable()
+        # ib.wait_until_stable()
         # print(ib.get_img_existence(img_manager.USE_20X2RESIN_DOBLE_CHOICES))
         # ib.appear_then_click(imgname=asset.USE_20RESIN_DOBLE_CHOICES)
         # ib.move_to(100,100)
