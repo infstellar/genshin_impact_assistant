@@ -237,8 +237,11 @@ class PoiJsonApi:
             area_id = self.item[item_id].areaId
             region = self.DICT_AREA_ID.get(area_id)
             # region = self.DICT_AREA_ID.get(1)
-            layer = MapConverter.convert_REGION_to_LAYER(region)
-            position = MapConverter.convert_kongying_to_GIMAP(row.position_tuple, layer=layer).round(3)
+            layer = MapConverter.LAYER_Teyvat  #  MapConverter.convert_REGION_to_LAYER(region)
+            from source.integration_json.funclib import correction_collection_position
+            position = MapConverter.convert_kongying_to_cvAutoTrack(row.position_tuple)
+            position = correction_collection_position(position, name='传送点')
+            position = MapConverter.convert_cvAutoTrack_to_GIMAP(position, layer=layer).round(3)
             # if lang=='en_US':
             #     name = zh2en(row.teleporter_name)
             # else:

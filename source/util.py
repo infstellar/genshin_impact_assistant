@@ -479,6 +479,11 @@ def crop(image, area):
         image = cv2.copyMakeBorder(image, *border, borderType=cv2.BORDER_CONSTANT, value=(0, 0, 0))
     return image
 
+def round_list(x:list, n:int):
+    for i in range(len(x)):
+        x[i] = round(x[i], n)
+    return x.copy()
+
 def recorp(image, area, size=None):
     if size is None:
         size=[1920,1080,3]
