@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2024-07-28 12:07+0800\n"
-"PO-Revision-Date: 2024-07-28 12:09+0800\n"
+"POT-Creation-Date: 2024-07-28 18:31+0800\n"
+"PO-Revision-Date: 2024-07-28 18:33+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -18,15 +18,15 @@ msgstr ""
 
 #: genshin_assistant.py:35
 msgid "正在初始化，请稍后"
-msgstr ""
+msgstr "正在初始化，请稍后"
 
 #: genshin_assistant.py:42 genshin_assistant.py:50
 msgid "导入依赖时错误"
-msgstr ""
+msgstr "导入依赖时错误"
 
 #: genshin_assistant.py:45 genshin_assistant.py:53
 msgid "程序暂停。按任意键退出"
-msgstr ""
+msgstr "程序暂停。按任意键退出"
 
 #: genshin_assistant.py:55
 msgid "初始化完成"
@@ -200,11 +200,11 @@ msgstr "运行速度"
 
 #: source\forgettext.py:9
 msgid "Artifact"
-msgstr ""
+msgstr "圣遗物"
 
 #: source\forgettext.py:10
 msgid "Plant"
-msgstr ""
+msgstr "植物"
 
 #: source\funclib\combat_lib.py:29 source\funclib\combat_lib.py:34
 msgid "No corresponding parameters filled in"
@@ -802,6 +802,14 @@ msgstr "生成自定义任务"
 msgid "upload route json file"
 msgstr "上传路径 json 文件"
 
+#: source\webio\webpages\TLPath2mission.py:39
+msgid "Current Collect Mode: "
+msgstr "当前采集模式："
+
+#: source\webio\webpages\TLPath2mission.py:39
+msgid "You can modify it at ConfigSettingPage->DevSettings"
+msgstr "您可以在 设置->开发选项设置 中修改它"
+
 #: source\webio\webpages\TLPath2mission.py:42
 #: source\webio\webpages\tavern2mission.py:39
 msgid "input collection name"
@@ -1164,60 +1172,60 @@ msgstr "局域网IP"
 msgid "WAN IP"
 msgstr "以太网IP"
 
-#: source\webio\webpages\mission.py:90
+#: source\webio\webpages\mission.py:102
 msgid "## Local Mission"
 msgstr "## 本地自定义任务"
 
-#: source\webio\webpages\mission.py:101
+#: source\webio\webpages\mission.py:114
 msgid "Enable"
 msgstr "启用"
 
-#: source\webio\webpages\mission.py:102
+#: source\webio\webpages\mission.py:115
 msgid "Priority"
 msgstr "优先级"
 
-#: source\webio\webpages\mission.py:104
+#: source\webio\webpages\mission.py:117
 msgid "Author: "
 msgstr "作者: "
 
-#: source\webio\webpages\mission.py:106
+#: source\webio\webpages\mission.py:119
 msgid "Description: "
 msgstr "描述: "
 
-#: source\webio\webpages\mission.py:108
+#: source\webio\webpages\mission.py:121
 msgid "Tags: "
 msgstr "标签: "
 
-#: source\webio\webpages\mission.py:110
+#: source\webio\webpages\mission.py:123
 msgid "Time: "
 msgstr "时间: "
 
-#: source\webio\webpages\mission.py:112
+#: source\webio\webpages\mission.py:125
 msgid "Note: "
 msgstr "注释: "
 
-#: source\webio\webpages\mission.py:136
+#: source\webio\webpages\mission.py:149
 #: source\webio\webpages\missiondownload.py:273
 msgid "Rebuild Progress"
 msgstr "重构进度"
 
-#: source\webio\webpages\mission.py:151
+#: source\webio\webpages\mission.py:164
 msgid "Compile Fail, please see the console and ask for help."
 msgstr "编译失败,请查看控制台的日志信息并寻求帮助."
 
-#: source\webio\webpages\mission.py:157
+#: source\webio\webpages\mission.py:170
 msgid "Compile Success!"
 msgstr "编译成功!"
 
-#: source\webio\webpages\mission.py:174
+#: source\webio\webpages\mission.py:188
 msgid "Compile Missions"
 msgstr "编译自定义任务"
 
-#: source\webio\webpages\mission.py:176
+#: source\webio\webpages\mission.py:190
 msgid "Save Changes"
 msgstr "保存更改"
 
-#: source\webio\webpages\mission.py:177
+#: source\webio\webpages\mission.py:191
 msgid ""
 "If no mission is displayed here or if you have modified any mission in the "
 "missions folder, click on the Compile Missions button."
@@ -1225,13 +1233,13 @@ msgstr ""
 "如果这里没有任何自定义任务或你修改了missions文件夹下的自定义任务,请点击编译自"
 "定义任务按钮."
 
-#: source\webio\webpages\mission.py:178
+#: source\webio\webpages\mission.py:192
 msgid ""
 "The order of execution decreases from smallest to largest, with 0 being the "
 "highest priority."
 msgstr "执行顺序从小到大递减，0为最高优先级。"
 
-#: source\webio\webpages\mission.py:179
+#: source\webio\webpages\mission.py:193
 msgid ""
 "If you would like to add more missions, please go to the MissionsDownload "
 "page."

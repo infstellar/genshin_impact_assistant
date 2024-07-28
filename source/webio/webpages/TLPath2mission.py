@@ -36,7 +36,7 @@ class TLPath2Mission(AdvancePage):
         with output.use_scope(self.main_scope):
             pin.put_file_upload(self.FILE_UPLOAD_ROUTE, label=t2t('upload route json file'), accept='.json')
             output.put_button(self.BUTTON_UPLOAD_FILE, onclick=self._upload_file)
-            output.put_text(f"{t2t('Current Collect Mode: ')} {t2t(GIAconfig.Dev_RecordPath_CollectionType)}\n{t2t('You can modify it at ConfigSettingPage->DevSettings')}")
+            output.put_markdown("### " + t2t('Current Collect Mode: ') + f"{t2t(GIAconfig.Dev_RecordPath_CollectionType)}\n" + t2t('You can modify it at ConfigSettingPage->DevSettings'))
             # output.put_button('load file', onclick=self._)
             output.put_scope(self.SCOPE_POSSIBLE_ROUTE)
             pin.put_input(self.INPUT_COLLECTION_NAME, help_text=t2t('input collection name'))
