@@ -1,3 +1,4 @@
+import logger
 from source.util import *
 from source.common.timer_module import *
 from source.funclib import generic_lib, movement
@@ -16,6 +17,7 @@ from source.flow.utils.cvars import *
 from source.teyvat_move.teyvat_move_optimizer import B_SplineCurve_GuidingHead_Optimizer
 from source.funclib.combat_lib import CSDL
 from source.combat.switch_character_operator import SwitchCharacterOperator, SHIELD
+from multiprocessing import Process
 
 
 class TeyvatMoveFlowConnector(FlowConnector):
@@ -41,6 +43,7 @@ class TeyvatMoveFlowConnector(FlowConnector):
         self.is_use_shield = True
         self.PUO = PickupOperator()
         self.SCO = SwitchCharacterOperator()
+        self.is_nahida = None
 
 
         self.motion_state = IN_MOVE
@@ -103,28 +106,34 @@ from source.common.base_threading import AdvanceThreading
 class MoveController(AdvanceThreading):
     def __init__(self):
         super().__init__()
-        self.while_sleep = 0.05
+        self.while_sleep = 0
         self.move_ahead_timer = AdvanceTimer(1).start()
+        self.w_pressed = False
 
     def move_ahead(self, duration: float = 1):
         self.move_ahead_timer = AdvanceTimer(duration).start()
         itt.key_down('w')
 
-    def switch_w(self, mode = 'all'):
-        logger.trace('mc switching')
+    def switch_w(self, mode = 'all', sleep=True):
+        # logger.trace('mc switching')
         if self.move_ahead_timer.reached():
             if mode in ['all', 'stop']:
-                itt.key_up('w')
+                if self.w_pressed:
+                    itt.key_up('w')
+                    self.w_pressed = False
+                if sleep:
+                    time.sleep(0.05)
         else:
             if mode in ['all', 'start']:
                 itt.key_down('w')
+                self.w_pressed = True
+                self.move_ahead_timer.wait(additional_time=-0.15)
 
     def stop_move_ahead(self):
         self.move_ahead_timer = AdvanceTimer(0).start()
         itt.key_up('w')
 
     def loop(self):
-
         self.switch_w()
 
 class TeyvatMoveCommon():
@@ -138,6 +147,8 @@ class TeyvatMoveCommon():
         self.press_w_timer = AdvanceTimer(limit=1).start()
         self.upper = upper
         self.mc = MoveController()
+        self.offset_timer = Timer()
+        self.offset_timer_flag = False
 
 
 
@@ -222,7 +233,7 @@ class TeyvatMoveCommon():
 
     def use_shield_if_needed(self):
         if self.upper.is_use_shield:
-            if self.motion_state == IN_MOVE:
+            if self.motion_state == IN_MOVE and CSDL.get_combat_state():
                 self.upper.SCO.continue_threading()
                 # self.upper.SCO.switch_character(SHIELD)
             else:
@@ -243,6 +254,26 @@ class TeyvatMoveCommon():
     def stop_move_ahead(self):
         self.mc.stop_move_ahead()
 
+    OFFSET_PRE_SECOND = 0.2
+    MIN_OFFSET_APPEND_TIME = 1.5
+
+    def _get_offset(self, diff:float, max_offset=6, min_offset=2):
+        offset = min_offset
+        if diff < max_offset:
+            if not self.offset_timer_flag:
+                self.offset_timer_flag = True
+                self.offset_timer = Timer()
+
+            dt = self.offset_timer.get_diff_time()
+            if dt > self.MIN_OFFSET_APPEND_TIME:
+                offset = min_offset + (dt-self.MIN_OFFSET_APPEND_TIME)*self.OFFSET_PRE_SECOND
+                logger.trace(f'{offset} = {min_offset} + {dt} - {self.MIN_OFFSET_APPEND_TIME}*{self.OFFSET_PRE_SECOND}')
+                return offset
+            else:
+                return offset
+        else:
+            self.offset_timer_flag = False
+            return offset
 class Navigation(TianliNavigator):
     def __init__(self, start, end) -> None:
         super().__init__()
@@ -361,7 +392,8 @@ class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon, Navigation):
 
     def state_in(self):
         self.current_posi = genshin_map.get_position()
-        if euclidean_distance(self.current_posi, self.upper.target_posi) <= 8:
+        distance = euclidean_distance(self.current_posi, self.upper.target_posi)
+        if distance <= 8:
             self.switch_motion_state(jump=False)
         else:
             self.switch_motion_state(jump=True)
@@ -379,17 +411,21 @@ class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon, Navigation):
             if self.upper.is_tianli_navigation:
                 self.print_TLPS_info(self.posi_index, self.current_posi)
         # movement.change_view_to_posi(p1, self.upper.checkup_stop_func)
-        if not self.in_flag:
-            itt.key_down('w')
-            self.in_flag = True
+        # if not self.in_flag:
+        #     itt.key_down('w')
+        #     self.in_flag = True
 
         r = self.detect_stop_rule(self.upper.stop_rule, self.upper.is_precise_arrival, self.upper.target_posi,
                                   self.current_posi, self.upper.stop_offset)
         if r:
             self._next_rfc()
+            return
 
         self.use_shield_if_needed()
-        self.move_ahead(duration=1)
+
+        move_duration = min(distance * 0.08, 0.8)
+        logger.trace(f'Move Automatic: Duration: {move_duration}')
+        self.move_ahead(duration=move_duration)
 
         # if len(genshin_map.history_posi) >= 29:
         #     p1 = genshin_map.history_posi[0][1:]
@@ -417,13 +453,12 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
     Args:
         FlowTemplate (_type_): _description_
         TeyvatMoveCommon (_type_): _description_
-        
-    SK: Special key. 特殊按键，包括f，space等，但是一般没啥用。
+
     BP: break point. 程序行走使用的点。
     CP: current point. 执行SK，切换Motion使用的点。
     """
 
-    IS_NAHIDA = False
+    is_nahida = False
     ENABLE_OPTIMIZER = True
     last_adsorptive_position = [10000000, 10000000]
 
@@ -559,7 +594,10 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
         if self.upper.is_auto_pickup:
             self.upper.PUO.continue_threading()
 
-        self.IS_NAHIDA = 'Nahida' in combat_lib.get_characters_name()
+        if self.upper.is_nahida is None:
+            self.is_nahida = 'Nahida' in combat_lib.get_characters_name()
+        else:
+            self.is_nahida = self.upper.is_nahida
 
         if 'kyt2m_version' in self.additional_info.keys():
             self.curr_break_point_index = 1
@@ -635,32 +673,30 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
             #     offset = 6 # NO SK
             # else:
             #     offset = 6 # SK
-            offset = 6
+            offset = 2
             if self.curr_path[self.curr_path_index]["motion"] == "FLYING":
                 offset = 12
+            elif self.motion_state == SWIMMING:
+                offset = 8
             if "additional_info" in self.upper.path_dict.keys():
                 if "pickup_points" in self.upper.path_dict["additional_info"].keys():
                     if self.curr_break_point_index in self.upper.path_dict["additional_info"]["pickup_points"]:
                         logger.debug('bp is pp, o=3.5.')
-                        offset = 3.5
+                        offset = 2
             if self.ready_to_end:
-                offset = min(3, max(1, (self.end_times) / 10))
-            # 如果两个BP距离小于offset就会瞬移，排除一下。
+                offset = 1 # min(1, max(1, (self.end_times) / 10))
 
+            # 如果两个BP距离小于offset就会瞬移，排除一下。
             if self.curr_break_point_index < len(self.curr_breaks) - 1:
                 dist = euclidean_distance(self.curr_breaks[self.curr_break_point_index],
                                           self.curr_breaks[self.curr_break_point_index + 1])
-                if dist >= 1 and dist <= offset:
+                if dist <= offset:
                     logger.trace(f"BPs too close: dist: {dist}")
                     offset = dist / 2
                     logger.trace(f"offset: {offset}")
-                elif dist < 1:
-                    logger.trace(f"BPs too close <1: dist: {dist}")
-                    offset = 1
-                    logger.trace(f"offset: {offset}")
-            if offset < 1.5:
-                offset = 2
 
+            offset = self._get_offset(diff=euclidean_distance(target_posi, curr_posi), max_offset=6, min_offset=offset)
+            logger.trace(f"offset: {offset}")
             # print(f"time0.2: {self.in_pt.get_diff_time()}")
 
             # 执行SK
@@ -785,13 +821,20 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
 
         # 自动拾取
         if self.upper.is_auto_pickup:
-            while self.upper.PUO.pickup_recognize(): pass
-            curr_posi = genshin_map.get_position()
+            if generic_lib.f_recognition():
+                while self.upper.PUO.pickup_recognize(): pass
+                curr_posi = genshin_map.get_position()
+
+        logger.trace(f"time4.1:  {self.in_pt.get_diff_time()}")
 
         # 检测移动是否卡住
+        if self.is_stuck(curr_posi, threshold=10):
+            if self.motion_state == WALKING:
+                logger.debug(f"move stuck, try jumping")
+                itt.key_press('spacebar')
         if self.is_stuck(curr_posi, threshold=45):
             itt.key_press('spacebar')
-        if self.is_stuck(curr_posi, threshold=60):
+        elif self.is_stuck(curr_posi, threshold=60):
             self._set_nfid(ST.END_TEYVAT_MOVE_STUCK)
             self._set_rfc(FC.END)
 
@@ -804,10 +847,15 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
             self._set_nfid(ST.END_TEYVAT_MOVE_STUCK)
             self._set_rfc(FC.END)
 
+        logger.trace(f"time4.2:  {self.in_pt.get_diff_time()}")
+
         r = self.detect_stop_rule(self.upper.stop_rule, self.upper.is_precise_arrival,
                                   self.upper.path_dict["end_position"], curr_posi, self.upper.stop_offset)
         if r:
             self._next_rfc()
+
+        logger.trace(f"time4.3:  {self.in_pt.get_diff_time()}")
+
         self.use_shield_if_needed()
 
         logger.trace(f"time4: pickup, stuck checks, shield and ready_to_end check: {self.in_pt.get_diff_time()}")
@@ -821,27 +869,38 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
         # delta_distance = self.CalculateTheDistanceBetweenTheAngleExtensionLineAndTheTarget(curr_posi,target_posi)
 
         # 移动视角
+        tx, ty = curr_posi[0], curr_posi[1]
+        logger.trace(f"time5.1.1: change_view_to_angle:  {self.in_pt.get_diff_time()}")
         if not self.ENABLE_OPTIMIZER:
-            target_degree = movement.calculate_posi2degree(target_posi)
+            target_degree = movement.calculate_posi2degree(target_posi, tx, ty)
         else:
-            target_degree = movement.calculate_posi2degree(self.predict_tdo_position(curr_posi, target_posi))
+            target_degree = movement.calculate_posi2degree(self.predict_tdo_position(curr_posi, target_posi), tx, ty)
             # target_degree = self.predict_tdo_degree(curr_posi, target_posi)
         delta_degree = abs(movement.calculate_delta_angle(genshin_map.get_rotation(), target_degree))
+
+        def set_move():
+            if self.ready_to_end:
+                self.move_ahead(duration=move_duration * 0.5)
+            else:
+                self.move_ahead(duration=move_duration)
+
         if delta_degree >= 45:
+            logger.trace(f"time5.2.1: change_view_to_angle:  {self.in_pt.get_diff_time()}")
             self.stop_move_ahead()
             # movement.change_view_to_posi(target_posi, stop_func = self.upper.checkup_stop_func)
             movement.change_view_to_angle(target_degree, offset=15)
-            if not self.ready_to_end:
-                self.move_ahead(duration=move_duration)
-            else:
-                self.move_ahead(duration=move_duration*0.5)
+            logger.trace(f"time5.2.2: change_view_to_angle:  {self.in_pt.get_diff_time()}")
+        # elif delta_degree >= 10:
+        #     # movement.change_view_to_posi(target_posi, stop_func = self.upper.checkup_stop_func, max_loop=4, offset=2, print_log = False)
+        #     logger.trace(f"time5.3.1: change_view_to_angle:  {self.in_pt.get_diff_time()}")
+        #     movement.change_view_to_angle(target_degree, loop_sleep=0, maxloop=4)
+        #     logger.trace(f"time5.3.2: change_view_to_angle:  {self.in_pt.get_diff_time()}")
         else:
-            # movement.change_view_to_posi(target_posi, stop_func = self.upper.checkup_stop_func, max_loop=4, offset=2, print_log = False)
-            movement.change_view_to_angle(target_degree, loop_sleep=0, maxloop=4)
-            if self.ready_to_end:
-                self.move_ahead(duration=move_duration*0.5)
-            else:
-                self.move_ahead(duration=move_duration)
+            movement.change_view_to_angle(target_degree, loop_sleep=0, maxloop=2, precise_mode=False)
+        set_move()
+
+
+
         if self.init_start == False:
             # itt.key_down('w')
             self.init_start = True
@@ -883,7 +942,7 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
     def _exec_active_pickup(self, force=False):
         if 'is_active_pickup_in_bp' in self.additional_info.keys():
             if self.additional_info['is_active_pickup_in_bp']:
-                if self.IS_NAHIDA:
+                if self.is_nahida:
                     self._land(enforce=True)
                     self.switch_motion_state()
                     if self.motion_state == WALKING:
@@ -909,11 +968,11 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
                             if self.upper.PUO.auto_pickup() == 0: break
                         logger.info("adsorption: finding blink: end")
                     if self.upper.is_auto_pickup:
-                        if self.IS_NAHIDA:
+                        if self.is_nahida:
                             if euclidean_distance(self.last_adsorptive_position, curr_posi) < 15:
                                 logger.info('in nahida mode & scanned once, skip the ads')
                                 break
-                        if i > 2 and self.IS_NAHIDA:
+                        if i > 2 and self.is_nahida:
                             self.upper.PUO.active_pickup(is_nahida=True)
                             self.last_adsorptive_position = adsorb_p
                             break
@@ -1001,7 +1060,8 @@ class TeyvatMoveFlowController(FlowController):
                       is_precise_arrival: bool = None,
                       stop_offset=None,
                       is_auto_pickup: bool = None,
-                      is_use_shield: bool = None):
+                      is_use_shield: bool = None,
+                      is_nahida: bool=None):
         """设置参数，如果不填则使用上次的设置。
 
         Args:
@@ -1047,6 +1107,8 @@ class TeyvatMoveFlowController(FlowController):
             self.flow_connector.is_auto_pickup = is_auto_pickup
         if is_use_shield != None:
             self.flow_connector.is_use_shield = is_use_shield
+        if is_nahida != None:
+            self.flow_connector.is_nahida = is_nahida
 
 
 if __name__ == '__main__':

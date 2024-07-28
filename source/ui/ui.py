@@ -1,4 +1,3 @@
-
 from source.manager.asset import *
 from source.common.timer_module import Timer, AdvanceTimer
 from source.ui.page import *
@@ -8,18 +7,17 @@ from source.interaction.interaction_core import itt
 from source.exceptions.ui import *
 
 
-
 class UI():
-    
+
     def __init__(self) -> None:
         self.switch_ui_lock = Lock()
-    
-    ui_pages=[page_bigmap,
-              page_domain,
-              page_main,
-              page_esc,
-              page_time,
-              page_configure_team]
+
+    ui_pages = [page_bigmap,
+                page_domain,
+                page_main,
+                page_esc,
+                page_time,
+                page_configure_team]
 
     def ui_additional(self):
         """
@@ -32,24 +30,24 @@ class UI():
         pass
 
     def is_valid_page(self):
-        if self.get_page(raise_exception=False, max_retry=2) is not None:
-            return True
-        else:
-            return False
+        for i in self.ui_pages:
+            if i.is_current_page(itt):
+                return True
+        return False
 
-    def get_page(self, retry_times=0, raise_exception = True, max_retry=5):
+    def get_page(self, retry_times=0, raise_exception=True, max_retry=5):
         ret_page = None
 
         # when ui_addition is complete, enable it
-        if retry_times >= max_retry:
+        if raise_exception and retry_times >= max_retry:
             logger.info(f"Unknown page, try pressing esc")
             itt.key_press('esc')
         if raise_exception and False:
-            if retry_times >= max_retry+3:
+            if retry_times >= max_retry + 3:
                 raise PageNotFoundError
 
         for page in self.ui_pages:
-            if page.is_current_page(itt, print_log = True):
+            if page.is_current_page(itt, print_log=True):
                 if ret_page is None:
                     ret_page = page
                 else:
@@ -58,13 +56,13 @@ class UI():
             logger.warning(t2t("未知Page, 重新检测"))
             self.ui_additional()
             time.sleep(3)
-            ret_page = self.get_page(retry_times=retry_times+1)
+            ret_page = self.get_page(retry_times=retry_times + 1)
         return ret_page
 
-    def verify_page(self, page:UIPage) -> bool:
+    def verify_page(self, page: UIPage) -> bool:
         return page.is_current_page(itt)
 
-    def ui_goto(self, destination:UIPage, confirm_wait=0.5):
+    def ui_goto(self, destination: UIPage, confirm_wait=0.5):
         """
         Args:
             destination (Page):
@@ -113,21 +111,21 @@ class UI():
             # Other pages
             clicked = False
             for page in visited:
-                if page.parent is None or len(page.check_icon_list)==0:
+                if page.parent is None or len(page.check_icon_list) == 0:
                     continue
                 if page.is_current_page(itt):
                     logger.debug(f'Page switch: {page} -> {page.parent}')
                     # if retry_timer.reached():
                     button = page.links[page.parent]
-                    if isinstance(button,str):
+                    if isinstance(button, str):
                         if retry_timer.reached():
                             itt.key_press(button)
                             retry_timer.reset()
-                    elif isinstance(button,Button):
+                    elif isinstance(button, Button):
                         itt.appear_then_click(button)
                     clicked = True
                     confirm_timer.reset()
-                        # retry_timer.reset()
+                    # retry_timer.reset()
                     # else:
                     #     itt.delay(0.2) # wait
                     #     break
@@ -152,13 +150,21 @@ class UI():
         self.switch_ui_lock.release()
         itt.delay(0.5, comment="ui goto is waiting genshin animation")
         # itt.wait_until_stable()
-    
-    def ensure_page(self, page:UIPage):
+
+    def ensure_page(self, page: UIPage):
         if not self.verify_page(page):
             self.ui_goto(page)
-        
+
+    def wait_until_stable(self, threshold=0.9995, timeout=10):
+        while 1:
+            itt.wait_until_stable(threshold=threshold, timeout=timeout, additional_break_func=self.is_valid_page)
+            if not page_loading.is_current_page(itt):
+                break
+
+
 ui_control = UI()
 
 if __name__ == '__main__':
     ui = UI()
-    ui.ui_goto(page_bigmap)
+    # ui.ui_goto(page_bigmap)
+    ui_control.wait_until_stable()

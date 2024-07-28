@@ -377,7 +377,7 @@ class Map(MiniMap, BigMap, MapConverter):
                 break
             itt.appear_then_click(asset.ButtonBigmapCloseMarkTableInTP)
 
-    def bigmap_tp(self, posi: list, tp_mode=0, tp_type: list = None, csf=lambda: False) -> TianLiPosition:
+    def bigmap_tp(self, posi: list, tp_mode=0, tp_type: list = None, csf=lambda: False) -> GIMAPPosition:
         """传送到指定坐标。
 
         Args:
@@ -451,7 +451,7 @@ class Map(MiniMap, BigMap, MapConverter):
 
         self.reinit_smallmap()
 
-        return TianLiPosition(tp_posi)
+        return GIMAPPosition(tp_posi)
 
 
 genshin_map = Map()
@@ -462,7 +462,7 @@ if __name__ == '__main__':
      #                      tp_type=["Domain"])  # tp to *染之庭
     # genshin_map.reinit_smallmap()
     # r = MapConverter.convert_cvAutoTrack_to_GIMAP([0,0])
-    genshin_map.bigmap_tp([0,0])# MapConverter.convert_GIMAP_to_cvAutoTrack([3639*2, 1564*2]))
+    # genshin_map.bigmap_tp([0,0])# MapConverter.convert_GIMAP_to_cvAutoTrack([3639*2, 1564*2]))
     genshin_map.reinit_smallmap()
     while 1:
         time.sleep(0.2)

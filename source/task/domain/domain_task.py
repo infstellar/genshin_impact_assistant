@@ -1,3 +1,5 @@
+import time
+
 from source.exceptions.domain_task import UnknownEnterPageError
 from source.util import *
 from source.task.domain.domain_flow_upgrade import DomainFlowController
@@ -125,7 +127,7 @@ class DomainTask(TaskTemplate):
             time.sleep(10)
 
     def _check_state(self):
-        
+        ui_control.wait_until_stable()
         if itt.get_img_existence(asset.IconUIInDomain) or itt.get_text_existence(asset.LEY_LINE_DISORDER):
             self.flow_mode = TI.DT_IN_DOMAIN
         elif itt.get_img_existence(asset.IconUIEmergencyFood):
@@ -204,6 +206,7 @@ class DomainTask(TaskTemplate):
                         if ui_control.get_page() in [UIPage.page_domain, UIPage.page_main]:
                             break
                     self.flow_mode = TI.DT_INIT
+                    self.dfc.reset()
                     return
             self._end_domain()
             

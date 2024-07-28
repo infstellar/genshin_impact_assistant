@@ -1,8 +1,11 @@
+import time
+
 from source.util import *
 from source.interaction.interaction_template import InteractionTemplate
 from source.common import vkcode, static_lib
 import win32api, win32con
 import pyautogui
+from source.common.base_threading import ProcessThreading
 
 class InteractionNormal(InteractionTemplate):
 
@@ -130,10 +133,62 @@ class InteractionNormal(InteractionTemplate):
                 y = y + wy + 26
                 
             win32api.SetCursorPos((x, y))
-            
+
+# ittN = InteractionNormal()
+
+KEY_DOWN = 'KeyDown'
+KEY_UP = 'KeyUp'
+
+class Operation():
+
+    def __str__(self):
+        return f'Operation: {self.key} {self.type}'
+    def __init__(self, key:str, type, operation_start=time.time(), operation_end = time.time()):
+        self.key = key
+        self.type = type
+        self.operation_start = operation_start
+        self.operation_end = operation_end
+        self.operated = False
+
+
+
+class InteractionController(ProcessThreading):
+    def __init__(self):
+        super().__init__()
+        self.operation_list:t.List[Operation] = []
+
+    def key_down(self, key):
+        self.operation_list.append(Operation(key, KEY_DOWN))
+
+    def exec_operation(self, op:Operation):
+        if op.type == KEY_DOWN:
+            print(f'key down: {op.key}')
+            ittN.key_down(op.key)
+        elif op.type == KEY_UP:
+            print(f'key up: {op.key}')
+            ittN.key_up(op.key)
+
+    def loop(self):
+        for i in self.operation_list:
+            print('looping')
+            if time.time() > i.operation_start:
+                if not i.operated:
+                    self.exec_operation(i)
+                    return
+                else:
+                    if time.time() > i.operation_end:
+                        logger.trace(f'pop op: {i}')
+                        self.operation_list.pop(self.operation_list.index(i))
+                        return
+
+
+
 if __name__ == '__main__':
-    ittN = InteractionNormal()
+    itc = InteractionController()
+    itc.start()
+    itc.continue_threading()
     while 1:
         time.sleep(0.5)
-        ittN.left_click()
+        itc.key_down('w')
+        # itc.left_click()
     

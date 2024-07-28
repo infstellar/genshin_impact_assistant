@@ -10,7 +10,7 @@ from PyQt5.QtCore import *
 from source.config.config import GIAconfig
 from source.common import static_lib, timer_module
 from source.cvars import PROCESS_NAME
-from source.util import DEMO_MODE, ansl_code2col
+from source.util import DEMO_MODE, ansl_code2col, DEBUG_MODE
 from source.logger import add_logger_to_GUI, logger
 from source.interaction.interaction_core import itt
 K = 5
@@ -23,7 +23,8 @@ class IngameUI(QWidget):
         super().__init__()
         self.setWindowTitle("IngameUI")
         self.QTextEdit_log_output = QTextEdit(self)
-        self.QTextEdit_log_output.setGeometry(0, 850, 550, 230)
+        _ = 300 if DEBUG_MODE else 0
+        self.QTextEdit_log_output.setGeometry(0, 850 - _, 550, 230 + _)
         # self.log_output.setHtml("QTextEdit Demo!<font color='blue' size='8'><red>Hello PyQt5!</font>")
         self.QTextEdit_log_output.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.notice_label = QLabel(self)
@@ -148,8 +149,8 @@ class IngameUI(QWidget):
     def generate_log_html(self):
         if len(self.log_history) > 500:
             logger.debug('clean log history')
-            self.log_history = self.log_history[-200:]
-        html_paragraphs = self.log_history[-min(50, len(self.log_history)):]
+            self.log_history = self.log_history[-210:]
+        html_paragraphs = self.log_history[-min(50 if not DEBUG_MODE else 200, len(self.log_history)):]
         output_html = ''
         for i in html_paragraphs: output_html+=i
         return output_html

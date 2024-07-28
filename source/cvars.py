@@ -1,4 +1,4 @@
-GIA_VERSION = "v1.1.1.1298"
+GIA_VERSION = "v1.1.2.1329"
 """Constants."""
 
 # Devices
@@ -64,3 +64,6 @@ THREAD_PAUSE_FORCE_TERMINATE = 1
 
 LOCA_TEYVAT = 'Teyvat'
 COLL_TYPE_PLANT = 'Plant'
+COLL_TYPE_ANY = 'Any'
+COLL_TYPE_TELEPORTER = 'Teleporter'
+COLL_TYPE_ARTIFACT = 'Artifact'

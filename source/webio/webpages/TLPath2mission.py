@@ -21,8 +21,10 @@ class TLPath2Mission(AdvancePage):
 
     SCOPE_POSSIBLE_ROUTE = AN()
 
+    TEXT_CURRENT_COLLECT_MODE = AN()
+
     BUTTON_GENERATE = AN()
-    BUTTON_UPLOAD_FILE = t2t('Analyze curve')
+    BUTTON_UPLOAD_FILE = t2t('Generate Mission')
 
     def __init__(self) -> None:
         super().__init__(
@@ -34,6 +36,7 @@ class TLPath2Mission(AdvancePage):
         with output.use_scope(self.main_scope):
             pin.put_file_upload(self.FILE_UPLOAD_ROUTE, label=t2t('upload route json file'), accept='.json')
             output.put_button(self.BUTTON_UPLOAD_FILE, onclick=self._upload_file)
+            output.put_text(f"{t2t('Current Collect Mode: ')} {t2t(GIAconfig.Dev_RecordPath_CollectionType)}\n{t2t('You can modify it at ConfigSettingPage->DevSettings')}")
             # output.put_button('load file', onclick=self._)
             output.put_scope(self.SCOPE_POSSIBLE_ROUTE)
             pin.put_input(self.INPUT_COLLECTION_NAME, help_text=t2t('input collection name'))
@@ -161,8 +164,8 @@ class TLPath2Mission(AdvancePage):
             },
             'author': f"{pin.pin[self.INPUT_AUTHOR]}",
             'tags': {
-                'zh_CN': ["采集"],
-                'en_US': ["Collect"]
+                'zh_CN': [{"Plant":"采集","Artifact":"圣遗物"}[GIAconfig.Dev_RecordPath_CollectionType]],
+                'en_US': [{"Plant":"Collect","Artifact":"Artifact"}[GIAconfig.Dev_RecordPath_CollectionType]]
             },
             'local_edit_mission': f'{pin.pin[self.INPUT_MISSION_NAME]}',
             'description': f'{pin.pin[self.INPUT_DESCRIPTION]}',
@@ -197,14 +200,17 @@ class TLPath2Mission(AdvancePage):
                 'generate_from': 'path recorder 1.0'
 
             }
+
+            mission_model = {"Artifact":"MissionCollectArtifact","Plant":"MissionJustCollect"}[GIAconfig.Dev_RecordPath_CollectionType]
+
             s = \
-                f'''from source.mission.template.mission_just_collect import MissionJustCollect
+f'''from source.mission.template.mission_just_collect import {mission_model}
 
 META={META}
 
-class MissionMain(MissionJustCollect):
+class MissionMain({mission_model}):
     def __init__(self):
-        super().__init__(tlp2m_default_value, "kyt2m_default_name")
+        super().__init__(tlp2m_default_value, "tlp2m_default_name")
 
 if __name__ == '__main__':
     mission = MissionMain()
@@ -223,13 +229,13 @@ tlp2m_default_value = {str(tlpp_path)}
         JSON_META['tags'] = META['tags'][GLOBAL_LANG]
         local_meta.update({pin.pin[self.INPUT_MISSION_FILE_NAME]: JSON_META})
         save_json(local_meta, 'local_edit_mission_meta.json', fr"{ROOT_PATH}/config/mission")
-        output.toast(t2t('mission has saved to ') + f'{path}')
+        output.toast(t2t('mission has saved to ') + f'{path}', duration=6)
 
     def _upload_file(self):
         if pin.pin[self.FILE_UPLOAD_ROUTE] is not None:
             self.route_dict = eval(pin.pin[self.FILE_UPLOAD_ROUTE]['content'].decode('utf-8').replace('null','\"\"'))
             self.file_last_modify_time = pin.pin[self.FILE_UPLOAD_ROUTE]['last_modified']
-            output.toast(t2t('Successfly upload file'), duration=4, color='success')
+            output.toast(t2t('Mission generate successfully'), duration=4, color='success')
             self._generate_mission(self.route_dict)
 
     def _event_thread(self):

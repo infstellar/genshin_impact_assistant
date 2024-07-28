@@ -99,12 +99,12 @@ class AdvanceTimer:
         else:
             return False
 
-    def wait(self):
+    def wait(self, additional_time = 0):
         """
         Wait until timer reached.
         """
-        diff = self._current + self.limit - time.time()
-        if diff > 0:
+        diff = self._current + self.limit - time.time() + additional_time
+        if diff > 0.05:
             time.sleep(diff)
 
     # def show(self):

@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2024-07-15 23:26+0800\n"
-"PO-Revision-Date: 2024-07-15 23:34+0800\n"
+"POT-Creation-Date: 2024-07-28 12:07+0800\n"
+"PO-Revision-Date: 2024-07-28 12:09+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: pygettext.py 1.5\n"
-"X-Generator: Poedit 3.3.1\n"
+"X-Generator: Poedit 3.4.4\n"
 
 #: genshin_assistant.py:35
 msgid "正在初始化，请稍后"
@@ -38,6 +38,30 @@ msgstr ""
 
 #: genshin_assistant.py:57
 msgid "启动键盘监听"
+msgstr ""
+
+#: source\api\cvAutoTrack.py:9
+msgid "cleaning cvautotrack files"
+msgstr "正在清理cvautotrack文件"
+
+#: source\api\cvAutoTrack.py:14
+msgid "autoTrack.log 1 cleaned"
+msgstr "autoTrack.log 1 已清理"
+
+#: source\api\cvAutoTrack.py:19
+msgid "autoTrack.log 2 cleaned"
+msgstr "autoTrack.log 2 已清理"
+
+#: source\api\cvAutoTrack.py:24
+msgid "autoTrack.log 3 cleaned"
+msgstr "autoTrack.log 3 已清理"
+
+#: source\api\cvAutoTrack.py:45
+msgid "cvAutoTrack DLL has been loaded."
+msgstr "cvAutoTrack DLL 已经加载"
+
+#: source\api\cvAutoTrack.py:59
+msgid "等待cvautotrack获取坐标"
 msgstr ""
 
 #: source\api\pdocr_api.py:3
@@ -88,7 +112,7 @@ msgstr "超过限制的执行次数，委托任务结束。"
 msgid "commission complete"
 msgstr "委托完成"
 
-#: source\common\base_threading.py:80
+#: source\common\base_threading.py:82 source\common\base_threading.py:371
 msgid ""
 "If you see this error, it's just because the thread was terminated normally, "
 "not a fatal error."
@@ -98,7 +122,7 @@ msgstr "这个错误，只是因为线程正常终止，而不是致命错误。
 msgid "CANNOT FIND HANDLE"
 msgstr "找不到句柄"
 
-#: source\dev_tool\tianli_navigator.py:151
+#: source\dev_tool\tianli_navigator.py:152
 msgid "remap fail, may due to incorrect input or duplicate values exist"
 msgstr "重映射失败，可能是因为输入错误或存在重复值"
 
@@ -114,35 +138,35 @@ msgstr "角色不在队伍中"
 msgid "The character name is incorrectly identified. Please submit a log."
 msgstr "角色名称识别错误。请提交日志。"
 
-#: source\flow\path_recorder_flow.py:72
+#: source\flow\path_recorder_flow.py:76
 msgid "position added:"
 msgstr "坐标已添加："
 
-#: source\flow\path_recorder_flow.py:121
+#: source\flow\path_recorder_flow.py:125
 msgid ""
 "Please take your hands off the keyboard and mouse while the position are "
 "being calibrated"
 msgstr "正在校准位置，请不要碰键盘和鼠标"
 
-#: source\flow\path_recorder_flow.py:124
+#: source\flow\path_recorder_flow.py:128
 msgid "Position calibration complete. Happy recording"
 msgstr "位置校准完成。记录愉快"
 
-#: source\flow\path_recorder_flow.py:129
-#: source\semiauto_funcs\path_record.py:40
+#: source\flow\path_recorder_flow.py:133
+#: source\semiauto_funcs\path_record.py:41
 msgid "ready to start recording"
 msgstr "准备开始记录"
 
-#: source\flow\path_recorder_flow.py:132
-#: source\semiauto_funcs\path_record.py:59
+#: source\flow\path_recorder_flow.py:136
+#: source\semiauto_funcs\path_record.py:60
 msgid "ready to stop recording"
 msgstr "准备停止记录"
 
-#: source\flow\path_recorder_flow.py:261
+#: source\flow\path_recorder_flow.py:276
 msgid "start recording"
 msgstr "开始记录"
 
-#: source\flow\path_recorder_flow.py:303
+#: source\flow\path_recorder_flow.py:320
 msgid "Record end."
 msgstr "记录结束。"
 
@@ -174,6 +198,14 @@ msgstr "在"
 msgid "running speed"
 msgstr "运行速度"
 
+#: source\forgettext.py:9
+msgid "Artifact"
+msgstr ""
+
+#: source\forgettext.py:10
+msgid "Plant"
+msgstr ""
+
 #: source\funclib\combat_lib.py:29 source\funclib\combat_lib.py:34
 msgid "No corresponding parameters filled in"
 msgstr "未填写相应参数"
@@ -200,6 +232,14 @@ msgstr ""
 #: source\funclib\generic_lib.py:61
 msgid "获取传送锚点失败，正在重试"
 msgstr ""
+
+#: source\funclib\movement.py:163
+msgid "Please waiting, CViewDynamicCalibration is loading."
+msgstr "请稍候，CVDC优化器正在加载。"
+
+#: source\funclib\movement.py:174
+msgid "CViewDynamicCalibration is loaded."
+msgstr "CViewDynamicCalibration 已加载。"
 
 #: source\funclib\scene_lib.py:22
 msgid "UI界面检测失败，正在尝试按esc返回"
@@ -238,7 +278,7 @@ msgstr "低性能"
 msgid "MEDIUM PERFORMANCE"
 msgstr "中等性能"
 
-#: source\generic_event.py:81 source\interaction\interaction_core.py:46
+#: source\generic_event.py:81 source\interaction\interaction_core.py:48
 msgid "恢复操作"
 msgstr ""
 
@@ -246,102 +286,102 @@ msgstr ""
 msgid "是原神窗口"
 msgstr ""
 
-#: source\generic_event.py:83 source\interaction\interaction_core.py:48
+#: source\generic_event.py:83 source\interaction\interaction_core.py:50
 msgid " 秒"
 msgstr ""
 
-#: source\generic_event.py:83 source\interaction\interaction_core.py:48
+#: source\generic_event.py:83 source\interaction\interaction_core.py:50
 msgid "当前窗口焦点为"
 msgstr ""
 
-#: source\generic_event.py:83 source\interaction\interaction_core.py:48
+#: source\generic_event.py:83 source\interaction\interaction_core.py:50
 msgid "，操作暂停 "
 msgstr ""
 
-#: source\integration_json\reader.py:55
-msgid "loading data"
-msgstr "加载数据"
-
-#: source\integration_json\reader.py:97
+#: source\integration_json\reader.py:94
 msgid "data loaded. cost"
 msgstr "数据已加载。用时"
 
-#: source\interaction\capture.py:75
+#: source\integration_json\reader.py:106
+msgid "loading data"
+msgstr "加载数据"
+
+#: source\interaction\capture.py:77
 msgid "Fail to get capture: "
 msgstr "截图失败"
 
-#: source\interaction\capture.py:77
+#: source\interaction\capture.py:79
 msgid " waiting 2 sec."
 msgstr "等待2秒"
 
-#: source\interaction\capture.py:78
+#: source\interaction\capture.py:80
 msgid "请确认原神窗口没有最小化，原神启动器关闭，原神分辨率为1080p"
 msgstr ""
 
-#: source\interaction\capture.py:119
+#: source\interaction\capture.py:121
 msgid "research handle: "
 msgstr "重新搜索句柄"
 
-#: source\interaction\capture.py:125
+#: source\interaction\capture.py:127
 msgid "research monitor: "
 msgstr "重新搜索显示器："
 
-#: source\interaction\capture.py:133
+#: source\interaction\capture.py:135
 msgid "multiple monitor detected: "
 msgstr "检测到多个显示器："
 
-#: source\interaction\capture.py:154
+#: source\interaction\capture.py:156
 msgid ""
 "You seem to have monitor scaling set? It is automatically recognized and "
 "this does not affect usage."
 msgstr "你看起来使用了多个不同的显示器缩放？已自动识别。"
 
-#: source\interaction\interaction_core.py:48
+#: source\interaction\interaction_core.py:50
 msgid "不是原神窗口"
 msgstr ""
 
-#: source\interaction\interaction_core.py:350
+#: source\interaction\interaction_core.py:352
 msgid "!!!appear then click fail!!!"
 msgstr "!!!appear then click失败!!!"
 
-#: source\interaction\interaction_core.py:629
+#: source\interaction\interaction_core.py:632
 msgid "左键点击"
 msgstr ""
 
-#: source\interaction\interaction_core.py:644
+#: source\interaction\interaction_core.py:647
 msgid "左键按下"
 msgstr ""
 
-#: source\interaction\interaction_core.py:659
+#: source\interaction\interaction_core.py:662
 msgid "左键抬起"
 msgstr ""
 
-#: source\interaction\interaction_core.py:677
+#: source\interaction\interaction_core.py:680
 msgid "左键双击"
 msgstr ""
 
-#: source\interaction\interaction_core.py:692
+#: source\interaction\interaction_core.py:695
 msgid "右键单击"
 msgstr ""
 
-#: source\interaction\interaction_core.py:708
+#: source\interaction\interaction_core.py:711
 msgid "点击鼠标中键"
 msgstr ""
 
-#: source\interaction\interaction_core.py:723
+#: source\interaction\interaction_core.py:726
 msgid "按下按键: "
 msgstr ""
 
-#: source\interaction\interaction_core.py:745
+#: source\interaction\interaction_core.py:748
 msgid "松开按键: "
 msgstr ""
 
-#: source\interaction\interaction_core.py:766
+#: source\interaction\interaction_core.py:769
 msgid "点击按键: "
 msgstr ""
 
-#: source\interaction\interaction_core.py:786
-#: source\interaction\interaction_core.py:801
+#: source\interaction\interaction_core.py:789
+#: source\interaction\interaction_core.py:804
 msgid "移动鼠标到坐标: "
 msgstr ""
 
@@ -413,11 +453,11 @@ msgstr "正在停止半自动功能： "
 msgid "Stop semi-auto function: "
 msgstr "停止半自动功能： "
 
-#: source\semiauto_funcs\path_record.py:47
+#: source\semiauto_funcs\path_record.py:48
 msgid "pausing recording..."
 msgstr "暂停记录..."
 
-#: source\semiauto_funcs\path_record.py:52
+#: source\semiauto_funcs\path_record.py:53
 msgid "restarting recording..."
 msgstr "重新开始记录..."
 
@@ -425,35 +465,35 @@ msgstr "重新开始记录..."
 msgid "正在开始挑战秘境"
 msgstr ""
 
-#: source\task\domain\domain_flow_upgrade.py:105
+#: source\task\domain\domain_flow_upgrade.py:108
 msgid "正在开始战斗"
 msgstr ""
 
-#: source\task\domain\domain_flow_upgrade.py:136
+#: source\task\domain\domain_flow_upgrade.py:139
 msgid "正在停止战斗"
 msgstr ""
 
-#: source\task\domain\domain_flow_upgrade.py:139
+#: source\task\domain\domain_flow_upgrade.py:142
 msgid "等待岩造物消失"
 msgstr ""
 
-#: source\task\domain\domain_flow_upgrade.py:196
+#: source\task\domain\domain_flow_upgrade.py:199
 msgid "正在激活石化古树"
 msgstr ""
 
-#: source\task\domain\domain_task.py:79
+#: source\task\domain\domain_task.py:81
 msgid "找不到秘境名称，放弃选择。"
 msgstr ""
 
-#: source\task\domain\domain_task.py:103
+#: source\task\domain\domain_task.py:105
 msgid "开始下一次秘境"
 msgstr ""
 
-#: source\task\domain\domain_task.py:115
+#: source\task\domain\domain_task.py:117
 msgid "次数结束。退出秘境"
 msgstr ""
 
-#: source\task\domain\domain_task.py:134
+#: source\task\domain\domain_task.py:136
 msgid "Unknown UI page"
 msgstr "未知的UI页面"
 
@@ -497,35 +537,35 @@ msgstr "任务"
 msgid "End Task"
 msgstr "任务结束"
 
-#: source\teyvat_move\teyvat_move_flow_upgrade.py:192
+#: source\teyvat_move\teyvat_move_flow_upgrade.py:203
 msgid "已到达目的地附近，本次导航结束。"
 msgstr ""
 
-#: source\teyvat_move\teyvat_move_flow_upgrade.py:206
+#: source\teyvat_move\teyvat_move_flow_upgrade.py:217
 msgid "已到达F附近，本次导航结束。"
 msgstr ""
 
-#: source\teyvat_move\teyvat_move_flow_upgrade.py:218
+#: source\teyvat_move\teyvat_move_flow_upgrade.py:229
 msgid "准备打架，本次导航结束。"
 msgstr ""
 
-#: source\teyvat_move\teyvat_move_flow_upgrade.py:274
+#: source\teyvat_move\teyvat_move_flow_upgrade.py:305
 msgid "不在服务区"
 msgstr "不在服务区"
 
-#: source\ui\ui.py:58
+#: source\ui\ui.py:56
 msgid "未知Page, 重新检测"
 msgstr "未知Page, 重新检测"
 
-#: source\util.py:80 source\util.py:82
+#: source\util.py:84 source\util.py:86
 msgid " 请检查"
 msgstr " 请检查"
 
-#: source\util.py:80 source\util.py:82
+#: source\util.py:84 source\util.py:86
 msgid "目录不存在："
 msgstr "目录不存在："
 
-#: source\util.py:94
+#: source\util.py:98
 msgid "请用管理员权限运行"
 msgstr "请用管理员权限运行"
 
@@ -568,6 +608,10 @@ msgstr "自定义任务下载"
 #: source\webio\page.py:51
 msgid "convert kongying Tavern's route to mission"
 msgstr "从空荧酒馆路线生成自定义任务"
+
+#: source\webio\page.py:52
+msgid "convert TianLi Path(Path recorder result) to mission"
+msgstr "将TianLi路径（路径记录器的json结果）转换为自定义任务"
 
 #: source\webio\update_notice.py:8
 msgid "GIA 已升级到"
@@ -694,13 +738,169 @@ msgid ""
 "        \n"
 "        ## 优化：\n"
 "        - ui识别失败多次后尝试按esc退出\n"
+"        "
+msgstr ""
+
+#: source\webio\update_notice.py:116
+msgid ""
+"\n"
+"        ## v1.1.1.1298 \n"
+"        \n"
+"        ## 新内容：\n"
+"        - 添加瞄准时普攻\n"
+"        - 添加游戏内覆盖UI\n"
+"        - 添加路径记录功能\n"
+"        - 更新天理导航编辑器\n"
+"        - 优化坐标修正功能\n"
+"        \n"
+"        ## 修复：\n"
+"        - 秘境挑战识别错误\n"
+"        \n"
+"        ## 优化：\n"
+"        - 大地图移动优化\n"
+"        - 本地化\n"
+"        - 地图识别\n"
+"        - 已知问题\n"
 "        \n"
 "        "
 msgstr ""
 
-#: source\webio\webio.py:53
+#: source\webio\update_notice.py:137
+msgid ""
+"\n"
+"        ## v1.1.2.1329 \n"
+"\n"
+"        ## 新内容：\n"
+"        - 使用动态优化器优化视角转向速度\n"
+"        - 完善游戏内路径记录器\n"
+"        - 可以添加狗粮采集路线，并已在自定义任务下载处添加3个狗粮采集路线\n"
+"\n"
+"        ## 修复：\n"
+"        - 秘境挑战失败无法重试\n"
+"        - 路径记录器坐标修正失效\n"
+"        - 其他bug\n"
+"\n"
+"        ## 优化：\n"
+"        - 定位精度优化\n"
+"        - 空荧酒馆坐标修正 \n"
+"        - 优化自动剧情的开关\n"
+"        \n"
+"        \n"
+"        "
+msgstr ""
+
+#: source\webio\webio.py:55
 msgid "webio启动完成"
 msgstr "webio启动完成"
+
+#: source\webio\webpages\TLPath2mission.py:27
+msgid "Generate Mission"
+msgstr "生成自定义任务"
+
+#: source\webio\webpages\TLPath2mission.py:37
+#: source\webio\webpages\tavern2mission.py:35
+msgid "upload route json file"
+msgstr "上传路径 json 文件"
+
+#: source\webio\webpages\TLPath2mission.py:42
+#: source\webio\webpages\tavern2mission.py:39
+msgid "input collection name"
+msgstr "输入采集物名称"
+
+#: source\webio\webpages\TLPath2mission.py:48
+#: source\webio\webpages\tavern2mission.py:44
+msgid ""
+"input mission file name, it should be `AuthorName`_`MissionName`_`id(1,2,3,"
+"etc.)` "
+msgstr ""
+"输入任务文件名，应为 \"作者名_任务名称_数字id(1,2,3,etc.)\"。不能包含中文和空"
+"格。"
+
+#: source\webio\webpages\TLPath2mission.py:50
+#: source\webio\webpages\tavern2mission.py:45
+msgid "input mission name"
+msgstr "输入自定义任务名称"
+
+#: source\webio\webpages\TLPath2mission.py:51
+#: source\webio\webpages\tavern2mission.py:46
+msgid "input author"
+msgstr "输入作者"
+
+#: source\webio\webpages\TLPath2mission.py:52
+#: source\webio\webpages\tavern2mission.py:47
+msgid "input description"
+msgstr "输入描述"
+
+#: source\webio\webpages\TLPath2mission.py:53
+#: source\webio\webpages\tavern2mission.py:48
+msgid "input note"
+msgstr "输入注意事项"
+
+#: source\webio\webpages\TLPath2mission.py:55
+#: source\webio\webpages\tavern2mission.py:50
+msgid "is collection in cliff"
+msgstr "采集物是否在悬崖上"
+
+#: source\webio\webpages\TLPath2mission.py:56
+#: source\webio\webpages\tavern2mission.py:51
+msgid "whether active pickup in waypoints"
+msgstr "是否在路径点处启动主动采集"
+
+#: source\webio\webpages\TLPath2mission.py:57
+#: source\webio\webpages\tavern2mission.py:52
+msgid "whether disable adsorptive positions"
+msgstr "是否禁用自动吸附"
+
+#: source\webio\webpages\TLPath2mission.py:58
+#: source\webio\webpages\tavern2mission.py:53
+msgid "whether Nahida is needed"
+msgstr "是否需要纳西妲"
+
+#: source\webio\webpages\TLPath2mission.py:104
+#: source\webio\webpages\tavern2mission.py:119
+msgid ""
+"mission name or collection name or author is/are empty, please check it."
+msgstr "任务名/采集物名称/作者 未输入，请检查。"
+
+#: source\webio\webpages\TLPath2mission.py:232
+#: source\webio\webpages\tavern2mission.py:234
+msgid "mission has saved to "
+msgstr "任务已保存到"
+
+#: source\webio\webpages\TLPath2mission.py:238
+msgid "Mission generate successfully"
+msgstr "任务成功生成"
+
+#: source\webio\webpages\TLPath2mission.py:251
+#: source\webio\webpages\TLPath2mission.py:266
+#: source\webio\webpages\collector_settings.py:148
+#: source\webio\webpages\collector_settings.py:161
+#: source\webio\webpages\config.py:119
+#: source\webio\webpages\tavern2mission.py:252
+#: source\webio\webpages\tavern2mission.py:265
+msgid "Waiting..."
+msgstr "等待中..."
+
+#: source\webio\webpages\TLPath2mission.py:256
+#: source\webio\webpages\collector_settings.py:152
+#: source\webio\webpages\config.py:110
+#: source\webio\webpages\tavern2mission.py:256
+msgid "Verified!"
+msgstr "验证通过！"
+
+#: source\webio\webpages\TLPath2mission.py:272
+#: source\webio\webpages\collector_settings.py:166
+#: source\webio\webpages\config.py:124
+#: source\webio\webpages\tavern2mission.py:270
+msgid "You may want to enter: "
+msgstr "你可能想输入："
+
+#: source\webio\webpages\TLPath2mission.py:279
+#: source\webio\webpages\collector_settings.py:171
+#: source\webio\webpages\config.py:129
+#: source\webio\webpages\tavern2mission.py:275
+msgid "Not a valid name"
+msgstr "不是一个有效的名称"
 
 #: source\webio\webpages\collector_settings.py:32
 #: source\webio\webpages\combat_settings.py:71
@@ -720,32 +920,6 @@ msgstr "展开/收起"
 #: source\webio\webpages\collector_settings.py:136
 msgid "clean list"
 msgstr "清空列表"
-
-#: source\webio\webpages\collector_settings.py:148
-#: source\webio\webpages\collector_settings.py:161
-#: source\webio\webpages\config.py:119
-#: source\webio\webpages\tavern2mission.py:247
-#: source\webio\webpages\tavern2mission.py:260
-msgid "Waiting..."
-msgstr "等待中..."
-
-#: source\webio\webpages\collector_settings.py:152
-#: source\webio\webpages\config.py:110
-#: source\webio\webpages\tavern2mission.py:251
-msgid "Verified!"
-msgstr "验证通过！"
-
-#: source\webio\webpages\collector_settings.py:166
-#: source\webio\webpages\config.py:124
-#: source\webio\webpages\tavern2mission.py:265
-msgid "You may want to enter: "
-msgstr "你可能想输入："
-
-#: source\webio\webpages\collector_settings.py:171
-#: source\webio\webpages\config.py:129
-#: source\webio\webpages\tavern2mission.py:270
-msgid "Not a valid name"
-msgstr "不是一个有效的名称"
 
 #: source\webio\webpages\combat_settings.py:61
 msgid "# Add team"
@@ -865,12 +1039,12 @@ msgid "Launch genshin"
 msgstr "进入原神"
 
 #: source\webio\webpages\main.py:151
-msgid "Domain Task"
-msgstr "秘境任务"
-
-#: source\webio\webpages\main.py:155
 msgid "Daily Commission"
 msgstr "每日委托"
+
+#: source\webio\webpages\main.py:155
+msgid "Domain Task"
+msgstr "秘境任务"
 
 #: source\webio\webpages\main.py:159
 msgid "Claim Reward"
@@ -1299,54 +1473,6 @@ msgstr "检查更新完成"
 msgid "Analyze curve"
 msgstr "分析路线"
 
-#: source\webio\webpages\tavern2mission.py:35
-msgid "upload route json file"
-msgstr "上传路径 json 文件"
-
-#: source\webio\webpages\tavern2mission.py:39
-msgid "input collection name"
-msgstr "输入采集物名称"
-
-#: source\webio\webpages\tavern2mission.py:44
-msgid ""
-"input mission file name, it should be `AuthorName`_`MissionName`_`id(1,2,3,"
-"etc.)` "
-msgstr ""
-"输入任务文件名，应为 \"作者名_任务名称_数字id(1,2,3,etc.)\"。不能包含中文和空"
-"格。"
-
-#: source\webio\webpages\tavern2mission.py:45
-msgid "input mission name"
-msgstr "输入自定义任务名称"
-
-#: source\webio\webpages\tavern2mission.py:46
-msgid "input author"
-msgstr "输入作者"
-
-#: source\webio\webpages\tavern2mission.py:47
-msgid "input description"
-msgstr "输入描述"
-
-#: source\webio\webpages\tavern2mission.py:48
-msgid "input note"
-msgstr "输入注意事项"
-
-#: source\webio\webpages\tavern2mission.py:50
-msgid "is collection in cliff"
-msgstr "采集物是否在悬崖上"
-
-#: source\webio\webpages\tavern2mission.py:51
-msgid "whether active pickup in waypoints"
-msgstr "是否在路径点处启动主动采集"
-
-#: source\webio\webpages\tavern2mission.py:52
-msgid "whether disable adsorptive positions"
-msgstr "是否禁用自动吸附"
-
-#: source\webio\webpages\tavern2mission.py:53
-msgid "whether Nahida is needed"
-msgstr "是否需要纳西妲"
-
 #: source\webio\webpages\tavern2mission.py:86
 msgid "From"
 msgstr "从"
@@ -1359,20 +1485,11 @@ msgstr "生成`采集`类自定义任务"
 msgid "Collections along the way: "
 msgstr "沿途的采集物： "
 
-#: source\webio\webpages\tavern2mission.py:119
-msgid ""
-"mission name or collection name or author is/are empty, please check it."
-msgstr "任务名/采集物名称/作者 未输入，请检查。"
-
-#: source\webio\webpages\tavern2mission.py:229
-msgid "mission has saved to "
-msgstr "任务已保存到"
-
-#: source\webio\webpages\tavern2mission.py:232
+#: source\webio\webpages\tavern2mission.py:237
 msgid "Analyzing curve, please waiting"
 msgstr "正在分析路线，请稍候"
 
-#: source\webio\webpages\tavern2mission.py:236
+#: source\webio\webpages\tavern2mission.py:241
 msgid "Successfly analyzed curve"
 msgstr "成功分析路线"
 
@@ -1644,18 +1761,3 @@ msgstr "自动停止"
 
 #~ msgid "Add to collected"
 #~ msgstr "添加到已采集"
-
-#~ msgid "cleaning cvautotrack files"
-#~ msgstr "正在清理cvautotrack文件"
-
-#~ msgid "autoTrack.log 1 cleaned"
-#~ msgstr "autoTrack.log 1 已清理"
-
-#~ msgid "autoTrack.log 2 cleaned"
-#~ msgstr "autoTrack.log 2 已清理"
-
-#~ msgid "autoTrack.log 3 cleaned"
-#~ msgstr "autoTrack.log 3 已清理"
-
-#~ msgid "cvAutoTrack DLL has been loaded."
-#~ msgstr "cvAutoTrack DLL 已经加载"

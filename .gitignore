@@ -226,3 +226,5 @@ config/cookies/web_genshin_cookies.json
 local_edit_missions/
 collected_images/
 *.giamode
+
+cache/

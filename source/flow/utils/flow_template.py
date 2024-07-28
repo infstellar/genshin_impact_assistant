@@ -98,6 +98,9 @@ class FlowTemplate():
             else:
                 break
 
+    def reset(self):
+        self.rfc = FC.INIT
+
 
 
 
