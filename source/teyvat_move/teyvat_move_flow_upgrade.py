@@ -954,7 +954,7 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
                 logger.info(f"adsorption: {adsorb_p} start")
                 if self.upper.is_auto_pickup:
                     pickup_item_num = len(self.upper.PUO.pickup_item_list)
-                for i in range(15):
+                for i in range(5):
                     if CSDL.get_combat_state():
                         if not self.upper.is_use_shield:
                             break
