@@ -43,6 +43,7 @@ class TeyvatMoveFlowConnector(FlowConnector):
         self.is_use_shield = True
         self.PUO = PickupOperator()
         self.SCO = SwitchCharacterOperator()
+        self.is_nahida = None
 
 
         self.motion_state = IN_MOVE
@@ -452,13 +453,12 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
     Args:
         FlowTemplate (_type_): _description_
         TeyvatMoveCommon (_type_): _description_
-        
-    SK: Special key. 特殊按键，包括f，space等，但是一般没啥用。
+
     BP: break point. 程序行走使用的点。
     CP: current point. 执行SK，切换Motion使用的点。
     """
 
-    IS_NAHIDA = False
+    is_nahida = False
     ENABLE_OPTIMIZER = True
     last_adsorptive_position = [10000000, 10000000]
 
@@ -594,7 +594,10 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
         if self.upper.is_auto_pickup:
             self.upper.PUO.continue_threading()
 
-        self.IS_NAHIDA = 'Nahida' in combat_lib.get_characters_name()
+        if self.upper.is_nahida is None:
+            self.is_nahida = 'Nahida' in combat_lib.get_characters_name()
+        else:
+            self.is_nahida = self.upper.is_nahida
 
         if 'kyt2m_version' in self.additional_info.keys():
             self.curr_break_point_index = 1
@@ -939,7 +942,7 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
     def _exec_active_pickup(self, force=False):
         if 'is_active_pickup_in_bp' in self.additional_info.keys():
             if self.additional_info['is_active_pickup_in_bp']:
-                if self.IS_NAHIDA:
+                if self.is_nahida:
                     self._land(enforce=True)
                     self.switch_motion_state()
                     if self.motion_state == WALKING:
@@ -965,11 +968,11 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
                             if self.upper.PUO.auto_pickup() == 0: break
                         logger.info("adsorption: finding blink: end")
                     if self.upper.is_auto_pickup:
-                        if self.IS_NAHIDA:
+                        if self.is_nahida:
                             if euclidean_distance(self.last_adsorptive_position, curr_posi) < 15:
                                 logger.info('in nahida mode & scanned once, skip the ads')
                                 break
-                        if i > 2 and self.IS_NAHIDA:
+                        if i > 2 and self.is_nahida:
                             self.upper.PUO.active_pickup(is_nahida=True)
                             self.last_adsorptive_position = adsorb_p
                             break
@@ -1057,7 +1060,8 @@ class TeyvatMoveFlowController(FlowController):
                       is_precise_arrival: bool = None,
                       stop_offset=None,
                       is_auto_pickup: bool = None,
-                      is_use_shield: bool = None):
+                      is_use_shield: bool = None,
+                      is_nahida: bool=None):
         """设置参数，如果不填则使用上次的设置。
 
         Args:
@@ -1103,6 +1107,8 @@ class TeyvatMoveFlowController(FlowController):
             self.flow_connector.is_auto_pickup = is_auto_pickup
         if is_use_shield != None:
             self.flow_connector.is_use_shield = is_use_shield
+        if is_nahida != None:
+            self.flow_connector.is_nahida = is_nahida
 
 
 if __name__ == '__main__':

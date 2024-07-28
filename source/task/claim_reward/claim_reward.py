@@ -86,10 +86,10 @@ class ClaimRewardMission(MissionExecutor, Talk):
 
     def exec_mission(self):
         itt.key_press('F1')
-        itt.wait_until_stable()
+        ui_control.wait_until_stable()
         while 1:
             itt.appear_then_click(ButtonCommissionSwitchToCommissionPage)
-            itt.wait_until_stable()
+            ui_control.wait_until_stable()
             siw()
             if self.checkup_stop_func(): return
             if itt.appear(IconCommissionDetailPage):
@@ -98,14 +98,14 @@ class ClaimRewardMission(MissionExecutor, Talk):
         if itt.appear(ButtonCommissionUsePoints):
             while 1:
                 r = itt.appear_then_click(ButtonCommissionUsePoints)
-                itt.wait_until_stable()
+                ui_control.wait_until_stable()
                 if r: break
                 siw()
                 if self.checkup_stop_func(): return
 
         while 1:
             itt.key_press('esc')
-            itt.wait_until_stable()
+            ui_control.wait_until_stable()
             siw()
             if self.checkup_stop_func(): return
             if ui_control.verify_page(UIPage.page_main): break

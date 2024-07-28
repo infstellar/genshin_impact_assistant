@@ -487,11 +487,12 @@ class InteractionBGD:
         else:
             return False
 
-    def wait_until_stable(self, threshold = 0.9995, timeout = 10):
+    def wait_until_stable(self, threshold = 0.9995, timeout = 10, additional_break_func=lambda x: False):
         timeout_timer = TimeoutTimer(timeout)
         last_cap = self.capture()
+
         pt = time.time()
-        t = AdvanceTimer(0.5, 2)
+        t = AdvanceTimer(0.25, 3).start()
         while 1:
             time.sleep(0.1)
             if timeout_timer.istimeout():
@@ -508,10 +509,10 @@ class InteractionBGD:
                 if DEBUG_MODE: print('wait time: ', time.time()-pt)
                 break
             last_cap = curr_img.copy()
+            if additional_break_func():
+                logger.debug(f"wait_until_stable break: addi func succ")
+                break
 
-        
-        
-        
     
     def extract_white_letters(image, threshold=128):
         """_summary_

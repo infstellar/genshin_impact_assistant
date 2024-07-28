@@ -64,6 +64,7 @@ class MissionCollectArtifact(MissionExecutor):
     def exec_mission(self):
         self.set_puo_crazy_f(True)
         self.start_pickup()  # SweatFlower167910289922 SweatFlowerV2P120230507180640i0
+        self.TMCF.flow_connector.is_nahida = False
         self.move_along(self.dictname, is_tp=True, is_precise_arrival=False)
         time.sleep(2)  # 如果路径结束时可能仍有剩余采集物，等待。
         self.stop_pickup()

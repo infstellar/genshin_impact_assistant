@@ -75,8 +75,8 @@ class MoveToChallenge(FlowTemplate):
         time.sleep(2)
         movement.view_to_angle_domain(-90, self.upper.checkup_stop_func)
         self._next_rfc()
-        if self.upper.fast_mode:
-            itt.key_down('w')
+        # if self.upper.fast_mode:
+        #     itt.key_down('w')
     
     def state_in(self):
         """
@@ -85,13 +85,16 @@ class MoveToChallenge(FlowTemplate):
 
         """
         movement.view_to_angle_domain(-90, self.upper.checkup_stop_func)
-        if self.upper.fast_mode:
-            pass
-        else:
-            movement.move(movement.MOVE_AHEAD, 4)
+        movement.move(movement.MOVE_AHEAD, 4)
 
         if generic_lib.f_recognition():
+            logger.info("checking if a real f")
             itt.key_up('w')
+            for i in range(5):
+                time.sleep(0.3)
+                if not generic_lib.f_recognition():
+                    break
+
             self._next_rfc()
 
 
@@ -292,17 +295,17 @@ class DomainFlowController(FlowController):
         
         self._add_sub_threading(self.flow_connector.combat_loop)
 
-        
-        self.append_flow(MoveToChallenge(self.flow_connector))
-        self.append_flow(Challenge(self.flow_connector))
-        self.append_flow(FindingTree(self.flow_connector))
-        self.append_flow(MoveToTree(self.flow_connector))
-        self.append_flow(AttainReward(self.flow_connector))
-        self.append_flow(DomainFlowEnd(self.flow_connector))
+        self.flow_list = [MoveToChallenge(self.flow_connector), Challenge(self.flow_connector), FindingTree(self.flow_connector), MoveToTree(self.flow_connector),
+                          AttainReward(self.flow_connector), DomainFlowEnd(self.flow_connector)]
+
+        for i in self.flow_list:
+            self.append_flow(i)
 
     def reset(self):
         self.flow_connector.reset()
         self.current_flow_id = ST.INIT_MOVETO_CHALLENGE
+        for i in self.flow_list:
+            i.reset()
         self.reset_err_code()
 
 if __name__ == '__main__':
