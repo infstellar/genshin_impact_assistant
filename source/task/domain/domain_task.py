@@ -203,7 +203,10 @@ class DomainTask(TaskTemplate):
                     while 1:
                         siw()
                         if self.checkup_stop_func(): return
-                        if ui_control.get_page() in [UIPage.page_domain, UIPage.page_main]:
+                        if ui_control.is_valid_page():
+                            if ui_control.get_page() in [UIPage.page_domain, UIPage.page_main]:
+                                break
+                        if itt.get_text_existence(asset.LEY_LINE_DISORDER):
                             break
                     self.flow_mode = TI.DT_INIT
                     self.dfc.reset()
