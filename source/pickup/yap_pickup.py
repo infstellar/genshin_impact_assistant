@@ -4,6 +4,7 @@ from source.util import *
 import giayap as yap
 import pydantic
 from threading import Thread
+from multiprocessing import Process
 
 class PickupResult(pydantic.BaseModel):
     pk_time:str
@@ -14,7 +15,6 @@ class YapPickupper(Thread):
     def __init__(self):
         super().__init__()
         self.rust_path = os.environ["PYO_YAP_PATH"]
-        self.yaper = yap.PickupC()
         self.file_reader = open(f"{self.rust_path}\\logs\\log.log", 'r', encoding='utf-8')
         self.pickup_result = []
         self.pickup_result:t.List[PickupResult]
@@ -22,16 +22,20 @@ class YapPickupper(Thread):
 
         self.start_count = 0
         self.stop_count = 0
+        self.start_pickup()
+        Process(target=yap.runner).start()
 
 
     def start_pickup(self):
-        self.yaper.startf()
+        with open(f"{self.rust_path}\\running.flag", 'w') as f:
+            pass
         self.start_count += 1
 
     def stop_pickup(self):
         self.stop_count += 1
         if self.start_count <= self.stop_count:
-            self.yaper.pausef()
+            if os.path.exists(f"{self.rust_path}\\running.flag"):
+                os.remove(f"{self.rust_path}\\running.flag")
         else:
             logger.debug(f"start {self.start_count} > stop {self.stop_count}, will not stop.")
 
@@ -56,11 +60,13 @@ class YapPickupper(Thread):
             time.sleep(1)
             self._load_collect_result()
 
-yap_pickupper = YapPickupper()
-yap_pickupper.start()
+
 
 if __name__ == '__main__':
+    yap_pickupper = YapPickupper()
+    yap_pickupper.start()
     print(yap_pickupper.pickup_result)
     while 1:
         time.sleep(1)
-        print(yap_pickupper.pickup_result)
+
+        # print(yap_pickupper.pickup_result[-1])
