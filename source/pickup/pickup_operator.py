@@ -1,3 +1,5 @@
+import time
+
 import numpy as np
 import random
 
@@ -11,12 +13,29 @@ from source.manager import img_manager, asset
 import cv2
 from source.interaction.minimap_tracker import tracker
 from source.assets.pickup import *
+from source.map.map import genshin_map
+from source.funclib.cvars import *
+
+
+# USE_YAP = False if sys.gettrace() else True
+USE_YAP = True # Fixed!!! print debug is useful.
+# if sys.gettrace():
+#     logger.warning("YAP disabled in debug mode. Pickupper may work slower.")
+
+if USE_YAP:
+    from source.pickup.yap_pickup import yap_pickupper, PickupResult
 
 SEARCH_MODE_FINDING = 1
 SEARCH_MODE_PICKUP = 0
 
+
+
+
+
 class PickupOperator(BaseThreading):
-    
+
+    ABSORPTION_THRESHOLD = 10
+
     def __init__(self):
         super().__init__()
         self.setName("PickupOperator")
@@ -43,7 +62,9 @@ class PickupOperator(BaseThreading):
         self.last_search_times = 2
         self.crazy_f = False
         self.pickup_fail_cooldown = timer_module.AdvanceTimer(limit=2).reset()
-        self.while_sleep = 0.1
+        self.while_sleep = 0.3 if USE_YAP else 0.1
+        self.pause_threading_flag = True  # TODO: formalize it, consider that expand this method to all threading in case the init funcs in 'continue_threading' don't run, and make some bugs.
+        self.absorptive_positions = []
         
     def continue_threading(self):
         if self.pause_threading_flag != False:
@@ -62,13 +83,20 @@ class PickupOperator(BaseThreading):
                     generic_lib.set_genshin_time()
                     # scene_manager.switchto_mainwin(self.checkup_stop_func)
                     self.night_timer.reset()
+            if USE_YAP:
+                yap_pickupper.start()
             self.pause_threading_flag = False
-    
+
+    def add_absorptive_position(self, pos):
+        self.absorptive_positions.append(pos)
+
     def pause_threading(self):
         if self.pause_threading_flag != True:
             self.pause_threading_flag = True
             time.sleep(0.5)
             self.itt.key_up('w')
+            if USE_YAP:
+                yap_pickupper.stop()
             
     def set_target_position(self, p):
         self.target_posi = p
@@ -78,7 +106,33 @@ class PickupOperator(BaseThreading):
     
     def set_search_mode(self, x):
         self.search_mode = x
-    
+
+    def before_terminate(self):
+        if USE_YAP:
+            if not self.pause_threading_flag:
+                yap_pickupper.stop()
+
+    def is_absorb(self):
+        if len(self.absorptive_positions) > 0:
+            return euclidean_distance_plist(genshin_map.get_position(use_cache=True), self.absorptive_positions).min() < self.ABSORPTION_THRESHOLD
+
+    def absorb(self):
+        curr_pos = genshin_map.get_position()
+        for abs_pos in self.absorptive_positions:
+            if euclidean_distance(abs_pos, curr_pos) < self.ABSORPTION_THRESHOLD:
+                if movement.get_current_motion_state() == FLYING:
+                    for i in range(20):
+                        itt.left_click()
+                        time.sleep(2)
+                        if movement.get_current_motion_state() != FLYING:
+                            break
+                if movement.get_current_motion_state() != FLYING:
+                    self.absorptive_pickup(abs_pos)
+                else:
+                    logger.error(f"LAND FAIL")
+                self.absorptive_positions.pop(self.absorptive_positions.index(abs_pos))
+                return
+
     def run(self):
         while 1:
             time.sleep(self.while_sleep)
@@ -109,7 +163,7 @@ class PickupOperator(BaseThreading):
                     if not ret:
                         break
                 # self.itt.delay(0.4, comment="Waiting for Genshin picking animation")
-            
+
             if self.search_mode == SEARCH_MODE_FINDING:
                 
                 ret = self.auto_pickup()
@@ -143,6 +197,7 @@ class PickupOperator(BaseThreading):
                         logger.info(t2t("已找到物品且无法找到下一个物品，停止拾取"))
                         self.pause_threading()
 
+
     def get_err_code(self):
         return self.last_err_code
     
@@ -164,50 +219,53 @@ class PickupOperator(BaseThreading):
     def pickup_recognize(self):
         if not self.pickup_fail_cooldown.reached():
             return False
-        ret = generic_lib.f_recognition(cap=itt.capture(jpgmode=NORMAL_CHANNELS, recapture_limit=0.1, posi=asset.IconGeneralFButton.cap_posi))
-        if ret:
-            ret = self.itt.get_img_position(asset.IconGeneralFButton)
-            if ret == False: return 0
-            
-            # itt.freeze_key('w', operate='up')
-            # time.sleep(0.1)
+        if not USE_YAP:
+            ret = generic_lib.f_recognition(cap=itt.capture(jpgmode=NORMAL_CHANNELS, recapture_limit=0.1, posi=asset.IconGeneralFButton.cap_posi))
+            if ret:
+                ret = self.itt.get_img_position(asset.IconGeneralFButton)
+                if ret == False: return 0
 
-            y1 = asset.IconGeneralFButton.cap_posi[1]
-            x1 = asset.IconGeneralFButton.cap_posi[0]
-            cap = self.itt.capture(jpgmode=FOUR_CHANNELS)
-            cap = crop(cap, [x1 + ret[0] + 53, y1 + ret[1] - 20, x1 + ret[0] + 361,  y1 + ret[1] + 54])
-            
-            if similar_img(cap[:,:,:3], IconGeneralTalkBubble.image)>0.99:
-                logger.info(f"pickup recognize: talk bubble; skip")
-                self.pickup_fail_cooldown.reset()
-                return False
-            # img_manager.qshow(cap)
-            # img = extract_white_letters(cap)
-            cap = self.itt.png2jpg(cap, channel='ui', alpha_num=160)
-            res = ocr.get_all_texts(cap, per_monitor=True)
-            # logger.info('enter 2')
-            if len(res) != 0:
-                for text in res:
-                    if text == '':
-                        continue
-                    if text not in self.pickup_blacklist:
-                        self.pickup_fail_timeout.reset()
-                        self.last_search_times = 2
-                        self.itt.key_press('f')
-                        if self.crazy_f:
-                            logger.info(f"crazy f start")
-                            for i in range(25):
-                                itt.key_press('f')
-                                time.sleep(0.05)
-                        self.pickup_item_list.append(text)
-                        logger.info(t2t('pickup: ') + str(text))
-                        
-                        if str(text) in self.target_name:
-                            logger.info(t2t("已找到：") + self.target_name)
-                            self.pickup_succ = True
-                        # logger.info('out 1')
-                        return True
-        return False
+                # itt.freeze_key('w', operate='up')
+                # time.sleep(0.1)
+
+                y1 = asset.IconGeneralFButton.cap_posi[1]
+                x1 = asset.IconGeneralFButton.cap_posi[0]
+                cap = self.itt.capture(jpgmode=FOUR_CHANNELS)
+                cap = crop(cap, [x1 + ret[0] + 53, y1 + ret[1] - 20, x1 + ret[0] + 361,  y1 + ret[1] + 54])
+
+                if similar_img(cap[:,:,:3], IconGeneralTalkBubble.image)>0.99:
+                    logger.info(f"pickup recognize: talk bubble; skip")
+                    self.pickup_fail_cooldown.reset()
+                    return False
+                # img_manager.qshow(cap)
+                # img = extract_white_letters(cap)
+                cap = self.itt.png2jpg(cap, channel='ui', alpha_num=160)
+                res = ocr.get_all_texts(cap, per_monitor=True)
+                # logger.info('enter 2')
+                if len(res) != 0:
+                    for text in res:
+                        if text == '':
+                            continue
+                        if text not in self.pickup_blacklist:
+                            self.pickup_fail_timeout.reset()
+                            self.last_search_times = 2
+                            self.itt.key_press('f')
+                            if self.crazy_f:
+                                logger.info(f"crazy f start")
+                                for i in range(25):
+                                    itt.key_press('f')
+                                    time.sleep(0.05)
+                            self.pickup_item_list.append(text)
+                            logger.info(t2t('pickup: ') + str(text))
+
+                            if str(text) in self.target_name:
+                                logger.info(t2t("已找到：") + self.target_name)
+                                self.pickup_succ = True
+                            # logger.info('out 1')
+                            return True
+            return False
+        else:
+            return True
 
     def reset_pickup_item_list(self):
         self.pickup_item_list = []
@@ -285,7 +343,51 @@ class PickupOperator(BaseThreading):
                 movement.move(movement.MOVE_AHEAD, 4)
                 self.itt.key_down('spacebar')
 
-    def active_pickup(self, is_nahida = False):
+    def absorptive_pickup(self, pos, is_active_pickup = True):
+        pt=time.time()
+        arrive_flag = False
+        arrive_i = 9999
+        or_len = len(yap_pickupper.pickup_result)
+        for i in range(50):
+            if time.time()-pt>5:
+                offset = 2
+            else:
+                offset = 1
+
+            curr_posi = genshin_map.get_position()
+            movement.change_view_to_posi(pos, offset=offset, stop_func=self.checkup_stop_func, curr_posi=curr_posi)
+            dist = euclidean_distance(curr_posi, pos)
+            logger.debug(f'absorption: dist: {dist}')
+            if dist > 2:
+                dura = 1
+            else:
+                dura = 0.5
+            movement.move(MOVE_AHEAD, distance=dura)
+
+            if len(yap_pickupper.pickup_result) > or_len:
+                logger.info(f'collected {yap_pickupper.get_last_picked_item().pk_name}, adsorption end.')
+                return True
+            if dist < offset:
+                if not arrive_flag:
+                    logger.info(f'absorption: arrive')
+                    arrive_flag = True
+                    arrive_i = i
+                    if is_active_pickup:
+                        self.active_pickup()
+            if i - arrive_i > 10:
+                logger.info(f'absorption: arrive but not find, break.')
+                return False
+        logger.info(f'adsorption: timeout.')
+        return False
+            # movement.move_to_posi_LoopMode(pos, stop_func=self.checkup_stop_func, threshold=offset)
+
+
+    def active_pickup(self, is_nahida = None):
+        if is_nahida is None:
+            is_nahida = 'Nahida' in combat_lib.get_characters_name(max_retry=30)
+            logger.debug(f'is nahida: {is_nahida}')
+            is_nahida = is_nahida and (movement.get_current_motion_state() == WALKING)
+            logger.info(f'is nahida: {is_nahida}')
         if is_nahida: # 'Nahida' in combat_lib.get_characters_name(max_retry=30)
             names = combat_lib.get_characters_name()
             nahida_index = names.index('Nahida') + 1
@@ -406,9 +508,11 @@ if __name__ == '__main__':
     # po.pause_threading()
     po.start()
     # po.set_search_mode(0)
-    po.active_pickup(is_nahida=True)
+    # po.active_pickup(is_nahida=True)
+    po.absorptive_pickup([7541.5, 5466.5])
     while 1:
         time.sleep(1)
+
         # po.find_collector()
         # po.pickup_recognize()
         # po.pickup_recognize()
