@@ -243,7 +243,7 @@ def add_angle(angle, delta):
         print(angle)
     return angle
 
-def save_json(x, json_name='General.json', default_path='config\\settings', sort_keys=True, auto_create=False, all_path:str=None):
+def save_json(x, json_name='General.json', default_path=f'{ROOT_PATH}\\config\\settings', sort_keys=True, auto_create=False, all_path:str=None):
     """保存json.
 
     Args:
@@ -923,6 +923,9 @@ def match_multiple_img(img, template, is_gray=False, is_show_res: bool = False, 
 
     return matched_coordinates
 
+def diff_angle(a1, a2):
+    return min(360-((a1-a2)&360), ((a1-a2)&360))
+    
 
 def ansl_code2col(ansl_code ,reserve = True):
     if ansl_code == "0":

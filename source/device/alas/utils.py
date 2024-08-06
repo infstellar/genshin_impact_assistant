@@ -389,6 +389,7 @@ def load_image(file, area=None):
         np.ndarray:
     """
     image = Image.open(file)
+
     if area is not None:
         image = image.crop(area)
     image = np.array(image)
