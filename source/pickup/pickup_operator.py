@@ -84,7 +84,7 @@ class PickupOperator(BaseThreading):
                     # scene_manager.switchto_mainwin(self.checkup_stop_func)
                     self.night_timer.reset()
             if USE_YAP:
-                yap_pickupper.start()
+                yap_pickupper.start_pickup()
             self.pause_threading_flag = False
 
     def add_absorptive_position(self, pos):
@@ -96,7 +96,7 @@ class PickupOperator(BaseThreading):
             time.sleep(0.5)
             self.itt.key_up('w')
             if USE_YAP:
-                yap_pickupper.stop()
+                yap_pickupper.stop_pickup()
             
     def set_target_position(self, p):
         self.target_posi = p
@@ -110,7 +110,7 @@ class PickupOperator(BaseThreading):
     def before_terminate(self):
         if USE_YAP:
             if not self.pause_threading_flag:
-                yap_pickupper.stop()
+                yap_pickupper.stop_pickup()
 
     def is_absorb(self):
         if len(self.absorptive_positions) > 0:
