@@ -23,7 +23,8 @@ class YapPickupper(Thread):
         self.start_count = 0
         self.stop_count = 0
         self.start_pickup()
-        Process(target=yap.runner).start()
+        os.system(f"start /min cmd /c python {self.rust_path}\\run.py")
+        # Process(target=yap.runner).start()
 
 
     def start_pickup(self):
@@ -60,11 +61,11 @@ class YapPickupper(Thread):
             time.sleep(1)
             self._load_collect_result()
 
-
+yap_pickupper = YapPickupper()
+yap_pickupper.start()
 
 if __name__ == '__main__':
-    yap_pickupper = YapPickupper()
-    yap_pickupper.start()
+
     print(yap_pickupper.pickup_result)
     while 1:
         time.sleep(1)

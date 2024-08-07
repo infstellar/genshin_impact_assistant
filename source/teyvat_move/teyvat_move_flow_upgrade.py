@@ -55,7 +55,6 @@ class TeyvatMoveFlowConnector(FlowConnector):
 
         self.motion_state = IN_MOVE
         self.jump_timer = Timer()
-        self.current_state = ST.INIT_TEYVAT_TELEPORT
 
         self.priority_waypoints = load_json("priority_waypoints.json", folder_path='assets')
         self.priority_waypoints_array = []
@@ -487,6 +486,8 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
         self.ready_to_end = False
         self.end_times = 0
         self.init_start = False
+        self.fly_flag = False
+        self.curr_motion = WALKING
 
         self.curr_target_pos = [0,0]
         self.curr_posi = [0,0]
@@ -645,7 +646,7 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
         # 刷新当前position index
         self._refresh_curr_posi_index(list(self.curr_posi))
         offset = 2
-        if self.curr_path[self.curr_path_index]["motion"] == "FLYING":
+        if self.fly_flag or self.motion_state == FLYING:
             offset = 12
         elif self.motion_state == SWIMMING:
             offset = 8
@@ -667,8 +668,7 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
         if self.ready_to_end:
             offset = 1  # min(1, max(1, (self.end_times) / 10))
 
-        offset = self._get_offset(diff=euclidean_distance(self.curr_target_pos, self.curr_posi), max_offset=max(6, offset),
-                                  min_offset=offset)
+        offset = self._get_offset(diff=euclidean_distance(self.curr_target_pos, self.curr_posi), max_offset=max(6, offset),min_offset=offset)
         logger.trace(f"offset: {offset}")
 
         # 检测是否要切换到下一个BP
@@ -731,15 +731,16 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
                     is_jump = True
 
         self.switch_motion_state(jump=((not self.ready_to_end) and is_jump))
-        fly_flag = False
+        self.fly_flag = False
         check_fly = self.curr_path[self.curr_path_index:min(self.curr_path_index + 10, len(self.curr_path) - 1)]  # 起飞
         for i in check_fly:
             if i["motion"] == "FLYING":
                 self.try_fly()
-                fly_flag = True
+                self.fly_flag = True
+                break
 
         if self.motion_state == IN_FLY and self.curr_path[self.curr_path_index]["motion"] == "WALKING" and (
-        not fly_flag):  # 降落
+        not self.fly_flag):  # 降落
             self._land()
 
 
