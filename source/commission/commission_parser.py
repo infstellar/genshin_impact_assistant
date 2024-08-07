@@ -20,7 +20,8 @@ class CommissionParser():
                                  TianLiPosition([1698.707152, -5273.648852]),
                                  TianLiPosition([2224.426352, -4798.046852]),
                                  TianLiPosition([2156.921552, -3923.552852]),
-                                 TianLiPosition([2423.872352, -3427.494852]),
+                                #  TianLiPosition([2423.872352, -3427.494852]),
+                                 TianLiPosition([2423.872352, -3227.494852]),
                                  TianLiPosition([3367.916752, -4196.640452]),
                                  TianLiPosition([3328.027552, -5106.932452])]
     

@@ -39,6 +39,9 @@ def get_commission_object(commission_type, commission_position:list):
     elif commission_type == "IncreasingDanger":
         import source.commission.general.IncreasingDanger
         return source.commission.general.IncreasingDanger.IncreasingDangerGeneral(commission_position)
+    elif commission_type == "ImpregnableDefense":
+        import source.commission.general.ImpregnableDefense
+        return source.commission.general.ImpregnableDefense.ImpregnableDefenseGeneral(commission_position)
 
     logger.error(f"get commission fail: {commission_type, commission_position}")
     return False

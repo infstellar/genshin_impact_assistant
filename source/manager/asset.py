@@ -80,6 +80,7 @@ QTSX = TextTemplate(text={"zh_CN":"七天神像","en_US":"Statues of The Seven"}
 CSMD = TextTemplate(text={"zh_CN":"传送锚点","en_US": "Teleport Waypoint"}, cap_area = AreaBigmapChoose.position)
 ASmallStepForHilichurls = TextTemplate(text={"zh_CN":"丘丘人的一小步", "en_US": "A Small Step for"})
 IncreasingDanger = TextTemplate(text={"zh_CN":"攀高危险", "en_US": "Increasing Danger"})
+ImpregnableDefense = TextTemplate(text={"zh_CN":"固若金汤", "en_US": "Impregnable Defense"})
 Emergency = TextTemplate(text={"zh_CN":"临危受命", "en_US": "Emergency"})
 IcyIssues = TextTemplate(text={"zh_CN":"冷冰冰的大麻烦", "en_US": "Icy Issues"})
 ForTheHarbingers = TextTemplate(text={"zh_CN":"为了执行官大人", "en_US": "For The Harbingers"})
