@@ -1,4 +1,3 @@
-import logger
 from source.integration_json.utils import *
 from source.integration_json import JIApi
 from source.map.extractor.convert import MapConverter
@@ -17,9 +16,13 @@ def correction_collection_position(pos:list, name:str='', threshold=15):
 
     """
     possible_list = []
-    if name != '':
+    if name == '圣遗物调查点':
+        name = '圣遗物'
+    if name != '' and name in JIApi.data.keys():
         possible_list = JIApi.data[name]
     else:
+        if name != '' and name not in JIApi.data.keys():
+            logger.warning(f"Unknow name: {name}")
         for i in JIApi.data.values():
             for j in i:
                 possible_list.append(j)

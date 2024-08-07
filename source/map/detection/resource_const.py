@@ -48,7 +48,9 @@ class MiniMapConst:
     # TODO: fine tuning MOVE_SPEED
     MOVE_SPEED = 12
 
-    def __init__(self, device_type):
+    def __init__(self, device_type=None):
+        if device_type is None:
+            device_type = MiniMapConst.DETECT_Desktop_1080p
         # 'wild' or 'city'
         self.scene = 'wild'
         # Usually to be 0.4~0.5

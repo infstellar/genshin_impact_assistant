@@ -157,27 +157,33 @@ class MissionExecutor(BaseThreading):
         puo_start_flag = False
         if self.PUO_initialized:
             if not self.PUO.pause_threading_flag:
-                logger.debug(f"in tmf, pause puo.")
+        #         logger.debug(f"in tmf, pause puo.")
                 puo_start_flag = True
-                self.PUO.pause_threading()
+        #         self.PUO.pause_threading()
         
         self.TMCF.reset()
         self.TMCF.set_parameter(MODE=MODE,stop_rule=stop_rule,target_posi=target_posi,path_dict=path_dict,to_next_posi_offset=to_next_posi_offset,special_keys_posi_offset=special_keys_posi_offset,reaction_to_enemy=reaction_to_enemy,is_tp=is_tp,is_reinit=is_reinit,is_precise_arrival=is_precise_arrival,stop_offset=stop_offset,is_auto_pickup=puo_start_flag)
         self.TMCF.start_flow()
         while 1:
-            time.sleep(0.6)
+            time.sleep(0.3)
             if self.checkup_stop_func(): return
             if self.TMCF.pause_threading_flag:
                 break
             if self._is_exception():
                 self.TMCF.pause_threading()
                 break
+            if self.PUO_initialized:
+                if self.PUO.is_absorb():
+                    if not self.TMCF.pause_threading_flag:
+                        self.TMCF.pause_threading()
+                        self.PUO.absorb()
+                        self.TMCF.continue_threading()
         if self.TMCF.get_and_reset_err_code() != ERR_PASS:
             self.exception_flag = True
         
-        if self.PUO_initialized:
-            if puo_start_flag:
-                self.PUO.continue_threading()
+        # if self.PUO_initialized:
+        #     if puo_start_flag:
+        #         self.PUO.continue_threading()
         self._handle_exception()
         return self.TMCF.get_and_reset_err_code()
         
@@ -200,8 +206,12 @@ class MissionExecutor(BaseThreading):
             path_dict = self.get_path_file(path)
         elif isinstance(path,dict):
             path_dict = path
+        else:
+            logger.error(f"UNKNOW PATHDICT TYPE")
+            raise Exception(path)
         is_reinit = True
-        
+        if "adsorptive_position" in path_dict.keys():
+            self.add_absorptive_positions(path_dict['adsorptive_position'])
         if is_tp is None:
             if euclidean_distance(self.last_move_along_position, path_dict["start_position"]) >= 50:
                 is_tp = True
@@ -286,7 +296,15 @@ class MissionExecutor(BaseThreading):
             
     def exec_mission(self):
         pass
-    
+
+    def add_absorptive_positions(self, positions:t.List):
+        logger.info(f"add pos: {positions}")
+        for i in positions:
+            if self.PUO_initialized:
+                self.PUO.add_absorptive_position(i)
+            else:
+                logger.error(f"Add absorptive position fail: puo has not been initialized.")
+
     def _reg_exception_found_enemy(self, state=True):
         self.exception_list["FoundEnemy"] = state
 

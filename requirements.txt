@@ -29,6 +29,7 @@ gimapdev==4.6.2
 giadep
 giaocr
 giayolo
+giayap==0.0.6
 pyyaml
 urllib3
 json5

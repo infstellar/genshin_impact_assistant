@@ -39,6 +39,12 @@ class MiniMapResource(MiniMapConst):
         return image
 
     @cached_property
+    def RAWGIMAP(self):
+        file = gimap.get_file('GIMAP.png')
+        image = cv2.cvtColor(cv2.imread(file), cv2.COLOR_BGR2RGB)
+        return image
+
+    @cached_property
     def ArrowRotateMapAll(self):
         file = gimap.get_file('ArrowRotateMapAll.png')
         image = load_image(file)
@@ -110,3 +116,6 @@ class MiniMapResource(MiniMapConst):
                 mx[i, j] = d / 2 + i / 2 * np.cos(2 * np.pi * j / d)
                 my[i, j] = d / 2 + i / 2 * np.sin(2 * np.pi * j / d)
         return mx, my
+
+if __name__ == '__main__':
+    MiniMapResource().GIBigmap

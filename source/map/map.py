@@ -116,12 +116,14 @@ class Map(MiniMap, BigMap, MapConverter):
             return over_times / 20 > threshold
         return False
 
-    def get_position(self, is_verify_position=False):
+    def get_position(self, is_verify_position=False, use_cache = False):
         """get current character position
 
         Returns:
             list: TianLiPosition format
         """
+        if use_cache:
+            return self.convert_GIMAP_to_cvAutoTrack(self.position)
         if not itt.get_img_existence(asset.IconUIEmergencyFood, is_log=False):
             logger.warning(t2t("不在大世界，无法获取坐标"))
             logger.warning(f"return {self.convert_GIMAP_to_cvAutoTrack(self.position)}")
