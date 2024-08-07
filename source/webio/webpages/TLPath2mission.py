@@ -230,7 +230,7 @@ class TLPath2Mission(AdvancePage):
             pin.put_input(self.INPUT_NOTE, help_text=t2t('input note'))
             pin.put_checkbox(self.CHECKBOX_ADDITIONAL_INFO, options=[
                 {'label': t2t('is collection in cliff'), 'value': "is_cliff_collection"},
-                {'label': t2t('whether active pickup in waypoints'), 'value': "is_active_pickup_in_bp", 'selected':True},
+                {'label': t2t('whether active pickup in waypoints'), 'value': "is_active_pickup_in_bp"},
                 {'label': t2t('whether disable adsorptive positions'), 'value': "is_disable_ads_points"},
                 {'label': t2t('whether Nahida is needed'), 'value': "is_nahida_needed"},
             ])
@@ -327,8 +327,8 @@ class TLPath2Mission(AdvancePage):
             },
             'author': f"{pin.pin[self.INPUT_AUTHOR]}",
             'tags': {
-                'zh_CN': [{"Plant":"采集","Artifact":"圣遗物"}[GIAconfig.Dev_RecordPath_CollectionType]],
-                'en_US': [{"Plant":"Collect","Artifact":"Artifact"}[GIAconfig.Dev_RecordPath_CollectionType]]
+                'zh_CN': [{"Plant":"采集","Artifact":"圣遗物","Combat":"战斗"}[GIAconfig.Dev_RecordPath_CollectionType]],
+                'en_US': [{"Plant":"Collect","Artifact":"Artifact","Combat":"Combat"}[GIAconfig.Dev_RecordPath_CollectionType]]
             },
             'local_edit_mission': f'{pin.pin[self.INPUT_MISSION_NAME]}',
             'description': f'{pin.pin[self.INPUT_DESCRIPTION]}',
@@ -359,21 +359,25 @@ class TLPath2Mission(AdvancePage):
                 "break_position": bps,
                 "time": "",
                 "additional_info": additional_info,
-                "adsorptive_position": tlpp_pos["adsorptive_position"],
+                "adsorptive_position": adsorptive_position,
                 'generate_from': 'path recorder 1.0'
 
             }
 
-            mission_model = {"Artifact":"MissionCollectArtifact","Plant":"MissionJustCollect"}[GIAconfig.Dev_RecordPath_CollectionType]
+            mission_import = {
+                "Artifact":"from source.mission.template.mission_just_collect import MissionCollectArtifact",
+                "Plant":"from source.mission.template.mission_just_collect import MissionJustCollect",
+                "Combat":"from source.mission.template.mission_combat import MissionCombat"
+            }[GIAconfig.Dev_RecordPath_CollectionType]
 
             s = \
-f'''from source.mission.template.mission_just_collect import {mission_model}
+f'''{mission_import}
 
 tlp2m_default_value = {str(tlpp_path)}
 
 META={META}
 
-class MissionMain({mission_model}):
+class MissionMain({mission_import.split(' ')[-1]}):
     def __init__(self):
         super().__init__(tlp2m_default_value, "tlp2m_default_name")
 
