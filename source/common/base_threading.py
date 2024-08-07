@@ -78,8 +78,12 @@ class BaseThreading(threading.Thread):
         self._clean_sub_threading()
 
     def __force_terminate(self):
+        self.before_terminate()
         logger.debug(f'Thread {self.name} terminated by exception.')
         raise ThreadTerminated(t2t('If you see this error, it\'s just because the thread was terminated normally, not a fatal error.'))
+
+    def before_terminate(self):
+        pass
 
     def checkup_stop_func(self):
         """

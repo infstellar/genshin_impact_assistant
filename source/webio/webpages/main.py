@@ -215,6 +215,11 @@ class MainPage(AdvancePage):
                             }]
                                          )
                     ]),
+                    output.put_markdown(t2t('## Other Selections')),
+                    output.put_row([
+                        output.put_button(t2t('Calibration Angle Rotation Parameter'), onclick=self._onclick_calibration_cvdc),
+
+                    ]),
                 ], size='auto'), None,
                 output.put_scope('Log')
 
@@ -245,6 +250,12 @@ class MainPage(AdvancePage):
     #     if jsonname is None:
     #         raise FileNotFoundError
     #     return load_json(str(jsonname),default_path=f"{CONFIG_PATH}\\mission_groups")
+
+    def _onclick_calibration_cvdc(self):
+        set_notice(t2t("Calibrating Rotation. Please waiting."))
+        from source.funclib.movement import CVDC
+        CVDC.calibration_cvdc()
+        set_notice(t2t("Calibrating Rotation Completed."), timeout=3)
 
     def on_click_startstop(self):
         # listening.MISSION_MANAGER.set_mission_list(list(pin.pin["MissionSelect"]))

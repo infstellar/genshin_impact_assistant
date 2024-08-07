@@ -135,20 +135,16 @@ from sklearn.ensemble import IsolationForest
 def discard_abnormal_data(data: list):
     if len(data) >= 3:
         predictions = IsolationForest().fit(np.array(data).reshape(-1, 1)).predict(np.array(data).reshape(-1, 1))
-        return np.array(data)[predictions == 1].reshape(1, -1)[0]
+        r = list(np.array(data)[predictions == 1].reshape(1, -1)[0])
+        for i in range(len(r)):
+            r[i] = int(r[i])
     else:
-        return data
+        r = data
+    return r
+
 
 
 class CViewDynamicCalibration:
-    available_angles = list(range(0, 10, 1)) + list(range(10, 180, 5))
-    CVDC_CACHE = f'{CACHE_PATH}\\cvdc.json'
-    CVDC_PREPROCESSED_CACHE = f'{CACHE_PATH}\\cvdc_preprocessed.json'
-    append_times = 0
-
-    preprocessed_id = []
-    preprocessed_angles = {}
-
     def __pre_isolation_forest(self, x):
         if x not in self.preprocessed_id:
             possible_angles = self.angles[x]
@@ -184,7 +180,20 @@ class CViewDynamicCalibration:
             for i in self.available_angles:
                 self.angles[str(i)] = []
 
+    def clean_CACHE(self):
+        if os.path.exists(self.CVDC_CACHE):
+            os.remove(self.CVDC_CACHE)
+        if os.path.exists(self.CVDC_PREPROCESSED_CACHE):
+            os.remove(self.CVDC_PREPROCESSED_CACHE)
+
     def __init__(self):
+        self.available_angles = list(range(0, 10, 1)) + list(range(10, 180, 5))
+        self.CVDC_CACHE = f'{CACHE_PATH}\\cvdc_2.json'
+        self.CVDC_PREPROCESSED_CACHE = f'{CACHE_PATH}\\cvdc_preprocessed_2.json'
+        self.append_times = 0
+
+        self.preprocessed_id = []
+        self.preprocessed_angles = {}
         self.angles = {}
         self.__load_CVDC_CACHE()
         if os.path.exists(self.CVDC_PREPROCESSED_CACHE):
@@ -192,6 +201,19 @@ class CViewDynamicCalibration:
             for i in self.preprocessed_angles.keys():
                 if len(self.preprocessed_angles[i]) >= 5:
                     self.preprocessed_id.append(i)
+
+    def calibration_cvdc(self):
+        genshin_map.reinit_smallmap()
+        self.clean_CACHE()
+        self.__init__()
+        for ts in range(10):
+            for i in range(0, 2000, 50):
+                direct_cview(i)
+                time.sleep(0.2)
+                change_view_to_angle(90, offset=1.5, maxloop= 100)
+                logger.info(f't: {ts} i: {i}')
+            print(CVDC.angles)
+        self.run_isolation_forest()
 
     def _closest_angle(self, x):
         return str(self.available_angles[np.argmin(abs(np.array(self.available_angles) - x))])
@@ -204,7 +226,7 @@ class CViewDynamicCalibration:
         self.angles[self._closest_angle(abs(diff_angle))].append(abs(move_px))
         self.append_times += 1
         if self.append_times%10==0:
-            save_json(self.angles, json_name="cvdc.json", default_path=CACHE_PATH)
+            save_json(self.angles, all_path=self.CVDC_CACHE)
 
     # @timer
     def predict_target(self, target_angel):
@@ -218,7 +240,7 @@ class CViewDynamicCalibration:
         # possible_angles = self.angles[]
         # pb = discard_abnormal_data(possible_angles)
         pb = self.__pre_isolation_forest(self._closest_angle(target_angel))
-        if len(pb) >= 3:
+        if len(pb) >= 10:
             logger.trace(f"gpr: {target_angel * sign} -> {np.mean(pb) * sign}")
             return np.mean(pb) * sign
         else:
@@ -235,10 +257,10 @@ def change_view_to_angle(tangle, stop_func=lambda: False, maxloop=25, offset=5, 
 
     @timer
     def get_rotation():
-        last_angle = 99999
+        last_angle = genshin_map.get_rotation()
         for ii in range(10):  # 过滤不准确的角度
             cangle = genshin_map.get_rotation()
-            if abs(cangle - last_angle) < 5 + i * 0.1:
+            if diff_angle(cangle, last_angle) < 5 + i * 0.1:
                 break
             last_angle = cangle
             if not precise_mode:
@@ -257,7 +279,8 @@ def change_view_to_angle(tangle, stop_func=lambda: False, maxloop=25, offset=5, 
         move_px = round(move_px, 2)
         
         # rate = min((0.6 / 50) * abs(dangle) + 0.4, 1)
-        time.sleep(loop_sleep)
+        if loop_sleep > 0:
+            time.sleep(loop_sleep)
         # print(cangle, dangle, rate)
         # rate = 1
         direct_cview(move_px)
@@ -334,10 +357,10 @@ def view_to_imgicon(cap: np.ndarray, imgicon: asset.ImgIcon):
 #         if i > 1:
 #             logger.debug('last degree: ' + str(degree))
 
-def calculate_posi2degree(pl, tx=None, ty=None):
-    if tx is None or ty is None:
-        tx, ty = genshin_map.get_position()
-    degree = generic_lib.points_angle([tx, ty], pl, coordinate=generic_lib.NEGATIVE_Y)
+def calculate_posi2degree(pl, curr_posi = None):
+    if curr_posi is None:
+        curr_posi = genshin_map.get_position()
+    degree = generic_lib.points_angle(curr_posi, pl, coordinate=generic_lib.NEGATIVE_Y)
     if abs(degree) < 1:
         return 0
     if math.isnan(degree):
@@ -346,9 +369,9 @@ def calculate_posi2degree(pl, tx=None, ty=None):
     return degree
 
 
-def change_view_to_posi(pl, stop_func, max_loop=25, offset=5, print_log=True):
+def change_view_to_posi(pl, stop_func, max_loop=25, offset=5, print_log=True, curr_posi = None):
     if IS_DEVICE_PC:
-        degree = calculate_posi2degree(pl)
+        degree = calculate_posi2degree(pl, curr_posi=curr_posi)
         if print_log:
             if abs(degree) >= 2:
                 logger.debug(f"change_view_to_posi: pl: {pl}")
@@ -428,26 +451,27 @@ def move_to_posi_LoopMode(target_posi, stop_func, threshold:float=6):
     else:
         change_view_to_posi(target_posi, stop_func=stop_func, max_loop=4, offset=2, print_log=False)
     return euclidean_distance(genshin_map.get_position(), target_posi) <= threshold
-if os.path.exists(CVDC.CVDC_PREPROCESSED_CACHE):
-    if time.time() - os.path.getmtime(CVDC.CVDC_PREPROCESSED_CACHE) > 86400:
-        CVDC.run_isolation_forest()
+# if os.path.exists(CVDC.CVDC_PREPROCESSED_CACHE):
+#     if time.time() - os.path.getmtime(CVDC.CVDC_PREPROCESSED_CACHE) > 86400:
+#         CVDC.run_isolation_forest()
 
 # view_to_angle(-90)
 if __name__ == '__main__':
     # print(calibration_angle_shift(times=10))
     # CVDC.run_isolation_forest()
-    genshin_map.reinit_smallmap()
-    for ts in range(5):
-        for i in range(0,1500,50):
-            direct_cview(i)
-            time.sleep(0.2)
-            change_view_to_angle(90)
-            logger.trace(f't: {ts} i: {i}')
-        print(CVDC.angles)
-
-    while 1:
-        time.sleep(0.2)
-        change_view_to_angle(90)
+    CVDC.calibration_cvdc()
+    # genshin_map.reinit_smallmap()
+    # for ts in range(5):
+    #     for i in range(0,1500,50):
+    #         direct_cview(i)
+    #         time.sleep(0.2)
+    #         change_view_to_angle(90)
+    #         logger.trace(f't: {ts} i: {i}')
+    #     print(CVDC.angles)
+    #
+    # while 1:
+    #     time.sleep(0.2)
+    #     change_view_to_angle(90)
         # print(genshin_map.get_rotation())
     #     cap = itt.capture(jpgmode=NORMAL_CHANNELS)
     #     ban_posi=asset.IconCommissionCommissionIcon.cap_posi
