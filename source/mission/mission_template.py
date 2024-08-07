@@ -185,7 +185,8 @@ class MissionExecutor(BaseThreading):
                                 while combat_lib.CSDL.get_combat_state():
                                     time.sleep(0.5)
                                 self.stop_combat()
-                        self.PUO.absorb()
+                        if not combat_lib.CSDL.get_combat_state():
+                            self.PUO.absorb()
                         self.TMCF.continue_threading()
 
         if self.TMCF.get_and_reset_err_code() != ERR_PASS:

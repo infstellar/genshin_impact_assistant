@@ -230,8 +230,8 @@ class TLPath2Mission(AdvancePage):
             pin.put_input(self.INPUT_NOTE, help_text=t2t('input note'))
             pin.put_checkbox(self.CHECKBOX_ADDITIONAL_INFO, options=[
                 {'label': t2t('is collection in cliff'), 'value': "is_cliff_collection"},
-                {'label': t2t('whether active pickup in waypoints'), 'value': "is_active_pickup_in_bp"},
-                {'label': t2t('whether disable adsorptive positions'), 'value': "is_disable_ads_points"},
+                {'label': t2t('是否在所有转折点使用自动吸附'), 'value': "is_active_pickup_in_bp"},
+                {'label': t2t('是否在禁用所有自动吸附'), 'value': "is_disable_ads_points"},
                 {'label': t2t('whether Nahida is needed'), 'value': "is_nahida_needed"},
             ])
             pin.put_input(self.INPUT_OPTIMIZE_THRESHOLD, help_text=t2t('input optimize threshold. default is 1. The larger the threshold, the stronger the optimization.'),value="1")
