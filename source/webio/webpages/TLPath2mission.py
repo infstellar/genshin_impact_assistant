@@ -210,8 +210,8 @@ class TLPath2Mission(AdvancePage):
             ], size='auto')
 
             output.put_scope(self.SCOPE_MISSION_INFO),
-            output.put_scope(self.SCOPE_TLPP_INFO),
             output.put_scope(self.SCOPE_KYT_INFO),
+            output.put_scope(self.SCOPE_TLPP_INFO),
 
             output.put_markdown("### " + t2t('Current Collect Mode: ') + f"{t2t(GIAconfig.Dev_RecordPath_CollectionType)}\n" + t2t('You can modify it at ConfigSettingPage->DevSettings'))
             # output.put_button('load file', onclick=self._)
@@ -230,7 +230,7 @@ class TLPath2Mission(AdvancePage):
             pin.put_input(self.INPUT_NOTE, help_text=t2t('input note'))
             pin.put_checkbox(self.CHECKBOX_ADDITIONAL_INFO, options=[
                 {'label': t2t('is collection in cliff'), 'value': "is_cliff_collection"},
-                {'label': t2t('whether active pickup in waypoints'), 'value': "is_active_pickup_in_bp"},
+                {'label': t2t('whether active pickup in waypoints'), 'value': "is_active_pickup_in_bp", 'selected':True},
                 {'label': t2t('whether disable adsorptive positions'), 'value': "is_disable_ads_points"},
                 {'label': t2t('whether Nahida is needed'), 'value': "is_nahida_needed"},
             ])
