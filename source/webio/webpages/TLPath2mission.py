@@ -369,6 +369,8 @@ class TLPath2Mission(AdvancePage):
             s = \
 f'''from source.mission.template.mission_just_collect import {mission_model}
 
+tlp2m_default_value = {str(tlpp_path)}
+
 META={META}
 
 class MissionMain({mission_model}):
@@ -379,7 +381,6 @@ if __name__ == '__main__':
     mission = MissionMain()
     mission.start()
 
-tlp2m_default_value = {str(tlpp_path)}
 '''
 
             f.write(s)
@@ -538,13 +539,14 @@ tlp2m_default_value = {str(tlpp_path)}
 
         from source.integration_json.funclib import correction_collection_position
         for p in tianli_posi_list:
-            possible_collection = collector_lib.predict_feature_by_pos_v2(p, pin.pin[self.INPUT_COLLECTION_NAME],
-                                                                          threshold=15)
+            possible_collection = collector_lib.predict_feature_by_pos_v2(p, pin.pin[self.INPUT_COLLECTION_NAME], threshold=15)
             if len(possible_collection) > 0:
                 for i in possible_collection:
                     pos = collector_lib.conv_kongying_str_pos_to_cvat_pos(i.position)
                     pos = list(correction_collection_position(pos, name=pin.pin[self.INPUT_COLLECTION_NAME]))
-                    if pos not in adsorptive_position:
+                    if len(adsorptive_position)  == 0:
+                        adsorptive_position.append(pos)
+                    elif quick_euclidean_distance_plist(pos, adsorptive_position).min() > 2:
                         adsorptive_position.append(pos)
                 # pickup_points.append(tianli_posi_list.index(p))
 

@@ -344,8 +344,6 @@ class PickupOperator(BaseThreading):
                 self.itt.key_down('spacebar')
 
     def absorptive_pickup(self, pos, is_active_pickup = True):
-        if not USE_YAP:
-            return True
         pt=time.time()
         arrive_flag = False
         arrive_i = 9999
