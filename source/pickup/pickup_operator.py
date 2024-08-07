@@ -18,7 +18,7 @@ from source.funclib.cvars import *
 
 
 # USE_YAP = False if sys.gettrace() else True
-USE_YAP = True # Fixed!!! print debug is useful.
+USE_YAP = False # Fixed!!! print debug is useful.
 # if sys.gettrace():
 #     logger.warning("YAP disabled in debug mode. Pickupper may work slower.")
 
@@ -344,10 +344,12 @@ class PickupOperator(BaseThreading):
                 self.itt.key_down('spacebar')
 
     def absorptive_pickup(self, pos, is_active_pickup = True):
+        if not USE_YAP:
+            return True
         pt=time.time()
         arrive_flag = False
         arrive_i = 9999
-        or_len = len(yap_pickupper.pickup_result)
+        or_len = len(self.pickup_item_list)
         for i in range(50):
             if time.time()-pt>5:
                 offset = 2
@@ -364,8 +366,18 @@ class PickupOperator(BaseThreading):
                 dura = 0.5
             movement.move(MOVE_AHEAD, distance=dura)
 
-            if len(yap_pickupper.pickup_result) > or_len:
-                logger.info(f'collected {yap_pickupper.get_last_picked_item().pk_name}, adsorption end.')
+            ret = generic_lib.f_recognition()
+            if ret:
+                itt.delay(0.1, comment='Waiting for Genshin picking animation')
+                while 1:
+                    if self.checkup_stop_func(): break
+                    # logger.info('enter 1')
+                    ret = self.pickup_recognize()
+                    if not ret:
+                        break
+
+            if len(self.pickup_item_list) > or_len:
+                logger.info(f'collected {self.pickup_item_list[-1]}, adsorption end.')
                 return True
             if dist < offset:
                 if not arrive_flag:
