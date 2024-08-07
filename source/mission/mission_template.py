@@ -49,6 +49,9 @@ class MissionExecutor(BaseThreading):
         self.raise_exception_flag = False
         self.handle_exception_mode = EXCEPTION_RECOVER
         self.puo_crazy_f_mode = False
+
+        self.reaction_to_enemy = ENEMY_REACTION_NONE
+
         self.itt = itt
 
     def _init_sub_threading(self, feat_name=""):
@@ -176,8 +179,15 @@ class MissionExecutor(BaseThreading):
                 if self.PUO.is_absorb():
                     if not self.TMCF.pause_threading_flag:
                         self.TMCF.pause_threading()
+                        if self.reaction_to_enemy == ENEMY_REACTION_FIGHT:
+                            if combat_lib.CSDL.get_combat_state():
+                                self.start_combat()
+                                while combat_lib.CSDL.get_combat_state():
+                                    time.sleep(0.5)
+                                self.stop_combat()
                         self.PUO.absorb()
                         self.TMCF.continue_threading()
+
         if self.TMCF.get_and_reset_err_code() != ERR_PASS:
             self.exception_flag = True
         
