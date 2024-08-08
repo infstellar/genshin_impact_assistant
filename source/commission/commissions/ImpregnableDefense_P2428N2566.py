@@ -3,8 +3,8 @@ from source.mission.mission_template import ERR_FAIL
 
 
 class ImpregnableDefense_P2428N2566(Commission):
-    def __init__(self, commission_position):
-        super().__init__("ImpregnableDefense", commission_position)
+    def __init__(self):
+        super().__init__("ImpregnableDefense", [2428.45, -2566.25], is_CFCF=True, is_TMCF=True)
 
     def exec_mission(self):
         self.start_pickup()
