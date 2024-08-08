@@ -2,23 +2,22 @@ from source.commission.commission import *
 from source.mission.mission_template import ERR_FAIL
 
 
-class ImpregnableDefenseGeneral(Commission):
+class ImpregnableDefense_P2428N2566(Commission):
     def __init__(self, commission_position):
         super().__init__("ImpregnableDefense", commission_position)
 
     def exec_mission(self):
-        self.start_pickup()
         r = self.move_along(ImpregnableDefenseTLPP, is_tp=True, stop_rule=STOP_RULE_ARRIVE)
         self.handle_tmf_stuck_then_raise(r)
         self.circle_search(self.commission_position, stop_rule=STOP_RULE_COMBAT)
 
-        self.stop_pickup()
-
         self.fight_until_commission_complete()
-        
-        if self.is_pickup_spoils:
-            r = self.collect(is_activate_pickup=self.is_pickup_spoils)
-            if r == ERR_FAIL:return
+
+        # TODO: 等收集模块完善后加入
+
+        # if self.is_pickup_spoils:
+        #     r = self.collect(is_activate_pickup=self.is_pickup_spoils)
+        #     if r == ERR_FAIL:return
         self.commission_succ()
 
 
