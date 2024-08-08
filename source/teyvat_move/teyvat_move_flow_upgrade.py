@@ -429,7 +429,7 @@ class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon, Navigation):
 
         self.use_shield_if_needed()
 
-        move_duration = min(distance * 0.08, 0.8)
+        move_duration = movement.get_move_duration(distance)
         logger.trace(f'Move Automatic: Duration: {move_duration}')
         self.move_ahead(duration=move_duration)
 
@@ -794,7 +794,7 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
     def state_move_ahead(self):
         # 输出日志
         distance = euclidean_distance(self.curr_target_pos, self.curr_posi)
-        move_duration = min(distance * 0.05, 0.8)  # estimate loop time: 0.1s estimate move speed: 10m/s when walking
+        move_duration = movement.get_move_duration(distance)  # estimate loop time: 0.1s estimate move speed: 10m/s when walking
         logger.trace(f"move_duration: {move_duration}")
         logger.debug(f"next break position distance: {distance}")
 

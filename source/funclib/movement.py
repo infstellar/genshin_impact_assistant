@@ -121,6 +121,9 @@ def reset_view():
 
 
 def calculate_delta_angle(cangle, tangle):
+
+    return diff_angle(cangle, tangle)
+
     dangle = cangle - tangle
     if dangle > 180:
         dangle = -(360 - dangle)
@@ -435,6 +438,8 @@ def get_current_motion_state() -> str:
     # else:
     #     return WALKING
 
+def get_move_duration(distance:float):
+    return min(distance * 0.08, 0.8)
 
 def move_to_posi_LoopMode(target_posi, stop_func, threshold:float=6):
     """移动到指定坐标。适合用于while循环的模式。
@@ -444,12 +449,14 @@ def move_to_posi_LoopMode(target_posi, stop_func, threshold:float=6):
         stop_func (_type_): 停止函数
     """
     delta_degree = abs(calculate_delta_angle(genshin_map.get_rotation(), calculate_posi2degree(target_posi)))
+    curr_posi = genshin_map.get_position()
+    dist = euclidean_distance(curr_posi, target_posi)
+    move_duration = get_move_duration(dist)
     if delta_degree >= 20:
-        itt.key_up('w')
-        change_view_to_posi(target_posi, stop_func=stop_func)
-        itt.key_down('w')
+        change_view_to_posi(target_posi, stop_func=stop_func, curr_posi=curr_posi)
     else:
-        change_view_to_posi(target_posi, stop_func=stop_func, max_loop=4, offset=2, print_log=False)
+        change_view_to_posi(target_posi, stop_func=stop_func, max_loop=4, offset=2, print_log=False, curr_posi=curr_posi)
+    move(MOVE_AHEAD, move_duration)
     return euclidean_distance(genshin_map.get_position(), target_posi) <= threshold
 # if os.path.exists(CVDC.CVDC_PREPROCESSED_CACHE):
 #     if time.time() - os.path.getmtime(CVDC.CVDC_PREPROCESSED_CACHE) > 86400:
