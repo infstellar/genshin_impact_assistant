@@ -7,7 +7,7 @@ from source.interaction.minimap_tracker import tracker
 from source.funclib import combat_lib, generic_lib, movement
 from source.interaction.interaction_core import itt
 from source.funclib.err_code_lib import ERR_PASS, ERR_STUCK
-from source.common.timer_module import AdvanceTimer
+from source.common.timer_module import AdvanceTimer, Timer
 from source.combat.combat_controller import CombatController
 from source.map.map import genshin_map
 from source.exceptions.mission import *
@@ -276,13 +276,14 @@ class MissionExecutor(BaseThreading):
     
     def circle_search(self, center_posi, stop_rule=STOP_RULE_F):
         points = get_circle_points(center_posi[0],center_posi[1])
-        itt.key_down('w')
         jil = movement.JumpInLoop(8)
         for p in points:
+            offset_timer = Timer()
             while 1:
+                offset = max(1.2, (offset_timer.get_diff_time()+6)*0.2)
                 if self.checkup_stop_func():return
                 movement.move_to_posi_LoopMode(p, self.checkup_stop_func)
-                if euclidean_distance(p, genshin_map.get_position())<=2.2:
+                if euclidean_distance(p, genshin_map.get_position())<=offset:
                     logger.debug(f"circle_search: {p} arrived")
                     break
                 if stop_rule == STOP_RULE_F:

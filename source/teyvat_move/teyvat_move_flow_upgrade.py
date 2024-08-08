@@ -429,9 +429,9 @@ class TeyvatMove_Automatic(FlowTemplate, TeyvatMoveCommon, Navigation):
 
         self.use_shield_if_needed()
 
-        move_duration = movement.get_move_duration(distance)
-        logger.trace(f'Move Automatic: Duration: {move_duration}')
-        self.move_ahead(duration=move_duration)
+        # move_duration = movement.get_move_duration(distance)
+        # logger.trace(f'Move Automatic: Duration: {move_duration}')
+        # self.move_ahead(duration=move_duration)
 
         # if len(genshin_map.history_posi) >= 29:
         #     p1 = genshin_map.history_posi[0][1:]
