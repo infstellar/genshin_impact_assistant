@@ -62,15 +62,20 @@ class AimOperator(BaseThreading):
             if self.stop_threading_flag:
                 return
 
+            self._thread_paused_flag = self.pause_threading_flag
+
             if self.pause_threading_flag:
                 if self.working_flag:
                     self.working_flag = False
                 time.sleep(1)
+
                 continue
 
             if not self.working_flag:
                 self.working_flag = True
-            
+
+
+
             if self.checkup_stop_func():
                 self.pause_threading_flag = True
                 continue

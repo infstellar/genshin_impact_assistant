@@ -102,6 +102,12 @@ class SwitchCharacterOperator(BaseThreading):
             aopf = self.aim_operator.pause_threading_flag
             if not aopf:
                 self.aim_operator.pause_threading()
+            while 1:
+                siw()
+                if self.checkup_stop_func(): return
+                logger.debug("waiting aim operator pause...")
+                if self.aim_operator.is_thread_paused():
+                    break
             succ_flag_1 = False
             print(self.died_character)
             for i in range(10):
