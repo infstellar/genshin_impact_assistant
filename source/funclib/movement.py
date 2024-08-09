@@ -188,7 +188,7 @@ class CViewDynamicCalibration:
             os.remove(self.CVDC_PREPROCESSED_CACHE)
 
     def __init__(self):
-        self.available_angles = list(range(0, 10, 1)) + list(range(10, 180, 5))
+        self.available_angles = list(range(10, 180, 5))
         self.CVDC_CACHE = f'{CACHE_PATH}\\cvdc_2.json'
         self.CVDC_PREPROCESSED_CACHE = f'{CACHE_PATH}\\cvdc_preprocessed_2.json'
         self.append_times = 0
@@ -211,7 +211,7 @@ class CViewDynamicCalibration:
             for i in range(0, 2000, 50):
                 direct_cview(i)
                 time.sleep(0.2)
-                change_view_to_angle(90, offset=1.5, maxloop= 100)
+                change_view_to_angle(90, offset=1.5, maxloop= 100, edit_cvdc=True)
                 logger.info(f't: {ts} i: {i}')
             print(CVDC.angles)
         self.run_isolation_forest()
@@ -251,25 +251,37 @@ class CViewDynamicCalibration:
 CVDC = CViewDynamicCalibration()
 
 
-def change_view_to_angle(tangle, stop_func=lambda: False, maxloop=25, offset=5, print_log=True, loop_sleep=0, precise_mode = True):
+def change_view_to_angle(tangle, stop_func=lambda: False, maxloop=25, offset:float=5, print_log=True, loop_sleep=0, precise_mode = True, use_last_rotation = False, edit_cvdc = False):
     i = 0
     dangle = 0
     loop_sleep = 0
 
-    @timer
-    def get_rotation():
-        last_angle = genshin_map.get_rotation()
+    first_enter_flag = True
+
+    def get_rotation(last_angle = None):
+        pt=time.time()
+        if last_angle is not None:
+            cangle = last_angle = last_angle
+        else:
+            cangle = last_angle = genshin_map.get_rotation()
         for ii in range(10):  # 过滤不准确的角度
+            logger.trace(f"get_rotation: {ii}: {time.time()-pt}")
             cangle = genshin_map.get_rotation()
+            if not precise_mode:
+                break
             if diff_angle(cangle, last_angle) < 5 + i * 0.1:
                 break
             last_angle = cangle
-            if not precise_mode:
-                break
+
+        logger.trace(f"get_rotation: end: {time.time() - pt}")
         return cangle
 
     while 1:
-        cangle = get_rotation()
+        if first_enter_flag and use_last_rotation:
+            cangle = get_rotation(last_angle=genshin_map.rotation)
+            first_enter_flag = False
+        else:
+            cangle = get_rotation()
         last_angle = cangle
         # print(ii)
         dangle = calculate_delta_angle(cangle, tangle)
@@ -291,8 +303,9 @@ def change_view_to_angle(tangle, stop_func=lambda: False, maxloop=25, offset=5, 
             break
         i += 1
         logger.trace(f"cangle {cangle} dangle {dangle}") #  rate {rate}
-        changed_angle = get_rotation()
-        if precise_mode:
+
+        if precise_mode and edit_cvdc:
+            changed_angle = get_rotation()
             CVDC.append_angle_result(move_px, calculate_delta_angle(last_angle, changed_angle))
 
 
@@ -437,7 +450,7 @@ def get_current_motion_state() -> str:
     #     return WALKING
 
 def get_move_duration(distance:float):
-    return min(distance * 0.08, 0.8)
+    return min(distance * 0.1, 0.8)
 
 def move_to_posi_LoopMode(target_posi, stop_func, threshold:float=6):
     """移动到指定坐标。适合用于while循环的模式。

@@ -263,6 +263,16 @@ def save_json(x, json_name='General.json', default_path=f'{ROOT_PATH}\\config\\s
         json.dump(x, open(all_path, 'w', encoding='utf-8'),
               ensure_ascii=False)
 
+def get_name(x):
+    (filename, line_number, function_name, text) = x
+    # = traceback.extract_stack()[-2]
+    return text[:text.find('=')].strip()
+
+def auto_name():
+    return get_name(traceback.extract_stack()[-2])
+
+AN = auto_name
+
 def verify_path(root):
     if not os.path.exists(root):
         verify_path(os.path.join(root, "../"))

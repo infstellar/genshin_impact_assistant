@@ -175,28 +175,31 @@ class MissionExecutor(BaseThreading):
             if self._is_exception():
                 self.TMCF.pause_threading()
                 break
+
+            # PICKUP
+
             if self.PUO_initialized:
                 if self.PUO.is_absorb():
                     if not self.TMCF.pause_threading_flag:
                         self.TMCF.pause_threading()
                         itt.key_up('w')
-                        if absorption_reaction_to_enemy == ENEMY_REACTION_FIGHT:
-                            r = combat_lib.combat_statement_detection()
-                            if r[0] or r[1]:
-                                timer1=AdvanceTimer(10)
-                                while 1:
-                                    siw()
-                                    if combat_lib.CSDL.get_combat_state(): break
-                                    if self.checkup_stop_func(): return
-                                    if timer1.reached(): break
-                            if combat_lib.CSDL.get_combat_state():
-                                self.start_combat()
-                                while combat_lib.CSDL.get_combat_state():
-                                    time.sleep(0.5)
-                                self.stop_combat()
-                        if not combat_lib.CSDL.get_combat_state():
-                            self.PUO.absorb()
-                        self.TMCF.continue_threading()
+                    if absorption_reaction_to_enemy == ENEMY_REACTION_FIGHT:
+                        r = combat_lib.combat_statement_detection()
+                        if r[0] or r[1]:
+                            timer1=AdvanceTimer(10)
+                            while 1:
+                                siw()
+                                if combat_lib.CSDL.get_combat_state(): break
+                                if self.checkup_stop_func(): return
+                                if timer1.reached(): break
+                        if combat_lib.CSDL.get_combat_state():
+                            self.start_combat()
+                            while combat_lib.CSDL.get_combat_state():
+                                time.sleep(0.5)
+                            self.stop_combat()
+
+                    self.PUO.absorb()
+                    self.TMCF.continue_threading()
 
         if self.TMCF.get_and_reset_err_code() != ERR_PASS:
             self.exception_flag = True

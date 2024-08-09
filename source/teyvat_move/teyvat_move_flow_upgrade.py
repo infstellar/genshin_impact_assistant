@@ -18,14 +18,14 @@ from source.funclib.combat_lib import CSDL
 from source.combat.switch_character_operator import SwitchCharacterOperator, SHIELD
 from multiprocessing import Process
 
-STATEMENT_CHECK_BP = 0
-STATEMENT_ADSORPTION = 1
-STATEMENT_MOTION = 3
-STATEMENT_END = 2
-STATEMENT_STUCK_CHECK = '213'
-STATEMENT_CHANGE_VIEW = 'cv'
-STATEMENT_MOVE_AHEAD = 'ahead'
-STATEMENT_OTHER = 'ot'
+STATEMENT_CHECK_BP = AN()
+STATEMENT_ADSORPTION = AN()
+STATEMENT_MOTION = AN()
+STATEMENT_END = AN()
+STATEMENT_STUCK_CHECK = AN()
+STATEMENT_CHANGE_VIEW = AN()
+STATEMENT_MOVE_AHEAD = AN()
+STATEMENT_OTHER = AN()
 
 class TeyvatMoveFlowConnector(FlowConnector):
     def __init__(self):
@@ -112,7 +112,7 @@ from source.common.base_threading import AdvanceThreading
 class MoveController(AdvanceThreading):
     def __init__(self):
         super().__init__()
-        self.while_sleep = 0
+        self.while_sleep = 0.02
         self.move_ahead_timer = AdvanceTimer(1).start()
         self.w_pressed = False
 
@@ -239,8 +239,8 @@ class TeyvatMoveCommon():
 
     def use_shield_if_needed(self):
         if self.upper.is_use_shield:
-            if self.motion_state == IN_MOVE and CSDL.get_combat_state():
-                self.upper.SCO.continue_threading()
+            if self.motion_state == IN_MOVE and combat_lib.CSDL.get_combat_state():
+                self.upper.SCO.continue_threading(reget_characters_name=False)
                 # self.upper.SCO.switch_character(SHIELD)
             else:
                 self.upper.SCO.pause_threading()
@@ -488,6 +488,8 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
         self.init_start = False
         self.fly_flag = False
         self.curr_motion = WALKING
+
+        self.performance_timer = Timer()
 
         self.curr_target_pos = [0,0]
         self.curr_posi = [0,0]
@@ -753,22 +755,27 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
         logger.trace(f"time2: switch motion: {self.in_pt.get_diff_time()}")
 
     def _set_inner_statement(self, x):
+        if DEBUG_MODE:
+            logger.trace(f"switch inner statement: {self.inner_statement} -> {x}; time: {self.performance_timer.get_diff_time()}")
+            self.performance_timer.reset()
         self.inner_statement = x
 
     def state_stuck(self):
         # 检测移动是否卡住
-        self._set_inner_statement(STATEMENT_OTHER)
         if self.is_stuck(self.curr_posi, threshold=15):
             if self.motion_state == WALKING:
                 logger.debug(f"move stuck, try jumping")
                 itt.key_press('spacebar')
-        if self.is_stuck(self.curr_posi, threshold=45):
-            itt.key_press('spacebar')
-            itt.delay(1, 'stuck')
-        if self.is_stuck(self.curr_posi, threshold=60):
-            self._set_nfid(ST.END_TEYVAT_MOVE_STUCK)
-            self._set_rfc(FC.END)
-            self._set_inner_statement(STATEMENT_END)
+
+            if self.is_stuck(self.curr_posi, threshold=45):
+                itt.key_press('spacebar')
+                itt.delay(1, 'stuck')
+
+                if self.is_stuck(self.curr_posi, threshold=60):
+                    self._set_nfid(ST.END_TEYVAT_MOVE_STUCK)
+                    self._set_rfc(FC.END)
+                    self._set_inner_statement(STATEMENT_END)
+        self._set_inner_statement(STATEMENT_OTHER)
 
     def state_adsorption(self):
         def is_ads(threshold):
@@ -819,15 +826,16 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
             logger.trace(f"time5.2.1: change_view_to_angle:  {self.in_pt.get_diff_time()}")
             self.stop_move_ahead()
             # movement.change_view_to_posi(self.curr_target_pos, stop_func = self.upper.checkup_stop_func)
-            movement.change_view_to_angle(target_degree, offset=15)
+            movement.change_view_to_angle(target_degree, offset=15, use_last_rotation = True)
             logger.trace(f"time5.2.2: change_view_to_angle:  {self.in_pt.get_diff_time()}")
-        # elif delta_degree >= 10:
-        #     # movement.change_view_to_posi(self.curr_target_pos, stop_func = self.upper.checkup_stop_func, max_loop=4, offset=2, print_log = False)
-        #     logger.trace(f"time5.3.1: change_view_to_angle:  {self.in_pt.get_diff_time()}")
-        #     movement.change_view_to_angle(target_degree, loop_sleep=0, maxloop=4)
-        #     logger.trace(f"time5.3.2: change_view_to_angle:  {self.in_pt.get_diff_time()}")
+        elif delta_degree >= 10:
+            # movement.change_view_to_posi(self.curr_target_pos, stop_func = self.upper.checkup_stop_func, max_loop=4, offset=2, print_log = False)
+            logger.trace(f"time5.3.1: change_view_to_angle:  {self.in_pt.get_diff_time()}")
+            movement.change_view_to_angle(target_degree, loop_sleep=0, maxloop=4, use_last_rotation = True)
+            logger.trace(f"time5.3.2: change_view_to_angle:  {self.in_pt.get_diff_time()}")
         else:
-            movement.change_view_to_angle(target_degree, loop_sleep=0, maxloop=2, precise_mode=False)
+            movement.change_view_to_angle(target_degree, loop_sleep=0, maxloop=2, precise_mode=False, use_last_rotation = True)
+            logger.trace(f"time5.4.1: change_view_to_angle:  {self.in_pt.get_diff_time()}")
         set_move()
         self._set_inner_statement(STATEMENT_CHECK_BP)
 
@@ -845,28 +853,32 @@ class TeyvatMove_FollowPath(FlowTemplate, TeyvatMoveCommon):
         # print(f"re in cost {self.in_pt.get_diff_time()}")
         # self.in_pt.reset()
         # logger.trace(f"time: refresh bp: {self.in_pt.get_diff_time()} state: {self.inner_statement}")
-        if self.inner_statement == STATEMENT_CHECK_BP:
-            self.state_check_bp()
-        elif self.inner_statement == STATEMENT_MOTION:
-            self.state_motion()
-        elif self.inner_statement == STATEMENT_STUCK_CHECK:
-            self.state_stuck()
-        elif self.inner_statement == STATEMENT_ADSORPTION:
-            logger.error(f'INVALIDED STATEMENT')
-        elif self.inner_statement == STATEMENT_OTHER:
-            self.state_other()
-        elif self.inner_statement in [STATEMENT_CHANGE_VIEW, STATEMENT_MOVE_AHEAD]:
-            self.state_move_ahead()
-        elif self.inner_statement == STATEMENT_END:
-            self.rfc = FC.AFTER
-        else:
-            self._set_inner_statement(STATEMENT_CHECK_BP)
-            # logger.error("UNKNOWN STATEMENT")
+        while 1:
+            if self.upper.checkup_stop_func(): break
+            if self.inner_statement == STATEMENT_CHECK_BP:
+                self.state_check_bp()
+            elif self.inner_statement == STATEMENT_MOTION:
+                self.state_motion()
+            elif self.inner_statement == STATEMENT_STUCK_CHECK:
+                self.state_stuck()
+            elif self.inner_statement == STATEMENT_ADSORPTION:
+                logger.error(f'INVALIDED STATEMENT')
+            elif self.inner_statement == STATEMENT_OTHER:
+                self.state_other()
+            elif self.inner_statement in [STATEMENT_CHANGE_VIEW, STATEMENT_MOVE_AHEAD]:
+                self.state_move_ahead()
+            elif self.inner_statement == STATEMENT_END:
+                self.rfc = FC.AFTER
+                break
+            else:
+                self._set_inner_statement(STATEMENT_CHECK_BP)
+                # logger.error("UNKNOWN STATEMENT")
 
-        r = self.detect_stop_rule(self.upper.stop_rule, self.upper.is_precise_arrival,
-                                  self.upper.path_dict["end_position"], self.curr_posi, self.upper.stop_offset)
-        if r:
-            self.rfc = FC.AFTER
+            r = self.detect_stop_rule(self.upper.stop_rule, self.upper.is_precise_arrival,
+                                      self.upper.path_dict["end_position"], self.curr_posi, self.upper.stop_offset)
+            if r:
+                self.rfc = FC.AFTER
+                break
 
 
 

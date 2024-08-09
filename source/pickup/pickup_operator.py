@@ -2,7 +2,7 @@ import time
 
 import numpy as np
 import random
-
+import datetime
 from source.common.base_threading import BaseThreading
 from source.util import *
 from source.interaction.interaction_core import itt
@@ -65,6 +65,8 @@ class PickupOperator(BaseThreading):
         self.while_sleep = 0.3 if USE_YAP else 0.1
         self.pause_threading_flag = True  # TODO: formalize it, consider that expand this method to all threading in case the init funcs in 'continue_threading' don't run, and make some bugs.
         self.absorptive_positions = []
+        self.is_nahida_in_team = None
+
         
     def continue_threading(self):
         if self.pause_threading_flag != False:
@@ -85,10 +87,17 @@ class PickupOperator(BaseThreading):
                     self.night_timer.reset()
             if USE_YAP:
                 yap_pickupper.start_pickup()
+            self.check_nahida()
             self.pause_threading_flag = False
 
     def add_absorptive_position(self, pos):
         self.absorptive_positions.append(pos)
+
+    def check_nahida(self):
+        from source.ui.ui import ui_control
+        from source.ui import page as UIPage
+        if ui_control.verify_page(UIPage.page_main):
+            self.is_nahida_in_team = 'Nahida' in combat_lib.get_characters_name(max_retry=30)
 
     def pause_threading(self):
         if self.pause_threading_flag != True:
@@ -347,7 +356,6 @@ class PickupOperator(BaseThreading):
         pt=time.time()
         arrive_flag = False
         arrive_i = 9999
-        or_len = len(self.pickup_item_list)
         for i in range(50):
             if time.time()-pt>5:
                 offset = 2
@@ -374,8 +382,8 @@ class PickupOperator(BaseThreading):
                     if not ret:
                         break
 
-            if len(self.pickup_item_list) > or_len:
-                logger.info(f'collected {self.pickup_item_list[-1]}, adsorption end.')
+            if (datetime.datetime.now() - yap_pickupper.pickup_result[-1].pk_time).total_seconds() < 10:
+                logger.info(f'collected {yap_pickupper.pickup_result[-1]}, adsorption end.')
                 return True
             if dist < offset:
                 if not arrive_flag:
@@ -384,6 +392,9 @@ class PickupOperator(BaseThreading):
                     arrive_i = i
                     if is_active_pickup:
                         self.active_pickup()
+                    if combat_lib.CSDL.get_combat_state():
+                        logger.info(f'absorption: fighting: break')
+                        return False
             if i - arrive_i > 10:
                 logger.info(f'absorption: arrive but not find, break.')
                 return False
@@ -394,10 +405,14 @@ class PickupOperator(BaseThreading):
 
     def active_pickup(self, is_nahida = None):
         if is_nahida is None:
-            is_nahida = 'Nahida' in combat_lib.get_characters_name(max_retry=30)
+            if self.is_nahida_in_team is None:
+                self.check_nahida()
+            is_nahida = self.is_nahida_in_team
             logger.debug(f'is nahida: {is_nahida}')
             is_nahida = is_nahida and (movement.get_current_motion_state() == WALKING)
             logger.info(f'is nahida: {is_nahida}')
+        if GIAconfig.Dev_DisableF:
+            is_nahida = False
         if is_nahida: # 'Nahida' in combat_lib.get_characters_name(max_retry=30)
             names = combat_lib.get_characters_name()
             nahida_index = names.index('Nahida') + 1

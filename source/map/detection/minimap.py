@@ -3,6 +3,7 @@ import typing as t
 import cv2
 from cached_property import cached_property
 
+from source.common import timer_module
 from source.map.detection.resource import MiniMapResource
 from source.map.detection.utils import *
 from source.map.extractor.convert import MapConverter
@@ -403,6 +404,7 @@ class MiniMap(MiniMapResource):
             self.degree = degree
             return degree
 
+    @timer_module.timer
     def update_rotation(self, image, layer=MapConverter.LAYER_Teyvat, update_position=True):
         # if image.shape[2]==4:
         #     image = image[:,:,:3]

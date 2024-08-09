@@ -1,3 +1,4 @@
+import datetime
 import os
 
 from source.util import *
@@ -6,7 +7,7 @@ import pydantic
 from threading import Thread
 
 class PickupResult(pydantic.BaseModel):
-    pk_time:str
+    pk_time:datetime.datetime
     pk_name:str
 
 
@@ -23,10 +24,14 @@ class YapPickupper(Thread):
         self.start_count = 0
         self.stop_count = 0
 
+        if GIAconfig.Dev_DisableF:
+            self.yaper.pausef()
+
 
     def start_pickup(self):
         if not GIAconfig.Dev_DisableF:
             self.yaper.startf()
+
         self.start_count += 1
 
     def stop_pickup(self):
@@ -42,7 +47,9 @@ class YapPickupper(Thread):
             for i in _:
                 if "ITEM_PICKUPED" in i:
                     pk = i.split('|')
-                    pkt = pk[0]
+                    pkt_str = list(map(int, pk[0].split('-')))
+                    pkt = datetime.datetime(pkt_str[0], pkt_str[1], pkt_str[2], pkt_str[3], pkt_str[4], pkt_str[5])
+
                     pkn = pk[2].replace("ITEM_PICKUPED: ", "")
                     self.pickup_result.append(PickupResult(pk_time=pkt, pk_name=pkn))
 

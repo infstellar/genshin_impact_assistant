@@ -268,11 +268,12 @@ class SwitchCharacterOperator(BaseThreading):
             self.tactic_operator.pause_threading()
             self.aim_operator.pause_threading()
 
-    def continue_threading(self):
+    def continue_threading(self, reget_characters_name = True):
         if self.pause_threading_flag != False:
             logger.info(f"SCO is getting the character list")
-            self.chara_list = combat_lib.get_chara_list()
-            self.chara_list.sort(key=sort_flag_1, reverse=False)
+            if reget_characters_name or (self.chara_list is None):
+                self.chara_list = combat_lib.get_chara_list()
+                self.chara_list.sort(key=sort_flag_1, reverse=False)
             self.chara_trigger_list = self.chara_list
             self.pause_threading_flag = False
             self.tactic_operator.set_parameter(None, None)
