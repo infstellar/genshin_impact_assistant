@@ -7,12 +7,10 @@ class ImpregnableDefense_P2428N2566(Commission):
         super().__init__("ImpregnableDefense", [2428.45, -2566.25], is_CFCF=True, is_TMCF=True)
 
     def exec_mission(self):
-        self.start_pickup()
         r = self.move_along(ImpregnableDefenseTLPP, is_tp=True, stop_rule=STOP_RULE_ARRIVE)
         self.handle_tmf_stuck_then_raise(r)
-        self.circle_search(self.commission_position, stop_rule=STOP_RULE_COMBAT)
-
-        self.stop_pickup()
+        self.circle_search(self.commission_position, stop_rule=STOP_RULE_F)
+        self.itt.key_press('f')
 
         self.fight_until_commission_complete()
 
