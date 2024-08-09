@@ -92,10 +92,13 @@ def angle2movex_v2(angle):
     cvn = angle * 12  # 10: magic num, test from test246.py
     return cvn
 
-def cview(angle=10, mode=HORIZONTAL, rate=0.9):  # left<0,right>0
+def cview(angle=10, mode=HORIZONTAL, rate=0.9, use_CVDC = False):  # left<0,right>0
     # logger.debug(f"cview: angle: {angle} mode: {mode}")
     if IS_DEVICE_PC:
-        cvn = angle2movex(angle) * rate
+        if not use_CVDC:
+            cvn = angle2movex(angle) * rate
+        else:
+            cvn = CVDC.predict_target(abs(angle))
         if abs(cvn) < 1:
             if cvn < 0:
                 cvn = -1

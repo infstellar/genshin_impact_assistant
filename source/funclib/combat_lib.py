@@ -591,7 +591,16 @@ class CombatStatementDetectionLoop(BaseThreading):
         self.is_low_health = False
         self.is_freeze_state = False
         self._is_init = False
-    
+
+    def active_find_enemy(self):
+        self.while_sleep = 0
+        from source.funclib import movement
+        for i in range(16):
+            movement.cview(24, use_CVDC=True)
+            itt.delay(0.3, comment="CSDL: active_find_enemy")
+            if self.get_combat_state(): break
+        self.while_sleep = 0.5
+
     def freeze_state(self):
         logger.info(f"CSDL freeze state")
         self.is_freeze_state = True
@@ -632,7 +641,7 @@ class CombatStatementDetectionLoop(BaseThreading):
             self.state_counter += 1
         else:
             self.state_counter = 0
-            self.while_sleep = 0.5
+            self.while_sleep = 0.4
         if self.state_counter >= 10:
             logger.debug(f'combat_statement_detection change state: {self.current_state} -> {state} {r}')
             # if self.current_state == False:
@@ -645,6 +654,8 @@ class CombatStatementDetectionLoop(BaseThreading):
 
 CSDL = CombatStatementDetectionLoop()
 CSDL.start()
+
+
 
 if __name__ == '__main__':
     # get_curr_team_file()

@@ -182,17 +182,22 @@ class MissionExecutor(BaseThreading):
                 if self.PUO.is_absorb():
                     if not self.TMCF.pause_threading_flag:
                         self.TMCF.pause_threading()
+                        while 1:
+                            siw()
+                            if self.TMCF.is_thread_paused(): break
                         itt.key_up('w')
                     if absorption_reaction_to_enemy == ENEMY_REACTION_FIGHT:
-                        r = combat_lib.combat_statement_detection()
-                        if r[0] or r[1]:
-                            timer1=AdvanceTimer(10)
-                            while 1:
-                                siw()
-                                if combat_lib.CSDL.get_combat_state(): break
-                                if self.checkup_stop_func(): return
-                                if timer1.reached(): break
+                        combat_lib.CSDL.active_find_enemy()
+                        # r = combat_lib.combat_statement_detection()
+                        # if r[0] or r[1] or combat_lib.CSDL.get_combat_state():
+                        #     timer1=AdvanceTimer(10)
+                        #     while 1:
+                        #         siw()
+                        #         if combat_lib.CSDL.get_combat_state(): break
+                        #         if self.checkup_stop_func(): return
+                        #         if timer1.reached(): break
                         if combat_lib.CSDL.get_combat_state():
+                            logger.info('enter combat')
                             self.start_combat()
                             while combat_lib.CSDL.get_combat_state():
                                 time.sleep(0.5)

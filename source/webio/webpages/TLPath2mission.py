@@ -224,6 +224,7 @@ class TLPath2Mission(AdvancePage):
                               init_run=True)
             pin.put_input(self.INPUT_MISSION_FILE_NAME, help_text=t2t(
                 'input mission file name, it should be `AuthorName`_`MissionName`_`id(1,2,3,etc.)` '))
+            output.put_link(t2t("Open Genshin dictionary"), url="https://genshin-dictionary.com/zh-CN", new_window=True)
             pin.put_input(self.INPUT_MISSION_NAME, help_text=t2t('input mission name'))
             pin.put_input(self.INPUT_AUTHOR, help_text=t2t('input author'))
             pin.put_input(self.INPUT_DESCRIPTION, help_text=t2t('input description'))
