@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2024-08-05 18:50+0800\n"
-"PO-Revision-Date: 2024-08-05 18:57+0800\n"
+"POT-Creation-Date: 2024-08-09 23:19+0800\n"
+"PO-Revision-Date: 2024-08-09 23:19+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -233,11 +233,11 @@ msgstr ""
 msgid "获取传送锚点失败，正在重试"
 msgstr ""
 
-#: source\funclib\movement.py:159
+#: source\funclib\movement.py:163
 msgid "Please waiting, CViewDynamicCalibration is loading."
 msgstr "请稍候，CVDC优化器正在加载。"
 
-#: source\funclib\movement.py:170
+#: source\funclib\movement.py:174
 msgid "CViewDynamicCalibration is loaded."
 msgstr "CViewDynamicCalibration 已加载。"
 
@@ -401,35 +401,35 @@ msgstr "无法找到mission"
 msgid "Need Lisa"
 msgstr "需要Lisa"
 
-#: source\pickup\pickup_operator.py:81
+#: source\pickup\pickup_operator.py:83
 msgid "正在设置时间为夜晚"
 msgstr ""
 
-#: source\pickup\pickup_operator.py:141
+#: source\pickup\pickup_operator.py:150
 msgid "停止自动拾取"
 msgstr ""
 
-#: source\pickup\pickup_operator.py:182
+#: source\pickup\pickup_operator.py:191
 msgid "PICKUP_TIMEOUT_001"
 msgstr ""
 
-#: source\pickup\pickup_operator.py:184 source\pickup\pickup_operator.py:190
+#: source\pickup\pickup_operator.py:193 source\pickup\pickup_operator.py:199
 msgid "停止拾取"
 msgstr ""
 
-#: source\pickup\pickup_operator.py:188
+#: source\pickup\pickup_operator.py:197
 msgid "PICKUP_TIMEOUT_002"
 msgstr ""
 
-#: source\pickup\pickup_operator.py:197
+#: source\pickup\pickup_operator.py:206
 msgid "已找到物品且无法找到下一个物品，停止拾取"
 msgstr ""
 
-#: source\pickup\pickup_operator.py:259
+#: source\pickup\pickup_operator.py:268
 msgid "pickup: "
 msgstr "拾取到："
 
-#: source\pickup\pickup_operator.py:262
+#: source\pickup\pickup_operator.py:271
 msgid "已找到："
 msgstr ""
 
@@ -537,19 +537,19 @@ msgstr "任务"
 msgid "End Task"
 msgstr "任务结束"
 
-#: source\teyvat_move\teyvat_move_flow_upgrade.py:210
+#: source\teyvat_move\teyvat_move_flow_upgrade.py:209
 msgid "已到达目的地附近，本次导航结束。"
 msgstr ""
 
-#: source\teyvat_move\teyvat_move_flow_upgrade.py:224
+#: source\teyvat_move\teyvat_move_flow_upgrade.py:223
 msgid "已到达F附近，本次导航结束。"
 msgstr ""
 
-#: source\teyvat_move\teyvat_move_flow_upgrade.py:236
+#: source\teyvat_move\teyvat_move_flow_upgrade.py:235
 msgid "准备打架，本次导航结束。"
 msgstr ""
 
-#: source\teyvat_move\teyvat_move_flow_upgrade.py:312
+#: source\teyvat_move\teyvat_move_flow_upgrade.py:311
 msgid "不在服务区"
 msgstr "不在服务区"
 
@@ -789,6 +789,30 @@ msgid ""
 "        "
 msgstr ""
 
+#: source\webio\update_notice.py:158
+msgid ""
+"\n"
+"        ## v1.2.0.1344 \n"
+"\n"
+"        ## 新内容：\n"
+"        - 全新路径编辑界面与流程，更直观简单\n"
+"        - 优化移动，减少非必要点位，加速移动。\n"
+"        - 自定义任务UI升级\n"
+"\n"
+"        ## 修复：\n"
+"        - 修改视角转向速度的优化方式修改为手动选择\n"
+"        - 领取日常奖励失败\n"
+"        - 秘境重试卡UI\n"
+"        - 其他bug\n"
+"\n"
+"        ## 优化：\n"
+"        - 定位精度优化\n"
+"        - 空荧酒馆坐标修正 \n"
+"\n"
+"\n"
+"        "
+msgstr ""
+
 #: source\webio\webio.py:54
 msgid "webio启动完成"
 msgstr "webio启动完成"
@@ -910,68 +934,70 @@ msgstr ""
 "格。"
 
 #: source\webio\webpages\TLPath2mission.py:227
+msgid "Open Genshin dictionary"
+msgstr "打开原神中英日文词典"
+
+#: source\webio\webpages\TLPath2mission.py:228
 #: source\webio\webpages\tavern2mission.py:47
 msgid "input mission name"
 msgstr "输入自定义任务名称"
 
-#: source\webio\webpages\TLPath2mission.py:228
+#: source\webio\webpages\TLPath2mission.py:229
 #: source\webio\webpages\tavern2mission.py:48
 msgid "input author"
 msgstr "输入作者"
 
-#: source\webio\webpages\TLPath2mission.py:229
+#: source\webio\webpages\TLPath2mission.py:230
 #: source\webio\webpages\tavern2mission.py:49
 msgid "input description"
 msgstr "输入描述"
 
-#: source\webio\webpages\TLPath2mission.py:230
+#: source\webio\webpages\TLPath2mission.py:231
 #: source\webio\webpages\tavern2mission.py:50
 msgid "input note"
 msgstr "输入注意事项"
 
-#: source\webio\webpages\TLPath2mission.py:232
+#: source\webio\webpages\TLPath2mission.py:233
 #: source\webio\webpages\tavern2mission.py:52
 msgid "is collection in cliff"
 msgstr "采集物是否在悬崖上"
 
-#: source\webio\webpages\TLPath2mission.py:233
-#: source\webio\webpages\tavern2mission.py:53
-msgid "whether active pickup in waypoints"
-msgstr "是否在路径点处启动主动采集"
-
 #: source\webio\webpages\TLPath2mission.py:234
-#: source\webio\webpages\tavern2mission.py:54
-msgid "whether disable adsorptive positions"
-msgstr "是否禁用自动吸附"
+msgid "是否在所有转折点使用自动吸附"
+msgstr ""
 
 #: source\webio\webpages\TLPath2mission.py:235
+msgid "是否在禁用所有自动吸附"
+msgstr ""
+
+#: source\webio\webpages\TLPath2mission.py:236
 #: source\webio\webpages\tavern2mission.py:55
 msgid "whether Nahida is needed"
 msgstr "是否需要纳西妲"
 
-#: source\webio\webpages\TLPath2mission.py:237
+#: source\webio\webpages\TLPath2mission.py:238
 msgid ""
 "input optimize threshold. default is 1. The larger the threshold, the "
 "stronger the optimization."
 msgstr "输入优化阈值，默认为 1。阈值越大，优化越强。"
 
-#: source\webio\webpages\TLPath2mission.py:267
+#: source\webio\webpages\TLPath2mission.py:268
 #: source\webio\webpages\tavern2mission.py:121
 msgid ""
 "mission name or collection name or author is/are empty, please check it."
 msgstr "任务名/采集物名称/作者 未输入，请检查。"
 
-#: source\webio\webpages\TLPath2mission.py:395
+#: source\webio\webpages\TLPath2mission.py:401
 #: source\webio\webpages\tavern2mission.py:236
 msgid "mission has saved to "
 msgstr "任务已保存到"
 
-#: source\webio\webpages\TLPath2mission.py:401
+#: source\webio\webpages\TLPath2mission.py:407
 msgid "Upload successfully"
 msgstr "上传成功"
 
-#: source\webio\webpages\TLPath2mission.py:416
-#: source\webio\webpages\TLPath2mission.py:431
+#: source\webio\webpages\TLPath2mission.py:422
+#: source\webio\webpages\TLPath2mission.py:437
 #: source\webio\webpages\collector_settings.py:148
 #: source\webio\webpages\collector_settings.py:161
 #: source\webio\webpages\config.py:119
@@ -980,58 +1006,58 @@ msgstr "上传成功"
 msgid "Waiting..."
 msgstr "等待中..."
 
-#: source\webio\webpages\TLPath2mission.py:421
+#: source\webio\webpages\TLPath2mission.py:427
 #: source\webio\webpages\collector_settings.py:152
 #: source\webio\webpages\config.py:110
 #: source\webio\webpages\tavern2mission.py:258
 msgid "Verified!"
 msgstr "验证通过！"
 
-#: source\webio\webpages\TLPath2mission.py:437
+#: source\webio\webpages\TLPath2mission.py:443
 #: source\webio\webpages\collector_settings.py:166
 #: source\webio\webpages\config.py:124
 #: source\webio\webpages\tavern2mission.py:272
 msgid "You may want to enter: "
 msgstr "你可能想输入："
 
-#: source\webio\webpages\TLPath2mission.py:444
+#: source\webio\webpages\TLPath2mission.py:450
 #: source\webio\webpages\collector_settings.py:171
 #: source\webio\webpages\config.py:129
 #: source\webio\webpages\tavern2mission.py:277
 msgid "Not a valid name"
 msgstr "不是一个有效的名称"
 
-#: source\webio\webpages\TLPath2mission.py:458
+#: source\webio\webpages\TLPath2mission.py:464
 msgid "no curve has been found in json file."
 msgstr "在 json 文件中未发现路线。"
 
-#: source\webio\webpages\TLPath2mission.py:461
+#: source\webio\webpages\TLPath2mission.py:467
 msgid ""
 "more than 1 curve has been found in json file. Only the first curve will be "
 "used."
 msgstr "在 json 文件中发现多条路线。将只使用第一条路线。"
 
-#: source\webio\webpages\TLPath2mission.py:483
+#: source\webio\webpages\TLPath2mission.py:489
 msgid "GIA Export Curve"
 msgstr "GIA导出路线"
 
-#: source\webio\webpages\TLPath2mission.py:485
+#: source\webio\webpages\TLPath2mission.py:491
 msgid "The kongying tavern curve has been saved to "
 msgstr "空荧酒馆路线已被保存到 "
 
-#: source\webio\webpages\TLPath2mission.py:489
+#: source\webio\webpages\TLPath2mission.py:495
 msgid "Uploading tavern curve"
 msgstr "上传酒馆路线"
 
-#: source\webio\webpages\TLPath2mission.py:507
+#: source\webio\webpages\TLPath2mission.py:513
 msgid "Uploading pymission"
 msgstr "上传python自定义任务"
 
-#: source\webio\webpages\TLPath2mission.py:515
+#: source\webio\webpages\TLPath2mission.py:521
 msgid "collection name is empty, please check it."
 msgstr "采集物名称为空，请检查。"
 
-#: source\webio\webpages\TLPath2mission.py:565
+#: source\webio\webpages\TLPath2mission.py:572
 msgid "Successfully convert KYT curve to TLPP. Please check."
 msgstr "成功将空荧酒馆路线转换为TLPP路径。请检查。"
 
@@ -1621,6 +1647,14 @@ msgstr "检查更新完成"
 #: source\webio\webpages\tavern2mission.py:27
 msgid "Analyze curve"
 msgstr "分析路线"
+
+#: source\webio\webpages\tavern2mission.py:53
+msgid "whether active pickup in waypoints"
+msgstr "是否在路径点处启动主动采集"
+
+#: source\webio\webpages\tavern2mission.py:54
+msgid "whether disable adsorptive positions"
+msgstr "是否禁用自动吸附"
 
 #: source\webio\webpages\tavern2mission.py:88
 msgid "From"
