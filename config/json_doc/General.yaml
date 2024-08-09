@@ -40,5 +40,6 @@ RecordPath_CollectionType:
   select_items:
   - Plant
   - Artifact
+  - Combat
 
 
