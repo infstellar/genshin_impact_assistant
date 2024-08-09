@@ -96,3 +96,7 @@ RecordPath_CollectionType:
   doc: 采集物品类型。
   annotation: Plant-植物；Artifact-圣遗物；Combat-战斗。
   special_index: $PREDICT_AND_VERIFY_01$
+
+Dev_DisableF:
+  doc: 禁用自动F键
+  annotation: 在调试自定义任务时使用。

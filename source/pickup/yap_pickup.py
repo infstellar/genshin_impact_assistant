@@ -25,7 +25,8 @@ class YapPickupper(Thread):
 
 
     def start_pickup(self):
-        self.yaper.startf()
+        if not GIAconfig.Dev_DisableF:
+            self.yaper.startf()
         self.start_count += 1
 
     def stop_pickup(self):

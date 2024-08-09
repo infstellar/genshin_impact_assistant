@@ -35,3 +35,4 @@ class GeneratedConfig:
    LeyLineOutcrop_CollectionTimes = 2
    Dev_RecordPath_CollectionType = 'Plant'
    Dev_RecordPath_CollectionName = ''
+   Dev_DisableF = False
