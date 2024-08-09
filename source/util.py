@@ -924,7 +924,7 @@ def match_multiple_img(img, template, is_gray=False, is_show_res: bool = False, 
     return matched_coordinates
 
 def diff_angle(a1, a2):
-    return min(360-((a1-a2)&360), ((a1-a2)&360))
+    return min(360-(int(a1-a2)&360), (int(a1-a2)&360))
     
 
 def ansl_code2col(ansl_code ,reserve = True):

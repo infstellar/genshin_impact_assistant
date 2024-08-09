@@ -122,8 +122,6 @@ def reset_view():
 
 def calculate_delta_angle(cangle, tangle):
 
-    return diff_angle(cangle, tangle)
-
     dangle = cangle - tangle
     if dangle > 180:
         dangle = -(360 - dangle)

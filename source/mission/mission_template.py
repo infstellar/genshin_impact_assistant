@@ -50,7 +50,6 @@ class MissionExecutor(BaseThreading):
         self.handle_exception_mode = EXCEPTION_RECOVER
         self.puo_crazy_f_mode = False
 
-        self.reaction_to_enemy = ENEMY_REACTION_NONE
 
         self.itt = itt
 
@@ -154,7 +153,8 @@ class MissionExecutor(BaseThreading):
              is_tp:bool = None,
              is_reinit:bool = None, 
              is_precise_arrival:bool = None,
-             stop_offset:int = None):
+             stop_offset:int = None,
+             absorption_reaction_to_enemy = ENEMY_REACTION_NONE):
         self._init_sub_threading("TMCF")
         self._detect_fight_if_needed()
         puo_start_flag = False
@@ -179,7 +179,16 @@ class MissionExecutor(BaseThreading):
                 if self.PUO.is_absorb():
                     if not self.TMCF.pause_threading_flag:
                         self.TMCF.pause_threading()
-                        if self.reaction_to_enemy == ENEMY_REACTION_FIGHT:
+                        itt.key_up('w')
+                        if absorption_reaction_to_enemy == ENEMY_REACTION_FIGHT:
+                            r = combat_lib.combat_statement_detection()
+                            if r[0] or r[1]:
+                                timer1=AdvanceTimer(10)
+                                while 1:
+                                    siw()
+                                    if combat_lib.CSDL.get_combat_state(): break
+                                    if self.checkup_stop_func(): return
+                                    if timer1.reached(): break
                             if combat_lib.CSDL.get_combat_state():
                                 self.start_combat()
                                 while combat_lib.CSDL.get_combat_state():
@@ -212,7 +221,7 @@ class MissionExecutor(BaseThreading):
         r = self.move(MODE="AUTO", target_posi=p, is_tp = is_tp, is_precise_arrival=is_precise_arrival, stop_rule=stop_rule)
         return r
         
-    def move_along(self, path, is_tp = None, is_precise_arrival=None, stop_rule = None):
+    def move_along(self, path, is_tp = None, is_precise_arrival=None, stop_rule = None, adsorb = True, absorption_reaction_to_enemy=ENEMY_REACTION_NONE):
         if isinstance(path,str):
             path_dict = self.get_path_file(path)
         elif isinstance(path,dict):
@@ -221,8 +230,9 @@ class MissionExecutor(BaseThreading):
             logger.error(f"UNKNOW PATHDICT TYPE")
             raise Exception(path)
         is_reinit = True
-        if "adsorptive_position" in path_dict.keys():
-            self.add_absorptive_positions(path_dict['adsorptive_position'])
+        if adsorb:
+            if "adsorptive_position" in path_dict.keys():
+                self.add_absorptive_positions(path_dict['adsorptive_position'])
         if is_tp is None:
             if euclidean_distance(self.last_move_along_position, path_dict["start_position"]) >= 50:
                 is_tp = True
@@ -231,7 +241,7 @@ class MissionExecutor(BaseThreading):
                 is_reinit = False
         if is_precise_arrival is None:
             is_precise_arrival = self.default_precise_arrive
-        r = self.move(MODE="PATH", path_dict = path_dict, is_tp = is_tp, is_reinit=is_reinit, is_precise_arrival=is_precise_arrival, stop_rule=stop_rule)
+        r = self.move(MODE="PATH", path_dict = path_dict, is_tp = is_tp, is_reinit=is_reinit, is_precise_arrival=is_precise_arrival, stop_rule=stop_rule, absorption_reaction_to_enemy=absorption_reaction_to_enemy)
         self.last_move_along_position = path_dict["end_position"]
         return r
     

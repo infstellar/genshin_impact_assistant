@@ -94,5 +94,5 @@ CollectionTimes:
 
 RecordPath_CollectionType:
   doc: 采集物品类型。
-  annotation: Plant-植物；Artifact-圣遗物。
+  annotation: Plant-植物；Artifact-圣遗物；Combat-战斗。
   special_index: $PREDICT_AND_VERIFY_01$
