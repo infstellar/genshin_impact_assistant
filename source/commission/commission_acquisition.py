@@ -40,6 +40,7 @@ def get_commission_object(commission_type, commission_position:list):
         import source.commission.general.IncreasingDanger
         return source.commission.general.IncreasingDanger.IncreasingDangerGeneral(commission_position)
 
+
     logger.error(f"get commission fail: {commission_type, commission_position}")
     return False
 
