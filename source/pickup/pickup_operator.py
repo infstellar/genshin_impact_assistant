@@ -18,7 +18,7 @@ from source.funclib.cvars import *
 
 
 # USE_YAP = False if sys.gettrace() else True
-USE_YAP = False # Fixed!!! print debug is useful.
+USE_YAP = True # Fixed!!! print debug is useful.
 # if sys.gettrace():
 #     logger.warning("YAP disabled in debug mode. Pickupper may work slower.")
 
@@ -265,7 +265,7 @@ class PickupOperator(BaseThreading):
                             return True
             return False
         else:
-            return True
+            return False
 
     def reset_pickup_item_list(self):
         self.pickup_item_list = []
@@ -517,9 +517,10 @@ if __name__ == '__main__':
     # po.set_target_position([4813.5, -4180.5])
     # po.pause_threading()
     po.start()
+    po.continue_threading()
     # po.set_search_mode(0)
     # po.active_pickup(is_nahida=True)
-    po.absorptive_pickup([7541.5, 5466.5])
+    # po.absorptive_pickup([7541.5, 5466.5])
     while 1:
         time.sleep(1)
 

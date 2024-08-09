@@ -24,6 +24,7 @@ uiautomator2
 uiautomator2cache
 filelock
 lxml
+giayap==0.0.5
 pydantic>2.0.0
 gimapdev==4.6.3
 giadep
