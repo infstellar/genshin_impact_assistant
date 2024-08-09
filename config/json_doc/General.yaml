@@ -36,6 +36,9 @@ Python32Path:
 UsingAlphaChannel:
   conceal: true
 
+RecordPath_CollectionName:
+  special_index: $PREDICT_AND_VERIFY_01$
+
 RecordPath_CollectionType:
   select_items:
   - Plant
